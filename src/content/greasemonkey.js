@@ -282,6 +282,22 @@ function getTempFile() {
 	return file;
 }
 
+function getContents(aURL){
+  var ioService=Components.classes["@mozilla.org/network/io-service;1"]
+    .getService(Components.interfaces.nsIIOService);
+  var scriptableStream=Components
+    .classes["@mozilla.org/scriptableinputstream;1"]
+    .getService(Components.interfaces.nsIScriptableInputStream);
+
+  var channel=ioService.newChannel(aURL,null,null);
+  var input=channel.open();
+  scriptableStream.init(input);
+  var str=scriptableStream.read(input.available());
+  scriptableStream.close();
+  input.close();
+  return str;
+}
+
 function getWriteStream(fileName) {
 	var file = getScriptFile(fileName);
 	var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
@@ -315,6 +331,23 @@ function getScriptDir() {
 	file.append("scripts");
 
 	return file;
+}
+
+/**
+ * Takes the place of the traditional prompt() function which became broken
+ * in FF 1.0.1. :(
+ */
+function gmPrompt(msg, defVal, title) {
+  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                      .getService(Components.interfaces.nsIPromptService);
+  var result = {value:defVal};
+  
+  if (promptService.prompt(null, title, msg, result, null, {value:0})) {
+    return result.value;
+  }
+  else {
+    return null;
+  }
 }
 
 // Converts a pattern in this programs simple notation to a regular expression.

@@ -58,7 +58,7 @@
                 }
 
                 function promptForNewPage(ev) {
-                    var val = prompt("Enter a new URL below. You can specify multiple pages using the wildcard (*) character.", "http://foo.com/*", "Add Page");
+                    var val = gmPrompt("Enter a new URL below. You can specify multiple pages using the wildcard (*) character.", "http://foo.com/*", "Add Page");
                     if (val && val != "") {
                         addPage(val);
                         self.pages.push(val);
@@ -67,7 +67,7 @@
                 }
 
                 function promptForEdit(ev) {
-                    var val = prompt("Modify the URL of the page below. You can specify multiple pages using the wildcard (*) character.", 
+                    var val = gmPrompt("Modify the URL of the page below. You can specify multiple pages using the wildcard (*) character.", 
                         self.listbox.selectedItem.label, "Edit Page");
 
                     if (val && val != "") {

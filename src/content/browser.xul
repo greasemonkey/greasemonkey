@@ -23,7 +23,7 @@
           
           function greaseLoad(e) {
             var config = new Config();
-            var scriptDownloader;
+            var scriptElm = e.originalTarget.createElement("SCRIPT");
 
             config.load();
             
@@ -43,16 +43,26 @@
                 		    continue outer;
                   		}
               	    }
-            
-              	    var elm = e.originalTarget.createElement("script");
-              	    elm.setAttribute("src", getScriptChrome(script.id));
+
+                    scriptElm.appendChild(
+                      e.originalTarget.createTextNode(
+                        "//===" + script.id + "===" + 
+                        getContents(getScriptChrome(script.id)) + 
+                        "\n\n"
+                      )
+                    );
           	    
-              	    e.originalTarget.body.appendChild(elm);
               	    continue outer;
                 	}
                 }
               }
             }
+
+            if (scriptElm.childNodes.length > 0) {
+              e.originalTarget.body.appendChild(scriptElm);
+              e.originalTarget.body.removeChild(scriptElm);
+            }
+            
           }
 
           function manageMenuItemClicked() {
