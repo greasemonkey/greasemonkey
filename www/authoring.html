@@ -4,22 +4,22 @@
 <p>You can write your very own shiny user script with just a few steps:</p>
 
 <h6>1. Create the file</h6>
-<p>Open a new text file in your favorite editor and throw some javascript in there.</p>
-<p>Note that there are <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">many</a> good <a href="http://www.google.com/search?q=dhtml+tutorial">resources</a> available if you're not sure exactly what javascript you need.</p> 
+<p>Open a new text file in your favorite editor and throw some javascript in there. Note that there are <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">many</a> good <a href="http://www.google.com/search?q=dhtml+tutorial">resources</a> available if you're not sure exactly what javascript you need.</p> 
+<p>For example, you might create this simple script:</p>
 <pre>(function() {
     alert("Hello, world!");
 })();</pre>
-<p>Also note that it's a good practice (though not required) to wrap the entire thing in an anonymous function to keep from creating new global names which might interfere with the target webpage.</p>
+<p>Also notice that it's a good practice (though not required) to wrap the entire script in an anonymous function to avoid creating new global names which might interfere with the target webpage.</p>
 
 <h6>2. Save the file</h6>
-<p>You can choose any name, but it has to end with <strong>.user.js</strong>.</p>
+<p>You can choose any name, <em>but it has to end with <strong>.user.js</strong></em>.</p>
 
 <h6>3. Test the file</h6>
 <p>Drag the file onto Firefox (or open it any other way) and select "Install User Script..." from the Tools menu. <em>Note that this option will be disabled if you forgot to name your file ending with ".user.js".</em></p>
 
 <h6>4. (optional) Add metadata</h6>
-<p>By default, scripts will be installed with a name based on their filename, a namespace based on the URL they were downloaded from, and will be included with every site. If you want to override these defaults, you need metadata.</p>
-<p>Medatadata is added with special javascript comments, like so:</p>
+<p>By default, scripts will be installed with a name based on their filename, a namespace based on the URL they were downloaded from, and will be included with every page on the interwebs. If you want to override this default behavior, you need metadata power.</p>
+<p>Medatadata is added to userscripts with special javascript comments, like so:</p>
 <pre>// ==UserScript==
 // @name          Say Hello!
 // @namespace     http://youngpup.net/userscripts
@@ -32,7 +32,7 @@
 (function() {
     alert("Hello, world!");
 })();</pre>
-<p>Here is a short reference of the available tags:</p>
+<p>Here is a short reference of the available metadata tags:</p>
 <p>
   <table border="1">
     <thead>
@@ -77,7 +77,7 @@
     </tbody>
   </table>
 </p>
-
+<br />
 <h6>Tips</h6>
 <ul>
   <li>User scripts are injected into the document after the DOM is fully loaded, but before onload occurs. This means that your scripts can begin immediately and don't need to wait for onload.</li>
