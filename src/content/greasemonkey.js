@@ -21,7 +21,11 @@ function Config() {
 	this.load = function() {
 		var doc = document.implementation.createDocument("", "", null);
 		doc.async = false;
-		doc.load(getScriptChrome("config.xml"));
+		try {
+		    doc.load(getScriptChrome("config.xml"));
+		} catch (exc) {
+		    doc.load(getScriptChrome("default-config.xml"));
+		}
 
 		var nodes = document.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
 

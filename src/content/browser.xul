@@ -5,96 +5,83 @@
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript">
     <![CDATA[
-        window.addEventListener("load", function(e) {
+        window.addEventListener("load", greaseInit, false);
+	function greaseInit() {
+	    var appcontent = document.getElementById("appcontent");
+	    if(appcontent){
+		if(!appcontent.greased){
+		    appcontent.greased = true;
+		    appcontent.addEventListener("load", greaseLoad, true);
+
+
+		    window.document.getElementById("userscript-tools-manage").addEventListener("command", function() {
+			window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", "resizable,centerscreen,modal");
+			// not necessary to reload here i don't think, because userscript injection
+			// is only done at load time anyway, and then the config will be reloaded
+		    }, true);
+		    
+		    window.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function() {
+			var culprit = document.popupNode;
+			var contextItem = document.getElementById("install-userscript");
+			var contextSep = document.getElementById("install-userscript-sep");
+			
+			contextItem.hidden = 
+			    contextSep.hidden = !(culprit.tagName.toLowerCase() == "a" && 
+						  culprit.href.match(/\.user\.js(\?|$)/i) != null);
+		    }, false);
+		    
+		    window.document.getElementById("menu_ToolsPopup").addEventListener("popupshowing", function() {
+			var culprit = document.popupNode;
+			var installItem = window.document.getElementById("userscript-tools-install");
+			
+			var disabled = !(window._content && window._content.location && 
+					 window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+			
+			installItem.setAttribute("disabled", disabled.toString());
+		    }, false);
+		    
+		    window.document.getElementById("install-userscript").addEventListener("command", function(e) {
+			new ScriptDownloader(document.popupNode.href).start();
+		    }, false);
+		    
+		    window.document.getElementById("userscript-tools-install").addEventListener("command", function(e) {
+			new ScriptDownloader(window._content.location.href).start();
+		    }, false);
+		}
+	    }
+	}
+	greaseLoad = function(e) {
             var config = new Config();
             var webProgress = getBrowser();
-            
+	    var browz = webProgress;
             var scriptDownloader;
 
-            // this needs to be defined as an actual variable, not anonymously!
-            // addProgressListener only adds a weak reference, so if this is not
-            // a real variable, it will get GC'd and stop working at some non-
-            // deterministic time.
-            var listener = {
-                QueryInterface : function(aIID) { return this; },
+	    config.load();
+	    
+	    outer:
+	    for (var i = 0; i < config.scripts.length; i++) {
+		var script = config.scripts[i];
+		if (script.enabled) {
+		    for (var j = 0; j < script.includes.length; j++) {
+			var pattern = convert2RegExp(script.includes[j]);
+			if (pattern.test(e.originalTarget.location.href)) {
+			    for (var k = 0; k < script.excludes.length; k++) {
+				pattern = convert2RegExp(script.excludes[k]);
+				
+				if (pattern.test(e.originalTarget.location.href)) {
+				    continue outer;
+				}
+			    }
+			    var elm = e.originalTarget.createElement("script");
+			    elm.setAttribute("src", getScriptChrome(script.id));
+			    
+			    e.originalTarget.body.appendChild(elm);
+			    continue outer;
+			}
+		    }
+		}
+	    }
 
-                onLocationChange : function(){},
-                onProgressChange : function(){},
-                onSecurityChange : function(){},
-                onStatusChange : function(){},
-                onLinkIconAvailable : function(){},
-
-                onStateChange : function(webProgress, request, stateFlags, status) {
-                    //dump(stateFlags + "\n");
-                    if ((stateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) && 
-                        (status == 0)) {
-                        config.load();
-
-                        outer:
-                        for (var i = 0; i < config.scripts.length; i++) {
-                            var script = config.scripts[i];
-
-                            if (script.enabled) {
-                                for (var j = 0; j < script.includes.length; j++) {
-                                    var pattern = convert2RegExp(script.includes[j]);
-
-                                    if (pattern.test(webProgress.DOMWindow.location.href)) {
-                                        for (var k = 0; k < script.excludes.length; k++) {
-                                            pattern = convert2RegExp(script.excludes[k]);
-
-                                            if (pattern.test(webProgress.DOMWindow.location.href)) {
-                                                continue outer;
-                                            }
-                                        }
-
-                                        var elm = webProgress.DOMWindow.document.createElement("script");
-                                        elm.setAttribute("src", getScriptChrome(script.id));
-
-                                        webProgress.DOMWindow.document.body.appendChild(elm);
-                                        continue outer;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-
-            webProgress.addProgressListener(listener, Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
-
-            window.document.getElementById("userscript-tools-manage").addEventListener("command", function() {
-                window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", "resizable,centerscreen,modal");
-                // not necessary to reload here i don't think, because userscript injection
-                // is only done at load time anyway, and then the config will be reloaded
-            }, true);
-
-            window.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function() {
-                var culprit = document.popupNode;
-                var contextItem = document.getElementById("install-userscript");
-                var contextSep = document.getElementById("install-userscript-sep");
-
-                contextItem.hidden = 
-                contextSep.hidden = !(culprit.tagName.toLowerCase() == "a" && 
-                                        culprit.href.match(/\.user\.js(\?|$)/i) != null);
-            }, false);
-
-            window.document.getElementById("menu_ToolsPopup").addEventListener("popupshowing", function() {
-                var culprit = document.popupNode;
-                var installItem = window.document.getElementById("userscript-tools-install");
-
-                var disabled = !(window._content && window._content.location && 
-                     window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
-
-                installItem.setAttribute("disabled", disabled.toString());
-            }, false);
-
-            window.document.getElementById("install-userscript").addEventListener("command", function(e) {
-                new ScriptDownloader(document.popupNode.href).start();
-            }, false);
-
-            window.document.getElementById("userscript-tools-install").addEventListener("command", function(e) {
-                new ScriptDownloader(window._content.location.href).start();
-            }, false);
 
             function parseArgs(href) {
                 var qsStartPos = href.lastIndexOf("?");
@@ -114,7 +101,7 @@
                 return vargs;
             }
 
-        }, false);
+        };
     ]]>
     </script>
 

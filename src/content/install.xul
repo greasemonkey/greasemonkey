@@ -12,10 +12,11 @@
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript"><![CDATA[
 
-        window.addEventListener("load", function() {
+        window.addEventListener("load", function(ev) {
             var pagesControl = new PagesControl(document.getElementById("pages-control"));
             var script = window.arguments[0];
             var file = window.arguments[1];
+	//		alert("install.xul\n"+ev.originalTarget.location+"\n"+file);
             var result = window.arguments[2];
             var status = document.getElementById("status");
             var config = new Config();
@@ -30,6 +31,7 @@
                 pagesControl.populate(script);
 
                 document.getElementById("btnOK").addEventListener("command", function() {
+	//		alert("ok button");
                     var newDir = getScriptDir();
                     var existingIndex = config.find(script.namespace, script.name);
                     var existingFile = null;
@@ -54,11 +56,12 @@
                     }
                     catch (e) {
                         config.scripts = oldScripts;
-                        alert("Could not save script. " + (e ? e : ""));
+	                        alert("Could not save script. " + (e ? e : ""));
                     }
                 }, false);
 
                 document.getElementById("btnCancel").addEventListener("command", function() {
+	//		alert("cancel button");
                     if (request) request.abort();
 
                     window.close();

@@ -20,7 +20,7 @@
         var pagesControl;
         var uninstallList = [];
 
-        window.addEventListener("load", function() {
+        window.addEventListener("load", function(ev) {
             config.load();
             loadControls();
             
@@ -31,7 +31,7 @@
                 populateChooser();
                 chooseScript(0);
             }
-        }, true);
+        }, false);
 
         function loadControls() {
             listbox = document.getElementById("lstScripts");

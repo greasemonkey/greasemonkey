@@ -51,13 +51,13 @@
                     }
                 }
 
-                function updatePagesBox() {
+                function updatePagesBox(ev) {
                     selectedPage = self.listbox.getSelectedItem(0);
                     self.btnEdit.disabled = selectedPage == null;
                     self.btnRemove.disabled = selectedPage == null;
                 }
 
-                function promptForNewPage() {
+                function promptForNewPage(ev) {
                     var val = prompt("Enter a new URL below. You can specify multiple pages using the wildcard (*) character.", "http://foo.com/*", "Add Page");
                     if (val && val != "") {
                         addPage(val);
@@ -66,7 +66,7 @@
                     }
                 }
 
-                function promptForEdit() {
+                function promptForEdit(ev) {
                     var val = prompt("Modify the URL of the page below. You can specify multiple pages using the wildcard (*) character.", 
                         self.listbox.selectedItem.label, "Edit Page");
 
@@ -78,7 +78,7 @@
                     }
                 }
 
-                function remove() {
+                function remove(ev) {
                     self.pages.splice(self.listbox.selectedIndex, 1);
                     self.listbox.removeChild(self.listbox.getSelectedItem(0));
 
