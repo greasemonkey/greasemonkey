@@ -52,8 +52,6 @@
 	}
 	greaseLoad = function(e) {
             var config = new Config();
-            var webProgress = getBrowser();
-	    var browz = webProgress;
             var scriptDownloader;
 
 	    config.load();
