@@ -1,0 +1,8 @@
+<UserScriptConfig>
+	<Script id="1102161148673" name="ununderline" namespace="greasemonkey" description="Converts underlined text to italics, making it more distinguishable from a hyperlink." enabled="true">
+		<Include>*</Include>
+	</Script>
+	<Script id="1102237157909" name="Linkify" namespace="http://youngpup.net/userscripts" description="Looks for things in the page that look like URLs but aren't hyperlinked, and converts them to clickable links." enabled="true">
+		<Include>*</Include>
+	</Script>
+</UserScriptConfig>

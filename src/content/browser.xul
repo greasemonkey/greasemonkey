@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+
+<overlay id="greasemonkey-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
+    <script type="application/x-javascript">
+    <![CDATA[
+        window.addEventListener("load", function(e) {
+            var config = new Config();
+            var webProgress = getBrowser().docShell
+                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                .getInterface(Components.interfaces.nsIWebProgress);
+            
+            var scriptDownloader;
+
+            // this needs to be defined as an actual variable, not anonymously!
+            // addProgressListener only adds a weak reference, so if this is not
+            // a real variable, it will get GC'd and stop working at some non-
+            // deterministic time.
+            var listener = {
+                QueryInterface : function(aIID) { return this; },
+
+                onStateChange : function(webProgress, request, stateFlags, status) {
+                    if ((stateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) && 
+                        (status == 0)) {
+                        config.load();
+
+                        outer:
+                        for (var i = 0; i < config.scripts.length; i++) {
+                            var script = config.scripts[i];
+
+                            if (script.enabled) {
+                                for (var j = 0; j < script.includes.length; j++) {
+                                    var pattern = convert2RegExp(script.includes[j]);
+
+                                    if (pattern.test(webProgress.DOMWindow.location.href)) {
+                                        for (var k = 0; k < script.excludes.length; k++) {
+                                            pattern = convert2RegExp(script.excludes[k]);
+
+                                            if (pattern.test(webProgress.DOMWindow.location.href)) {
+                                                continue outer;
+                                            }
+                                        }
+
+                                        var elm = webProgress.DOMWindow.document.createElement("script");
+                                        elm.setAttribute("src", getScriptChrome(script.id));
+
+                                        webProgress.DOMWindow.document.body.appendChild(elm);
+                                        continue outer;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            webProgress.addProgressListener(listener, Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+
+            window.document.getElementById("userscript-tools-manage").addEventListener("command", function() {
+                window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", "resizable,centerscreen,modal");
+                // not necessary to reload here i don't think, because userscript injection
+                // is only done at load time anyway, and then the config will be reloaded
+            }, true);
+
+            window.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function() {
+                var culprit = document.popupNode;
+                var contextItem = document.getElementById("install-userscript");
+                var contextSep = document.getElementById("install-userscript-sep");
+
+                contextItem.hidden = 
+                contextSep.hidden = !(culprit.tagName.toLowerCase() == "a" && 
+                                        culprit.href.match(/\.user\.js(\?|$)/i) != null);
+            }, false);
+
+            window.document.getElementById("menu_ToolsPopup").addEventListener("popupshowing", function() {
+                var culprit = document.popupNode;
+                var installItem = window.document.getElementById("userscript-tools-install");
+
+                var disabled = !(window._content && window._content.location && 
+                     window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+
+                installItem.setAttribute("disabled", disabled.toString());
+            }, false);
+
+            window.document.getElementById("install-userscript").addEventListener("command", function(e) {
+                new ScriptDownloader(document.popupNode.href).start();
+            }, false);
+
+            window.document.getElementById("userscript-tools-install").addEventListener("command", function(e) {
+                new ScriptDownloader(window._content.location.href).start();
+            }, false);
+
+            function parseArgs(href) {
+                var qsStartPos = href.lastIndexOf("?");
+                var vargs = {};
+
+                if (qsStartPos > -1) {
+                    var qs = href.substring(qsStartPos + 1);
+                    var args = qs.split("&");
+                    var nv;
+
+                    for (var i = 0, arg = null; (arg = args[i]); i++) {
+                        nv = arg.split("=");
+                        vargs[nv[0]] = unescape(nv[1]);
+                    }
+                }
+
+                return vargs;
+            }
+
+        }, false);
+    ]]>
+    </script>
+
+    <popup id="contentAreaContextMenu">
+        <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" />
+        <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
+    </popup>
+
+    <menupopup id="menu_ToolsPopup">
+        <menuseparator id="userscript-tools-sep" position="9" />
+        <menuitem id="userscript-tools-install" position="10" accesskey="S" label="Install User Script..." />
+        <menuitem id="userscript-tools-manage" position="11" accesskey="U" label="Manage User Scripts..." />
+    </menupopup>
+
+</overlay>
