@@ -7,7 +7,7 @@
   </RDF:Seq>
   
   <RDF:Description about="urn:mozilla:package:greasemonkey"
-    chrome:displayName="Grease Monkey"
+    chrome:displayName="Greasemonkey"
     chrome:author="Aaron Boodman and David Pullman"
     chrome:authorURL="http://youngpup.net, http://stilleye.net/"
     chrome:name="greasemonkey"
