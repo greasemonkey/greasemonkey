@@ -46,7 +46,7 @@
 
                     scriptElm.appendChild(
                       e.originalTarget.createTextNode(
-                        "//===" + script.id + "===" + 
+                        "//===" + script.id + "===\n" + 
                         getContents(getScriptChrome(script.id)) + 
                         "\n\n"
                       )
