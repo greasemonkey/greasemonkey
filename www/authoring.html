@@ -1,24 +1,44 @@
 <!-- MAIN CONTENT -->
 <h5 class="page-header"><a id="content" name="content">Writing User Scripts</a></h5>
 
-<p>User scripts are just plain 'ol DHTML javascripts with a *.user.js file extension. Thus, any <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">book</a> or <a href="http://www.google.com/search?q=dhtml+tutorial">online reference</a> for writing DHTML applies equally to writing user scripts.</p>
+<p>You can write your very own shiny user script with just a few steps:</p>
 
-<h6>Metadata</h6>
-<p>Optionally, you can throw a tiny bit of metadata into a user script in a javascript code comment with this format:</p>
+<h6>1. Create the file</h6>
+<p>Open a new text file in your favorite editor and throw some javascript in there. There are <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">many</a> <<a href="http://www.google.com/search?q=dhtml+tutorial">good</a> resources available if you're not sure what javascript you need.</p> 
+<pre>(function() {
+    alert("Hello, world!");
+})();</pre>
+<p>Note that it's a good practice (though not required) to wrap the entire thing in an anonymous function to keep from creating new global names which might interfere with the target webpage.</p>
+
+<h6>2. Save the file</h6>
+<p>You can choose any name, but it has to end with <strong>.user.js</strong>.</p>
+
+<h6>3. Test the file</h6>
+<p>Drag the file onto Firefox (or open it any other way) and select "Install User Script..." from the Tools menu. <em>Note that this option will be disabled if you forgot to name your file ending with ".user.js".</em></p>
+
+<h6>4. (optional) Add metadata</h6>
+<p>By default, scripts will be installed with a name based on their filename, a namespace based on the URL they were downloaded from, and will be included with every site. If you want to override these defaults, you need metadata.</p>
+<p>Medatadata is added with special javascript comments, like so:</p>
 <pre>// ==UserScript==
-// @name          My Cool User Script
+// @name          Say Hello!
 // @namespace     http://youngpup.net/userscripts
-// @description	  Does things that no other user script can do.
-// @include       http://youngpup.net/*
-// @include       http://www.youngpup.net/*
-// @exclude       http://www.youngpup.net/2001/ypsimplescroll
-// ==/UserScript==</pre>
+// @description	  Greets the world
+// @include       http://google.com/*
+// @include       http://www.google.com/*
+// @exclude       http://gmail.google.com/*
+// ==/UserScript==
+
+(function() {
+    alert("Hello, world!");
+})();</pre>
+<p>Here is a short reference of the available tags:</p>
 <p>
   <table border="1">
     <thead>
       <tr>
         <th>Property</th>
         <th>Description</th>
+        <th>Multiplicity</th>
         <th>Default</th>
       </tr>
     </thead>
@@ -26,26 +46,31 @@
       <tr>
         <td>@name</td>
         <td>A friendly name for the script.</td>
+        <td>0-1</td>
         <td>The script's filename without the extension.</td>
       </tr>
       <tr>
         <td>@namespace</td>
         <td>A scope within which @name should be unique.</td>
+        <td>0-1</td>
         <td>The domain of the script's file.</td>
       </tr>
       <tr>
         <td>@description</td>
         <td>A, uhm, description.</td>
+        <td>0-1</td>
         <td>none</td>
       </tr>
       <tr>
         <td>@include</td>
         <td>A url to include the script with. There can be more than one.</td>
-        <td>*</td>
+        <td>0+</td>
+        <td>one, set to *</td>
       </tr>
       <tr>
         <td>@exclude</td>
         <td>A url to explicitly exclude the script from. There can be more than one.</td>
+        <td>0+</td>
         <td>none</td>
       </tr>
     </tbody>

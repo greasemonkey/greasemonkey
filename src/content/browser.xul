@@ -7,9 +7,7 @@
     <![CDATA[
         window.addEventListener("load", function(e) {
             var config = new Config();
-            var webProgress = getBrowser().docShell
-                .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-                .getInterface(Components.interfaces.nsIWebProgress);
+            var webProgress = getBrowser();
             
             var scriptDownloader;
 
@@ -20,7 +18,14 @@
             var listener = {
                 QueryInterface : function(aIID) { return this; },
 
+                onLocationChange : function(){},
+                onProgressChange : function(){},
+                onSecurityChange : function(){},
+                onStatusChange : function(){},
+                onLinkIconAvailable : function(){},
+
                 onStateChange : function(webProgress, request, stateFlags, status) {
+                    //dump(stateFlags + "\n");
                     if ((stateFlags & Components.interfaces.nsIWebProgressListener.STATE_STOP) && 
                         (status == 0)) {
                         config.load();
