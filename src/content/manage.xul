@@ -1,154 +1,131 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
-<window
-    id="manage-window"
-    title="Manage User Scripts"
-    orient="vertical"
-    style="padding:1em;"
-    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="greasemonkey-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript">
     <![CDATA[
+        //" <-- what is this doing? well, my editor sucks and the XUL bits confuse it. This helps.
 
-    (function() {
-        var config = new Config();
-        var listbox, header, description, chkEnabled, btnOk, btnCancel, btnUninstall;
-        var selectedScript;
-        var pagesControl;
-        var uninstallList = [];
+        window.addEventListener("load", function() {
+          var appcontent = ge("appcontent");
 
-        window.addEventListener("load", function(ev) {
+          if (appcontent){
+            if (!appcontent.greased){
+              appcontent.greased = true;
+              appcontent.addEventListener("DOMContentLoaded", greaseLoad, false);
+
+              ge("userscript-tools-manage").addEventListener("command", manageMenuItemClicked, false);
+              ge("contentAreaContextMenu").addEventListener("popupshowing", contextMenuShowing, false);
+              ge("menu_ToolsPopup").addEventListener("popupshowing", toolsMenuShowing, false);
+              ge("install-userscript").addEventListener("command", installContextItemClicked, false);
+              ge("userscript-tools-install").addEventListener("command", installMenuItemClicked, false);
+            }
+          }
+          
+          function greaseLoad(e) {
+            var config = new Config();
+            var scriptDownloader;
+
             config.load();
-            loadControls();
             
-            if (config.scripts.length == 0) {
-                disableAll(true);
-            }
-            else {
-                populateChooser();
-                chooseScript(0);
-            }
-        }, false);
+            outer:
+            for (var i = 0; i < config.scripts.length; i++) {
+              var script = config.scripts[i];
 
-        function loadControls() {
-            listbox = document.getElementById("lstScripts");
-            header = document.getElementById("ctlHeader");
-            description = document.getElementById("ctlDescription");
-            btnOk = document.getElementById("btnOK");
-            btnCancel = document.getElementById("btnCancel");
-            btnUninstall = document.getElementById("btnUninstall");
-            pagesControl = new PagesControl(document.getElementById("pages-control"));
-            chkEnabled = document.getElementById("chkEnabled");
+              if (script.enabled) {
+                for (var j = 0; j < script.includes.length; j++) {
+                	var pattern = convert2RegExp(script.includes[j]);
 
-            listbox.addEventListener("select", function() { updateDetails(); }, false);
-            btnOk.addEventListener("command", function() { handleOkButton(); }, false);
-            btnCancel.addEventListener("command", function() { handleCancelButton(); }, false);
-            btnUninstall.addEventListener("command", function() { handleUninstallButton(); }, false);
-            chkEnabled.addEventListener("command", function() { 
-                selectedScript.enabled = chkEnabled.checked;
-                }, false);
-        }
-
-        function updateDetails() {
-            if (listbox.selectedCount == 0) {
-                selectedScript = null;
-                header.setAttribute("title", "");
-                description.textContent = " ";
-                chkEnabled.checked = true;
-                pagesControl.clear();
-                disableAll(true);
-                btnOk.disabled = false;
-            }
-            else {
-                selectedScript = listbox.getSelectedItem(0).script;
-                header.setAttribute("title", selectedScript.name);
-                description.textContent = selectedScript.description;
-                chkEnabled.checked = selectedScript.enabled;
-                pagesControl.populate(selectedScript);
-                disableAll(false);
-            }
-        }
-
-        function handleOkButton() {
-            for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-                var idx = config.find(script.namespace, script.name);
-                config.scripts.splice(idx, 1);
-            }
-            config.save();
-
-            for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-                getScriptFile(script.id).remove(false);
-            }
-            window.close();
-        }
-
-        function handleCancelButton() {
-            window.close();            
-        }
-
-        function handleUninstallButton() {
-            uninstallList.push(selectedScript);
-            listbox.removeChild(listbox.childNodes[listbox.selectedIndex]);
-
-            if (listbox.childNodes.length > 0) {
-                chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
-            }
-        }
-
-        function populateChooser() {
-            for (var i = 0, script = null; (script = config.scripts[i]); i++) {
-                var listitem = document.createElement("listitem");
-
-                listitem.setAttribute("label", script.name);
-                listitem.script = script;
-                listbox.appendChild(listitem);
-            }
-        }
-
-        function chooseScript(index) {
-            listbox.selectedIndex = index;            
-            listbox.focus();
-        }
-
-        function disableAll(disable) {
-            var elms = document.getElementsByTagName("*");
-
-            for (var i = 0, elm = null; (elm = elms[i]); i++) {
-                if (elm.id != "btnCancel") {
-                    elm.disabled = disable;
+                	if (pattern.test(e.originalTarget.location.href)) {
+              	    for (var k = 0; k < script.excludes.length; k++) {
+                  		pattern = convert2RegExp(script.excludes[k]);
+          		
+                  		if (pattern.test(e.originalTarget.location.href)) {
+                		    continue outer;
+                  		}
+              	    }
+            
+              	    var elm = e.originalTarget.createElement("script");
+              	    elm.setAttribute("src", getScriptChrome(script.id));
+          	    
+              	    e.originalTarget.body.appendChild(elm);
+              	    continue outer;
+                	}
                 }
+              }
             }
-        }
+          }
 
-    })();
+          function manageMenuItemClicked() {
+            window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
+              "resizable,centerscreen,modal");
+          }
+
+          function contextMenuShowing() {
+            var culprit = document.popupNode;
+            var contextItem = ge("install-userscript");
+            var contextSep = ge("install-userscript-sep");
+
+            contextItem.hidden = contextSep.hidden = 
+              !(culprit.tagName.toLowerCase() == "a" 
+              && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+          }
+
+          function toolsMenuShowing() {
+            var culprit = document.popupNode;
+            var installItem = ge("userscript-tools-install");
+
+            var disabled = !(window._content && window._content.location && 
+            		 window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+
+            installItem.setAttribute("disabled", disabled.toString());
+          }
+
+          function installMenuItemClicked() {
+            new ScriptDownloader(window._content.location.href).start();
+          }
+
+          function installContextItemClicked() {
+            new ScriptDownloader(document.popupNode.href).start();
+          }
+
+          function parseArgs(href) {
+            var qsStartPos = href.lastIndexOf("?");
+            var vargs = {};
+
+            if (qsStartPos > -1) {
+              var qs = href.substring(qsStartPos + 1);
+              var args = qs.split("&");
+              var nv;
+
+              for (var i = 0, arg = null; (arg = args[i]); i++) {
+                nv = arg.split("=");
+                vargs[nv[0]] = unescape(nv[1]);
+              }
+            }
+
+            return vargs;
+          }
+
+          function ge(id) {
+            return window.document.getElementById(id)
+          }
+
+        }, false); // end window.addEventListener("load"...)
 
     ]]>
     </script>
 
-    <hbox>
-        <listbox id="lstScripts" style="width:auto; min-width:140px; margin-top:0" />
-        <vbox flex="1">
-            <dialogheader id="ctlHeader" title="" />
-            <description id="ctlDescription" style="margin-top:.5em; margin-bottom:.5em; height:3em; max-height:3em;"> </description>
-            <vbox id="pages-control" />
-            <groupbox>
-                <caption label="Enabled" />
-                <hbox>
-                    <description flex="1">Temporarily enable or disable a user script without uninstalling it.</description>
-                    <checkbox id="chkEnabled" label="Enabled" checked="true" />
-                </hbox>
-            </groupbox>
-            <button id="btnUninstall" label="Uninstall" style="margin-top:1em" />
-        </vbox>
-    </hbox>
-    <spacer flex="1" style="min-height:2em" />
-    <hbox>
-        <spacer flex="1" />
-        <button id="btnOK" label="OK" default="true" />
-        <button id="btnCancel" label="Cancel" />
-    </hbox>
+    <popup id="contentAreaContextMenu">
+        <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" />
+        <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
+    </popup>
 
-</window>
+    <menupopup id="menu_ToolsPopup">
+        <menuseparator id="userscript-tools-sep" position="9" />
+        <menuitem id="userscript-tools-install" position="10" accesskey="S" label="Install User Script..." />
+        <menuitem id="userscript-tools-manage" position="11" accesskey="U" label="Manage User Scripts..." />
+    </menupopup>
+
+</overlay>

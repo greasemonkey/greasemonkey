@@ -5,101 +5,110 @@
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript">
     <![CDATA[
-        window.addEventListener("load", greaseInit, false);
-	function greaseInit() {
-	    var appcontent = document.getElementById("appcontent");
-	    if(appcontent){
-		if(!appcontent.greased){
-		    appcontent.greased = true;
-		    appcontent.addEventListener("load", greaseLoad, true);
+        //" <-- what is this doing? well, my editor sucks and the XUL bits confuse it. This helps.
 
+        window.addEventListener("load", function() {
+          var appcontent = ge("appcontent");
 
-		    window.document.getElementById("userscript-tools-manage").addEventListener("command", function() {
-			window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", "resizable,centerscreen,modal");
-			// not necessary to reload here i don't think, because userscript injection
-			// is only done at load time anyway, and then the config will be reloaded
-		    }, true);
-		    
-		    window.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", function() {
-			var culprit = document.popupNode;
-			var contextItem = document.getElementById("install-userscript");
-			var contextSep = document.getElementById("install-userscript-sep");
-			
-			contextItem.hidden = 
-			    contextSep.hidden = !(culprit.tagName.toLowerCase() == "a" && 
-						  culprit.href.match(/\.user\.js(\?|$)/i) != null);
-		    }, false);
-		    
-		    window.document.getElementById("menu_ToolsPopup").addEventListener("popupshowing", function() {
-			var culprit = document.popupNode;
-			var installItem = window.document.getElementById("userscript-tools-install");
-			
-			var disabled = !(window._content && window._content.location && 
-					 window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
-			
-			installItem.setAttribute("disabled", disabled.toString());
-		    }, false);
-		    
-		    window.document.getElementById("install-userscript").addEventListener("command", function(e) {
-			new ScriptDownloader(document.popupNode.href).start();
-		    }, false);
-		    
-		    window.document.getElementById("userscript-tools-install").addEventListener("command", function(e) {
-			new ScriptDownloader(window._content.location.href).start();
-		    }, false);
-		}
-	    }
-	}
-	greaseLoad = function(e) {
+          if (appcontent){
+            if (!appcontent.greased){
+              appcontent.greased = true;
+              appcontent.addEventListener("DOMContentLoaded", greaseLoad, false);
+
+              ge("userscript-tools-manage").addEventListener("command", manageMenuItemClicked, false);
+              ge("contentAreaContextMenu").addEventListener("popupshowing", contextMenuShowing, false);
+              ge("menu_ToolsPopup").addEventListener("popupshowing", toolsMenuShowing, false);
+              ge("install-userscript").addEventListener("command", installMenuItemClicked, false);
+              ge("userscript-tools-install").addEventListener("command", installMenuItemClicked, false);
+            }
+          }
+          
+          function greaseLoad(e) {
             var config = new Config();
             var scriptDownloader;
 
-	    config.load();
-	    
-	    outer:
-	    for (var i = 0; i < config.scripts.length; i++) {
-		var script = config.scripts[i];
-		if (script.enabled) {
-		    for (var j = 0; j < script.includes.length; j++) {
-			var pattern = convert2RegExp(script.includes[j]);
-			if (pattern.test(e.originalTarget.location.href)) {
-			    for (var k = 0; k < script.excludes.length; k++) {
-				pattern = convert2RegExp(script.excludes[k]);
-				
-				if (pattern.test(e.originalTarget.location.href)) {
-				    continue outer;
-				}
-			    }
-			    var elm = e.originalTarget.createElement("script");
-			    elm.setAttribute("src", getScriptChrome(script.id));
-			    
-			    e.originalTarget.body.appendChild(elm);
-			    continue outer;
-			}
-		    }
-		}
-	    }
+            config.load();
+            
+            outer:
+            for (var i = 0; i < config.scripts.length; i++) {
+              var script = config.scripts[i];
+              if (script.enabled) {
 
+              for (var j = 0; j < script.includes.length; j++) {
+              	var pattern = convert2RegExp(script.includes[j]);
 
-            function parseArgs(href) {
-                var qsStartPos = href.lastIndexOf("?");
-                var vargs = {};
+              	if (pattern.test(e.originalTarget.location.href)) {
+            	    for (var k = 0; k < script.excludes.length; k++) {
+                		pattern = convert2RegExp(script.excludes[k]);
+          		
+                		if (pattern.test(e.originalTarget.location.href)) {
+                		    continue outer;
+                		}
+            	    }
+            
+            	    var elm = e.originalTarget.createElement("script");
+            	    elm.setAttribute("src", getScriptChrome(script.id));
+          	    
+            	    e.originalTarget.body.appendChild(elm);
+            	    continue outer;
+              	}
+              }
+            }
+          }
 
-                if (qsStartPos > -1) {
-                    var qs = href.substring(qsStartPos + 1);
-                    var args = qs.split("&");
-                    var nv;
+          function manageMenuItemClicked() {
+            window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
+              "resizable,centerscreen,modal");
+          }
 
-                    for (var i = 0, arg = null; (arg = args[i]); i++) {
-                        nv = arg.split("=");
-                        vargs[nv[0]] = unescape(nv[1]);
-                    }
-                }
+          function contextMenuShowing() {
+            var culprit = document.popupNode;
+            var contextItem = ge("install-userscript");
+            var contextSep = ge("install-userscript-sep");
 
-                return vargs;
+            contextItem.hidden = contextSep.hidden = 
+              !(culprit.tagName.toLowerCase() == "a" 
+              && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+          }
+
+          function toolsMenuShowing() {
+            var culprit = document.popupNode;
+            var installItem = ge("userscript-tools-install");
+
+            var disabled = !(window._content && window._content.location && 
+            		 window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+
+            installItem.setAttribute("disabled", disabled.toString());
+          }
+
+          function installMenuItemClicked() {
+            	new ScriptDownloader(document.popupNode.href).start();
+          }
+
+          function parseArgs(href) {
+            var qsStartPos = href.lastIndexOf("?");
+            var vargs = {};
+
+            if (qsStartPos > -1) {
+              var qs = href.substring(qsStartPos + 1);
+              var args = qs.split("&");
+              var nv;
+
+              for (var i = 0, arg = null; (arg = args[i]); i++) {
+                nv = arg.split("=");
+                vargs[nv[0]] = unescape(nv[1]);
+              }
             }
 
-        };
+            return vargs;
+          }
+
+          function ge(id) {
+            return window.document.getElementById(id)
+          }
+
+        }, false); // end window.addEventListener("load"...)
+
     ]]>
     </script>
 
