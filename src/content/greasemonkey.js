@@ -1,6 +1,105 @@
 const GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 const NAMESPACE = "http://youngpup.net/greasemonkey";
 
+function CommandManager() {
+  var nextDocId = 1;
+  var docIdsInUse = [];
+  var docMenuCommands = {};
+  
+  this.loadDoc = function(e) {
+    var docId;
+    var document = e.originalTarget;
+
+    if (!document.__gmId) {
+      document.__gmId = nextDocId++;
+    }
+
+    docMenuCommands[document.__gmId] = 
+      window.document.createElement('menupopup');
+    
+    //enclose the docId to register on.
+    //simplifies API, and disallows registering commands on a doc other 
+    //than the one the script's on.
+    docId = document.__gmId;
+    
+    document.GM_registerMenuCommand = 
+      function(commandName, commandCallback) { 
+        registerMenuCommand(docId, commandName, commandCallback);
+      }; 
+  }
+  
+  this.unloadDoc = function(e) {
+    var doc = e.originalTarget;
+
+    if (doc.__gmId) {
+      delete docMenuCommands[doc.__gmId];
+    }
+  }
+        
+  this.initToolsMenu = function(commandMenu) {
+    var doc = getActiveDocument();
+
+    if (commandMenu.firstChild == docMenuCommands[doc.__gmId]) {
+      return;
+    }
+
+    //show only the popup that's appropriate.
+    if (commandMenu.firstChild) {
+      commandMenu.removeChild(commandMenu.firstChild);
+    }
+
+    var commandPopup = docMenuCommands[doc.__gmId];
+
+    if (commandPopup) {
+      commandMenu.appendChild(commandPopup);
+    
+      var menuItems = commandPopup.childNodes;
+      for (var i = 0; i < menuItems.length; i++) {
+        //couldn't just add listeners when the popup was created 
+        //because removing the popup removes all listeners as well.
+        menuItems[i].addEventListener("command", 
+          menuItems[i].__gmCommandFunc, false);
+      }
+      
+      commandMenu.setAttribute("disabled", 
+        commandPopup.childNodes.length == 0);
+    }
+      
+  } //end initToolsMenus
+  
+  function registerMenuCommand(docId, commandName, commandFunc) {
+    var menuItem;
+    var previousItems;
+    
+    menuItem = window.document.createElement('menuitem');
+    menuItem.setAttribute("label", commandName);
+    menuItem.__gmCommandFunc = commandFunc;
+    //menuItem.addEventListener("command", commandFunc, false);
+    previousItems = docMenuCommands[docId].childNodes;
+    
+    var i=0;
+    var nextNode=null;
+
+    while (i < previousItems.length) {
+      if (commandName.toLowerCase() < 
+          previousItems[i].getAttribute('label').toLowerCase()) 
+      {
+        nextNode = previousItems[i];
+        break;
+      }
+      i++;
+    }
+
+    docMenuCommands[docId].insertBefore(menuItem, nextNode);
+  }
+
+  
+  function getActiveDocument() {
+    var tabbrowser = ge("content");
+    return tabbrowser.selectedBrowser.contentDocument;
+  }
+}
+
 function Config() {
 	this.onload = null;
 	this.scripts = null;
@@ -265,6 +364,7 @@ function ScriptDownloader(url) {
 	}
 }
 
+
 function parseScriptName(sourceUri) {
 	var name = sourceUri.spec;
 	name = name.substring(0, name.indexOf(".user.js"));
@@ -393,6 +493,10 @@ function convert2RegExp( pattern ) {
 	return new RegExp(res + '$', "i");
 }
 
+function ge(id) {
+    return window.document.getElementById(id);
+}
+
 function dbg(o) {
 	var s = "";
 	var i = 0;
@@ -407,4 +511,12 @@ function dbg(o) {
 	}
 
 	alert(s);
+}
+
+function delaydbg(o) {
+    setTimeout(function() {dbg(o);}, 1000);
+}
+
+function delayalert(s) {
+    setTimeout(function() {alert(s);}, 1000);
 }

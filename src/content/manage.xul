@@ -15,7 +15,7 @@
 
     (function() {
         var config = new Config();
-        var listbox, header, description, chkEnabled, btnOk, btnCancel, btnUninstall;
+        var listbox, header, description, chkEnabled, btnOk, btnCancel, btnUninstall, btnDisableAll, btnEnableAll;
         var selectedScript;
         var pagesControl;
         var uninstallList = [];
@@ -40,6 +40,8 @@
             btnOk = document.getElementById("btnOK");
             btnCancel = document.getElementById("btnCancel");
             btnUninstall = document.getElementById("btnUninstall");
+            btnDisableAll = document.getElementById("btnDisableAll");
+            btnEnableAll = document.getElementById("btnEnableAll");
             pagesControl = new PagesControl(document.getElementById("pages-control"));
             chkEnabled = document.getElementById("chkEnabled");
 
@@ -47,9 +49,17 @@
             btnOk.addEventListener("command", function() { handleOkButton(); }, false);
             btnCancel.addEventListener("command", function() { handleCancelButton(); }, false);
             btnUninstall.addEventListener("command", function() { handleUninstallButton(); }, false);
+            btnDisableAll.addEventListener("command", function() { handleDisableAllButton(); }, false);
+            btnEnableAll.addEventListener("command", function() { handleEnableAllButton(); }, false);
             chkEnabled.addEventListener("command", function() { 
                 selectedScript.enabled = chkEnabled.checked;
-                }, false);
+		if (selectedScript.enabled) {
+		    listbox.selectedItem.style.color = '';
+		} else {
+		    listbox.selectedItem.style.color = 'gray';
+		}
+		checkAllButtonStatus();
+	    }, false);
         }
 
         function updateDetails() {
@@ -70,6 +80,7 @@
                 pagesControl.populate(selectedScript);
                 disableAll(false);
             }
+	    checkAllButtonStatus();
         }
 
         function handleOkButton() {
@@ -98,14 +109,34 @@
             }
         }
 
+	function handleDisableAllButton() {
+            for (var i = 0; i < listbox.childNodes.length; i++) {
+		toggleScript(i, false);
+	    }
+	    btnDisableAll.disabled = true;
+	    btnEnableAll.disabled = false;
+	}
+
+	function handleEnableAllButton() {
+            for (var i = 0; i < listbox.childNodes.length; i++) {
+		toggleScript(i, true);
+	    }
+	    btnEnableAll.disabled = true;
+	    btnDisableAll.disabled = false;
+	}
+
         function populateChooser() {
             for (var i = 0, script = null; (script = config.scripts[i]); i++) {
                 var listitem = document.createElement("listitem");
 
                 listitem.setAttribute("label", script.name);
                 listitem.script = script;
+		if (!script.enabled) {
+		    listitem.style.color = 'gray';
+		}
                 listbox.appendChild(listitem);
             }
+	    checkAllButtonStatus();
         }
 
         function chooseScript(index) {
@@ -122,6 +153,34 @@
                 }
             }
         }
+
+	function toggleScript(index, enableFlag) {
+	    var listitem = listbox.childNodes[index];
+	    if (enableFlag) {
+		listitem.script.enabled = true;
+		listitem.style.color = '';
+	    } else {
+		listitem.script.enabled = false;
+		listitem.style.color = 'gray';
+	    }
+	}
+
+	function checkAllButtonStatus() {
+	    var enabledCount = 0;
+	    var scriptCount = config.scripts.length;
+	    for (var i = 0; i < scriptCount; i++) {
+		if (config.scripts[i].enabled)
+		    enabledCount++;
+	    }
+	    if (enabledCount == 0) { // all scripts are disabled
+		btnDisableAll.disabled = true;
+	    } else if (enabledCount == scriptCount) { // all scripts are enabled
+		btnEnableAll.disabled = true;
+	    } else {
+		btnDisableAll.disabled = false;
+		btnEnableAll.disabled = false;
+	    }
+	}
 
     })();
 
@@ -141,7 +200,11 @@
                     <checkbox id="chkEnabled" label="Enabled" checked="true" />
                 </hbox>
             </groupbox>
-            <button id="btnUninstall" label="Uninstall" style="margin-top:1em" />
+	    <hbox>
+		<button flex="1" id="btnUninstall" label="Uninstall" style="margin-top:1em" />
+		<button flex="1" id="btnDisableAll" label="Disable All" style="margin-top:1em" />
+		<button flex="1" id="btnEnableAll" label="Enable All" style="margin-top:1em" />
+	    </hbox>
         </vbox>
     </hbox>
     <spacer flex="1" style="min-height:2em" />

@@ -6,10 +6,12 @@
 <h6>1. Create the file</h6>
 <p>Open a new text file in your favorite editor and throw some javascript in there. Note that there are <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">many</a> good <a href="http://www.google.com/search?q=dhtml+tutorial">resources</a> available if you're not sure exactly what javascript you need.</p> 
 <p>For example, you might create this simple script:</p>
-<pre>(function() {
+<pre><code>(function() {
     alert("Hello, world!");
-})();</pre>
-<p>Also notice that it's a good practice (though not required) to wrap the entire script in an anonymous function to avoid creating new global names which might interfere with the target webpage.</p>
+})();</code></pre>
+<p>Also notice that it's a good practice (though not required) to wrap the entire script in an anonymous function to a
+void creating new global names which might interfere with the target webpage.</p>
+p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are available to greasemonkey scripts. For more information, see <a href="#specialfunctions">Special Functions</a>.</p>
 
 <h6>2. Save the file</h6>
 <p>You can choose any name, <em>but it has to end with <strong>.user.js</strong></em>.</p>
@@ -17,7 +19,10 @@
 <h6>3. Test the file</h6>
 <p>Drag the file onto Firefox (or open it any other way) and select "Install User Script..." from the Tools menu. <em>Note that this option will be disabled if you forgot to name your file ending with ".user.js".</em> Refresh the browser to see any changes to the current page.</p>
 
-<h6>4. (optional) Add metadata</h6>
+<h6>4. Debug the file</h6>
+<p>In the future, there will hopefully be a better debugging/development experience. For now, a good way to debug is to edit the user script file directly in {firefox profile dir}\extensions\{e4a8a97b-f2ed-450b-b12d-ee082ba24781}\chrome\greasemonkey\content\scripts\. To find the right file look in the config.xml file.</p>
+
+<h6>5. (optional) Add metadata</h6>
 <p>By default, scripts will be installed with a name based on their filename, a namespace based on the URL they were downloaded from, and will be included with every page on the interwebs. If you want to override this default behavior, you need metadata power.</p>
 <p>Medatadata is added to userscripts with special javascript comments, like so:</p>
 <pre>// ==UserScript==
@@ -80,6 +85,33 @@
 <br />
 <h6>Tips</h6>
 <ul>
-  <li>User scripts are injected into the document after the DOM is fully loaded, but before onload occurs. This means that your scripts can begin immediately and don't need to wait for onload.</li>
+  <li>User scripts are injected into the document after the DOM is fully loaded, but before onload occurs. This means that your scripts can begin immediately and don't need to wait for onload.  However, replacing large parts of the DOM (e.g. using innerHTML or outerHTML) at this early stage of rendering is <a href="http://www.kryogenix.org/days/2005/03/21/textplain">known</a> to cause Firefox some trouble.  In this case, you'll have more success if you call your code in response to the load event instead: 
+<pre><code>(function() {
+  window.addEventListener("load", function(e) {
+    document.innerHTML = "Hello, world!";
+  }, false);
+})();</code></pre></li>
   <li>Mozilla has a bunch of advanced features that you can take advantage of to make your job easier. These typically aren't practical for DHTML authors because they don't exist in any other browser, but since your user scripts will only run on firefox, you're free to use such goodies as <a href="http://www-jcsu.jesus.cam.ac.uk/~jg307/mozilla/xpath-tutorial.html">xpath</a> support (for HTML as well as XHTML), <a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html">treewalkers</a>, <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html">mutation events</a>, <a href="http://xulplanet.com/references/objref/XMLHttpRequest.html">xmlhttp</a>, etc.</li>
 </ul>
+<h6 id="specialfunctions">Special Functions</h6>
+<p>GM_registerMenuCommand</p>
+<p>Userscripts can call GM_registerMenuCommand(commandName, callback) to add a menu command to the tools > User Script Commands submenu. The first parameter should be the string name of the command to display. The second parameter should be a callback function which will be invoked when the menu item is selected by the user.</p>
+<p>GM_xmlhttpRequest</p>
+<p>Userscripts can call GM_xmlhttpRequest(details) to make an xmlhttp request to other domains.</p>
+<p>The details parameter is an object having the following fields: method, url, headers, onload, onreadystatechange, onerror, data. All fields are optional except method and url. The headers field is an object which should be the name-value pairs of the headers to send, for instance {"User-Agent":"Mozilla"}. The onload, onreadystatechange, and onerror parameters are callback functions which are called when the corresponding events occur.</p>
+<p>Callback functions should accept a single object parameter having the following fields: responseText, status, statusText, readyState, and responseHeaders. The responseHeaders is the string representation of response headers returned by XMLHTTPRequest.getAllResponseHeaders().</p>
+<p>Here's an example:</p>
+<pre>GM_xmlhttpRequest({
+  method:"GET",
+  url:"http://youngpup.net/",
+  headers:["User-Agent":"Mozilla"],
+  onload:function(details) {
+    alert([
+      status,
+      statusText,
+      readyState,
+      responseHeaders.join(","),
+      responseText
+    ].join("\n"))
+  }
+});</pre>

@@ -5,6 +5,17 @@
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript">
     <![CDATA[
+        var commandManager = new CommandManager();
+
+        try {
+            top.getBrowser().addProgressListener(commandManager.progressListener);
+        } catch (e) { 
+            //delaydbg(e);   
+            //TODO: I'm getting a TypeError here, but can't figure out why. 
+            //Otherwise, things appear to work, so I'm eating the exception.
+            //Can someone else figure out why?
+        }        
+        
         window.addEventListener("load", function() {
           var appcontent = ge("appcontent");
 
@@ -22,27 +33,33 @@
           }
           
           function greaseLoad(e) {
+            initGMXmlHttp(e.view);
+
             var config = new Config();
-            var scriptElm = e.originalTarget.createElement("SCRIPT");
+            var scriptElm = e.originalTarget.createElement("script");
 
             config.load();
             
+            commandManager.loadDoc(e);
+            window._content.addEventListener("unload", commandManager.unloadDoc, false);
+
             outer:
             for (var i = 0; i < config.scripts.length; i++) {
               var script = config.scripts[i];
 
               if (script.enabled) {
                 for (var j = 0; j < script.includes.length; j++) {
-                	var pattern = convert2RegExp(script.includes[j]);
+                  var pattern = convert2RegExp(script.includes[j]);
 
-                	if (pattern.test(e.originalTarget.location.href)) {
-              	    for (var k = 0; k < script.excludes.length; k++) {
-                  		pattern = convert2RegExp(script.excludes[k]);
-          		
-                  		if (pattern.test(e.originalTarget.location.href)) {
-                		    continue outer;
-                  		}
-              	    }
+                  if (pattern.test(e.originalTarget.location.href)) {
+                    for (var k = 0; k < script.excludes.length; k++) {
+                      pattern = convert2RegExp(script.excludes[k]);
+              
+                      if (pattern.test(e.originalTarget.location.href)) {
+                        continue outer;
+                      }
+
+                    }
 
                     scriptElm.appendChild(
                       e.originalTarget.createTextNode(
@@ -51,19 +68,73 @@
                         "\n\n"
                       )
                     );
-          	    
-              	    continue outer;
-                	}
+                
+                    continue outer;
+                  }
                 }
               }
             }
-
+            
             if (scriptElm.childNodes.length > 0) {
               e.originalTarget.body.appendChild(scriptElm);
               e.originalTarget.body.removeChild(scriptElm);
             }
-            
           }
+          
+          function initGMXmlHttp(browser) {
+            // details should look like: 
+            // {method,url,onload,onerror,onreadystatechange,headers,data}
+            // headers should be in the form [{name:value},{name:value},etc]
+            // can't support mimetype because i think it's only used for forcing
+            // text/xml and we can't support that
+            browser.GM_xmlhttpRequest = function(details) {
+
+              // don't actually need the timer functionality, but this pops it 
+              // out into chromeWindow's thread so that we get that security 
+              // context.
+              window.setTimeout(function(){ startRequest(details) }, 0);
+            }
+            
+            function startRequest(details) {
+              var req = new XMLHttpRequest();
+
+              setupRequestEvent(req, "onload", details);
+              setupRequestEvent(req, "onreadystatechange", details);
+              setupRequestEvent(req, "onerror", details);
+
+              req.open(details.method, details.url);
+              
+              if (details.headers && details.headers.length) {
+                for (var i = 0; i < details.headers.length; i++) {
+                  for (var prop in details.headers[i]) {
+                    req.setRequestHeader(prop, details.headers[i][prop]);
+                  }
+                }
+              }
+              
+              req.send(details.data);
+            }
+
+            function setupRequestEvent(req, event, details) {
+              if (details[event]) {
+                req[event] = function() {
+                  // pop back onto browser thread and call event handler
+                  browser.setTimeout(function(){ 
+                    details[event]({
+                      // can't support responseXML because security won't
+                      // let the browser call properties on it
+                      responseText:req.responseText,
+                      status:req.status,
+                      statusText:req.statusText,
+                      readyState:req.readyState,
+                      responseHeaders:req.getAllResponseHeaders()
+                    }) }, 0);
+                }
+              }
+            }
+          }
+
+
 
           function manageMenuItemClicked() {
             window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
@@ -80,14 +151,15 @@
               && culprit.href.match(/\.user\.js(\?|$)/i) != null);
           }
 
-          function toolsMenuShowing() {
-            var culprit = document.popupNode;
+          function toolsMenuShowing(e) {
             var installItem = ge("userscript-tools-install");
+            var commandsItem = ge("userscript-commands");
 
             var disabled = !(window._content && window._content.location && 
-            		 window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+            window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
 
             installItem.setAttribute("disabled", disabled.toString());
+            commandManager.initToolsMenu(commandsItem);
           }
 
           function installMenuItemClicked() {
@@ -115,11 +187,7 @@
 
             return vargs;
           }
-
-          function ge(id) {
-            return window.document.getElementById(id)
-          }
-
+         
         }, false); // end window.addEventListener("load"...)
 
     ]]>
@@ -129,11 +197,17 @@
         <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" />
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
-
     <menupopup id="menu_ToolsPopup">
-        <menuseparator id="userscript-tools-sep" position="9" />
-        <menuitem id="userscript-tools-install" position="10" accesskey="S" label="Install User Script..." />
-        <menuitem id="userscript-tools-manage" position="11" accesskey="U" label="Manage User Scripts..." />
+        <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
+        <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." />
+        <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." />
+        <menu id="userscript-commands" accesskey="C" label="User Script Commands" disabled="true">
+          <menupopup>
+            
+          </menupopup>
+        </menu>
     </menupopup>
 
 </overlay>
+
+
