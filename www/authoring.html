@@ -1,0 +1,59 @@
+<!-- MAIN CONTENT -->
+<h5 class="page-header"><a id="content" name="content">Writing User Scripts</a></h5>
+
+<p>User scripts are just plain 'ol DHTML javascripts with a *.user.js file extension. Thus, any <a href="http://www.amazon.com/exec/obidos/tg/detail/-/1565923928/103-6951853-4103063?v=glance">book</a> or <a href="http://www.google.com/search?q=dhtml+tutorial">online reference</a> for writing DHTML applies equally to writing user scripts.</p>
+
+<h6>Metadata</h6>
+<p>Optionally, you can throw a tiny bit of metadata into a user script in a javascript code comment with this format:</p>
+<pre>// ==UserScript==
+// @name          My Cool User Script
+// @namespace     http://youngpup.net/userscripts
+// @description	  Does things that no other user script can do.
+// @include       http://youngpup.net/*
+// @include       http://www.youngpup.net/*
+// @exclude       http://www.youngpup.net/2001/ypsimplescroll
+// ==/UserScript==</pre>
+<p>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>@name</td>
+        <td>A friendly name for the script.</td>
+        <td>The script's filename without the extension.</td>
+      </tr>
+      <tr>
+        <td>@namespace</td>
+        <td>A scope within which @name should be unique.</td>
+        <td>The domain of the script's file.</td>
+      </tr>
+      <tr>
+        <td>@description</td>
+        <td>A, uhm, description.</td>
+        <td>none</td>
+      </tr>
+      <tr>
+        <td>@include</td>
+        <td>A url to include the script with. There can be more than one.</td>
+        <td>*</td>
+      </tr>
+      <tr>
+        <td>@exclude</td>
+        <td>A url to explicitly exclude the script from. There can be more than one.</td>
+        <td>none</td>
+      </tr>
+    </tbody>
+  </table>
+</p>
+
+<h6>Tips</h6>
+<ul>
+  <li>User scripts are injected into the document after the DOM is fully loaded, but before onload occurs. This means that your scripts can begin immediately and don't need to wait for onload.</li>
+  <li>Mozilla has a bunch of advanced features that you can take advantage of to make your job easier. These typically aren't practical for DHTML authors because they don't exist in any other browser, but since your user scripts will only run on firefox, you're free to use such goodies as <a href="http://www-jcsu.jesus.cam.ac.uk/~jg307/mozilla/xpath-tutorial.html">xpath</a> support (for HTML as well as XHTML), <a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html">treewalkers</a>, <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html">mutation events</a>, <a href="http://xulplanet.com/references/objref/XMLHttpRequest.html">xmlhttp</a>, etc.</li>
+</ul>
