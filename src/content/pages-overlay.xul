@@ -103,7 +103,7 @@
         <groupbox id="grpIncluded" orient="vertical">
             <caption label="Included pages" />
             <hbox style="margin-bottom:.5em;">
-                <listbox style="height:auto" flex="1" />
+                <listbox style="max-height: 8em; overflow: auto" flex="1" />
                 <vbox>
                     <button label="Add..." />
                     <button label="Edit..." disabled="true" />
@@ -115,7 +115,7 @@
         <groupbox id="grpExcluded" orient="vertical">
             <caption label="Excluded pages" />
             <hbox style="margin-bottom:.5em">
-                <listbox style="height:auto" flex="1" />
+                <listbox style="max-height: 8em; overflow: auto" flex="1" />
                 <vbox>
                     <button label="Add..." />
                     <button label="Edit..." disabled="true" />
