@@ -193,9 +193,9 @@ function ScriptDownloader(url) {
 						case "description":
 							script[match[1]] = match[2];
 							break;
-						case "includes":
-						case "excludes":
-							script[match[1]].push(match[2]);
+						case "include":
+						case "exclude":
+							script[match[1]+"s"].push(match[2]);
 							break;
 					}
 				}
