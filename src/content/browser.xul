@@ -7,15 +7,6 @@
     <![CDATA[
         var commandManager = new CommandManager();
 
-        try {
-            top.getBrowser().addProgressListener(commandManager.progressListener);
-        } catch (e) { 
-            //delaydbg(e);   
-            //TODO: I'm getting a TypeError here, but can't figure out why. 
-            //Otherwise, things appear to work, so I'm eating the exception.
-            //Can someone else figure out why?
-        }        
-        
         window.addEventListener("load", function() {
           var appcontent = ge("appcontent");
 

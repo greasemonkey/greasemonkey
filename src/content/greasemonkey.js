@@ -22,7 +22,7 @@ function CommandManager() {
     //than the one the script's on.
     docId = document.__gmId;
     
-    document.GM_registerMenuCommand = 
+    e.view.GM_registerMenuCommand = 
       function(commandName, commandCallback) { 
         registerMenuCommand(docId, commandName, commandCallback);
       }; 
