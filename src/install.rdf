@@ -7,11 +7,11 @@
 
     <em:name>Greasemonkey</em:name>
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <em:version>0.1</em:version>
+    <em:version>0.1.1</em:version>
     <em:description>A User Script Manager for Firefox</em:description>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
-    <em:homepageURL>http://youngpup.net/2004/greasemonkey</em:homepageURL>
+    <em:homepageURL>http://greasemonkey.mozdev.org/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
 
     <em:targetApplication>

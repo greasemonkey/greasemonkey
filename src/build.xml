@@ -3,7 +3,7 @@
 <project name="greasemonkey" default="createxpi">
 
   <target name="createxpi">
-    <zip destfile="greasemonkey.xpi">
+    <zip destfile="..\downloads\greasemonkey.xpi">
       <zipfileset dir="content" includes="*" prefix="chrome/greasemonkey/content" />
       <zipfileset dir="content" includes="scripts/*" prefix="chrome/greasemonkey/content" />
 	  <zipfileset dir="." includes="install.rdf" />
