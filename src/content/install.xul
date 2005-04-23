@@ -16,7 +16,6 @@
             var pagesControl = new PagesControl(document.getElementById("pages-control"));
             var script = window.arguments[0];
             var file = window.arguments[1];
-	//		alert("install.xul\n"+ev.originalTarget.location+"\n"+file);
             var result = window.arguments[2];
             var status = document.getElementById("status");
             var config = new Config();
@@ -31,25 +30,22 @@
                 pagesControl.populate(script);
 
                 document.getElementById("btnOK").addEventListener("command", function() {
-	//		alert("ok button");
                     var newDir = getScriptDir();
                     var existingIndex = config.find(script.namespace, script.name);
                     var existingFile = null;
                     var oldScripts = new Array(config.scripts);
 
                     if (existingIndex > -1) {
-                        existingFile = getScriptFile(config.scripts[existingIndex].id);
+                        existingFile = getScriptFile(config.scripts[existingIndex].filename);
+                        existingFile.remove(false);
                         config.scripts.splice(existingIndex, 1);
                     }
 
                     try {
-                        file.moveTo(newDir, script.id);
+                        config.initFilename(script);
+                        file.moveTo(newDir, script.filename);
                         config.scripts.push(script);
                         config.save();
-
-                        if (existingFile != null) {
-                            existingFile.remove(false);
-                        }
 
                         result.value = true;
                         window.close();
@@ -61,10 +57,8 @@
                 }, false);
 
                 document.getElementById("btnCancel").addEventListener("command", function() {
-	//		alert("cancel button");
-                    if (request) request.abort();
-
-                    window.close();
+                  if (request) request.abort();
+                  window.close();
                 }, false);
             }
         }, false);

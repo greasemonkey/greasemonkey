@@ -24,7 +24,8 @@
     
     	return true;
     }
-  window.GM_registerMenuCommand("Coralize page", function() {
+
+    GM_registerMenuCommand("Coralize page", function() {
         var parts;
         var newLoc;
         

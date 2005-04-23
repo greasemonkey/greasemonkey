@@ -1,15 +1,36 @@
 <?xml version="1.0"?>
 
+<!--
+Greasemonkey todo:
+===================================
+! fix checkboxes in manage.xul
+X support for latest nightlies - some scripts incorrectly used window._content
+X create an edit script button
+! enable data urls
+X enable/disable GM icon
+X log() functionality, fix line numbers
+* status window/icon
+X local data persistence
+* earlier script injection
+* pattern-based injection/HTML overlays
+-->
+
 <overlay id="greasemonkey-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/versioning.js" />
     <script type="application/x-javascript">
     <![CDATA[
         var commandManager = new CommandManager();
 
         window.addEventListener("load", function() {
           var appcontent = ge("appcontent");
+          var prefManager = new GM_PrefManager();
+          var gmEnabled = true;
 
+          GM_updateVersion(prefManager);
+          
           if (appcontent){
             if (!appcontent.greased){
               appcontent.greased = true;
@@ -20,20 +41,34 @@
               ge("menu_ToolsPopup").addEventListener("popupshowing", toolsMenuShowing, false);
               ge("install-userscript").addEventListener("command", installContextItemClicked, false);
               ge("userscript-tools-install").addEventListener("command", installMenuItemClicked, false);
+
+              var statusImage = ge("gm-status-image");
+              
+              prefManager.watch("enabled", refreshStatus);
+              refreshStatus();
+
+              statusImage.addEventListener("mousedown", statusImageClicked, false);
             }
           }
-          
-          function greaseLoad(e) {
-            initGMXmlHttp(e.view);
 
+          function greaseLoad(e) {
+            if (!gmEnabled) {
+              return;
+            }
+            
+            var win = e.explicitOriginalTarget.defaultView;
+            var doc = win.document;
+            
+            initGMXmlHttp(win);
+
+            commandManager.loadDoc(e);
+            window._content.addEventListener("unload", commandManager.unloadDoc, false);
+            
             var config = new Config();
-            var scriptElm = e.originalTarget.createElement("script");
+            var scriptElm;
 
             config.load();
             
-            commandManager.loadDoc(e);
-            window._content.addEventListener("unload", commandManager.unloadDoc, false);
-
             outer:
             for (var i = 0; i < config.scripts.length; i++) {
               var script = config.scripts[i];
@@ -49,27 +84,70 @@
                       if (pattern.test(e.originalTarget.location.href)) {
                         continue outer;
                       }
-
                     }
 
-                    scriptElm.appendChild(
-                      e.originalTarget.createTextNode(
-                        "//===" + script.id + "===\n" + 
-                        getContents(getScriptChrome(script.id)) + 
-                        "\n\n"
-                      )
-                    );
-                
+                    injectScript(script, win, doc);                    
+
                     continue outer;
                   }
                 }
               }
             }
+
+            // need to undo these here because if any of the scripts load
+            // external scripts, then they will get run asynchronously, which
+            // means that this will run before them, which means that they
+            // will get null references when trying to use these functions.
+            runBrowserScript(
+              doc,
+              ["delete window.GM_xmlhttpRequest;", 
+               "delete window.GM_registerMenuCommand;",
+               "delete window.GM_setValue;",
+               "delete window.GM_getValue;",
+               "delete window.GM_log;"].join("\n")
+            );
+          }
+          
+          function injectScript(script, win, doc) {
+            var prefMan = new GM_PrefManager("scriptvals." + script.namespace + "/" + script.name + ".");
             
-            if (scriptElm.childNodes.length > 0) {
-              e.originalTarget.body.appendChild(scriptElm);
-              e.originalTarget.body.removeChild(scriptElm);
+            win.GM_setValue = function(name, value) {
+              prefMan.setValue(name, value);
             }
+            win.GM_getValue = function(name, defaultValue) {
+              return prefMan.getValue(name, defaultValue);
+            }
+            win.GM_log = function(message) {
+              GM_log([script.namespace, "/", script.name, ": ", message].join(""))
+            }
+
+            try {
+              runBrowserScript(
+                doc,
+                [ "(function(){",
+                  "var GM_xmlhttpRequest = window.GM_xmlhttpRequest;",
+                  "var GM_registerMenuCommand = window.GM_registerMenuCommand;",
+                  "var GM_setValue = window.GM_setValue;",
+                  "var GM_getValue = window.GM_getValue;",
+                  "var GM_log = window.GM_log;\n",
+                  getContents(getScriptChrome(script.filename)),
+                  "})();"
+                  ].join("\n")
+              );
+            } catch (ex) {
+              GM_log([scriptLogPrefix(script), "Exception when injecting : ", uneval(ex)].join(""));
+            }
+          }
+          
+          function scriptLogPrefix(script) {
+            return [script.namespace, "/", script.name, ": "].join("");
+          }
+
+          function runBrowserScript(doc, jscode) {
+            var elm = doc.createElement("script");
+            elm.appendChild(doc.createTextNode(jscode));
+            doc.body.appendChild(elm);
+            doc.body.removeChild(elm);
           }
           
           function initGMXmlHttp(browser) {
@@ -95,11 +173,9 @@
 
               req.open(details.method, details.url);
               
-              if (details.headers && details.headers.length) {
-                for (var i = 0; i < details.headers.length; i++) {
-                  for (var prop in details.headers[i]) {
-                    req.setRequestHeader(prop, details.headers[i][prop]);
-                  }
+              if (details.headers) {
+                for (var prop in details.headers) {
+                  req.setRequestHeader(prop, details.headers[prop]);
                 }
               }
               
@@ -124,8 +200,6 @@
               }
             }
           }
-
-
 
           function manageMenuItemClicked() {
             window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
@@ -161,6 +235,23 @@
             new ScriptDownloader(document.popupNode.href).start();
           }
 
+          function refreshStatus() {
+            gmEnabled = prefManager.getValue("enabled", true);
+
+            if (gmEnabled) {
+              statusImage.src = "chrome://greasemonkey/content/status_on.gif";
+              statusImage.tooltipText = "Greasemonkey is enabled";
+            }
+            else {
+              statusImage.src = "chrome://greasemonkey/content/status_off.gif";
+              statusImage.tooltipText = "Greasemonkey is disabled";
+            }
+          }
+
+          function statusImageClicked() {
+            prefManager.setValue("enabled", !gmEnabled);
+          }
+
           function parseArgs(href) {
             var qsStartPos = href.lastIndexOf("?");
             var vargs = {};
@@ -178,7 +269,6 @@
 
             return vargs;
           }
-         
         }, false); // end window.addEventListener("load"...)
 
     ]]>
@@ -199,6 +289,9 @@
         </menu>
     </menupopup>
 
+    <statusbar id="status-bar">
+        <statusbarpanel id="gm-status" insertafter="livemark-button">
+            <image id="gm-status-image" width="16" height="16"/>
+        </statusbarpanel>
+    </statusbar>
 </overlay>
-
-

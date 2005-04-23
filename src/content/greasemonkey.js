@@ -22,7 +22,7 @@ function CommandManager() {
     //than the one the script's on.
     docId = document.__gmId;
     
-    e.view.GM_registerMenuCommand = 
+    e.explicitOriginalTarget.defaultView.GM_registerMenuCommand = 
       function(commandName, commandCallback) { 
         registerMenuCommand(docId, commandName, commandCallback);
       }; 
@@ -101,285 +101,320 @@ function CommandManager() {
 }
 
 function Config() {
-	this.onload = null;
-	this.scripts = null;
+  this.onload = null;
+  this.scripts = null;
 
-	this.find = function(namespace, name) {
-		namespace = namespace.toLowerCase();
-		name = name.toLowerCase();
+  this.find = function(namespace, name) {
+    namespace = namespace.toLowerCase();
+    name = name.toLowerCase();
 
-		for (var i = 0, script = null; (script = this.scripts[i]); i++) {
-			if (script.namespace.toLowerCase() == namespace && script.name.toLowerCase() == name) {
-				return i;
-			}
-		}
+    for (var i = 0, script = null; (script = this.scripts[i]); i++) {
+      if (script.namespace.toLowerCase() == namespace && script.name.toLowerCase() == name) {
+        return i;
+      }
+    }
 
-		return -1;
-	}
-	
-	this.load = function() {
-		var doc = document.implementation.createDocument("", "", null);
-		doc.async = false;
-		try {
-		    doc.load(getScriptChrome("config.xml"));
-		} catch (exc) {
-		    doc.load(getScriptChrome("default-config.xml"));
-		}
+    return -1;
+  }
+  
+  this.initFilename = function(script) {
+    var index = {};
+    var base = script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
 
-		var nodes = document.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
+    // 24 is a totally arbitrary max length
+    if (base.length > 24) {
+      base = base.substring(0, 24);
+    }
+    
+    for (var i = 0; i < this.scripts.length; i++) {
+      index[this.scripts[i].filename] = this.scripts[i];
+    }
+    
+    if (!index[base + ".user.js"]) {
+      script.filename = base + ".user.js";
+      return;
+    }
+    
+    for (var count = 1; count < Number.MAX_VALUE; count++) {
+      if (!index[base + count + ".user.js"]) {
+        script.filename = base + count + ".user.js";
+        return;
+      }
+    }
+    
+    throw new Error("doooooooode. get some different user script or something.");
+  }
+  
+  this.load = function() {
+    var doc = document.implementation.createDocument("", "", null);
+    doc.async = false;
+    try {
+        doc.load(getScriptChrome("config.xml"));
+    } catch (exc) {
+        doc.load(getScriptChrome("default-config.xml"));
+    }
 
-		this.scripts = [];
+    var nodes = document.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
 
-		for (var node = null; (node = nodes.iterateNext()); ) {
-			var script = new Script();
+    this.scripts = [];
 
-			for (var i = 0, childNode = null; (childNode = node.childNodes[i]); i++) {
-				if (childNode.nodeName == "Include") {
-					script.includes.push(childNode.firstChild.nodeValue);
-				}
-				else if (childNode.nodeName == "Exclude") {
-					script.excludes.push(childNode.firstChild.nodeValue);
-				}
-			}
+    for (var node = null; (node = nodes.iterateNext()); ) {
+      var script = new Script();
 
-			script.id = node.getAttribute("id");
-			script.name = node.getAttribute("name");
-			script.namespace = node.getAttribute("namespace");
-			script.description = node.getAttribute("description");
-			script.enabled = node.getAttribute("enabled") == true.toString();
+      for (var i = 0, childNode = null; (childNode = node.childNodes[i]); i++) {
+        if (childNode.nodeName == "Include") {
+          script.includes.push(childNode.firstChild.nodeValue);
+        }
+        else if (childNode.nodeName == "Exclude") {
+          script.excludes.push(childNode.firstChild.nodeValue);
+        }
+      }
 
-			this.scripts.push(script);
-		}
-	}
+      script.filename = node.getAttribute("filename");
+      script.name = node.getAttribute("name");
+      script.namespace = node.getAttribute("namespace");
+      script.description = node.getAttribute("description");
+      script.enabled = node.getAttribute("enabled") == true.toString();
 
-	this.save = function() {
-		var doc = document.implementation.createDocument("", "UserScriptConfig", null);
-		
-		for (var i = 0, scriptObj = null; (scriptObj = this.scripts[i]); i++) {
-			var scriptNode = doc.createElement("Script");
+      this.scripts.push(script);
+    }
+  }
 
-			for (var j = 0; j < scriptObj.includes.length; j++) {
-				var includeNode = doc.createElement("Include");
-				includeNode.appendChild(doc.createTextNode(scriptObj.includes[j]));
-				scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-				scriptNode.appendChild(includeNode);
-			}
+  this.save = function() {
+    var doc = document.implementation.createDocument("", "UserScriptConfig", null);
+    
+    for (var i = 0, scriptObj = null; (scriptObj = this.scripts[i]); i++) {
+      var scriptNode = doc.createElement("Script");
 
-			for (var j = 0; j < scriptObj.excludes.length; j++) {
-				var excludeNode = doc.createElement("Exclude");
-				excludeNode.appendChild(doc.createTextNode(scriptObj.excludes[j]));
-				scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-				scriptNode.appendChild(excludeNode);
-			}
+      for (var j = 0; j < scriptObj.includes.length; j++) {
+        var includeNode = doc.createElement("Include");
+        includeNode.appendChild(doc.createTextNode(scriptObj.includes[j]));
+        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+        scriptNode.appendChild(includeNode);
+      }
 
-			scriptNode.appendChild(doc.createTextNode("\n\t"));
+      for (var j = 0; j < scriptObj.excludes.length; j++) {
+        var excludeNode = doc.createElement("Exclude");
+        excludeNode.appendChild(doc.createTextNode(scriptObj.excludes[j]));
+        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+        scriptNode.appendChild(excludeNode);
+      }
 
-			scriptNode.setAttribute("id", scriptObj.id);
-			scriptNode.setAttribute("name", scriptObj.name);
-			scriptNode.setAttribute("namespace", scriptObj.namespace);
-			scriptNode.setAttribute("description", scriptObj.description);
-			scriptNode.setAttribute("enabled", scriptObj.enabled);
+      scriptNode.appendChild(doc.createTextNode("\n\t"));
 
-			doc.firstChild.appendChild(doc.createTextNode("\n\t"));
-			doc.firstChild.appendChild(scriptNode);
-		}
+      scriptNode.setAttribute("filename", scriptObj.filename);
+      scriptNode.setAttribute("name", scriptObj.name);
+      scriptNode.setAttribute("namespace", scriptObj.namespace);
+      scriptNode.setAttribute("description", scriptObj.description);
+      scriptNode.setAttribute("enabled", scriptObj.enabled);
 
-		doc.firstChild.appendChild(doc.createTextNode("\n"))
+      doc.firstChild.appendChild(doc.createTextNode("\n\t"));
+      doc.firstChild.appendChild(scriptNode);
+    }
 
-		var configStream = getWriteStream("config.xml");
-		new XMLSerializer().serializeToStream(doc, configStream, "utf-8");
-		configStream.close();
-	}
+    doc.firstChild.appendChild(doc.createTextNode("\n"))
+
+    var configStream = getWriteStream(getScriptFile("config.xml"));
+    new XMLSerializer().serializeToStream(doc, configStream, "utf-8");
+    configStream.close();
+  }
 }
 
 function Script() {
-	this.name = null;
-	this.namespace = null;
-	this.description = null;
-	this.enabled = true;
-	this.includes = [];
-	this.excludes = [];
+  this.filename = null;
+  this.name = null;
+  this.namespace = null;
+  this.description = null;
+  this.enabled = true;
+  this.includes = [];
+  this.excludes = [];
 }
 
 function ScriptDownloader(url) {
-	var dm = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager)
-	var ioservice = Components.classes["@mozilla.org/network/io-service;1"].getService();
-	var sourceUri = ioservice.newURI(url, null, null);
-	var targetFile = getTempFile();
-	var targetUri = ioservice.newFileURI(targetFile)
-	var persist = makeWebBrowserPersist();	
-	var sysListener = null;
-	var download = null;
-	var self = this;
-	var timerId = null;
+  var dm = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager)
+  var ioservice = Components.classes["@mozilla.org/network/io-service;1"].getService();
+  var sourceUri = ioservice.newURI(url, null, null);
+  var targetFile = getTempFile();
+  var targetUri = ioservice.newFileURI(targetFile)
+  var persist = makeWebBrowserPersist();  
+  var sysListener = null;
+  var download = null;
+  var self = this;
+  var timerId = null;
 
-	this.start = function() {
-		try {
-			dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
-			dm.open(window._content, targetFile.path)
+  this.start = function() {
+    try {
+      dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
+      dm.open(window._content, targetFile.path)
 
-			download = dm.getDownload(targetFile.path);
-			download.persist = persist;
+      download = dm.getDownload(targetFile.path);
+      download.persist = persist;
 
-			persist.saveURI(sourceUri, null, null, null, null, targetFile);
+      persist.saveURI(sourceUri, null, null, null, null, targetFile);
 
-			// this seems like a huge hack, but it was actually the most reliable
-			// way I could find to determine when downloading is complete
-			timerId = window.setInterval(checkLoad, 200);
-		}
-		catch (e) {
-			handleErrors(e);
-		}
-	}
+      // this seems like a huge hack, but it was actually the most reliable
+      // way I could find to determine when downloading is complete
+      timerId = window.setInterval(checkLoad, 200);
+    }
+    catch (e) {
+      handleErrors(e);
+    }
+  }
 
-	function checkLoad() {
-		// if the download is complete, stop.
-		if (download.percentComplete == 100) {
-			window.clearInterval(timerId);
-			handleLoad();
-		}
-		// if not complete yet, double-check that somebody hasn't cancelled it
-		else if (dm.getDownload(targetFile.path) == null) {
-			// the download is no longer active
-			window.clearInterval(timerId);
-			return;
-		}
-		// otherwise, do nothing. downloading continues.
-	}
+  function checkLoad() {
+    // if the download is complete, stop.
+    if (download.percentComplete == 100) {
+      window.clearInterval(timerId);
+      handleLoad();
+    }
+    // if not complete yet, double-check that somebody hasn't cancelled it
+    else if (dm.getDownload(targetFile.path) == null) {
+      // the download is no longer active
+      window.clearInterval(timerId);
+      return;
+    }
+    // otherwise, do nothing. downloading continues.
+  }
 
-	function handleLoad() {
-		closeDownloadManager();
+  function handleLoad() {
+    closeDownloadManager();
 
-		// validate that we downloaded ok
-		if (!targetFile.exists() || targetFile.fileSize == 0) {
-			alert("The file does not exist or was removed.");
-			return;
-		}
+    // validate that we downloaded ok
+    if (!targetFile.exists() || targetFile.fileSize == 0) {
+      alert("The file does not exist or was removed.");
+      return;
+    }
 
-		// initialize a new script object
-		var script = new Script();
-		script.id = targetFile.leafName;
-		script.enabled = true;
-		script.includes = [];
-		script.excludes = [];
+    // initialize a new script object
+    var script = new Script();
+    script.filename = targetFile.leafName;
+    script.enabled = true;
+    script.includes = [];
+    script.excludes = [];
 
-		// crack open the file so we can look for metadata in the comments
-		var fileStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
-						.createInstance(Components.interfaces.nsIFileInputStream);
+    // crack open the file so we can look for metadata in the comments
+    var fileStream = getLineStream(targetFile);
 
-		fileStream.init(targetFile, 1, 0, false);
+    // read one line at a time looking for start meta delimiter or EOF
+    var lineStream = fileStream.QueryInterface(Components.interfaces.nsILineInputStream);
+    var result = {};
+    var foundMeta = false;
 
-		// read one line at a time looking for start meta delimiter or EOF
-		var lineStream = fileStream.QueryInterface(Components.interfaces.nsILineInputStream);
-		var result = {};
-		var foundMeta = false;
+    while (lineStream.readLine(result)) {
+      if (result.value.indexOf("// ==UserScript==") == 0) {
+        foundMeta = true;
+        break;
+      }
+    }
 
-		while (lineStream.readLine(result)) {
-			if (result.value.indexOf("// ==UserScript==") == 0) {
-				foundMeta = true;
-				break;
-			}
-		}
+    // gather up meta lines
+    if (foundMeta) {
+      while (lineStream.readLine(result)) {
+        if (result.value.indexOf("// ==/UserScript==") == 0) {
+          break;
+        }
 
-		// gather up meta lines
-		if (foundMeta) {
-			while (lineStream.readLine(result)) {
-				if (result.value.indexOf("// ==/UserScript==") == 0) {
-					break;
-				}
+        var match = result.value.match(/\/\/ \@(\S+)\s+([^\n]+)/);
+        if (match != null) {
+          switch (match[1]) {
+            case "name":
+            case "namespace":
+            case "description":
+              script[match[1]] = match[2];
+              break;
+            case "include":
+            case "exclude":
+              script[match[1]+"s"].push(match[2]);
+              break;
+          }
+        }
+      }
+    }
 
-				var match = result.value.match(/\/\/ \@(\S+)\s+([^\n]+)/);
-				if (match != null) {
-					switch (match[1]) {
-						case "name":
-						case "namespace":
-						case "description":
-							script[match[1]] = match[2];
-							break;
-						case "include":
-						case "exclude":
-							script[match[1]+"s"].push(match[2]);
-							break;
-					}
-				}
-			}
-		}
+    fileStream.close();
 
-		fileStream.close();
+    // if no meta info, default to reasonable values
+    if (script.name == null) {
+      script.name = parseScriptName(sourceUri);
+    }
 
-		// if no meta info, default to reasonable values
-		if (script.name == null) {
-			script.name = parseScriptName(sourceUri);
-		}
+    if (script.namespace == null) {
+      script.namespace = sourceUri.host;
+    }
 
-		if (script.namespace == null) {
-			script.namespace = sourceUri.host;
-		}
+    if (script.includes.length == 0) {
+      script.includes.push("*");
+    }
 
-		if (script.includes.length == 0) {
-			script.includes.push("*");
-		}
+    // open install dialog
+    var result = {};
+    window.openDialog("chrome://greasemonkey/content/install.xul", 
+      "manager", "resizable,centerscreen,modal", script, targetFile, result);
 
-		// open install dialog
-		var result = {};
-		window.openDialog("chrome://greasemonkey/content/install.xul", 
-			"manager", "resizable,centerscreen,modal", script, targetFile, result);
+    closeDownloadManager();
 
-		closeDownloadManager();
+    if (result.value) {
+      alert("Success! Refresh page to see changes.");
+    }
+  }
 
-		if (result.value) {
-			alert("Success! Refresh page to see changes.");
-		}
-	}
+  function handleErrors(e) {
+    //todo: need to handle this somehow. perhaps nsIUriChecker?
+    //if (e.name == "NS_ERROR_FILE_NOT_FOUND") {
+    //  alert("User script could not be found. Please check the name and try again.");
+    //  window.status = defaultStatus;
+    //}
+    //else {
+      alert("Could not download user script\n\n" + e.toString());
+    //}
+  }
 
-	function handleErrors(e) {
-		//todo: need to handle this somehow. perhaps nsIUriChecker?
-		//if (e.name == "NS_ERROR_FILE_NOT_FOUND") {
-		//	alert("User script could not be found. Please check the name and try again.");
-		//	window.status = defaultStatus;
-		//}
-		//else {
-			alert("Could not download user script\n\n" + e.toString());
-		//}
-	}
+  function closeDownloadManager() {
+    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator); 
+    var en = wm.getEnumerator(""); 
+    var n = 0; 
+    var dlm = null;
+    
+    while (en.hasMoreElements()) { 
+      var w = en.getNext(); 
 
-	function closeDownloadManager() {
-		var wm = Components.classes['@mozilla.org/appshell/window-mediator;1'].getService(Components.interfaces.nsIWindowMediator); 
-		var en = wm.getEnumerator(""); 
-		var n = 0; 
-		var dlm = null;
-		
-		while (en.hasMoreElements()) { 
-			var w = en.getNext(); 
+      if (w.location.href == "chrome://mozapps/content/downloads/downloads.xul") {
+        dlm = w;
+        break;
+      }
+    }
 
-			if (w.location.href == "chrome://mozapps/content/downloads/downloads.xul") {
-				dlm = w;
-				break;
-			}
-		}
-
-		if (dlm != null) {
-			dlm.close();
-		}
-	}
+    if (dlm != null) {
+      dlm.close();
+    }
+  }
 }
 
 
 function parseScriptName(sourceUri) {
-	var name = sourceUri.spec;
-	name = name.substring(0, name.indexOf(".user.js"));
-	name = name.substring(name.lastIndexOf("/") + 1);
-	return name;
+  var name = sourceUri.spec;
+  name = name.substring(0, name.indexOf(".user.js"));
+  name = name.substring(name.lastIndexOf("/") + 1);
+  return name;
+}
+
+function getLineStream(file) {
+  var fileStream = Components.classes["@mozilla.org/network/file-input-stream;1"]
+          .createInstance(Components.interfaces.nsIFileInputStream);
+
+  fileStream.init(file, 1, 0, false);
+
+  return fileStream.QueryInterface(Components.interfaces.nsILineInputStream);
 }
 
 function getTempFile() {
-	var file = Components.classes["@mozilla.org/file/directory_service;1"]
-				.getService(Components.interfaces.nsIProperties)
-				.get("TmpD", Components.interfaces.nsILocalFile);
+  var file = Components.classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("TmpD", Components.interfaces.nsILocalFile);
 
-	file.append(new Date().getTime());
+  file.append("gm_" + new Date().getTime());
 
-	return file;
+  return file;
 }
 
 function getContents(aURL){
@@ -398,39 +433,43 @@ function getContents(aURL){
   return str;
 }
 
-function getWriteStream(fileName) {
-	var file = getScriptFile(fileName);
-	var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
-		.createInstance(Components.interfaces.nsIFileOutputStream);
+function getWriteStream(file) {
+  var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
+    .createInstance(Components.interfaces.nsIFileOutputStream);
 
-	stream.init(file, 0x02 | 0x08 | 0x20, 420, 0);
+  stream.init(file, 0x02 | 0x08 | 0x20, 420, 0);
 
-	return stream;
+  return stream;
 }
 
 function getScriptChrome(fileName) {
-	return "chrome://greasemonkey/content/scripts/" + fileName;
+  return "chrome://greasemonkey/content/scripts/" + fileName;
 }
 
 function getScriptFile(fileName) {
-	var file = getScriptDir();
-	file.append(fileName);
-	return file;
+  var file = getScriptDir();
+  file.append(fileName);
+  return file;
 }
 
 function getScriptDir() {
-	var file = Components.classes["@mozilla.org/file/directory_service;1"]
-				.getService(Components.interfaces.nsIProperties)
-				.get("ProfD", Components.interfaces.nsILocalFile);
+  var file = getContentDir();
+  file.append("scripts");
+  return file;
+}
 
-	file.append("extensions");
-	file.append(GUID);
-	file.append("chrome");
-	file.append("greasemonkey");
-	file.append("content");
-	file.append("scripts");
+function getContentDir() {
+  var file = Components.classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsILocalFile);
 
-	return file;
+  file.append("extensions");
+  file.append(GUID);
+  file.append("chrome");
+  file.append("greasemonkey");
+  file.append("content");
+
+  return file;
 }
 
 /**
@@ -453,64 +492,71 @@ function gmPrompt(msg, defVal, title) {
 // Converts a pattern in this programs simple notation to a regular expression.
 // thanks AdBlock! http://www.mozdev.org/source/browse/adblock/adblock/
 function convert2RegExp( pattern ) {
-	s = new String(pattern);
-	res = new String("^");
-	
-	for (var i = 0 ; i < s.length ; i++) {
-		switch(s[i]) {
-			case '*' : 
-				res += ".*";
-				break;
-				
-			case '.' : 
-			case '?' :
-			case '^' : 
-			case '$' : 
-			case '+' :
-			case '{' :
-			case '[' : 
-			case '|' :
-			case '(' : 
-			case ')' :
-			case ']' :
-				res += "\\" + s[i];
-				break;
-			
-			case '\\' :
-				res += "\\\\";
-				break;
-			
-			case ' ' :
-				// Remove spaces from URLs.
-				break;
-			
-			default :			
-				res += s[i];
-				break;
-		}
-	}
+  s = new String(pattern);
+  res = new String("^");
+  
+  for (var i = 0 ; i < s.length ; i++) {
+    switch(s[i]) {
+      case '*' : 
+        res += ".*";
+        break;
+        
+      case '.' : 
+      case '?' :
+      case '^' : 
+      case '$' : 
+      case '+' :
+      case '{' :
+      case '[' : 
+      case '|' :
+      case '(' : 
+      case ')' :
+      case ']' :
+        res += "\\" + s[i];
+        break;
+      
+      case '\\' :
+        res += "\\\\";
+        break;
+      
+      case ' ' :
+        // Remove spaces from URLs.
+        break;
+      
+      default :     
+        res += s[i];
+        break;
+    }
+  }
 
-	return new RegExp(res + '$', "i");
+  return new RegExp(res + '$', "i");
 }
 
 function ge(id) {
     return window.document.getElementById(id);
 }
 
+
+function GM_log(aMessage) {
+  var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+                       .getService(Components.interfaces.nsIConsoleService);
+  consoleService.logStringMessage("Greasemonkey: " + aMessage);
+}
+
 function dbg(o) {
-	var s = "";
-	var i = 0;
+  var s = "";
+  var i = 0;
 
-	for (var p in o) {
-		s += p + ":" + o[p] + "\n";
+  for (var p in o) {
+    s += p + ":" + o[p] + "\n";
 
-		if (++i % 15 == 0) {
-			alert(s);
-			s = "";
-		}
-	}
+    if (++i % 15 == 0) {
+      alert(s);
+      s = "";
+    }
+  }
 
-	alert(s);
+  alert(s);
 }
 
 function delaydbg(o) {
