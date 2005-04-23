@@ -94,9 +94,9 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
   <li>Mozilla has a bunch of advanced features that you can take advantage of to make your job easier. These typically aren't practical for DHTML authors because they don't exist in any other browser, but since your user scripts will only run on firefox, you're free to use such goodies as <a href="http://www-jcsu.jesus.cam.ac.uk/~jg307/mozilla/xpath-tutorial.html">xpath</a> support (for HTML as well as XHTML), <a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/traversal.html">treewalkers</a>, <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html">mutation events</a>, <a href="http://xulplanet.com/references/objref/XMLHttpRequest.html">xmlhttp</a>, etc.</li>
 </ul>
 <h6 id="specialfunctions">Special Functions</h6>
-<p>GM_registerMenuCommand</p>
+<p id="GM_registerMenuCommand">GM_registerMenuCommand</p>
 <p>Userscripts can call GM_registerMenuCommand(commandName, callback) to add a menu command to the tools > User Script Commands submenu. The first parameter should be the string name of the command to display. The second parameter should be a callback function which will be invoked when the menu item is selected by the user.</p>
-<p>GM_xmlhttpRequest</p>
+<p id="GM_xmlhttpRequest">GM_xmlhttpRequest</p>
 <p>Userscripts can call GM_xmlhttpRequest(details) to make an xmlhttp request to other domains.</p>
 <p>The details parameter is an object having the following fields: method, url, headers, onload, onreadystatechange, onerror, data. All fields are optional except method and url. The headers field is an object which should be the name-value pairs of the headers to send, for instance {"User-Agent":"Mozilla"}. The onload, onreadystatechange, and onerror parameters are callback functions which are called when the corresponding events occur.</p>
 <p>Callback functions should accept a single object parameter having the following fields: responseText, status, statusText, readyState, and responseHeaders. The responseHeaders is the string representation of response headers returned by XMLHTTPRequest.getAllResponseHeaders().</p>
@@ -104,14 +104,26 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 <pre>GM_xmlhttpRequest({
   method:"GET",
   url:"http://youngpup.net/",
-  headers:["User-Agent":"Mozilla"],
+  headers:{
+    "User-Agent":"monkeyagent",
+    "Accept":"text/monkey,text/xml",
+    },
   onload:function(details) {
     alert([
-      status,
-      statusText,
-      readyState,
-      responseHeaders.join(","),
-      responseText
+      details.status,
+      details.statusText,
+      details.readyState,
+      details.responseHeaders,
+      details.responseText
     ].join("\n"))
   }
 });</pre>
+<p id="GM_setValue">GM_setValue(name, value)</p>
+<p>Allows user script authors to persist simple values locally. Strings, booleans, and integers are the only allowed datatypes. For example:</p>
+<pre>GM_setValue("foo", "bar");
+<p id="GM_getValue">GM_getValue(name, default)</p>
+<p>Retrieve a value set with setValue. If the value is not found, default is returned instead. If default is not supplied, <code>undefined</code> is returned.</p>
+<pre>alert(GM_getValue("foo"));</pre>
+<p id="GM_log">GM_log(message)</p>
+<p>Allows script authors simple access to logging informational messages in the JS Console. This can be helpful for debugging.</p>
+<pre>GM_log("Hello, World!")</pre>

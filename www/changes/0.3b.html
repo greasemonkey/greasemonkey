@@ -1,0 +1,22 @@
+<h3><a href="http://youngpup.net.nyud.net:8090/greasemonkey_0.3b.xpi">Install Greasemonkey 0.3b Beta</a></h3>
+
+<p><em><strong>Warning:</strong> Beta versions have not been fully tested. For best results, always install the latest stable version from the <a href="/">homepage</a>.</p>
+
+<h4>Changes</h4>
+<ul>
+  <li>Added <a href="/index.html#GM_getValue">GM_getValue()</a> and <a href="/index.html#GM_setValue">GM_setValue()</a> for local persistence.</li>
+  <li>Added an edit button to the manage dialog.</li>
+  <li>Replaced enable and disable all buttons in the manage dialog with an easier to access icon in the bottom right corner of firefox.</li>
+  <li>Added <a href="/index.html#GM_log">GM_log()</a> for writing to the JS Console.</li>
+  <li>Updates for FF 1.0.3 support.</li>
+  <li>Scoped GM_* functions down so that they are only accessible from user scripts. This was a security concern.</li>
+  <li>Clipped script names in the manage dialog with elipsises so that they cannot push the uninstall button off the window.</li>
+  <li>Improved error handling by isolating scripts from one another. Errors in one script will no longer stop other scripts from running. Errors loading a script will not stop other scripts from being loaded.</li>
+  <li>Added a generalized versioning scheme. Starting now, the current version of the script will be stored in the Mozilla preference <code>greasemonkey.version</code>. Scripts should know how to migrate themselves from earlier versions based on this.</li>
+</ul>
+
+<h4>Notes</h4>
+<ul>
+  <li>Have not yet implemented clean uninstall. This means that if you downgrade to an earlier version you may have to clean out your preferences and config folder by hand.</li>
+  <li>Although FF 1.0.3 is now supported, that browser breaks some existing scripts because it removed the undocumented, unsupport window._content property. No scripts should have been using this in the first place as it was a circular reference back to window. Affected scripts will have to be modified.</li>
+</ul>
