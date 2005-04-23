@@ -120,7 +120,7 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 });</pre>
 <p id="GM_setValue">GM_setValue(name, value)</p>
 <p>Allows user script authors to persist simple values locally. Strings, booleans, and integers are the only allowed datatypes. For example:</p>
-<pre>GM_setValue("foo", "bar");
+<pre>GM_setValue("foo", "bar");</pre>
 <p id="GM_getValue">GM_getValue(name, default)</p>
 <p>Retrieve a value set with setValue. If the value is not found, default is returned instead. If default is not supplied, <code>undefined</code> is returned.</p>
 <pre>alert(GM_getValue("foo"));</pre>
