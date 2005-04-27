@@ -9,3 +9,8 @@
 .infoTab {
   position:absolute;
 }
+
+h4 *:link {
+  color:rbg(157,0,0);
+  text-decoration:underline;
+}
