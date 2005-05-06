@@ -183,19 +183,22 @@ X local data persistence
             }
 
             function setupRequestEvent(req, event, details) {
-              if (details[event]) {
+              if (details[event]) {              
                 req[event] = function() {
-                  // pop back onto browser thread and call event handler
+                var responseState = {
+                    // can't support responseXML because security won't
+                    // let the browser call properties on it
+                    responseText:req.responseText,
+                    readyState:req.readyState,
+                    responseHeaders:(req.readyState == 4 ? req.getAllResponseHeaders() : ''),
+                    status:(req.readyState == 4 ? req.status : 0),
+                    statusText:(req.readyState == 4 ? req.statusText : '')
+                  }
+                  
+                  // pop back onto browser thread and call event handler                    
                   browser.setTimeout(function(){ 
-                    details[event]({
-                      // can't support responseXML because security won't
-                      // let the browser call properties on it
-                      responseText:req.responseText,
-                      status:req.status,
-                      statusText:req.statusText,
-                      readyState:req.readyState,
-                      responseHeaders:req.getAllResponseHeaders()
-                    }) }, 0);
+                    details[event](responseState)
+                  }, 0);
                 }
               }
             }
