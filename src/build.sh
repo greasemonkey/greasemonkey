@@ -1,6 +1,7 @@
 #!/bin/sh
 
 rm -rf build
+rm -rf ./content/*.patch
 mkdir -p build/chrome/greasemonkey
 cp install.rdf build/
 cp -r content build/chrome/greasemonkey/
