@@ -3,11 +3,17 @@
  * any necessary upgrades.
  */
 function GM_updateVersion(prefMan) {
-  // this is the currently installed version according to extension manager
-  var installed = Components.classes["@mozilla.org/extensions/manager;1"]
-    .getService(Components.interfaces.nsIExtensionManager)
-    .getItemList(GUID, Components.interfaces.nsIUpdateItem.TYPE_EXTENSION, {})[0].version;
 
+  var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
+   .getService(Components.interfaces.nsIExtensionManager);
+
+  // get the currently installed version according to extension manager
+  if (extensionManager.getItemForID) {
+    var installed = extensionManager.getItemForID(GUID).version;
+  } else { // getItemForID isn't available on the Aviary 1.0 branch
+    installed = extensionManager
+       .getItemList(GUID, Components.interfaces.nsIUpdateItem.TYPE_EXTENSION,{})[0].version;
+  }
   // this is the last version which has been run at least once
   var initialized = prefMan.getValue("version");  
   
@@ -106,3 +112,4 @@ function GM_pointThreeMigrate() {
     throw e;
   }
 }
+

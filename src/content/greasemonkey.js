@@ -73,7 +73,7 @@ function CommandManager() {
     
     menuItem = window.document.createElement('menuitem');
     menuItem.setAttribute("label", commandName);
-    menuItem.__gmCommandFunc = commandFunc;
+    menuItem.__gmCommandFunc = function(e) {commandFunc()};
     //menuItem.addEventListener("command", commandFunc, false);
     previousItems = docMenuCommands[docId].childNodes;
     
