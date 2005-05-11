@@ -248,7 +248,7 @@ function ScriptDownloader(url) {
       dm.open(window._content, targetFile.path)
 
       download = dm.getDownload(targetFile.path);
-      download.persist = persist;
+      persist.progressListener = download;
 
       persist.saveURI(sourceUri, null, null, null, null, targetFile);
 
