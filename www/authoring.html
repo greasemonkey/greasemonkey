@@ -31,8 +31,12 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 // @description	  Greets the world
 // @include       http://google.com/*
 // @include       http://www.google.com/*
+// @include       http://maps.google.tld/*
 // @exclude       http://gmail.google.com/*
 // ==/UserScript==
+// Notes:
+//   * is a wildcard character
+//   .tld is magic that matches all top-level domains (e.g. .com, .co.uk, .us, etc.)
 
 (function() {
     alert("Hello, world!");
@@ -95,7 +99,17 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 </ul>
 <h6 id="specialfunctions">Special Functions</h6>
 <p id="GM_registerMenuCommand">GM_registerMenuCommand</p>
-<p>Userscripts can call GM_registerMenuCommand(commandName, callback) to add a menu command to the tools > User Script Commands submenu. The first parameter should be the string name of the command to display. The second parameter should be a callback function which will be invoked when the menu item is selected by the user.</p>
+<p>Userscripts can call GM_registerMenuCommand(commandName, commandFunc, accel, access) to add a menu command to the tools > User Script Commands submenu. The first parameter should be the string name of the command to display. The second parameter should be a callback function which will be invoked when the menu item is selected by the user. The last two are strictly optional. Access is an access key that can be used to get to the command in the "User Script Commands" menu. Accel, if present, defines an "accelerator," a key that can be used to call the menu command (like Ctrl-C is copy). This parameter (accel) is actually object with the following properties:<ul>
+<li>ctrl</li>
+<li>alt</li>
+<li>meta</li>
+<li>key</li>
+</ul>
+The first three properties are optional and indicate whether or not that key needs to be held down. The last (key) is required if you use this parameter at all. It indicates which key (e.g. "c") needs to be held down. Example calls:
+<code>GM_registerMenuCommand( "Hello world!", hello, {ctrl:true,key:"e"}, "h" );</code><br />
+<code>GM_registerMenuCommand( "Hello world 2", hello2, null, "h" );</code><br />
+<code>GM_registerMenuCommand( "Hello world (simple)", hello3 );</code>
+</p>
 <p id="GM_xmlhttpRequest">GM_xmlhttpRequest</p>
 <p>Userscripts can call GM_xmlhttpRequest(details) to make an xmlhttp request to other domains.</p>
 <p>The details parameter is an object having the following fields: method, url, headers, onload, onreadystatechange, onerror, data. All fields are optional except method and url. The headers field is an object which should be the name-value pairs of the headers to send, for instance {"User-Agent":"Mozilla"}. The onload, onreadystatechange, and onerror parameters are callback functions which are called when the corresponding events occur.</p>
@@ -124,6 +138,6 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 <p id="GM_getValue">GM_getValue(name, default)</p>
 <p>Retrieve a value set with setValue. If the value is not found, default is returned instead. If default is not supplied, <code>undefined</code> is returned.</p>
 <pre>alert(GM_getValue("foo"));</pre>
-<p id="GM_log">GM_log(message)</p>
-<p>Allows script authors simple access to logging informational messages in the JS Console. This can be helpful for debugging.</p>
+<p id="GM_log">GM_log(message, level)</p>
+<p>Allows script authors simple access to logging informational messages in the JS Console. This can be helpful for debugging. Level is optional and defaults to 0. Valid values are: 0 - info, 1 - warning, 2 - error.</p>
 <pre>GM_log("Hello, World!")</pre>

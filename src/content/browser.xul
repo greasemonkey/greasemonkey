@@ -117,8 +117,8 @@ X local data persistence
             win.GM_getValue = function(name, defaultValue) {
               return prefMan.getValue(name, defaultValue);
             }
-            win.GM_log = function(message) {
-              GM_log([script.namespace, "/", script.name, ": ", message].join(""))
+            win.GM_log = function(message, level) {
+              GM_log([script.namespace, "/", script.name, ": ", message].join(""), level)
             }
 
             try {

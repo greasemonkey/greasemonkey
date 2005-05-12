@@ -24,7 +24,7 @@ function CommandManager() {
     
     e.explicitOriginalTarget.defaultView.GM_registerMenuCommand = 
       function(commandName, commandCallback, accel, access) { 
-        registerMenuCommand(docId, commandName, commandCallback, accel, access);
+        registerMenuCommand(docId, commandName, commandCallback, accel, access, e.explicitOriginalTarget.defaultView);
       }; 
   }
   
@@ -67,10 +67,10 @@ function CommandManager() {
       
   } //end initToolsMenus
   
-  function registerMenuCommand(docId, commandName, commandFunc, accel, access) {
+  // last param is a hack to figure out where to attach the event listener. should be improved
+  function registerMenuCommand(docId, commandName, commandFunc, accel, access, where) {
     var menuItem;
     var previousItems;
-    
     menuItem = window.document.createElement('menuitem');
     menuItem.setAttribute("label", commandName);
     if( access ) {
@@ -115,8 +115,7 @@ function CommandManager() {
       accelText += accel.key;
       
       menuItem.setAttribute("acceltext", accelText);
-      alert( menuItem.getAttribute("acceltext") );
-      getActiveDocument().addEventListener("keypress", function(e){
+      var tmpFunc = function(e){
           if (/*(e.accelKey == accel.accel) &&*/
               (e.ctrlKey == accel.ctrl) &&
               (e.metaKey == accel.meta) &&
@@ -125,7 +124,9 @@ function CommandManager() {
               (String.fromCharCode(e.which) == accel.key)) {
             commandFunc();
           }
-        }, false);
+        }
+      where.removeEventListener("keypress", tmpFunc, false);
+      where.addEventListener("keypress", tmpFunc, false);
     }
     
     var i=0;
@@ -528,8 +529,7 @@ function getContentDir() {
  * in FF 1.0.1. :(
  */
 function gmPrompt(msg, defVal, title) {
-  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                      .getService(Components.interfaces.nsIPromptService);
+  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]       .getService(Components.interfaces.nsIPromptService);
   var result = {value:defVal};
   
   if (promptService.prompt(null, title, msg, result, null, {value:0})) {
@@ -579,7 +579,48 @@ function convert2RegExp( pattern ) {
         break;
     }
   }
-
+  
+  var tldRegExp = new RegExp("^(\\^(?:[^/]*)(?://)?(?:[^/]*))(\\\\\\.tld)((?:/.*)?)$")
+  var tldRes = res.match(tldRegExp);
+  if (tldRes) {
+    // global tld
+    // from http://www.icann.org/tlds/
+                 // original seven
+    var gTLD = [ "arpa", "com", "edu", "int", "mil", "net", "org",
+                 // the new seven
+                 "aero", "biz", "coop", "info", "museum", "name", "pro" ];
+    // two letter country codes
+    // from http://www.iana.org/cctld/cctld-whois.htm
+    var ccTLD = [ "ac", "ad", "ae", "af", "ag", "ai", "al", "am", "an", "ao", "aq",
+                  "ar", "ar", "as", "at", "au", "aw", "ax", "az", "ba", "bb", "bd",
+                  "be", "bf", "bg", "bh", "bi", "bj", "bm", "bn", "bo", "br", "bs",
+                  "bt", "bv", "bw", "by", "bz", "ca", "cc", "cd", "cf", "cg", "ch",
+                  "ci", "ck", "cl", "cm", "cn", "co", "cr", "cs", "cu", "cv", "cx",
+                  "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee", "eg",
+                  "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr",
+                  "ga", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn",
+                  "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn",
+                  "hr", "ht", "hu", "id", "ie", "il", "im", "in", "io", "iq", "ir",
+                  "is", "it", "je", "jm", "jo", "jp", "ke", "kh", "ki", "km", "kn",
+                  "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr",
+                  "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "mg", "mg", "mh",
+                  "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "mp", "mq", "mr",
+                  "ms", "mt", "mu", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne",
+                  "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "pa",
+                  "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "ps", "pt",
+                  "pw", "py", "qa", "re", "ro", "ru", "rw", "sa", "sb", "sc", "sd",
+                  "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr",
+                  "st", "sv", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj", "tk",
+                  "tl", "tm", "tn", "to", "tp", "tr", "tt", "tv", "tw", "tz", "ua",
+                  "ug", "uk", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi",
+                  "vn", "vu", "wf", "ws", "ye", "yt", "yu", "za", "zm", "zw" ]
+    var subTLD = [ "co", "or" ]
+    // build the mighty TLD RegExp
+    var tldStr = "(\\.((" + gTLD.join("|") +")|(((" +
+                 subTLD.join( "|" ) + ")\\.)?(" +ccTLD.join("|") +"))))";
+    // insert it
+    res = tldRes[1] + tldStr + tldRes[3];
+  }
   return new RegExp(res + '$', "i");
 }
 
@@ -591,8 +632,7 @@ function ge(id) {
 function GM_log(aMessage, level) {
   // TODO: -make a GM category
   //       -record script name
-  var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-                       .getService(Components.interfaces.nsIConsoleService);
+  var consoleService = Components.classes["@mozilla.org/consoleservice;1"]        .getService(Components.interfaces.nsIConsoleService);
   // level == 0 or not present means info
   // otherwise, create a ScriptError and map level to it's flag values
   if (level) {
