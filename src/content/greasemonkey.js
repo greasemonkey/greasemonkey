@@ -23,8 +23,8 @@ function CommandManager() {
     docId = document.__gmId;
     
     e.explicitOriginalTarget.defaultView.GM_registerMenuCommand = 
-      function(commandName, commandCallback) { 
-        registerMenuCommand(docId, commandName, commandCallback);
+      function(commandName, commandCallback, accel, access) { 
+        registerMenuCommand(docId, commandName, commandCallback, accel, access);
       }; 
   }
   
@@ -67,15 +67,66 @@ function CommandManager() {
       
   } //end initToolsMenus
   
-  function registerMenuCommand(docId, commandName, commandFunc) {
+  function registerMenuCommand(docId, commandName, commandFunc, accel, access) {
     var menuItem;
     var previousItems;
     
     menuItem = window.document.createElement('menuitem');
     menuItem.setAttribute("label", commandName);
+    if( access ) {
+      menuItem.setAttribute("accesskey", access);
+    }
     menuItem.__gmCommandFunc = function(e) {commandFunc()};
     //menuItem.addEventListener("command", commandFunc, false);
     previousItems = docMenuCommands[docId].childNodes;
+    
+    if (accel && typeof(accel.key) == "string")  {
+      var accelText = "";
+      if (accel.accel) {
+        accelText += "<accel> + ";
+        accel.accel = true;
+      } else {
+        accel.accel = false;
+      }
+      if (accel.ctrl) {
+        accelText += "<ctrl> + ";
+        accel.ctrl = true;
+      } else {
+        accel.ctrl = false;
+      }
+      if (accel.meta) {
+        accelText += "<meta> + ";
+        accel.meta = true;
+      } else {
+        accel.meta = false;
+      }
+      if (accel.shift) {
+        accelText += "<shift> + ";
+        accel.shift = true;
+      } else {
+        accel.shift = false;
+      }
+      if (accel.alt) {
+        accelText += "<alt> + ";
+        accel.alt = true;
+      } else {
+        accel.alt = false;
+      }
+      accelText += accel.key;
+      
+      menuItem.setAttribute("acceltext", accelText);
+      alert( menuItem.getAttribute("acceltext") );
+      getActiveDocument().addEventListener("keypress", function(e){
+          if (/*(e.accelKey == accel.accel) &&*/
+              (e.ctrlKey == accel.ctrl) &&
+              (e.metaKey == accel.meta) &&
+              (e.shiftKey == accel.shift) &&
+              (e.altKey == accel.alt) &&
+              (String.fromCharCode(e.which) == accel.key)) {
+            commandFunc();
+          }
+        }, false);
+    }
     
     var i=0;
     var nextNode=null;
@@ -537,10 +588,10 @@ function ge(id) {
 }
 
 
-function GM_log(aMessage) {
+function GM_log(aMessage, level) {
   var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                        .getService(Components.interfaces.nsIConsoleService);
-  consoleService.logStringMessage("Greasemonkey: " + aMessage);
+  consoleService.logMessage(aMessage);
 }
 
 function dbg(o) {
