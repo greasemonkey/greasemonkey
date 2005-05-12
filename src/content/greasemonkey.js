@@ -589,9 +589,23 @@ function ge(id) {
 
 
 function GM_log(aMessage, level) {
+  // TODO: -make a GM category
+  //       -record script name
   var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                        .getService(Components.interfaces.nsIConsoleService);
-  consoleService.logMessage(aMessage);
+  // level == 0 or not present means info
+  // otherwise, create a ScriptError and map level to it's flag values
+  if (level) {
+    if (level == 1) {
+      // warning
+      level = 1;
+    } else /*if (level == 2)*/ {
+      // error - currently fallback
+      level = 0;
+    }
+    var consoleError = Components.classes["@mozilla.org/scripterror;1"]      .createInstance(Components.interfaces.nsIScriptError);    consoleError.init(aMessage, null, null, 0, 0, level, "XUL javascript");    consoleService.logMessage(consoleError);
+  } else {    consoleService.logStringMessage(aMessage);
+  }
 }
 
 function dbg(o) {
