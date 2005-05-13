@@ -23,6 +23,45 @@ X local data persistence
     <script type="application/x-javascript">
     <![CDATA[
         var commandManager = new CommandManager();
+        function manageMenuItemClicked() {
+           window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
+             "resizable,centerscreen,modal");
+         }
+
+         function installMenuItemClicked() {
+           new ScriptDownloader(window._content.location.href).start();
+         }
+
+         function installContextItemClicked() {
+           new ScriptDownloader(document.popupNode.href).start();
+         }
+
+         function contextMenuShowing() {
+           var culprit = document.popupNode;
+           var contextItem = ge("install-userscript");
+           var contextSep = ge("install-userscript-sep");
+
+           contextItem.hidden = contextSep.hidden = 
+             !(culprit.tagName.toLowerCase() == "a" 
+             && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+         }
+
+         function toolsMenuShowing(e) {
+           var installItem = ge("userscript-tools-install");
+           var commandsItem = ge("userscript-commands");
+
+           var disabled = !(window._content && window._content.location && 
+           window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+
+           installItem.setAttribute("disabled", disabled.toString());
+           commandManager.initToolsMenu(commandsItem);
+         }
+
+         function installContextItemClicked() {
+           new ScriptDownloader(document.popupNode.href).start();
+         }
+
+
 
         window.addEventListener("load", function() {
           var appcontent = ge("appcontent");
@@ -35,12 +74,6 @@ X local data persistence
             if (!appcontent.greased){
               appcontent.greased = true;
               appcontent.addEventListener("DOMContentLoaded", greaseLoad, false);
-
-              ge("userscript-tools-manage").addEventListener("command", manageMenuItemClicked, false);
-              ge("contentAreaContextMenu").addEventListener("popupshowing", contextMenuShowing, false);
-              ge("menu_ToolsPopup").addEventListener("popupshowing", toolsMenuShowing, false);
-              ge("install-userscript").addEventListener("command", installContextItemClicked, false);
-              ge("userscript-tools-install").addEventListener("command", installMenuItemClicked, false);
 
               var statusImage = ge("gm-status-image");
               
@@ -204,40 +237,6 @@ X local data persistence
             }
           }
 
-          function manageMenuItemClicked() {
-            window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
-              "resizable,centerscreen,modal");
-          }
-
-          function contextMenuShowing() {
-            var culprit = document.popupNode;
-            var contextItem = ge("install-userscript");
-            var contextSep = ge("install-userscript-sep");
-
-            contextItem.hidden = contextSep.hidden = 
-              !(culprit.tagName.toLowerCase() == "a" 
-              && culprit.href.match(/\.user\.js(\?|$)/i) != null);
-          }
-
-          function toolsMenuShowing(e) {
-            var installItem = ge("userscript-tools-install");
-            var commandsItem = ge("userscript-commands");
-
-            var disabled = !(window._content && window._content.location && 
-            window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
-
-            installItem.setAttribute("disabled", disabled.toString());
-            commandManager.initToolsMenu(commandsItem);
-          }
-
-          function installMenuItemClicked() {
-            new ScriptDownloader(window._content.location.href).start();
-          }
-
-          function installContextItemClicked() {
-            new ScriptDownloader(document.popupNode.href).start();
-          }
-
           function refreshStatus() {
             gmEnabled = prefManager.getValue("enabled", true);
 
@@ -277,14 +276,14 @@ X local data persistence
     ]]>
     </script>
 
-    <popup id="contentAreaContextMenu">
-        <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" />
+    <popup id="contentAreaContextMenu" onpopupshowing="contextMenuShowing(event)">
+        <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" oncommand="installContextItemClicked(event)"/>
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
-    <menupopup id="menu_ToolsPopup">
+    <menupopup id="menu_ToolsPopup" onpopupshowing="toolsMenuShowing(event)">
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
-        <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." />
-        <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." />
+        <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." oncommand="installMenuItemClicked(event)"/>
+        <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
         <menu id="userscript-commands" accesskey="C" label="User Script Commands" disabled="true">
           <menupopup>
             
