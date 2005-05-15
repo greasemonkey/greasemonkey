@@ -4,12 +4,6 @@
   width:55em;
 }
 
-/* I don't really even understand why this works, but I'll take it until I have
- * a chance to test on other browsers. */
-.infoTab {
-  position:absolute;
-}
-
 h4 *:link {
   color:rgb(157,0,0)!important;
 }
