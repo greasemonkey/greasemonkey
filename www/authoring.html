@@ -1,6 +1,10 @@
 <!-- MAIN CONTENT -->
 <h5 class="page-header"><a id="content" name="content">Writing User Scripts</a></h5>
 
+<p>Mark Pilgrim has given the Greasemonkey community <a href="http://diveintogreasemonkey.org/">Dive into Greasemonkey</a>, the best reference imaginable. The stuff below might be slightly more up-to-date.</p>
+
+<hr/>
+
 <p>You can write your very own shiny user script with just a few steps:</p>
 
 <h6>1. Create the file</h6>
@@ -11,7 +15,6 @@
 })();</code></pre>
 <p>Also notice that it's a good practice (though not required) to wrap the entire script in an anonymous function to a
 void creating new global names which might interfere with the target webpage.</p>
-p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are available to greasemonkey scripts. For more information, see <a href="#specialfunctions">Special Functions</a>.</p>
 
 <h6>2. Save the file</h6>
 <p>You can choose any name, <em>but it has to end with <strong>.user.js</strong></em>.</p>
@@ -20,7 +23,7 @@ p>Two special functions, GM_xmlhttpRequest() and GM_registerMenuCommand() are av
 <p>Drag the file onto Firefox (or open it any other way) and select "Install User Script..." from the Tools menu. <em>Note that this option will be disabled if you forgot to name your file ending with ".user.js".</em> Refresh the browser to see any changes to the current page.</p>
 
 <h6>4. Debug the file</h6>
-<p>In the future, there will hopefully be a better debugging/development experience. For now, a good way to debug is to edit the user script file directly in {firefox profile dir}\extensions\{e4a8a97b-f2ed-450b-b12d-ee082ba24781}\chrome\greasemonkey\content\scripts\. To find the right file look in the config.xml file.</p>
+<p>Press the Edit button in the Manage Userscripts screen to edit a live copy of the script. When you save changes, you will be able to reload and see their effects immediately. You can also use the <a href="#GM_L=log">GM_log</a> function to write output to the JavaScript Console.</p>
 
 <h6>5. (optional) Add metadata</h6>
 <p>By default, scripts will be installed with a name based on their filename, a namespace based on the URL they were downloaded from, and will be included with every page on the interwebs. If you want to override this default behavior, you need metadata power.</p>
