@@ -2,154 +2,146 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
-<window
+<dialog
     id="manage-window"
+    buttons="accept,cancel"
+    ondialogaccept="handleOkButton()"
     title="Manage User Scripts"
     orient="vertical"
-    style="padding:1em;"
+    style="padding:1em; width: 500px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
     <script type="application/x-javascript">
     <![CDATA[
+    var config = new Config();
+    var uninstallList = [];
 
-    (function() {
-        var config = new Config();
-        var listbox, header, description, chkEnabled, btnOk, btnCancel, btnEdit, btnUninstall;
-        var selectedScript;
-        var pagesControl;
-        var uninstallList = [];
-        var prefMan = new GM_PrefManager();
-
-        window.addEventListener("load", function(ev) {
-            config.load();
-            loadControls();
-            
-            if (!config.scripts.length == 0) {
-                populateChooser();
-                chooseScript(0);
-            }
-        }, false);
-
-        function loadControls() {
-            listbox = document.getElementById("lstScripts");
-            header = document.getElementById("ctlHeader");
-            description = document.getElementById("ctlDescription");
-            btnOk = document.getElementById("btnOK");
-            btnCancel = document.getElementById("btnCancel");
-            btnEdit = document.getElementById("btnEdit");
-            btnUninstall = document.getElementById("btnUninstall");
-            pagesControl = new PagesControl(document.getElementById("pages-control"));
-            chkEnabled = document.getElementById("chkEnabled");
-
-            listbox.addEventListener("select", function() { updateDetails(); }, false);
-            btnOk.addEventListener("command", function() { handleOkButton(); }, false);
-            btnCancel.addEventListener("command", function() { handleCancelButton(); }, false);
-            btnEdit.addEventListener("command", function() { handleEditButton(); }, false);
-            btnUninstall.addEventListener("command", function() { handleUninstallButton(); }, false);
-            chkEnabled.addEventListener("command", function() {
-                selectedScript.enabled = chkEnabled.checked;
-                if (selectedScript.enabled) {
-                    listbox.selectedItem.style.color = '';
-                } else {
-                    listbox.selectedItem.style.color = 'gray';
-                }
-           }, false);
+    function handleOkButton() {
+        for (var i = 0, script = null; (script = uninstallList[i]); i++) {
+            var idx = config.find(script.namespace, script.name);
+            config.scripts.splice(idx, 1);
         }
+        config.save();
 
-        function updateDetails() {
-            if (listbox.selectedCount == 0) {
-                selectedScript = null;
-                header.setAttribute("title", "");
-                description.textContent = " ";
-                chkEnabled.checked = true;
-                pagesControl.clear();
-                btnOk.disabled = false;
-            }
-            else {
-                selectedScript = listbox.getSelectedItem(0).script;
-                header.setAttribute("title", selectedScript.name);
-                description.textContent = selectedScript.description;
-                chkEnabled.checked = selectedScript.enabled;
-                pagesControl.populate(selectedScript);
-            }
+        for (var i = 0, script = null; (script = uninstallList[i]); i++) {
+            getScriptFile(script.filename).remove(false);
         }
+        window.close();
+    }
 
-        function handleOkButton() {
-            for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-                var idx = config.find(script.namespace, script.name);
-                config.scripts.splice(idx, 1);
-            }
-            config.save();
+    var listbox, header, description, chkEnabled, btnEdit, btnUninstall;
+    var selectedScript;
+    var pagesControl;
+    var prefMan = new GM_PrefManager();
 
-            for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-                getScriptFile(script.filename).remove(false);
-            }
-            window.close();
-        }
-
-        function handleCancelButton() {
-            window.close();            
-        }
+    window.addEventListener("load", function(ev) {
+        config.load();
+        loadControls();
         
-        function handleEditButton() {
-          if (navigator.userAgent.match(/\bwindows\b/i) && 
-              !prefMan.getValue("warnedWindowsEditor")) 
-          {
-            alert("Hello! Looks like you're on Windows and that this is the your " +
-                  "first time editing a user script.\n\nTake this opportunity " +
-                  "to verify that you have associated either the .user.js or " +
-                  "the .js extension with a text editor on your computer. " + 
-                  "Otherwise, you may get funny errors.\n\nWhen you're done, " + 
-                  "come back here and press OK.");
-
-            prefMan.setValue("warnedWindowsEditor", true);
-          }
-        
-          window.close();
-          getScriptFile(selectedScript.filename).launch();
+        if (!config.scripts.length == 0) {
+            populateChooser();
+            chooseScript(0);
         }
+    }, false);
 
-        function handleUninstallButton() {
-            uninstallList.push(selectedScript);
-            listbox.removeChild(listbox.childNodes[listbox.selectedIndex]);
+    function loadControls() {
+        listbox = document.getElementById("lstScripts");
+        header = document.getElementById("ctlHeader");
+        description = document.getElementById("ctlDescription");
+        btnEdit = document.getElementById("btnEdit");
+        btnUninstall = document.getElementById("btnUninstall");
+        pagesControl = new PagesControl(document.getElementById("pages-control"));
+        chkEnabled = document.getElementById("chkEnabled");
 
-            if (listbox.childNodes.length > 0) {
-                chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
-            }
-        }
-
-        function populateChooser() {
-            for (var i = 0, script = null; (script = config.scripts[i]); i++) {
-                var listitem = document.createElement("listitem");
-
-                listitem.setAttribute("label", script.name);
-                listitem.setAttribute("crop", "end");
-                listitem.script = script;
-                if (!script.enabled) {
-                    listitem.style.color = 'gray';
-                }
-                listbox.appendChild(listitem);
-            }
-        }
-
-        function chooseScript(index) {
-            listbox.selectedIndex = index;            
-            listbox.focus();
-        }
-
-        function toggleScript(index, enableFlag) {
-            var listitem = listbox.childNodes[index];
-            if (enableFlag) {
-                listitem.script.enabled = true;
-                listitem.style.color = '';
+        listbox.addEventListener("select", function() { updateDetails(); }, false);
+        btnEdit.addEventListener("command", function() { handleEditButton(); }, false);
+        btnUninstall.addEventListener("command", function() { handleUninstallButton(); }, false);
+        chkEnabled.addEventListener("command", function() {
+            selectedScript.enabled = chkEnabled.checked;
+            if (selectedScript.enabled) {
+                listbox.selectedItem.style.color = '';
             } else {
-                listitem.script.enabled = false;
+                listbox.selectedItem.style.color = 'gray';
+            }
+       }, false);
+    }
+
+    function updateDetails() {
+        if (listbox.selectedCount == 0) {
+            selectedScript = null;
+            header.setAttribute("title", "");
+            description.textContent = " ";
+            chkEnabled.checked = true;
+            pagesControl.clear();
+            document.documentElement.getButton("accept").disabled = false;
+        }
+        else {
+            selectedScript = listbox.getSelectedItem(0).script;
+            header.setAttribute("title", selectedScript.name);
+            description.textContent = selectedScript.description;
+            chkEnabled.checked = selectedScript.enabled;
+            pagesControl.populate(selectedScript);
+        }
+    }
+    
+    function handleEditButton() {
+      if (navigator.userAgent.match(/\bwindows\b/i) && 
+          !prefMan.getValue("warnedWindowsEditor")) 
+      {
+        alert("Hello! Looks like you're on Windows and that this is the your " +
+              "first time editing a user script.\n\nTake this opportunity " +
+              "to verify that you have associated either the .user.js or " +
+              "the .js extension with a text editor on your computer. " + 
+              "Otherwise, you may get funny errors.\n\nWhen you're done, " + 
+              "come back here and press OK.");
+
+        prefMan.setValue("warnedWindowsEditor", true);
+      }
+    
+      window.close();
+      getScriptFile(selectedScript.filename).launch();
+    }
+
+    function handleUninstallButton() {
+        uninstallList.push(selectedScript);
+        listbox.removeChild(listbox.childNodes[listbox.selectedIndex]);
+
+        if (listbox.childNodes.length > 0) {
+            chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
+        }
+    }
+
+    function populateChooser() {
+        for (var i = 0, script = null; (script = config.scripts[i]); i++) {
+            var listitem = document.createElement("listitem");
+
+            listitem.setAttribute("label", script.name);
+            listitem.setAttribute("crop", "end");
+            listitem.script = script;
+            if (!script.enabled) {
                 listitem.style.color = 'gray';
             }
+            listbox.appendChild(listitem);
         }
-    })();
+    }
+
+    function chooseScript(index) {
+        listbox.selectedIndex = index;            
+        listbox.focus();
+    }
+
+    function toggleScript(index, enableFlag) {
+        var listitem = listbox.childNodes[index];
+        if (enableFlag) {
+            listitem.script.enabled = true;
+            listitem.style.color = '';
+        } else {
+            listitem.script.enabled = false;
+            listitem.style.color = 'gray';
+        }
+    }
 
     ]]>
     </script>
@@ -167,12 +159,6 @@
             </hbox>
         </vbox>
     </hbox>
-    <spacer flex="1" style="min-height:2em" />
-    <hbox>
-        <spacer flex="1" />
-        <button id="btnOK" label="OK" default="true" />
-        <button id="btnCancel" label="Cancel" />
-    </hbox>
 
-</window>
+</dialog>
 
