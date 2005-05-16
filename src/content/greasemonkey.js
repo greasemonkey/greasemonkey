@@ -469,12 +469,20 @@ function getTempFile() {
   return file;
 }
 
-function getContents(aURL){
+function getContents(aURL, charset){
+  if( !charset ) {
+    charset = "UTF-8"
+  }
   var ioService=Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
   var scriptableStream=Components
     .classes["@mozilla.org/scriptableinputstream;1"]
     .getService(Components.interfaces.nsIScriptableInputStream);
+  // http://lxr.mozilla.org/mozilla/source/intl/uconv/idl/nsIScriptableUConv.idl
+  var unicodeConverter = Components
+    .classes["@mozilla.org/intl/scriptableunicodeconverter"]
+    .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  unicodeConverter.charset = charset;
 
   var channel=ioService.newChannel(aURL,null,null);
   var input=channel.open();
@@ -482,7 +490,7 @@ function getContents(aURL){
   var str=scriptableStream.read(input.available());
   scriptableStream.close();
   input.close();
-  return str;
+  return unicodeConverter.ConvertToUnicode( str );
 }
 
 function getWriteStream(file) {
