@@ -1,78 +1,79 @@
 <?xml version="1.0"?>
+<?xml-stylesheet href="chrome://greasemonkey/content/greasemonkey.css" type="text/css"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
-<window
-    id="manage-window"
+<dialog
+    id="install-window"
+    buttons="accept,cancel"
+    ondialogaccept="handleOkButton()"
+    ondialogcancel="handleCancelButton()"
     title="Install User Script"
     orient="vertical"
-    style="max-width:400px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript"><![CDATA[
+        var request;
+        var config;
+        var file;
+        var script;
+        var result;
+
+        function handleOkButton() {
+            var newDir = getScriptDir();
+            var existingIndex = config.find(script.namespace, script.name);
+            var existingFile = null;
+            var oldScripts = new Array(config.scripts);
+
+            if (existingIndex > -1) {
+                existingFile = getScriptFile(config.scripts[existingIndex].filename);
+                existingFile.remove(false);
+                config.scripts.splice(existingIndex, 1);
+            }
+
+            try {
+                config.initFilename(script);
+                file.moveTo(newDir, script.filename);
+                config.scripts.push(script);
+                config.save();
+
+                result.value = true;
+            }
+            catch (e) {
+                config.scripts = oldScripts;
+	                        alert("Could not save script. " + (e ? e : ""));
+            }
+            window.close();
+        }
+
+        function handleCancelButton() {
+            if (request) request.abort();
+            window.close();
+        }
 
         window.addEventListener("load", function(ev) {
             var pagesControl = new PagesControl(document.getElementById("pages-control"));
-            var script = window.arguments[0];
-            var file = window.arguments[1];
-            var result = window.arguments[2];
+            script = window.arguments[0];
+            file = window.arguments[1];
+            result = window.arguments[2];
             var status = document.getElementById("status");
-            var config = new Config();
-            var request;
+            config = new Config();
 
             config.load();
 
-            document.getElementById("ctlHeader").setAttribute("title", script.name);
+            document.getElementById("ctlHeader").textContent = script.name;
             document.getElementById("ctlDescription").textContent = script.description;
 
             if (script != null) {
                 pagesControl.populate(script);
-
-                document.getElementById("btnOK").addEventListener("command", function() {
-                    var newDir = getScriptDir();
-                    var existingIndex = config.find(script.namespace, script.name);
-                    var existingFile = null;
-                    var oldScripts = new Array(config.scripts);
-
-                    if (existingIndex > -1) {
-                        existingFile = getScriptFile(config.scripts[existingIndex].filename);
-                        existingFile.remove(false);
-                        config.scripts.splice(existingIndex, 1);
-                    }
-
-                    try {
-                        config.initFilename(script);
-                        file.moveTo(newDir, script.filename);
-                        config.scripts.push(script);
-                        config.save();
-
-                        result.value = true;
-                        window.close();
-                    }
-                    catch (e) {
-                        config.scripts = oldScripts;
-	                        alert("Could not save script. " + (e ? e : ""));
-                    }
-                }, false);
-
-                document.getElementById("btnCancel").addEventListener("command", function() {
-                  if (request) request.abort();
-                  window.close();
-                }, false);
             }
         }, false);
     ]]></script>
 
     <vbox style="margin:1em;">
-        <dialogheader id="ctlHeader" title="" />
-        <description id="ctlDescription" style="margin-top:.5em; margin-bottom:.5em; padding-left:2px; padding-right:2px;" />
+        <description id="ctlHeader" />
+        <description id="ctlDescription" />
         <vbox id="pages-control" />
-        <spacer flex="1" style="min-height:2em" />
-        <hbox align="center" style=" height:3em;">
-            <description id="status" flex="1" style="font-weight:bold;">Press OK to confirm these settings and install the user script...</description>
-            <button id="btnOK" label="OK" default="true" />
-            <button id="btnCancel" label="Cancel" />
-        </hbox>
     </vbox>
-</window>
+</dialog>
