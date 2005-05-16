@@ -31,7 +31,7 @@ function CommandManager() {
   this.unloadDoc = function(e) {
     var doc = e.originalTarget;
 
-    if (doc.__gmId) {
+    if (doc && doc.__gmId) {
       delete docMenuCommands[doc.__gmId];
     }
   }
