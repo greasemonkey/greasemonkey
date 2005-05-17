@@ -1,14 +1,8 @@
 
 dialog#manage-window {
-  width: 500px;
-  height: 350px;
+
 }
 
-
-dialog#install-window {
-  width: 400px;
-  height: 300px;
-}
 
 #ctlHeader {
   margin: 0px 5px 5px 5px; 

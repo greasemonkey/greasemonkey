@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://greasemonkey/content/greasemonkey.css" type="text/css"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
@@ -9,6 +8,7 @@
     ondialogaccept="handleOkButton()"
     title="Manage User Scripts"
     orient="vertical"
+    style="width: 500px; height: 350px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
@@ -149,8 +149,21 @@
     <hbox>
         <listbox flex="1" id="lstScripts" style="min-width:140px; margin-top:0" />
         <vbox flex="3">
-            <description id="ctlHeader" />
-            <description id="ctlDescription" />
+            <description id="ctlHeader" style="  margin: 0px 5px 5px 5px; 
+               border: 2px solid; 
+               -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow; 
+               -moz-border-right-colors: ThreeDHighlight ThreeDDarkShadow; 
+               -moz-border-bottom-colors: ThreeDHighlight ThreeDDarkShadow; 
+               -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow; 
+               padding: 5px 8px; 
+               background-color: Highlight; 
+               color: HighlightText; 
+               font-size: 1.5em; 
+               height: 2em;"/>
+            <description id="ctlDescription" style="margin-top:.5em; 
+               margin-bottom:.5em; 
+               height:3em; 
+               max-height:3em;"/>
             <vbox id="pages-control" />
             <hbox style="margin-top:1em">
               <checkbox flex="1" id="chkEnabled" label="Enabled" checked="true" />
