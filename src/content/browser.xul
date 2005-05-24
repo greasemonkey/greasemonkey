@@ -47,14 +47,18 @@ X local data persistence
          }
 
          function toolsMenuShowing(e) {
-           var installItem = ge("userscript-tools-install");
-           var commandsItem = ge("userscript-commands");
+           var installItems = ge_multi("userscript-tools-install", "menuitem");
+           var commandsItems = ge_multi("userscript-commands", "menu");
 
            var disabled = !(window._content && window._content.location && 
            window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
 
-           installItem.setAttribute("disabled", disabled.toString());
-           commandManager.initToolsMenu(commandsItem);
+           for( var i = 0; i < installItems.length; i++ ) {
+             installItems[i].setAttribute("disabled", disabled.toString());
+           }
+           for( var i = 0; i < commandsItems.length; i++ ) {
+             commandManager.initToolsMenu(commandsItems[i]);
+           }
          }
 
          function installContextItemClicked() {

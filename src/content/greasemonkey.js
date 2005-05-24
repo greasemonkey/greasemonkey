@@ -636,6 +636,17 @@ function ge(id) {
     return window.document.getElementById(id);
 }
 
+function ge_multi(id, tagName) {
+    var elms = window.document.getElementsByTagName(tagName);
+    var ret = [];
+    for( var i = 0; i < elms.length; i++ ) {
+      if( elms[i].getAttribute( "id" ) == id ) {
+        ret.push( elms[i] );
+      }
+    }
+    return ret;
+}
+
 
 function GM_log(aMessage, level) {
   // TODO: -make a GM category
