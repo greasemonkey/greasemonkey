@@ -5,7 +5,7 @@
 <dialog
     id="manage-window"
     buttons="accept,cancel"
-    ondialogaccept="handleOkButton()"
+    ondialogaccept="return handleOkButton()"
     title="Manage User Scripts"
     orient="vertical"
     style="width: 500px; height: 350px;"
@@ -28,7 +28,7 @@
         for (var i = 0, script = null; (script = uninstallList[i]); i++) {
             getScriptFile(script.filename).remove(false);
         }
-        window.close();
+        return true;
     }
 
     var listbox, header, description, chkEnabled, btnEdit, btnUninstall;

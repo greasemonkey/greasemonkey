@@ -5,8 +5,8 @@
 <dialog
     id="install-window"
     buttons="accept,cancel"
-    ondialogaccept="handleOkButton()"
-    ondialogcancel="handleCancelButton()"
+    ondialogaccept="return handleOkButton()"
+    ondialogcancel="return handleCancelButton()"
     title="Install User Script"
     orient="vertical"
     style="width: 400px; height: 300px;"
@@ -44,12 +44,12 @@
                 config.scripts = oldScripts;
 	                        alert("Could not save script. " + (e ? e : ""));
             }
-            window.close();
+            return true;
         }
 
         function handleCancelButton() {
             if (request) request.abort();
-            window.close();
+            return true;
         }
 
         window.addEventListener("load", function(ev) {
