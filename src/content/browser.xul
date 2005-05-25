@@ -97,6 +97,10 @@ X local data persistence
             
             var win = e.explicitOriginalTarget.defaultView;
             var doc = win.document;
+
+            if(!doc.body) {
+              return;
+            }
             
             initGMXmlHttp(win);
 
