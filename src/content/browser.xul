@@ -79,6 +79,8 @@ X local data persistence
               appcontent.greased = true;
               appcontent.addEventListener("DOMContentLoaded", greaseLoad, false);
 
+              ge("contentAreaContextMenu").addEventListener("popupshowing", contextMenuShowing, false);
+
               var statusImage = ge("gm-status-image");
               
               prefManager.watch("enabled", refreshStatus);
@@ -282,7 +284,7 @@ X local data persistence
     ]]>
     </script>
 
-    <popup id="contentAreaContextMenu" onpopupshowing="contextMenuShowing(event)">
+    <popup id="contentAreaContextMenu">
         <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" oncommand="installContextItemClicked(event)"/>
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
