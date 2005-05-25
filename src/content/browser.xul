@@ -181,10 +181,12 @@ X local data persistence
           }
 
           function runBrowserScript(doc, jscode) {
-            var elm = doc.createElement("script");
-            elm.appendChild(doc.createTextNode(jscode));
-            doc.body.appendChild(elm);
-            doc.body.removeChild(elm);
+            if(doc && doc.body) {
+              var elm = doc.createElement("script");
+              elm.appendChild(doc.createTextNode(jscode));
+              doc.body.appendChild(elm);
+              doc.body.removeChild(elm);
+            }
           }
           
           function initGMXmlHttp(browser) {
@@ -288,7 +290,7 @@ X local data persistence
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
         <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." oncommand="installMenuItemClicked(event)"/>
         <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
-        <menu id="userscript-commands" accesskey="C" label="User Script Commands" disabled="true">
+        <menu id="userscript-commands" accesskey="m" label="User Script Commands" disabled="true">
           <menupopup>
             
           </menupopup>
