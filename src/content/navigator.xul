@@ -2,7 +2,7 @@
 
 <!-- Note: Contains Firefox-specific overlay -->
 
-<overlay id="greasemonkey-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="greasemonkey-navigator-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
@@ -14,7 +14,7 @@
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
 
-    <menupopup id="menu_ToolsPopup">
+    <menupopup id="taskPopup">
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
         <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." oncommand="installMenuItemClicked(event)"/>
         <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>

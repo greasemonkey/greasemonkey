@@ -34,7 +34,7 @@
 
             try {
                 config.initFilename(script);
-                file.moveTo(newDir, script.filename);
+                file.moveTo(newDir, script.filename)
                 config.scripts.push(script);
                 config.save();
 

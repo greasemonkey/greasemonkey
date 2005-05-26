@@ -285,21 +285,38 @@ function Script() {
 function ScriptDownloader(url) {
   var dm = Components.classes["@mozilla.org/download-manager;1"].getService(Components.interfaces.nsIDownloadManager)
   var ioservice = Components.classes["@mozilla.org/network/io-service;1"].getService();
-  var sourceUri = ioservice.newURI(url, null, null);
+  var sourceUri = null;
   var targetFile = getTempFile();
-  var targetUri = ioservice.newFileURI(targetFile)
+  var targetUri = null;
   var persist = makeWebBrowserPersist();  
   var sysListener = null;
   var download = null;
   var self = this;
   var timerId = null;
 
+  // io-service isn't available in Seamonkey, but makeURL and makeFileURL are
+  if(ioservice.newURI && ioservice.newFileURI ) {
+    sourceUri = ioservice.newURI(url, null, null);
+    targetUri = ioservice.newFileURI(targetFile);
+  } else {
+    sourceUri = makeURL(url);
+    targetUri = makeFileURL(targetFile)
+  }
+
   this.start = function() {
     try {
-      dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
-      dm.open(window._content, targetFile.path)
+      if(dm.addDownload.length == 8) {
+       dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
+      } else {
+        dm.addDownload(sourceUri, targetUri, parseScriptName(sourceUri), null, null, persist);
+      }
 
       download = dm.getDownload(targetFile.path);
+      try {
+        dm.open(window._content, targetFile.path)
+      } catch (e) {
+        dm.open(window, download)
+      }
       persist.progressListener = download;
 
       persist.saveURI(sourceUri, null, null, null, null, targetFile);
@@ -403,8 +420,6 @@ function ScriptDownloader(url) {
     window.openDialog("chrome://greasemonkey/content/install.xul", 
       "manager", "resizable,centerscreen,modal", script, targetFile, result);
 
-    closeDownloadManager();
-
     if (result.value) {
       alert("Success! Refresh page to see changes.");
     }
@@ -430,7 +445,8 @@ function ScriptDownloader(url) {
     while (en.hasMoreElements()) { 
       var w = en.getNext(); 
 
-      if (w.location.href == "chrome://mozapps/content/downloads/downloads.xul") {
+      if ((w.location.href == "chrome://mozapps/content/downloads/downloads.xul") ||
+          (w.location.href == "chrome://communicator/content/downloadmanager/downloadmanager.xul")) {
         dlm = w;
         break;
       }
@@ -523,13 +539,28 @@ function getContentDir() {
         .getService(Components.interfaces.nsIProperties)
         .get("ProfD", Components.interfaces.nsILocalFile);
 
-  file.append("extensions");
-  file.append(GUID);
+  // Seamonkey case
   file.append("chrome");
   file.append("greasemonkey");
   file.append("content");
 
-  return file;
+  if( file.exists() ) {
+    return file;
+  } else {
+    // Firefox case
+    file = Components.classes["@mozilla.org/file/directory_service;1"]
+          .getService(Components.interfaces.nsIProperties)
+          .get("ProfD", Components.interfaces.nsILocalFile);
+
+    file.append("extensions");
+    file.append(GUID);
+    file.append("chrome");
+    file.append("greasemonkey");
+    file.append("content");
+
+    return file
+  }
+
 }
 
 /**

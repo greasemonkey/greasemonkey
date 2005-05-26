@@ -3,16 +3,20 @@
  * any necessary upgrades.
  */
 function GM_updateVersion(prefMan) {
+  var installed = "0.3.4";
 
+  // trust the extension manager more than the above variable
   var extensionManager = Components.classes["@mozilla.org/extensions/manager;1"]
-   .getService(Components.interfaces.nsIExtensionManager);
+  if( extensionManager ) {
+    extensionManager = extensionManager.getService(Components.interfaces.nsIExtensionManager);
 
-  // get the currently installed version according to extension manager
-  if (extensionManager.getItemForID) {
-    var installed = extensionManager.getItemForID(GUID).version;
-  } else { // getItemForID isn't available on the Aviary 1.0 branch
-    installed = extensionManager
-       .getItemList(GUID, Components.interfaces.nsIUpdateItem.TYPE_EXTENSION,{})[0].version;
+    // get the currently installed version according to extension manager
+    if (extensionManager.getItemForID) {
+      var installed = extensionManager.getItemForID(GUID).version;
+    } else { // getItemForID isn't available on the Aviary 1.0 branch
+      installed = extensionManager
+         .getItemList(GUID, Components.interfaces.nsIUpdateItem.TYPE_EXTENSION,{})[0].version;
+    }
   }
   // this is the last version which has been run at least once
   var initialized = prefMan.getValue("version");  
