@@ -9,7 +9,7 @@
     ondialogcancel="return handleCancelButton()"
     title="Install User Script"
     orient="vertical"
-    style="width: 400px; height: 300px;"
+    style="max-width:400px"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
@@ -71,7 +71,7 @@
         }, false);
     ]]></script>
 
-    <vbox style="margin:1em;">
+    <vbox style="margin-bottom:2em;">
         <description id="ctlHeader" style="  margin: 0px 5px 5px 5px; 
            border: 2px solid; 
            -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow; 
@@ -83,8 +83,7 @@
            color: HighlightText; 
            font-size: 1.5em; 
            height: 2em;"/>
-        <description id="ctlDescription" style="margin-top:.5em; 
-           margin-bottom:.5em; 
+        <description id="ctlDescription" style="margin:.5em; 
            height:3em; 
            max-height:3em;"/>
         <vbox id="pages-control" />

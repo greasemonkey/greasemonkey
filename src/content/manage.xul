@@ -8,7 +8,7 @@
     ondialogaccept="return handleOkButton()"
     title="Manage User Scripts"
     orient="vertical"
-    style="width: 500px; height: 350px;"
+    style="max-width:650px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
@@ -146,7 +146,7 @@
     ]]>
     </script>
 
-    <hbox>
+    <hbox style="margin-bottom:2em;">
         <listbox flex="1" id="lstScripts" style="min-width:140px; margin-top:0" />
         <vbox flex="3">
             <description id="ctlHeader" style="  margin: 0px 5px 5px 5px; 
@@ -160,12 +160,11 @@
                color: HighlightText; 
                font-size: 1.5em; 
                height: 2em;"/>
-            <description id="ctlDescription" style="margin-top:.5em; 
-               margin-bottom:.5em; 
+            <description id="ctlDescription" style="margin:.5em;
                height:3em; 
                max-height:3em;"/>
             <vbox id="pages-control" />
-            <hbox style="margin-top:1em">
+            <hbox style="margin-top:1em;">
               <checkbox flex="1" id="chkEnabled" label="Enabled" checked="true" />
               <button flex="1" id="btnEdit" label="Edit" />
               <button flex="1" id="btnUninstall" label="Uninstall" />
