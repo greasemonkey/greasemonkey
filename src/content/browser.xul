@@ -16,7 +16,7 @@
 
     <menupopup id="menu_ToolsPopup">
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
-        <menuitem id="userscript-tools-install" accesskey="S" label="Install User Script..." oncommand="installMenuItemClicked(event)"/>
+        <menuitem id="userscript-tools-install" accesskey="S" label="Install This User Script..." oncommand="installMenuItemClicked(event)"/>
         <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
         <menu id="userscript-commands" accesskey="r" label="User Script Commands" disabled="true">
           <menupopup>

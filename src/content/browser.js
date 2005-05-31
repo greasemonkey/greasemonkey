@@ -1,44 +1,44 @@
 var commandManager = new CommandManager();
 function manageMenuItemClicked() {
    window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
-     "resizable,centerscreen,modal");
- }
+    "resizable,centerscreen,modal");
+}
 
- function installMenuItemClicked() {
-   new ScriptDownloader(window._content.location.href).start();
- }
+function installMenuItemClicked() {
+  new ScriptDownloader(window._content.location.href).start();
+}
 
- function installContextItemClicked() {
-   new ScriptDownloader(document.popupNode.href).start();
- }
+function installContextItemClicked() {
+  new ScriptDownloader(document.popupNode.href).start();
+}
 
- function contextMenuShowing() {
-   var culprit = document.popupNode;
-   var contextItem = ge("install-userscript");
-   var contextSep = ge("install-userscript-sep");
+function contextMenuShowing() {
+  var culprit = document.popupNode;
+  var contextItem = ge("install-userscript");
+  var contextSep = ge("install-userscript-sep");
 
    contextItem.hidden = contextSep.hidden = 
-     !(culprit.tagName.toLowerCase() == "a" 
-     && culprit.href.match(/\.user\.js(\?|$)/i) != null);
- }
+    !(culprit.tagName.toLowerCase() == "a" 
+    && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+}
 
- function toolsMenuShowing(e) {
-   var installItems = ge_multi("userscript-tools-install", "menuitem");
-   var commandsItems = ge_multi("userscript-commands", "menu");
-   var disabled = !(window._content && window._content.location && 
-   window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
+function toolsMenuShowing(e) {
+  var installItems = ge_multi("userscript-tools-install", "menuitem");
+  var commandsItems = ge_multi("userscript-commands", "menu");
+  var disabled = !(window._content && window._content.location && 
+  window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
 
-   for( var i = 0; i < installItems.length; i++ ) {
-     installItems[i].setAttribute("disabled", disabled.toString());
-   }
-   for( var i = 0; i < commandsItems.length; i++ ) {
-     commandManager.initToolsMenu(commandsItems[i]);
-   }
- }
+  for( var i = 0; i < installItems.length; i++ ) {
+    installItems[i].setAttribute("disabled", disabled.toString());
+  }
+  for( var i = 0; i < commandsItems.length; i++ ) {
+    commandManager.initToolsMenu(commandsItems[i]);
+  }
+}
 
- function installContextItemClicked() {
-   new ScriptDownloader(document.popupNode.href).start();
- }
+function installContextItemClicked() {
+  new ScriptDownloader(document.popupNode.href).start();
+}
 
 
 
