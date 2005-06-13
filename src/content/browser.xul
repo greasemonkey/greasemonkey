@@ -5,6 +5,7 @@
 <overlay id="greasemonkey-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/convert2RegExp.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/versioning.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
@@ -14,7 +15,21 @@
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
 
+    <!-- Note: If you change anything here, you should make the same
+               change for the Seamonkey copy below -->
     <menupopup id="menu_ToolsPopup">
+        <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
+        <menuitem id="userscript-tools-install" accesskey="S" label="Install This User Script..." oncommand="installMenuItemClicked(event)"/>
+        <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
+        <menu id="userscript-commands" accesskey="r" label="User Script Commands" disabled="true">
+          <menupopup>
+            
+          </menupopup>
+        </menu>
+    </menupopup>
+
+    <!-- Seamonkey ID is a bit different. Keep this the same as above -->
+    <menupopup id="taskPopup">
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
         <menuitem id="userscript-tools-install" accesskey="S" label="Install This User Script..." oncommand="installMenuItemClicked(event)"/>
         <menuitem id="userscript-tools-manage" accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>

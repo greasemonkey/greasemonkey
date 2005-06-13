@@ -25,7 +25,7 @@
   </RDF:Seq>
 
   <RDF:Seq about="chrome://navigator/content/navigatorOverlay.xul">
-    <RDF:li>chrome://greasemonkey/content/navigator.xul</RDF:li>
+    <RDF:li>chrome://greasemonkey/content/browser.xul</RDF:li>
   </RDF:Seq>
 
 </RDF:RDF>
