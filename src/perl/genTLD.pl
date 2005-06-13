@@ -18,9 +18,10 @@ my @all_domains = ( 'demon.co.uk',
                     '[^.].(?:(?:pvt.)?k12|cc|tec|lib|state|gen)' . $state_regex . '.us',
                     '[^.].' . join( '|', @US_STATES ) . 'us' );
 push( @all_domains, @VALID_TLD, @TWO_LEVEL_DOMAINS );
-# Escape '.' a lot. Remember that
+# Escape '.' a lot. Remember that we have to escape \ because it's in a JS string
+# So, '.' becomes '\\.'
 foreach( @all_domains ) {
     $_ =~ s/\./\\\\\./g;
 }
 
-print( '"(?:'. join( '|', @all_domains ) . ')"' . "\n" )
+print( '"\\.(?:'. join( '|', @all_domains ) . ')"' . "\n" )
