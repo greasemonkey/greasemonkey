@@ -1,3 +1,35 @@
+/*
+Copyright 2004-2005 Aaron Boodman
+
+Contributors:
+Jeremy Dunck, Nikolas Coukouma, Matthew Gray.
+
+Greasemonkey is licensed under the MIT License:
+http://www.opensource.org/licenses/mit-license.php
+
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the "Software"), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+Note that this license applies only to the Greasemonkey extension source 
+files, not to the user scripts which it runs. User scripts are licensed 
+separately by their authors.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE.
+*/
+
 // Based on Extension Developer's install.js
 // More info: http://www.xulplanet.com/tutorials/xultu/xpiscript.html
 
@@ -6,7 +38,7 @@ const APP_PACKAGE = "/greasemonkey.mozdev.org/greasemonkey";
 const APP_NAME = "/greasemonkey";
 // TODO: figure out how to extract this from install.rdf
 //   or generate install.rdf ...
-const APP_VERSION = "0.3.4";
+const APP_VERSION = "0.4";
 
 var instFlags = DELAYED_CHROME;
 var chromef = getFolder("Profile", "chrome/greasemonkey/");

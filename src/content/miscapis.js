@@ -1,6 +1,4 @@
-<?xml version="1.0"?>
-
-<!--
+/*
 Copyright 2004-2005 Aaron Boodman
 
 Contributors:
@@ -30,39 +28,48 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
--->
+*/
 
-<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+function GM_ScriptStorage(script) {
+  var namespace = script.namespace;
+  
+  if (namespace.substring(namespace.length - 1) != "/") {
+    namespace += "/";
+  }
+  
+  this.prefMan = new GM_PrefManager(["scriptvals.",
+                                     namespace,
+                                     "/",
+                                     script.name,
+                                     "."].join(""));
+}
 
-  <Description about="urn:mozilla:install-manifest">
+GM_ScriptStorage.prototype.setValue = function(name, val) {
+  this.prefMan.setValue(name, val);
+}
 
-    <em:name>Greasemonkey</em:name>
-    <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <em:version>0.4</em:version>
-    <em:description>A User Script Manager for Firefox</em:description>
-    <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
-    <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
-    <em:contributor>Matthew Gray; http://mkgray.com:8000/</em:contributor>
-    <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>
-    <em:contributor>Nikolas Coukouma; http://atrus.org/</em:contributor>
-    <em:homepageURL>http://greasemonkey.mozdev.org/</em:homepageURL>
-    <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
+GM_ScriptStorage.prototype.getValue = function(name, defVal) {
+  return this.prefMan.getValue(name, defVal);
+}
 
-    <em:targetApplication>
-      <Description>
-        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>0.9</em:minVersion>
-        <em:maxVersion>1.1</em:maxVersion>
-      </Description>
-    </em:targetApplication> 
 
-    <em:file>
-      <Description about="urn:mozilla:extension:file:greasemonkey">
-        <em:package>content/</em:package>
-      </Description>
-    </em:file>
+function GM_ScriptLogger(script) {
+  var namespace = script.namespace;
+  
+  if (namespace.substring(namespace.length - 1) != "/") {
+    namespace += "/";
+  }
+  
+  this.prefix = [namespace, script.name, ": "].join("");
+}
 
-  </Description>
+GM_ScriptLogger.prototype.log = function(message) {
+  GM_log(this.prefix + message, true);
+}
 
-</RDF>
+
+function GM_openInTab(url) {
+  window.setTimeout(function() {
+    document.getElementById("content").addTab(url);
+  }, 0);
+}

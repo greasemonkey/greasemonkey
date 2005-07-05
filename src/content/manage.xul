@@ -2,6 +2,38 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
+<!--
+Copyright 2004-2005 Aaron Boodman
+
+Contributors:
+Jeremy Dunck, Nikolas Coukouma, Matthew Gray.
+
+Greasemonkey is licensed under the MIT License:
+http://www.opensource.org/licenses/mit-license.php
+
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the "Software"), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+Note that this license applies only to the Greasemonkey extension source 
+files, not to the user scripts which it runs. User scripts are licensed 
+separately by their authors.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE.
+-->
+
 <dialog
     id="manage-window"
     buttons="accept,cancel"
@@ -11,8 +43,9 @@
     style="max-width:650px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
     <script type="application/x-javascript">
     <![CDATA[
     var config = new Config();
@@ -34,7 +67,6 @@
     var listbox, header, description, chkEnabled, btnEdit, btnUninstall;
     var selectedScript;
     var pagesControl;
-    var prefMan = new GM_PrefManager();
 
     window.addEventListener("load", function(ev) {
         config.load();
@@ -87,19 +119,7 @@
     }
     
     function handleEditButton() {
-      if (navigator.userAgent.match(/\bwindows\b/i) && 
-          !prefMan.getValue("warnedWindowsEditor")) 
-      {
-        alert("Hello! Looks like you're on Windows and that this is the your " +
-              "first time editing a user script.\n\nTake this opportunity " +
-              "to verify that you have associated either the .user.js or " +
-              "the .js extension with a text editor on your computer. " + 
-              "Otherwise, you may get funny errors.\n\nWhen you're done, " + 
-              "come back here and press OK.");
-
-        prefMan.setValue("warnedWindowsEditor", true);
-      }
-    
+      ensureWindowsAssoc();    
       window.close();
       getScriptFile(selectedScript.filename).launch();
     }
@@ -146,9 +166,16 @@
     ]]>
     </script>
 
-    <hbox style="margin-bottom:2em;">
-        <listbox flex="1" id="lstScripts" style="min-width:140px; margin-top:0" />
-        <vbox flex="3">
+    <grid style="margin-bottom:2em" flex="1" orient="vertical">
+      <columns>
+        <column flex="1"/>
+        <column flex="3"/>
+      </columns>
+      
+      <rows>
+        <row flex="1" orient="horizontal">
+          <listbox id="lstScripts" style="min-width:140px; margin-top:0" flex="1"/>
+          <vbox flex="3">
             <description id="ctlHeader" style="  margin: 0px 5px 5px 5px; 
                border: 2px solid; 
                -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow; 
@@ -164,13 +191,17 @@
                height:3em; 
                max-height:3em;"/>
             <vbox id="pages-control" />
-            <hbox style="margin-top:1em;">
-              <checkbox flex="1" id="chkEnabled" label="Enabled" checked="true" />
-              <button flex="1" id="btnEdit" label="Edit" />
-              <button flex="1" id="btnUninstall" label="Uninstall" />
-            </hbox>
-        </vbox>
-    </hbox>
+          </vbox>                
+        </row>
+        <row>
+          <checkbox id="chkEnabled" label="Enabled" checked="true" />
+          <hbox>
+            <button flex="1" id="btnEdit" label="Edit" />
+            <button flex="1" id="btnUninstall" label="Uninstall" />
+          </hbox>
+        </row>
+      </rows>          
+    </grid>
 
 </dialog>
 
