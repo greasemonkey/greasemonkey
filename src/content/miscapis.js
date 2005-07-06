@@ -32,14 +32,8 @@ copies or substantial portions of the Software.
 */
 
 function GM_ScriptStorage(script) {
-  var namespace = script.namespace;
-  
-  if (namespace.substring(namespace.length - 1) != "/") {
-    namespace += "/";
-  }
-  
   this.prefMan = new GM_PrefManager(["scriptvals.",
-                                     namespace,
+                                     script.namespace,
                                      "/",
                                      script.name,
                                      "."].join(""));

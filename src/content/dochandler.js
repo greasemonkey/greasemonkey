@@ -94,7 +94,7 @@ GM_DocHandler.prototype.injectScripts = function() {
   // script so we instance them here, before the loop.
   var xmlhttpRequester = new GM_xmlhttpRequester(this.contentWindow, 
                                                  this.chromeWindow);
-  this.menuCommander = new GM_MenuCommander();
+  this.menuCommander = new GM_MenuCommander(this.contentWindow);
   var xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
   var registerMenuCommand = GM_hitch(this.menuCommander, 
                                      "registerMenuCommand");
