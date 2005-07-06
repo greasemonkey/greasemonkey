@@ -1,11 +1,10 @@
 /*
+=== START LICENSE ===
+
 Copyright 2004-2005 Aaron Boodman
 
 Contributors:
 Jeremy Dunck, Nikolas Coukouma, Matthew Gray.
-
-Greasemonkey is licensed under the MIT License:
-http://www.opensource.org/licenses/mit-license.php
 
 Permission is hereby granted, free of charge, to any person obtaining a copy 
 of this software and associated documentation files (the "Software"), to deal 
@@ -13,9 +12,6 @@ in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
 copies of the Software, and to permit persons to whom the Software is 
 furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all 
-copies or substantial portions of the Software.
 
 Note that this license applies only to the Greasemonkey extension source 
 files, not to the user scripts which it runs. User scripts are licensed 
@@ -28,6 +24,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE.
+
+=== END LICENSE ===
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
 */
 
 function ScriptDownloader(url) {
@@ -116,17 +117,18 @@ function ScriptDownloader(url) {
     script.enabled = true;
     script.includes = [];
     script.excludes = [];
-
+    
     // crack open the file so we can look for metadata in the comments
-    var fileStream = getLineStream(targetFile);
+    var txt = getContents(targetUri.spec);
 
     // read one line at a time looking for start meta delimiter or EOF
-    var lineStream = fileStream.QueryInterface(Components.interfaces.nsILineInputStream);
+    var lines = txt.match(/.+/g);
+    var lnIdx = 0;
     var result = {};
     var foundMeta = false;
 
-    while (lineStream.readLine(result)) {
-      if (result.value.indexOf("// ==UserScript==") == 0) {
+    while (result = lines[lnIdx++]) {
+      if (result.indexOf("// ==UserScript==") == 0) {
         GM_log("* found metadata");
         foundMeta = true;
         break;
@@ -135,12 +137,12 @@ function ScriptDownloader(url) {
 
     // gather up meta lines
     if (foundMeta) {
-      while (lineStream.readLine(result)) {
-        if (result.value.indexOf("// ==/UserScript==") == 0) {
+      while (result = lines[lnIdx++]) {
+        if (result.indexOf("// ==/UserScript==") == 0) {
           break;
         }
 
-        var match = result.value.match(/\/\/ \@(\S+)\s+([^\n]+)/);
+        var match = result.match(/\/\/ \@(\S+)\s+([^\n]+)/);
         if (match != null) {
           switch (match[1]) {
             case "name":
@@ -157,8 +159,6 @@ function ScriptDownloader(url) {
       }
     }
 
-    fileStream.close();
-
     // if no meta info, default to reasonable values
     if (script.name == null) {
       script.name = parseScriptName(sourceUri);
@@ -173,7 +173,7 @@ function ScriptDownloader(url) {
     }
 
     // open install dialog
-    var result = {};
+    result = {};
     GM_log("* opening install dialog");
     window.openDialog("chrome://greasemonkey/content/install.xul", 
       "manager", "resizable,centerscreen,modal", script, targetFile, result);
