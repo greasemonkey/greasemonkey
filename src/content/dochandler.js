@@ -126,7 +126,7 @@ GM_DocHandler.prototype.injectScripts = function() {
 		        "GM_xmlhttpRequest, GM_registerMenuCommand, GM_setValue, ",
 		        "GM_getValue, GM_log, GM_openInTab) { delete window.GM_apis; ",
 		        getContents(getScriptChrome(script.filename)),
-		        "}).apply(this, window.GM_apis);"
+		        "\n}).apply(this, window.GM_apis);"
 		        ].join("");
 
     this.contentWindow.GM_apis = [xmlhttpRequest,
