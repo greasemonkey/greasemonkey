@@ -56,9 +56,15 @@ function ScriptDownloader(url) {
   this.start = function() {
     GM_log("> ScriptDownloader.start");
     try {
+      // This is actually bad, we should be using interface IDs. 
       if(dm.addDownload.length == 8) {
-       dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
+        // ff 1.0.x
+        dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, persist)
+      } else if (dm.addDownload.length == 9) {
+        // ff 1.1.x
+        dm.addDownload(0, sourceUri, targetUri, parseScriptName(sourceUri), null, null, null, null, persist)
       } else {
+        // seamonkey
         dm.addDownload(sourceUri, targetUri, parseScriptName(sourceUri), null, null, persist);
       }
 
