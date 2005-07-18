@@ -112,14 +112,30 @@ GM_BrowserUI.contentLoad = function(e) {
     return;
   }
 
-  GM_log("win == win.top: " + (win == win.top));
+  // get the right menu commander for this document. this is either a new one
+  // if the document is in the top window (not framed), or an existing one if
+  // it the doc is framed. 
+  
+  var commander;
   if (win == win.top) {
-    this.currentMenuCommander = new GM_MenuCommander(win);
-    this.menuCommanders.push(this.currentMenuCommander);
+    // if the doc is the top-level doc, create a new commander for it
+    commander = new GM_MenuCommander(win);
+    this.menuCommanders.push(commander);
+  } else {
+    // otherwise get the commander which goes with this document's top window.
+    // Note that this is *not* always the currentCommander because the tab 
+    // might be loading in the background.
+    commander = this.getCommander(win.top);
+  }
+
+  // if this content load is in the focused tab, attach the menuCommaander  
+  if (win == this.tabBrowser.selectedBrowser.contentWindow) {
+    this.currentMenuCommander = commander;
     this.currentMenuCommander.attach();
   }
 
-  new GM_DocHandler(win, window, this.currentMenuCommander);
+  // inject all scripts
+  new GM_DocHandler(win, window, commander);
 
   GM_listen(win, "unload", GM_hitch(this, "contentUnload"));
 
