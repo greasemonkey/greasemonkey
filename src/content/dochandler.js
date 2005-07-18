@@ -34,11 +34,12 @@ copies or substantial portions of the Software.
 // GM_DocHandlers are created by GM_BrowserUI to process individual documents
 // loaded into the content area.
 
-function GM_DocHandler(contentWindow, chromeWindow) {
+function GM_DocHandler(contentWindow, chromeWindow, menuCommander) {
   GM_log("> GM_DocHandler")
 
   this.contentWindow = contentWindow;
   this.chromeWindow = chromeWindow;
+  this.menuCommander = menuCommander;
 
   this.initScripts();
   this.injectScripts();
@@ -94,7 +95,6 @@ GM_DocHandler.prototype.injectScripts = function() {
   // script so we instance them here, before the loop.
   var xmlhttpRequester = new GM_xmlhttpRequester(this.contentWindow, 
                                                  this.chromeWindow);
-  this.menuCommander = new GM_MenuCommander(this.contentWindow);
   var xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
   var registerMenuCommand = GM_hitch(this.menuCommander, 
                                      "registerMenuCommand");
@@ -121,7 +121,6 @@ GM_DocHandler.prototype.injectScripts = function() {
     // This has debugging benefits; when the script errors it shows the right
     // line number.
 
-		//TODO: Add in GM_registerMenuCommand
 		var toInject = ["(function(",
 		        "GM_xmlhttpRequest, GM_registerMenuCommand, GM_setValue, ",
 		        "GM_getValue, GM_log, GM_openInTab) { delete window.GM_apis; ",
@@ -135,8 +134,6 @@ GM_DocHandler.prototype.injectScripts = function() {
                                   getValue, 
                                   log,
                                   GM_openInTab];
-
-    GM_log('injecting: ' + toInject);
 
     scriptElm.appendChild(this.contentWindow.document.
                           createTextNode(toInject));

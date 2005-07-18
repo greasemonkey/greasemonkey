@@ -46,8 +46,8 @@ var GM_BrowserUI = new Object();
 GM_BrowserUI.init = function() {
   GM_log("> GM_BrowserUI.init");
 
-  this.handlers = [];
-  this.currentHandler = null;
+  this.menuCommanders = [];
+  this.currentMenuCommander = null;
 
   GM_updateVersion();
 
@@ -97,10 +97,10 @@ GM_BrowserUI.chromeLoad = function() {
 }
 
 GM_BrowserUI.contentLoad = function(e) {
-  GM_log("> GM_BrowserUI.contentLoad");
+  GM_log("> GM_BrowserUI.contentLoad: " + e.target.defaultView.location.href);
 
   if (!this.getEnabled()) {
-    GM_log("* Greasemonkey disabled, exiting")
+    GM_log("* Greasemonkey disabled, skipping contentLoad");
     return;
   }
 
@@ -112,14 +112,14 @@ GM_BrowserUI.contentLoad = function(e) {
     return;
   }
 
-  if (this.getHandler(win)) {
-    GM_log("* document has already been greased, exiting")
-    return;
+  GM_log("win == win.top: " + (win == win.top));
+  if (win == win.top) {
+    this.currentMenuCommander = new GM_MenuCommander(win);
+    this.menuCommanders.push(this.currentMenuCommander);
+    this.currentMenuCommander.attach();
   }
 
-  this.currentHandler = new GM_DocHandler(win, window);
-  this.currentHandler.menuCommander.attach();
-  this.handlers.push(this.currentHandler);
+  new GM_DocHandler(win, window, this.currentMenuCommander);
 
   GM_listen(win, "unload", GM_hitch(this, "contentUnload"));
 
@@ -142,29 +142,31 @@ GM_BrowserUI.chromeUnload = function() {
 }
 
 /**
- * A content document has unloaded. We need to remove it's handler to avoid
- * leaking it's memory.
+ * A content document has unloaded. We need to remove it's menuCommander to 
+ * avoid leaking it's memory.
  */
 GM_BrowserUI.contentUnload = function(e) {
   GM_log("> GM_BrowserUI.contentUnload");
 
-  // remove the handler for this document  
-  var handler = null;
+  // remove the commander for this document  
+  var commander = null;
   
-  //looping over handlers rather than using getHandler because we need
-  //the index into handlers.splice.
-  for (var i = 0; i < this.handlers.length; i++) {
-    if (this.handlers[i].contentWindow == e.currentTarget) {
-      handler = this.handlers[i];
-      handler.menuCommander.detach();
-      
-      if (handler == this.currentHandler) {
-        this.currentHandler = null;
+  // looping over commanders rather than using getCommander because we need
+  // the index into commanders.splice.
+  for (var i = 0; commander = this.menuCommanders[i]; i++) {
+    if (commander.contentWindow == e.currentTarget) {
+
+      GM_log("* Found corresponding commander. Is currentMenuCommander: " + 
+             (commander == this.currentMenuCommander));
+
+      if (commander == this.currentMenuCommander) {
+        this.currentMenuCommander.detach();
+        this.currentMenuCommander = null;
       }
+      
+      this.menuCommanders.splice(i, 1);
 
-      this.handlers.splice(i, 1);
-
-      GM_log("* Found and removed corresponding handler")
+      GM_log("* Found and removed corresponding commander")
       break;
     }
   }
@@ -205,20 +207,21 @@ GM_BrowserUI.toolsMenuShowing = function() {
 GM_BrowserUI.onLocationChange = function(a,b,c) {
   GM_log("> GM_BrowserUI.onLocationChange");
 
-  if (this.currentHandler != null) {
-    this.currentHandler.menuCommander.detach();
-    this.currentHandler = null;
+  if (this.currentMenuCommander != null) {
+    this.currentMenuCommander.detach();
+    this.currentMenuCommander = null;
   }
 
-  this.currentHandler = this.getHandler(this.tabBrowser.selectedBrowser.
+  var menuCommander = this.getCommander(this.tabBrowser.selectedBrowser.
                                         contentWindow);
   
-  if (!this.currentHandler) {
-    GM_log("* no handler registered for this content doc, exiting")
+  if (!menuCommander) {
+    GM_log("* no commander found for this document - it must be new.");
     return;
   }
   
-  this.currentHandler.menuCommander.attach();
+  this.currentMenuCommander = menuCommander;
+  this.currentMenuCommander.attach();
 
   GM_log("< GM_BrowserUI.onLocationChange");
 }
@@ -231,12 +234,13 @@ GM_BrowserUI.updateMenu = function(menuElm, commandsArr) {
 }
 
 /**
- * Helper method which gets the handler corresponding to a given document
+ * Helper method which gets the menuCommander corresponding to a given 
+ * document
  */
-GM_BrowserUI.getHandler = function(win) {
-  for (var i = 0; i < this.handlers.length; i++) {
-    if (this.handlers[i].contentWindow == win) {
-      return this.handlers[i];
+GM_BrowserUI.getCommander = function(win) {
+  for (var i = 0; i < this.menuCommanders.length; i++) {
+    if (this.menuCommanders[i].contentWindow == win) {
+      return this.menuCommanders[i];
     }
   }
   
@@ -330,4 +334,19 @@ function installContextItemClicked() {
 
 function installContextItemClicked() {
   new ScriptDownloader(document.popupNode.href).start();
+}
+
+// this is a debug function to make sure that menuCommanders are being
+// created and destroyed at the correct time.
+
+// window.setInterval(GM_checkState, 2000);
+
+function GM_checkState() {
+  var commander;
+  var urls = [];
+  for (var i = 0; commander = GM_BrowserUI.menuCommanders[i]; i++) {
+    urls.push(commander.contentWindow.location.href);
+  }
+  
+  GM_log(urls.length + " active commanders: " + urls.join(", "), true);
 }

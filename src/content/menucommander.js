@@ -33,14 +33,16 @@ copies or substantial portions of the Software.
 
 function GM_MenuCommander(contentWindow) {
   GM_log("> GM_MenuCommander")
+  
+  this.contentWindow = contentWindow;
   this.menu = document.getElementById("userscript-commands");
   this.keyset = document.getElementById("mainKeyset");
   this.menuPopup = this.menu.firstChild;
-  this.contentWindow = contentWindow;
-  
+
   this.menuItems = [];
   this.keys = [];
   this.attached = false;
+  
   GM_log("< GM_MenuCommander")
 }
 
@@ -48,36 +50,28 @@ GM_MenuCommander.prototype.registerMenuCommand =
 function(commandName, commandFunc, accelKey, accelModifiers, accessKey) {
   GM_log("> GM_MenuCommander.registerMenuCommand");
   
-  // Most of the time, and IFRAME creating a menu command would just be wierd,
-  // because there'd end up being lots of duplicate commands. We should add 
-  // IFRAME support for this, but for now, iframe scripts which *really* want 
-  // to register commands can always add a hook for themselves in the top 
-  // frame, and call it from the iframe.
+  GM_log('accelKey: ' + accelKey);
+  GM_log('modifiers: ' + accelModifiers); 
+  GM_log('accessKey: ' + accessKey); 
 
-  if (this.contentWindow == this.contentWindow.top) {
-    GM_log('accelKey: ' + accelKey);
-    GM_log('modifiers: ' + accelModifiers); 
-    GM_log('accessKey: ' + accessKey); 
+  var menuItem = this.createMenuItem(commandName, commandFunc, accessKey);
+  this.menuItems.push(menuItem);  
 
-    var menuItem = this.createMenuItem(commandName, commandFunc, accessKey);
-    this.menuItems.push(menuItem);  
+  if (accelKey) {
+    var key = this.createKey(commandFunc, accelKey, accelModifiers, menuItem);
+    this.keys.push(key);
+  }
+
+  // if this menucommander is for the current document, we should add the 
+  // elements immediately. otherwise it will be added in attach()
+  if (this.attached) {
+    this.menuPopup.appendChild(menuItem);
   
     if (accelKey) {
-      var key = this.createKey(commandFunc, accelKey, accelModifiers, menuItem);
-      this.keys.push(key);
+      this.keyset.appendChild(key);
     }
-
-    // if this menucommander is for the current document, we should add the 
-    // elements immediately. otherwise it will be added in attach()
-    if (this.attached) {
-      this.menuPopup.appendChild(menuItem);
-    
-      if (accelKey) {
-        this.keyset.appendChild(key);
-      }
-    
-      this.setDisabled(false);
-    }
+  
+    this.setDisabled(false);
   }
   
   GM_log("< GM_MenuCommmander.registerMenuCommand")
