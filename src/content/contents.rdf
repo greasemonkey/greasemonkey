@@ -42,8 +42,8 @@ copies or substantial portions of the Software.
   
   <RDF:Description about="urn:mozilla:package:greasemonkey"
     chrome:displayName="Greasemonkey"
-    chrome:author="Aaron Boodman and David Pullman"
-    chrome:authorURL="http://youngpup.net, http://stilleye.net/"
+    chrome:author="Aaron Boodman"
+    chrome:authorURL="http://youngpup.net"
     chrome:name="greasemonkey"
     chrome:extension="true"
     chrome:description="A user script manager for Firefox.">
