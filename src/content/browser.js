@@ -36,6 +36,18 @@ copies or substantial portions of the Software.
 // all the main injection logic, though that should probably be a proper XPCOM
 // service and wouldn't need to be initialized in that case.
 
+const nsISupports = Components.interfaces.nsISupports;
+const nsIObserver = Components.interfaces.nsIObserver;
+const nsISupportsWeakReference = Components.interfaces.nsISupportsWeakReference;
+
+const nsIWebProgress =
+      Components.interfacesByID["{570F39D0-EFD0-11d3-B093-00A024FFC08C}"];
+const nsIWebProgressListener =
+      Components.interfacesByID["{570F39D1-EFD0-11d3-B093-00A024FFC08C}"];
+
+const webProgress = Components.classes["@mozilla.org/docloaderservice;1"]
+                    .getService(nsIWebProgress);
+
 var GM_BrowserUI = new Object();
 
 /**
@@ -46,6 +58,7 @@ var GM_BrowserUI = new Object();
 GM_BrowserUI.init = function() {
   GM_log("> GM_BrowserUI.init");
 
+  this.docHandlers = [];
   this.menuCommanders = [];
   this.currentMenuCommander = null;
 
@@ -53,7 +66,7 @@ GM_BrowserUI.init = function() {
 
   GM_listen(window, "load", GM_hitch(this, "chromeLoad"));
   GM_listen(window, "unload", GM_hitch(this, "chromeUnload"));
-  
+
   GM_log("< GM_BrowserUI.init");
 }
 
@@ -61,8 +74,8 @@ GM_BrowserUI.init = function() {
  * The browser XUL has loaded. Find the elements we need and set up our
  * listeners and wrapper objects.
  */
-GM_BrowserUI.chromeLoad = function() {
-  GM_log("> GM_BrowserUI.browserLoad")
+GM_BrowserUI.chromeLoad = function(e) {
+  GM_log("> GM_BrowserUI.chromeLoad")
 
   // get all required DOM elements
   this.tabBrowser = document.getElementById("content");
@@ -86,134 +99,70 @@ GM_BrowserUI.chromeLoad = function() {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));	
 
-
-  window.getBrowser().addProgressListener(this, 
-    Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+  // this gives us onLocationChange
+  document.getElementById("content").addProgressListener(this,
+    Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
   // update enabled icon
   this.refreshStatus();
 
-  GM_log("< GM_BrowserUI.browserLoad")
+  GM_log("< GM_BrowserUI.chromeLoad")
 }
 
-GM_BrowserUI.contentLoad = function(e) {
-  GM_log("> GM_BrowserUI.contentLoad: " + e.target.defaultView.location.href);
+/**
+ * Gets called by browser.webProgress when a document changes state. We watch
+ * for STATE_START and create GM_DocHandler instances around the corresponding
+ * DOMWindow.
+ */
+GM_BrowserUI.onDocStart = function(unsafeWin, unsafeTop, isFile) {
+  GM_log("> GM_BrowserUI.onDocStart");
 
-  if (!this.getEnabled()) {
-    GM_log("* Greasemonkey disabled, skipping contentLoad");
-    return;
-  }
+  // get the right menu commander for this document. a doc might not have one
+  // because it is an iframe. we don't have a context menu for frames yet.
+  var commander = null;
 
-  var win = e.target.defaultView;
-  var doc = win.document;
-
-  if(!doc.body) {
-    GM_log("* no body on document, existing")
-    return;
-  }
-
-  // get the right menu commander for this document. this is either a new one
-  // if the document is in the top window (not framed), or an existing one if
-  // it the doc is framed. 
-  
-  var commander;
-  if (win == win.top) {
+  if (unsafeWin == unsafeTop) {
     // if the doc is the top-level doc, create a new commander for it
-    commander = new GM_MenuCommander(win);
-    this.menuCommanders.push(commander);
-  } else {
-    // otherwise get the commander which goes with this document's top window.
-    // Note that this is *not* always the currentCommander because the tab 
-    // might be loading in the background.
-    commander = this.getCommander(win.top);
+    commander = new GM_MenuCommander();
+    this.menuCommanders.push({win:unsafeWin, commander:commander});
   }
 
-  // if this content load is in the focused tab, attach the menuCommaander  
-  if (win == this.tabBrowser.selectedBrowser.contentWindow) {
-    this.currentMenuCommander = commander;
-    this.currentMenuCommander.attach();
+  new GM_DocHandler(unsafeWin, window, commander, isFile);
+  
+  GM_log("< GM_BrowserUI.onDocStart");
+}
+
+/**
+ * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
+ * If that document is in in the top-level window of the focused tab, find 
+ * it's menu items and activate them.
+ */
+GM_BrowserUI.contentLoad = function(e) {
+  GM_log("> GM_BrowserUI.contentLoad");
+
+  var unsafeTarget = new XPCNativeWrapper(e, "target").target;
+  var unsafeWin = new XPCNativeWrapper(unsafeTarget, "defaultView").defaultView;
+  var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
+  var href = new XPCNativeWrapper(unsafeLoc, "href").href;
+
+  if (GM_isGreasemonkeyable(href)) {
+    // if this content load is in the focused tab, attach the menuCommaander  
+    if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
+      var commander = this.getCommander(unsafeWin);
+    
+      if (!commander) {
+        throw new Error("No menu commaner found for URL: " + href);
+      }
+
+      this.currentMenuCommander = commander;
+      this.currentMenuCommander.attach();
+    }
+  
+    GM_listen(unsafeWin, "unload", GM_hitch(this, "contentUnload"));
   }
-
-  // inject all scripts
-  new GM_DocHandler(win, window, commander);
-
-  GM_listen(win, "unload", GM_hitch(this, "contentUnload"));
-
+  
   GM_log("< GM_BrowserUI.contentLoad");
 }
-
-/**
- * The browser XUL has unloaded. We need to let go of the pref watcher so
- * that a non-existant window is not informed when greasemonkey enabled state
- * changes. And we need to let go of the progress listener so that we don't
- * leak it's memory.
- */
-GM_BrowserUI.chromeUnload = function() {
-  GM_log("> GM_BrowserUI.chromeUnload")
-
-  GM_prefRoot.unwatch("enabled", this.enabledWatcher);
-  window.getBrowser().removeProgressListener(this);
-
-  GM_log("< GM_BrowserUI.chromeUnload")
-}
-
-/**
- * A content document has unloaded. We need to remove it's menuCommander to 
- * avoid leaking it's memory.
- */
-GM_BrowserUI.contentUnload = function(e) {
-  GM_log("> GM_BrowserUI.contentUnload");
-
-  // remove the commander for this document  
-  var commander = null;
-  
-  // looping over commanders rather than using getCommander because we need
-  // the index into commanders.splice.
-  for (var i = 0; commander = this.menuCommanders[i]; i++) {
-    if (commander.contentWindow == e.currentTarget) {
-
-      GM_log("* Found corresponding commander. Is currentMenuCommander: " + 
-             (commander == this.currentMenuCommander));
-
-      if (commander == this.currentMenuCommander) {
-        this.currentMenuCommander.detach();
-        this.currentMenuCommander = null;
-      }
-      
-      this.menuCommanders.splice(i, 1);
-
-      GM_log("* Found and removed corresponding commander")
-      break;
-    }
-  }
-
-  GM_log("< GM_BrowserUI.contentUnload");
-}
-
-
-GM_BrowserUI.contextMenuShowing = function() {
-  GM_log('> contextMenuShowing');
-  var culprit = document.popupNode;
-  var contextItem = ge("install-userscript");
-  var contextSep = ge("install-userscript-sep");
-
-  contextItem.hidden = contextSep.hidden = 
-    !(culprit.tagName.toLowerCase() == "a" 
-    && culprit.href.match(/\.user\.js(\?|$)/i) != null);
-  GM_log('< contextMenuShowing');
-}
-
-GM_BrowserUI.toolsMenuShowing = function() {
-	GM_log('> toolsMenuShowing');
-  var installItem = ge("userscript-tools-install");
-
-  var disabled = !(window._content && window._content.location && 
-  window._content.location.href.match(/\.user\.js(\?|$)/i) != null);
-
-  installItem.setAttribute("disabled", disabled.toString());
-  GM_log('< toolsMenuShowing');
-}
-
 
 /**
  * The browser's location has changed. Usually, we don't care. But in the case
@@ -243,20 +192,97 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
 }
 
 /**
- * Builds up and inserts a submenu for the specified menu commands array
+ * A content document has unloaded. We need to remove it's menuCommander to 
+ * avoid leaking it's memory. 
  */
-GM_BrowserUI.updateMenu = function(menuElm, commandsArr) {
-  GM_log("* TODO: GM_BrowserUI.updateMenu")
+GM_BrowserUI.contentUnload = function(e) {
+  GM_log("> GM_BrowserUI.contentUnload");
+
+  var unsafeWin = new XPCNativeWrapper(e, "currentTarget").currentTarget;
+
+  // remove the commander for this document  
+  var commander = null;
+  
+  // looping over commanders rather than using getCommander because we need
+  // the index into commanders.splice.
+  for (var i = 0; item = this.menuCommanders[i]; i++) {
+    if (item.win == unsafeWin) {
+
+      GM_log("* Found corresponding commander. Is currentMenuCommander: " + 
+             (item.commander == this.currentMenuCommander));
+
+      if (item.commander == this.currentMenuCommander) {
+        this.currentMenuCommander.detach();
+        this.currentMenuCommander = null;
+      }
+      
+      this.menuCommanders.splice(i, 1);
+
+      GM_log("* Found and removed corresponding commander")
+      break;
+    }
+  }
+
+  GM_log("< GM_BrowserUI.contentUnload");
+}
+
+/**
+ * The browser XUL has unloaded. We need to let go of the pref watcher so
+ * that a non-existant window is not informed when greasemonkey enabled state
+ * changes. And we need to let go of the progress listener so that we don't
+ * leak it's memory.
+ */
+GM_BrowserUI.chromeUnload = function() {
+  GM_log("> GM_BrowserUI.chromeUnload")
+
+  GM_prefRoot.unwatch("enabled", this.enabledWatcher);
+  window.getBrowser().removeProgressListener(this);
+
+  GM_log("< GM_BrowserUI.chromeUnload")
+}
+
+
+GM_BrowserUI.contextMenuShowing = function() {
+  GM_log('> contextMenuShowing');
+  var culprit = document.popupNode;
+  var contextItem = ge("install-userscript");
+  var contextSep = ge("install-userscript-sep");
+
+  contextItem.hidden = contextSep.hidden = 
+    !(culprit.tagName.toLowerCase() == "a" 
+    && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+  GM_log('< contextMenuShowing');
+}
+
+GM_BrowserUI.toolsMenuShowing = function() {
+	GM_log('> toolsMenuShowing');
+  var installItem = ge("userscript-tools-install");
+  var disabled = true;
+  
+  if (window._content) {
+    var locationGetter = new XPCNativeWrapper(window._content, "location");
+
+    if (locationGetter.location) {
+      var href = new XPCNativeWrapper(locationGetter.location, "href").href;
+
+      if (href.match(/\.user\.js(\?|$)/i)) {
+        disabled = false;
+      }
+    }
+  }
+  
+  installItem.setAttribute("disabled", disabled.toString());
+  GM_log('< toolsMenuShowing');
 }
 
 /**
  * Helper method which gets the menuCommander corresponding to a given 
  * document
  */
-GM_BrowserUI.getCommander = function(win) {
+GM_BrowserUI.getCommander = function(unsafeWin) {
   for (var i = 0; i < this.menuCommanders.length; i++) {
-    if (this.menuCommanders[i].contentWindow == win) {
-      return this.menuCommanders[i];
+    if (this.menuCommanders[i].win == unsafeWin) {
+      return this.menuCommanders[i].commander;
     }
   }
   
@@ -323,8 +349,9 @@ GM_BrowserUI.newUserScript = function() {
   destFile.launch();
 }
 
+// necessary for webProgressListener implementation
+GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){}
 GM_BrowserUI.onStateChange = function(a,b,c,d){}
-GM_BrowserUI.onProgressChange = function(a,b,c,d,e,f){}
 GM_BrowserUI.onStatusChange = function(a,b,c,d){}
 GM_BrowserUI.onSecurityChange = function(a,b,c){}
 GM_BrowserUI.onLinkIconAvailable = function(a){}
@@ -355,14 +382,86 @@ function installContextItemClicked() {
 // this is a debug function to make sure that menuCommanders are being
 // created and destroyed at the correct time.
 
-// window.setInterval(GM_checkState, 2000);
+// window.setInterval(GM_checkState, 3000);
 
 function GM_checkState() {
   var commander;
   var urls = [];
   for (var i = 0; commander = GM_BrowserUI.menuCommanders[i]; i++) {
-    urls.push(commander.contentWindow.location.href);
+    urls.push(commander.win.location.href);
   }
   
-  GM_log(urls.length + " active commanders: " + urls.join(", "), true);
+  GM_log(urls.length + " active commanders: " + urls.join(", "));
 }
+
+
+
+/**
+ * This is wierd. It turns out that catching DOC_START from the webProgress on
+ * tabBrowser will make you miss the very first one, for the document that
+ * loads as a new window opens.
+ *
+ * The only way to catch that one from the browser appears to be to listen to
+ * *every* DOC_START throughout mozilla. So we do that here, and then check to
+ * see if the window which is loading corresponds to any of the tabs in this 
+ * browser window.
+ *
+ * TODO: move this to an XPCOM service which the browser windows register
+ * themselves with.
+ */
+
+var GM_DocStartListener = {
+  QueryInterface : function(aIID) {
+    if (!aIID.equals(nsIWebProgressListener) &&
+        !aIID.equals(nsISupportsWeakReference) &&
+        !aIID.equals(nsISupports)) 
+    {
+      throw Components.results.NS_ERROR_NO_INTERFACE;
+    }
+    
+    return this;
+  },
+
+  onStateChange : function(aWebProgress, aRequest, aStateFlags, aStatus) {
+    //GM_log("> GM_DocStartListener.onStateChange");
+    
+    if (!GM_BrowserUI.getEnabled()) {
+      GM_log("* Greasemonkey disabled");
+      return;
+    }
+
+    if (aStateFlags & nsIWebProgressListener.STATE_START) {
+      if (GM_isGreasemonkeyable(aRequest.name)) {
+        GM_log("caught request: " + aRequest.name);
+        
+        var browsers = window.getBrowser().browsers;
+        var browser;
+        
+        var unsafeWin = aWebProgress.DOMWindow;
+        var unsafeTop = new XPCNativeWrapper(unsafeWin, "top").top;
+        
+        GM_log("window is top: " + (unsafeWin == unsafeTop));
+      
+        // find the browser associated with this request.
+        for (var i = 0; browser = browsers[i]; i++) {
+          if (browser.contentWindow == unsafeTop) {
+            GM_log("request is in this window, forward to doc start");
+            GM_BrowserUI.onDocStart(unsafeWin, unsafeTop, 
+                                    GM_isFileScheme(aRequest.name));
+          }
+        }
+      }
+    }
+
+    //GM_log("< GM_DocStartListener.onStateChange");
+  }  
+}
+
+GM_log("starting GM_DocListener...");
+
+webProgress.addProgressListener(GM_DocStartListener, 
+  nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+  
+window.addEventListener("unload", function() {
+  webProgress.removeProgressListener(GM_DocStartListener);
+}, false);

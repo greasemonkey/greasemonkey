@@ -34,40 +34,179 @@ copies or substantial portions of the Software.
 // GM_DocHandlers are created by GM_BrowserUI to process individual documents
 // loaded into the content area.
 
-function GM_DocHandler(contentWindow, chromeWindow, menuCommander) {
+const GM_VALID_DEFAULT_DOC_CONTENTS = [
+  "<HTML><HEAD/></HTML>",
+  ""
+  ];
+  
+GM_VALID_DEFAULT_DOC_CONTENTS.contains = function(str) {
+  var cand;
+
+  for (var i = 0; cand = this[i]; i++) {
+    if (cand == str) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+function GM_DocHandler(unsafeContentWin, chromeWindow, menuCommander, isFile) {
   GM_log("> GM_DocHandler")
 
-  this.contentWindow = contentWindow;
+  this.unsafeContentWin = unsafeContentWin;
   this.chromeWindow = chromeWindow;
   this.menuCommander = menuCommander;
+  this.isFile = isFile;
 
-  this.initScripts();
-  this.injectScripts();
+  // this will be an Object instance from content which we will use to create
+  // sandboxes to run our scripts in.
+  this.sandboxCtor = null;
 
+  // this will be all scripts to be injected into this document.
+  this.scripts = [];
+
+  this.loadHandler = GM_hitch(this, "contentLoad");
+  GM_listen(this.chromeWindow, "DOMContentLoaded", this.loadHandler);
+
+  if (this.isFile) {
+  } else {
+    webProgress.addProgressListener(this, nsIWebProgress.NOTIFY_PROGRESS);
+  }
+            
   GM_log("< GM_DocHandler")
 }
 
+/**
+ * This object will sometimes get registered with docloaderservice to receive 
+ * progress events.
+ */
+GM_DocHandler.prototype.QueryInterface = function(iid) {
+  if (iid.equals(Components.interfaces.nsISupportsWeakReference) ||
+      iid.equals(Components.interfaces.nsIWebProgressListener) ||
+      iid.equals(Components.interfaces.nsISupports)) {
+    return this;
+  }
+  
+  throw Components.results.NS_ERROR_NO_INTERFACE;
+}
+
+/**
+ * Used as GM_registerMenuCommand for frames, where that function isn't
+ * supported
+ */
+GM_DocHandler.prototype.nullRegisterMenuCommand = function(){}
+
+/**
+ * Gets called when the first progress event happens on any window after 
+ * instanciation. This is the earliest we could figure to get in and grab a
+ * reference to Object for this.evaluator. We need to get in super early to
+ * avoid the chance of malicious content changing the definiton of Object
+ * before we get to it.
+ *
+ * Since we're only using this as a way to get in as soon as the document is
+ * available, and don't actually care about any additional progress changes, 
+ * we immediately unregister as soon as the first matching event occurs.
+ */
+GM_DocHandler.prototype.onProgressChange = 
+function(webProgress, request, stateFlags, aStatus) {
+  GM_log("> GM_DocHandler.onProgressChange");
+  
+  // we're waiting for the first progress event from our DOMWindow 
+  if (webProgress.DOMWindow == this.unsafeContentWin) {
+    try {
+      var unsafeDoc = new XPCNativeWrapper(this.unsafeContentWin, 
+                                           "document").document;
+
+      // sanity check that we got in early enough. 
+      var docContent = new XMLSerializer().serializeToString(unsafeDoc);
+
+      GM_log("doc content: " + docContent);
+
+      if (!GM_VALID_DEFAULT_DOC_CONTENTS.contains(docContent)) {
+        // The document is in some unknown state. Don't get references from it.
+        this.reportError(new Error("Invalid document, could not get global " + 
+                                   "object.\n" + docContent));
+        return;
+      } else {
+        // It seems safe. Go ahead an snarf a ref to the Object from content.
+        this.sandboxCtor = this.unsafeContentWin.Object;
+      }
+    } finally {
+      // we're done - stop listening for events
+      Components.classes["@mozilla.org/docloaderservice;1"]
+        .getService(Components.interfaces.nsIWebProgress)
+        .removeProgressListener(this);
+    }
+  }
+
+  GM_log("< GM_DocHandler.onProgressChange");
+}
+
+/**
+ * Called when the DOM we are watching is complete
+ */
+GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
+  GM_log("> GM_DocHandler.contentLoad");
+  
+  var unsafeDoc = new XPCNativeWrapper(unsafeEvent, "target").target;
+  var unsafeWin = new XPCNativeWrapper(unsafeDoc, "defaultView").defaultView;
+
+  // beacuse of event bubbling, we can actually get DOMContentLoaded from 
+  // other frames. Only act on the window that this DocHandler was created 
+  // for.
+  if (this.unsafeContentWin == unsafeWin) {
+    try {
+      GM_log("DOMContentLoaded event was from this window. Continuing.. ");
+
+      if (this.isFile) {
+        // for file loads, we don't get a progress notification where we can 
+        // snarf a trusted object early. I guess that's OK though since it is 
+        // a local file we're loading.
+        this.sandboxCtor = this.unsafeContentWin.Object.constructor;
+      } else if (!this.sandboxCtor) {
+        throw new Error("Invalid state. Should have had a progress event " + 
+                        "and snarfed a sandbox ctor by now.");
+      }
+
+      this.initScripts();
+      this.injectScripts();
+    } finally {
+      GM_unlisten(this.chromeWindow, "DOMContentLoaded", this.loadHandler);
+    }
+  } else {
+    GM_log("DOMContentLoaded was not from this window. skipping.")
+  }
+  
+  GM_log("< GM_DocHandler.contentLoad");
+}
+
+/**
+ * Figure out which scripts to inject by running their patterns against this
+ * window's URL
+ */
 GM_DocHandler.prototype.initScripts = function() {
   GM_log("> GM_DocHandler.initScripts");
   
   var config = new Config();
   config.load();
   
-  this.scripts = [];
+  var unsafeLoc = new XPCNativeWrapper(this.unsafeContentWin, 
+                                       "location").location;
+  var url = new XPCNativeWrapper(unsafeLoc, "href").href;
 
   outer:
   for (var i = 0; i < config.scripts.length; i++) {
     var script = config.scripts[i];
-
     if (script.enabled) {
       for (var j = 0; j < script.includes.length; j++) {
         var pattern = convert2RegExp(script.includes[j]);
 
-        if (pattern.test(this.contentWindow.location.href)) {
+        if (pattern.test(url)) {
           for (var k = 0; k < script.excludes.length; k++) {
             pattern = convert2RegExp(script.excludes[k]);
   
-            if (pattern.test(this.contentWindow.location.href)) {
+            if (pattern.test(url)) {
               continue outer;
             }
           }
@@ -84,66 +223,101 @@ GM_DocHandler.prototype.initScripts = function() {
   GM_log("< GM_DocHandler.initScripts");
 }
 
+/**
+ * Inject the scripts for this window by evaling them against a sandbox which
+ * delegates to content. The sandbox has the GM apis on it. This prevents 
+ * content from possibly accessing them. Other than that, it appears to 
+ * scripts that they are running in content. Except that variables they 
+ * create do not end up as properties of contentWindow.
+ */
 GM_DocHandler.prototype.injectScripts = function() {
-  GM_log("> GM_DocHandler.injectScripts")
+  GM_log("> GM_DocHandler.injectScripts");
+  var start = new Date().getTime();
 
-  // trying not to keep to much huge state hanging around, just to avoid
-  // stupid mistakes that would leak memory. So not making any of the API
-  // objects instance data until it is necessary to do so.
-  
-  // GM_registerMenuCommand and GM_xmlhttpRequest are the same for every
-  // script so we instance them here, before the loop.
-  var xmlhttpRequester = new GM_xmlhttpRequester(this.contentWindow, 
+  var xmlhttpRequester = new GM_xmlhttpRequester(this.unsafeContentWin, 
                                                  this.chromeWindow);
+
   var xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
-  var registerMenuCommand = GM_hitch(this.menuCommander, 
-                                     "registerMenuCommand");
-  
-  for (var i = 0; i < this.scripts.length; i++) {
-    var script = this.scripts[i];
-    var scriptElm = this.contentWindow.document.createElement("script");
-    
-    // GM_setValue, GM_getValue, and GM_log differ for every script, so they
-    // need to be instanced for each script.
-    var storage = new GM_ScriptStorage(script);
-    var logger = new GM_ScriptLogger(script);
-    var setValue = GM_hitch(storage, "setValue");
-    var getValue = GM_hitch(storage, "getValue");
-    var log = GM_hitch(logger, "log");
+  var registerCommand;
 
-    // TODO: investigate invoking user scripts with the least possible
-    // opportunity for page scripts to interfere -- either by calling GM apis,
-    // or by removing or changing user scripts.
-    // I imagine that right now, a page script could catch DOMSubtreeModified
-    // and remove window.GM_apis.
-    
-    // TODO: invoke user scripts by embedding a link to a javascript file.
-    // This has debugging benefits; when the script errors it shows the right
-    // line number.
-
-		var toInject = ["(function(",
-		        "GM_xmlhttpRequest, GM_registerMenuCommand, GM_setValue, ",
-		        "GM_getValue, GM_log, GM_openInTab) { delete window.GM_apis; ",
-		        getContents(getScriptChrome(script.filename)),
-		        "\n}).apply(this, window.GM_apis);"
-		        ].join("");
-
-    this.contentWindow.GM_apis = [xmlhttpRequest,
-                                  registerMenuCommand,
-        												  setValue,
-                                  getValue, 
-                                  log,
-                                  GM_openInTab];
-
-    scriptElm.appendChild(this.contentWindow.document.
-                          createTextNode(toInject));
-
-    this.contentWindow.document.body.appendChild(scriptElm);
-    this.contentWindow.document.body.removeChild(scriptElm);
-
-		GM_log("* injected '" + script.name + "'");    
-
+  if (this.menuCommander) {
+    registerCommand = GM_hitch(this.menuCommander, "registerMenuCommand");
+  } else {
+    registerCommand = this.nullRegisterMenuCommand;
   }
 
-  GM_log("< GM_DocHandler.injectScripts")  
+  for (var i = 0; i < this.scripts.length; i++) {
+    var script = this.scripts[i];
+    GM_log("running script " + script.name + "...");
+    
+    var storage = new GM_ScriptStorage(script);
+    var logger = new GM_ScriptLogger(script);
+
+    var sandbox = new this.sandboxCtor();
+    
+    sandbox.GM_log = GM_hitch(logger, "log");
+    sandbox.GM_setValue = GM_hitch(storage, "setValue");
+    sandbox.GM_getValue = GM_hitch(storage, "getValue");
+    sandbox.GM_log = GM_hitch(logger, "log");
+    sandbox.GM_xmlhttpRequest = xmlhttpRequest;
+    sandbox.GM_registerMenuCommand = registerCommand;
+    sandbox.GM_openInTab = GM_openInTab;
+    sandbox.unsafeWindow = this.unsafeContentWin;
+
+    // At first XPCNativeWrappers were not deep. If the deep kind is 
+    // available, use it. Otherwise, use the regular non-wrapped objects.
+    if (GM_deepWrappersEnabled()) {
+      sandbox.window = new XPCNativeWrapper(this.unsafeContentWin);
+      sandbox.document = sandbox.window.document;
+    } else {
+      sandbox.window = this.unsafeContentWin;
+      sandbox.document = new XPCNativeWrapper(this.unsafeContentWin, 
+                                              "document").document;
+    }
+
+    sandbox.__proto__ = this.unsafeContentWin;
+    
+    // The wrapper function expression is required. If not present, FF 
+    // crashes. Don't know why.
+    // We handle errors strictly inside the script because we can't trust
+    // errors that come out of content to do anything with them in chrome.
+    // Even letting the error bubble up to chrome will call it's toString()
+    // method.
+    var code = ["(function(){",
+                "try {",
+                getContents(getScriptChrome(script.filename)), 
+                "} catch(e) {",
+                "unsafeWindow.setTimeout(function(){",
+                "throw new Error('" + script.filename + ": ' + e.message)",
+                "})}})()"
+                ].join("\n");
+    
+    sandbox.eval(code, sandbox);
+  }
+  
+  var end = new Date().getTime();
+  GM_log("< GM_DocHandler.injectScripts (took " + (end - start) + " ms)");
+}
+
+/**
+ * Utility to create an error message in the log without throwing an error.
+ * There seems to be a problem with throwing errors in the consumer of this
+ * object -- it always thinks they are null, so we use this to report errors
+ * instead.
+ */
+GM_DocHandler.prototype.reportError = function(e) {
+  GM_log("> GM_DocHandler.reportError");
+
+  var consoleService = Components.classes['@mozilla.org/consoleservice;1']
+    .getService(Components.interfaces.nsIConsoleService);
+
+  var consoleError = Components.classes['@mozilla.org/scripterror;1']
+    .createInstance(Components.interfaces.nsIScriptError);
+
+  consoleError.init(e.message, e.fileName, e.lineNumber, e.lineNumber,
+                    e.columnNumber, 0, null);
+
+  consoleService.logMessage(consoleError);
+
+  GM_log("< GM_DocHandler.reportError");
 }

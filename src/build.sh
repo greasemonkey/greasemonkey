@@ -6,5 +6,5 @@ cp install.rdf build/
 cp install.js build/
 cp -r content build/chrome/greasemonkey/
 cd build
-find * | grep -v '\/CVS' | grep -v .DS_Store | zip greasemonkey.xpi -@
+find * | grep -v 'CVS' | grep -v .DS_Store | zip greasemonkey.xpi -@
 mv greasemonkey.xpi ../

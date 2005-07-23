@@ -31,10 +31,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-function GM_MenuCommander(contentWindow) {
+function GM_MenuCommander() {
   GM_log("> GM_MenuCommander")
   
-  this.contentWindow = contentWindow;
   this.menu = document.getElementById("userscript-commands");
   this.keyset = document.getElementById("mainKeyset");
   this.menuPopup = this.menu.firstChild;

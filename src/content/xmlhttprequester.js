@@ -31,9 +31,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-function GM_xmlhttpRequester(contentWindow, chromeWindow) {
+function GM_xmlhttpRequester(unsafeContentWin, chromeWindow) {
+  this.unsafeContentWin = unsafeContentWin;
   this.chromeWindow = chromeWindow;
-  this.contentWindow = contentWindow;
 }
 
 // this function gets called by user scripts in content security scope to
@@ -48,18 +48,38 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   // don't actually need the timer functionality, but this pops it 
   // out into chromeWindow's thread so that we get that security 
   // context.
-  this.chromeWindow.setTimeout(
-    GM_hitch(this, "chromeStartRequest", details), 0);
+  GM_log("> GM_xmlhttpRequest.contentStartRequest");
+  
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                  .getService(Components.interfaces.nsIIOService);
+  var scheme = ioService.extractScheme(details.url);
+
+  // This is important - without it, GM_xmlhttpRequest can be used to get
+  // access to things like files and chrome. Careful.
+  switch (scheme) {
+    case "http":
+    case "https":
+    case "ftp":
+      this.chromeWindow.setTimeout(
+        GM_hitch(this, "chromeStartRequest", details), 0);
+      break;
+    default:
+      throw new Error("Invalid url: " + details.url);
+  }
+
+  GM_log("< GM_xmlhttpRequest.contentStartRequest");
 }
 
 // this function is intended to be called in chrome's security context, so 
 // that it can access other domains without security warning
 GM_xmlhttpRequester.prototype.chromeStartRequest = function(details) {
+  GM_log("> GM_xmlhttpRequest.chromeStartRequest");
   var req = new XMLHttpRequest();
 
-  this.setupRequestEvent(this, req, "onload", details);
-  this.setupRequestEvent(this, req, "onreadystatechange", details);
-  this.setupRequestEvent(this, req, "onerror", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange", 
+                         details);
 
   req.open(details.method, details.url);
 
@@ -70,16 +90,21 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(details) {
   }
 
   req.send(details.data);
+  GM_log("< GM_xmlhttpRequest.chromeStartRequest");
 }
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent = 
-function(requester, req, event, details) {
+function(unsafeContentWin, req, event, details) {
+  GM_log("> GM_xmlhttpRequester.setupRequestEvent");
+
   if (details[event]) {
     req[event] = function() {
-    var responseState = {
+      GM_log("> GM_xmlhttpRequester -- callback for " + event);
+
+      var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
         responseText:req.responseText,
@@ -90,10 +115,14 @@ function(requester, req, event, details) {
         status:(req.readyState == 4 ? req.status : 0),
         statusText:(req.readyState == 4 ? req.statusText : '')
       }
-    
-      // pop back onto browser thread and call event handler                    
-      requester.contentWindow.setTimeout(
-        GM_hitch(details, event, responseState), 0);
+
+      // pop back onto browser thread and call event handler 
+      new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
+        .setTimeout(GM_hitch(details, event, responseState), 0);
+
+      GM_log("< GM_xmlhttpRequester -- callback for " + event);
     }
   }
+
+  GM_log("< GM_xmlhttpRequester.setupRequestEvent");
 }

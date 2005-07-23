@@ -61,7 +61,13 @@ function GM_hitch(obj, meth) {
 }
 
 function GM_listen(source, event, listener, opt_capture) {
-  source.addEventListener(event, listener, opt_capture);
+  Components.lookupMethod(source, "addEventListener").apply(
+    source, [event, listener, opt_capture]);
+}
+
+function GM_unlisten(source, event, listener, opt_capture) {
+  Components.lookupMethod(source, "removeEventListener").apply(
+    source, [event, listener, opt_capture]);
 }
 
 function GM_log(message, force) {
@@ -227,4 +233,26 @@ function delaydbg(o) {
 
 function delayalert(s) {
     setTimeout(function() {alert(s);}, 1000);
+}
+
+function GM_deepWrappersEnabled() {
+  // the old school javacript wrappers had this property containing their
+  // untrusted variable. the new ones don't.
+  return !(new XPCNativeWrapper(window).mUntrustedObject);
+}
+
+function GM_isGreasemonkeyable(url) {
+  var scheme = Components.classes["@mozilla.org/network/io-service;1"]
+               .getService(Components.interfaces.nsIIOService)
+               .extractScheme(url);
+
+  return scheme == "http" || scheme == "https" || scheme == "file";
+}
+
+function GM_isFileScheme(url) {
+  var scheme = Components.classes["@mozilla.org/network/io-service;1"]
+               .getService(Components.interfaces.nsIIOService)
+               .extractScheme(url);
+
+  return scheme == "file";
 }
