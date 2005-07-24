@@ -40,10 +40,8 @@ const GM_VALID_DEFAULT_DOC_CONTENTS = [
   ];
   
 GM_VALID_DEFAULT_DOC_CONTENTS.contains = function(str) {
-  var cand;
-
-  for (var i = 0; cand = this[i]; i++) {
-    if (cand == str) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == str) {
       return true;
     }
   }
