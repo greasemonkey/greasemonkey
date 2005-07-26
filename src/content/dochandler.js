@@ -57,10 +57,6 @@ function GM_DocHandler(unsafeContentWin, chromeWindow, menuCommander, isFile) {
   this.menuCommander = menuCommander;
   this.isFile = isFile;
 
-  // this will be an Object instance from content which we will use to create
-  // sandboxes to run our scripts in.
-  this.sandboxCtor = null;
-
   // this will be all scripts to be injected into this document.
   this.scripts = [];
 
@@ -128,7 +124,7 @@ function(webProgress, request, stateFlags, aStatus) {
         return;
       } else {
         // It seems safe. Go ahead an snarf a ref to the Object from content.
-        this.sandboxCtor = this.unsafeContentWin.Object;
+        this.snarf();
       }
     } finally {
       // we're done - stop listening for events
@@ -161,7 +157,7 @@ GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
         // for file loads, we don't get a progress notification where we can 
         // snarf a trusted object early. I guess that's OK though since it is 
         // a local file we're loading.
-        this.sandboxCtor = this.unsafeContentWin.Object.constructor;
+        this.snarf();
       } else if (!this.sandboxCtor) {
         throw new Error("Invalid state. Should have had a progress event " + 
                         "and snarfed a sandbox ctor by now.");
@@ -230,71 +226,98 @@ GM_DocHandler.prototype.initScripts = function() {
  */
 GM_DocHandler.prototype.injectScripts = function() {
   GM_log("> GM_DocHandler.injectScripts");
-  var start = new Date().getTime();
 
+  for (var i = 0; i < this.scripts.length; i++) {
+    // Arrange for injectScript to be called with the current script in a 
+    // split second.
+    // We evaluate scripts on a timeout because not doing so caused one
+    // strange problem in bloglinesautoload.user.js -- user scripts were not 
+    // allowed to change the URL of the content frame. Moving to timeout 
+    // solved this.
+    this.sandboxSetTimeout.apply(
+      this.unsafeContentWin, 
+      [GM_hitch(this, "injectScript", this.scripts[i])]);
+  }
+  
+  GM_log("< GM_DocHandler.injectScripts");
+}
+
+/**
+ * Injects a script into the given sandbox.
+ */
+GM_DocHandler.prototype.injectScript = function(script) {
+  GM_log("> GM_DocHandler.injectScript (" + script.filename + ")");
+
+  var sandbox = new this.sandboxCtor();
+  var storage = new GM_ScriptStorage(script);
+  var logger = new GM_ScriptLogger(script);
   var xmlhttpRequester = new GM_xmlhttpRequester(this.unsafeContentWin, 
                                                  this.chromeWindow);
 
-  var xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
-  var registerCommand;
+  sandbox.GM_log = GM_hitch(logger, "log");
+  sandbox.GM_setValue = GM_hitch(storage, "setValue");
+  sandbox.GM_getValue = GM_hitch(storage, "getValue");
+  sandbox.GM_log = GM_hitch(logger, "log");
+  sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
+  sandbox.GM_openInTab = GM_openInTab;
+  sandbox.unsafeWindow = this.unsafeContentWin;
 
   if (this.menuCommander) {
-    registerCommand = GM_hitch(this.menuCommander, "registerMenuCommand");
+    sandbox.GM_registerMenuCommand = GM_hitch(this.menuCommander, 
+                                              "registerMenuCommand");
   } else {
-    registerCommand = this.nullRegisterMenuCommand;
+    sandbox.GM_registerMenuCommand = this.nullRegisterMenuCommand;
   }
 
-  for (var i = 0; i < this.scripts.length; i++) {
-    var script = this.scripts[i];
-    GM_log("running script " + script.name + "...");
-    
-    var storage = new GM_ScriptStorage(script);
-    var logger = new GM_ScriptLogger(script);
+  // At first XPCNativeWrappers were not deep. If the deep kind is 
+  // available, use it. Otherwise, use the regular non-wrapped objects.
+  if (GM_deepWrappersEnabled()) {
+    sandbox.window = new XPCNativeWrapper(this.unsafeContentWin);
+    sandbox.document = sandbox.window.document;
+  } else {
+    sandbox.window = this.unsafeContentWin;
+    sandbox.document = new XPCNativeWrapper(this.unsafeContentWin, 
+                                            "document").document;
+  }
 
-    var sandbox = new this.sandboxCtor();
-    
-    sandbox.GM_log = GM_hitch(logger, "log");
-    sandbox.GM_setValue = GM_hitch(storage, "setValue");
-    sandbox.GM_getValue = GM_hitch(storage, "getValue");
-    sandbox.GM_log = GM_hitch(logger, "log");
-    sandbox.GM_xmlhttpRequest = xmlhttpRequest;
-    sandbox.GM_registerMenuCommand = registerCommand;
-    sandbox.GM_openInTab = GM_openInTab;
-    sandbox.unsafeWindow = this.unsafeContentWin;
+  sandbox.__proto__ = this.unsafeContentWin;
 
-    // At first XPCNativeWrappers were not deep. If the deep kind is 
-    // available, use it. Otherwise, use the regular non-wrapped objects.
-    if (GM_deepWrappersEnabled()) {
-      sandbox.window = new XPCNativeWrapper(this.unsafeContentWin);
-      sandbox.document = sandbox.window.document;
-    } else {
-      sandbox.window = this.unsafeContentWin;
-      sandbox.document = new XPCNativeWrapper(this.unsafeContentWin, 
-                                              "document").document;
-    }
+  // the wrapper function is just for compatibility with older scripts
+  // which used 'return' expecting to live inside a function. Also, 
+  // FF crashes without it (but this can be overcome by adding a meaningless
+  // eval() at the start of this function -- eg eval('42') -- there is a 
+  // compiler bug which this addresses).
 
-    sandbox.__proto__ = this.unsafeContentWin;
-    
-    // The wrapper function expression is required. If not present, FF 
-    // crashes. Don't know why.
-    // We handle errors strictly inside the script because we can't trust
-    // errors that come out of content to do anything with them in chrome.
-    // Even letting the error bubble up to chrome will call it's toString()
-    // method.
-    var code = ["(function(){",
-                "try {",
-                getContents(getScriptChrome(script.filename)), 
-                "} catch(e) {",
-                "unsafeWindow.setTimeout(function(){",
-                "throw new Error('" + script.filename + ": ' + e.message)",
-                "})}})()"
-                ].join("\n");
-    
-    sandbox.eval(code, sandbox);
+  var code = ["(function(){",
+              getContents(getScriptChrome(script.filename)),
+              "})()"]
+              .join("\n");
+
+  try {
+    // When you eval scripts that have an error, the line number you get
+    // back is the line number of the eval() call plus the line number 
+    // within the eval'd code. Creating a marker error is just a way to get
+    // the line number of the eval() call so that we can subtract it out in
+    // the error messages. This only works in DeerPark+.
+    var marker = new Error();
+    this.sandboxEval.apply(sandbox, [code, sandbox]);
+  } catch (e) {
+    this.reportError(
+      new Error(e.message, 
+                script.filename, 
+                e.lineNumber ? (e.lineNumber - marker.lineNumber - 1) : 0));
   }
   
-  var end = new Date().getTime();
-  GM_log("< GM_DocHandler.injectScripts (took " + (end - start) + " ms)");
+  GM_log("< GM_DocHandler.injectScript");
+}
+
+/**
+ * Grab some clean references out of the content window for later use
+ */
+GM_DocHandler.prototype.snarf = function() {
+  this.sandboxCtor = this.unsafeContentWin.Object;
+  this.sandboxEval = this.sandboxCtor.eval;
+  this.sandboxSetTimeout = this.unsafeContentWin.setTimeout;
 }
 
 /**
