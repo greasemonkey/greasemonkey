@@ -65,7 +65,11 @@ function GM_DocHandler(unsafeContentWin, chromeWindow, menuCommander, isFile) {
 
   if (this.isFile) {
   } else {
-    webProgress.addProgressListener(this, nsIWebProgress.NOTIFY_PROGRESS);
+    Components.classes["@mozilla.org/docloaderservice;1"]
+              .getService(Components.interfaces.nsIWebProgress)
+              .addProgressListener(this, 
+                                   Components.interfaces.nsIWebProgress
+                                                        .NOTIFY_PROGRESS);
   }
             
   GM_log("< GM_DocHandler")
@@ -289,7 +293,9 @@ GM_DocHandler.prototype.injectScript = function(script) {
   // compiler bug which this addresses).
 
   var code = ["(function(){",
+              "with (unsafeWindow) {",
               getContents(getScriptChrome(script.filename)),
+              "}",
               "})()"]
               .join("\n");
 

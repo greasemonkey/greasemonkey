@@ -80,8 +80,10 @@ function GM_log(message, force) {
 // the UI and Config rely on it. Needs rethinking.
 
 function ensureWindowsAssoc() {
+  var prefMan = new GM_PrefManager();
+
   if (navigator.userAgent.match(/\bwindows\b/i) && 
-      !new GM_PrefManager().getValue("warnedWindowsEditor")) 
+      !prefMan.getValue("warnedWindowsEditor")) 
   {
     alert("Hello! Looks like you're on Windows and that this is the your " +
           "first time editing a user script.\n\nTake this opportunity " +

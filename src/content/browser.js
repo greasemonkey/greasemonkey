@@ -36,18 +36,6 @@ copies or substantial portions of the Software.
 // all the main injection logic, though that should probably be a proper XPCOM
 // service and wouldn't need to be initialized in that case.
 
-const nsISupports = Components.interfaces.nsISupports;
-const nsIObserver = Components.interfaces.nsIObserver;
-const nsISupportsWeakReference = Components.interfaces.nsISupportsWeakReference;
-
-const nsIWebProgress =
-      Components.interfacesByID["{570F39D0-EFD0-11d3-B093-00A024FFC08C}"];
-const nsIWebProgressListener =
-      Components.interfacesByID["{570F39D1-EFD0-11d3-B093-00A024FFC08C}"];
-
-const webProgress = Components.classes["@mozilla.org/docloaderservice;1"]
-                    .getService(nsIWebProgress);
-
 var GM_BrowserUI = new Object();
 
 /**
@@ -412,9 +400,9 @@ function GM_checkState() {
 
 var GM_DocStartListener = {
   QueryInterface : function(aIID) {
-    if (!aIID.equals(nsIWebProgressListener) &&
-        !aIID.equals(nsISupportsWeakReference) &&
-        !aIID.equals(nsISupports)) 
+    if (!aIID.equals(Components.interfaces.nsIWebProgressListener) &&
+        !aIID.equals(Components.interfaces.nsISupportsWeakReference) &&
+        !aIID.equals(Components.interfaces.nsISupports)) 
     {
       throw Components.results.NS_ERROR_NO_INTERFACE;
     }
@@ -430,7 +418,7 @@ var GM_DocStartListener = {
       return;
     }
 
-    if (aStateFlags & nsIWebProgressListener.STATE_START) {
+    if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_START) {
       if (GM_isGreasemonkeyable(aRequest.name)) {
         GM_log("caught request: " + aRequest.name);
         
@@ -459,9 +447,14 @@ var GM_DocStartListener = {
 
 GM_log("starting GM_DocListener...");
 
-webProgress.addProgressListener(GM_DocStartListener, 
-  nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+Components.classes["@mozilla.org/docloaderservice;1"]
+          .getService(Components.interfaces.nsIWebProgress)
+          .addProgressListener(GM_DocStartListener, 
+                               Components.interfaces.nsIWebProgress
+                                                    .NOTIFY_STATE_DOCUMENT);
   
 window.addEventListener("unload", function() {
-  webProgress.removeProgressListener(GM_DocStartListener);
+  Components.classes["@mozilla.org/docloaderservice;1"]
+            .getService(Components.interfaces.nsIWebProgress)
+            .removeProgressListener(GM_DocStartListener);
 }, false);
