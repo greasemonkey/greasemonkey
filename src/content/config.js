@@ -31,9 +31,10 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-function Config() {
+function Config(configFile) {
   this.onload = null;
   this.scripts = null;
+  this.configFile = configFile;
 
   this.find = function(namespace, name) {
     namespace = namespace.toLowerCase();
@@ -83,12 +84,12 @@ function Config() {
   
   this.load = function() {
     var doc = document.implementation.createDocument("", "", null);
+    var configURI = Components.classes["@mozilla.org/network/io-service;1"]
+                              .getService(Components.interfaces.nsIIOService)
+                              .newFileURI(this.configFile);
+
     doc.async = false;
-    try {
-        doc.load(getScriptChrome("config.xml"));
-    } catch (exc) {
-        doc.load(getScriptChrome("default-config.xml"));
-    }
+    doc.load(configURI.spec);
 
     var nodes = document.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
 
@@ -150,7 +151,7 @@ function Config() {
 
     doc.firstChild.appendChild(doc.createTextNode("\n"))
 
-    var configStream = getWriteStream(getScriptFile("config.xml"));
+    var configStream = getWriteStream(this.configFile);
     new XMLSerializer().serializeToStream(doc, configStream, "utf-8");
     configStream.close();
   }

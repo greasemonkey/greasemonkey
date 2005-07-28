@@ -147,8 +147,10 @@ function getWriteStream(file) {
   return stream;
 }
 
-function getScriptChrome(fileName) {
-  return "chrome://greasemonkey/content/scripts/" + fileName;
+function getScriptFileURI(fileName) {
+  return Components.classes["@mozilla.org/network/io-service;1"]
+                   .getService(Components.interfaces.nsIIOService)
+                   .newFileURI(getScriptFile(fileName));
 }
 
 function getScriptFile(fileName) {
@@ -158,8 +160,10 @@ function getScriptFile(fileName) {
 }
 
 function getScriptDir() {
-  var file = getContentDir();
-  file.append("scripts");
+  var file = Components.classes["@mozilla.org/file/directory_service;1"]
+                       .getService(Components.interfaces.nsIProperties)
+                       .get("ProfD", Components.interfaces.nsILocalFile);
+  file.append("gm_scripts");
   return file;
 }
 

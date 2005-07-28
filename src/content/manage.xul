@@ -49,7 +49,7 @@ copies or substantial portions of the Software.
     <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
     <script type="application/x-javascript">
     <![CDATA[
-    var config = new Config();
+    var config = new Config(getScriptFile("config.xml"));
     var uninstallList = [];
 
     function handleOkButton() {

@@ -186,7 +186,7 @@ GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
 GM_DocHandler.prototype.initScripts = function() {
   GM_log("> GM_DocHandler.initScripts");
   
-  var config = new Config();
+  var config = new Config(getScriptFile("config.xml"));
   config.load();
   
   var unsafeLoc = new XPCNativeWrapper(this.unsafeContentWin, 
@@ -277,11 +277,8 @@ GM_DocHandler.prototype.injectScript = function(script) {
   // available, use it. Otherwise, use the regular non-wrapped objects.
   if (GM_deepWrappersEnabled()) {
     sandbox.window = new XPCNativeWrapper(this.unsafeContentWin);
-    sandbox.document = sandbox.window.document;
   } else {
     sandbox.window = this.unsafeContentWin;
-    sandbox.document = new XPCNativeWrapper(this.unsafeContentWin, 
-                                            "document").document;
   }
 
   sandbox.__proto__ = this.unsafeContentWin;
@@ -293,8 +290,12 @@ GM_DocHandler.prototype.injectScript = function(script) {
   // compiler bug which this addresses).
 
   var code = ["(function(){",
+              "var safeWin = window",
               "with (unsafeWindow) {",
-              getContents(getScriptChrome(script.filename)),
+              "with (safeWin) {",
+              "delete safeWin;",
+              getContents(getScriptFileURI(script.filename).spec),
+              "}",
               "}",
               "})()"]
               .join("\n");
@@ -311,7 +312,7 @@ GM_DocHandler.prototype.injectScript = function(script) {
     this.reportError(
       new Error(e.message, 
                 script.filename, 
-                e.lineNumber ? (e.lineNumber - marker.lineNumber - 1) : 0));
+                e.lineNumber ? (e.lineNumber - marker.lineNumber - 5) : 0));
   }
   
   GM_log("< GM_DocHandler.injectScript");

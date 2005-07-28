@@ -45,8 +45,8 @@ copies or substantial portions of the Software.
     style="max-width:400px"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <!--<script type="application/x-javascript" src="chrome://greasemonkey/content/greasemonkey.js" />-->
     <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
     <script type="application/x-javascript"><![CDATA[
         var request;
@@ -93,7 +93,8 @@ copies or substantial portions of the Software.
             file = window.arguments[1];
             result = window.arguments[2];
             var status = document.getElementById("status");
-            config = new Config();
+            var configFile = getScriptFile("config.xml");
+            config = new Config(configFile);
 
             config.load();
 
