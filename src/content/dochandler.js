@@ -116,10 +116,12 @@ function(webProgress, request, stateFlags, aStatus) {
       var unsafeDoc = new XPCNativeWrapper(this.unsafeContentWin, 
                                            "document").document;
 
+      GM_log("*** doc: " + unsafeDoc);
+
       // sanity check that we got in early enough. 
       var docContent = new XMLSerializer().serializeToString(unsafeDoc);
 
-      GM_log("doc content: " + docContent);
+      GM_log("doc content: " + docContent.substring(0, 100));
 
       if (!GM_VALID_DEFAULT_DOC_CONTENTS.contains(docContent)) {
         // The document is in some unknown state. Don't get references from it.
@@ -252,6 +254,13 @@ GM_DocHandler.prototype.injectScripts = function() {
 GM_DocHandler.prototype.injectScript = function(script) {
   GM_log("> GM_DocHandler.injectScript (" + script.filename + ")");
 
+  // This is the most amazing thing I have ever seen.
+  // Multiple statements in the JavaScript interpreter were causing a crash
+  // in FF 1.0.x.
+  // I described it to Brendan, and, after a bit of thought, he knew right off
+  // the top of his head that adding a pointless eval() would fix it. Magic.
+  eval("42");
+
   var sandbox = new this.sandboxCtor();
   var storage = new GM_ScriptStorage(script);
   var logger = new GM_ScriptLogger(script);
@@ -289,15 +298,15 @@ GM_DocHandler.prototype.injectScript = function(script) {
   // eval() at the start of this function -- eg eval('42') -- there is a 
   // compiler bug which this addresses).
 
-  var code = ["(function(){",
-              "var safeWin = window",
+  var code = ["var safeWin = window",
               "with (unsafeWindow) {",
               "with (safeWin) {",
               "delete safeWin;",
+              "(function(){",
               getContents(getScriptFileURI(script.filename).spec),
+              "})()",
               "}",
-              "}",
-              "})()"]
+              "}"]
               .join("\n");
 
   try {

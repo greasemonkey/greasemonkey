@@ -80,11 +80,10 @@ function GM_pointFourMigrate() {
 
     GM_log("old scripts dir exists: " + oldScriptsDir.exists());
     GM_log("new scripts dir exists: " + newScriptsDir.exists());
-    GM_log("new config file exists: " + newConfigFile.exists());
 
     if (oldScriptsDir.exists()) {
-      if (!newScriptDir.exists()) {
-        oldScriptsDir.moveTo(newScriptDir.parent);
+      if (!newScriptsDir.exists()) {
+        oldScriptsDir.moveTo(newScriptsDir.parent, newScriptsDir.leafName);
       }
     } else {
       if (!newScriptsDir.exists()) {
@@ -92,14 +91,15 @@ function GM_pointFourMigrate() {
                              0644);
       }
     
+      GM_log("new config file exists: " + newConfigFile.exists());
+
       if (!newConfigFile.exists()) {
         defaultConfigFile.copyTo(newConfigFile.parent, newConfigFile.leafName);
         defaultConfigFile.permissions = 0644;
       }
     }
   } catch (e) {
-    alert("Could not complete Greasemonkey 0.4 migration. See JS Console " + 
-          "for error details.");
+    alert("Could not complete Greasemonkey 0.4 migration. Error:\n\n" + e);
     throw e;
   } finally {
     GM_log("< GM_pointFourMigrate");
