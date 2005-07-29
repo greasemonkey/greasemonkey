@@ -293,19 +293,11 @@ GM_DocHandler.prototype.injectScript = function(script) {
   sandbox.__proto__ = this.unsafeContentWin;
 
   // the wrapper function is just for compatibility with older scripts
-  // which used 'return' expecting to live inside a function. Also, 
-  // FF crashes without it (but this can be overcome by adding a meaningless
-  // eval() at the start of this function -- eg eval('42') -- there is a 
-  // compiler bug which this addresses).
-
-  var code = ["var safeWin = window",
-              "with (unsafeWindow) {",
-              "with (safeWin) {",
-              "delete safeWin;",
+  // which used 'return' expecting to live inside a function.  
+  var code = ["with (window) {",
               "(function(){",
               getContents(getScriptFileURI(script.filename).spec),
               "})()",
-              "}",
               "}"]
               .join("\n");
 
@@ -321,7 +313,7 @@ GM_DocHandler.prototype.injectScript = function(script) {
     this.reportError(
       new Error(e.message, 
                 script.filename, 
-                e.lineNumber ? (e.lineNumber - marker.lineNumber - 5) : 0));
+                e.lineNumber ? (e.lineNumber - marker.lineNumber - 2) : 0));
   }
   
   GM_log("< GM_DocHandler.injectScript");
