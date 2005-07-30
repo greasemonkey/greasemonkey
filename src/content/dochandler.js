@@ -170,7 +170,18 @@ GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
       }
 
       this.initScripts();
-      this.injectScripts();
+      
+      if (this.scripts.length > 0) {
+        // Arrange for injectScripts to be called in a split second.
+
+        // We evaluate scripts on a timeout because not doing so caused one
+        // strange problem in bloglinesautoload.user.js -- user scripts were 
+        // not allowed to change the URL of the content frame. Moving to 
+        // timeout solved this.
+
+        new XPCNativeWrapper(unsafeWin, "setTimeout")
+            .setTimeout(GM_hitch(this, "injectScripts"));
+      }
     } finally {
       GM_unlisten(this.chromeWindow, "DOMContentLoaded", this.loadHandler);
     }
@@ -234,17 +245,6 @@ GM_DocHandler.prototype.injectScripts = function() {
   GM_log("> GM_DocHandler.injectScripts");
 
   for (var i = 0; i < this.scripts.length; i++) {
-    // Arrange for injectScript to be called with the current script in a 
-    // split second.
-    // We evaluate scripts on a timeout because not doing so caused one
-    // strange problem in bloglinesautoload.user.js -- user scripts were not 
-    // allowed to change the URL of the content frame. Moving to timeout 
-    // solved this.
-    
-    // can't figure out a way to make this work without content being able
-    // to steal it.
-    // window.setTimeout(GM_hitch(this, "injectScript", this.scripts[i]));
-
     this.injectScript(this.scripts[i]);
   }
   
@@ -316,7 +316,7 @@ GM_DocHandler.prototype.injectScript = function(script) {
     this.reportError(
       new Error(e.message, 
                 script.filename, 
-                e.lineNumber ? (e.lineNumber - marker.lineNumber - 2) : 0));
+                e.lineNumber ? (e.lineNumber - marker.lineNumber - 1) : 0));
   }
   
   GM_log("< GM_DocHandler.injectScript");
@@ -329,7 +329,6 @@ GM_DocHandler.prototype.snarf = function() {
   this.sandboxCtor = this.unsafeContentWin.Object;
   this.sandboxEval = this.sandboxCtor.eval;
   this.sandboxEval.__proto__ = null;
-  this.sandboxSetTimeout = this.unsafeContentWin.setTimeout;
 }
 
 /**
