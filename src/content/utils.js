@@ -70,6 +70,28 @@ function GM_unlisten(source, event, listener, opt_capture) {
     source, [event, listener, opt_capture]);
 }
 
+/**
+ * Utility to create an error message in the log without throwing an error.
+ */
+function GM_logError(e, force) {
+  GM_log("> GM_DocHandler.reportError");
+
+  if (force || GM_prefRoot.getValue("logChrome", false)) {
+    var consoleService = Components.classes['@mozilla.org/consoleservice;1']
+      .getService(Components.interfaces.nsIConsoleService);
+
+    var consoleError = Components.classes['@mozilla.org/scripterror;1']
+      .createInstance(Components.interfaces.nsIScriptError);
+
+    consoleError.init(e.message, e.fileName, e.lineNumber, e.lineNumber,
+                      e.columnNumber, 0, null);
+
+    consoleService.logMessage(consoleError);
+  }
+
+  GM_log("< GM_DocHandler.reportError");
+}
+
 function GM_log(message, force) {
   if (force || GM_prefRoot.getValue("logChrome", false)) {
     GM_consoleService.logStringMessage(message);

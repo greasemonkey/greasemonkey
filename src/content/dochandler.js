@@ -116,8 +116,6 @@ function(webProgress, request, stateFlags, aStatus) {
       var unsafeDoc = new XPCNativeWrapper(this.unsafeContentWin, 
                                            "document").document;
 
-      GM_log("*** doc: " + unsafeDoc);
-
       // sanity check that we got in early enough. 
       var docContent = new XMLSerializer().serializeToString(unsafeDoc);
 
@@ -125,8 +123,8 @@ function(webProgress, request, stateFlags, aStatus) {
 
       if (!GM_VALID_DEFAULT_DOC_CONTENTS.contains(docContent)) {
         // The document is in some unknown state. Don't get references from it.
-        this.reportError(new Error("Invalid document, could not get global " + 
-                                   "object.\n" + docContent));
+        GM_logError(new Error("Invalid document, could not get global " + 
+                              "object.\n" + docContent));
         return;
       } else {
         // It seems safe. Go ahead an snarf a ref to the Object from content.
@@ -165,8 +163,9 @@ GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
         // a local file we're loading.
         this.snarf();
       } else if (!this.sandboxCtor) {
-        throw new Error("Invalid state. Should have had a progress event " + 
-                        "and snarfed a sandbox ctor by now.");
+        GM_logError(new Error("Invalid state. Should have had a progress " + 
+                              "event and snarfed a sandbox ctor by now."));
+        return;
       }
 
       this.initScripts();
@@ -179,7 +178,7 @@ GM_DocHandler.prototype.contentLoad = function(unsafeEvent) {
         // not allowed to change the URL of the content frame. Moving to 
         // timeout solved this.
 
-        new XPCNativeWrapper(unsafeWin, "setTimeout")
+        new XPCNativeWrapper(unsafeWin, "setTimeout()")
             .setTimeout(GM_hitch(this, "injectScripts"));
       }
     } finally {
@@ -313,10 +312,11 @@ GM_DocHandler.prototype.injectScript = function(script) {
     var marker = new Error();
     sandbox.eval(code, sandbox);
   } catch (e) {
-    this.reportError(
+    GM_logError(
       new Error(e.message, 
                 script.filename, 
-                e.lineNumber ? (e.lineNumber - marker.lineNumber - 1) : 0));
+                e.lineNumber ? (e.lineNumber - marker.lineNumber - 1) : 0),
+      true); // always log this error
   }
   
   GM_log("< GM_DocHandler.injectScript");
@@ -329,27 +329,4 @@ GM_DocHandler.prototype.snarf = function() {
   this.sandboxCtor = this.unsafeContentWin.Object;
   this.sandboxEval = this.sandboxCtor.eval;
   this.sandboxEval.__proto__ = null;
-}
-
-/**
- * Utility to create an error message in the log without throwing an error.
- * There seems to be a problem with throwing errors in the consumer of this
- * object -- it always thinks they are null, so we use this to report errors
- * instead.
- */
-GM_DocHandler.prototype.reportError = function(e) {
-  GM_log("> GM_DocHandler.reportError");
-
-  var consoleService = Components.classes['@mozilla.org/consoleservice;1']
-    .getService(Components.interfaces.nsIConsoleService);
-
-  var consoleError = Components.classes['@mozilla.org/scripterror;1']
-    .createInstance(Components.interfaces.nsIScriptError);
-
-  consoleError.init(e.message, e.fileName, e.lineNumber, e.lineNumber,
-                    e.columnNumber, 0, null);
-
-  consoleService.logMessage(consoleError);
-
-  GM_log("< GM_DocHandler.reportError");
 }

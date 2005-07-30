@@ -411,14 +411,25 @@ var GM_DocStartListener = {
   },
 
   onStateChange : function(aWebProgress, aRequest, aStateFlags, aStatus) {
-    //GM_log("> GM_DocStartListener.onStateChange");
+    GM_log("> GM_DocStartListener.onStateChange");
     
+    var name = null;
+
     if (!GM_BrowserUI.getEnabled()) {
       GM_log("* Greasemonkey disabled");
       return;
     }
 
     if (aStateFlags & Components.interfaces.nsIWebProgressListener.STATE_START) {
+      try {
+        name = aRequest.name;
+      } catch(e) {
+        // For some requests, not only is there no name, retrieving it throws
+        // an error. Just ignore those.
+        GM_logError(e);
+        return;
+      }
+      
       if (GM_isGreasemonkeyable(aRequest.name)) {
         GM_log("caught request: " + aRequest.name);
         
@@ -441,7 +452,7 @@ var GM_DocStartListener = {
       }
     }
 
-    //GM_log("< GM_DocStartListener.onStateChange");
+    GM_log("< GM_DocStartListener.onStateChange");
   }  
 }
 
