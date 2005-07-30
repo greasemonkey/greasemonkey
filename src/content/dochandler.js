@@ -240,9 +240,12 @@ GM_DocHandler.prototype.injectScripts = function() {
     // strange problem in bloglinesautoload.user.js -- user scripts were not 
     // allowed to change the URL of the content frame. Moving to timeout 
     // solved this.
-    this.sandboxSetTimeout.apply(
-      this.unsafeContentWin, 
-      [GM_hitch(this, "injectScript", this.scripts[i])]);
+    
+    // can't figure out a way to make this work without content being able
+    // to steal it.
+    // window.setTimeout(GM_hitch(this, "injectScript", this.scripts[i]));
+
+    this.injectScript(this.scripts[i]);
   }
   
   GM_log("< GM_DocHandler.injectScripts");
@@ -253,27 +256,28 @@ GM_DocHandler.prototype.injectScripts = function() {
  */
 GM_DocHandler.prototype.injectScript = function(script) {
   GM_log("> GM_DocHandler.injectScript (" + script.filename + ")");
-
   // This is the most amazing thing I have ever seen.
   // Multiple statements in the JavaScript interpreter were causing a crash
   // in FF 1.0.x.
   // I described it to Brendan, and, after a bit of thought, he knew right off
   // the top of his head that adding a pointless eval() would fix it. Magic.
   eval("42");
-
   var sandbox = new this.sandboxCtor();
   var storage = new GM_ScriptStorage(script);
   var logger = new GM_ScriptLogger(script);
   var xmlhttpRequester = new GM_xmlhttpRequester(this.unsafeContentWin, 
                                                  this.chromeWindow);
 
+  sandbox.__proto__ = null;
+  sandbox.eval = this.sandboxEval;
+
+  sandbox.unsafeWindow = this.unsafeContentWin;
   sandbox.GM_log = GM_hitch(logger, "log");
   sandbox.GM_setValue = GM_hitch(storage, "setValue");
   sandbox.GM_getValue = GM_hitch(storage, "getValue");
-  sandbox.GM_log = GM_hitch(logger, "log");
-  sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester, "contentStartRequest");
   sandbox.GM_openInTab = GM_openInTab;
-  sandbox.unsafeWindow = this.unsafeContentWin;
+  sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester, 
+                                       "contentStartRequest");
 
   if (this.menuCommander) {
     sandbox.GM_registerMenuCommand = GM_hitch(this.menuCommander, 
@@ -286,19 +290,18 @@ GM_DocHandler.prototype.injectScript = function(script) {
   // available, use it. Otherwise, use the regular non-wrapped objects.
   if (GM_deepWrappersEnabled()) {
     sandbox.window = new XPCNativeWrapper(this.unsafeContentWin);
+    sandbox.document = sandbox.window.document;
   } else {
     sandbox.window = this.unsafeContentWin;
+    sandbox.document = new XPCNativeWrapper(this.unsafeContentWin, 
+                                            "document").document;
   }
-
-  sandbox.__proto__ = this.unsafeContentWin;
-
+  
   // the wrapper function is just for compatibility with older scripts
   // which used 'return' expecting to live inside a function.  
-  var code = ["with (window) {",
-              "(function(){",
+  var code = ["(function(){",
               getContents(getScriptFileURI(script.filename).spec),
-              "})()",
-              "}"]
+              "})()"]
               .join("\n");
 
   try {
@@ -308,7 +311,7 @@ GM_DocHandler.prototype.injectScript = function(script) {
     // the line number of the eval() call so that we can subtract it out in
     // the error messages. This only works in DeerPark+.
     var marker = new Error();
-    this.sandboxEval.apply(sandbox, [code, sandbox]);
+    sandbox.eval(code, sandbox);
   } catch (e) {
     this.reportError(
       new Error(e.message, 
@@ -325,6 +328,7 @@ GM_DocHandler.prototype.injectScript = function(script) {
 GM_DocHandler.prototype.snarf = function() {
   this.sandboxCtor = this.unsafeContentWin.Object;
   this.sandboxEval = this.sandboxCtor.eval;
+  this.sandboxEval.__proto__ = null;
   this.sandboxSetTimeout = this.unsafeContentWin.setTimeout;
 }
 
