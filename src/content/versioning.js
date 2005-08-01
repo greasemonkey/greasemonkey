@@ -88,7 +88,7 @@ function GM_pointFourMigrate() {
     } else {
       if (!newScriptsDir.exists()) {
         newScriptsDir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE,
-                             0644);
+                             0755);
       }
     
       GM_log("new config file exists: " + newConfigFile.exists());
