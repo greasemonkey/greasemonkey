@@ -157,7 +157,11 @@ function getContents(aURL, charset){
   scriptableStream.close();
   input.close();
 
-  return unicodeConverter.ConvertToUnicode(str);
+  try {
+    return unicodeConverter.ConvertToUnicode(str);
+  } catch( e ) {
+    return str;
+  }
 }
 
 function getWriteStream(file) {
