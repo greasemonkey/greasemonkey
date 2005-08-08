@@ -102,16 +102,22 @@ void creating new global names which might interfere with the target webpage.</p
 </ul>
 <h6 id="specialfunctions">Special Functions</h6>
 <p id="GM_registerMenuCommand">GM_registerMenuCommand</p>
-<p>Userscripts can call GM_registerMenuCommand(commandName, commandFunc, accel, access) to add a menu command to the tools > User Script Commands submenu. The first parameter should be the string name of the command to display. The second parameter should be a callback function which will be invoked when the menu item is selected by the user. The last two are strictly optional. Access is an access key that can be used to get to the command in the "User Script Commands" menu. Accel, if present, defines an "accelerator," a key that can be used to call the menu command (like Ctrl-C is copy). This parameter (accel) is actually object with the following properties:<ul>
-<li>ctrl</li>
-<li>alt</li>
-<li>meta</li>
-<li>key</li>
-</ul>
-The first three properties are optional and indicate whether or not that key needs to be held down. The last (key) is required if you use this parameter at all. It indicates which key (e.g. "c") needs to be held down. Example calls:
-<code>GM_registerMenuCommand( "Hello world!", hello, {ctrl:true,key:"e"}, "h" );</code><br />
-<code>GM_registerMenuCommand( "Hello world 2", hello2, null, "h" );</code><br />
-<code>GM_registerMenuCommand( "Hello world (simple)", hello3 );</code>
+<p>Userscripts can call GM_registerMenuCommand(commandName, commandFunc, accelKey, accelModifiers, accessKey) to add a menu command to the tools > User Script Commands submenu.  The first two arguments are required; the reamining ones are optional.<dl>
+<dt>commandName</dt>
+<dd>Name to display in the menu</dd>
+<dt>commandFunc</dt>
+<dd>Function to call</dd>
+<dt>accelKey</dt>
+<dd>A single character (e.g. 'g') or keycode that can trigger the command</dd>
+<dt>accelKey</dt>
+<dd>A string listing modifiers that must be pressed with the accelKey. If there's more than one, then they should be separated with spaces. For example, 'shift' or 'ctrl alt'. Available modifiers are: shift, alt, meta, control, and accel.</dd>
+<dt>accessKey</dt>
+<dd>A single character (e.g. 'g') that can be used to jump to the command when the menu is open. It should be a letter in commandName</dd>
+</dl>
+Example calls:<br />
+<code>GM_registerMenuCommand( "Hello world!", hello, "e", "control", "h" );</code><br />
+<code>GM_registerMenuCommand( "Hello world! (again)", hello2, "e", "shift alt", "w" );</code><br />
+<code>GM_registerMenuCommand( "Hello world (simple)", helloSimple );</code>
 </p>
 <p id="GM_xmlhttpRequest">GM_xmlhttpRequest</p>
 <p>Userscripts can call GM_xmlhttpRequest(details) to make an xmlhttp request to other domains.</p>
