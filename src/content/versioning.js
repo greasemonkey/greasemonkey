@@ -74,14 +74,17 @@ function GM_pointFourMigrate() {
 
     var oldScriptsDir = contentDir.clone();
     oldScriptsDir.append("scripts");
+    var oldConfigFile = oldScriptsDir.clone();
+    oldConfigFile.append("config.xml");
 
     var defaultConfigFile = getContentDir();
     defaultConfigFile.append("default-config.xml");
 
     GM_log("old scripts dir exists: " + oldScriptsDir.exists());
+    GM_log("old config file exists: " + oldConfigFile.exists());
     GM_log("new scripts dir exists: " + newScriptsDir.exists());
 
-    if (oldScriptsDir.exists()) {
+    if (oldScriptsDir.exists() && oldConfigFile.exists()) {
       if (!newScriptsDir.exists()) {
         oldScriptsDir.moveTo(newScriptsDir.parent, newScriptsDir.leafName);
       }
