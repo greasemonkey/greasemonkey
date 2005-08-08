@@ -101,21 +101,64 @@ function GM_log(message, force) {
 // TODO: this stuff was copied wholesale and not refactored at all. Lots of
 // the UI and Config rely on it. Needs rethinking.
 
-function ensureWindowsAssoc() {
-  var prefMan = new GM_PrefManager();
-
-  if (navigator.userAgent.match(/\bwindows\b/i) && 
-      !prefMan.getValue("warnedWindowsEditor")) 
-  {
-    alert("Hello! Looks like you're on Windows and that this is the your " +
-          "first time editing a user script.\n\nTake this opportunity " +
-          "to verify that you have associated either the .user.js or " +
-          "the .js extension with a text editor on your computer. " + 
-          "Otherwise, you may get funny errors.\n\nWhen you're done, " + 
-          "come back here and press OK.");
-
-    prefMan.setValue("warnedWindowsEditor", true);
+function openInEditor(aFile) {
+  var editor, editorPath;
+  try {
+    editorPath = GM_prefRoot.getValue("editor");
+  } catch(e) {
+    GM_log( "Failed to get 'editor' value:" + e );
+    if (GM_prefRoot.exists("editor")) {
+      GM_log("A value for 'editor' exists, so let's remove it because it's causing problems");
+      GM_prefRoot.remove("editor");
+    }
+    editorPath = false;
   }
+  if (editorPath) {
+    // check whether the editor path is valid
+    GM_log("Try editor with path " + editorPath);
+    editor = Components.classes["@mozilla.org/file/local;1"]
+        .createInstance(Components.interfaces.nsILocalFile);
+    editor.followLinks = true;
+    editor.initWithPath(editorPath);
+  } else {
+    var nsIFilePicker = Components.interfaces.nsIFilePicker;
+    var filePicker = Components.classes["@mozilla.org/filepicker;1"]
+      .createInstance(nsIFilePicker);
+    
+    filePicker.init(window, "Find Text Editor", nsIFilePicker.modeOpen);
+    filePicker.appendFilters(nsIFilePicker.filterApplication);
+    filePicker.appendFilters(nsIFilePicker.filterAll);
+    
+    if (filePicker.show() != nsIFilePicker.returnOK) {
+      return false;
+    }
+    editor = filePicker.file;
+    GM_log("User selected: " + editor.path);
+    GM_prefRoot.setValue("editor", editor.path);
+  }
+
+  if (editor.exists() && editor.isExecutable()) {
+    try {
+      GM_log("launching ...");
+      
+      var mimeInfoService = Components
+        .classes["@mozilla.org/uriloader/external-helper-app-service;1"]
+        .getService(Components.interfaces.nsIMIMEService);
+      var mimeInfo = mimeInfoService
+        .getFromTypeAndExtension( "application/x-userscript+javascript", "user.js" );
+      mimeInfo.preferredAction = mimeInfo.useHelperApp
+      mimeInfo.preferredApplicationHandler = editor;
+      mimeInfo.launchWithFile( aFile );
+      return true;
+    } catch (e) {
+      GM_log("Failed to launch editor: " + e, true);
+    }
+  } else {
+    GM_log("Editor '" + editorPath + "' does not exist or isn't executable. " +
+           "Put it back, check the permissions, or just give up and reset " +
+           "editor using about:config", true)
+  }
+  return false;
 }
 
 function parseScriptName(sourceUri) {

@@ -333,8 +333,7 @@ GM_BrowserUI.newUserScript = function() {
   }
 
   source.copyTo(dest, tempname);
-  ensureWindowsAssoc();
-  destFile.launch();
+  openInEditor(destFile);
 }
 
 // necessary for webProgressListener implementation

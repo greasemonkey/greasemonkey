@@ -120,9 +120,7 @@ copies or substantial portions of the Software.
     }
     
     function handleEditButton() {
-      ensureWindowsAssoc();    
-      window.close();
-      getScriptFile(selectedScript.filename).launch();
+      openInEditor(getScriptFile(selectedScript.filename));
     }
 
     function handleUninstallButton() {
