@@ -224,7 +224,7 @@ GM_BrowserUI.chromeUnload = function() {
   GM_log("> GM_BrowserUI.chromeUnload")
 
   GM_prefRoot.unwatch("enabled", this.enabledWatcher);
-  window.getBrowser().removeProgressListener(this);
+  this.tabBrowser.removeProgressListener(this);
 
   GM_log("< GM_BrowserUI.chromeUnload")
 }
@@ -243,7 +243,7 @@ GM_BrowserUI.contextMenuShowing = function() {
 }
 
 GM_BrowserUI.toolsMenuShowing = function() {
-	GM_log('> toolsMenuShowing');
+  GM_log('> toolsMenuShowing');
   var installItem = ge("userscript-tools-install");
   var disabled = true;
   
@@ -432,7 +432,8 @@ var GM_DocStartListener = {
       if (GM_isGreasemonkeyable(aRequest.name)) {
         GM_log("caught request: " + aRequest.name);
         
-        var browsers = window.getBrowser().browsers;
+        // this.tabBrowser apparently doesn't work here
+        var browsers = document.getElementById("content").browsers;
         var browser;
         
         var unsafeWin = aWebProgress.DOMWindow;
