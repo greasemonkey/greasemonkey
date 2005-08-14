@@ -232,15 +232,22 @@ GM_BrowserUI.chromeUnload = function() {
 
 GM_BrowserUI.contextMenuShowing = function() {
   GM_log('> contextMenuShowing');
-  var culprit = document.popupNode;
   var contextItem = ge("install-userscript");
   var contextSep = ge("install-userscript-sep");
 
+  var culprit = document.popupNode;
+  while (culprit && culprit.tagName.toLowerCase() != "a") {
+     culprit = culprit.parentNode;
+  }
+
   contextItem.hidden = contextSep.hidden = 
-    !(culprit.tagName.toLowerCase() == "a" 
-    && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+    !(culprit && 
+       culprit.href.match(/\.user\.js(\?|$)/i) != null);
+      );
+
   GM_log('< contextMenuShowing');
 }
+
 
 GM_BrowserUI.toolsMenuShowing = function() {
   GM_log('> toolsMenuShowing');
