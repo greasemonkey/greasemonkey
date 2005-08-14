@@ -122,10 +122,13 @@ function(commandName, commandFunc, accessKey) {
   menuItem._commandFunc = commandFunc;
   menuItem.setAttribute("label", commandName);
   menuItem.setAttribute("oncommand", "this._commandFunc()");
-  if (accessKey && typeof(accessKey) == string && accessKey.length == 1) {
-    menuItem.setAttribute("accesskey", accessKey);
-  } else {
-    throw "accessKey must be a single character";
+
+  if (accessKey) {
+    if (typeof(accessKey) == string && accessKey.length == 1) {
+      menuItem.setAttribute("accesskey", accessKey);
+    } else {
+      throw "accessKey must be a single character";
+    }
   }
 
   GM_log("< GM_MenuCommander.createMenuItem");
