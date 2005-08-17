@@ -240,10 +240,9 @@ GM_BrowserUI.contextMenuShowing = function() {
      culprit = culprit.parentNode;
   }
 
-  contextItem.hidden = contextSep.hidden = 
-    !(culprit && 
-       culprit.href.match(/\.user\.js(\?|$)/i) != null);
-      );
+  contextItem.hidden = 
+    contextSep.hidden = 
+    !(culprit && culprit.href.match(/\.user\.js(\?|$)/i) != null);
 
   GM_log('< contextMenuShowing');
 }
