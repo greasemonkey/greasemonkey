@@ -41,11 +41,11 @@ function GM_updateVersion() {
   // this is the last version which has been run at least once
   var initialized = GM_prefRoot.getValue("version", "0.0");
   
-  if (GM_compareVersions(initialized, "0.3") < 0) {
+  if (!GM_versionIsGreaterOrEqual(initialized, "0.3")) {
     GM_pointThreeMigrate();
   }
   
-  if (GM_compareVersions(initialized, "0.4.2") < 0) {
+  if (!GM_versionIsGreaterOrEqual(initialized, "0.4.2")) {
     GM_pointFourMigrate();
   }
 
@@ -199,16 +199,19 @@ function GM_pointThreeMigrate() {
   }
 }
 
-function GM_compareVersions(v1, v2) {
+function GM_versionIsGreaterOrEqual(v1, v2) {
   v1 = v1.split(".");
   v2 = v2.split(".");
 
+  if (v1[0] == "") v1[0] = "0";
+  if (v2[0] == "") v2[0] = "0";
+
   while (v1.length < v2.length) {
-    v1.splice(0, 0, 0.0);
+    v1.push("0");
   }
   
   while (v2.length < v1.length) {
-    v2.splice(0, 0, 0.0);
+    v2.push("0");
   }
   
   var diff;
@@ -216,7 +219,7 @@ function GM_compareVersions(v1, v2) {
     diff = parseInt(v1[i]) - parseInt(v2[i]);
     
     if (diff != 0) {
-      return diff;
+      return diff > 0;
     } else {
       continue;
     }
