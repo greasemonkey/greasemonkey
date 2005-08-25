@@ -236,13 +236,14 @@ GM_BrowserUI.contextMenuShowing = function() {
   var contextSep = ge("install-userscript-sep");
 
   var culprit = document.popupNode;
-  while (culprit && culprit.tagName.toLowerCase() != "a") {
+
+  while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
      culprit = culprit.parentNode;
   }
 
-  contextItem.hidden = 
-    contextSep.hidden = 
-    !(culprit && culprit.href.match(/\.user\.js(\?|$)/i) != null);
+  contextItem.hidden = contextSep.hidden = 
+    !(culprit && culprit.href && 
+       culprit.href.match(/\.user\.js(\?|$)/i) != null);
 
   GM_log('< contextMenuShowing');
 }
