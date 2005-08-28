@@ -50,7 +50,7 @@ function GM_updateVersion() {
   }
 
   // update the currently initialized version so we don't do this work again.
-  GM_prefRoot.setValue("version", "0.5.1");
+  GM_prefRoot.setValue("version", "0.5.2");
 
   GM_log("< GM_updateVersion");
 }
@@ -86,7 +86,14 @@ function GM_pointFourMigrate() {
 
     if (oldScriptsDir.exists() && oldConfigFile.exists()) {
       if (!newScriptsDir.exists()) {
-        oldScriptsDir.moveTo(newScriptsDir.parent, newScriptsDir.leafName);
+        oldScriptsDir.copyTo(newScriptsDir.parent, newScriptsDir.leafName);
+
+        try {
+          //oldScriptsDir.remove(true);
+        } catch (e) {
+          // pffft.... :-)
+          // stupid permissions can bite me
+        }
       }
     } else {
       if (!newScriptsDir.exists()) {
