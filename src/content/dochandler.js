@@ -4,7 +4,7 @@
 Copyright 2004-2005 Aaron Boodman
 
 Contributors:
-Jeremy Dunck, Nikolas Coukouma, Matthew Gray.
+Jeremy Dunck, Nikolas Coukouma, Matthew Gray, Michael Craft.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy 
 of this software and associated documentation files (the "Software"), to deal 
@@ -63,8 +63,7 @@ function GM_DocHandler(unsafeContentWin, chromeWindow, menuCommander, isFile) {
   this.loadHandler = GM_hitch(this, "contentLoad");
   GM_listen(this.chromeWindow, "DOMContentLoaded", this.loadHandler);
 
-  if (this.isFile) {
-  } else {
+  if (!this.isFile) {
     Components.classes["@mozilla.org/docloaderservice;1"]
               .getService(Components.interfaces.nsIWebProgress)
               .addProgressListener(this, 
@@ -107,11 +106,12 @@ GM_DocHandler.prototype.nullRegisterMenuCommand = function(){}
  * we immediately unregister as soon as the first matching event occurs.
  */
 GM_DocHandler.prototype.onProgressChange = 
-function(webProgress, request, stateFlags, aStatus) {
+function(webProgress, request, curSelfProgress, maxSelfProgress, 
+         curTotalProgress, maxTotalProgress) {
   GM_log("> GM_DocHandler.onProgressChange");
   
   // we're waiting for the first progress event from our DOMWindow 
-  if (webProgress.DOMWindow == this.unsafeContentWin) {
+  if (webProgress.DOMWindow == this.unsafeContentWin && maxSelfProgress == -1) {
     try {
       var unsafeDoc = new XPCNativeWrapper(this.unsafeContentWin, 
                                            "document").document;
