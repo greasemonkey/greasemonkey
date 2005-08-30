@@ -58,7 +58,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   // make sure that we have an actual string so that we can't be fooled with
   // tricky toString() implementations.
   if (typeof url != "string") {
-    throw new Error("Invalid url");
+    throw new Error("Invalid url: url must be of type string");
   }
   
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
