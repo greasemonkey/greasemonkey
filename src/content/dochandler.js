@@ -111,7 +111,7 @@ function(webProgress, request, curSelfProgress, maxSelfProgress,
   GM_log("> GM_DocHandler.onProgressChange");
   
   // we're waiting for the first progress event from our DOMWindow 
-  if (webProgress.DOMWindow == this.unsafeContentWin && maxSelfProgress == -1) {
+  if (webProgress.DOMWindow == this.unsafeContentWin) {
     try {
       var unsafeDoc = new XPCNativeWrapper(this.unsafeContentWin, 
                                            "document").document;
