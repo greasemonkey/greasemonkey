@@ -39,7 +39,7 @@ const APP_PACKAGE = "/greasemonkey.mozdev.org/greasemonkey";
 const APP_NAME = "/greasemonkey";
 // TODO: figure out how to extract this from install.rdf
 //   or generate install.rdf ...
-const APP_VERSION = "0.5.3";
+const APP_VERSION = "0.5.4";
 
 var instFlags = DELAYED_CHROME;
 
