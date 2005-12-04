@@ -1,0 +1,36 @@
+<h3><a 
+href="http://ftp.mozilla.org/pub/mozilla.org/extensions/greasemonkey/greasemonke
+y-0.6.4-fx.xpi">Install Greasemonkey 
+0.6.4</a></h3>
+
+<p>This is the first official release with support for Firefox 1.5. The major 
+change is that, with the exception of <a href="TODO">unsafeWindow</a>, all 
+objects that user scripts have access to are <a 
+href="http://developer.mozilla.org/en/docs/XPCNativeWrapper">XPCNativeWrappers</
+a>. This makes user scripts vastly more secure since there is no way for content 
+scripts to hijack function calls.
+
+<h4>Other Changes</h4>
+
+<ul>
+
+<li><strong>Monkey Menu</strong> - Right click on the monkey for the list of 
+scripts which match this page. You can easily enable and disable them from this 
+location. You can also enable or disable all of Greasemonkey, or access the 
+Manage User Scripts dialog.
+
+<li><strong>New Install UI</strong> - When you load a user script into the 
+browser, a banner is displayed across the top of the script explaining what it 
+is and giving you a chance to install. Also, stopped using the download manager 
+in favor of a more subtle status menu message.
+
+<li><strong>New Injection System</strong> - We now use <a 
+href="http://www.xulplanet.com/references/xpcomref/ifaces/nsIXPCComponents_Utils
+.html#method_evalInSandbox">evalInSandbox</a> to execute Greasemonkey scripts. 
+This is more secure than the old system, but wasn't available without 
+improvements which arrived in Firefox 1.5.
+
+<li><strong>Remove script preferences when uninstalling</strong> - We now 
+provide an option to remove user script preferences when uninstalling.
+
+</ul>
