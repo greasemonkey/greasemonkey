@@ -242,12 +242,46 @@ JS Console. This can be helpful for debugging. Level is optional and defaults to
 <pre>GM_addStyle("body { color:red; }");</pre>
 
 <p id="unsafeWindow">unsafeWindow</p>
+
 <p>A reference to the content document's javascript window object. This is where 
 the content document's global variable and functions are defined.</p>
-<p>Note that accessing any variables in unsafeWindow gives content scripts the 
-ability to get the source code for the calling user script as well as
 
 <pre>// list all the variables in the content's global scope
 for (var p in unsafeWindow) {
   GM_log(p + ": " + unsafeWindow[p] + "\n");
 }</pre>
+
+<p>Note that accessing any variables in unsafeWindow yields control to the 
+page's scripts. This means they can get acccess to the user script's source. 
+
+<p>If you call browser APIs from this window, they might be redefined to mean 
+something different than you expect. For example, a content script which wanted 
+to trip up a Greasemonkey script could redefine 
+unsafeWindow.document.getElementById to do nothing, or throw an error. This is 
+one reason why you should not use unsafeWindow unless there is no other way to 
+accomplish what you want to.
+
+<p>Also, content functions you call can walk back up the call stack to get any 
+parameters you passed to higher-level calling functions. Consider this 
+hypothetical example:
+
+<pre>// DONT DO THIS.
+function a(gmxhr) {
+ // do something with gmxhr
+ unsafeWindow.foo();
+}
+
+function b() {
+  a(GM_xmlhttpRequest);
+}
+
+b();</pre>
+
+<p>Here, we pass a reference to GM_xmlhttpRequest to a user script function, 
+which calls a content function. In this example, the content function 
+<code>foo</code> could walk up the call stack to retrieve a reference to 
+GM_xmlhttpRequest, which would be bad.
+
+<p><strong>In general, it's probably best practice to avoid passing GM_* to any 
+functions as parameters.</strong> In the future, there will be a better way to 
+call content functions.</p>
