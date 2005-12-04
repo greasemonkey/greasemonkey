@@ -157,7 +157,7 @@ detect your script and potentially interfere with it if they choose.
 <p>Greasemonkey also defines several special APIs which are not available to 
 content scripts.
 
-<p id="GM_registerMenuCommand">GM_registerMenuCommand</p>
+<p id="GM_registerMenuCommand"><strong>GM_registerMenuCommand</strong></p>
 <p>Userscripts can call GM_registerMenuCommand(commandName, commandFunc, 
 accelKey, accelModifiers, accessKey) to add a menu command to the tools > User 
 Script Commands submenu.  The first two arguments are required; the reamining 
@@ -184,7 +184,7 @@ Example calls:<br />
 "w" );</code><br />
 <code>GM_registerMenuCommand( "Hello world (simple)", helloSimple );</code>
 </p>
-<p id="GM_xmlhttpRequest">GM_xmlhttpRequest</p>
+<p id="GM_xmlhttpRequest"><strong>GM_xmlhttpRequest</strong></p>
 <p>Userscripts can call GM_xmlhttpRequest(details) to make an xmlhttp request to 
 other domains.</p>
 <p>The details parameter is an object having the following fields: method, url, 
@@ -216,32 +216,32 @@ headers returned by XMLHTTPRequest.getAllResponseHeaders().</p>
   }
 });</pre>
 
-<p id="GM_setValue">GM_setValue(name, value)</p>
+<p id="GM_setValue"><strong>GM_setValue(name, value)</strong></p>
 <p>Allows user script authors to persist simple values locally. Strings, 
 booleans, and integers are the only allowed datatypes. For example:</p>
 <pre>GM_setValue("foo", "bar");</pre>
 
-<p id="GM_getValue">GM_getValue(name, default)</p>
+<p id="GM_getValue"><strong>GM_getValue(name, default)</strong></p>
 <p>Retrieve a value set with setValue. If the value is not found, default is 
 returned instead. If default is not supplied, <code>undefined</code> is 
 returned.</p>
 <pre>alert(GM_getValue("foo"));</pre>
 
-<p id="GM_log">GM_log(message, level)</p>
+<p id="GM_log"><strong>GM_log(message, level)</strong></p>
 <p>Allows script authors simple access to logging informational messages in the 
 JS Console. This can be helpful for debugging. Level is optional and defaults to 
 0. Valid values are: 0 - info, 1 - warning, 2 - error.</p>
 <pre>GM_log("Hello, World!")</pre>
 
-<p id="GM_openInTab">GM_openInTab(url)</p>
+<p id="GM_openInTab"><strong>GM_openInTab(url)</strong></p>
 <p>Opens the specified URL in a new tab.</p>
 <pre>GM_openInTab("http://greasemonkey.mozdev.org/")</pre>
 
-<p id="GM_addStyle">GM_addStyle(css)</p>
+<p id="GM_addStyle"><strong>GM_addStyle(css)</strong></p>
 <p>Adds a string of CSS to the document.</p>
 <pre>GM_addStyle("body { color:red; }");</pre>
 
-<p id="unsafeWindow">unsafeWindow</p>
+<p id="unsafeWindow"><strong>unsafeWindow</strong></p>
 
 <p>A reference to the content document's javascript window object. This is where 
 the content document's global variable and functions are defined.</p>
