@@ -1,0 +1,35 @@
+<?php
+
+// $Id: 404.html,v 1.3 2005-12-30 22:24:36 boogs Exp $
+
+// r 1.11 look/www/org/helm/common/template/404.tem
+
+//<font color="#990000" face="helvetica"><B>Page Not Found</B></font>&nbsp;&nbsp;&nbsp;
+//<img src="http://www.mozdev.org/sharedimages/boxes.gif"><br><br>
+
+// clashs with project_nav.html
+
+?><!-- testing for admin section -->
+
+<p>The page <font color="#990000"><b><?php PRINT PAGE; ?></b></font> was not found on this site.
+
+<p>To find the desired link, try checking the <?php print $project; ?> project's 
+<?php print "<a href=\"http://$project.mozdev.org/index.html\">"; ?>main page</a>.
+
+<p>If that doesn't have the link you were looking for, you could also check out the following links:
+
+<ul>
+<li><a href="http://www.mozdev.org/projects.html">List of announced projects</a>
+<li><a href="http://www.mozdev.org/categories/unannounced.html">List of unannounced projects</a>
+<li><a href="http://www.mozdev.org/faq.html">Frequently Asked Questions page</a>
+<li>Search query page (coming soon)
+</ul>
+
+<p>If those don't help, you could also try sending mail to a project's mailing list, to one of the project owners, or to the general 
+site feedback address:
+
+<ul>
+<li><a href="http://www.mozdev.org/mailing-lists.html">Mailing Lists</a>
+<li><a href="http://www.mozdev.org/contact.html">Project Owners</a>
+<li><a href="http://www.mozdev.org/feedback.html">Feedback</a>
+</ul>

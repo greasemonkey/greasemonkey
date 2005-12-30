@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <popup id="contentAreaContextMenu">
+    <menuitem id="gm-context-install" label="Install User Script..."  accesskey="S" 
+      insertbefore="context-openlink"/>
+    <menuseparator id="gm-context-install-sep" insertbefore="context-openlink" />
+    <menuseparator/>
+    <menu id="gm-userscript-commands-context" accesskey="r" label="User Script Commands"
+      disabled="false">
+      <menupopup/>
+    </menu>
+  </popup>
+
+  <menupopup id="menu_ToolsPopup">
+    <menuseparator insertafter="menu_preferences" />
+    <menuitem id="gm-manage-userscript" accesskey="U" label="Manage User Scripts..."/>
+    <menuitem id="gm-new-userscript" accesskey="N" label="New User Script"/>
+    <menuitem id="gm-tools-install" accesskey="S" label="Install This User Script..."/>
+    <menuseparator />
+    <menu id="gm-userscript-commands" accesskey="r" label="User Script Commands" 
+      disabled="false">
+      <menupopup/>
+    </menu>
+  </menupopup>
+
+  <statusbar id="status-bar">
+    <statusbarpanel id="gm-status" insertafter="livemark-button">
+      <label id="gm-status-label" collapsed="true" crop="end" style="width:0px" />
+      <image id="gm-status-image" width="16" height="16" context="gm-status-popup"/>
+      <popup id="gm-status-popup" position="before_end">
+        <menuitem id="gm-status-manage" accesskey="U" label="Manage User Scripts..."/>
+        <menuseparator/>
+        <menuitem id="gm-status-no-scripts" label="No scripts installed!" 
+          style="color:grey"/>
+        <menuseparator id="gm-status-no-scripts-sep"/>
+        <menuitem id="gm-status-enabled-item" accesskey="E" label="Enabled" 
+          type="checkbox"/>
+      </popup>
+    </statusbarpanel>
+  </statusbar>
+
+  <script type="application/x-javascript">
+    var GM_context = Components.classes["@greasemonkey.mozdev.org/app-context;1"]
+                               .getService().wrappedJSObject;
+
+    new GM_context.GM_BrowserUI(window);
+  </script>
+</overlay>
