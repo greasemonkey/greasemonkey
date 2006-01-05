@@ -10,9 +10,13 @@
 <!ENTITY context.install "Installeer User Script...">
 <!ENTITY context.commands "User Script Opdrachten">
 <!ENTITY menu.new "Nieuwe User Script">
+<!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Beheer User Scripts...">
+<!ENTITY menu.manage.accesskey "U">
 <!ENTITY menu.install "Installeer dit User Script...">
+<!ENTITY menu.install.accesskey "S">
 <!ENTITY menu.commands "User Script Opdrachten">
+<!ENTITY menu.commands.accesskey "r">
 <!ENTITY statusbar.manage "Beheer User Scripts...">
 <!ENTITY statusbar.noscripts "Er zijn geen scripts geinstalleerd!">
 <!ENTITY statusbar.enabled "Ingeschakeld">

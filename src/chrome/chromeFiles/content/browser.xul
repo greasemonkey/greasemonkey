@@ -15,11 +15,12 @@
   
   <menupopup id="menu_ToolsPopup">
     <menuseparator insertafter="menu_preferences" />
-    <menuitem id="gm-manage-userscript" accesskey="U" label="&menu.manage;"/>
-    <menuitem id="gm-new-userscript" accesskey="N" label="&menu.new;"/>
-    <menuitem id="gm-tools-install" accesskey="S" label="&menu.install;"/>
+    <menuitem id="gm-manage-userscript" accesskey="&menu.manage.accesskey;" label="&menu.manage;"/>
+    <menuitem id="gm-new-userscript" accesskey="&menu.new.accesskey;" label="&menu.new;"/>
+    <menuitem id="gm-tools-install" accesskey="&menu.install.accesskey;" label="&menu.install;"/>
     <menuseparator />
-    <menu id="gm-userscript-commands" accesskey="r" label="&menu.commands;" 
+    <menu id="gm-userscript-commands" accesskey="&menu.commands
+.accesskey;" label="&menu.commands;" 
           disabled="false">
       <menupopup/>
     </menu>

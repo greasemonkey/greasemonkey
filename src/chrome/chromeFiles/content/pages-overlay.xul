@@ -5,7 +5,7 @@
 <overlay id="pages-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <vbox id="pages-control">
     <groupbox id="grpIncluded" orient="vertical">
-      <caption label="Included pages" />
+      <caption label="&manage.label.grpIncluded;" />
       <hbox style="margin-bottom:.5em;">
         <listbox style="max-height: 8em; overflow: auto" flex="1" />
         <vbox>
@@ -17,7 +17,7 @@
     </groupbox>
 
     <groupbox id="grpExcluded" orient="vertical">
-      <caption label="Excluded pages" />
+      <caption label="&manage.label.grpExcluded;" />
       <hbox style="margin-bottom:.5em">
         <listbox style="max-height: 8em; overflow: auto" flex="1" />
         <vbox>
