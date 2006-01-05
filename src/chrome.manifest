@@ -1,3 +1,5 @@
 content    greasemonkey    chrome/chromeFiles/content/
 overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
 locale     greasemonkey   en-US   chrome/chromeFiles/locale/en-US/
+locale     greasemonkey   nl-NL   chrome/chromeFiles/locale/nl-NL/
+

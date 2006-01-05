@@ -1,0 +1,18 @@
+<!ENTITY manage.button.add "Toevoegen">
+<!ENTITY manage.button.edit "Aanpassen">
+<!ENTITY manage.button.remove "Verwijderen">
+<!ENTITY manage.label.grpIncluded "Inclusief deze paginas">
+<!ENTITY manage.label.grpExcluded "Exclusief deze paginas">
+<!ENTITY manage.label.btnEdit "Aanpassen">
+<!ENTITY manage.label.chkEnabled "Ingeschakeld">
+<!ENTITY manage.label.btnUninstall "Verwijderen">
+<!ENTITY manage.label.chkUninstall "Verwijder ook de bijbehorende instellingen">
+<!ENTITY context.install "Installeer User Script...">
+<!ENTITY context.commands "User Script Opdrachten">
+<!ENTITY menu.new "Nieuwe User Script">
+<!ENTITY menu.manage "Beheer User Scripts...">
+<!ENTITY menu.install "Installeer dit User Script...">
+<!ENTITY menu.commands "User Script Opdrachten">
+<!ENTITY statusbar.manage "Beheer User Scripts...">
+<!ENTITY statusbar.noscripts "Er zijn geen scripts geinstalleerd!">
+<!ENTITY statusbar.enabled "Ingeschakeld">
