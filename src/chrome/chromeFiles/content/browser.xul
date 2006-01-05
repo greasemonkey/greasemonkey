@@ -1,49 +1,51 @@
 <?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <popup id="contentAreaContextMenu">
-    <menuitem id="gm-context-install" label="Install User Script..."  accesskey="S" 
-      insertbefore="context-openlink"/>
+    <menuitem id="gm-context-install" label="&context.install;"  accesskey="S" 
+              insertbefore="context-openlink"/>
     <menuseparator id="gm-context-install-sep" insertbefore="context-openlink" />
     <menuseparator/>
-    <menu id="gm-userscript-commands-context" accesskey="r" label="User Script Commands"
-      disabled="false">
+    <menu id="gm-userscript-commands-context" accesskey="r" label="&context.commands;"
+          disabled="false">
       <menupopup/>
     </menu>
   </popup>
-
+  
   <menupopup id="menu_ToolsPopup">
     <menuseparator insertafter="menu_preferences" />
-    <menuitem id="gm-manage-userscript" accesskey="U" label="Manage User Scripts..."/>
-    <menuitem id="gm-new-userscript" accesskey="N" label="New User Script"/>
-    <menuitem id="gm-tools-install" accesskey="S" label="Install This User Script..."/>
+    <menuitem id="gm-manage-userscript" accesskey="U" label="&menu.manage;"/>
+    <menuitem id="gm-new-userscript" accesskey="N" label="&menu.new;"/>
+    <menuitem id="gm-tools-install" accesskey="S" label="&menu.install;"/>
     <menuseparator />
-    <menu id="gm-userscript-commands" accesskey="r" label="User Script Commands" 
-      disabled="false">
+    <menu id="gm-userscript-commands" accesskey="r" label="&menu.commands;" 
+          disabled="false">
       <menupopup/>
     </menu>
   </menupopup>
-
+  
   <statusbar id="status-bar">
+    <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties"/>
     <statusbarpanel id="gm-status" insertafter="livemark-button">
       <label id="gm-status-label" collapsed="true" crop="end" style="width:0px" />
       <image id="gm-status-image" width="16" height="16" context="gm-status-popup"/>
       <popup id="gm-status-popup" position="before_end">
-        <menuitem id="gm-status-manage" accesskey="U" label="Manage User Scripts..."/>
+        <menuitem id="gm-status-manage" accesskey="U" label="&statusbar.manage;"/>
         <menuseparator/>
-        <menuitem id="gm-status-no-scripts" label="No scripts installed!" 
-          style="color:grey"/>
+        <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;" 
+                  style="color:grey"/>
         <menuseparator id="gm-status-no-scripts-sep"/>
-        <menuitem id="gm-status-enabled-item" accesskey="E" label="Enabled" 
-          type="checkbox"/>
+        <menuitem id="gm-status-enabled-item" accesskey="E" label="&statusbar.enabled;" 
+                  type="checkbox"/>
       </popup>
     </statusbarpanel>
   </statusbar>
-
+  
   <script type="application/x-javascript">
     var GM_context = Components.classes["@greasemonkey.mozdev.org/app-context;1"]
-                               .getService().wrappedJSObject;
-
+    .getService().wrappedJSObject;
+    
     new GM_context.GM_BrowserUI(window);
   </script>
 </overlay>

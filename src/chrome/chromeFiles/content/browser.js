@@ -36,6 +36,8 @@ GM_BrowserUI.prototype.handleWinLoad = function(e) {
   this.statusEnabledItem = this.doc.getElementById("gm-status-enabled-item");
   this.toolsMenu = this.doc.getElementById("gm-userscript-commands");
   this.contextMenu = this.doc.getElementById("gm-userscript-commands-context");
+  this.bundle = this.doc.getElementById("gm-browser-bundle");
+  this.greetz = new Array;
 
   // update visual status when enabled state changes
   GM_prefRoot.watch("enabled", this.refreshStatus);
@@ -95,20 +97,22 @@ GM_BrowserUI.prototype.handleContentLoad = function(e) {
   if (GM_getEnabled() && GM_isGreasemonkeyable(win.location.href)) {
     this.inject(win);
   }
-
+  
+  for(var i = 0; i < 6; i++){
+    this.greetz.push(this.bundle.getString('greetz.' + i));
+  }
   if (GM_getEnabled() && win.location.pathname.match(/\.user\.js$/i)) {
     // find the browser the user script is loading in
     for (var i = 0, browser; browser = this.tabBrowser.browsers[i]; i++) {
       if (browser.contentWindow == win) {
-        var pick = Math.round(Math.random() * (GM_BrowserUI.greetz.length - 1));
-        var greeting = GM_BrowserUI.greetz[pick];
+        var pick = Math.round(Math.random() * (this.greetz.length - 1));
+        var greeting = this.greetz[pick];
 
         this.tabBrowser.showMessage(
           browser,
           "chrome://greasemonkey/content/status_on.gif",
-          greeting + " This is a Greasemonkey User Script. " + 
-                     "Click Install to start using it.",
-          "Install",
+          greeting + " " + this.bundle.getString('greeting.msg'),
+          this.bundle.getString('greeting.btn'),
           null /* default doc shell */,
           "install-userscript",
           null /* no popuup */,
@@ -378,10 +382,10 @@ GM_BrowserUI.prototype.getUserScriptLinkUnderPointer = function() {
 GM_BrowserUI.prototype.refreshStatus = function() {
   if (GM_getEnabled()) {
     this.statusImage.src = "chrome://greasemonkey/content/status_on.gif";
-    this.statusImage.tooltipText = "Greasemonkey is enabled";
+    this.statusImage.tooltipText = this.bundle.getString('tooltip.enabled');
   } else {
     this.statusImage.src = "chrome://greasemonkey/content/status_off.gif";
-    this.statusImage.tooltipText = "Greasemonkey is disabled";
+    this.statusImage.tooltipText = this.bundle.getString('tooltip.disabled');
   }
 }
 
@@ -430,14 +434,5 @@ GM_BrowserUI.prototype.hideStatusAnimationEnd = function() {
   this.hideAnimation = null;
   this.statusLabel.collapsed = true;
 }
-
-GM_BrowserUI.greetz = [
-  "Huzzah!",
-  "Toodles...",
-  "Howdy!",
-  "Sup...",
-  "Greetings, fellow traveler.",
-  "G'Day!"
-  ];
 
 loggify(GM_BrowserUI.prototype, "GM_BrowserUI");

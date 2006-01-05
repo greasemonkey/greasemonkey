@@ -7,9 +7,9 @@
       <hbox style="margin-bottom:.5em;">
         <listbox style="max-height: 8em; overflow: auto" flex="1" />
         <vbox>
-          <button label="Add..." />
-          <button label="Edit..." disabled="true" />
-          <button label="Remove" disabled="true" />
+          <button label="&manage.button.add;" />
+          <button label="&manage.button.edit;" disabled="true" />
+          <button label="&manage.button.remove;" disabled="true" />
         </vbox>
       </hbox>
     </groupbox>
@@ -19,9 +19,9 @@
       <hbox style="margin-bottom:.5em">
         <listbox style="max-height: 8em; overflow: auto" flex="1" />
         <vbox>
-          <button label="Add..." />
-          <button label="Edit..." disabled="true" />
-          <button label="Remove" disabled="true" />
+          <button label="&manage.button.add;" />
+          <button label="&manage.button.edit;" disabled="true" />
+          <button label="&manage.button.remove;" disabled="true" />
         </vbox>
       </hbox>
     </groupbox>

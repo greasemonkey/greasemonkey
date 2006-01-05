@@ -2,6 +2,7 @@ function PagesControl(ctlPages) {
     var document = ctlPages.ownerDocument;
     var includesBox = new PagesBox(document.getElementById("grpIncluded"));
     var excludesBox = new PagesBox(document.getElementById("grpExcluded"));
+    var manageBundle = document.getElementById("gm-manage-bundle");
 
     this.populate = function(script) {
         includesBox.populate(script.includes);
@@ -54,7 +55,8 @@ function PagesControl(ctlPages) {
         }
 
         function promptForNewPage(ev) {
-            var val = gmPrompt("Enter a new URL below. You can specify multiple pages using the wildcard (*) character.", "http://foo.com/*", "Add Page");
+            var val = gmPrompt(manageBundle.getString("promptForNewPage.msg"), 
+            manageBundle.getString("promptForNewPage.defVal"), manageBundle.getString("promptForNewPage.title"));;
             if (val && val != "") {
                 addPage(val);
                 self.pages.push(val);
@@ -63,8 +65,8 @@ function PagesControl(ctlPages) {
         }
 
         function promptForEdit(ev) {
-            var val = gmPrompt("Modify the URL of the page below. You can specify multiple pages using the wildcard (*) character.", 
-                self.listbox.selectedItem.label, "Edit Page");
+            var val = gmPrompt(manageBundle.getString("promptForEdit.msg"),
+                self.listbox.selectedItem.label, manageBundle.getString("promptForEdit.title"));
 
             if (val && val != "") {
                 self.listbox.selectedItem.label = val;
