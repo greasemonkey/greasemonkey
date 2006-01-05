@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
+<!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
 <overlay id="pages-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <vbox id="pages-control">
     <groupbox id="grpIncluded" orient="vertical">
