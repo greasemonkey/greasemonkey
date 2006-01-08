@@ -52,7 +52,7 @@ function openInEditor(aFile, win) {
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
       .createInstance(nsIFilePicker);
     
-    filePicker.init(win, "Find Text Editor", nsIFilePicker.modeOpen);
+    filePicker.init(win, win.document.getElementById('gm-manage-bundle').getString('editor.prompt'), nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
     
