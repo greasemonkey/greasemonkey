@@ -19,8 +19,7 @@
     <menuitem id="gm-new-userscript" accesskey="&menu.new.accesskey;" label="&menu.new;"/>
     <menuitem id="gm-tools-install" accesskey="&menu.install.accesskey;" label="&menu.install;"/>
     <menuseparator />
-    <menu id="gm-userscript-commands" accesskey="&menu.commands
-.accesskey;" label="&menu.commands;" 
+    <menu id="gm-userscript-commands" accesskey="&menu.commands.accesskey;" label="&menu.commands;" 
           disabled="false">
       <menupopup/>
     </menu>
