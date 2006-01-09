@@ -158,6 +158,7 @@ GM_BrowserUI.prototype.inject = function(win) {
     sandbox.window = win;
     sandbox.document = win.document;
     sandbox.unsafeWindow = win.wrappedJSObject;
+    sandbox.XPathResult = Ci.nsIDOMXPathResult;
 
     // add our own APIs
     sandbox.GM_addStyle = bind(GM_addStyle, null, sandbox.document);
