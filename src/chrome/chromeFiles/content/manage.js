@@ -91,7 +91,9 @@ ManageUI.prototype.updateDetails = function() {
 }
 
 ManageUI.prototype.handleEditButton = function() {
-  openInEditor(getScriptFile(this.selectedScript.filename), this.win);
+  if(this.selectedScript) {
+    openInEditor(getScriptFile(this.selectedScript.filename), this.win);
+  }
 }
 
 ManageUI.prototype.handleUninstallButton = function() {

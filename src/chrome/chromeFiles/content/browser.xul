@@ -7,7 +7,7 @@
               insertbefore="context-openlink"/>
     <menuseparator id="gm-context-install-sep" insertbefore="context-openlink" />
     <menuseparator/>
-    <menu id="gm-userscript-commands-context" accesskey="r" label="&context.commands;"
+    <menu id="gm-userscript-commands-context" accesskey="&context.commands.accesskey;" label="&context.commands;"
           disabled="false">
       <menupopup/>
     </menu>
@@ -31,12 +31,12 @@
       <label id="gm-status-label" collapsed="true" crop="end" style="width:0px" />
       <image id="gm-status-image" width="16" height="16" context="gm-status-popup"/>
       <popup id="gm-status-popup" position="before_end">
-        <menuitem id="gm-status-manage" accesskey="U" label="&statusbar.manage;"/>
+        <menuitem id="gm-status-manage" accesskey="&statusbar.manage.accesskey;" label="&statusbar.manage;"/>
         <menuseparator/>
         <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;" 
                   style="color:grey"/>
         <menuseparator id="gm-status-no-scripts-sep"/>
-        <menuitem id="gm-status-enabled-item" accesskey="E" label="&statusbar.enabled;" 
+        <menuitem id="gm-status-enabled-item" accesskey="&statusbar.enabled.accesskey;" label="&statusbar.enabled;" 
                   type="checkbox"/>
       </popup>
     </statusbarpanel>
