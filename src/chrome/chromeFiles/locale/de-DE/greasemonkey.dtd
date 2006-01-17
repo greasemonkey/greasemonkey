@@ -1,3 +1,4 @@
+<!ENTITY manage.title "User Scripte verwalten">
 <!ENTITY manage.button.add "Hinzuf&#252;gen...">
 <!ENTITY manage.button.edit "Bearbeiten...">
 <!ENTITY manage.button.remove "Entfernen">
@@ -12,13 +13,13 @@
 <!ENTITY context.commands.accesskey "B">
 <!ENTITY menu.new "Neues User Script">
 <!ENTITY menu.new.accesskey "U">
-<!ENTITY menu.manage "User Scripts verwalten...">
+<!ENTITY menu.manage "User Scripte verwalten...">
 <!ENTITY menu.manage.accesskey "v">
 <!ENTITY menu.install "User Script installieren...">
 <!ENTITY menu.install.accesskey "i">
 <!ENTITY menu.commands "User Script Befehle">
 <!ENTITY menu.commands.accesskey "B">
-<!ENTITY statusbar.manage "User Scripts verwalten...">
+<!ENTITY statusbar.manage "User Scripte verwalten...">
 <!ENTITY statusbar.manage.accesskey "v">
 <!ENTITY statusbar.noscripts "Keine Skripte installiert!">
 <!ENTITY statusbar.enabled "Aktiv">

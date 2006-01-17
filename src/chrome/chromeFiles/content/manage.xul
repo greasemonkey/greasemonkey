@@ -8,7 +8,7 @@
     id="manage-window"
     buttons="accept,cancel"
     ondialogaccept="return GM_manageUI.handleOkButton()"
-    title="Manage User Scripts"
+    title="&manage.title;"
     orient="vertical"
     style="max-width:650px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
