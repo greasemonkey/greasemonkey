@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
 <!-- Note: Contains Firefox-specific overlay -->
 
@@ -19,7 +19,7 @@
     <script type="application/x-javascript" src="chrome://greasemonkey/content/accelimation.js" />
 
     <popup id="contentAreaContextMenu">
-        <menuitem id="install-userscript" label="Install User Script..."  accesskey="S" insertbefore="context-openlink" oncommand="installContextItemClicked(event)"/>
+        <menuitem id="install-userscript" label="&context.install;"  accesskey="S" insertbefore="context-openlink" oncommand="installContextItemClicked(event)"/>
         <menuseparator id="install-userscript-sep" insertbefore="context-openlink" />
     </popup>
 
@@ -27,12 +27,12 @@
                change for the Seamonkey copy below -->
     <menupopup id="menu_ToolsPopup">
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
-        <menuitem accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
-        <menuitem id="userscript-tools-new" accesskey="N" label="New User Script" oncommand="GM_BrowserUI.newUserScript()"/>
-        <menuitem id="userscript-tools-install" accesskey="S" label="Install This User Script..." oncommand="installMenuItemClicked(event)"/>
+        <menuitem accesskey="&menu.manage.accesskey;" label="&menu.manage;" oncommand="manageMenuItemClicked(event)"/>
+        <menuitem id="userscript-tools-new" accesskey="&menu.new.accesskey;" label="&menu.new;" oncommand="GM_BrowserUI.newUserScript()"/>
+        <menuitem id="userscript-tools-install" accesskey="&menu.install.accesskey;" label="&menu.install;" oncommand="installMenuItemClicked(event)"/>
         <menuseparator />
-        <menu id="userscript-commands-sb" accesskey="r" 
-          label="User Script Commands" disabled="false" 
+        <menu id="userscript-commands-sb" accesskey="&menu.commands.accesskey;" 
+          label="&menu.commands;" disabled="false" 
           onpopupshowing='event.preventBubble()'>
           <menupopup/>
         </menu>
@@ -40,26 +40,27 @@
 
     <!-- Seamonkey ID is a bit different. Keep this the same as above -->
     <menupopup id="taskPopup">
-        <menuitem accesskey="U" label="Manage User Scripts..." oncommand="manageMenuItemClicked(event)"/>
+        <menuitem accesskey="&menu.manage.accesskey;" label="&menu.manage;" oncommand="manageMenuItemClicked(event)"/>
         <menuseparator id="userscript-tools-sep" insertafter="menu_preferences" />
-        <menuitem id="userscript-tools-new" accesskey="N" label="New User Script" oncommand="GM_BrowserUI.newUserScript()"/>
-        <menuitem id="userscript-tools-install" accesskey="S" label="Install This User Script..." oncommand="installMenuItemClicked(event)"/>
+        <menuitem id="userscript-tools-new" accesskey="&menu.new.accesskey;" label="&menu.new;" oncommand="GM_BrowserUI.newUserScript()"/>
+        <menuitem id="userscript-tools-install" accesskey="&menu.install.accesskey;" label="&menu.install;" oncommand="installMenuItemClicked(event)"/>
     </menupopup>
 
     <statusbar id="status-bar">
+        <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties"/>
         <statusbarpanel id="gm-status" insertafter="livemark-button">
             <label id="gm-status-label" collapsed="true" crop="end" style="width:0px" />
             <image id="gm-status-image" width="16" height="16" onclick="if (!event.button) GM_setEnabled(!GM_getEnabled())"  context='gm-status-popup'/>
             <popup id='gm-status-popup' position='before_end'
               onpopupshowing='GM_showPopup(event); event.preventBubble();'
               oncommand='GM_popupClicked(event); event.preventBubble();'>
-              <menuitem accesskey="U" label="Manage User Scripts..." 
+              <menuitem accesskey="&statusbar.manage.accesskey;" label="&statusbar.manage;" 
                 oncommand="manageMenuItemClicked(event)"/>
               <menuseparator/>
-              <menuitem id="gm-status-no-scripts" label="No scripts installed!" 
+              <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;" 
                 style="color:grey"/>
               <menuseparator id="gm-status-no-scripts-sep"/>
-              <menuitem id="gm-status-enabled-item" accesskey="E" label="Enabled" 
+              <menuitem id="gm-status-enabled-item" accesskey="&statusbar.enabled.accesskey;" label="&statusbar.enabled;" 
                 type="checkbox" oncommand="GM_setEnabled(!GM_getEnabled())"/>
             </popup>
          </statusbarpanel>

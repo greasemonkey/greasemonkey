@@ -2,13 +2,13 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
-
+<!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
 <dialog
     id="manage-window"
     buttons="accept,cancel"
     ondialogaccept="return handleOkButton()"
-    title="Manage User Scripts"
+    title="&manage.title;"
     orient="vertical"
     style="max-width:650px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -144,6 +144,8 @@
 
     ]]>
     </script>
+    
+    <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
 
     <grid style="margin-bottom:2em" flex="1" orient="vertical">
       <columns>
@@ -175,15 +177,15 @@
         <row>
           <hbox>
             <hbox>
-              <checkbox id="chkEnabled" label="Enabled" checked="true" />               
-              <button flex="1" id="btnEdit" label="Edit" />
+              <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />               
+              <button flex="1" id="btnEdit" label="&manage.label.btnEdit;" />
             </hbox>
           </hbox>
           <hbox>
                <hbox>
-                 <button flex="1" id="btnUninstall" label="Uninstall" />
+                 <button flex="1" id="btnUninstall" label="&manage.label.btnUninstall;" />
                  <checkbox id="chkUninstallPrefs" 
-                    label="Also uninstall associated preferences" checked="false" />          
+                    label="&manage.label.chkUninstall;" checked="false" />          
                </hbox>
           </hbox>
         </row>
