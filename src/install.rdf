@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+
+    <em:name>Greasemonkey</em:name>
+    <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
+    <em:version>0.6.4</em:version>
+    <em:description>A User Script Manager for Firefox</em:description>
+    <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
+    <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
+    <em:contributor>Matthew Gray; http://mkgray.com:8000/</em:contributor>
+    <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>
+    <em:contributor>Nikolas Coukouma; http://atrus.org/</em:contributor>
+    <em:contributor>Mark Pilgrim,; http://diveintomark.org</em:contributor> 
+    <em:contributor>Gareth Andrew; http://freegarethandrew.org</em:contributor>
+    <em:contributor>Ori Avtallon; n/a</em:contributor>
+    <em:contributor>JP Sugarbroad; n/a</em:contributor>
+    <em:contributor>Anthony Lieuallen; http://arantius.com</em:contributor>
+    <em:homepageURL>http://greasemonkey.mozdev.org/</em:homepageURL>
+    <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
+    <em:iconURL>chrome://greasemonkey/content/status_on.gif</em:iconURL>
+
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>1.5.0.*</em:maxVersion>
+      </Description>
+    </em:targetApplication> 
+
+    <em:file>
+      <Description about="urn:mozilla:extension:file:greasemonkey">
+        <em:package>content/</em:package>
+      </Description>
+    </em:file>
+
+  </Description>
+
+</RDF>

@@ -1,0 +1,26 @@
+<!ENTITY manage.title "User Scripte verwalten">
+<!ENTITY manage.button.add "Hinzuf&#252;gen...">
+<!ENTITY manage.button.edit "Bearbeiten...">
+<!ENTITY manage.button.remove "Entfernen">
+<!ENTITY manage.label.grpIncluded "Einbezogene Seiten">
+<!ENTITY manage.label.grpExcluded "Ausgeschlossene Seiten">
+<!ENTITY manage.label.btnEdit "Bearbeiten">
+<!ENTITY manage.label.chkEnabled "Aktiviert">
+<!ENTITY manage.label.btnUninstall "Deinstallieren">
+<!ENTITY manage.label.chkUninstall "Auch zugeh&#246;rige Einstellungen entfernen">
+<!ENTITY context.install "Dieses User Script installieren...">
+<!ENTITY context.commands "User Script Befehle...">
+<!ENTITY context.commands.accesskey "B">
+<!ENTITY menu.new "Neues User Script">
+<!ENTITY menu.new.accesskey "U">
+<!ENTITY menu.manage "User Scripte verwalten...">
+<!ENTITY menu.manage.accesskey "v">
+<!ENTITY menu.install "User Script installieren...">
+<!ENTITY menu.install.accesskey "i">
+<!ENTITY menu.commands "User Script Befehle">
+<!ENTITY menu.commands.accesskey "B">
+<!ENTITY statusbar.manage "User Scripte verwalten...">
+<!ENTITY statusbar.manage.accesskey "v">
+<!ENTITY statusbar.noscripts "Keine Skripte installiert!">
+<!ENTITY statusbar.enabled "Aktiv">
+<!ENTITY statusbar.enabled.accesskey "A">

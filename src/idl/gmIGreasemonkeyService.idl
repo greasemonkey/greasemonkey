@@ -1,0 +1,11 @@
+#include "nsISupports.idl"
+#include "gmIMenuCommand.idl"
+#include "gmIBrowserWindow.idl"
+
+[scriptable, uuid(c5826e20-1cc7-11da-8cd6-0800200c9a66)]
+interface gmIGreasemonkeyService : nsISupports
+{
+  void registerBrowser(in gmIBrowserWindow window);
+  void unregisterBrowser(in gmIBrowserWindow window);
+  void domContentLoaded(in nsISupports wrappedWindow);
+};

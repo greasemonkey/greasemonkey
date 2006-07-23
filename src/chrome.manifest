@@ -1,0 +1,2 @@
+content    greasemonkey    chrome/chromeFiles/content/
+overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
