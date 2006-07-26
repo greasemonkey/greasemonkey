@@ -165,19 +165,45 @@ GM_BrowserUI.contentLoad = function(e) {
     for (var i = 0, browser; browser = this.tabBrowser.browsers[i]; i++) {
       if (browser.contentWindow == unsafeWin) {
         var pick = Math.round(Math.random() * (GM_BrowserUI.greetz.length - 1));
-        var greeting = GM_BrowserUI.greetz[pick];
+        var greeting = GM_BrowserUI.greetz[pick] 
+	               + this.bundle.getString("greeting.msg");
 
-        this.tabBrowser.showMessage(
-          browser,
-          "chrome://greasemonkey/content/status_on.gif",
-          greeting + " " + this.bundle.getString('greeting.msg'),
-          this.bundle.getString('greeting.btn'),
-          null /* default doc shell */,
-          "install-userscript",
-          null /* no popuup */,
-          "top",
-          true /* show close button */,
-          "I" /* access key */);
+	if (this.tabBrowser.showMessage) {
+	  // Firefox 1.5 and lower
+	  this.tabBrowser.showMessage(
+            browser,
+	    "chrome://greasemonkey/content/status_on.gif",
+	    greeting,
+	    this.bundle.getString('greeting.btn'),
+	    null /* default doc shell */,
+	    "install-userscript",
+	    null /* no popuup */,
+	    "top",
+	    true /* show close button */,
+	    "I" /* access key */);
+	} else {
+	  // Firefox 2.0+
+	  var notificationBox = this.tabBrowser.getNotificationBox(browser);
+
+	  // Remove existing notifications. Notifications get removed 
+	  // automatically onclick and on page navigation, but we need to remove
+	  // them ourselves in the case of reload, or they stack up.
+	  for (var i = 0, child; child = notificationBox.childNodes[i]; i++) {
+	    if (child.getAttribute("value") == "install-userscript") {
+	      notificationBox.removeNotification(child);
+	    }
+	  }
+
+	  var notification = notificationBox.appendNotification(
+            greeting,
+	    "install-userscript",
+	    "chrome://greasemonkey/content/status_on.gif",
+	    notificationBox.PRIORITY_WARNING_MEDIUM,
+	    [{ label: this.bundle.getString('greeting.btn'),
+	       accessKey: "I",
+	       popup: null,
+               callback: GM_hitch(this, "installCurrentScript") }]);
+	}
 
         break;
       }
@@ -192,13 +218,20 @@ GM_BrowserUI.contentLoad = function(e) {
 GM_BrowserUI.observe = function(subject, topic, data) {
   if (topic == "install-userscript") {
     if (window == this.winWat.activeWindow) {
-      new ScriptDownloader().installFromURL(
-        this.tabBrowser.selectedBrowser.contentWindow.location.href);
+      this.installCurrentScript();
     }
   } else {
     throw new Error("Unexpected topic received: {" + topic + "}");
   }
-}
+};
+
+/**
+ * Handles the install button getting clicked.
+ */
+GM_BrowserUI.installCurrentScript = function() {
+  new ScriptDownloader().installFromURL(
+    this.tabBrowser.selectedBrowser.contentWindow.location.href);
+};
 
 /**
  * The browser's location has changed. Usually, we don't care. But in the case
