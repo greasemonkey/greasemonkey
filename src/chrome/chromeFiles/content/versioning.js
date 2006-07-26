@@ -1,5 +1,3 @@
-
-
 /**
  * Checks whether the version has changed since the last run and performs 
  * any necessary upgrades.
@@ -19,7 +17,11 @@ function GM_updateVersion() {
   }
 
   // update the currently initialized version so we don't do this work again.
-  GM_prefRoot.setValue("version", "0.6.4");
+  var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
+    .getService(Components.interfaces.nsIExtensionManager);
+
+  var item = extMan.getItemForID(GM_GUID);
+  GM_prefRoot.setValue("version", item.version);
 
   log("< GM_updateVersion");
 }
