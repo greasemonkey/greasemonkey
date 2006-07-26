@@ -100,7 +100,9 @@
     }
     
     function handleEditButton() {
-      openInEditor(getScriptFile(selectedScript.filename));
+      openInEditor(
+        getScriptFile(selectedScript.filename),
+        document.getElementById("gm-manage-bundle").getString("editor.prompt"));
     }
 
     function handleUninstallButton() {

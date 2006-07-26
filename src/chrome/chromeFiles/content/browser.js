@@ -480,7 +480,10 @@ GM_BrowserUI.newUserScript = function() {
   }
 
   source.copyTo(dest, tempname);
-  openInEditor(destFile);
+
+  openInEditor(
+    destFile,
+    document.getElementById("gm-browser-bundle").getString("editor.prompt"));
 }
 
 GM_BrowserUI.showStatus = function(message, autoHide) {

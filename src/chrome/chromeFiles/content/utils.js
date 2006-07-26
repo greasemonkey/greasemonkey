@@ -71,7 +71,7 @@ function GM_log(message, force) {
 // TODO: this stuff was copied wholesale and not refactored at all. Lots of
 // the UI and Config rely on it. Needs rethinking.
 
-function openInEditor(aFile) {
+function openInEditor(aFile, promptTitle) {
   var editor, editorPath;
   try {
     editorPath = GM_prefRoot.getValue("editor");
@@ -94,8 +94,8 @@ function openInEditor(aFile) {
     var nsIFilePicker = Components.interfaces.nsIFilePicker;
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
       .createInstance(nsIFilePicker);
-    
-    filePicker.init(win, win.document.getElementById('gm-manage-bundle').getString('editor.prompt'), nsIFilePicker.modeOpen);
+
+    filePicker.init(window, promptTitle, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
     
