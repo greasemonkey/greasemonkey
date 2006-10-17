@@ -14,7 +14,6 @@ function alert(msg) {
     .alert(null, "message from your mom", msg);
 }
 
-
 var greasemonkeyService = {
 
   browserWindows: [],
@@ -24,11 +23,12 @@ var greasemonkeyService = {
   QueryInterface: function(aIID) {
     if (!aIID.equals(Ci.nsIObserver) &&
         !aIID.equals(Ci.nsISupports) &&
-        !aIID.equals(Ci.nsIWebProgressListener) &&
         !aIID.equals(Ci.nsISupportsWeakReference) &&
         !aIID.equals(Ci.gmIGreasemonkeyService) &&
-        !aIID.equals(Ci.nsIWindowMediatorListener))
+        !aIID.equals(Ci.nsIWindowMediatorListener) &&
+	!aIID.equals(Ci.nsIContentPolicy)) {
       throw Components.results.NS_ERROR_NO_INTERFACE;
+    }
 
     return this;
   },
@@ -36,7 +36,7 @@ var greasemonkeyService = {
 
   // nsIObserver
   observe: function(aSubject, aTopic, aData) {
-    if (aTopic == "http-startup") {
+    if (aTopic == "app-startup") {
       this.startup();
     }
   },
@@ -56,7 +56,7 @@ var greasemonkeyService = {
   },
 
   unregisterBrowser: function(browserWin) {
-    var existing;
+   var existing;
 
     for (var i = 0; existing = this.browserWindows[i]; i++) {
       if (existing == browserWin) {
@@ -109,9 +109,55 @@ var greasemonkeyService = {
       .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
 
-    loggify(this, "GM_GreasemonkeyService");
+    //loggify(this, "GM_GreasemonkeyService");
   },
 
+  shouldLoad: function(ct, cl, org, ctx, mt, ext) {
+    var ret = Ci.nsIContentPolicy.ACCEPT;
+
+    if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT && 
+	cl.spec.match(/\.user\.js$/)) {
+
+      dump("shouldload: " + cl.spec + "\n");
+      dump("ignorescript: " + this.ignoreNextScript_ + "\n");
+
+      if (!this.ignoreNextScript_) {
+	if (!this.isTempScript(cl)) {
+	  var winWat = Cc["@mozilla.org/embedcomp/window-watcher;1"]
+	    .getService(Ci.nsIWindowWatcher);
+
+	  if (winWat.activeWindow && winWat.activeWindow.GM_BrowserUI) {
+	    winWat.activeWindow.GM_BrowserUI.startInstallScript(cl);
+	    ret = Ci.nsIContentPolicy.REJECT_REQUEST;
+	  }
+	}
+      }
+    }
+
+    this.ignoreNextScript_ = false;
+    return ret;
+  },
+
+  ignoreNextScript: function() {
+    dump("ignoring next script...\n");
+    this.ignoreNextScript_ = true;
+  },
+
+  isTempScript: function(uri) {
+    if (uri.scheme != "file") {
+      return false;
+    }
+
+    var fph = Components.classes["@mozilla.org/network/protocol;1?name=file"]
+    .getService(Ci.nsIFileProtocolHandler);
+
+    var file = fph.getFileFromURLSpec(uri.spec);
+    var tmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
+    .getService(Components.interfaces.nsIProperties)
+    .get("TmpD", Components.interfaces.nsILocalFile);
+
+    return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
+  },
 
   initScripts: function(url) {
     var config = new Config(getScriptFile("config.xml"));
@@ -153,6 +199,7 @@ var greasemonkeyService = {
     var storage;
     var xmlhttpRequester;
     var safeWin = new XPCNativeWrapper(unsafeContentWin);
+    var safeDoc = safeWin.document;
 
     for (var i = 0; script = scripts[i]; i++) {
       sandbox = new Components.utils.Sandbox(safeWin);
@@ -170,7 +217,7 @@ var greasemonkeyService = {
       sandbox.XPathResult = Ci.nsIDOMXPathResult;
 
       // add our own APIs
-      sandbox.GM_addStyle = function(css) { GM_addStyle(sandbox.document, css) };
+      sandbox.GM_addStyle = function(css) { GM_addStyle(safeDoc, css) };
       sandbox.GM_log = GM_hitch(logger, "log");
       sandbox.GM_setValue = GM_hitch(storage, "setValue");
       sandbox.GM_getValue = GM_hitch(storage, "getValue");
@@ -233,6 +280,8 @@ var greasemonkeyService = {
   },
 };
 
+greasemonkeyService.wrappedJSObject = greasemonkeyService;
+
 //loggify(greasemonkeyService, "greasemonkeyService");
 
 
@@ -254,8 +303,14 @@ Module.registerSelf = function(compMgr, fileSpec, location, type) {
   var catMgr = Cc["@mozilla.org/categorymanager;1"]
                  .getService(Ci.nsICategoryManager);
 
-  catMgr.addCategoryEntry("http-startup-category",
+  catMgr.addCategoryEntry("app-startup",
                           CLASSNAME,
+                          CONTRACTID,
+                          true,
+                          true);
+
+  catMgr.addCategoryEntry("content-policy", 
+			  CONTRACTID,
                           CONTRACTID,
                           true,
                           true);

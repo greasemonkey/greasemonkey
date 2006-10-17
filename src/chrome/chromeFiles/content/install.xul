@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://mozapps/content/xpinstall/xpinstallConfirm.css" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/skin/xpinstall/xpinstallConfirm.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        id="greasemonkey" title="&install.title;" style="width: 32em; height:32em;" 
+        onload="GMInstall.init()" 
+        ondialogaccept="return GMInstall.onOK();"
+        ondialogcancel="return GMInstall.onCancel();"
+        ondialogextra1="return GMInstall.onShowSource()"
+        buttons="accept,cancel,extra1"
+        buttonlabelaccept="&install.installbutton;"
+        buttonlabelextra1="&install.showscriptsource;"
+        defaultButton="accept">
+
+  <script src="chrome://greasemonkey/content/utils.js"/>
+  <script src="chrome://greasemonkey/content/config.js"/>
+  <script src="chrome://greasemonkey/content/scriptdownloader.js"/>
+  <script src="chrome://greasemonkey/content/prefmanager.js"/>
+  <script src="chrome://greasemonkey/content/install.js"/>
+  <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties"/>
+
+  <vbox flex="1" id="dialogContentBox">
+    <description id="heading" style="margin-bottom:1em"/>
+    <vbox id="itemBox" flex="1" style="padding:0; overflow:auto; -moz-appearance:textfield; margin:2px 4px;">
+      <vbox style="background:InfoBackground; border-bottom:1px black dotted; padding:0.5em; margin:0; margin-bottom:0.5em;">
+        <description id="scriptDescription" style="margin:0"/>
+      </vbox>
+      <vbox id="includes" style="margin-bottom:1em; display:none;">
+        <label value="&install.runson;"/>
+        <description id="includes-desc" style="font-style:italic"/>
+      </vbox>
+      <vbox id="excludes" style="display:none;">
+        <label value="&install.butnoton;"/>
+        <description id="excludes-desc" style="font-style:italic"/>
+      </vbox>
+      <spacer flex="1"/>
+    </vbox>
+
+    <description style="margin-top:1em">&install.warning1;</description> 
+    <description style="margin-bottom:1em" class="warning">&install.warning2;</description> 
+  </vbox>
+
+</dialog>

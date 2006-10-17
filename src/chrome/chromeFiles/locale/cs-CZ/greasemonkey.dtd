@@ -8,19 +8,26 @@
 <!ENTITY manage.label.chkEnabled "Povolen">
 <!ENTITY manage.label.btnUninstall "Odinstalovat">
 <!ENTITY manage.label.chkUninstall "Odinstalovat i přidružená nastavení">
-<!ENTITY context.install "Instalovat tento uživatelský skript...">
-<!ENTITY context.commands "Příkazy uživatelských skriptů...">
-<!ENTITY context.commands.accesskey "r">
+
+<!ENTITY menu.install "Instalovat tento uživatelský skript...">
+<!ENTITY menu.install.accesskey "S">
+<!ENTITY menu.show "View User Script Source">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Příkazy uživatelských skriptů">
+<!ENTITY menu.commands.accesskey "r">
 <!ENTITY menu.new "Nový uživatelský skript">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
 <!ENTITY menu.manage.accesskey "U">
-<!ENTITY menu.install "Instalovat tento uživatelský skript...">
-<!ENTITY menu.install.accesskey "S">
-<!ENTITY menu.commands "Příkazy uživatelských skriptů">
-<!ENTITY menu.commands.accesskey "r">
-<!ENTITY statusbar.manage "Správce uživatelských skriptů...">
-<!ENTITY statusbar.manage.accesskey "U">
+
 <!ENTITY statusbar.noscripts "Žádné skripty nejsou nainstalovány!">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
+
+<!ENTITY install.title "Greasemonkey Installation">
+<!ENTITY install.runson "runs on:">
+<!ENTITY install.butnoton "does not run on:">
+<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
+<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
+<!ENTITY install.showscriptsource "Show Script Source">
+<!ENTITY install.installbutton "Install">
