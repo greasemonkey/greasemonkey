@@ -434,7 +434,7 @@ function GM_showPopup(aEvent) {
     }
   }
 
-  var foundScript = false;
+  var foundInjectedScript = false;
 
   // build the new list of scripts
   for (var i = 0, script = null; script = config.scripts[i]; i++) {
