@@ -61,7 +61,12 @@
                 }
 
                 function promptForNewPage(ev) {
-                    var val = gmPrompt("Enter a new URL below. You can specify multiple pages using the wildcard (*) character.", "http://foo.com/*", "Add Page");
+		    var gmManageBundle = document.getElementById("gm-manage-bundle");
+                    var val = gmPrompt(
+                      gmManageBundle.getString("promptForNewPage.msg"), 
+                      gmManageBundle.getString("promptForNewPage.defVal"), 
+                      gmManageBundle.getString("promptForNewPage.title"));
+
                     if (val && val != "") {
                         addPage(val);
                         self.pages.push(val);
@@ -70,8 +75,11 @@
                 }
 
                 function promptForEdit(ev) {
-                    var val = gmPrompt("Modify the URL of the page below. You can specify multiple pages using the wildcard (*) character.", 
-                        self.listbox.selectedItem.label, "Edit Page");
+		    var gmManageBundle = document.getElementById("gm-manage-bundle");
+                    var val = gmPrompt(
+                      gmManageBundle.getString("promptForEdit.msg"), 
+                      self.listbox.selectedItem.label, 
+                      gmManageBundle.getString("promptForEdit.title"));
 
                     if (val && val != "") {
                         self.listbox.selectedItem.label = val;
@@ -102,6 +110,8 @@
     ]]>
     </script>
 
+    <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
+
     <vbox id="pages-control">
         <groupbox id="grpIncluded" orient="vertical">
             <caption label="&manage.label.grpIncluded;" />
@@ -129,3 +139,4 @@
      </vbox>
 
 </overlay>
+
