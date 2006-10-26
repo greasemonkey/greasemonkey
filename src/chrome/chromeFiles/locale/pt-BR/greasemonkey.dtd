@@ -1,0 +1,42 @@
+<!ENTITY manage.title "Gerenciar Scripts de Usuários">
+<!ENTITY manage.button.add "Adicionar...">
+<!ENTITY manage.button.edit "Editar...">
+<!ENTITY manage.button.remove "Remover">
+<!ENTITY manage.label.grpIncluded "Páginas Incluídas">
+<!ENTITY manage.label.grpExcluded "Páginas Excluídas">
+<!ENTITY manage.label.btnEdit "Editar">
+<!ENTITY manage.label.chkEnabled "Ativado">
+<!ENTITY manage.label.btnUninstall "Desinstalar">
+<!ENTITY manage.label.btnMoveUp "Para cima">
+<!ENTITY manage.label.btnMoveDown "Para baixo">
+<!ENTITY manage.label.btnMoveLast "Para o fim">
+<!ENTITY manage.label.chkUninstall "Desinstalar também as preferências  associadas">
+
+<!ENTITY context.install "Instalar este Script...">
+<!ENTITY context.commands "Comandos de Scripts...">
+<!ENTITY context.commands.accesskey "r">
+
+<!ENTITY menu.new "Novo Script de Usuário">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Gerenciar Scripts de Usuários...">
+<!ENTITY menu.manage.accesskey "U">
+<!ENTITY menu.install "Instalar este Script...">
+<!ENTITY menu.install.accesskey "S">
+<!ENTITY menu.commands "Comandos de Scripts">
+<!ENTITY menu.commands.accesskey "r">
+<!ENTITY menu.show "Ver o Código do Script">
+<!ENTITY menu.show.accesskey "V">
+
+<!ENTITY statusbar.manage "Gerenciar Scripts de Usuários...">
+<!ENTITY statusbar.manage.accesskey "U">
+<!ENTITY statusbar.noscripts "Nenhum script instalado!">
+<!ENTITY statusbar.enabled "Ativado">
+<!ENTITY statusbar.enabled.accesskey "A">
+
+<!ENTITY install.title "Instalação do Greasemonkey">
+<!ENTITY install.runson "Executa em:">
+<!ENTITY install.butnoton "Não executa em:">
+<!ENTITY install.warning1 "Scripts maliciosos podem violar sua privacidade e fazer coisas sem seu conhecimento.">
+<!ENTITY install.warning2 "Você somente deve instalar scripts de fontes que você conhece.">
+<!ENTITY install.showscriptsource "Mostrar código fonte do Script">
+<!ENTITY install.installbutton "Instalar">
