@@ -24,7 +24,7 @@
     </popup>
 
     <menupopup id="menu_ToolsPopup">
-        <menu label="Greasemonkey" accesskey="G">
+        <menu id="gm_general_menu" label="Greasemonkey" accesskey="G" position="10">
             <menupopup>
                 <menuitem 
                     id="userscript-tools-install"
@@ -41,7 +41,7 @@
                     accesskey="&menu.new.accesskey;" 
                     label="&menu.new;" 
                     oncommand="GM_BrowserUI.newUserScript()"/>
-                <menu id="userscript-commands-sb" accesskey="&menu.commands.accesskey;" 
+                <menu id="userscript-commands-sb2" accesskey="&menu.commands.accesskey;" 
                     label="&menu.commands;" disabled="false" 
                     onpopupshowing='event.preventBubble()'>
                     <menupopup/>
@@ -61,6 +61,13 @@
               <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;" 
                 style="color:grey"/>
               <menuseparator id="gm-status-no-scripts-sep"/>
+              <menu id="userscript-commands-sb" 
+                accesskey="&menu.commands.accesskey;" 
+	        label="&menu.commands;" disabled="false" 
+      	        onpopupshowing='event.preventBubble()'>
+                <menupopup />
+              </menu>
+              <menuseparator />
               <menuitem accesskey="&menu.new.accesskey;" label="&menu.new;" 
                 oncommand="GM_BrowserUI.newUserScript()"/>
               <menuitem accesskey="&menu.manage.accesskey;" label="&menu.manage;" 
