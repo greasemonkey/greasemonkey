@@ -296,8 +296,8 @@ function GM_isGreasemonkeyable(url) {
                .getService(Components.interfaces.nsIIOService)
                .extractScheme(url);
 
-  return (scheme == "http" || scheme == "https" || scheme == "file") &&
-         !/hiddenWindow\.html$/.test(url);
+  return (scheme == "http" || scheme == "https" || scheme == "file" ||
+          url.match(/^about:cache/)) && !/hiddenWindow\.html$/.test(url);
 }
 
 function GM_isFileScheme(url) {
