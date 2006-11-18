@@ -137,6 +137,10 @@ var greasemonkeyService = {
     this.ignoreNextScript_ = false;
     return ret;
   },
+  
+  shouldProcess: function(ct, cl, org, ctx, mt, ext) {
+    return Ci.nsIContentPolicy.ACCEPT;
+  },
 
   ignoreNextScript: function() {
     dump("ignoring next script...\n");
