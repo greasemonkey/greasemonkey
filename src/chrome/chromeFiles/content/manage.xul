@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/content/manage.css" type="text/css"?>
 <?xul-overlay href="chrome://greasemonkey/content/pages-overlay.xul"?>
 
 <!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
@@ -10,7 +11,6 @@
     ondialogaccept="return handleOkButton()"
     title="&manage.title;"
     orient="vertical"
-    style="max-width:650px;"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
@@ -92,8 +92,22 @@
         }
         else {
             selectedScript = listbox.getSelectedItem(0).script;
+
+            // make sure one word isn't too long to fit ... a too-long word
+            // will bump the interface out wider than the window
+            var wordLen = 50;
+            var desc = selectedScript.description.split(/\s+/);
+            for (var i = 0; i < desc.length; i++) {
+              if (desc[i].length>wordLen) {
+                for (var j=desc[i].length; j>0; j-=wordLen) {
+                  desc[i]=desc[i].substr(0,j)+'\u200B'+desc[i].substr(j);
+                }
+              }
+            }
+            desc=desc.join(' ');
+
             header.textContent = selectedScript.name;
-            description.textContent = selectedScript.description;
+            description.textContent = desc;
             chkEnabled.checked = selectedScript.enabled;
             pagesControl.populate(selectedScript);
         }
@@ -149,43 +163,31 @@
     
     <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
 
-    <grid style="margin-bottom:2em" flex="1" orient="vertical">
+    <grid flex="1" orient="vertical">
       <columns>
-        <column flex="1"/>
-        <column flex="3"/>
+        <column id="col_left" flex="1"/>
+        <column id="col_right" flex="3"/>
       </columns>
       
       <rows>
         <row flex="1" orient="horizontal">
-          <listbox id="lstScripts" style="min-width:140px; margin-top:0" flex="1"/>
-          <vbox flex="3">
-            <description id="ctlHeader" style="  margin: 0px 5px 5px 5px; 
-               border: 2px solid; 
-               -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow; 
-               -moz-border-right-colors: ThreeDHighlight ThreeDDarkShadow; 
-               -moz-border-bottom-colors: ThreeDHighlight ThreeDDarkShadow; 
-               -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow; 
-               padding: 5px 8px; 
-               background-color: Highlight; 
-               color: HighlightText; 
-               font-size: 1.5em; 
-               height: 2em;"/>
-            <description id="ctlDescription" style="margin:.5em;
-               height:3em; 
-               max-height:3em;"/>
-            <vbox id="pages-control" />
+          <listbox id="lstScripts"/>
+          <vbox>
+            <description id="ctlHeader"/>
+            <description id="ctlDescription"/>
+            <vbox id="pages-control" flex="1" />
           </vbox>                
         </row>
         <row>
           <hbox>
             <hbox>
               <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />               
-              <button flex="1" id="btnEdit" label="&manage.label.btnEdit;" />
+              <button id="btnEdit" label="&manage.label.btnEdit;" />
             </hbox>
           </hbox>
           <hbox>
                <hbox>
-                 <button flex="1" id="btnUninstall" label="&manage.label.btnUninstall;" />
+                 <button id="btnUninstall" label="&manage.label.btnUninstall;" />
                  <checkbox id="chkUninstallPrefs" 
                     label="&manage.label.chkUninstall;" checked="false" />          
                </hbox>
