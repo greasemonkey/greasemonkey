@@ -466,13 +466,30 @@ function GM_showPopup(aEvent) {
   document.getElementById("gm-status-no-scripts").collapsed = foundInjectedScript;
 }
 
+/**
+ * Handle clicking one of the items in the popup. Left-click toggles the enabled 
+ * state, rihgt-click opens in an editor.
+ */
 function GM_popupClicked(aEvent) {
-  var config = new Config(getScriptFile("config.xml"));
-  config.load();
-  var scriptNum=aEvent.target.value;
-  if (!config.scripts[scriptNum]) return;
-  config.scripts[scriptNum].enabled=!config.scripts[scriptNum].enabled;
-  config.save();
+  if (aEvent.button == 0 || aEvent.button == 2) {
+    var config = new Config(getScriptFile("config.xml"));
+    config.load();
+    var scriptNum=aEvent.target.value;
+    if (!config.scripts[scriptNum]) return;
+
+    if (aEvent.button == 0) {
+      // left-click: toggle enabled state
+      config.scripts[scriptNum].enabled=!config.scripts[scriptNum].enabled;
+      config.save();
+    } else {
+      // right-click: open in editor
+      openInEditor(getScriptFile(config.scripts[scriptNum].filename),
+		   document.getElementById("gm-browser-bundle")
+		           .getString("editor.prompt"))
+    }
+
+    closeMenus(aEvent.target);
+  }
 }
 
 /**

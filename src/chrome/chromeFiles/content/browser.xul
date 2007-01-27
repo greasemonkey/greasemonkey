@@ -54,10 +54,13 @@
         <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties"/>
         <statusbarpanel id="gm-status" insertafter="livemark-button">
             <label id="gm-status-label" collapsed="true" crop="end" style="width:0px; margin:0;" />
-            <image id="gm-status-image" width="16" height="16" style="margin:0 5px" onclick="if (!event.button) GM_setEnabled(!GM_getEnabled())"  context='gm-status-popup'/>
+            <image id="gm-status-image" width="16" height="16" style="margin:0 5px"
+              onclick="if (!event.button) GM_setEnabled(!GM_getEnabled()); 
+                       else if (event.button == 1) GM_BrowserUI.manageMenuItemClicked();"
+              context='gm-status-popup'/>
             <popup id='gm-status-popup' position='before_end'
               onpopupshowing='GM_showPopup(event); event.preventBubble();'
-              oncommand='GM_popupClicked(event); event.preventBubble();'>
+              onclick="GM_popupClicked(event); event.preventBubble();">
               <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;" 
                 style="color:grey"/>
               <menuseparator id="gm-status-no-scripts-sep"/>
