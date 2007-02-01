@@ -7,7 +7,7 @@
 
     <em:name>Greasemonkey</em:name>
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <em:version>0.6.6.20061017.0</em:version>
+    <em:version>0.6.7.20070131.0</em:version>
     <em:description>A User Script Manager for Firefox</em:description>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:contributor>Anthony Lieuallen; http://arantius.com</em:contributor>
@@ -18,6 +18,7 @@
     <em:contributor>JP Sugarbroad; n/a</em:contributor>
     <em:contributor>Juan Pablo Guereca Alonso; n/a</em:contributor>
     <em:contributor>Mark Pilgrim,; http://diveintomark.org</em:contributor> 
+    <em:contributor>Matthias Bauer; http://moeffju.net/</em:contributor>
     <em:contributor>Matthew Gray; http://mkgray.com:8000/</em:contributor>
     <em:contributor>Nikolas Coukouma; http://atrus.org/</em:contributor>
     <em:contributor>Ori Avtallon; n/a</em:contributor>
