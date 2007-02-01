@@ -9,5 +9,5 @@ cp license.txt build/
 cp -r components build/
 cp -r chrome build/
 cd build
-find * | grep -v 'CVS' | grep -v ~$ | grep -v '#' | grep -v .DS_Store | zip greasemonkey.xpi -@
+find * | grep -v 'CVS' | grep -v '\.svn' | grep -v ~$ | grep -v '#' | grep -v .DS_Store | zip greasemonkey.xpi -@
 mv greasemonkey.xpi ../
