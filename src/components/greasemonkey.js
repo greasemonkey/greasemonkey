@@ -115,6 +115,11 @@ var greasemonkeyService = {
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
     var ret = Ci.nsIContentPolicy.ACCEPT;
 
+    if (org && org.scheme != "chrome" && cl.scheme == "chrome" &&
+        cl.host == "greasemonkey") {
+      return Ci.nsIContentPolicy.REJECT_SERVER;
+    }
+
     if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT && 
 	cl.spec.match(/\.user\.js$/)) {
 
