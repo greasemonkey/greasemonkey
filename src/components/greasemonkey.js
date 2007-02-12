@@ -116,7 +116,7 @@ var greasemonkeyService = {
     var ret = Ci.nsIContentPolicy.ACCEPT;
 
     if (org && org.scheme != "chrome" && cl.scheme == "chrome" &&
-        cl.host == "greasemonkey") {
+        decodeURI(cl.host) == "greasemonkey") {
       return Ci.nsIContentPolicy.REJECT_SERVER;
     }
 
