@@ -115,9 +115,17 @@ var greasemonkeyService = {
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
     var ret = Ci.nsIContentPolicy.ACCEPT;
 
+    // block content detection of greasemonkey by denying GM
+    // chrome content, unless loaded from chrome
     if (org && org.scheme != "chrome" && cl.scheme == "chrome" &&
         decodeURI(cl.host) == "greasemonkey") {
       return Ci.nsIContentPolicy.REJECT_SERVER;
+    }
+
+    // don't interrupt the view-source: scheme
+    // (triggered if the link in the error console is clicked)
+    if ("view-source" == cl.scheme) {
+      return Ci.nsIContentPolicy.ACCEPT;
     }
 
     if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT && 
@@ -239,15 +247,12 @@ var greasemonkeyService = {
 
       sandbox.__proto__ = safeWin;
 
-      try {
-        this.evalInSandbox("(function(){\n" +
-                           getContents(getScriptFileURI(script.filename)) +
-                           "\n})()",
-                           url, 
-                           sandbox);
-      } catch (e) {
-        GM_logError(e);
-      }
+      this.evalInSandbox("(function(){\n" +
+                         getContents(getScriptFileURI(script.filename)) +
+                         "\n})()",
+                         url,
+                         sandbox,
+                         script);
     }
   },
 
@@ -273,18 +278,23 @@ var greasemonkeyService = {
     }
   },
 
-  evalInSandbox: function(code, codebase, sandbox) {
-    // DP beta+
-    if (Components.utils && Components.utils.Sandbox) {
-      Components.utils.evalInSandbox(code, sandbox);
-    // DP alphas
-    } else if (Components.utils && Components.utils.evalInSandbox) {
-      Components.utils.evalInSandbox(code, codebase, sandbox);
-    // 1.0.x
-    } else if (Sandbox) {
-      evalInSandbox(code, sandbox, codebase);
+  evalInSandbox: function(code, codebase, sandbox, script) {
+    if (!(Components.utils && Components.utils.Sandbox)) {
+      var e = new Error("Could not create sandbox.");
+      GM_logError(e, 0, e.fileName, e.lineNumber);
     } else {
-      throw new Error("Could not create sandbox.");
+      try {
+        // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=307984
+        var lineFinder = new Error();
+        Components.utils.evalInSandbox(code, sandbox);
+      } catch (e) {
+        GM_logError(
+          e, // error obj
+          0, // 0 = error (1 = warning)
+          getScriptFileURI(script.filename).spec,
+          e.lineNumber-lineFinder.lineNumber-1
+        );
+      }
     }
   },
 };
