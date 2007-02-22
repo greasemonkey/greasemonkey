@@ -8,9 +8,15 @@ href='http://www.greasespot.net/'>greasespot.net</a>. You will be
 redirected there in a few moments...</p>
 
 <p>This old stuff will stick around for posterity.</p>
-<meta http-equiv="refresh" content="10;url=http://www.greasespot.net/" />
+
+<!-- 
+Putting both kinds of redirects in hoping that <meta> is better
+understood by search engines
+-->
+
+<meta http-equiv="refresh" content="5;url=http://www.greasespot.net/" />
 <script language="javascript">
 window.setTimeout(function() {
-  //location.href = 'http://www.greasespot.net/';
+  location.href = 'http://www.greasespot.net/';
 }, 5000);
 </script>
