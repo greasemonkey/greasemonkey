@@ -4,7 +4,7 @@ const GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 // TODO: properly scope this constant
 const NAMESPACE = "http://youngpup.net/greasemonkey";
 
-var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]        
+var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
 function GM_isDef(thing) {
@@ -15,10 +15,10 @@ function GM_hitch(obj, meth) {
   if (!obj[meth]) {
     throw "method '" + meth + "' does not exist on object '" + obj + "'";
   }
-  
+
   var staticArgs = Array.prototype.splice.call(arguments, 2, arguments.length);
 
-  return function() { 
+  return function() {
     // make a copy of staticArgs (don't modify it because it gets reused for
     // every invocation).
     var args = staticArgs.concat();
@@ -100,7 +100,7 @@ function openInEditor(aFile, promptTitle) {
     filePicker.init(window, promptTitle, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
-    
+
     if (filePicker.show() != nsIFilePicker.returnOK) {
       return false;
     }
@@ -112,7 +112,7 @@ function openInEditor(aFile, promptTitle) {
   if (editor.exists() && editor.isExecutable()) {
     try {
       GM_log("launching ...");
-      
+
       var mimeInfoService = Components
         .classes["@mozilla.org/uriloader/external-helper-app-service;1"]
         .getService(Components.interfaces.nsIMIMEService);
@@ -246,10 +246,10 @@ function getContentDir() {
  * in FF 1.0.1. :(
  */
 function gmPrompt(msg, defVal, title) {
-  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]       
+  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                                 .getService(Components.interfaces.nsIPromptService);
   var result = {value:defVal};
-  
+
   if (promptService.prompt(null, title, msg, result, null, {value:0})) {
     return result.value;
   }
@@ -320,7 +320,7 @@ function GM_setEnabled(enabled) {
 
 
 /**
- * Logs a message to the console. The message can have python style %s 
+ * Logs a message to the console. The message can have python style %s
  * thingers which will be interpolated with additional parameters passed.
  */
 function log(message) {
@@ -338,7 +338,7 @@ function logf(message) {
 }
 
 /**
- * Loggifies an object. Every method of the object will have it's entrance, 
+ * Loggifies an object. Every method of the object will have it's entrance,
  * any parameters, any errors, and it's exit logged automatically.
  */
 function loggify(obj, name) {
@@ -358,15 +358,15 @@ return function() {
       //args[i] = arguments[i];
       argString += arguments[i] + (((i+1)<arguments.length)? ", " : "");
     }
-    
+
     log("> %s.%s(%s)", objName, methName, argString);//args.join(", "));
-    
+
     try {
       return retVal = meth.apply(this, arguments);
     } finally {
-      log("< %s.%s: %s", 
-          objName, 
-          methName, 
+      log("< %s.%s: %s",
+          objName,
+          methName,
           (typeof retVal == "undefined" ? "void" : retVal));
     }
   }

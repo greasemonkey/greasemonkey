@@ -28,7 +28,7 @@
         }
         config.save();
 
-        var chkUninstallPrefs = document.getElementById('chkUninstallPrefs');        
+        var chkUninstallPrefs = document.getElementById('chkUninstallPrefs');
         for (var i = 0, script = null; (script = uninstallList[i]); i++) {
             getScriptFile(script.filename).remove(false);
             if (chkUninstallPrefs.checked) {
@@ -37,9 +37,9 @@
                                       script.namespace,
                                       "/",
                                       script.name,
-                                      "."].join("");                                
-               GM_prefRoot.remove(scriptPrefRoot);            
-            }   
+                                      "."].join("");
+               GM_prefRoot.remove(scriptPrefRoot);
+            }
         }
         return true;
     }
@@ -50,7 +50,7 @@
     window.addEventListener("load", function(ev) {
         config.load();
         loadControls();
-        
+
         if (!config.scripts.length == 0) {
             populateChooser();
             chooseScript(0);
@@ -112,7 +112,7 @@
             pagesControl.populate(selectedScript);
         }
     }
-    
+
     function handleEditButton() {
       openInEditor(
         getScriptFile(selectedScript.filename),
@@ -143,7 +143,7 @@
     }
 
     function chooseScript(index) {
-        listbox.selectedIndex = index;            
+        listbox.selectedIndex = index;
         listbox.focus();
     }
 
@@ -160,7 +160,7 @@
 
     ]]>
     </script>
-    
+
     <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
 
     <grid flex="1" orient="vertical">
@@ -168,7 +168,7 @@
         <column id="col_left" flex="1"/>
         <column id="col_right" flex="3"/>
       </columns>
-      
+
       <rows>
         <row flex="1" orient="horizontal">
           <listbox id="lstScripts"/>
@@ -176,24 +176,24 @@
             <description id="ctlHeader"/>
             <description id="ctlDescription"/>
             <vbox id="pages-control" flex="1" />
-          </vbox>                
+          </vbox>
         </row>
         <row>
           <hbox>
             <hbox>
-              <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />               
+              <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />
               <button id="btnEdit" label="&manage.label.btnEdit;" />
             </hbox>
           </hbox>
           <hbox>
                <hbox>
                  <button id="btnUninstall" label="&manage.label.btnUninstall;" />
-                 <checkbox id="chkUninstallPrefs" 
-                    label="&manage.label.chkUninstall;" checked="false" />          
+                 <checkbox id="chkUninstallPrefs"
+                    label="&manage.label.chkUninstall;" checked="false" />
                </hbox>
           </hbox>
         </row>
-      </rows>          
+      </rows>
     </grid>
 
 </dialog>

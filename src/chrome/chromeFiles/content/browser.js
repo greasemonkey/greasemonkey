@@ -112,7 +112,7 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 
 /**
  * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
- * If that document is in in the top-level window of the focused tab, find 
+ * If that document is in in the top-level window of the focused tab, find
  * it's menu items and activate them.
  */
 GM_BrowserUI.contentLoad = function(e) {
@@ -147,14 +147,14 @@ GM_BrowserUI.contentLoad = function(e) {
   if (GM_isGreasemonkeyable(href)) {
     commander = this.getCommander(unsafeWin);
 
-    // if this content load is in the focused tab, attach the menuCommaander  
+    // if this content load is in the focused tab, attach the menuCommaander
     if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
       this.currentMenuCommander = commander;
       this.currentMenuCommander.attach();
     }
 
     this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin });
-  
+
     GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 
@@ -181,7 +181,7 @@ GM_BrowserUI.contentLoad = function(e) {
   } else {
     // Firefox 2.0+
     var notificationBox = this.tabBrowser.getNotificationBox(browser);
-  
+
     // Remove existing notifications. Notifications get removed
     // automatically onclick and on page navigation, but we need to remove
     // them ourselves in the case of reload, or they stack up.
@@ -204,11 +204,11 @@ GM_BrowserUI.contentLoad = function(e) {
 };
 
 /**
- * Called from greasemonkey service when we should load a user script. 
+ * Called from greasemonkey service when we should load a user script.
  */
 GM_BrowserUI.startInstallScript = function(uri, timer) {
   if (!timer) {
-    // docs for nsicontentpolicy say we're not supposed to block, so short 
+    // docs for nsicontentpolicy say we're not supposed to block, so short
     // timer.
     window.setTimeout(
       function() { GM_BrowserUI.startInstallScript(uri, true) }, 0);
@@ -277,7 +277,7 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
 
   var menuCommander = this.getCommander(this.tabBrowser.selectedBrowser.
                                         contentWindow);
-  
+
   if (menuCommander) {
     this.currentMenuCommander = menuCommander;
     this.currentMenuCommander.attach();
@@ -285,8 +285,8 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
 }
 
 /**
- * A content document has unloaded. We need to remove it's menuCommander to 
- * avoid leaking it's memory. 
+ * A content document has unloaded. We need to remove it's menuCommander to
+ * avoid leaking it's memory.
  */
 GM_BrowserUI.contentUnload = function(e) {
   if (e.persisted) {
@@ -295,22 +295,22 @@ GM_BrowserUI.contentUnload = function(e) {
 
   var unsafeWin = e.target.defaultView;
 
-  // remove the commander for this document  
+  // remove the commander for this document
   var commander = null;
-  
+
   // looping over commanders rather than using getCommander because we need
   // the index into commanders.splice.
   for (var i = 0; item = this.menuCommanders[i]; i++) {
     if (item.win == unsafeWin) {
 
-      log("* Found corresponding commander. Is currentMenuCommander: " + 
+      log("* Found corresponding commander. Is currentMenuCommander: " +
           (item.commander == this.currentMenuCommander));
 
       if (item.commander == this.currentMenuCommander) {
         this.currentMenuCommander.detach();
         this.currentMenuCommander = null;
       }
-      
+
       this.menuCommanders.splice(i, 1);
 
       log("* Found and removed corresponding commander")
@@ -385,7 +385,7 @@ GM_BrowserUI.toolsMenuShowing = function() {
 
 
 /**
- * Helper method which gets the menuCommander corresponding to a given 
+ * Helper method which gets the menuCommander corresponding to a given
  * document
  */
 GM_BrowserUI.getCommander = function(unsafeWin) {
@@ -406,7 +406,7 @@ GM_BrowserUI.getCommander = function(unsafeWin) {
  * Helper to determine if a given dom window is in this tabbrowser
  */
 GM_BrowserUI.isMyWindow = function(domWindow) {
-  var tabbrowser = getBrowser();  
+  var tabbrowser = getBrowser();
   var browser;
 
   for (var i = 0; browser = tabbrowser.browsers[i]; i++) {
@@ -467,7 +467,7 @@ function GM_showPopup(aEvent) {
 }
 
 /**
- * Handle clicking one of the items in the popup. Left-click toggles the enabled 
+ * Handle clicking one of the items in the popup. Left-click toggles the enabled
  * state, rihgt-click opens in an editor.
  */
 function GM_popupClicked(aEvent) {
@@ -511,17 +511,17 @@ GM_BrowserUI.refreshStatus = function() {
 
 GM_BrowserUI.newUserScript = function() {
   var tempname = "newscript.user.js";
-  
+
   var source = getContentDir();
   source.append("template.user.js");
-  
+
   var dest = Components.classes["@mozilla.org/file/directory_service;1"]
                        .getService(Components.interfaces.nsIProperties)
                        .get("TmpD", Components.interfaces.nsILocalFile);
-        
+
   var destFile = dest.clone().QueryInterface(Components.interfaces.nsILocalFile);
   destFile.append(tempname);
-  
+
   if (destFile.exists()) {
     destFile.remove(false);
   }
@@ -554,7 +554,7 @@ GM_BrowserUI.showStatus = function(message, autoHide) {
   this.statusLabel.value = message;
   var max = label.boxObject.width;
 
-  this.showAnimation = new Accelimation(this.statusLabel.style, 
+  this.showAnimation = new Accelimation(this.statusLabel.style,
                                           "width", max, 300, 2, "px");
   this.showAnimation.onend = GM_hitch(this, "showStatusAnimationEnd", autoHide);
   this.showAnimation.start();
@@ -579,7 +579,7 @@ GM_BrowserUI.setAutoHideTimer = function() {
 GM_BrowserUI.hideStatus = function() {
   if (!this.hideAnimation) {
     this.autoHideTimer = null;
-    this.hideAnimation = new Accelimation(this.statusLabel.style, 
+    this.hideAnimation = new Accelimation(this.statusLabel.style,
                                             "width", 0, 300, 2, "px");
     this.hideAnimation.onend = GM_hitch(this, "hideStatusAnimationEnd");
     this.hideAnimation.start();
@@ -615,7 +615,7 @@ GM_BrowserUI.viewContextItemClicked = function() {
 }
 
 GM_BrowserUI.manageMenuItemClicked = function() {
-   window.openDialog("chrome://greasemonkey/content/manage.xul", "manager", 
+   window.openDialog("chrome://greasemonkey/content/manage.xul", "manager",
     "resizable,centerscreen,modal");
 }
 

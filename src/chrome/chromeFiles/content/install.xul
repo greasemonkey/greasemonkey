@@ -8,8 +8,8 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        id="greasemonkey" title="&install.title;" style="width: 32em; height:32em;" 
-        onload="GMInstall.init()" 
+        id="greasemonkey" title="&install.title;" style="width: 32em; height:32em;"
+        onload="GMInstall.init()"
         ondialogaccept="return GMInstall.onOK();"
         ondialogcancel="return GMInstall.onCancel();"
         ondialogextra1="return GMInstall.onShowSource()"
@@ -42,8 +42,8 @@
       <spacer flex="1"/>
     </vbox>
 
-    <description style="margin-top:1em">&install.warning1;</description> 
-    <description style="margin-bottom:1em" class="warning">&install.warning2;</description> 
+    <description style="margin-top:1em">&install.warning1;</description>
+    <description style="margin-bottom:1em" class="warning">&install.warning2;</description>
   </vbox>
 
 </dialog>

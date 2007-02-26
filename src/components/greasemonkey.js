@@ -128,7 +128,7 @@ var greasemonkeyService = {
       return Ci.nsIContentPolicy.ACCEPT;
     }
 
-    if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT && 
+    if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT &&
 	cl.spec.match(/\.user\.js$/)) {
 
       dump("shouldload: " + cl.spec + "\n");
@@ -150,7 +150,7 @@ var greasemonkeyService = {
     this.ignoreNextScript_ = false;
     return ret;
   },
-  
+
   shouldProcess: function(ct, cl, org, ctx, mt, ext) {
     return Ci.nsIContentPolicy.ACCEPT;
   },
@@ -180,7 +180,7 @@ var greasemonkeyService = {
     var config = new Config(getScriptFile("config.xml"));
     var scripts = [];
     config.load();
-    
+
     outer:
     for (var i = 0; i < config.scripts.length; i++) {
       var script = config.scripts[i];
@@ -191,7 +191,7 @@ var greasemonkeyService = {
           if (pattern.test(url)) {
             for (var k = 0; k < script.excludes.length; k++) {
               pattern = convert2RegExp(script.excludes[k]);
-    
+
               if (pattern.test(url)) {
                 continue outer;
               }
@@ -223,7 +223,7 @@ var greasemonkeyService = {
 
       logger = new GM_ScriptLogger(script);
       storage = new GM_ScriptStorage(script);
-      xmlhttpRequester = new GM_xmlhttpRequester(unsafeContentWin, 
+      xmlhttpRequester = new GM_xmlhttpRequester(unsafeContentWin,
                                                  appSvc.hiddenDOMWindow);
 
       sandbox.window = safeWin;
@@ -239,10 +239,10 @@ var greasemonkeyService = {
       sandbox.GM_setValue = GM_hitch(storage, "setValue");
       sandbox.GM_getValue = GM_hitch(storage, "getValue");
       sandbox.GM_openInTab = GM_hitch(this, "openInTab", unsafeContentWin);
-      sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester, 
+      sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
                                            "contentStartRequest");
-      sandbox.GM_registerMenuCommand = GM_hitch(this, 
-                                                "registerMenuCommand", 
+      sandbox.GM_registerMenuCommand = GM_hitch(this,
+                                                "registerMenuCommand",
                                                 unsafeContentWin);
 
       sandbox.__proto__ = safeWin;
@@ -256,7 +256,7 @@ var greasemonkeyService = {
     }
   },
 
-  registerMenuCommand: function(unsafeContentWin, commandName, commandFunc, 
+  registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
                                 accelKey, accelModifiers, accessKey) {
     var command = {name: commandName,
                    accelKey: accelKey,
@@ -305,7 +305,7 @@ greasemonkeyService.wrappedJSObject = greasemonkeyService;
 
 
 
-/** 
+/**
  * XPCOM Registration goop
  */
 var Module = new Object();
@@ -328,7 +328,7 @@ Module.registerSelf = function(compMgr, fileSpec, location, type) {
                           true,
                           true);
 
-  catMgr.addCategoryEntry("content-policy", 
+  catMgr.addCategoryEntry("content-policy",
 			  CONTRACTID,
                           CONTRACTID,
                           true,
@@ -339,7 +339,7 @@ Module.getClassObject = function(compMgr, cid, iid) {
   if (!cid.equals(CID)) {
     throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
   }
-  
+
   if (!iid.equals(Ci.nsIFactory)) {
     throw Components.results.NS_ERROR_NO_INTERFACE;
   }

@@ -18,7 +18,7 @@ Config.prototype.find = function(namespace, name) {
 
   return -1;
 }
-  
+
 Config.prototype.initFilename = function(script) {
   var index = {};
   var base = script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
@@ -32,26 +32,26 @@ Config.prototype.initFilename = function(script) {
   if (base.length > 24) {
     base = base.substring(0, 24);
   }
-    
+
   for (var i = 0; i < this.scripts.length; i++) {
     index[this.scripts[i].filename] = this.scripts[i];
   }
-    
+
   if (!index[base + ".user.js"]) {
     script.filename = base + ".user.js";
     return;
   }
-    
+
   for (var count = 1; count < Number.MAX_VALUE; count++) {
     if (!index[base + count + ".user.js"]) {
       script.filename = base + count + ".user.js";
       return;
     }
   }
-    
+
   throw new Error("doooooooode. get some different user script or something.");
 }
-  
+
 Config.prototype.load = function() {
   var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
     .createInstance(Components.interfaces.nsIDOMParser);
@@ -73,7 +73,7 @@ Config.prototype.load = function() {
 	script.excludes.push(childNode.firstChild.nodeValue);
       }
     }
-    
+
     script.filename = node.getAttribute("filename");
     script.name = node.getAttribute("name");
     script.namespace = node.getAttribute("namespace");
@@ -86,7 +86,7 @@ Config.prototype.load = function() {
 
 Config.prototype.save = function() {
   var doc = document.implementation.createDocument("", "UserScriptConfig", null);
-    
+
   for (var i = 0, scriptObj = null; (scriptObj = this.scripts[i]); i++) {
     var scriptNode = doc.createElement("Script");
 

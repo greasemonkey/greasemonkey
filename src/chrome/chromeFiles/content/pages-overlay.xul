@@ -63,8 +63,8 @@
                 function promptForNewPage(ev) {
 		    var gmManageBundle = document.getElementById("gm-manage-bundle");
                     var val = gmPrompt(
-                      gmManageBundle.getString("promptForNewPage.msg"), 
-                      gmManageBundle.getString("promptForNewPage.defVal"), 
+                      gmManageBundle.getString("promptForNewPage.msg"),
+                      gmManageBundle.getString("promptForNewPage.defVal"),
                       gmManageBundle.getString("promptForNewPage.title"));
 
                     if (val && val != "") {
@@ -77,8 +77,8 @@
                 function promptForEdit(ev) {
 		    var gmManageBundle = document.getElementById("gm-manage-bundle");
                     var val = gmPrompt(
-                      gmManageBundle.getString("promptForEdit.msg"), 
-                      self.listbox.selectedItem.label, 
+                      gmManageBundle.getString("promptForEdit.msg"),
+                      self.listbox.selectedItem.label,
                       gmManageBundle.getString("promptForEdit.title"));
 
                     if (val && val != "") {

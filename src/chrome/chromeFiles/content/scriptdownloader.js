@@ -36,8 +36,8 @@ ScriptDownloader.prototype.handleDownloadComplete = function() {
 
   // If loading from file, status might be zero on success
   if (this.req_.status != 200 && this.req_.status != 0) {
-    alert("Error loading user script:\n" + 
-	  this.req_.status + ": " + 
+    alert("Error loading user script:\n" +
+	  this.req_.status + ": " +
 	  this.req_.statusText);
     return;
   }
@@ -74,7 +74,7 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
     return;
   }
 
-  this.win_.openDialog("chrome://greasemonkey/content/install.xul", "", 
+  this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
 		       "chrome,centerscreen,modal,dialog,titlebar,resizable",
 		       this);
 };
@@ -89,7 +89,7 @@ ScriptDownloader.prototype.parseScript_ = function(source, uri) {
   script.enabled = true;
   script.includes = [];
   script.excludes = [];
-    
+
   // read one line at a time looking for start meta delimiter or EOF
   var lines = source.match(/.+/g);
   var lnIdx = 0;
@@ -103,7 +103,7 @@ ScriptDownloader.prototype.parseScript_ = function(source, uri) {
       break;
     }
   }
-  
+
   // gather up meta lines
   if (foundMeta) {
     while (result = lines[lnIdx++]) {

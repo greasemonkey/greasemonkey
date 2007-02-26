@@ -6,11 +6,11 @@
 // prop : property you would like to change eg: "left"
 // to   : final value of prop
 // time : time the animation should take to run
-// zip    : optional. specify the zippiness of the acceleration. pick a 
-//          number between -1 and 1 where -1 is full decelerated, 1 is 
+// zip    : optional. specify the zippiness of the acceleration. pick a
+//          number between -1 and 1 where -1 is full decelerated, 1 is
 //          full accelerated, and 0 is linear (no acceleration). default
 //          is 0.
-// unit    : optional. specify the units for use with prop. default is 
+// unit    : optional. specify the units for use with prop. default is
 //          "px".
 //=====================================================================
 

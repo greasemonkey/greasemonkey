@@ -11,9 +11,9 @@ const APP_VERSION = "0.6.5.20060726";
 
 var instFlags = DELAYED_CHROME;
 
-// So, some wierd thing causes extension manager in FF to sometimes fail when 
+// So, some wierd thing causes extension manager in FF to sometimes fail when
 // trying to delete the temporary xpi file in the last step of installing gm.
-// Unfortunately, the error handling sucks so it interprets any failure 
+// Unfortunately, the error handling sucks so it interprets any failure
 // whatsoever as a missing install.rdf and falls back on this file.
 // If this file were to run on FF it would create strange really incorrect
 // behavior and just generally be bad since it is the Seamonkey installer.
@@ -29,7 +29,7 @@ if (!File.exists(ffExtFolder)) {
 
   var err = addDirectory(APP_PACKAGE, APP_VERSION, "chrome/greasemonkey", chromef, null);
 
-  if(err >= SUCCESS) { 
+  if(err >= SUCCESS) {
           registerChrome(CONTENT | instFlags, getFolder( "Profile", "chrome/greasemonkey/content/" ));
           //registerChrome(LOCALE  | instFlags, ...);
           //registerChrome(SKIN  | instFlags, ...);
@@ -37,11 +37,11 @@ if (!File.exists(ffExtFolder)) {
           if(err >= SUCCESS) {
                   alert(APP_DISPLAY_NAME + " " + APP_VERSION + " has been succesfully installed.\n"
                           +"Please restart your browser before continuing.");
-          } else { 
+          } else {
                   alert("Install failed. Error code:" + err);
                   cancelInstall(err);
           }
-  } else { 
+  } else {
           alert("Failed to create chrome directory\n"
                   +"You probably don't have appropriate permissions \n"
                   +"(write access to Profile/chrome directory). \n"
