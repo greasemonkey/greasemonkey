@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
 
   // load default namespace from pref
   document.getElementById("namespace").value = GM_prefRoot.getValue(
-  	"newscript_namespace"
+  	"newscript_namespace", ""
   );
 }, false);
 
