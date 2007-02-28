@@ -15,7 +15,7 @@
 <!ENTITY menu.show.accesskey "V">
 <!ENTITY menu.commands "User Script Commands...">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "New User Script">
+<!ENTITY menu.new "New User Script...">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Manage User Scripts...">
 <!ENTITY menu.manage.accesskey "M">
@@ -31,3 +31,9 @@
 <!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
 <!ENTITY install.showscriptsource "Show Script Source">
 <!ENTITY install.installbutton "Install">
+
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">

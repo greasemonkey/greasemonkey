@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
+<dialog
+	id="new-script-window"
+	buttons="accept,cancel"
+	ondialogaccept="return doInstall()"
+	title="&menu.new;"
+	orient="vertical"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+	<script type="application/x-javascript" src="chrome://greasemonkey/content/newscript.js" />
+
+	<stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties"/>
+
+	<vbox>
+		<label value='&newscript.name;' />
+		<textbox id='name' />
+		<separator class='thin' />
+
+		<label value='&newscript.namespace;' />
+		<textbox id='namespace' />
+		<separator class='thin' />
+
+		<label value='&newscript.description;' />
+		<textbox id='descr' />
+		<separator class='thin' />
+
+		<label value='&newscript.includes;' />
+		<textbox multiline='true' rows='4' cols='60' id='includes' />
+		<separator class='thin' />
+
+		<label value='&newscript.excludes;' />
+		<textbox multiline='true' rows='4' cols='60' id='excludes' />
+		<separator class='thin' />
+	</vbox>
+</dialog>

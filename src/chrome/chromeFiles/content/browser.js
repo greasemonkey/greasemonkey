@@ -510,27 +510,13 @@ GM_BrowserUI.refreshStatus = function() {
 }
 
 GM_BrowserUI.newUserScript = function() {
-  var tempname = "newscript.user.js";
-
-  var source = getContentDir();
-  source.append("template.user.js");
-
-  var dest = Components.classes["@mozilla.org/file/directory_service;1"]
-                       .getService(Components.interfaces.nsIProperties)
-                       .get("TmpD", Components.interfaces.nsILocalFile);
-
-  var destFile = dest.clone().QueryInterface(Components.interfaces.nsILocalFile);
-  destFile.append(tempname);
-
-  if (destFile.exists()) {
-    destFile.remove(false);
-  }
-
-  source.copyTo(dest, tempname);
-
-  openInEditor(
-    destFile,
-    this.bundle.getString("editor.prompt"));
+  var windowWatcher = Components
+    .classes["@mozilla.org/embedcomp/window-watcher;1"]
+    .getService(Components.interfaces.nsIWindowWatcher);
+  windowWatcher.openWindow(
+    window, 'chrome://greasemonkey/content/newscript.xul', null,
+    'chrome,dependent,centerscreen,resizable,dialog', null
+  );
 }
 
 GM_BrowserUI.showStatus = function(message, autoHide) {

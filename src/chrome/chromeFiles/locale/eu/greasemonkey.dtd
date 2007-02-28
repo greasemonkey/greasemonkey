@@ -32,3 +32,8 @@
 <!ENTITY install.showscriptsource "Erakutsi Scriptaren Iturburua">
 <!ENTITY install.installbutton "Instalatu">
 
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">

@@ -44,7 +44,7 @@ ScriptDownloader.prototype.handleDownloadComplete = function() {
 
   var source = this.req_.responseText;
 
-  this.parseScript_(source, this.uri_);
+  this.parseScript(source, this.uri_);
 
   var file = Components.classes["@mozilla.org/file/directory_service;1"]
         .getService(Components.interfaces.nsIProperties)
@@ -75,15 +75,15 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
   }
 
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
-		       "chrome,centerscreen,modal,dialog,titlebar,resizable",
-		       this);
+                       "chrome,centerscreen,modal,dialog,titlebar,resizable",
+                       this);
 };
 
 ScriptDownloader.prototype.showScriptView = function() {
   this.win_.GM_BrowserUI.showScriptView(this);
 };
 
-ScriptDownloader.prototype.parseScript_ = function(source, uri) {
+ScriptDownloader.prototype.parseScript = function(source, uri) {
   var script = new Script();
   script.uri = uri;
   script.enabled = true;
@@ -108,22 +108,22 @@ ScriptDownloader.prototype.parseScript_ = function(source, uri) {
   if (foundMeta) {
     while (result = lines[lnIdx++]) {
       if (result.indexOf("// ==/UserScript==") == 0) {
-	break;
+        break;
       }
 
       var match = result.match(/\/\/ \@(\S+)\s+([^\n]+)/);
       if (match != null) {
-	switch (match[1]) {
-	case "name":
-	case "namespace":
-	case "description":
-	  script[match[1]] = match[2];
-	  break;
-	case "include":
-	case "exclude":
-	  script[match[1]+"s"].push(match[2]);
-	  break;
-	}
+        switch (match[1]) {
+        case "name":
+        case "namespace":
+        case "description":
+          script[match[1]] = match[2];
+          break;
+        case "include":
+        case "exclude":
+          script[match[1]+"s"].push(match[2]);
+          break;
+        }
       }
     }
   }

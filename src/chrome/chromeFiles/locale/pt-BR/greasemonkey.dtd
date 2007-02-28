@@ -40,3 +40,9 @@
 <!ENTITY install.warning2 "Você somente deve instalar scripts de fontes que você conhece.">
 <!ENTITY install.showscriptsource "Mostrar código fonte do Script">
 <!ENTITY install.installbutton "Instalar">
+
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">

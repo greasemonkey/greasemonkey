@@ -31,3 +31,9 @@
 <!ENTITY install.warning2 "Sie sollten nur Scripts von vertrauensw&#252;rdigen Quellen installieren.">
 <!ENTITY install.showscriptsource "Quelltext anzeigen">
 <!ENTITY install.installbutton "Installieren">
+
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">

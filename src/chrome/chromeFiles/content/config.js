@@ -137,7 +137,7 @@ Config.prototype.install = function(script) {
       existingFile = getScriptFile(this.scripts[existingIndex].filename);
 
       if (existingFile.exists()) {
-	existingFile.remove(false);
+        existingFile.remove(false);
       }
 
       this.scripts.splice(existingIndex, 1);
