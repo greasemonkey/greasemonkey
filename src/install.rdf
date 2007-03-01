@@ -15,14 +15,15 @@
     <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
     <em:contributor>Gareth Andrew; http://freegarethandrew.org</em:contributor>
     <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>
-    <em:contributor>JP Sugarbroad; n/a</em:contributor>
-    <em:contributor>Juan Pablo Guereca Alonso; n/a</em:contributor>
-    <em:contributor>Mark Pilgrim,; http://diveintomark.org</em:contributor>
+    <em:contributor>JP Sugarbroad</em:contributor>
+    <em:contributor>Juan Pablo Guereca Alonso</em:contributor>
+    <em:contributor>Mark Pilgrim; http://diveintomark.org</em:contributor>
     <em:contributor>Matthias Bauer; http://moeffju.net/</em:contributor>
     <em:contributor>Matthew Gray; http://mkgray.com:8000/</em:contributor>
     <em:contributor>Nikolas Coukouma; http://atrus.org/</em:contributor>
-    <em:contributor>Ori Avtallon; n/a</em:contributor>
+    <em:contributor>Ori Avtallon</em:contributor>
     <em:contributor>Sergio Abreu; http://sitedosergio.sitesbr.net</em:contributor>
+    <em:contributor>Tommi Rautava</em:contributor>
     <em:homepageURL>http://greasemonkey.mozdev.org/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
     <em:iconURL>chrome://greasemonkey/content/status_on.gif</em:iconURL>

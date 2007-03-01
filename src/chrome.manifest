@@ -5,6 +5,7 @@ locale     greasemonkey   de-DE   chrome/chromeFiles/locale/de-DE/
 locale     greasemonkey   en-US   chrome/chromeFiles/locale/en-US/
 locale     greasemonkey   es-ES   chrome/chromeFiles/locale/es-ES/
 locale     greasemonkey   eu      chrome/chromeFiles/locale/eu/
+locale     greasemonkey   fi-FI   chrome/chromeFiles/locale/fi-FI/
 locale     greasemonkey   nl-NL   chrome/chromeFiles/locale/nl-NL/
 locale     greasemonkey   pt-BR   chrome/chromeFiles/locale/pt-BR/
 
