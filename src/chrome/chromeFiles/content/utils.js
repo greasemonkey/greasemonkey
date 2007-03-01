@@ -293,7 +293,8 @@ function GM_isGreasemonkeyable(url) {
                .extractScheme(url);
 
   return (scheme == "http" || scheme == "https" || scheme == "file" ||
-          url.match(/^about:cache/)) && !/hiddenWindow\.html$/.test(url);
+          scheme == "ftp" || url.match(/^about:cache/)) && 
+          !/hiddenWindow\.html$/.test(url);
 }
 
 function GM_isFileScheme(url) {
