@@ -63,6 +63,10 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
 
   req.open(details.method, safeUrl);
 
+  if (details.overrideMimeType) {
+    req.overrideMimeType(details.overrideMimeType);
+  }
+
   if (details.headers) {
     for (var prop in details.headers) {
       req.setRequestHeader(prop, details.headers[prop]);
