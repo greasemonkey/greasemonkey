@@ -93,7 +93,7 @@ function createScriptSource() {
   var excludes = document.getElementById("excludes").value;
   if ("" != excludes) {
     excludes = excludes.match(/.+/g);
-    excludes = "// @exclude        " + excludes.join("// @exclude        ");
+    excludes = "// @exclude        " + excludes.join("\n// @exclude        ");
     script.push(excludes);
   }
 
