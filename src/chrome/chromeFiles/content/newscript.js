@@ -9,9 +9,13 @@ window.addEventListener("load", function() {
   bundle = document.getElementById("gm-browser-bundle");
 
   // load default namespace from pref
-  document.getElementById("namespace").value = GM_prefRoot.getValue(
-  	"newscript_namespace", ""
-  );
+  document.getElementById("namespace").value = 
+      GM_prefRoot.getValue("newscript_namespace", "");
+
+  // default the includes with the current page's url
+  document.getElementById("includes").value = 
+      window.opener.document.getElementById("content").selectedBrowser
+      .contentWindow.location.href;
 }, false);
 
 ////////////////////////////////// functions ///////////////////////////////////
