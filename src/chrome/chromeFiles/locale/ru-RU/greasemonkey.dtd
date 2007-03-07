@@ -1,0 +1,39 @@
+﻿<!ENTITY manage.title "Управление скриптами">
+<!ENTITY manage.button.add "Добавить...">
+<!ENTITY manage.button.edit "Изменить...">
+<!ENTITY manage.button.remove "Удалить">
+<!ENTITY manage.label.grpIncluded "Охватываемые адреса">
+<!ENTITY manage.label.grpExcluded "Исключаемые адреса">
+<!ENTITY manage.label.btnEdit "Изменить">
+<!ENTITY manage.label.chkEnabled "Использовать">
+<!ENTITY manage.label.btnUninstall "Удалить скрипт">
+<!ENTITY manage.label.chkUninstall "Удалять ассоциированные настройки">
+
+<!ENTITY menu.install "Установить скрипт...">
+<!ENTITY menu.install.accesskey "и">
+<!ENTITY menu.show "Показать код скрипта">
+<!ENTITY menu.show.accesskey "о">
+<!ENTITY menu.commands "Команды скрипта...">
+<!ENTITY menu.commands.accesskey "м">
+<!ENTITY menu.new "Новый скрипт">
+<!ENTITY menu.new.accesskey "в">
+<!ENTITY menu.manage "Управление скриптами...">
+<!ENTITY menu.manage.accesskey "п">
+
+<!ENTITY statusbar.noscripts "Нет установленных скриптов!">
+<!ENTITY statusbar.enabled "Включить Greasemonkey">
+<!ENTITY statusbar.enabled.accesskey "к">
+
+<!ENTITY install.title "Установка скриптов Greasemonkey">
+<!ENTITY install.runson "Охватываемые адреса:">
+<!ENTITY install.butnoton "Исключаемые адреса:">
+<!ENTITY install.warning1 "Злонамеренные скрипты могут нарушить конфиденциальность Вашей информации и использовать её в недобросовестных целях.">
+<!ENTITY install.warning2 "Устанавливайте скрипты только из тех источников, которым вы доверяете.">
+<!ENTITY install.showscriptsource "Показать код скрипта">
+<!ENTITY install.installbutton "Начать установку">
+
+<!ENTITY newscript.name "Название">
+<!ENTITY newscript.namespace "Пространство имён">
+<!ENTITY newscript.description "Описание">
+<!ENTITY newscript.includes "Включения (одно на строку)">
+<!ENTITY newscript.excludes "Исключения (одно на строку)">
