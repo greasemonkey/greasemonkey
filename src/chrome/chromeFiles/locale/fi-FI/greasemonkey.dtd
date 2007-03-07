@@ -7,15 +7,15 @@
 <!ENTITY manage.label.btnEdit "Muokkaa">
 <!ENTITY manage.label.chkEnabled "K&#x00e4;yt&#x00f6;ss&#x00e4;">
 <!ENTITY manage.label.btnUninstall "Poista skripti">
-<!ENTITY manage.label.chkUninstall "Poista my&#x00f6;s skriptin omat asetukset">
+<!ENTITY manage.label.chkUninstall "Poista my&#x00f6;s skriptin asetukset">
 
 <!ENTITY menu.install "Asenna skripti...">
 <!ENTITY menu.install.accesskey "A">
 <!ENTITY menu.show "N&#x00e4;yt&#x00e4; skriptin l&#x00e4;hdekoodi">
 <!ENTITY menu.show.accesskey "L">
-<!ENTITY menu.commands "Skriptin komennot...">
+<!ENTITY menu.commands "Skriptikomennot...">
 <!ENTITY menu.commands.accesskey "S">
-<!ENTITY menu.new "Uusi skripti">
+<!ENTITY menu.new "Uusi skripti...">
 <!ENTITY menu.new.accesskey "U">
 <!ENTITY menu.manage "Hallinnoi skriptej&#x00e4;...">
 <!ENTITY menu.manage.accesskey "H">
@@ -35,44 +35,5 @@
 <!ENTITY newscript.name "Nimi">
 <!ENTITY newscript.namespace "Nimiavaruus">
 <!ENTITY newscript.description "Kuvaus">
-<!ENTITY newscript.includes "Mukaan lue (yksi per rivi)">
-<!ENTITY newscript.excludes "Pois lue (yksi per rivi)">
-<!ENTITY manage.title "Hallinnoi skriptej&#x00e4;">
-<!ENTITY manage.button.add "Lis&#x00e4;&#x00e4;...">
-<!ENTITY manage.button.edit "Muokkaa...">
-<!ENTITY manage.button.remove "Poista">
-<!ENTITY manage.label.grpIncluded "K&#x00e4;yt&#x00e4; sivuilla">
-<!ENTITY manage.label.grpExcluded "Pois lukien sivut">
-<!ENTITY manage.label.btnEdit "Muokkaa">
-<!ENTITY manage.label.chkEnabled "K&#x00e4;yt&#x00f6;ss&#x00e4;">
-<!ENTITY manage.label.btnUninstall "Poista skripti">
-<!ENTITY manage.label.chkUninstall "Poista my&#x00f6;s skriptin omat asetukset">
-
-<!ENTITY menu.install "Asenna skripti...">
-<!ENTITY menu.install.accesskey "A">
-<!ENTITY menu.show "N&#x00e4;yt&#x00e4; skriptin l&#x00e4;hdekoodi">
-<!ENTITY menu.show.accesskey "L">
-<!ENTITY menu.commands "Skriptin komennot...">
-<!ENTITY menu.commands.accesskey "S">
-<!ENTITY menu.new "Uusi skripti">
-<!ENTITY menu.new.accesskey "U">
-<!ENTITY menu.manage "Hallinnoi skriptej&#x00e4;...">
-<!ENTITY menu.manage.accesskey "H">
-
-<!ENTITY statusbar.noscripts "Ei asennettuja skriptej&#x00e4;!">
-<!ENTITY statusbar.enabled "K&#x00e4;yt&#x00f6;ss&#x00e4;">
-<!ENTITY statusbar.enabled.accesskey "K">
-
-<!ENTITY install.title "Greasemonkey-asennus">
-<!ENTITY install.runson "suoritetaan:">
-<!ENTITY install.butnoton "ei suoriteta:">
-<!ENTITY install.warning1 "Haitalliset skriptit voivat loukata yksityisyytt&#x00e4;si ja toimia puolestasi tiet&#x00e4;m&#x00e4;tt&#x00e4;si.">
-<!ENTITY install.warning2 "Sinun tulisi asentaa skriptej&#x00e4; vain luotettavista l&#x00e4;hteist&#x00e4;.">
-<!ENTITY install.showscriptsource "N&#x00e4;yt&#x00e4; skriptin l&#x00e4;hdekoodi">
-<!ENTITY install.installbutton "Asenna">
-
-<!ENTITY newscript.name "Nimi">
-<!ENTITY newscript.namespace "Nimiavaruus">
-<!ENTITY newscript.description "Kuvaus">
-<!ENTITY newscript.includes "Mukaan lue (yksi per rivi)">
-<!ENTITY newscript.excludes "Pois lue (yksi per rivi)">
+<!ENTITY newscript.includes "K&#x00e4;yt&#x00e4; sivuilla (yksi per rivi)">
+<!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
