@@ -68,14 +68,14 @@ var greasemonkeyService = {
     throw new Error("Browser window is not registered.");
   },
 
-  domContentLoaded: function(wrappedWindow) {
-    var unsafeWin = wrappedWindow.wrappedJSObject;
+  domContentLoaded: function(wrappedContentWin, chromeWin) {
+    var unsafeWin = wrappedContentWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
     var scripts = this.initScripts(href);
 
     if (scripts.length > 0) {
-      this.injectScripts(scripts, href, unsafeWin);
+      this.injectScripts(scripts, href, unsafeWin, chromeWin);
     }
   },
 
@@ -209,19 +209,26 @@ var greasemonkeyService = {
     return scripts;
   },
 
-  injectScripts: function(scripts, url, unsafeContentWin) {
+  injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
     var sandbox;
     var script;
     var logger;
+    var console;
     var storage;
     var xmlhttpRequester;
     var safeWin = new XPCNativeWrapper(unsafeContentWin);
     var safeDoc = safeWin.document;
 
+    // detect and grab reference to firebug console and context, if it exists
+    var firebugConsole = this.getFirebugConsole(unsafeContentWin, chromeWin);
+
     for (var i = 0; script = scripts[i]; i++) {
       sandbox = new Components.utils.Sandbox(safeWin);
 
       logger = new GM_ScriptLogger(script);
+
+      console = firebugConsole ? firebugConsole : new GM_console(script);
+
       storage = new GM_ScriptStorage(script);
       xmlhttpRequester = new GM_xmlhttpRequester(unsafeContentWin,
                                                  appSvc.hiddenDOMWindow);
@@ -236,6 +243,7 @@ var greasemonkeyService = {
       // add our own APIs
       sandbox.GM_addStyle = function(css) { GM_addStyle(safeDoc, css) };
       sandbox.GM_log = GM_hitch(logger, "log");
+      sandbox.console = console;
       sandbox.GM_setValue = GM_hitch(storage, "setValue");
       sandbox.GM_getValue = GM_hitch(storage, "getValue");
       sandbox.GM_openInTab = GM_hitch(this, "openInTab", unsafeContentWin);
@@ -297,6 +305,26 @@ var greasemonkeyService = {
       }
     }
   },
+
+  getFirebugConsole:function(unsafeContentWin, chromeWin) {
+    var firebugConsoleCtor = null;
+    var firebugContext = null;
+
+    if (chromeWin && chromeWin.FirebugConsole) {
+      firebugConsoleCtor = chromeWin.FirebugConsole;
+      firebugContext = chromeWin.top.TabWatcher
+        .getContextByWindow(unsafeContentWin);
+
+      // on first load (of multiple tabs) the context might not exist
+      if (!firebugContext) firebugConsoleCtor = null;
+    }
+
+    if (firebugConsoleCtor && firebugContext) {
+      return new firebugConsoleCtor(firebugContext, unsafeContentWin);
+    } else {
+      return null;
+    }
+  }
 };
 
 greasemonkeyService.wrappedJSObject = greasemonkeyService;

@@ -136,7 +136,7 @@ GM_BrowserUI.contentLoad = function(e) {
       this.currentMenuCommander.attach();
     }
 
-    this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin });
+    this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin }, window);
 
     GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }

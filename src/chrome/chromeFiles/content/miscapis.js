@@ -44,3 +44,23 @@ function GM_addStyle(doc, css) {
   style.innerHTML = css;
   head.appendChild(style);
 }
+
+function GM_console(script) {
+  // based on http://www.getfirebug.com/firebug/firebugx.js
+  var names = [
+    "debug", "warn", "error", "info", "assert", "dir", "dirxml",
+    "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile",
+    "profileEnd"
+  ];
+
+  for (var i=0, name; name=names[i]; i++) {
+    this[name] = function() {}
+  }
+
+  this.logger = new GM_ScriptLogger(script);
+}
+GM_console.prototype.log = function() {
+  this.logger.log(
+    ( Array.prototype.slice.apply(arguments) ).join('\n')
+  );
+}
