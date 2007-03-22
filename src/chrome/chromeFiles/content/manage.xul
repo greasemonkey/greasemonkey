@@ -13,153 +13,13 @@
     orient="vertical"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+    <script src="chrome://global/content/nsDragAndDrop.js"/>
+    <script src="chrome://global/content/nsTransferable.js"/>
+
     <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
     <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
-    <script type="application/x-javascript">
-    <![CDATA[
-    var config = new Config(getScriptFile("config.xml"));
-    var uninstallList = [];
-
-    function handleOkButton() {
-        for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-            var idx = config.find(script.namespace, script.name);
-            config.scripts.splice(idx, 1);
-        }
-        config.save();
-
-        var chkUninstallPrefs = document.getElementById('chkUninstallPrefs');
-        for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-            getScriptFile(script.filename).remove(false);
-            if (chkUninstallPrefs.checked) {
-               // Remove saved preferences
-               var scriptPrefRoot = ["scriptvals.",
-                                      script.namespace,
-                                      "/",
-                                      script.name,
-                                      "."].join("");
-               GM_prefRoot.remove(scriptPrefRoot);
-            }
-        }
-        return true;
-    }
-    var listbox, header, description, chkEnabled, btnEdit, btnUninstall;
-    var selectedScript;
-    var pagesControl;
-
-    window.addEventListener("load", function(ev) {
-        config.load();
-        loadControls();
-
-        if (!config.scripts.length == 0) {
-            populateChooser();
-            chooseScript(0);
-        }
-    }, false);
-
-    function loadControls() {
-        listbox = document.getElementById("lstScripts");
-        header = document.getElementById("ctlHeader");
-        description = document.getElementById("ctlDescription");
-        btnEdit = document.getElementById("btnEdit");
-        btnUninstall = document.getElementById("btnUninstall");
-        pagesControl = new PagesControl(document.getElementById("pages-control"));
-        chkEnabled = document.getElementById("chkEnabled");
-
-        listbox.addEventListener("select", function() { updateDetails(); }, false);
-        btnEdit.addEventListener("command", function() { handleEditButton(); }, false);
-        btnUninstall.addEventListener("command", function() { handleUninstallButton(); }, false);
-        chkEnabled.addEventListener("command", function() {
-           if (selectedScript) {
-             selectedScript.enabled = chkEnabled.checked;
-             if (selectedScript.enabled) {
-                 listbox.selectedItem.style.color = '';
-             } else {
-                 listbox.selectedItem.style.color = 'gray';
-             }
-           }
-        }, false);
-    }
-
-    function updateDetails() {
-        if (listbox.selectedCount == 0) {
-            selectedScript = null;
-            header.textContent = " ";
-            description.textContent = " ";
-            chkEnabled.checked = true;
-            pagesControl.clear();
-            document.documentElement.getButton("accept").disabled = false;
-        }
-        else {
-            selectedScript = listbox.getSelectedItem(0).script;
-
-            // make sure one word isn't too long to fit ... a too-long word
-            // will bump the interface out wider than the window
-            var wordLen = 50;
-            var desc = selectedScript.description.split(/\s+/);
-            for (var i = 0; i < desc.length; i++) {
-              if (desc[i].length>wordLen) {
-                for (var j=desc[i].length; j>0; j-=wordLen) {
-                  desc[i]=desc[i].substr(0,j)+'\u200B'+desc[i].substr(j);
-                }
-              }
-            }
-            desc=desc.join(' ');
-
-            header.textContent = selectedScript.name;
-            description.textContent = desc;
-            chkEnabled.checked = selectedScript.enabled;
-            pagesControl.populate(selectedScript);
-        }
-    }
-
-    function handleEditButton() {
-      openInEditor(
-        getScriptFile(selectedScript.filename),
-        document.getElementById("gm-manage-bundle").getString("editor.prompt"));
-    }
-
-    function handleUninstallButton() {
-        uninstallList.push(selectedScript);
-        listbox.removeChild(listbox.childNodes[listbox.selectedIndex]);
-
-        if (listbox.childNodes.length > 0) {
-            chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
-        }
-    }
-
-    function populateChooser() {
-        for (var i = 0, script = null; (script = config.scripts[i]); i++) {
-            var listitem = document.createElement("listitem");
-
-            listitem.setAttribute("label", script.name);
-            listitem.setAttribute("crop", "end");
-            listitem.script = script;
-            if (!script.enabled) {
-                listitem.style.color = 'gray';
-            }
-            listbox.appendChild(listitem);
-        }
-    }
-
-    function chooseScript(index) {
-        listbox.selectedIndex = index;
-        listbox.focus();
-    }
-
-    function toggleScript(index, enableFlag) {
-        var listitem = listbox.childNodes[index];
-        if (enableFlag) {
-            listitem.script.enabled = true;
-            listitem.style.color = '';
-        } else {
-            listitem.script.enabled = false;
-            listitem.style.color = 'gray';
-        }
-    }
-
-    ]]>
-    </script>
+    <script type="application/x-javascript" src="chrome://greasemonkey/content/manage.js" />
 
     <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
 
@@ -171,7 +31,12 @@
 
       <rows>
         <row flex="1" orient="horizontal">
-          <listbox id="lstScripts"/>
+          <listbox id="lstScripts"
+            onkeypress="return listboxKeypress(event);"
+            ondraggesture="nsDragAndDrop.startDrag(event, dndObserver)"
+            ondragover="nsDragAndDrop.dragOver(event, dndObserver)"
+            ondragdrop="nsDragAndDrop.drop(event, dndObserver)"
+          />
           <vbox>
             <description id="ctlHeader"/>
             <description id="ctlDescription"/>
@@ -179,22 +44,23 @@
           </vbox>
         </row>
         <row>
-          <hbox>
+          <vbox>
+            <description>&manage.reorderHelp;</description>
             <hbox>
               <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />
               <button id="btnEdit" label="&manage.label.btnEdit;" />
             </hbox>
-          </hbox>
-          <hbox>
-               <hbox>
-                 <button id="btnUninstall" label="&manage.label.btnUninstall;" />
-                 <checkbox id="chkUninstallPrefs"
-                    label="&manage.label.chkUninstall;" checked="false" />
-               </hbox>
-          </hbox>
+          </vbox>
+          <vbox>
+            <hbox flex="1" />
+            <hbox>
+              <button id="btnUninstall" label="&manage.label.btnUninstall;" />
+              <checkbox id="chkUninstallPrefs"
+                label="&manage.label.chkUninstall;" checked="false" />
+            </hbox>
+          </vbox>
         </row>
       </rows>
     </grid>
-
 </dialog>
 

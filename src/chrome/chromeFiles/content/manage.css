@@ -50,3 +50,14 @@ dialog {
 	margin-bottom: 0.5em;
 }
 
+/* border for indicator where drag-and-drop will go */
+listbox#lstScripts listitem {
+	border-top: 1px solid -moz-field;
+	border-bottom: 1px solid -moz-field;
+}
+listbox#lstScripts listitem[dragover="top"] {
+	border-top-color: black;
+}
+listbox#lstScripts listitem[dragover="bottom"] {
+	border-bottom-color: black;
+}
