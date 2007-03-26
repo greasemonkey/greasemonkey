@@ -91,6 +91,10 @@ var greasemonkeyService = {
 
     Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader)
+      .loadSubScript("chrome://greasemonkey/content/versioning.js");
+
+    Cc["@mozilla.org/moz/jssubscript-loader;1"]
+      .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/utils.js");
 
     Cc["@mozilla.org/moz/jssubscript-loader;1"]

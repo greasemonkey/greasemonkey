@@ -206,7 +206,14 @@ function getScriptDir() {
   if (dir.exists()) {
     return dir;
   } else {
-    return getOldScriptDir();
+    var oldDir = getOldScriptDir();
+    if (oldDir.exists()) {
+      return oldDir;
+    } else {
+      // if we called this function, we want a script dir.
+      // but, at this branch, neither the old nor new exists, so create one
+      return GM_createScriptsDir(dir);
+    }
   }
 }
 

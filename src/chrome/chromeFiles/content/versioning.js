@@ -36,16 +36,26 @@ function GM_pointFourMigrate() {
   var newDir = getNewScriptDir();
 
   if (!oldDir.exists() && !newDir.exists()) {
-    newDir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
-
-    var defaultConfigFile = getContentDir();
-    defaultConfigFile.append("default-config.xml");
-
-    defaultConfigFile.copyTo(newDir, "config.xml");
-    defaultConfigFile.permissions = 0644;
+    GM_createScriptsDir(newDir);
   }
 
   log("< GM_pointFourMigrate");
+}
+
+/**
+ * Given a nsILocalFile object, create a directory of that name and fill
+ * it with the default (empty) config.js.
+ */
+function GM_createScriptsDir(newDir) {
+  newDir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+
+  var defaultConfigFile = getContentDir();
+  defaultConfigFile.append("default-config.xml");
+
+  defaultConfigFile.copyTo(newDir, "config.xml");
+  defaultConfigFile.permissions = 0644;
+
+  return newDir;
 }
 
 /**
