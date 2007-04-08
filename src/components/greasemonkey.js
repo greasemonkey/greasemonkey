@@ -11,7 +11,7 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
-    .alert(null, "message from your mom", msg);
+    .alert(null, "Greasemonkey alert", msg);
 }
 
 var greasemonkeyService = {
