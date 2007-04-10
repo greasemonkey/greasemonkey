@@ -57,10 +57,15 @@ function GM_console(script) {
     this[name] = function() {}
   }
 
-  this.logger = new GM_ScriptLogger(script);
+  // Important to use this private variable so that user scripts can't make
+  // this call something else by redefining <this> or <logger>.
+  var logger = new GM_ScriptLogger(script);
+  this.log = function() {
+    logger.log(
+      Array.prototype.slice.apply(arguments).join('\n')
+    );
+  };
 }
+
 GM_console.prototype.log = function() {
-  this.logger.log(
-    ( Array.prototype.slice.apply(arguments) ).join('\n')
-  );
 }
