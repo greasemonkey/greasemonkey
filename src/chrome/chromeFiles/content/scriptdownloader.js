@@ -53,6 +53,12 @@ ScriptDownloader.prototype.handleDownloadComplete = function() {
   var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
   file.append(base + ".user.js");
 
+  var converter =  
+    Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]  
+    .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);  
+  converter.charset = "UTF-8";  
+  source = converter.ConvertFromUnicode(source);
+
   var ws = getWriteStream(file);
   ws.write(source, source.length);
   ws.close();
