@@ -145,7 +145,7 @@ GM_BrowserUI.contentLoad = function(e) {
     return;
   }
 
-  var browser = this.tabBrowser.selectedBrowser;
+  var browser = this.tabBrowser.getBrowserForDocument(e.target);
   var greeting = this.bundle.getString("greeting.msg");
 
   if (this.tabBrowser.showMessage) {
