@@ -46,6 +46,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.statusLabel = document.getElementById("gm-status-label");
   this.statusPopup = document.getElementById("gm-status-popup");
   this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
+  this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.toolsMenu = document.getElementById("menu_ToolsPopup");
   this.bundle = document.getElementById("gm-browser-bundle");
 
@@ -399,6 +400,11 @@ GM_BrowserUI.isMyWindow = function(domWindow) {
   }
 
   return false;
+}
+
+function GM_showGeneralPopup(aEvent) {
+  // set the enabled/disabled state
+  GM_BrowserUI.generalMenuEnabledItem.setAttribute("checked", GM_getEnabled());
 }
 
 function GM_showPopup(aEvent) {
