@@ -579,7 +579,8 @@ GM_BrowserUI.showHorrayMessage = function(scriptName) {
 
 GM_BrowserUI.installMenuItemClicked = function() {
   GM_BrowserUI.startInstallScript(
-    GM_BrowserUI.getUserScriptLinkUnderPointer());
+    gBrowser.currentURI
+  );
 }
 
 GM_BrowserUI.viewContextItemClicked = function() {

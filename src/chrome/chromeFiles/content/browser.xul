@@ -73,7 +73,7 @@
               <menuseparator id="gm-status-no-scripts-sep"/>
               <menu id="userscript-commands-sb"
                 accesskey="&menu.commands.accesskey;"
-            label="&menu.commands;" disabled="false"
+                label="&menu.commands;" disabled="false"
                 onpopupshowing='event.preventBubble()'>
                 <menupopup />
               </menu>
