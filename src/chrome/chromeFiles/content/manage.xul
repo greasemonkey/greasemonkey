@@ -31,12 +31,15 @@
 
       <rows>
         <row flex="1" orient="horizontal">
-          <listbox id="lstScripts"
-            onkeypress="return listboxKeypress(event);"
-            ondraggesture="nsDragAndDrop.startDrag(event, dndObserver)"
-            ondragover="nsDragAndDrop.dragOver(event, dndObserver)"
-            ondragdrop="nsDragAndDrop.drop(event, dndObserver)"
-          />
+          <vbox flex="1">
+            <listbox id="lstScripts" flex="10"
+              onkeypress="return listboxKeypress(event);"
+              ondraggesture="nsDragAndDrop.startDrag(event, dndObserver)"
+              ondragover="nsDragAndDrop.dragOver(event, dndObserver)"
+              ondragdrop="nsDragAndDrop.drop(event, dndObserver)"
+            />
+            <description flex="1">&manage.reorderHelp;</description>
+          </vbox>
           <vbox>
             <description id="ctlHeader"/>
             <description id="ctlDescription"/>
@@ -44,13 +47,10 @@
           </vbox>
         </row>
         <row>
-          <vbox>
-            <description>&manage.reorderHelp;</description>
-            <hbox>
-              <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />
-              <button id="btnEdit" label="&manage.label.btnEdit;" />
-            </hbox>
-          </vbox>
+          <hbox>
+            <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />
+            <button id="btnEdit" label="&manage.label.btnEdit;" />
+          </hbox>
           <vbox>
             <hbox flex="1" />
             <hbox>
@@ -63,4 +63,3 @@
       </rows>
     </grid>
 </dialog>
-

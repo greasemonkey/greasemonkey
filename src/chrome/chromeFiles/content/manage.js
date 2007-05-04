@@ -99,8 +99,14 @@ function handleEditButton() {
 }
 
 function handleUninstallButton() {
+  var index=listbox.selectedIndex;
+
+  // mark script to be uninstalled on "OK"
   uninstallList.push(selectedScript);
-  listbox.removeChild(listbox.childNodes[listbox.selectedIndex]);
+  // remove it from the working config
+  config.scripts.splice(index, 1);
+  // remove it from the display
+  listbox.removeChild(listbox.childNodes[index]);
 
   if (listbox.childNodes.length > 0) {
     chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
@@ -148,21 +154,19 @@ function reorderScript(from, to) {
     return false;
   }
 
+  // REORDER CONFIG:
   // save item-to-move
   var tmp = config.scripts[from];
-
   // remove it
   config.scripts.splice(from, 1);
-
   // put it back in the new spot
   config.scripts.splice(to, 0, tmp);
 
-  // empty out the list box
-  while (listbox.firstChild) {
-    listbox.removeChild(listbox.firstChild);
-  }
-  // and re-populate it
-  populateChooser();
+  // REORDER DISPLAY:
+  var tmp = listbox.childNodes[from];
+  listbox.removeChild(tmp);
+  listbox.insertBefore(tmp, listbox.childNodes[to]);
+
   // then re-select the dropped script
   listbox.selectedIndex = to;
 
