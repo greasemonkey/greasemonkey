@@ -62,9 +62,17 @@
 
                 function promptForNewPage(ev) {
 		    var gmManageBundle = document.getElementById("gm-manage-bundle");
+                    var wm = Components.classes['@mozilla.org/appshell/window-mediator;1']
+                                       .getService();
+                    var wmi = wm.QueryInterface(Components.interfaces.nsIWindowMediator);
+                    var win = wmi.getMostRecentWindow("navigator:browser");
+                    var currentSite = GM_isGreasemonkeyable(win.content.location.href)
+                                      ? win.content.location.protocol + "//" +
+                                        win.content.location.hostname + "/*"
+                                      : gmManageBundle.getString("promptForNewPage.defVal");
                     var val = gmPrompt(
                       gmManageBundle.getString("promptForNewPage.msg"),
-                      gmManageBundle.getString("promptForNewPage.defVal"),
+                      currentSite,
                       gmManageBundle.getString("promptForNewPage.title"));
 
                     if (val && val != "") {
