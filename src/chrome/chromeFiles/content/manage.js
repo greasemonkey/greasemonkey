@@ -166,6 +166,10 @@ function reorderScript(from, to) {
   var tmp = listbox.childNodes[from];
   listbox.removeChild(tmp);
   listbox.insertBefore(tmp, listbox.childNodes[to]);
+  // fix the listbox indexes
+  for (var i=0, node=null; node=listbox.childNodes[i]; i++) {
+	  node.index=i;
+  }
 
   // then re-select the dropped script
   listbox.selectedIndex = to;
