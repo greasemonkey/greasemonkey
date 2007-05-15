@@ -14,8 +14,6 @@ function alert(msg) {
     .alert(null, "Greasemonkey alert", msg);
 }
 
-var gmIsEnabled = null;
-
 var greasemonkeyService = {
 
   browserWindows: [],
@@ -115,13 +113,6 @@ var greasemonkeyService = {
       .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
 
-    // use an observer for efficient monitoring of enabled status
-    GM_prefRoot.watch('enabled', function(prefName) {
-      if ('enabled' == prefName) {
-        gmIsEnabled=GM_prefRoot.getValue('enabled', false);
-      }
-    });
-
     //loggify(this, "GM_GreasemonkeyService");
   },
 
@@ -129,7 +120,7 @@ var greasemonkeyService = {
     var ret = Ci.nsIContentPolicy.ACCEPT;
 
     // don't intercept anything when GM is not enabled
-    if (!gmIsEnabled) {
+    if (!GM_getEnabled()) {
       return ret;
     }
 
