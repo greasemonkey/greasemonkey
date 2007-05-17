@@ -7,7 +7,7 @@
 
     <em:name>Greasemonkey</em:name>
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <em:version>0.6.9.20070507.0</em:version>
+    <em:version>0.6.9.20070516.0</em:version>
     <em:description>A User Script Manager for Firefox</em:description>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:contributor>Anthony Lieuallen; http://arantius.com</em:contributor>
