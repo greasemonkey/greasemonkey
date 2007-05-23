@@ -37,7 +37,7 @@
                     id="userscript-tools-install"
                     accesskey="&menu.install.accesskey;"
                     label="&menu.install;"
-                    collapsed="true"
+                    hidden="true"
                     oncommand="GM_BrowserUI.installMenuItemClicked(event)"/>
                 <menuitem
                     accesskey="&menu.manage.accesskey;"

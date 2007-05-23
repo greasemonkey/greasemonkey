@@ -103,8 +103,7 @@ function handleUninstallButton() {
 
   // mark script to be uninstalled on "OK"
   uninstallList.push(selectedScript);
-  // remove it from the working config
-  config.scripts.splice(index, 1);
+
   // remove it from the display
   listbox.removeChild(listbox.childNodes[index]);
 
