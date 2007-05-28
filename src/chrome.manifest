@@ -1,16 +1,2 @@
 content    greasemonkey    chrome/chromeFiles/content/
 overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
-locale     greasemonkey   cs-CZ   chrome/chromeFiles/locale/cs-CZ/
-locale     greasemonkey   de-DE   chrome/chromeFiles/locale/de-DE/
-locale     greasemonkey   en-US   chrome/chromeFiles/locale/en-US/
-locale     greasemonkey   es-ES   chrome/chromeFiles/locale/es-ES/
-locale     greasemonkey   eu-ES   chrome/chromeFiles/locale/eu-ES/
-locale     greasemonkey   fi-FI   chrome/chromeFiles/locale/fi-FI/
-locale     greasemonkey   ja-JP   chrome/chromeFiles/locale/ja-JP/
-locale     greasemonkey   ko-KR   chrome/chromeFiles/locale/ko-KR/
-locale     greasemonkey   nl-NL   chrome/chromeFiles/locale/nl-NL/
-locale     greasemonkey   pl-PL   chrome/chromeFiles/locale/pl-PL/
-locale     greasemonkey   pt-BR   chrome/chromeFiles/locale/pt-BR/
-locale     greasemonkey   ru-RU   chrome/chromeFiles/locale/ru-RU/
-locale     greasemonkey   sk-SK   chrome/chromeFiles/locale/sk-SK/
-locale     greasemonkey   zh-CN   chrome/chromeFiles/locale/zh-CN/
