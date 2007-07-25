@@ -19,6 +19,7 @@ function GM_PrefManager(startPoint) {
                 getBranch(startPoint);
 
   var observers = {};
+  const nsISupportsString = Components.interfaces.nsISupportsString;
 
   /**
    * whether a preference exists
@@ -38,14 +39,19 @@ function GM_PrefManager(startPoint) {
       return defaultValue;
     }
 
-    switch (prefType) {
-      case pref.PREF_STRING:
-        return pref.getCharPref(prefName);
-      case pref.PREF_BOOL:
-        return pref.getBoolPref(prefName);
-      case pref.PREF_INT:
-        return pref.getIntPref(prefName);
+    try {
+      switch (prefType) {
+        case pref.PREF_STRING:
+          return pref.getComplexValue(prefName, nsISupportsString).data;
+        case pref.PREF_BOOL:
+          return pref.getBoolPref(prefName);
+        case pref.PREF_INT:
+          return pref.getIntPref(prefName);
+      }
+    } catch(ex) {
+      return defaultValue != undefined ? defaultValue : null;
     }
+    return null;
   }
 
   /**
@@ -78,7 +84,10 @@ function GM_PrefManager(startPoint) {
     // set new value using correct method
     switch (prefType) {
       case "string":
-        pref.setCharPref(prefName, value);
+        var str = Components.classes["@mozilla.org/supports-string;1"]
+                            .createInstance(nsISupportsString);
+        str.data = value;
+        pref.setComplexValue(prefName, nsISupportsString, str);
         break;
       case "boolean":
         pref.setBoolPref(prefName, value);
