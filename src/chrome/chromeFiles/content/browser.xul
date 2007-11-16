@@ -62,6 +62,7 @@
         <statusbarpanel id="gm-status" insertafter="livemark-button">
             <label id="gm-status-label" collapsed="true" crop="end" style="width:0px; margin:0;" />
             <image id="gm-status-image" width="16" height="16" style="margin:0 5px"
+              mousethrough="never"
               onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
                        else if (event.button == 1) GM_BrowserUI.manageMenuItemClicked();"
               context='gm-status-popup'/>

@@ -11,7 +11,8 @@ var GM_BrowserUI = new Object();
 GM_BrowserUI.QueryInterface = function(aIID) {
   if (!aIID.equals(Components.interfaces.nsISupports) &&
       !aIID.equals(Components.interfaces.gmIBrowserWindow) &&
-      !aIID.equals(Components.interfaces.nsISupportsWeakReference))
+      !aIID.equals(Components.interfaces.nsISupportsWeakReference) &&
+      !aIID.equals(Components.interfaces.nsIWebProgressListener))
     throw Components.results.NS_ERROR_NO_INTERFACE;
 
   return this;
@@ -55,6 +56,11 @@ GM_BrowserUI.chromeLoad = function(e) {
     this.toolsMenu = document.getElementById("taskPopup");
   }
 
+  // songbird compat
+  if (!this.appContent && this.tabBrowser) {
+    this.appContent = this.tabBrowser.parentNode;
+  }
+
   // update visual status when enabled state changes
   this.enabledWatcher = GM_hitch(this, "refreshStatus");
   GM_prefRoot.watch("enabled", this.enabledWatcher);
@@ -74,7 +80,7 @@ GM_BrowserUI.chromeLoad = function(e) {
                           .getService(Components.interfaces.nsIWindowWatcher);
 
   // this gives us onLocationChange
-  document.getElementById("content").addProgressListener(this,
+  this.tabBrowser.addProgressListener(this,
     Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
   // update enabled icon
@@ -107,7 +113,7 @@ GM_BrowserUI.registerMenuCommand = function(menuCommand) {
  */
 GM_BrowserUI.openInTab = function(domWindow, url) {
   if (this.isMyWindow(domWindow)) {
-    document.getElementById("content").addTab(url);
+    this.tabBrowser.addTab(url);
   }
 }
 
