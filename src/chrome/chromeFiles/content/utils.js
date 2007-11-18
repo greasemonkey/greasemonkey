@@ -145,9 +145,28 @@ function getTempFile() {
         .getService(Components.interfaces.nsIProperties)
         .get("TmpD", Components.interfaces.nsILocalFile);
 
-  file.append("gm_" + new Date().getTime());
+  file.append("gm_" + new Date().getTime() + Math.floor(Math.random()*65536));
+  if(file.exists()){
+    return getTempFile();
+  }
 
   return file;
+}
+
+function getBinaryContents(url){
+    var ioService=Components.classes["@mozilla.org/network/io-service;1"]
+    .getService(Components.interfaces.nsIIOService);
+    
+    var channel=ioService.newChannelFromURI(url);
+    var input = channel.open();
+    
+    var bstream = Components.classes["@mozilla.org/binaryinputstream;1"]
+                        .createInstance(Components.interfaces.nsIBinaryInputStream);
+    bstream.setInputStream(input);
+
+    var bytes = bstream.readBytes(bstream.available());
+    
+    return bytes;
 }
 
 function getContents(aURL, charset){
@@ -188,15 +207,47 @@ function getWriteStream(file) {
   return stream;
 }
 
-function getScriptFileURI(fileName) {
-  return Components.classes["@mozilla.org/network/io-service;1"]
-                   .getService(Components.interfaces.nsIIOService)
-                   .newFileURI(getScriptFile(fileName));
+function getConfigFile(){
+  var file = getScriptDir();
+  file.append("config.xml");
+  return file;
 }
 
-function getScriptFile(fileName) {
+function getConfigFileURI(){
+  return Components.classes["@mozilla.org/network/io-service;1"]
+                   .getService(Components.interfaces.nsIIOService)
+                   .newFileURI(getConfigFile());
+}
+
+function getDependencyFileURI(script, dep){
+  return Components.classes["@mozilla.org/network/io-service;1"]
+                   .getService(Components.interfaces.nsIIOService)
+                   .newFileURI(getDependencyFile(script, dep));
+}
+
+function getDependencyFile(script, dep){
   var file = getScriptDir();
-  file.append(fileName);
+  file.append(script.basedir);
+  file.append(dep.filename);
+  return file;  
+}
+
+function getScriptFileURI(script) {
+  return Components.classes["@mozilla.org/network/io-service;1"]
+                   .getService(Components.interfaces.nsIIOService)
+                   .newFileURI(getScriptFile(script));
+}
+
+function getScriptBasedir(script) {
+  var file = getScriptDir();
+  file.append(script.basedir);
+  return file;
+}
+
+function getScriptFile(script) {
+  var file = getScriptDir();
+  file.append(script.basedir);
+  file.append(script.filename);
   return file;
 }
 

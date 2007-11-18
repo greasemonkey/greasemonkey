@@ -10,7 +10,7 @@ var GMInstall = {
 
     this.setupIncludes("includes", "includes-desc", this.script_.includes);
     this.setupIncludes("excludes", "excludes-desc", this.script_.excludes);
-
+    
     this.dialog_ = document.documentElement;
     this.extraButton_ = this.dialog_.getButton("extra1");
     this.extraButton_.setAttribute("type", "checkbox");
@@ -92,19 +92,16 @@ var GMInstall = {
       document.getElementById(box).style.display = "";
 
       for (var i = 0; i < includes.length; i++) {
-	desc.appendChild(document.createTextNode(includes[i]));
-	desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
+        desc.appendChild(document.createTextNode(includes[i]));
+        desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
       }
 
       desc.removeChild(desc.lastChild);
     }
   },
-
+    
   onOK: function() {
-    var config = new Config();
-    config.load();
-    config.install(this.script_);
-    window.opener.GM_BrowserUI.showHorrayMessage(this.script_.name);
+    this.scriptDownloader_.installScript();
     window.setTimeout("window.close()", 0);
   },
 
@@ -115,5 +112,5 @@ var GMInstall = {
   onShowSource: function() {
     this.scriptDownloader_.showScriptView();
     window.setTimeout("window.close()", 0);
-  },
+  }
 };

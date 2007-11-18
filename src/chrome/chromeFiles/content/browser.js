@@ -229,6 +229,17 @@ GM_BrowserUI.showScriptView = function(scriptDownloader) {
 
 };
 
+GM_BrowserUI.openDependency = function(file){
+  var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
+                        .getService(Components.interfaces.nsIIOService);
+  var uri = ioSvc.newFileURI(file);
+
+  var tab = this.tabBrowser.addTab(uri.spec);
+  var browser = this.tabBrowser.getBrowserForTab(tab);
+
+  this.tabBrowser.selectedTab = tab;
+} 
+
 /**
  * Implements nsIObserve.observe. Right now we're only observing our own
  * install-userscript, which happens when the install bar is clicked.
@@ -247,12 +258,15 @@ GM_BrowserUI.observe = function(subject, topic, data) {
  * Handles the install button getting clicked.
  */
 GM_BrowserUI.installCurrentScript = function() {
-  var config = new Config();
-  config.load();
-  config.install(this.scriptDownloader_.script);
-  this.showHorrayMessage(this.scriptDownloader_.script.name);
+  this.scriptDownloader_.installScript();
 };
 
+GM_BrowserUI.installScript = function(script){
+    var config = new Config();
+    config.load();
+    config.install(script);
+    this.showHorrayMessage(script.name);
+}
 
 /**
  * The browser's location has changed. Usually, we don't care. But in the case
@@ -416,7 +430,7 @@ function GM_showGeneralPopup(aEvent) {
 }
 
 function GM_showPopup(aEvent) {
-  var config = new Config(getScriptFile("config.xml"));
+  var config = new Config();
   config.load();
   var popup = aEvent.target;
   var url = getBrowser().contentWindow.document.location.href;
@@ -469,7 +483,7 @@ function GM_showPopup(aEvent) {
  */
 function GM_popupClicked(aEvent) {
   if (aEvent.button == 0 || aEvent.button == 2) {
-    var config = new Config(getScriptFile("config.xml"));
+    var config = new Config();
     config.load();
     var scriptNum=aEvent.target.value;
     if (!config.scripts[scriptNum]) return;
@@ -480,7 +494,7 @@ function GM_popupClicked(aEvent) {
       config.save();
     } else {
       // right-click: open in editor
-      openInEditor(getScriptFile(config.scripts[scriptNum].filename),
+      openInEditor(getScriptFile(config.scripts[scriptNum]),
 		   document.getElementById("gm-browser-bundle")
 		           .getString("editor.prompt"))
     }

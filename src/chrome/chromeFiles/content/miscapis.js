@@ -16,6 +16,44 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
   return this.prefMan.getValue(name, defVal);
 }
 
+function GM_Imports(script){
+  this.script = script;
+}
+
+GM_Imports.prototype.getImportURL = function(name) {
+  var dep = this.getDep_(name);
+
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+    .getService(Components.interfaces.nsIIOService);
+  var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
+    .getService(Components.interfaces.nsIAppShellService);
+
+  var window = appSvc.hiddenDOMWindow;
+  var binaryContents = getBinaryContents(getDependencyFileURI(this.script, dep))
+  
+  var mimetype = dep.mimetype;
+  if(dep.charset && dep.charset.length > 0){
+    mimetype += ";charset=" + dep.charset;
+  }
+  
+  return "data:" + mimetype + ";base64," + 
+    window.encodeURIComponent(window.btoa(binaryContents));
+}
+
+GM_Imports.prototype.getImportText = function(name) {
+  var dep = this.getDep_(name);
+  return getContents(getDependencyFileURI(this.script, dep))
+}
+
+GM_Imports.prototype.getDep_ = function(name) {
+  for (var i=0; i< this.script.imports.length; i++){
+    var d = this.script.imports[i]
+    if (d.name == name) {
+      return d;
+    }
+  }
+  throw new Error("No import with name: " + name);
+}
 
 function GM_ScriptLogger(script) {
   var namespace = script.namespace;

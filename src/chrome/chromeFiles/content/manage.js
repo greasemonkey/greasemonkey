@@ -1,4 +1,4 @@
-var config = new Config(getScriptFile("config.xml"));
+var config = new Config();
 var uninstallList = [];
 
 window.addEventListener("load", function(ev) {
@@ -20,7 +20,18 @@ function handleOkButton() {
 
   var chkUninstallPrefs = document.getElementById('chkUninstallPrefs');
   for (var i = 0, script = null; (script = uninstallList[i]); i++) {
-    getScriptFile(script.filename).remove(false);
+    file = getScriptBasedir(script);
+    file.normalize();
+    if(file.path != getScriptDir().path){
+      if (file.exists()) {
+        file.remove(true);//file==base directory recursive delete
+      }
+  	}else{
+  		file = getScriptFile(script);
+    	if (file.exists()) {
+    		file.remove(false);
+    	}
+  	}
     if (chkUninstallPrefs.checked) {
        // Remove saved preferences
        var scriptPrefRoot = ["scriptvals.",
@@ -93,8 +104,7 @@ function updateDetails() {
 }
 
 function handleEditButton() {
-  openInEditor(
-  getScriptFile(selectedScript.filename),
+  openInEditor(getScriptFile(selectedScript),
   document.getElementById("gm-manage-bundle").getString("editor.prompt"));
 }
 

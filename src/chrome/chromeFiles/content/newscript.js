@@ -52,7 +52,7 @@ function doInstall() {
 
   // and fire up the editor!
   openInEditor(
-    getScriptFile(script.filename),
+    getScriptFile(script),
     document.getElementById("gm-browser-bundle").getString("editor.prompt")
   );
 
