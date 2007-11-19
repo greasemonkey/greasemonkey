@@ -229,10 +229,6 @@ ScriptDownloader.prototype.showScriptView = function() {
   this.win_.GM_BrowserUI.showScriptView(this);
 };
 
-ScriptDownloader.prototype.openDependency = function(file){
-  this.win_.GM_BrowserUI.openDependency(file)
-}
-
 ScriptDownloader.prototype.parseScript = function(source, uri) {
   var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
                             .getService();

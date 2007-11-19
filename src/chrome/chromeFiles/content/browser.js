@@ -229,17 +229,6 @@ GM_BrowserUI.showScriptView = function(scriptDownloader) {
 
 };
 
-GM_BrowserUI.openDependency = function(file){
-  var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
-  var uri = ioSvc.newFileURI(file);
-
-  var tab = this.tabBrowser.addTab(uri.spec);
-  var browser = this.tabBrowser.getBrowserForTab(tab);
-
-  this.tabBrowser.selectedTab = tab;
-} 
-
 /**
  * Implements nsIObserve.observe. Right now we're only observing our own
  * install-userscript, which happens when the install bar is clicked.
@@ -510,10 +499,10 @@ function GM_popupClicked(aEvent) {
  */
 GM_BrowserUI.refreshStatus = function() {
   if (GM_getEnabled()) {
-    this.statusImage.src = "chrome://greasemonkey/content/status_on.gif";
+    this.statusImage.src = "chrome://greasemonkey/content/icon_small.png";
     this.statusImage.tooltipText = this.bundle.getString('tooltip.enabled');
   } else {
-    this.statusImage.src = "chrome://greasemonkey/content/status_off.gif";
+    this.statusImage.src = "chrome://greasemonkey/content/icon_small_disabled.png";
     this.statusImage.tooltipText = this.bundle.getString('tooltip.disabled');
   }
 

@@ -28,7 +28,7 @@
     <em:contributor>Tommi Rautava</em:contributor>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
-    <em:iconURL>chrome://greasemonkey/content/status_on.gif</em:iconURL>
+    <em:iconURL>chrome://greasemonkey/content/icon_medium.png</em:iconURL>
 
     <!-- Firefox -->
     <em:targetApplication>
