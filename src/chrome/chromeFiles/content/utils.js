@@ -113,14 +113,12 @@ function openInEditor(aFile, promptTitle) {
     try {
       GM_log("launching ...");
 
-      var mimeInfoService = Components
-        .classes["@mozilla.org/uriloader/external-helper-app-service;1"]
-        .getService(Components.interfaces.nsIMIMEService);
-      var mimeInfo = mimeInfoService
-        .getFromTypeAndExtension( "application/x-userscript+javascript", "user.js" );
-      mimeInfo.preferredAction = mimeInfo.useHelperApp
-      mimeInfo.preferredApplicationHandler = editor;
-      mimeInfo.launchWithFile( aFile );
+      var process = Components.classes["@mozilla.org/process/util;1"]
+                              .getService(Components.interfaces.nsIProcess);
+      process.init(editor);
+      process.run(false, // non-blocking
+                  [aFile.path],
+                  1); // number of arguments in second param
       return true;
     } catch (e) {
       GM_log("Failed to launch editor: " + e, true);
