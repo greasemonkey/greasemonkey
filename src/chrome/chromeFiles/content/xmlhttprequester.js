@@ -97,7 +97,8 @@ function(unsafeContentWin, req, event, details) {
                          req.getAllResponseHeaders() :
                          ''),
         status:(req.readyState == 4 ? req.status : 0),
-        statusText:(req.readyState == 4 ? req.statusText : '')
+        statusText:(req.readyState == 4 ? req.statusText : ''),
+        finalUri:(req.readyState == 4 ? req.channel.URI.spec : '')
       }
 
       // Pop back onto browser thread and call event handler.
