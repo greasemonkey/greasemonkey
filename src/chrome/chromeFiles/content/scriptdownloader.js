@@ -89,7 +89,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
 ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
-  var deps = this.script.requires.concat(this.script.imports);
+  var deps = this.script.requires.concat(this.script.resources);
   for (var i = 0; i < deps.length; i++) {
     var dep = deps[i];
     if (this.checkDependencyURL(dep.url)) {
@@ -254,6 +254,9 @@ ScriptDownloader.prototype.parseScript = function(source, uri) {
   
   // gather up meta lines
   if (foundMeta) {
+    // used for duplicate resource name detection
+    var previousResourceNames = {};
+
     while (result = lines[lnIdx++]) {
       if (result.indexOf("// ==/UserScript==") == 0) {
 	    break;
@@ -277,20 +280,28 @@ ScriptDownloader.prototype.parseScript = function(source, uri) {
               scriptDependency.url = reqUri.spec;
               script.requires.push(scriptDependency);
               break;
-            case "import":
-              var imp = match[2].match(/([^\s]+)\s+([^\s]+)/);
-              if (imp) {
-                var impName = imp[1];
-                var impUri = imp[2];
-              } else {
-                var impUri = match[2];
-                var impName = "";
+            case "resource":
+              var res = match[2].match(/(\S+)\s+(.*)/);
+              if (res === null) {
+                throw new Error("Invalid syntax for @resource declaration '" +
+                                match[2] + "'. Resources are declared like: " +
+                                "@resource <name> <url>.");
               }
-              var impUri = ioservice.newURI(impUri, null, uri);
-              var scriptImport = new ScriptImport();
-              scriptImport.name = impName;
-              scriptImport.url = impUri.spec;
-              script.imports.push(scriptImport);
+
+              var resName = res[1];
+              if (previousResourceNames[resName]) {
+                throw new Error("Duplicate resource name '" + resName + "' " +
+                                "detected. Each resource must have a unique " +
+                                "name.");
+              } else {
+                previousResourceNames[resName] = true;
+              }
+
+              var resUri = ioservice.newURI(res[2], null, uri);
+              var scriptResource = new ScriptResource();
+              scriptResource.name = resName;
+              scriptResource.url = resUri.spec;
+              script.resources.push(scriptResource);
               break;
       	}
       }
