@@ -225,7 +225,7 @@ var greasemonkeyService = {
     var console;
     var storage;
     var xmlhttpRequester;
-    var imports;
+    var resources;
     var safeWin = new XPCNativeWrapper(unsafeContentWin);
     var safeDoc = safeWin.document;
 
@@ -242,7 +242,7 @@ var greasemonkeyService = {
       storage = new GM_ScriptStorage(script);
       xmlhttpRequester = new GM_xmlhttpRequester(unsafeContentWin,
                                                  appSvc.hiddenDOMWindow);
-      imports = new GM_Imports(script);
+      resources = new GM_Resources(script);
 
       sandbox.window = safeWin;
       sandbox.document = sandbox.window.document;
@@ -257,8 +257,8 @@ var greasemonkeyService = {
       sandbox.console = console;
       sandbox.GM_setValue = GM_hitch(storage, "setValue");
       sandbox.GM_getValue = GM_hitch(storage, "getValue");
-      sandbox.GM_getImportURL = GM_hitch(imports, "getImportURL"); 
-      sandbox.GM_getImportText = GM_hitch(imports, "getImportText");
+      sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL"); 
+      sandbox.GM_getResourceText = GM_hitch(resources, "getResourceText");
       sandbox.GM_openInTab = GM_hitch(this, "openInTab", unsafeContentWin);
       sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
                                            "contentStartRequest");

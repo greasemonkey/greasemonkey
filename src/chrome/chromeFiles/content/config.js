@@ -123,11 +123,11 @@ Config.prototype.load = function() {
         script.excludes.push(childNode.firstChild.nodeValue);
       } else if (childNode.nodeName == "Require") {
         script.requires.push({ filename : childNode.getAttribute("filename")});
-      } else if (childNode.nodeName == "Import") {
-         script.imports.push({ name : childNode.getAttribute("name"),
-                               filename : childNode.getAttribute("filename"),
-                               mimetype : childNode.getAttribute("mimetype"),
-                               charset  : childNode.getAttribute("charset")});
+      } else if (childNode.nodeName == "Resource") {
+        script.resources.push({ name : childNode.getAttribute("name"),
+                                filename : childNode.getAttribute("filename"),
+                                mimetype : childNode.getAttribute("mimetype"),
+                                charset  : childNode.getAttribute("charset")});
       }
     }
 
@@ -164,27 +164,27 @@ Config.prototype.save = function() {
     
     for (var j = 0; j < scriptObj.requires.length; j++) {
       var req = scriptObj.requires[j];
-      var importNode = doc.createElement("Require");
+      var resourceNode = doc.createElement("Require");
       
-      importNode.setAttribute("filename", req.filename);
+      resourceNode.setAttribute("filename", req.filename);
       
       scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-      scriptNode.appendChild(importNode);
+      scriptNode.appendChild(resourceNode);
     }
     
-    for (var j = 0; j< scriptObj.imports.length; j++) {
-      var imp = scriptObj.imports[j];
-      var importNode = doc.createElement("Import");
+    for (var j = 0; j< scriptObj.resources.length; j++) {
+      var imp = scriptObj.resources[j];
+      var resourceNode = doc.createElement("Resource");
       
-      importNode.setAttribute("name", imp.name);
-      importNode.setAttribute("filename", imp.filename);
-      importNode.setAttribute("mimetype", imp.mimetype);
+      resourceNode.setAttribute("name", imp.name);
+      resourceNode.setAttribute("filename", imp.filename);
+      resourceNode.setAttribute("mimetype", imp.mimetype);
       if (imp.charset) {
-        importNode.setAttribute("charset", imp.charset);
+        resourceNode.setAttribute("charset", imp.charset);
       }
       
       scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-      scriptNode.appendChild(importNode);
+      scriptNode.appendChild(resourceNode);
     }
     
     scriptNode.appendChild(doc.createTextNode("\n\t"));
@@ -239,8 +239,8 @@ Config.prototype.install = function(script) {
       this.installDependency(script, script.requires[i]);
     }
  
-    for (var i = 0; i < script.imports.length; i++) {
-      this.installDependency(script, script.imports[i]);
+    for (var i = 0; i < script.resources.length; i++) {
+      this.installDependency(script, script.resources[i]);
     } 
    
    
@@ -262,9 +262,6 @@ Config.prototype.installDependency = function(script, req){
   scriptDir.append(script.basedir);
 
   req.filename = this.initDependencyFilename(script, req);
-  if(req.name == ""){
-    req.name = req.filename;
-  }
   GM_log("Installing as: " + req.filename);                   
 
   try {
@@ -284,7 +281,7 @@ function Script() {
   this.excludes = [];
   this.basedir = null;
   this.requires = [];
-  this.imports = [];
+  this.resources = [];
 }
 
 function ScriptDependency(){
@@ -293,8 +290,8 @@ function ScriptDependency(){
   this.filename = null;
 }
 
-function ScriptImport(){
-  this.url = null
+function ScriptResource(){
+  this.url = null;
   this.name = null;
   this.file = null;
   this.filename = null;

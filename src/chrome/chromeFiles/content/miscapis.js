@@ -16,11 +16,11 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
   return this.prefMan.getValue(name, defVal);
 }
 
-function GM_Imports(script){
+function GM_Resources(script){
   this.script = script;
 }
 
-GM_Imports.prototype.getImportURL = function(name) {
+GM_Resources.prototype.getResourceURL = function(name) {
   var dep = this.getDep_(name);
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
@@ -40,19 +40,19 @@ GM_Imports.prototype.getImportURL = function(name) {
     window.encodeURIComponent(window.btoa(binaryContents));
 }
 
-GM_Imports.prototype.getImportText = function(name) {
+GM_Resources.prototype.getResourceText = function(name) {
   var dep = this.getDep_(name);
   return getContents(getDependencyFileURI(this.script, dep))
 }
 
-GM_Imports.prototype.getDep_ = function(name) {
-  for (var i=0; i< this.script.imports.length; i++){
-    var d = this.script.imports[i]
+GM_Resources.prototype.getDep_ = function(name) {
+  for (var i=0; i< this.script.resources.length; i++){
+    var d = this.script.resources[i]
     if (d.name == name) {
       return d;
     }
   }
-  throw new Error("No import with name: " + name);
+  throw new Error("No resource with name: " + name);
 }
 
 function GM_ScriptLogger(script) {
