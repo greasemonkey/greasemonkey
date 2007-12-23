@@ -4,4 +4,3 @@
 // @description    A template for creating new user scripts from
 // @include        *
 // ==/UserScript==
-

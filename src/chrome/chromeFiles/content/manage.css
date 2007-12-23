@@ -4,60 +4,57 @@ columns from shifting size, as their content does.  They also influence
 the original starting size of the elements before flexing.
 */
 dialog {
-	width: 600px;
-	height: 500px;
+  width: 600px;
+  height: 500px
 }
 #col_left {
-	width: 200px;
+  width: 200px
 }
 #col_right {
-	width: 400px;
+  width: 400px
 }
 
-
 #lstScripts {
-	min-width:140px;
-	margin-top:0;
+  min-width:140px;
+  margin-top:0
 }
 
 #ctlHeader {
-	margin: 0px 5px 5px 5px;
-	border: 2px solid;
-	-moz-border-top-colors: ThreeDShadow ThreeDDarkShadow;
-	-moz-border-right-colors: ThreeDHighlight ThreeDDarkShadow;
-	-moz-border-bottom-colors: ThreeDHighlight ThreeDDarkShadow;
-	-moz-border-left-colors: ThreeDShadow ThreeDDarkShadow;
-	padding: 5px 8px;
-	background-color: Highlight;
-	color: HighlightText;
-	font-size: 1.5em;
-	height: 2em;
+  margin: 0px 5px 5px 5px;
+  border: 2px solid;
+  -moz-border-top-colors: ThreeDShadow ThreeDDarkShadow;
+  -moz-border-right-colors: ThreeDHighlight ThreeDDarkShadow;
+  -moz-border-bottom-colors: ThreeDHighlight ThreeDDarkShadow;
+  -moz-border-left-colors: ThreeDShadow ThreeDDarkShadow;
+  padding: 5px 8px;
+  background-color: Highlight;
+  color: HighlightText;
+  font-size: 1.5em;
+  height: 2em
 }
 
 #ctlDescription {
-	margin:.5em;
-	height:3em;
-	max-height:3em;
+  margin:.5em;
+  height:3em;
+  max-height:3em
 }
 
-
-
 #pages-control listbox {
-	overflow: auto;
+  overflow: auto
 }
 
 #pages-control > groupbox > hbox {
-	margin-bottom: 0.5em;
+  margin-bottom: 0.5em
 }
 
 /* border for indicator where drag-and-drop will go */
 listbox#lstScripts listitem {
-	border-top: 1px solid -moz-field;
-	border-bottom: 1px solid -moz-field;
+  border-top: 1px solid -moz-field;
+  border-bottom: 1px solid -moz-field
 }
 listbox#lstScripts listitem[dragover="top"] {
-	border-top-color: black;
+  border-top-color: black
 }
 listbox#lstScripts listitem[dragover="bottom"] {
-	border-bottom-color: black;
+  border-bottom-color: black
 }

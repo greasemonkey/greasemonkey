@@ -5,61 +5,64 @@
 
 <!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<dialog
-    id="manage-window"
-    buttons="accept,cancel"
-    ondialogaccept="return handleOkButton()"
-    title="&manage.title;"
-    orient="vertical"
-    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<dialog id="manage-window"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  buttons="accept,cancel"
+  ondialogaccept="return handleOkButton()"
+  title="&manage.title;"
+  orient="vertical">
 
-    <script src="chrome://global/content/nsDragAndDrop.js"/>
-    <script src="chrome://global/content/nsTransferable.js"/>
+  <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js" />
+  <script type="application/x-javascript" src="chrome://global/content/nsTransferable.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/manage.js" />
 
-    <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
-    <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
-    <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
-    <script type="application/x-javascript" src="chrome://greasemonkey/content/manage.js" />
+  <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties" />
 
-    <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties"/>
+  <grid flex="1" orient="vertical">
+    <columns>
+      <column id="col_left" flex="1"/>
+      <column id="col_right" flex="3"/>
+    </columns>
 
-    <grid flex="1" orient="vertical">
-      <columns>
-        <column id="col_left" flex="1"/>
-        <column id="col_right" flex="3"/>
-      </columns>
-
-      <rows>
-        <row flex="1" orient="horizontal">
-          <vbox flex="1">
-            <listbox id="lstScripts" flex="10"
-              onkeypress="return listboxKeypress(event);"
-              ondraggesture="nsDragAndDrop.startDrag(event, dndObserver)"
-              ondragover="nsDragAndDrop.dragOver(event, dndObserver)"
-              ondragdrop="nsDragAndDrop.drop(event, dndObserver)"
-            />
-            <description flex="1">&manage.reorderHelp;</description>
-          </vbox>
-          <vbox>
-            <description id="ctlHeader"/>
-            <description id="ctlDescription"/>
-            <vbox id="pages-control" flex="1" />
-          </vbox>
-        </row>
-        <row>
+    <rows>
+      <row flex="1" orient="horizontal">
+        <vbox flex="1">
+          <listbox id="lstScripts" flex="10"
+            onkeypress="return listboxKeypress(event);"
+            ondraggesture="nsDragAndDrop.startDrag(event, dndObserver);"
+            ondragover="nsDragAndDrop.dragOver(event, dndObserver);"
+            ondragdrop="nsDragAndDrop.drop(event, dndObserver);" />
+          <description flex="1">&manage.reorderHelp;</description>
+        </vbox>
+        <vbox>
+          <description id="ctlHeader" />
+          <description id="ctlDescription" />
+          <vbox id="pages-control" flex="1" />
+        </vbox>
+      </row>
+      <row>
+        <hbox>
+          <checkbox id="chkEnabled"
+            label="&manage.label.chkEnabled;"
+            checked="true" />
+          <button id="btnEdit"
+            label="&manage.label.btnEdit;" />
+        </hbox>
+        <vbox>
+          <hbox flex="1" />
           <hbox>
-            <checkbox id="chkEnabled" label="&manage.label.chkEnabled;" checked="true" />
-            <button id="btnEdit" label="&manage.label.btnEdit;" />
+            <button id="btnUninstall"
+              label="&manage.label.btnUninstall;" />
+            <checkbox id="chkUninstallPrefs"
+              label="&manage.label.chkUninstall;"
+              checked="false" />
           </hbox>
-          <vbox>
-            <hbox flex="1" />
-            <hbox>
-              <button id="btnUninstall" label="&manage.label.btnUninstall;" />
-              <checkbox id="chkUninstallPrefs"
-                label="&manage.label.chkUninstall;" checked="false" />
-            </hbox>
-          </vbox>
-        </row>
-      </rows>
-    </grid>
+        </vbox>
+      </row>
+    </rows>
+  </grid>
+
 </dialog>
