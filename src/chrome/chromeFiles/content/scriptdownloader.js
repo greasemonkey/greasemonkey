@@ -23,7 +23,7 @@ ScriptDownloader.prototype.startDownload = function() {
   this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
   this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
   this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
-  
+
   this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
 
   Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
@@ -42,40 +42,40 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     if (this.req_.status != 200 && this.req_.status != 0) {
       this.win_.GM_BrowserUI.refreshStatus();
       this.win_.GM_BrowserUI.hideStatus();
-      
-      alert("Error loading user script:\n" + 
-  	  this.req_.status + ": " + 
+
+      alert("Error loading user script:\n" +
+  	  this.req_.status + ": " +
   	  this.req_.statusText);
       return;
     }
-  
+
     var source = this.req_.responseText;
-  
+
     this.parseScript(source, this.uri_);
-  
+
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
           .getService(Components.interfaces.nsIProperties)
           .get("TmpD", Components.interfaces.nsILocalFile);
-  
+
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
-    
-    var converter =  
-      Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]  
-      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);  
-    converter.charset = "UTF-8";  
+
+    var converter =
+      Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+    converter.charset = "UTF-8";
     source = converter.ConvertFromUnicode(source);
-  
+
     var ws = getWriteStream(file);
     ws.write(source, source.length);
     ws.close();
-  
+
     this.script.file = file;
-    
+
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
-    
+
     if(this.installing_){
-      this.showInstallDialog();  
+      this.showInstallDialog();
     }else{
       this.showScriptView();
     }
@@ -110,10 +110,10 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
       var persist = Components.classes[
         "@mozilla.org/embedding/browser/nsWebBrowserPersist;1"]
         .createInstance(Components.interfaces.nsIWebBrowserPersist);
-      persist.persistFlags = 
-        persist.PERSIST_FLAGS_BYPASS_CACHE | 
-        persist.PERSIST_FLAGS_REPLACE_EXISTING_FILES; //doesn't work? 
-      var ioservice = 
+      persist.persistFlags =
+        persist.PERSIST_FLAGS_BYPASS_CACHE |
+        persist.PERSIST_FLAGS_REPLACE_EXISTING_FILES; //doesn't work?
+      var ioservice =
         Components.classes["@mozilla.org/network/io-service;1"]
         .getService();
       var sourceUri = ioservice.newURI(dep.url, null, null);
@@ -121,12 +121,12 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
       var file = getTempFile();
-    
+
       var progressListener = new PersistProgressListener(persist);
       progressListener.onFinish = GM_hitch(this,
         "handleDependencyDownloadComplete", dep, file, sourceChannel);
       persist.progressListener = progressListener;
-     
+
       persist.saveChannel(sourceChannel,  file);
     } catch(e) {
       GM_log("Download exception " + e);
@@ -135,7 +135,7 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
   } else {
     this.dependenciesLoaded_ = true;
     this.finishInstall();
-  } 
+  }
 }
 
 ScriptDownloader.prototype.handleDependencyDownloadComplete =
@@ -145,13 +145,13 @@ function(dep, file, channel) {
     var httpChannel =
       channel.QueryInterface(Components.interfaces.nsIHttpChannel);
   } catch(e) {
-    var httpChannel = false;    
+    var httpChannel = false;
   }
-  
+
   if (httpChannel) {
     if (httpChannel.requestSucceeded) {
       dep.file = file;
-      dep.mimetype= channel.contentType;  
+      dep.mimetype= channel.contentType;
       if (channel.contentCharset) {
         dep.charset = channel.contentCharset;
       }
@@ -178,7 +178,7 @@ ScriptDownloader.prototype.checkDependencyURL = function(url) {
     case "ftp":
         return true;
     case "file":
-        scriptScheme = ioService.extractScheme(this.uri_.spec);
+        var scriptScheme = ioService.extractScheme(this.uri_.spec);
         return (scriptScheme == "file")
     default:
       return false;
@@ -188,7 +188,7 @@ ScriptDownloader.prototype.checkDependencyURL = function(url) {
 ScriptDownloader.prototype.finishInstall = function(){
   if (this.installOnCompletion_) {
     this.installScript();
-  }    
+  }
 }
 
 ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
@@ -218,7 +218,7 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
   }
   this.win_.GM_BrowserUI.hideStatus();
   this.win_.GM_BrowserUI.refreshStatus();
-  this.win_.openDialog("chrome://greasemonkey/content/install.xul", "", 
+  this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
 		               "chrome,centerscreen,modal,dialog,titlebar,resizable",
 		               this);
 };
@@ -232,32 +232,32 @@ ScriptDownloader.prototype.showScriptView = function() {
 ScriptDownloader.prototype.parseScript = function(source, uri) {
   var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
                             .getService();
-	  
+
   var script = new Script();
   script.uri = uri;
   script.enabled = true;
   script.includes = [];
   script.excludes = [];
-    
+
   // read one line at a time looking for start meta delimiter or EOF
   var lines = source.match(/.+/g);
   var lnIdx = 0;
   var result = {};
   var foundMeta = false;
 
-  while (result = lines[lnIdx++]) {
+  while ((result = lines[lnIdx++])) {
     if (result.indexOf("// ==UserScript==") == 0) {
       foundMeta = true;
       break;
     }
   }
-  
+
   // gather up meta lines
   if (foundMeta) {
     // used for duplicate resource name detection
     var previousResourceNames = {};
 
-    while (result = lines[lnIdx++]) {
+    while ((result = lines[lnIdx++])) {
       if (result.indexOf("// ==/UserScript==") == 0) {
 	    break;
       }
@@ -334,13 +334,14 @@ NotificationCallbacks.prototype.QueryInterface = function(aIID) {
   }
   throw Components.results.NS_NOINTERFACE;
 };
-   
+
 NotificationCallbacks.prototype.getInterface = function(aIID) {
   if (aIID.equals(Components.interfaces.nsIAuthPrompt )) {
      var winWat = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
                   .getService(Components.interfaces.nsIWindowWatcher);
-     return winWat.getNewAuthPrompter(winWat.activeWindow);                          
+     return winWat.getNewAuthPrompter(winWat.activeWindow);
   }
+  return undefined;
 };
 
 

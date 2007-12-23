@@ -3,8 +3,8 @@
 // Converts a pattern in this programs simple notation to a regular expression.
 // thanks AdBlock! http://www.mozdev.org/source/browse/adblock/adblock/
 function convert2RegExp( pattern ) {
-  s = new String(pattern);
-  res = new String("^");
+  var s = new String(pattern);
+  var res = new String("^");
 
   for (var i = 0 ; i < s.length ; i++) {
     switch(s[i]) {

@@ -221,6 +221,8 @@ var dndObserver = {
 
     transferData.data = new TransferData();
     transferData.data.addDataForFlavour("text/unicode", event.target.index);
+
+    return true;
   },
 
   onDragOver: function (event, flavour, session) {
@@ -253,7 +255,7 @@ var dndObserver = {
     var newIndex = this.findNewIndex(event);
 
     // don't do anything if we haven't changed
-    if (newIndex === this.lastFeedbackIndex) return;
+    if (newIndex === this.lastFeedbackIndex) return false; // NOTE: possible incongruent logic
     this.lastFeedbackIndex = newIndex;
 
     // clear any previous feedback
