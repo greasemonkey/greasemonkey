@@ -42,7 +42,7 @@
       GM_log('>< test10: body inversion');
 
       GM_registerMenuCommand(
-        "Important Message",
+        "Important Message (jJ)",
         function() {
           alert( "BOO!" ); // And if you're reading this now, you're CHEATING!!! but good for you! ;D
         },
