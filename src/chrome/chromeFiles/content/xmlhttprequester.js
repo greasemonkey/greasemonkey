@@ -1,9 +1,7 @@
-
-
 function GM_xmlhttpRequester(unsafeContentWin, chromeWindow) {
   this.unsafeContentWin = unsafeContentWin;
   this.chromeWindow = chromeWindow;
-}
+};
 
 // this function gets called by user scripts in content security scope to
 // start a cross-domain xmlhttp request.
@@ -48,7 +46,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   }
 
   GM_log("< GM_xmlhttpRequest.contentStartRequest");
-}
+};
 
 // this function is intended to be called in chrome's security context, so
 // that it can access other domains without security warning
@@ -113,4 +111,4 @@ function(unsafeContentWin, req, event, details) {
   }
 
   GM_log("< GM_xmlhttpRequester.setupRequestEvent");
-}
+};

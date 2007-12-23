@@ -15,51 +15,51 @@ function GM_MenuCommander() {
   this.menuItems2 = [];
 
   GM_log("< GM_MenuCommander")
-}
+};
 
 GM_MenuCommander.prototype.registerMenuCommand =
-function(commandName, commandFunc, accelKey, accelModifiers, accessKey) {
-  GM_log("> GM_MenuCommander.registerMenuCommand");
+  function(commandName, commandFunc, accelKey, accelModifiers, accessKey) {
+    GM_log("> GM_MenuCommander.registerMenuCommand");
 
-  // Protection against item duplication
-  for (var i = 0; i < this.menuItems.length; i++) {
-    if (this.menuItems[i].getAttribute("label") == commandName) {
-      return;
+    // Protection against item duplication
+    for (var i = 0; i < this.menuItems.length; i++) {
+      if (this.menuItems[i].getAttribute("label") == commandName) {
+        return;
+      }
     }
-  }
 
-  GM_log('accelKey: ' + accelKey);
-  GM_log('modifiers: ' + accelModifiers);
-  GM_log('accessKey: ' + accessKey);
+    GM_log('accelKey: ' + accelKey);
+    GM_log('modifiers: ' + accelModifiers);
+    GM_log('accessKey: ' + accessKey);
 
-  var menuItem = this.createMenuItem(commandName, commandFunc, accessKey);
-  var menuItem2 = this.createMenuItem(commandName, commandFunc, accessKey);
-  this.menuItems.push(menuItem);
-  this.menuItems2.push(menuItem2);
-
-  if (accelKey) {
-    var key = this.createKey(commandFunc, accelKey, accelModifiers, menuItem);
-    this.keys.push(key);
-  }
-
-  // if this menucommander is for the current document, we should add the
-  // elements immediately. otherwise it will be added in attach()
-  if (this.attached) {
-    this.menuPopup.appendChild(menuItem);
-    this.menuPopup2.appendChild(menuItem2);
+    var menuItem = this.createMenuItem(commandName, commandFunc, accessKey);
+    var menuItem2 = this.createMenuItem(commandName, commandFunc, accessKey);
+    this.menuItems.push(menuItem);
+    this.menuItems2.push(menuItem2);
 
     if (accelKey) {
-      this.keyset.appendChild(key);
+      var key = this.createKey(commandFunc, accelKey, accelModifiers, menuItem);
+      this.keys.push(key);
     }
 
-    this.setDisabled(false);
-  }
+    // if this menucommander is for the current document, we should add the
+    // elements immediately. otherwise it will be added in attach()
+    if (this.attached) {
+      this.menuPopup.appendChild(menuItem);
+      this.menuPopup2.appendChild(menuItem2);
 
-  GM_log("< GM_MenuCommmander.registerMenuCommand")
-}
+      if (accelKey) {
+        this.keyset.appendChild(key);
+      }
+
+      this.setDisabled(false);
+    }
+
+    GM_log("< GM_MenuCommmander.registerMenuCommand")
+  };
 
 GM_MenuCommander.prototype.attach = function() {
-  GM_log("> GM_MenuCommander.attach")
+  GM_log("> GM_MenuCommander.attach");
 
   for (var i = 0; i < this.menuItems.length; i++) {
     this.menuPopup.appendChild(this.menuItems[i]);
@@ -73,11 +73,11 @@ GM_MenuCommander.prototype.attach = function() {
   this.setDisabled(this.menuItems.length == 0);
   this.attached = true;
 
-  GM_log("< GM_MenuCommander.attach")
-}
+  GM_log("< GM_MenuCommander.attach");
+};
 
 GM_MenuCommander.prototype.detach = function() {
-  GM_log("> GM_MenuCommander.detach")
+  GM_log("> GM_MenuCommander.detach");
   GM_log("* this.menuPopup: " + this.menuPopup);
   GM_log("* this.menuPopup2: " + this.menuPopup2);
 
@@ -93,8 +93,8 @@ GM_MenuCommander.prototype.detach = function() {
   this.setDisabled(true);
   this.attached = false;
 
-  GM_log("< GM_MenuCommander.detach")
-}
+  GM_log("< GM_MenuCommander.detach");
+};
 
 //TODO: restructure accel/access validation to be at register time.
 //Should throw when called, not when building menu.
@@ -120,40 +120,40 @@ function(commandName, commandFunc, accessKey) {
 
   GM_log("< GM_MenuCommander.createMenuItem");
   return menuItem;
-}
+};
 
 GM_MenuCommander.prototype.createKey =
-function(commandFunc, accelKey, modifiers, menuItem) {
-  GM_log("> GM_MenuCommander.createKey");
+  function(commandFunc, accelKey, modifiers, menuItem) {
+    GM_log("> GM_MenuCommander.createKey");
 
-  var key = document.createElement("key");
+    var key = document.createElement("key");
 
-  if ((typeof accelKey) == "number") {
-    GM_log("keycode: " + accelKey);
-    key.setAttribute("keycode", accelKey);
-  } else if ((typeof accelKey) == "string" && accelKey.length == 1) {
-    GM_log("key: " + accelKey);
-    key.setAttribute("key", accelKey);
-  } else {
-    throw "accelKey must be a numerical keycode or a single character";
-  }
+    if ((typeof accelKey) == "number") {
+      GM_log("keycode: " + accelKey);
+      key.setAttribute("keycode", accelKey);
+    } else if ((typeof accelKey) == "string" && accelKey.length == 1) {
+      GM_log("key: " + accelKey);
+      key.setAttribute("key", accelKey);
+    } else {
+      throw "accelKey must be a numerical keycode or a single character";
+    }
 
-  GM_log("modifiers: " + modifiers);
-  key.setAttribute("modifiers", modifiers);
+    GM_log("modifiers: " + modifiers);
+    key.setAttribute("modifiers", modifiers);
 
-  // hack, because listen("oncommand", commandFunc) does not work!
-  // this is ok because .detach() gets called when the document is unloaded
-  // and this key is destroyed
-  key._commandFunc = commandFunc;
-  key.setAttribute("oncommand", "this._commandFunc()");
+    // hack, because listen("oncommand", commandFunc) does not work!
+    // this is ok because .detach() gets called when the document is unloaded
+    // and this key is destroyed
+    key._commandFunc = commandFunc;
+    key.setAttribute("oncommand", "this._commandFunc()");
 
-  var id = "userscript-command-" + this.keys.length;
-  key.setAttribute("id", id);
-  menuItem.setAttribute("key", id);
+    var id = "userscript-command-" + this.keys.length;
+    key.setAttribute("id", id);
+    menuItem.setAttribute("key", id);
 
-  GM_log("< GM_MenuCommander.createKey");
-  return key;
-}
+    GM_log("< GM_MenuCommander.createKey");
+    return key;
+  };
 
 GM_MenuCommander.prototype.setDisabled = function(disabled) {
   var menu = this.menu;
@@ -172,4 +172,4 @@ GM_MenuCommander.prototype.setDisabled = function(disabled) {
 
   parent2.removeChild(menu2);
   parent2.insertBefore(menu2, marker2);
-}
+};

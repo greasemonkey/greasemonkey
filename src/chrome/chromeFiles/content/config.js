@@ -1,10 +1,8 @@
-
-
 function Config() {
   this.onload = null;
   this.scripts = null;
   this.configFile = getConfigFile();
-}
+};
 
 Config.prototype.find = function(namespace, name) {
   namespace = namespace.toLowerCase();
@@ -17,7 +15,7 @@ Config.prototype.find = function(namespace, name) {
   }
 
   return -1;
-}
+};
 
 Config.prototype.initFilename = function(script) {
   var index = {};
@@ -60,12 +58,12 @@ Config.prototype.initFilename = function(script) {
       }
     }
   }
-
+  // NOTE: non localised string
   throw new Error("doooooooode. get some different user script or something.");
-}
+};
 
-Config.prototype.initDependencyFilename = function(script, req){
-  var remoteFilename = req.url.substr(req.url.lastIndexOf("/") + 1)
+Config.prototype.initDependencyFilename = function(script, req) {
+  var remoteFilename = req.url.substr(req.url.lastIndexOf("/") + 1);
 
   if(remoteFilename.indexOf("?")>0){
     remoteFilename = remoteFilename.substr(0, remoteFilename.indexOf("?"));
@@ -81,7 +79,7 @@ Config.prototype.initDependencyFilename = function(script, req){
   }
 
   ext = ext.replace(/[^A-Z0-9_]/gi, "");
-  base = base.replace(/[^A-Z0-9_]/gi, "")
+  base = base.replace(/[^A-Z0-9_]/gi, "");
 
   if (base.length > 24) {
     base = base.substring(0, 24);
@@ -106,7 +104,7 @@ Config.prototype.initDependencyFilename = function(script, req){
 
 Config.prototype.load = function() {
   var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
-    .createInstance(Components.interfaces.nsIDOMParser);
+                            .createInstance(Components.interfaces.nsIDOMParser);
 
   var configContents = getContents(getConfigFileURI());
   var doc = domParser.parseFromString(configContents, "text/xml");
@@ -141,7 +139,7 @@ Config.prototype.load = function() {
 
     this.scripts.push(script);
   }
-}
+};
 
 Config.prototype.save = function() {
   var doc = document.implementation.createDocument("", "UserScriptConfig", null);
@@ -201,12 +199,12 @@ Config.prototype.save = function() {
     doc.firstChild.appendChild(scriptNode);
   }
 
-  doc.firstChild.appendChild(doc.createTextNode("\n"))
+  doc.firstChild.appendChild(doc.createTextNode("\n"));
 
   var configStream = getWriteStream(this.configFile);
   new XMLSerializer().serializeToStream(doc, configStream, "utf-8");
   configStream.close();
-}
+};
 
 Config.prototype.install = function(script) {
   GM_log("> Config.install");
@@ -244,16 +242,15 @@ Config.prototype.install = function(script) {
       this.installDependency(script, script.resources[i]);
     }
 
-
     this.scripts.push(script);
     this.save();
 
-
-    GM_log("< Config.install")
+    GM_log("< Config.install");
   } catch (e2) {
+    // NOTE: unlocalised string
     alert("Error installing user script:\n\n" + (e2 ? e2 : ""));
   }
-}
+};
 
 Config.prototype.installDependency = function(script, req){
   GM_log("Installing dependency: " + req.url  + " from " + req.file.path);
@@ -270,7 +267,7 @@ Config.prototype.installDependency = function(script, req){
   } catch(e) {
     throw e;
   }
-}
+};
 
 function Script() {
   this.filename = null;
@@ -283,13 +280,13 @@ function Script() {
   this.basedir = null;
   this.requires = [];
   this.resources = [];
-}
+};
 
 function ScriptDependency(){
   this.url = null
   this.file = null;
   this.filename = null;
-}
+};
 
 function ScriptResource(){
   this.url = null;
@@ -297,4 +294,4 @@ function ScriptResource(){
   this.file = null;
   this.filename = null;
   this.mimetype = null;
-}
+};

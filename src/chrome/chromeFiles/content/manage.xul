@@ -24,9 +24,9 @@
   <grid flex="1" orient="vertical">
     <columns>
       <column id="col_left"
-        flex="1"/>
+        flex="1" />
       <column id="col_right"
-        flex="3"/>
+        flex="3" />
     </columns>
 
     <rows>

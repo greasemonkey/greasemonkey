@@ -1,49 +1,47 @@
-
-
 function GM_ScriptStorage(script) {
   this.prefMan = new GM_PrefManager(["scriptvals.",
                                      script.namespace,
                                      "/",
                                      script.name,
                                      "."].join(""));
-}
+};
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
   this.prefMan.setValue(name, val);
-}
+};
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
   return this.prefMan.getValue(name, defVal);
-}
+};
 
 function GM_Resources(script){
   this.script = script;
-}
+};
 
 GM_Resources.prototype.getResourceURL = function(name) {
   var dep = this.getDep_(name);
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-    .getService(Components.interfaces.nsIIOService);
+                            .getService(Components.interfaces.nsIIOService);
   var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
-    .getService(Components.interfaces.nsIAppShellService);
+                         .getService(Components.interfaces.nsIAppShellService);
 
   var window = appSvc.hiddenDOMWindow;
-  var binaryContents = getBinaryContents(getDependencyFileURI(this.script, dep))
-  
+  var binaryContents = getBinaryContents(getDependencyFileURI(this.script, dep));
+
   var mimetype = dep.mimetype;
   if(dep.charset && dep.charset.length > 0){
     mimetype += ";charset=" + dep.charset;
   }
-  
-  return "data:" + mimetype + ";base64," + 
+
+  return "data:" + mimetype + ";base64," +
     window.encodeURIComponent(window.btoa(binaryContents));
-}
+};
 
 GM_Resources.prototype.getResourceText = function(name) {
   var dep = this.getDep_(name);
-  return getContents(getDependencyFileURI(this.script, dep))
-}
+  return getContents(getDependencyFileURI(this.script, dep));
+};
 
 GM_Resources.prototype.getDep_ = function(name) {
   for (var i=0; i< this.script.resources.length; i++){
@@ -52,8 +50,8 @@ GM_Resources.prototype.getDep_ = function(name) {
       return d;
     }
   }
-  throw new Error("No resource with name: " + name);
-}
+  throw new Error("No resource with name: " + name); // NOTE: Non localised string
+};
 
 function GM_ScriptLogger(script) {
   var namespace = script.namespace;
@@ -63,11 +61,11 @@ function GM_ScriptLogger(script) {
   }
 
   this.prefix = [namespace, script.name, ": "].join("");
-}
+};
 
 GM_ScriptLogger.prototype.log = function(message) {
   GM_log(this.prefix + message, true);
-}
+};
 
 
 // Based on Mark Pilgrim's GM_addGlobalStyle from
@@ -81,7 +79,7 @@ function GM_addStyle(doc, css) {
   style.type = 'text/css';
   style.innerHTML = css;
   head.appendChild(style);
-}
+};
 
 function GM_console(script) {
   // based on http://www.getfirebug.com/firebug/firebugx.js
@@ -92,7 +90,7 @@ function GM_console(script) {
   ];
 
   for (var i=0, name; name=names[i]; i++) {
-    this[name] = function() {}
+    this[name] = function() {};
   }
 
   // Important to use this private variable so that user scripts can't make
@@ -103,7 +101,7 @@ function GM_console(script) {
       Array.prototype.slice.apply(arguments).join('\n')
     );
   };
-}
+};
 
 GM_console.prototype.log = function() {
-}
+};

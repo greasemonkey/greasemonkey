@@ -9,11 +9,11 @@ window.addEventListener("load", function() {
   bundle = document.getElementById("gm-browser-bundle");
 
   // load default namespace from pref
-  document.getElementById("namespace").value = 
+  document.getElementById("namespace").value =
       GM_prefRoot.getValue("newscript_namespace", "");
 
   // default the includes with the current page's url
-  document.getElementById("includes").value = 
+  document.getElementById("includes").value =
       window.opener.document.getElementById("content").selectedBrowser
       .contentWindow.location.href;
 }, false);
@@ -60,7 +60,7 @@ function doInstall() {
   GM_prefRoot.setValue("newscript_namespace", script.namespace);
 
   return true;
-}
+};
 
 // assemble the XUL fields into a script template
 function createScriptSource() {
@@ -106,4 +106,4 @@ function createScriptSource() {
   script = script.join("\n");
 
   return script;
-}
+};

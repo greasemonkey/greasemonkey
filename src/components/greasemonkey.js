@@ -12,7 +12,7 @@ function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
     .alert(null, "Greasemonkey alert", msg);
-}
+};
 
 var greasemonkeyService = {
 
@@ -26,7 +26,7 @@ var greasemonkeyService = {
         !aIID.equals(Ci.nsISupportsWeakReference) &&
         !aIID.equals(Ci.gmIGreasemonkeyService) &&
         !aIID.equals(Ci.nsIWindowMediatorListener) &&
-	!aIID.equals(Ci.nsIContentPolicy)) {
+        !aIID.equals(Ci.nsIContentPolicy)) {
       throw Components.results.NS_ERROR_NO_INTERFACE;
     }
 
@@ -48,6 +48,7 @@ var greasemonkeyService = {
 
     for (var i = 0; existing = this.browserWindows[i]; i++) {
       if (existing == browserWin) {
+        // NOTE: Unlocalised strings
         throw new Error("Browser window has already been registered.");
       }
     }
@@ -112,7 +113,7 @@ var greasemonkeyService = {
     Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
-    
+
     //loggify(this, "GM_GreasemonkeyService");
   },
 
@@ -257,7 +258,7 @@ var greasemonkeyService = {
       sandbox.console = console;
       sandbox.GM_setValue = GM_hitch(storage, "setValue");
       sandbox.GM_getValue = GM_hitch(storage, "getValue");
-      sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL"); 
+      sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL");
       sandbox.GM_getResourceText = GM_hitch(resources, "getResourceText");
       sandbox.GM_openInTab = GM_hitch(this, "openInTab", unsafeContentWin);
       sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
@@ -269,7 +270,7 @@ var greasemonkeyService = {
       sandbox.__proto__ = safeWin;
 
       var contents = getContents(getScriptFileURI(script))
-      
+
       var requires = [];
       var offsets = [];
       var offset = 0;
@@ -282,11 +283,11 @@ var greasemonkeyService = {
         offset += lineCount;
         offsets.push(offset);
       })
-      script.offsets = offsets; 
-      
+      script.offsets = offsets;
+
       var scriptSrc = "(function(){\n" +
                          requires.join("\n") +
-                         "\n" + 
+                         "\n" +
                          contents +
                          "\n})()";
       this.evalInSandbox(scriptSrc,
@@ -347,7 +348,7 @@ var greasemonkeyService = {
           GM_logError(
             e, // error obj
             0, // 0 = error (1 = warning)
-            err.uri, 
+            err.uri,
             err.lineNumber
           );
         } else {
@@ -382,7 +383,7 @@ var greasemonkeyService = {
       lineNumber: (lineNumber - end)
     };
   },
-  
+
   getFirebugConsole: function(unsafeContentWin, chromeWin) {
     var firebugConsoleCtor = null;
     var firebugContext = null;
@@ -434,11 +435,11 @@ Module.registerSelf = function(compMgr, fileSpec, location, type) {
                           true);
 
   catMgr.addCategoryEntry("content-policy",
-			  CONTRACTID,
+                          CONTRACTID,
                           CONTRACTID,
                           true,
                           true);
-}
+};
 
 Module.getClassObject = function(compMgr, cid, iid) {
   if (!cid.equals(CID)) {
@@ -450,11 +451,11 @@ Module.getClassObject = function(compMgr, cid, iid) {
   }
 
   return Factory;
-}
+};
 
 Module.canUnload = function(compMgr) {
   return true;
-}
+};
 
 
 var Factory = new Object();
@@ -465,12 +466,12 @@ Factory.createInstance = function(outer, iid) {
   }
 
   return greasemonkeyService;
-}
+};
 
 
 function NSGetModule(compMgr, fileSpec) {
   return Module;
-}
+};
 
 //loggify(Module, "greasemonkeyService:Module");
 //loggify(Factory, "greasemonkeyService:Factory");

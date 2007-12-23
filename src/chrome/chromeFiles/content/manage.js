@@ -24,14 +24,14 @@ function handleOkButton() {
     file.normalize();
     if(file.path != getScriptDir().path){
       if (file.exists()) {
-        file.remove(true);//file==base directory recursive delete
+        file.remove(true); // file==base directory recursive delete
       }
-  	}else{
-  		file = getScriptFile(script);
-    	if (file.exists()) {
-    		file.remove(false);
-    	}
-  	}
+    } else {
+      file = getScriptFile(script);
+      if (file.exists()) {
+        file.remove(false);
+      }
+    }
     if (chkUninstallPrefs.checked) {
        // Remove saved preferences
        var scriptPrefRoot = ["scriptvals.",
@@ -43,7 +43,8 @@ function handleOkButton() {
     }
   }
   return true;
-}
+};
+
 var listbox, header, description, chkEnabled, btnEdit, btnUninstall;
 var selectedScript;
 var pagesControl;
@@ -70,7 +71,7 @@ function loadControls() {
        }
      }
   }, false);
-}
+};
 
 function updateDetails() {
   if (listbox.selectedCount == 0) {
@@ -101,12 +102,12 @@ function updateDetails() {
     chkEnabled.checked = selectedScript.enabled;
     pagesControl.populate(selectedScript);
   }
-}
+};
 
 function handleEditButton() {
   openInEditor(getScriptFile(selectedScript),
   document.getElementById("gm-manage-bundle").getString("editor.prompt"));
-}
+};
 
 function handleUninstallButton() {
   var index=listbox.selectedIndex;
@@ -120,7 +121,7 @@ function handleUninstallButton() {
   if (listbox.childNodes.length > 0) {
     chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
   }
-}
+};
 
 function populateChooser() {
   for (var i = 0, script = null; (script = config.scripts[i]); i++) {
@@ -135,14 +136,14 @@ function populateChooser() {
       listitem.style.color = 'gray';
     }
 
-	listbox.appendChild(listitem);
+  listbox.appendChild(listitem);
   }
-}
+};
 
 function chooseScript(index) {
   listbox.selectedIndex = index;
   listbox.focus();
-}
+};
 
 function toggleScript(index, enableFlag) {
   var listitem = listbox.childNodes[index];
@@ -153,7 +154,7 @@ function toggleScript(index, enableFlag) {
     listitem.script.enabled = false;
     listitem.style.color = 'gray';
   }
-}
+};
 
 function reorderScript(from, to) {
   // make sure to and from are in range
@@ -177,14 +178,14 @@ function reorderScript(from, to) {
   listbox.insertBefore(tmp, listbox.childNodes[to]);
   // fix the listbox indexes
   for (var i=0, node=null; node=listbox.childNodes[i]; i++) {
-	  node.index=i;
+    node.index=i;
   }
 
   // then re-select the dropped script
   listbox.selectedIndex = to;
 
   return true;
-}
+};
 
 // allow reordering scripts with keyboard (alt- up and down)
 function listboxKeypress(event) {
@@ -204,7 +205,7 @@ function listboxKeypress(event) {
     !reorderScript(index, index + 1);
     listbox.selectedIndex = index + 1;
   }
-}
+};
 
 // allow reordering scripts with drag-and-drop
 var dndObserver = {

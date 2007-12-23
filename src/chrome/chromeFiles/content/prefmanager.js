@@ -1,5 +1,3 @@
-
-
 var GM_prefRoot = new GM_PrefManager();
 
 /**
@@ -14,9 +12,9 @@ function GM_PrefManager(startPoint) {
 
   startPoint = "greasemonkey." + startPoint;
 
-  var pref = Components.classes["@mozilla.org/preferences-service;1"].
-                getService(Components.interfaces.nsIPrefService).
-                getBranch(startPoint);
+  var pref = Components.classes["@mozilla.org/preferences-service;1"]
+                       .getService(Components.interfaces.nsIPrefService)
+                       .getBranch(startPoint);
 
   var observers = {};
   const nsISupportsString = Components.interfaces.nsISupportsString;
@@ -26,7 +24,7 @@ function GM_PrefManager(startPoint) {
    */
   this.exists = function(prefName) {
     return pref.getPrefType(prefName) != 0;
-  }
+  };
 
   /**
    * returns the named preference, or defaultValue if it does not exist
@@ -52,7 +50,7 @@ function GM_PrefManager(startPoint) {
       return defaultValue != undefined ? defaultValue : null;
     }
     return null;
-  }
+  };
 
   /**
    * sets the named preference to the specified value. values must be strings,
@@ -67,6 +65,7 @@ function GM_PrefManager(startPoint) {
         break;
       case "number":
         if (value % 1 != 0) {
+          // NOTE: Non localised strings
           throw new Error("Cannot set preference to non integral number");
         }
         break;
@@ -96,14 +95,14 @@ function GM_PrefManager(startPoint) {
         pref.setIntPref(prefName, Math.floor(value));
         break;
     }
-  }
+  };
 
   /**
    * deletes the named preference or subtree
    */
   this.remove = function(prefName) {
     pref.deleteBranch(prefName);
-  }
+  };
 
   /**
    * call a function whenever the named preference subtree changes
@@ -121,7 +120,7 @@ function GM_PrefManager(startPoint) {
 
     pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal).
       addObserver(prefName, observer, false);
-  }
+  };
 
   /**
    * stop watching
@@ -131,5 +130,5 @@ function GM_PrefManager(startPoint) {
       pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal).
         removeObserver(prefName, observers[watcher]);
     }
-  }
-}
+  };
+};

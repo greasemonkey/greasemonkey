@@ -24,7 +24,7 @@ function GM_updateVersion() {
   GM_prefRoot.setValue("version", item.version);
 
   log("< GM_updateVersion");
-}
+};
 
 /**
  * Copies the entire scripts directory to the new location, if it exists.
@@ -40,7 +40,7 @@ function GM_pointFourMigrate() {
   }
 
   log("< GM_pointFourMigrate");
-}
+};
 
 /**
  * Given a nsILocalFile object, create a directory of that name and fill
@@ -56,7 +56,7 @@ function GM_createScriptsDir(newDir) {
   defaultConfigFile.permissions = 0644;
 
   return newDir;
-}
+};
 
 /**
  * Migrates the configuration directory from the old format to the new one
@@ -114,7 +114,7 @@ function GM_pointThreeMigrate() {
     new XMLSerializer().serializeToStream(doc, configStream, "utf-8");
     configStream.close();
 
-    log("config saved.")
+    log("config saved.");
 
     // now, load config normally and reinitialize all scripts's filenames
     var config = new Config(GM_getPointThreeScriptFile("config.xml"));
@@ -131,12 +131,12 @@ function GM_pointThreeMigrate() {
       }
     }
 
-    log("moving complete. saving configuration.")
+    log("moving complete. saving configuration.");
 
     // save the config file
     config.save();
 
-    log("0.3 migration completed successfully!")
+    log("0.3 migration completed successfully!");
   } catch (e) {
     alert("Could not complete Greasemonkey 0.3 migration. Some changes may " +
           "have been made to your scripts directory. See JS Console for " +
@@ -146,7 +146,7 @@ function GM_pointThreeMigrate() {
   } finally {
     log("< GM_pointThreeMigrate");
   }
-}
+};
 
 function GM_versionIsGreaterOrEqual(v1, v2) {
   v1 = v1.split(".");
@@ -175,16 +175,16 @@ function GM_versionIsGreaterOrEqual(v1, v2) {
   }
 
   return 0;
-}
+};
 
 function GM_getPointThreeScriptDir() {
   var file = getContentDir();
   file.append("scripts");
   return file;
-}
+};
 
 function GM_getPointThreeScriptFile(fileName) {
   var file = GM_getPointThreeScriptDir();
   file.append(fileName);
   return file;
-}
+};

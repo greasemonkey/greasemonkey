@@ -62,7 +62,7 @@ function PerformInstall(tryAgain) {
     const prefDirs = [
       getFolder(getFolder("Profile"), "pref"),
       getFolder(getFolder(getFolder("Program"), "defaults"), "pref")
-      ];
+    ];
     for (i = prefDirs.length; i-- > 0;) {
       var prefDir = prefDirs[ i ];
       if (!File.exists(prefDir)) {
@@ -128,7 +128,7 @@ function PerformInstall(tryAgain) {
       cancelInstall(err);
         return;
   }
-}
+};
 
 var InstToProfile = true;
 
