@@ -30,9 +30,11 @@
       insertbefore="context-openlink" />
   </popup>
 
-  <menupopup id="menu_ToolsPopup">
+  <menupopup id="menu_ToolsPopup"
+  >
     <!-- NOTE: Unlocalized accesskey & label in menu tag; possibly unaccessible -->
-    <menu id="gm_general_menu"
+    <menu id="gm_general_menu" class="menu-iconic"
+      image="chrome://greasemonkey/skin/icon_small.png"
       accesskey="G"
       label="Greasemonkey"
       position="10"
