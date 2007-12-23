@@ -45,6 +45,7 @@ checkGMVER "<em:version>$GMREGEXVER<\/em:version>" install.rdf
 sed -r -i "s/const APP_VERSION =.*;/const APP_VERSION = \"$GMVER\";/" install.js
 checkGMVER "const APP_VERSION = \"$GMREGEXVER\";" install.js
 
+# sets up available locales for seamonkey
 sed -r -i "s/const APP_LOCALES =.*;/const APP_LOCALES = [ $GMLOC ];/" install.js
 
 find . -name '.svn' -prune -or -name '.DS_Store' -or -name '*~' -or -name '#*' \
