@@ -23,14 +23,17 @@
 
   <grid flex="1" orient="vertical">
     <columns>
-      <column id="col_left" flex="1"/>
-      <column id="col_right" flex="3"/>
+      <column id="col_left"
+        flex="1"/>
+      <column id="col_right"
+        flex="3"/>
     </columns>
 
     <rows>
       <row flex="1" orient="horizontal">
         <vbox flex="1">
-          <listbox id="lstScripts" flex="10"
+          <listbox id="lstScripts"
+            flex="10"
             onkeypress="return listboxKeypress(event);"
             ondraggesture="nsDragAndDrop.startDrag(event, dndObserver);"
             ondragover="nsDragAndDrop.dragOver(event, dndObserver);"
@@ -40,7 +43,8 @@
         <vbox>
           <description id="ctlHeader" />
           <description id="ctlDescription" />
-          <vbox id="pages-control" flex="1" />
+          <vbox id="pages-control"
+            flex="1" />
         </vbox>
       </row>
       <row>

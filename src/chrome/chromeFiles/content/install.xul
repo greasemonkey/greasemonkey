@@ -24,13 +24,15 @@
 
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 
-  <script src="chrome://greasemonkey/content/utils.js" />
-  <script src="chrome://greasemonkey/content/config.js" />
-  <script src="chrome://greasemonkey/content/scriptdownloader.js" />
-  <script src="chrome://greasemonkey/content/prefmanager.js" />
-  <script src="chrome://greasemonkey/content/install.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/install.js" />
 
-  <vbox flex="1" id="dialogContentBox">
+  <vbox id="dialogContentBox"
+    flex="1"
+  >
     <description id="heading"
       style="margin-bottom:1em" />
     <vbox id="itemBox"
