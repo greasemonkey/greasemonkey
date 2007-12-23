@@ -6,7 +6,7 @@ const APP_NAME = "greasemonkey";
 const APP_PACKAGE = "/greasemonkey.mozdev.org/greasemonkey";
 // NOTE : build.sh will correct the APP_VERSION, if applicable
 const APP_VERSION = "0.8.20071218.0";
-// NOTE : build.sh will add additional locals, if applicable
+// NOTE : build.sh will add additional locales, if applicable
 const APP_LOCALES = [ "en-US" ];
 const APP_PREFS_FILE="defaults/preferences/greasemonkey.js";
 const APP_XPCOM_SERVICES = [
@@ -29,7 +29,7 @@ const MSG_SUCCESS = APP_DISPLAY_NAME + ' ' + APP_VERSION + ' has been succesfull
                     + 'Please restart your browser before continuing.';
 
 const MSG_FAILAPPNAME = 'Failed to create ' + APP_NAME + '\n'
-                        + 'You probably don not have appropriate permissions \n'
+                        + 'You probably do not have appropriate permissions \n'
                         + '(write access to profile or chrome directory). \n'
                         + '_____________________________\nError code:';
 
