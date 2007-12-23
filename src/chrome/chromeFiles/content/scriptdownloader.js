@@ -163,7 +163,7 @@ function(dep, file, channel) {
     }
   } else {
     dep.file = file;
-    downloadNext();
+    this.downloadNextDependency();
   }
 }
 

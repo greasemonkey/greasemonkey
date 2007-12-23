@@ -73,7 +73,7 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
     }
   }
 
-  req.send(details.data);
+  req.send((details.data) ? details.data : null);
   GM_log("< GM_xmlhttpRequest.chromeStartRequest");
 }
 
