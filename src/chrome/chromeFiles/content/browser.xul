@@ -50,7 +50,7 @@
                     oncommand="GM_BrowserUI.newUserScript()"/>
                 <menu id="userscript-commands-sb2" accesskey="&menu.commands.accesskey;"
                     label="&menu.commands;" disabled="false"
-                    onpopupshowing='event.preventBubble()'>
+                    onpopupshowing='event.stopPropagation()'>
                     <menupopup/>
                 </menu>
             </menupopup>
@@ -68,14 +68,14 @@
               context='gm-status-popup'/>
             <popup id='gm-status-popup' position='before_end'
               onpopupshowing='GM_showPopup(event); event.stopPropagation();'
-              onclick="GM_popupClicked(event); event.preventBubble();">
+              onclick="GM_popupClicked(event); event.stopPropagation();">
               <menuitem id="gm-status-no-scripts" label="&statusbar.noscripts;"
                 style="color:grey"/>
               <menuseparator id="gm-status-no-scripts-sep"/>
               <menu id="userscript-commands-sb"
                 accesskey="&menu.commands.accesskey;"
                 label="&menu.commands;" disabled="false"
-                onpopupshowing='event.preventBubble()'>
+                onpopupshowing='event.stopPropagation()'>
                 <menupopup />
               </menu>
               <menuseparator />
