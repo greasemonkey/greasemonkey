@@ -30,19 +30,21 @@
       insertbefore="context-openlink" />
   </popup>
 
-  <!-- NOTE: Unlocalized accesskey & label in menu tags; possibly unaccessible -->
   <!-- Firefox -->
   <menupopup id="menu_ToolsPopup">
     <menu id="gm_general_menu"
       insertbefore="javascriptConsole" />
   </menupopup>
 
-  <!-- Seamonkey -->
+  <!-- SeaMonkey -->
   <menupopup id="taskPopup">
     <menu id="gm_general_menu"
       insertbefore="downloadMgr" />
   </menupopup>
 
+  <!--
+  NOTE: Unlocalized accesskey & label in menu tags; possibly unaccessible
+  -->
   <menu id="gm_general_menu" class="menu-iconic"
     image="chrome://greasemonkey/content/icon_small.png"
     accesskey="G"
