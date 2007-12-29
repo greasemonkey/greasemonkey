@@ -30,38 +30,86 @@
       insertbefore="context-openlink" />
   </popup>
 
-  <menupopup id="menu_ToolsPopup"
+  <!-- NOTE: Unlocalized accesskey & label in menu tags; possibly unaccessible -->
+  <!-- Firefox -->
+  <menupopup id="menu_ToolsPopup">
+    <menu id="gm_general_menu"
+      insertbefore="javascriptConsole" />
+  </menupopup>
+
+  <!-- Seamonkey -->
+  <menupopup id="taskPopup">
+    <menu id="gm_general_menu"
+      insertbefore="downloadMgr" />
+  </menupopup>
+
+  <menu id="gm_general_menu" class="menu-iconic"
+    image="chrome://greasemonkey/content/icon_small.png"
+    accesskey="G"
+    label="Greasemonkey"
   >
-    <!-- NOTE: Unlocalized accesskey & label in menu tag; possibly unaccessible -->
-    <menu id="gm_general_menu" class="menu-iconic"
-      image="chrome://greasemonkey/skin/icon_small.png"
-      accesskey="G"
-      label="Greasemonkey"
-      position="10"
+    <menupopup
+      onpopupshowing="GM_showGeneralPopup(event); event.stopPropagation();"
     >
-      <menupopup
-        onpopupshowing="GM_showGeneralPopup(event); event.stopPropagation();"
+      <menuitem id="gm-general-menu-enabled-item"
+        accesskey="&statusbar.enabled.accesskey;"
+        label="&statusbar.enabled;"
+        type="checkbox"
+        oncommand="GM_setEnabled(!GM_getEnabled());" />
+      <menuseparator />
+      <menuitem id="userscript-tools-install"
+        accesskey="&menu.install.accesskey;"
+        label="&menu.install;"
+        hidden="true"
+        oncommand="GM_BrowserUI.installMenuItemClicked(event);" />
+      <menuitem
+        accesskey="&menu.manage.accesskey;"
+        label="&menu.manage;"
+        oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
+      <menuitem id="userscript-tools-new"
+        accesskey="&menu.new.accesskey;"
+        label="&menu.new;"
+        oncommand="GM_BrowserUI.newUserScript();" />
+      <menu id="userscript-commands-sb2"
+        accesskey="&menu.commands.accesskey;"
+        label="&menu.commands;"
+        disabled="false"
+        onpopupshowing="event.stopPropagation();"
       >
-        <menuitem id="gm-general-menu-enabled-item"
-          accesskey="&statusbar.enabled.accesskey;"
-          label="&statusbar.enabled;"
-          type="checkbox"
-          oncommand="GM_setEnabled(!GM_getEnabled());" />
-        <menuseparator />
-        <menuitem id="userscript-tools-install"
-          accesskey="&menu.install.accesskey;"
-          label="&menu.install;"
-          hidden="true"
-          oncommand="GM_BrowserUI.installMenuItemClicked(event);" />
-        <menuitem
-          accesskey="&menu.manage.accesskey;"
-          label="&menu.manage;"
-          oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
-        <menuitem id="userscript-tools-new"
-          accesskey="&menu.new.accesskey;"
-          label="&menu.new;"
-          oncommand="GM_BrowserUI.newUserScript();" />
-        <menu id="userscript-commands-sb2"
+        <menupopup />
+      </menu>
+    </menupopup>
+  </menu>
+
+  <statusbar id="status-bar">
+    <!-- NOTE: Local to statusbar tag scope -->
+    <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
+
+    <statusbarpanel id="gm-status"
+      insertafter="livemark-button"
+    >
+      <label id="gm-status-label"
+        collapsed="true"
+        crop="end"
+        style="width:0px; margin:0" />
+      <image id="gm-status-image"
+        width="16"
+        height="16"
+        style="margin:0 5px"
+        mousethrough="never"
+        onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
+                    else if (event.button == 1) GM_BrowserUI.manageMenuItemClicked();"
+        context="gm-status-popup" />
+      <popup id="gm-status-popup"
+        position="before_end"
+        onpopupshowing="GM_showPopup(event); event.stopPropagation();"
+        onclick="GM_popupClicked(event); event.stopPropagation();"
+      >
+        <menuitem id="gm-status-no-scripts"
+          label="&statusbar.noscripts;"
+          style="color:grey" />
+        <menuseparator id="gm-status-no-scripts-sep" />
+        <menu id="userscript-commands-sb"
           accesskey="&menu.commands.accesskey;"
           label="&menu.commands;"
           disabled="false"
@@ -69,61 +117,21 @@
         >
           <menupopup />
         </menu>
-      </menupopup>
-    </menu>
-  </menupopup>
-
-    <statusbar id="status-bar">
-      <!-- NOTE: Local to statusbar tag scope -->
-      <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
-
-      <statusbarpanel id="gm-status"
-        insertafter="livemark-button"
-      >
-        <label id="gm-status-label"
-          collapsed="true"
-          crop="end"
-          style="width:0px; margin:0" />
-        <image id="gm-status-image"
-          width="16"
-          height="16"
-          style="margin:0 5px"
-          mousethrough="never"
-          onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
-                     else if (event.button == 1) GM_BrowserUI.manageMenuItemClicked();"
-          context="gm-status-popup" />
-        <popup id="gm-status-popup"
-          position="before_end"
-          onpopupshowing="GM_showPopup(event); event.stopPropagation();"
-          onclick="GM_popupClicked(event); event.stopPropagation();"
-        >
-          <menuitem id="gm-status-no-scripts"
-            label="&statusbar.noscripts;"
-            style="color:grey" />
-          <menuseparator id="gm-status-no-scripts-sep" />
-          <menu id="userscript-commands-sb"
-            accesskey="&menu.commands.accesskey;"
-            label="&menu.commands;"
-            disabled="false"
-            onpopupshowing="event.stopPropagation();"
-          >
-            <menupopup />
-          </menu>
-          <menuseparator />
-          <menuitem accesskey="&menu.new.accesskey;"
-            label="&menu.new;"
-            oncommand="GM_BrowserUI.newUserScript();" />
-          <menuitem accesskey="&menu.manage.accesskey;"
-            label="&menu.manage;"
-            oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
-          <menuseparator />
-          <menuitem id="gm-status-enabled-item"
-            accesskey="&statusbar.enabled.accesskey;"
-            label="&statusbar.enabled;"
-            type="checkbox"
-            oncommand="GM_setEnabled(!GM_getEnabled());" />
-        </popup>
-      </statusbarpanel>
-    </statusbar>
+        <menuseparator />
+        <menuitem accesskey="&menu.new.accesskey;"
+          label="&menu.new;"
+          oncommand="GM_BrowserUI.newUserScript();" />
+        <menuitem accesskey="&menu.manage.accesskey;"
+          label="&menu.manage;"
+          oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
+        <menuseparator />
+        <menuitem id="gm-status-enabled-item"
+          accesskey="&statusbar.enabled.accesskey;"
+          label="&statusbar.enabled;"
+          type="checkbox"
+          oncommand="GM_setEnabled(!GM_getEnabled());" />
+      </popup>
+    </statusbarpanel>
+  </statusbar>
 
 </overlay>
