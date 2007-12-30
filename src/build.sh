@@ -51,7 +51,7 @@ sed -r -i "s/const APP_LOCALES =.*;/const APP_LOCALES = [ $GMLOC ];/" install.js
 find . -name '.svn' -prune -or -name '.DS_Store' -or -name '*~' -or -name '#*' \
   -or -print | zip $GMNAME-$GMVER.xpi -9X -@
 
-mv $GMNAME-$GMVER.xpi ../../downloads/
+mv $GMNAME-$GMVER.xpi ../
 
 echo Created $GMNAME-$GMVER.xpi
 exit 0
