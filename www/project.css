@@ -1,9 +1,0 @@
-@import url("http://www.mozdev.org/project.css");
-
-#main-content {
-  width:55em;
-}
-
-h4 *:link {
-  color:rgb(157,0,0)!important;
-}
