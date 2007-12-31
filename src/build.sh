@@ -1,9 +1,13 @@
 #!/bin/sh
 GMMAX=0
 GMMIN=8
+GMBUILD=`date +"%Y%m%d"`
 GMREL=0
 
 GMNAME=greasemonkey
+
+GMVER="$GMMAX.$GMMIN.$GMBUILD.$GMREL"
+GMXPI="$GMNAME-$GMVER.xpi"
 
 # Copy base structure to a temporary build directory and change to it
 rm -rf build
@@ -27,31 +31,38 @@ for entry in $(ls chrome/chromeFiles/locale/); do
   fi
 done
 
-# Versioning checks
-GMBUILD=`date +"%04Y%02m%02d"`
-GMREGEXVER=[0-9]+\.[0-9]+\.[0-9]{8}\.[0-9]+
-
-checkGMVER () {
-  GMVER=`grep -Eo "$1" $2 | grep -Eo "$GMREGEXVER"`
-  if [ ! $GMVER ]; then
-    echo ERROR: $2 HAS INVALID VERSION!
-    exit 1
+replace () {
+  TMP=`mktemp -t Greasemonkey-build.sh`
+  SRC=`echo "$1" | sed 's/[\/\\\\]/\\\\&/g'`
+  DST=`echo "$2" | sed 's/[\/\\\\]/\\\\&/g'`
+  sed "s/$SRC/$DST/g" "$3" > "$TMP"
+  if cmp -s "$3" "$TMP" ; then
+    # No change! Treat as a failure to react to in caller.
+    rm "$TMP"
+    return 1
   fi
+  cp "$TMP" "$3"
+  rm "$TMP"
+  return 0
 }
 
-sed -r -i "s/<em:version>.*<\/em:version>/<em:version>$GMMAX\.$GMMIN\.$GMBUILD\.$GMREL<\/em:version>/" install.rdf
-checkGMVER "<em:version>$GMREGEXVER<\/em:version>" install.rdf
+replace '<em:version>.*</em:version>' \
+        '<em:version>'$GMVER'</em:version>' \
+        install.rdf
 
-sed -r -i "s/const APP_VERSION =.*;/const APP_VERSION = \"$GMVER\";/" install.js
-checkGMVER "const APP_VERSION = \"$GMREGEXVER\";" install.js
+replace 'const APP_VERSION =.*' \
+        'const APP_VERSION = "'$GMVER'";' \
+        install.js
 
 # sets up available locales for seamonkey
-sed -r -i "s/const APP_LOCALES =.*;/const APP_LOCALES = [ $GMLOC ];/" install.js
+replace 'const APP_LOCALES =.*;' \
+        'const APP_LOCALES = [ '$GMLOC' ];' \
+        install.js
 
 find . -name '.svn' -prune -or -name '.DS_Store' -or -name '*~' -or -name '#*' \
-  -or -print | zip $GMNAME-$GMVER.xpi -9X -@
+  -or -print | zip -9X -@ "$GMXPI"
 
-mv $GMNAME-$GMVER.xpi ../
+mv "$GMXPI" ../
 
-echo Created $GMNAME-$GMVER.xpi
+echo "Created $GMXPI"
 exit 0
