@@ -46,7 +46,6 @@
   NOTE: Unlocalized accesskey & label in menu tags; possibly unaccessible
   -->
   <menu id="gm_general_menu" class="menu-iconic"
-    image="chrome://greasemonkey/content/icon_small.png"
     accesskey="G"
     label="Greasemonkey"
   >
