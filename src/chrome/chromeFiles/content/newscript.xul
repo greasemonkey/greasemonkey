@@ -3,7 +3,7 @@
 
 <!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<dialog id="new-script-window"
+<dialog id="greasemonkey"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept,cancel"
   ondialogaccept="return doInstall();"

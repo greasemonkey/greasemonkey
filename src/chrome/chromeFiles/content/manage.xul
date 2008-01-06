@@ -5,7 +5,7 @@
 
 <!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<dialog id="manage-window"
+<dialog id="greasemonkey"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept,cancel"
   ondialogaccept="return handleOkButton()"
