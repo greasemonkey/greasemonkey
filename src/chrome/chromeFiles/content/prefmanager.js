@@ -1,5 +1,8 @@
 var GM_prefRoot = new GM_PrefManager();
 
+GM_PrefManager.MIN_INT_32 = (1 << 31);
+GM_PrefManager.MAX_INT_32 = ~(1 << 31);
+
 /**
  * Simple API on top of preferences for greasemonkey.
  * Construct an instance by passing the startPoint of a preferences subtree.
@@ -58,19 +61,25 @@ function GM_PrefManager(startPoint) {
    */
   this.setValue = function(prefName, value) {
     var prefType = typeof(value);
+    var goodType = false;
 
     switch (prefType) {
       case "string":
       case "boolean":
+        goodType = true;
         break;
       case "number":
-        if (value % 1 != 0) {
-          // NOTE: Non localised strings
-          throw new Error("Cannot set preference to non integral number");
+        if (value % 1 == 0 &&
+            value >= GM_PrefManager.MIN_INT_32 &&
+            value <= GM_PrefManager.MAX_INT_32) {
+          goodType = true;
         }
         break;
-      default:
-        throw new Error("Cannot set preference with datatype: " + prefType);
+    }
+
+    if (!goodType) {
+      throw new Error("Unsupported type for GM_setValue. Supported types " +
+                      "are: string, bool, and 32 bit integers.");
     }
 
     // underlying preferences object throws an exception if new pref has a
