@@ -123,6 +123,7 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
  * it's menu items and activate them.
  */
 GM_BrowserUI.contentLoad = function(e) {
+  var safeWin;
   var unsafeWin;
   var href;
   var commander;
@@ -131,8 +132,9 @@ GM_BrowserUI.contentLoad = function(e) {
     return;
   }
 
-  unsafeWin = e.target.defaultView.wrappedJSObject;
-  href = e.target.location.href;
+  safeWin = e.target.defaultView;
+  unsafeWin = safeWin.wrappedJSObject;
+  href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
     commander = this.getCommander(unsafeWin);
@@ -148,11 +150,20 @@ GM_BrowserUI.contentLoad = function(e) {
     GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 
-  if (!href.match(/\.user\.js$/)) {
-    return;
+  // Show the greasemonkey install banner if we are navigating to a .user.js
+  // file in a top-level tab.
+  if (href.match(/\.user\.js$/) && safeWin == safeWin.top) {
+    var browser = this.tabBrowser.getBrowserForDocument(safeWin.document);
+    this.showInstallBanner(browser);
   }
+};
 
-  var browser = this.tabBrowser.getBrowserForDocument(e.target);
+
+/**
+ * Shows the install banner across the top of the tab that is displayed when
+ * a user selects "show script source" in the install dialog.
+ */
+GM_BrowserUI.showInstallBanner = function(browser) {
   var greeting = this.bundle.getString("greeting.msg");
 
   if (this.tabBrowser.showMessage) {
