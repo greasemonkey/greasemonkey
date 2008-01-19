@@ -37,12 +37,12 @@ ScriptDownloader.prototype.startDownload = function() {
 };
 
 ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
+  this.win_.GM_BrowserUI.refreshStatus();
+  this.win_.GM_BrowserUI.hideStatusImmediately();
+
   try {
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
-      this.win_.GM_BrowserUI.refreshStatus();
-      this.win_.GM_BrowserUI.hideStatus();
-
       // NOTE: Unlocalized string
       alert('Error loading user script:\n' +
       this.req_.status + ": " +
@@ -83,8 +83,6 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
-    this.win_.GM_BrowserUI.refreshStatus();
-    this.win_.GM_BrowserUI.hideStatus();
     throw e;
   }
 };
@@ -218,16 +216,12 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
     this.win_.setTimeout(GM_hitch(this, "showInstallDialog", true), 0);
     return;
   }
-  this.win_.GM_BrowserUI.hideStatus();
-  this.win_.GM_BrowserUI.refreshStatus();
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
                        "chrome,centerscreen,modal,dialog,titlebar,resizable",
                        this);
 };
 
 ScriptDownloader.prototype.showScriptView = function() {
-  this.win_.GM_BrowserUI.hideStatus();
-  this.win_.GM_BrowserUI.refreshStatus();
   this.win_.GM_BrowserUI.showScriptView(this);
 };
 

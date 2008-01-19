@@ -575,6 +575,26 @@ GM_BrowserUI.setAutoHideTimer = function() {
   this.autoHideTimer = window.setTimeout(GM_hitch(this, "hideStatus"), 3000);
 };
 
+GM_BrowserUI.hideStatusImmediately = function() {
+  if (this.showAnimation) {
+    this.showAnimation.stop();
+    this.showAnimation = null;
+  }
+
+  if (this.hideAnimation) {
+    this.hideAnimation.stop();
+    this.hideAnimation = null;
+  }
+
+  if (this.autoHideTimer) {
+    window.clearTimeout(this.autoHideTimer);
+    this.autoHideTimer = null;
+  }
+
+  this.statusLabel.style.width = "0";
+  this.statusLabel.collapsed = true;
+};
+
 GM_BrowserUI.hideStatus = function() {
   if (!this.hideAnimation) {
     this.autoHideTimer = null;
