@@ -11,7 +11,7 @@
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
-    <em:iconURL>chrome://greasemonkey/skin/icon_medium.png</em:iconURL>
+    <em:iconURL>chrome://greasemonkey/content/icon_medium.png</em:iconURL>
 
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
@@ -22,6 +22,7 @@
     <em:contributor>Gareth Andrew; http://freegarethandrew.org</em:contributor>
     <em:contributor>Hisateru Tanaka</em:contributor>
     <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>
+    <em:contributor>Johan Sundström; http://ecmanaut.blogspot.com/</em:contributor>
     <em:contributor>JP Sugarbroad</em:contributor>
     <em:contributor>Juan Pablo Guereca Alonso</em:contributor>
     <em:contributor>Manpreet Singh</em:contributor>
