@@ -309,9 +309,6 @@ GM_BrowserUI.contentUnload = function(e) {
   for (var i = 0; item = this.menuCommanders[i]; i++) {
     if (item.win == unsafeWin) {
 
-      log("* Found corresponding commander. Is currentMenuCommander: " +
-          (item.commander == this.currentMenuCommander));
-
       if (item.commander == this.currentMenuCommander) {
         this.currentMenuCommander.detach();
         this.currentMenuCommander = null;
@@ -319,7 +316,6 @@ GM_BrowserUI.contentUnload = function(e) {
 
       this.menuCommanders.splice(i, 1);
 
-      log("* Found and removed corresponding commander")
       break;
     }
   }
