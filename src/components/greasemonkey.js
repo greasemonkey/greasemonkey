@@ -17,6 +17,7 @@ function alert(msg) {
 var greasemonkeyService = {
 
   browserWindows: [],
+  updater: null,
 
 
   // nsISupports
@@ -78,6 +79,15 @@ var greasemonkeyService = {
     if (scripts.length > 0) {
       this.injectScripts(scripts, href, unsafeWin, chromeWin);
     }
+
+    // Need to wait until well after startup for prefs store and extension
+    // manager to be initialized. First page load is a convenient place.
+    if (!this.updater) {
+      // Note: the param to this has to match the extension ID in install.rdf
+      this.updater = new ExtensionUpdater(
+          "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}");
+      this.updater.updatePeriodically();
+    }
   },
 
 
@@ -113,6 +123,10 @@ var greasemonkeyService = {
     Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
+
+    Cc["@mozilla.org/moz/jssubscript-loader;1"]
+      .getService(Ci.mozIJSSubScriptLoader)
+      .loadSubScript("chrome://greasemonkey/content/updater.js");
 
     //loggify(this, "GM_GreasemonkeyService");
   },
