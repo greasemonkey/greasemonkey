@@ -160,6 +160,8 @@ function getEditor(promptTitle) {
 function launchApplicationWithDoc(appFile, docFile) {
   var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
                              .getService(Components.interfaces.nsIXULRuntime);
+  // See Mozilla bug: https://bugzilla.mozilla.org/show_bug.cgi?id=411819
+  // TODO: remove this when nsIMIMEInfo works on windows again.
   if (xulRuntime.OS.toLowerCase().substring(0, 3) == "win") {
     var process = Components.classes["@mozilla.org/process/util;1"]
                             .createInstance(Components.interfaces.nsIProcess);
