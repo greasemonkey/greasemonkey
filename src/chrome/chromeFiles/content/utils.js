@@ -88,25 +88,48 @@ function GM_log(message, force) {
 // the UI and Config rely on it. Needs rethinking.
 
 function openInEditor(aFile, promptTitle) {
-  var editor, editorPath;
-  try {
-    editorPath = GM_prefRoot.getValue("editor");
-  } catch(e) {
-    GM_log( "Failed to get 'editor' value:" + e );
-    if (GM_prefRoot.exists("editor")) {
-      GM_log("A value for 'editor' exists, so let's remove it because it's causing problems");
-      GM_prefRoot.remove("editor");
-    }
-    editorPath = false;
+  var editor = getEditor(promptTitle);
+  if (!editor) {
+    // The user did not choose an editor.
+    return;
   }
+
+  try {
+    launchApplicationWithDoc(editor, aFile);
+  } catch (e) {
+    // Something may be wrong with the editor the user selected. Remove so that
+    // next time they can pick a different one.
+    alert("Could not launch editor:\n" + e);
+    GM_prefRoot.remove("editor");
+    throw e;
+  }
+}
+
+function getEditor(promptTitle) {
+  var editorPath = GM_prefRoot.getValue("editor");
+
   if (editorPath) {
-    // check whether the editor path is valid
-    GM_log("Try editor with path " + editorPath);
-    editor = Components.classes["@mozilla.org/file/local;1"]
-                       .createInstance(Components.interfaces.nsILocalFile);
+    GM_log("Found saved editor preference: " + editorPath);
+
+    var editor = Components.classes["@mozilla.org/file/local;1"]
+                 .createInstance(Components.interfaces.nsILocalFile);
     editor.followLinks = true;
     editor.initWithPath(editorPath);
-  } else {
+
+    // make sure the editor preference is still valid
+    if (editor.exists() && editor.isExecutable()) {
+      return editor;
+    } else {
+      GM_log("Editor preference either does not exist or is not executable");
+      GM_prefRoot.remove("editor");
+    }
+  }
+
+  // Ask the user to choose a new editor. Sometimes users get confused and
+  // pick a non-executable file, so we set this up in a loop so that if they do
+  // that we can give them an error and try again.
+  while (true) {
+    GM_log("Asking user to choose editor...");
     var nsIFilePicker = Components.interfaces.nsIFilePicker;
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
                                .createInstance(nsIFilePicker);
@@ -116,34 +139,34 @@ function openInEditor(aFile, promptTitle) {
     filePicker.appendFilters(nsIFilePicker.filterAll);
 
     if (filePicker.show() != nsIFilePicker.returnOK) {
-      return false;
+      // The user canceled, return null.
+      GM_log("User canceled file picker dialog");
+      return null;
     }
-    editor = filePicker.file;
-    GM_log("User selected: " + editor.path);
-    GM_prefRoot.setValue("editor", editor.path);
-  }
 
-  if (editor.exists() && editor.isExecutable()) {
-    try {
-      GM_log("launching ...");
+    GM_log("User selected: " + filePicker.file.path);
 
-      var process = Components.classes["@mozilla.org/process/util;1"]
-                              .getService(Components.interfaces.nsIProcess);
-      process.init(editor);
-      process.run(false, // non-blocking
-                  [aFile.path],
-                  1); // number of arguments in second param
-      return true;
-    } catch (e) {
-      GM_log("Failed to launch editor: " + e, true);
+    if (filePicker.file.exists() && filePicker.file.isExecutable()) {
+      GM_prefRoot.setValue("editor", filePicker.file.path);
+      return filePicker.file;
+    } else {
+      // TODO: i18n
+      alert("Please pick an executable application to use to edit user " +
+            "scripts.");
     }
-  } else {
-    GM_log("Editor '" + editorPath + "' does not exist or isn't executable. " +
-           "Put it back, check the permissions, or just give up and reset " +
-           "editor using about:config", true);
   }
-  return false;
-};
+}
+
+function launchApplicationWithDoc(appFile, docFile) {
+  var mimeInfoService =
+      Components.classes["@mozilla.org/uriloader/external-helper-app-service;1"]
+                .getService(Components.interfaces.nsIMIMEService);
+  var mimeInfo = mimeInfoService.getFromTypeAndExtension(
+      "application/x-userscript+javascript", "user.js" );
+  mimeInfo.preferredAction = mimeInfo.useHelperApp;
+  mimeInfo.preferredApplicationHandler = appFile;
+  mimeInfo.launchWithFile(docFile);
+}
 
 function parseScriptName(sourceUri) {
   var name = sourceUri.spec;
