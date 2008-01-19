@@ -6,6 +6,21 @@ const NAMESPACE = "http://youngpup.net/greasemonkey";
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
+function GM_apiLeakCheck() {
+  var stack = Components.stack;
+
+  do {
+    if (2 == stack.language) {
+      if ('file' != stack.filename.substr(0, 4) &&
+          'chrome' != stack.filename.substr(0, 6)) {
+        throw new Error("Greasemonkey access violation");
+      }
+    }
+
+    stack = stack.caller;
+  } while (stack);
+};
+
 function GM_isDef(thing) {
   return typeof(thing) != "undefined";
 };

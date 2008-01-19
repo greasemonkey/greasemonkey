@@ -19,6 +19,8 @@ function GM_MenuCommander() {
 
 GM_MenuCommander.prototype.registerMenuCommand =
   function(commandName, commandFunc, accelKey, accelModifiers, accessKey) {
+    GM_apiLeakCheck();
+
     GM_log("> GM_MenuCommander.registerMenuCommand");
 
     // Protection against item duplication

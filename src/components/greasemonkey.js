@@ -312,6 +312,8 @@ var greasemonkeyService = {
   },
 
   openInTab: function(unsafeContentWin, url) {
+    GM_apiLeakCheck();
+
     var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
 
     for (var i = 0; i < this.browserWindows.length; i++) {
