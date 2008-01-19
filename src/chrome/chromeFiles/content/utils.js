@@ -158,14 +158,25 @@ function getEditor(promptTitle) {
 }
 
 function launchApplicationWithDoc(appFile, docFile) {
-  var mimeInfoService =
-      Components.classes["@mozilla.org/uriloader/external-helper-app-service;1"]
-                .getService(Components.interfaces.nsIMIMEService);
-  var mimeInfo = mimeInfoService.getFromTypeAndExtension(
-      "application/x-userscript+javascript", "user.js" );
-  mimeInfo.preferredAction = mimeInfo.useHelperApp;
-  mimeInfo.preferredApplicationHandler = appFile;
-  mimeInfo.launchWithFile(docFile);
+  var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
+                             .getService(Components.interfaces.nsIXULRuntime);
+  if (xulRuntime.OS.toLowerCase().substring(0, 3) == "win") {
+    var process = Components.classes["@mozilla.org/process/util;1"]
+                            .createInstance(Components.interfaces.nsIProcess);
+    process.init(appFile);
+    process.run(false, // blocking
+                [docFile.path], // args
+                1); // number of args
+  } else {
+    var mimeInfoService =
+        Components.classes["@mozilla.org/uriloader/external-helper-app-service;1"]
+                  .getService(Components.interfaces.nsIMIMEService);
+    var mimeInfo = mimeInfoService.getFromTypeAndExtension(
+        "application/x-userscript+javascript", "user.js" );
+    mimeInfo.preferredAction = mimeInfo.useHelperApp;
+    mimeInfo.preferredApplicationHandler = appFile;
+    mimeInfo.launchWithFile(docFile);
+  }
 }
 
 function parseScriptName(sourceUri) {
