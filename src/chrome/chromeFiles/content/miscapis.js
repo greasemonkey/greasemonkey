@@ -7,13 +7,17 @@ function GM_ScriptStorage(script) {
 };
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
-  GM_apiLeakCheck();
+  if (!GM_apiLeakCheck("GM_setValue")) {
+    return;
+  }
 
   this.prefMan.setValue(name, val);
 };
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
-  GM_apiLeakCheck();
+  if (!GM_apiLeakCheck("GM_getValue")) {
+    return;
+  }
 
   return this.prefMan.getValue(name, defVal);
 };
@@ -23,7 +27,9 @@ function GM_Resources(script){
 };
 
 GM_Resources.prototype.getResourceURL = function(name) {
-  GM_apiLeakCheck();
+  if (!GM_apiLeakCheck("GM_getResourceURL")) {
+    return;
+  }
 
   var dep = this.getDep_(name);
 
@@ -45,7 +51,9 @@ GM_Resources.prototype.getResourceURL = function(name) {
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
-  GM_apiLeakCheck();
+  if (!GM_apiLeakCheck("GM_getResourceText")) {
+    return;
+  }
 
   var dep = this.getDep_(name);
   return getContents(getDependencyFileURI(this.script, dep));
@@ -72,7 +80,9 @@ function GM_ScriptLogger(script) {
 };
 
 GM_ScriptLogger.prototype.log = function(message) {
-  GM_apiLeakCheck();
+  if (!GM_apiLeakCheck("GM_log")) {
+    return;
+  }
 
   GM_log(this.prefix + message, true);
 };

@@ -8,6 +8,8 @@ const Ci = Components.interfaces;
 const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
                  .getService(Ci.nsIAppShellService);
 
+const gmSvcFilename = Components.stack.filename;
+
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
@@ -15,11 +17,8 @@ function alert(msg) {
 };
 
 // Examines the stack to determine if an API should be callable.
-// NOTE: This function's mechanism relies on the fact that it is implemented
-// in this file.
-function GM_apiLeakCheck() {
+function GM_apiLeakCheck(apiName) {
   var stack = Components.stack;
-  var gmSvcFilename = stack.filename;
 
   do {
     // Valid stack frames for GM api calls are: native and js when coming from
@@ -27,12 +26,16 @@ function GM_apiLeakCheck() {
     if (2 == stack.language) {
       if ('chrome' != stack.filename.substr(0, 6) &&
           gmSvcFilename != stack.filename) {
-        throw new Error("Greasemonkey access violation");
+        GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +
+                    "cannot call " + apiName + "."));
+        return false;
       }
     }
 
     stack = stack.caller;
   } while (stack);
+
+  return true;
 };
 
 var greasemonkeyService = {
@@ -334,7 +337,9 @@ var greasemonkeyService = {
 
   registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
                                 accelKey, accelModifiers, accessKey) {
-    GM_apiLeakCheck();
+    if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
+      return;
+    }
 
     var command = {name: commandName,
                    accelKey: accelKey,
@@ -349,7 +354,9 @@ var greasemonkeyService = {
   },
 
   openInTab: function(unsafeContentWin, url) {
-    GM_apiLeakCheck();
+    if (!GM_apiLeakCheck("GM_openInTab")) {
+      return;
+    }
 
     var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
 
