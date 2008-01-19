@@ -21,6 +21,7 @@ function handleOkButton() {
   var chkUninstallPrefs = document.getElementById('chkUninstallPrefs');
   for (var i = 0, script = null; (script = uninstallList[i]); i++) {
     file = getScriptBasedir(script);
+    file.normalize();
     if (!file.equals(getScriptDir())) {
       if (file.exists()) {
         file.remove(true); // file==base directory recursive delete
