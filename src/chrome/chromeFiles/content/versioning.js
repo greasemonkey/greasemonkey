@@ -8,12 +8,16 @@ function GM_updateVersion() {
   // this is the last version which has been run at least once
   var initialized = GM_prefRoot.getValue("version", "0.0");
 
-  if (!GM_versionIsGreaterOrEqual(initialized, "0.3")) {
+  if (GM_compareVersions(initialized, "0.3") == -1) {
     GM_pointThreeMigrate();
   }
 
-  if (!GM_versionIsGreaterOrEqual(initialized, "0.4.2")) {
+  if (GM_compareVersions(initialized, "0.4.2") == -1) {
     GM_pointFourMigrate();
+  }
+
+  if (GM_compareVersions(initialized, "0.8") == -1) {
+    GM_pointEightBackup();
   }
 
   // update the currently initialized version so we don't do this work again.
@@ -24,6 +28,20 @@ function GM_updateVersion() {
   GM_prefRoot.setValue("version", item.version);
 
   log("< GM_updateVersion");
+};
+
+/**
+ * In Greasemonkey 0.8 there was a format change to the gm_scripts folder and
+ * testing found several bugs where the entire folder would get nuked. So we are
+ * paranoid and backup the folder the first time 0.8 runs.
+ */
+function GM_pointEightBackup() {
+  var scriptDir = getNewScriptDir();
+  var scriptDirBackup = scriptDir.clone();
+  scriptDirBackup.leafName += "_08bak";
+  if (scriptDir.exists() && !scriptDirBackup.exists()) {
+    scriptDir.copyTo(scriptDirBackup.parent, scriptDirBackup.leafName);
+  }
 };
 
 /**
@@ -146,35 +164,6 @@ function GM_pointThreeMigrate() {
   } finally {
     log("< GM_pointThreeMigrate");
   }
-};
-
-function GM_versionIsGreaterOrEqual(v1, v2) {
-  v1 = v1.split(".");
-  v2 = v2.split(".");
-
-  if (v1[0] == "") v1[0] = "0";
-  if (v2[0] == "") v2[0] = "0";
-
-  while (v1.length < v2.length) {
-    v1.push("0");
-  }
-
-  while (v2.length < v1.length) {
-    v2.push("0");
-  }
-
-  var diff;
-  for (var i = 0; i < v1.length; i++) {
-    diff = parseInt(v1[i]) - parseInt(v2[i]);
-
-    if (diff != 0) {
-      return diff > 0;
-    } else {
-      continue;
-    }
-  }
-
-  return 0;
 };
 
 function GM_getPointThreeScriptDir() {
