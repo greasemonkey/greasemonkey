@@ -9,11 +9,6 @@ function GM_ScriptStorage(script) {
 GM_ScriptStorage.prototype.setValue = function(name, val) {
   GM_apiLeakCheck();
 
-  if (GM_apiLeakCheck()) {
-    alert('ALERT ALERT detected leaked GM_ API, aborting!\n');
-    return;
-  }
-
   this.prefMan.setValue(name, val);
 };
 
