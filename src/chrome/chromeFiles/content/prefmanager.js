@@ -1,7 +1,7 @@
 var GM_prefRoot = new GM_PrefManager();
 
-GM_PrefManager.MIN_INT_32 = (1 << 31);
-GM_PrefManager.MAX_INT_32 = ~(1 << 31);
+GM_PrefManager.MIN_INT_32 = -0x80000000;
+GM_PrefManager.MAX_INT_32 = 0x7FFFFFFF;
 
 /**
  * Simple API on top of preferences for greasemonkey.
