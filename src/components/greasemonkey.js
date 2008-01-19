@@ -14,6 +14,27 @@ function alert(msg) {
     .alert(null, "Greasemonkey alert", msg);
 };
 
+// Examines the stack to determine if an API should be callable.
+// NOTE: This function's mechanism relies on the fact that it is implemented
+// in this file.
+function GM_apiLeakCheck() {
+  var stack = Components.stack;
+  var gmSvcFilename = stack.filename;
+
+  do {
+    // Valid stack frames for GM api calls are: native and js when coming from
+    // chrome:// URLs and the greasemonkey.js component's file:// URL.
+    if (2 == stack.language) {
+      if ('chrome' != stack.filename.substr(0, 6) &&
+          gmSvcFilename != stack.filename) {
+        throw new Error("Greasemonkey access violation");
+      }
+    }
+
+    stack = stack.caller;
+  } while (stack);
+};
+
 var greasemonkeyService = {
 
   browserWindows: [],
@@ -313,6 +334,8 @@ var greasemonkeyService = {
 
   registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
                                 accelKey, accelModifiers, accessKey) {
+    GM_apiLeakCheck();
+
     var command = {name: commandName,
                    accelKey: accelKey,
                    accelModifiers: accelModifiers,
