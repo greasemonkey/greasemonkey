@@ -50,15 +50,6 @@ replace '<em:version>.*</em:version>' \
         '<em:version>'$GMVER'</em:version>' \
         install.rdf
 
-replace 'const APP_VERSION =.*' \
-        'const APP_VERSION = "'$GMVER'";' \
-        install.js
-
-# sets up available locales for seamonkey
-replace 'const APP_LOCALES =.*;' \
-        'const APP_LOCALES = [ '$GMLOC' ];' \
-        install.js
-
 find . -name '.svn' -prune -or -name '.DS_Store' -or -name '*~' -or -name '#*' \
   -or -print | zip -9X -@ "$GMXPI"
 
