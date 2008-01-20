@@ -24,8 +24,12 @@ function GM_apiLeakCheck(apiName) {
     // Valid stack frames for GM api calls are: native and js when coming from
     // chrome:// URLs and the greasemonkey.js component's file:// URL.
     if (2 == stack.language) {
-      if ('chrome' != stack.filename.substr(0, 6) &&
-          gmSvcFilename != stack.filename) {
+      // NOTE: In FF 2.0.0.0, I saw that stack.filename can be null for JS/XPCOM
+      // services. This didn't happen in FF 2.0.0.11; I'm not sure when it
+      // changed.
+      if (stack.filename != null && 
+          stack.filename != gmSvcFilename &&
+          stack.filename.substr(0, 6) != 'chrome') {
         GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +
                     "cannot call " + apiName + "."));
         return false;
