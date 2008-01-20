@@ -72,8 +72,8 @@ function GM_log(message, force) {
 // TODO: this stuff was copied wholesale and not refactored at all. Lots of
 // the UI and Config rely on it. Needs rethinking.
 
-function openInEditor(aFile, promptTitle) {
-  var editor = getEditor(promptTitle);
+function openInEditor(aFile, stringBundle) {
+  var editor = getEditor(stringBundle);
   if (!editor) {
     // The user did not choose an editor.
     return;
@@ -84,13 +84,13 @@ function openInEditor(aFile, promptTitle) {
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
-    alert("Could not launch editor:\n" + e);
+    alert(stringBundle.getString("editor.could_not_launch") + "\n" + e);
     GM_prefRoot.remove("editor");
     throw e;
   }
 }
 
-function getEditor(promptTitle) {
+function getEditor(stringBundle) {
   var editorPath = GM_prefRoot.getValue("editor");
 
   if (editorPath) {
@@ -119,7 +119,8 @@ function getEditor(promptTitle) {
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
                                .createInstance(nsIFilePicker);
 
-    filePicker.init(window, promptTitle, nsIFilePicker.modeOpen);
+    filePicker.init(window, stringBundle.getString("editor.prompt"),
+                    nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
 
@@ -135,9 +136,7 @@ function getEditor(promptTitle) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
       return filePicker.file;
     } else {
-      // TODO: i18n
-      alert("Please pick an executable application to use to edit user " +
-            "scripts.");
+      alert(stringBundle.getString("editor.please_pick_executable"));
     }
   }
 }

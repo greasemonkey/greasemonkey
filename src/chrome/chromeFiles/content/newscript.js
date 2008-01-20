@@ -51,10 +51,8 @@ function doInstall() {
   config.install(script);
 
   // and fire up the editor!
-  openInEditor(
-    getScriptFile(script),
-    document.getElementById("gm-browser-bundle").getString("editor.prompt")
-  );
+  openInEditor(getScriptFile(script),
+               document.getElementById("gm-browser-bundle"));
 
   // persist namespace value
   GM_prefRoot.setValue("newscript_namespace", script.namespace);
