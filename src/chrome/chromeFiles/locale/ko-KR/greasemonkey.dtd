@@ -1,0 +1,36 @@
+<!ENTITY manage.title "유저 스크립트 관리">
+<!ENTITY manage.button.add "추가...">
+<!ENTITY manage.button.edit "수정...">
+<!ENTITY manage.button.remove "삭제">
+<!ENTITY manage.label.grpIncluded "동작할 페이지">
+<!ENTITY manage.label.grpExcluded "동작하지 않을 페이지">
+<!ENTITY manage.label.btnEdit "편집">
+<!ENTITY manage.label.chkEnabled "사용">
+<!ENTITY manage.label.btnUninstall "삭제">
+<!ENTITY manage.label.chkUninstall "관련된 환경설정도 함께 삭제">
+<!ENTITY manage.reorderHelp "마우스로 드래그 앤 드롭하시거나, Alt-Up/Alt-Down 키를 눌러서 스크립트 목록의 순서를 바꿀 수 있습니다.">
+<!ENTITY menu.install "유저 스크립트 설치...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "유저 스크립트 소스 보기">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "유저 스크립트 명령...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "새로운 유저 스크립트...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "유저 스크립트 관리...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "설치된 스크립트가 없음!">
+<!ENTITY statusbar.enabled "사용">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "그리즈몽키 설치">
+<!ENTITY install.runson "다음에서 동작:">
+<!ENTITY install.butnoton "다음에서 동작하지 않음:">
+<!ENTITY install.warning1 "악성 스크립트는 당신의 개인정보를 침해할 수 있으며, 당신이 모르는 사이에 당신을 대신하여 동작할 수 있습니다.">
+<!ENTITY install.warning2 "오직 신뢰할 수 있는 출처의 스크립트만 설치하여야 합니다.">
+<!ENTITY install.showscriptsource "스크립트 소스 보기">
+<!ENTITY install.installbutton "설치">
+<!ENTITY newscript.name "이름">
+<!ENTITY newscript.namespace "네임 스페이스">
+<!ENTITY newscript.description "설명">
+<!ENTITY newscript.includes "동작할 페이지 (한 줄당 하나)">
+<!ENTITY newscript.excludes "동작하지 않을 페이지 (한 줄당 하나)">

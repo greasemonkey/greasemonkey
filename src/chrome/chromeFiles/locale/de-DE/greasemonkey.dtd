@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Benutzerskripte verwalten">
+<!ENTITY manage.button.add "Hinzufügen...">
+<!ENTITY manage.button.edit "Bearbeiten...">
+<!ENTITY manage.button.remove "Entfernen">
+<!ENTITY manage.label.grpIncluded "Auf diese Seiten anwenden:">
+<!ENTITY manage.label.grpExcluded "Nicht auf diese Seiten anwenden:">
+<!ENTITY manage.label.btnEdit "Bearbeiten...">
+<!ENTITY manage.label.chkEnabled "Aktiviert">
+<!ENTITY manage.label.btnUninstall "Deinstallieren">
+<!ENTITY manage.label.chkUninstall "Zugehörige Einstellungen ebenfalls entfernen">
+<!ENTITY manage.reorderHelp "Umordnen der Skripte durch Ziehen mir der Maus oder Drücken von Alt+Hoch/Alt+Runter.">
+<!ENTITY menu.install "Benutzerskript installieren...">
+<!ENTITY menu.install.accesskey "s">
+<!ENTITY menu.show "Benutzerskript-Quelle anzeigen">
+<!ENTITY menu.show.accesskey "Q">
+<!ENTITY menu.commands "Benutzerskript-Befehle">
+<!ENTITY menu.commands.accesskey "B">
+<!ENTITY menu.new "Neues Benutzerskript">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Benutzerskripte verwalten...">
+<!ENTITY menu.manage.accesskey "v">
+<!ENTITY statusbar.noscripts "Es sind keine Skripte installiert!">
+<!ENTITY statusbar.enabled "Greasemonkey aktivieren">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Greasemonkey-Installation">
+<!ENTITY install.runson "Wird angewendet auf:">
+<!ENTITY install.butnoton "Wird nicht angewendet auf:">
+<!ENTITY install.warning1 "Bösartige Skripte können Ihre Privatsphäre verletzen und ohne Ihr Wissen eigenmächtige Aktionen ausführen.">
+<!ENTITY install.warning2 "Sie sollten nur Skripte von Quellen installieren, denen Sie vertrauen.">
+<!ENTITY install.showscriptsource "Skript-Quelltext anzeigen">
+<!ENTITY install.installbutton "Installieren">
+<!ENTITY newscript.name "Name:">
+<!ENTITY newscript.namespace "Namensraum:">
+<!ENTITY newscript.description "Beschreibung:">
+<!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
+<!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">

@@ -1,0 +1,36 @@
+<!ENTITY manage.title "管理用户脚本">
+<!ENTITY manage.button.add "添加...">
+<!ENTITY manage.button.edit "编辑...">
+<!ENTITY manage.button.remove "删除">
+<!ENTITY manage.label.grpIncluded "脚本应用到下列网页">
+<!ENTITY manage.label.grpExcluded "不包括下列网页">
+<!ENTITY manage.label.btnEdit "编辑">
+<!ENTITY manage.label.chkEnabled "启用">
+<!ENTITY manage.label.btnUninstall "卸载">
+<!ENTITY manage.label.chkUninstall "同时清除相关的首选项设置">
+<!ENTITY manage.reorderHelp "使用鼠标拖动并释放或按 Alt-Up/Alt-Down 键重新排列列表中的脚本。">
+<!ENTITY menu.install "安装用户脚本...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "查看用户脚本源代码">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "用户脚本命令...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "新建用户脚本...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "管理用户脚本...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "当前未安装任何脚本！">
+<!ENTITY statusbar.enabled "启用">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Greasemonkey 安装过程">
+<!ENTITY install.runson "脚本应用到下列网页：">
+<!ENTITY install.butnoton "不包括下列网页：">
+<!ENTITY install.warning1 "恶意脚本可能会侵犯您的隐私并在您不知情的情况下以您的身份运行。">
+<!ENTITY install.warning2 "您应该只安装从可信任来源获得的脚本。">
+<!ENTITY install.showscriptsource "显示脚本源代码">
+<!ENTITY install.installbutton "安装">
+<!ENTITY newscript.name "名字">
+<!ENTITY newscript.namespace "名字空间">
+<!ENTITY newscript.description "描述">
+<!ENTITY newscript.includes "脚本应用到下列网页（每行一条网页地址）">
+<!ENTITY newscript.excludes "不包括下列网页（每行一条网页地址）">

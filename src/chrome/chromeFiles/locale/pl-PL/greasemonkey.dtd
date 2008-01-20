@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Zarządzanie skryptami">
+<!ENTITY manage.button.add "Dodaj">
+<!ENTITY manage.button.edit "Edytuj">
+<!ENTITY manage.button.remove "Usuń">
+<!ENTITY manage.label.grpIncluded "Witryny, na których skrypt jest uruchamiany">
+<!ENTITY manage.label.grpExcluded "Witryny, na których skrypt nie jest uruchamiany">
+<!ENTITY manage.label.btnEdit "Edytuj">
+<!ENTITY manage.label.chkEnabled "Włącz">
+<!ENTITY manage.label.btnUninstall "Usuń">
+<!ENTITY manage.label.chkUninstall "Usuń także skojarzone ustawienia">
+<!ENTITY manage.reorderHelp "Aby zmienić kolejność skryptów na liście przenieś je za pomocą myszy lub skorzystaj ze skótu Alt-Up/Alt-Down.">
+<!ENTITY menu.install "Instaluj skrypt">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Zobacz kod źródłowy skryptu">
+<!ENTITY menu.show.accesskey "Z">
+<!ENTITY menu.commands "Polecenia skryptu">
+<!ENTITY menu.commands.accesskey "P">
+<!ENTITY menu.new "Nowy skrypt">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Zarządzaj skryptami">
+<!ENTITY menu.manage.accesskey "R">
+<!ENTITY statusbar.noscripts "Brak zainstalowanych skryptów!">
+<!ENTITY statusbar.enabled "Włącz">
+<!ENTITY statusbar.enabled.accesskey "W">
+<!ENTITY install.title "Instalacja skryptu">
+<!ENTITY install.runson "Uruchom na:">
+<!ENTITY install.butnoton "Nie uruchamiaj na:">
+<!ENTITY install.warning1 "Złośliwe skrypty mogą naruszać prywatność i bez wiedzy użytkownika pracować w jego imieniu.">
+<!ENTITY install.warning2 "Powinno instalować się tylko skrypty pochodzące z zaufanych źródeł.">
+<!ENTITY install.showscriptsource "Pokaż kod źródłowy skryptu">
+<!ENTITY install.installbutton "Instaluj">
+<!ENTITY newscript.name "Nazwa">
+<!ENTITY newscript.namespace "Lokalizacja">
+<!ENTITY newscript.description "Opis">
+<!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
+<!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">

@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Kullanıcı Script&apos;lerini Yönet">
+<!ENTITY manage.button.add "Ekle...">
+<!ENTITY manage.button.edit "Düzenle...">
+<!ENTITY manage.button.remove "Kaldır...">
+<!ENTITY manage.label.grpIncluded "Dahil Edilen Sayfalar">
+<!ENTITY manage.label.grpExcluded "Hariç Tutulan Sayfalar">
+<!ENTITY manage.label.btnEdit "Düzenle">
+<!ENTITY manage.label.chkEnabled "Geçerli">
+<!ENTITY manage.label.btnUninstall "Yüklemeyi Kaldır">
+<!ENTITY manage.label.chkUninstall "İlgili tercihleri de kaldır">
+<!ENTITY manage.reorderHelp "Bu listedeki Script&apos;leri sıralamak için fareyle sürükleyip bırakın veya Alt-Yukarı / Alt-Aşağı tuşlarına basın.">
+<!ENTITY menu.install "Kullanıcı Script&apos;ini Yükle">
+<!ENTITY menu.install.accesskey "L">
+<!ENTITY menu.show "Kullanıcı Script&apos;ini Göster">
+<!ENTITY menu.show.accesskey "G">
+<!ENTITY menu.commands "Kullanıcı Script&apos;inin Komutları">
+<!ENTITY menu.commands.accesskey "K">
+<!ENTITY menu.new "Yeni Kullanıcı Script&apos;i">
+<!ENTITY menu.new.accesskey "Y">
+<!ENTITY menu.manage "Kullanıcı Script&apos;lerini Yönet">
+<!ENTITY menu.manage.accesskey "N">
+<!ENTITY statusbar.noscripts "Yüklü script bulunamadı!">
+<!ENTITY statusbar.enabled "Geçerli">
+<!ENTITY statusbar.enabled.accesskey "R">
+<!ENTITY install.title "Greasemonkey Kurulumu">
+<!ENTITY install.runson "Üstünde çalıştığı:">
+<!ENTITY install.butnoton "Üstünde çalışmadığı:">
+<!ENTITY install.warning1 "Kötü niyetli script&apos;ler gizliliğinizi ihlal edebilir ve siz bilmeden size karşı çalışabilir.">
+<!ENTITY install.warning2 "Yalnızca güvendiğiniz kaynaklardan gelen script&apos;leri yüklemelisiniz.">
+<!ENTITY install.showscriptsource "Script Kaynağini Göster">
+<!ENTITY install.installbutton "Yükle">
+<!ENTITY newscript.name "Adı">
+<!ENTITY newscript.namespace "Ad Alanı">
+<!ENTITY newscript.description "Tanımlama">
+<!ENTITY newscript.includes "Dahil Ettikleri (Her satıra bir tane)">
+<!ENTITY newscript.excludes "Hariç Tuttukları (Her satıra bir tane)">

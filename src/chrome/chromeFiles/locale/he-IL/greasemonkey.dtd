@@ -1,0 +1,36 @@
+<!ENTITY manage.title "נהל סקריפטים">
+<!ENTITY manage.button.add "הוסף...">
+<!ENTITY manage.button.edit "ערוך...">
+<!ENTITY manage.button.remove "הסר">
+<!ENTITY manage.label.grpIncluded "כלול דפים">
+<!ENTITY manage.label.grpExcluded "אל תכלול דפים">
+<!ENTITY manage.label.btnEdit "עריכה">
+<!ENTITY manage.label.chkEnabled "פועל">
+<!ENTITY manage.label.btnUninstall "מחיקה">
+<!ENTITY manage.label.chkUninstall "מחק גם את כל ההגדרות הקשורות">
+<!ENTITY manage.reorderHelp "גרור-ושחרר באמצעות העכבר או לחץ Alt-Up/Alt-Down לשנות את סדר הסריפטים ברשימה זו.">
+<!ENTITY menu.install "התקן סקריפט...">
+<!ENTITY menu.install.accesskey "ה">
+<!ENTITY menu.show "צפה בקוד המקור של הסקריפט">
+<!ENTITY menu.show.accesskey "ק">
+<!ENTITY menu.commands "פקודות סקריפט...">
+<!ENTITY menu.commands.accesskey "פ">
+<!ENTITY menu.new "סקריפט חדש...">
+<!ENTITY menu.new.accesskey "ח">
+<!ENTITY menu.manage "נהל סקריפטים">
+<!ENTITY menu.manage.accesskey "נ">
+<!ENTITY statusbar.noscripts "אין סקריפטים מותקנים!">
+<!ENTITY statusbar.enabled "פועל">
+<!ENTITY statusbar.enabled.accesskey "פ">
+<!ENTITY install.title "התקנת Greasemonkey">
+<!ENTITY install.runson "פועל על:">
+<!ENTITY install.butnoton "לא פועל על:">
+<!ENTITY install.warning1 "סקריפטים זדוניים עלולים להפר את פרטיותך ולפעול בשמך ללא ידיעתך.">
+<!ENTITY install.warning2 "התקן רק סקריפטים המסופקים ע&quot;י מקור בו אתה בוטח.">
+<!ENTITY install.showscriptsource "הצג קוד המקור של הסקריפט">
+<!ENTITY install.installbutton "התקן">
+<!ENTITY newscript.name "שם">
+<!ENTITY newscript.namespace "מרחב-שמות">
+<!ENTITY newscript.description "תיאור">
+<!ENTITY newscript.includes "כלול (אחד הכל שורה)">
+<!ENTITY newscript.excludes "אל-תכללול (אחד בכל שורה)">

@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Upravljaj z uporabniškimi skripti">
+<!ENTITY manage.button.add "Dodaj ...">
+<!ENTITY manage.button.edit "Uredi ...">
+<!ENTITY manage.button.remove "Odstrani">
+<!ENTITY manage.label.grpIncluded "Vključene strani">
+<!ENTITY manage.label.grpExcluded "Izključene strani">
+<!ENTITY manage.label.btnEdit "Uredi">
+<!ENTITY manage.label.chkEnabled "Omogočeno">
+<!ENTITY manage.label.btnUninstall "Odstrani">
+<!ENTITY manage.label.chkUninstall "Odstrani tudi pridružene nastavitve">
+<!ENTITY manage.reorderHelp "Povlecite-in-spustite z miško ali pritisnite Alt-Up/Alt-Down, da skripte premestite po seznamu.">
+<!ENTITY menu.install "Namesti uporabniški skript ...">
+<!ENTITY menu.install.accesskey "N">
+<!ENTITY menu.show "Pokaži izvorno kodo uporabniškega skripta">
+<!ENTITY menu.show.accesskey "P">
+<!ENTITY menu.commands "Ukazi uporabniškega skripta ...">
+<!ENTITY menu.commands.accesskey "U">
+<!ENTITY menu.new "Nov uporabniški skript ...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Upravljaj z uporabniškimi skripti ...">
+<!ENTITY menu.manage.accesskey "U">
+<!ENTITY statusbar.noscripts "Ni nameščenih skriptov!">
+<!ENTITY statusbar.enabled "Omogočeno">
+<!ENTITY statusbar.enabled.accesskey "O">
+<!ENTITY install.title "Namestitev Mastneopice">
+<!ENTITY install.runson "teče na:">
+<!ENTITY install.butnoton "ne teče na:">
+<!ENTITY install.warning1 "Škodljivi skripti lahko kršijo vašo zasebnost in delujejo v vašem imenu brez vaše vednosti.">
+<!ENTITY install.warning2 "Nameščajte le skripte iz virov, ki jim zaupate.">
+<!ENTITY install.showscriptsource "Pokaži izvorni skript">
+<!ENTITY install.installbutton "Namesti">
+<!ENTITY newscript.name "Ime">
+<!ENTITY newscript.namespace "Imenski prostor">
+<!ENTITY newscript.description "Opis">
+<!ENTITY newscript.includes "Vključuje (eno na vrstico)">
+<!ENTITY newscript.excludes "Izključuje (eno na vrstico)">

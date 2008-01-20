@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Hallinnoi skriptejä">
+<!ENTITY manage.button.add "Lisää...">
+<!ENTITY manage.button.edit "Muokkaa...">
+<!ENTITY manage.button.remove "Poista">
+<!ENTITY manage.label.grpIncluded "Käytä sivuilla">
+<!ENTITY manage.label.grpExcluded "Pois lukien sivut">
+<!ENTITY manage.label.btnEdit "Muokkaa">
+<!ENTITY manage.label.chkEnabled "Käytössä">
+<!ENTITY manage.label.btnUninstall "Poista skripti">
+<!ENTITY manage.label.chkUninstall "Poista myös skriptin asetukset">
+<!ENTITY manage.reorderHelp "Voit järjestää skriptejä vetämällä niitä hiirellä tai painamalla Alt-nuoli ylös/Alt-nuoli alas.">
+<!ENTITY menu.install "Asenna skripti...">
+<!ENTITY menu.install.accesskey "A">
+<!ENTITY menu.show "Näytä skriptin lähdekoodi">
+<!ENTITY menu.show.accesskey "L">
+<!ENTITY menu.commands "Skriptikomennot...">
+<!ENTITY menu.commands.accesskey "S">
+<!ENTITY menu.new "Uusi skripti...">
+<!ENTITY menu.new.accesskey "U">
+<!ENTITY menu.manage "Hallinnoi skriptejä...">
+<!ENTITY menu.manage.accesskey "H">
+<!ENTITY statusbar.noscripts "Ei asennettuja skriptejä!">
+<!ENTITY statusbar.enabled "Käytössä">
+<!ENTITY statusbar.enabled.accesskey "K">
+<!ENTITY install.title "Greasemonkey-asennus">
+<!ENTITY install.runson "suoritetaan:">
+<!ENTITY install.butnoton "ei suoriteta:">
+<!ENTITY install.warning1 "Haitalliset skriptit voivat loukata yksityisyyttäsi ja toimia puolestasi tietämättäsi.">
+<!ENTITY install.warning2 "Sinun tulisi asentaa skriptejä vain luotettavista lähteistä.">
+<!ENTITY install.showscriptsource "Näytä skriptin lähdekoodi">
+<!ENTITY install.installbutton "Asenna">
+<!ENTITY newscript.name "Nimi">
+<!ENTITY newscript.namespace "Nimiavaruus">
+<!ENTITY newscript.description "Kuvaus">
+<!ENTITY newscript.includes "Käytä sivuilla (yksi per rivi)">
+<!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">

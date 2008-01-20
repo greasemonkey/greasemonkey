@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Manega Scripts d&apos;Usuari">
+<!ENTITY manage.button.add "Afegeix...">
+<!ENTITY manage.button.edit "Edita...">
+<!ENTITY manage.button.remove "Elimina">
+<!ENTITY manage.label.grpIncluded "Pàgines incloses">
+<!ENTITY manage.label.grpExcluded "Pàgines excloses">
+<!ENTITY manage.label.btnEdit "Edita">
+<!ENTITY manage.label.chkEnabled "Habilitat">
+<!ENTITY manage.label.btnUninstall "Desinstal.la">
+<!ENTITY manage.label.chkUninstall "També desinstal.la les preferències associades">
+<!ENTITY manage.reorderHelp "Arrossega i allibera amb el ratolí o prem Alt-Amunt/Alt-Avall per reordenar els scripts d&apos;aquesta llista">
+<!ENTITY menu.install "Instal.la l&apos;Script d&apos;Usuari">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Veure el codi font de l&apos;Script d&apos;Usuari">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Comandes de l&apos;Script d&apos;Usuari">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Nou Script d&apos;Usuari...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Manega els Scripts d&apos;Usuari...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "No hi ha scripts instal.lats!">
+<!ENTITY statusbar.enabled "Habilitat">
+<!ENTITY statusbar.enabled.accesskey "H">
+<!ENTITY install.title "Instal.lació de Greasemonkey">
+<!ENTITY install.runson "S&apos;executa a:">
+<!ENTITY install.butnoton "No s&apos;executa a:">
+<!ENTITY install.warning1 "Els scripts maliciosos poden violar la teva privacitat i actuar en nom teu">
+<!ENTITY install.warning2 "Només hauries d&apos;instal.lar scripts de font en què confiis">
+<!ENTITY install.showscriptsource "Mostra el codi font de l&apos;script.">
+<!ENTITY install.installbutton "Instal.la">
+<!ENTITY newscript.name "Nom">
+<!ENTITY newscript.namespace "Espai de Noms">
+<!ENTITY newscript.description "Descripció">
+<!ENTITY newscript.includes "Inclou (Un per línia)">
+<!ENTITY newscript.excludes "Exclou (Un per línia)">
