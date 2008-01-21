@@ -341,10 +341,6 @@ var greasemonkeyService = {
 
   registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
                                 accelKey, accelModifiers, accessKey) {
-    if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
-      return;
-    }
-
     var command = {name: commandName,
                    accelKey: accelKey,
                    accelModifiers: accelModifiers,
@@ -358,10 +354,6 @@ var greasemonkeyService = {
   },
 
   openInTab: function(unsafeContentWin, url) {
-    if (!GM_apiLeakCheck("GM_openInTab")) {
-      return;
-    }
-
     var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
 
     for (var i = 0; i < this.browserWindows.length; i++) {

@@ -80,10 +80,6 @@ function GM_ScriptLogger(script) {
 };
 
 GM_ScriptLogger.prototype.log = function(message) {
-  if (!GM_apiLeakCheck("GM_log")) {
-    return;
-  }
-
   GM_log(this.prefix + message, true);
 };
 
