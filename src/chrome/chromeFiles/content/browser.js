@@ -492,8 +492,7 @@ function GM_popupClicked(aEvent) {
       config.save();
     } else {
       // right-click: open in editor
-      openInEditor(getScriptFile(config.scripts[scriptNum]),
-                   document.getElementById("gm-browser-bundle"));
+      openInEditor(config.scripts[scriptNum]);
     }
 
     closeMenus(aEvent.target);

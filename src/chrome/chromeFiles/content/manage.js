@@ -105,8 +105,7 @@ function updateDetails() {
 };
 
 function handleEditButton() {
-  openInEditor(getScriptFile(selectedScript),
-               document.getElementById("gm-manage-bundle"));
+  openInEditor(selectedScript);
 };
 
 function handleUninstallButton() {
