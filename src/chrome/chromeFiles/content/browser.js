@@ -449,12 +449,14 @@ function GM_showPopup(aEvent) {
 
   function scriptsMatching(urls) {
     var matching = [];
-    for (var i = 0, script = null; script = config.scripts[i]; i++)
-      for (var j = 0; j < urls.length; j++)
+    for (var i = 0, script = null; script = config.scripts[i]; i++) {
+      for (var j = 0; j < urls.length; j++) {
         if (GM_scriptMatchesUrl(script, urls[j])) {
           matching.push(script);
           break;
         }
+      }
+    }
     return matching;
   }
 
@@ -489,11 +491,13 @@ function GM_showPopup(aEvent) {
   // drop all runsFramed scripts already present in runsOnTop
   for (var i = 0; i < runsOnTop.length; i++) {
     var j = 0, item = runsOnTop[i];
-    while (j < runsFramed.length)
-      if (item === runsFramed[j])
+    while (j < runsFramed.length) {
+      if (item === runsFramed[j]) {
         runsFramed.splice(j, 1);
-      else
+      } else {
         j++;
+      }
+    }
   }
 
   // build the new list of scripts

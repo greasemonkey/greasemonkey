@@ -233,27 +233,9 @@ var greasemonkeyService = {
     var scripts = [];
     config.load();
 
-    outer:
-    for (var i = 0; i < config.scripts.length; i++) {
-      var script = config.scripts[i];
-      if (script.enabled) {
-        for (var j = 0; j < script.includes.length; j++) {
-          var pattern = convert2RegExp(script.includes[j]);
-
-          if (pattern.test(url)) {
-            for (var k = 0; k < script.excludes.length; k++) {
-              pattern = convert2RegExp(script.excludes[k]);
-
-              if (pattern.test(url)) {
-                continue outer;
-              }
-            }
-
-            scripts.push(script);
-
-            continue outer;
-          }
-        }
+    for (var i = 0; script = config.scripts[i]; i++) {
+      if (script.enabled && GM_scriptMatchesUrl(script, url)) {
+        scripts.push(script);
       }
     }
 
