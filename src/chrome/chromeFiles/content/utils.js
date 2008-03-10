@@ -496,3 +496,18 @@ function gen_loggify_wrapper(meth, objName, methName) {
     }
   }
 };
+
+function GM_scriptMatchesUrl(script, url) {
+ for (var i = 0, glob; glob = script.includes[i]; i++) {
+   var re = convert2RegExp(glob);
+   if (re.test(url)) {
+     for (var j = 0; glob = script.excludes[j]; j++) {
+       re = convert2RegExp(glob);
+       if (re.test(url))
+         return false;
+     }
+     return true;
+   }
+ }
+ return false;
+}

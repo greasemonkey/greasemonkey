@@ -428,10 +428,49 @@ function GM_showGeneralPopup(aEvent) {
 };
 
 function GM_showPopup(aEvent) {
+  function urlsOfAllFrames(contentWindow) {
+    function collect(contentWindow) {
+      urls = urls.concat(urlsOfAllFrames(contentWindow));
+    }
+    var urls = [contentWindow.location.href];
+    Array.prototype.slice.call(contentWindow.frames).forEach(collect);
+    return urls;
+  }
+
+  function uniq(a) {
+    var seen = {}, list = [], item;
+    for (var i = 0; i < a.length; i++) {
+      item = a[i];
+      if (!seen.hasOwnProperty(item))
+        seen[item] = list.push(item);
+    }
+    return list;
+  }
+
+  function scriptsMatching(urls) {
+    var matching = [];
+    for (var i = 0, script = null; script = config.scripts[i]; i++)
+      for (var j = 0; j < urls.length; j++)
+        if (GM_scriptMatchesUrl(script, urls[j])) {
+          matching.push(script);
+          break;
+        }
+    return matching;
+  }
+
+  function appendScriptToPopup(script) {
+    var mi = document.createElement("menuitem");
+    mi.setAttribute("label", script.name);
+    mi.setAttribute("value", i);
+    mi.setAttribute("type", "checkbox");
+    mi.setAttribute("checked", script.enabled.toString());
+    popup.insertBefore(mi, tail);
+  }
+
   var config = new Config();
   config.load();
   var popup = aEvent.target;
-  var url = getBrowser().contentWindow.document.location.href;
+  var tail = document.getElementById("gm-status-no-scripts-sep");
 
   // set the enabled/disabled state
   GM_BrowserUI.statusEnabledItem.setAttribute("checked", GM_getEnabled());
@@ -443,35 +482,30 @@ function GM_showPopup(aEvent) {
     }
   }
 
-  var foundInjectedScript = false;
+  var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
+  var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
+  var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
 
-  // build the new list of scripts
-  for (var i = 0, script = null; script = config.scripts[i]; i++) {
-    incloop: for (var j = 0; j < script.includes.length; j++) {
-      var pattern = convert2RegExp(script.includes[j]);
-      if (pattern.test(url)) {
-        for (var k = 0; k < script.excludes.length; k++) {
-          pattern = convert2RegExp(script.excludes[k]);
-          if (pattern.test(url)) {
-            break incloop;
-          }
-        }
-
-        foundInjectedScript = true;
-
-        var mi = document.createElement('menuitem');
-        mi.setAttribute('label', script.name);
-        mi.setAttribute('value', i);
-        mi.setAttribute('type', 'checkbox');
-        mi.setAttribute('checked', script.enabled.toString());
-
-        popup.insertBefore(mi, document.getElementById("gm-status-no-scripts-sep"));
-
-        break incloop;
-      }
-    }
+  // drop all runsFramed scripts already present in runsOnTop
+  for (var i = 0; i < runsOnTop.length; i++) {
+    var j = 0, item = runsOnTop[i];
+    while (j < runsFramed.length)
+      if (item === runsFramed[j])
+        runsFramed.splice(j, 1);
+      else
+        j++;
   }
 
+  // build the new list of scripts
+  if (runsFramed.length) {
+    runsFramed.forEach(appendScriptToPopup);
+    var separator = document.createElement("menuseparator");
+    separator.setAttribute("value", "hack"); // to get removed in the loop above
+    popup.insertBefore(separator, tail);
+  }
+  runsOnTop.forEach(appendScriptToPopup);
+
+  var foundInjectedScript = !!(runsFramed.length + runsOnTop.length);
   document.getElementById("gm-status-no-scripts").collapsed = foundInjectedScript;
 };
 
