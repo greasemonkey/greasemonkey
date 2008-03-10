@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name          Foo
-// @namespace     localhost
+// @namespace     http://www.greasespot.net/
 // @description   Foo'in around
 // @include       http://wiki.greasespot.net/*
 // @resource      fooCon1 foo1.png
