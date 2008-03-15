@@ -12,7 +12,6 @@
 
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />

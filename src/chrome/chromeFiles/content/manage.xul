@@ -5,10 +5,9 @@
 
 <!DOCTYPE dialog SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<dialog id="greasemonkey"
+<window id="greasemonkey"
+  windowtype="Greasemonkey:Manage"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  buttons="accept,cancel"
-  ondialogaccept="return handleOkButton()"
   title="&manage.title;"
   orient="vertical">
 
@@ -16,7 +15,6 @@
   <script type="application/x-javascript" src="chrome://global/content/nsTransferable.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/manage.js" />
 
   <stringbundle id="gm-manage-bundle" src="chrome://greasemonkey/locale/gm-manage.properties" />
@@ -69,4 +67,4 @@
     </rows>
   </grid>
 
-</dialog>
+</window>

@@ -10,13 +10,11 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/convert2RegExp.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/versioning.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/dochandler.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/config.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/accelimation.js" />
 

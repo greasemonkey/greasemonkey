@@ -52,7 +52,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.parseScript(source, this.uri_);
+    this.script = GM_getConfig().parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
                          .getService(Components.interfaces.nsIProperties)
@@ -71,7 +71,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     ws.write(source, source.length);
     ws.close();
 
-    this.script.file = file;
+    this.script.setDownloadedFile(file);
 
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
@@ -92,7 +92,7 @@ ScriptDownloader.prototype.fetchDependencies = function(){
   var deps = this.script.requires.concat(this.script.resources);
   for (var i = 0; i < deps.length; i++) {
     var dep = deps[i];
-    if (this.checkDependencyURL(dep.url)) {
+    if (this.checkDependencyURL(dep.urlToDownload)) {
       this.depQueue_.push(dep);
     } else {
       this.errorInstallDependency(this.script, dep,
@@ -115,8 +115,8 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
         persist.PERSIST_FLAGS_REPLACE_EXISTING_FILES; //doesn't work?
       var ioservice =
         Components.classes["@mozilla.org/network/io-service;1"]
-        .getService();
-      var sourceUri = ioservice.newURI(dep.url, null, null);
+        .getService(Components.interfaces.nsIIOService);
+      var sourceUri = ioservice.newURI(dep.urlToDownload, null, null);
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
@@ -140,7 +140,7 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
 
 ScriptDownloader.prototype.handleDependencyDownloadComplete =
 function(dep, file, channel) {
-  GM_log("Dependency Download complete " + dep.url);
+  GM_log("Dependency Download complete " + dep.urlToDownload);
   try {
     var httpChannel =
       channel.QueryInterface(Components.interfaces.nsIHttpChannel);
@@ -150,11 +150,7 @@ function(dep, file, channel) {
 
   if (httpChannel) {
     if (httpChannel.requestSucceeded) {
-      dep.file = file;
-      dep.mimetype= channel.contentType;
-      if (channel.contentCharset) {
-        dep.charset = channel.contentCharset;
-      }
+      dep.setDownloadedFile(file, channel.contentType, channel.contentCharset ? channel.contentCharset : null);
       this.downloadNextDependency();
     } else {
       this.errorInstallDependency(this.script, dep,
@@ -162,7 +158,7 @@ function(dep, file, channel) {
         httpChannel.responseStatusText);
     }
   } else {
-    dep.file = file;
+    dep.setDownloadedFile(file);
     this.downloadNextDependency();
   }
 };
@@ -192,11 +188,11 @@ ScriptDownloader.prototype.finishInstall = function(){
 };
 
 ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
-  GM_log("Error loading dependency " + dep.url + "\n" + msg)
+  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg)
   if (this.installOnCompletion_) {
-    alert("Error loading dependency " + dep.url + "\n" + msg);
+    alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {
-    this.dependencyError = "Error loading dependency " + dep.url + "\n" + msg;
+    this.dependencyError = "Error loading dependency " + dep.urlToDownload + "\n" + msg;
   }
 };
 
@@ -224,103 +220,6 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
 ScriptDownloader.prototype.showScriptView = function() {
   this.win_.GM_BrowserUI.showScriptView(this);
 };
-
-ScriptDownloader.prototype.parseScript = function(source, uri) {
-  var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService();
-
-  var script = new Script();
-  script.uri = uri;
-  script.enabled = true;
-  script.includes = [];
-  script.excludes = [];
-
-  // read one line at a time looking for start meta delimiter or EOF
-  var lines = source.match(/.+/g);
-  var lnIdx = 0;
-  var result = {};
-  var foundMeta = false;
-
-  while ((result = lines[lnIdx++])) {
-    if (result.indexOf("// ==UserScript==") == 0) {
-      foundMeta = true;
-      break;
-    }
-  }
-
-  // gather up meta lines
-  if (foundMeta) {
-    // used for duplicate resource name detection
-    var previousResourceNames = {};
-
-    while ((result = lines[lnIdx++])) {
-      if (result.indexOf("// ==/UserScript==") == 0) {
-        break;
-      }
-
-      var match = result.match(/\/\/ \@(\S+)\s+([^\n]+)/);
-      if (match != null) {
-        switch (match[1]) {
-          case "name":
-          case "namespace":
-          case "description":
-            script[match[1]] = match[2];
-            break;
-          case "include":
-          case "exclude":
-            script[match[1]+"s"].push(match[2]);
-            break;
-          case "require":
-            var reqUri = ioservice.newURI(match[2], null, uri);
-            var scriptDependency = new ScriptDependency();
-            scriptDependency.url = reqUri.spec;
-            script.requires.push(scriptDependency);
-            break;
-          case "resource":
-            var res = match[2].match(/(\S+)\s+(.*)/);
-            if (res === null) {
-              // NOTE: Unlocalized strings
-              throw new Error("Invalid syntax for @resource declaration '" +
-                              match[2] + "'. Resources are declared like: " +
-                              "@resource <name> <url>.");
-            }
-
-            var resName = res[1];
-            if (previousResourceNames[resName]) {
-              throw new Error("Duplicate resource name '" + resName + "' " +
-                              "detected. Each resource must have a unique " +
-                              "name.");
-            } else {
-              previousResourceNames[resName] = true;
-            }
-
-            var resUri = ioservice.newURI(res[2], null, uri);
-            var scriptResource = new ScriptResource();
-            scriptResource.name = resName;
-            scriptResource.url = resUri.spec;
-            script.resources.push(scriptResource);
-            break;
-        }
-      }
-    }
-  }
-
-  // if no meta info, default to reasonable values
-  if (script.name == null) {
-    script.name = parseScriptName(uri);
-  }
-
-  if (script.namespace == null) {
-    script.namespace = uri.host;
-  }
-
-  if (script.includes.length == 0) {
-    script.includes.push("*");
-  }
-
-  this.script = script;
-};
-
 
 function NotificationCallbacks() {
 };

@@ -3,9 +3,10 @@ These dummy values are "flexed".  Having a set value, though, keeps the
 columns from shifting size, as their content does.  They also influence
 the original starting size of the elements before flexing.
 */
-dialog {
+window {
   width: 600px;
-  height: 500px
+  height: 500px;
+  padding: 10px;
 }
 #col_left {
   width: 200px

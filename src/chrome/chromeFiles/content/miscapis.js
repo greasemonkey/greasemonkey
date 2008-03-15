@@ -31,23 +31,7 @@ GM_Resources.prototype.getResourceURL = function(name) {
     return;
   }
 
-  var dep = this.getDep_(name);
-
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
-  var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
-                         .getService(Components.interfaces.nsIAppShellService);
-
-  var window = appSvc.hiddenDOMWindow;
-  var binaryContents = getBinaryContents(getDependencyFileURI(this.script, dep));
-
-  var mimetype = dep.mimetype;
-  if(dep.charset && dep.charset.length > 0){
-    mimetype += ";charset=" + dep.charset;
-  }
-
-  return "data:" + mimetype + ";base64," +
-    window.encodeURIComponent(window.btoa(binaryContents));
+  return this.getDep_(name).dataContent;
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
@@ -55,17 +39,14 @@ GM_Resources.prototype.getResourceText = function(name) {
     return;
   }
 
-  var dep = this.getDep_(name);
-  return getContents(getDependencyFileURI(this.script, dep));
+  return this.getDep_(name).textContent;
 };
 
 GM_Resources.prototype.getDep_ = function(name) {
-  for (var i=0; i< this.script.resources.length; i++){
-    var d = this.script.resources[i]
-    if (d.name == name) {
-      return d;
-    }
-  }
+  var resources = this.script.resources;
+  for (var i = 0, resource; resource = resources[i]; i++)
+    if (resource.name == name)
+      return resource;
   throw new Error("No resource with name: " + name); // NOTE: Non localised string
 };
 

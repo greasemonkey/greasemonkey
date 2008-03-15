@@ -43,7 +43,12 @@ function GM_apiLeakCheck(apiName) {
 };
 
 var greasemonkeyService = {
-
+  _config: null,
+  get config() {
+    if (!this._config)
+      this._config = new Config();
+    return this._config;
+  },
   browserWindows: [],
   updater: null,
 
@@ -131,10 +136,6 @@ var greasemonkeyService = {
     Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader)
       .loadSubScript("chrome://greasemonkey/content/utils.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/versioning.js");
 
     Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader)
@@ -229,18 +230,11 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url) {
-    var config = new Config();
-    var scripts = [];
-    config.load();
-
-    for (var i = 0; script = config.scripts[i]; i++) {
-      if (script.enabled && GM_scriptMatchesUrl(script, url)) {
-        scripts.push(script);
-      }
+    function testMatch(script) {
+      return script.enabled && script.matchesURL(url);
     }
 
-    log("* number of matching scripts: " + scripts.length);
-    return scripts;
+    return GM_getConfig().getMatchingScripts(testMatch);
   },
 
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
@@ -293,17 +287,16 @@ var greasemonkeyService = {
 
       sandbox.__proto__ = safeWin;
 
-      var contents = getContents(getScriptFileURI(script))
+      var contents = script.textContent;
 
       var requires = [];
       var offsets = [];
       var offset = 0;
 
       script.requires.forEach(function(req){
-        var uri = getDependencyFileURI(script, req);
-        var contents = getContents(uri);
+        var contents = req.textContent;
         var lineCount = contents.split("\n").length;
-        requires.push(getContents(uri));
+        requires.push(contents);
         offset += lineCount;
         offsets.push(offset);
       })
@@ -379,7 +372,7 @@ var greasemonkeyService = {
           GM_logError(
             e, // error obj
             0, // 0 = error (1 = warning)
-            getScriptFileURI(script).spec,
+            script.fileURL,
             0
           );
         }
@@ -395,7 +388,7 @@ var greasemonkeyService = {
       end = script.offsets[i];
       if (lineNumber < end) {
         return {
-          uri: getDependencyFileURI(script, script.requires[i]).spec,
+          uri: script.requires[i].fileURL,
           lineNumber: (lineNumber - start)
         };
       }
@@ -403,7 +396,7 @@ var greasemonkeyService = {
     }
 
     return {
-      uri: getScriptFileURI(script).spec,
+      uri: script.fileURL,
       lineNumber: (lineNumber - end)
     };
   },

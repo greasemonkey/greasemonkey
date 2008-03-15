@@ -2,14 +2,30 @@ function PagesControl(ctlPages) {
   var includesBox = new PagesBox(document.getElementById("grpIncluded"));
   var excludesBox = new PagesBox(document.getElementById("grpExcluded"));
 
+  this.notifyEvent = function(script, event, data) {
+    switch (event) {
+    case "edit-include-add": includesBox.pageAdded(data); break;
+    case "edit-include-remove": includesBox.pageRemoved(data); break;
+    case "edit-exclude-add": excludesBox.pageAdded(data); break;
+    case "edit-exclude-remove": excludesBox.pageRemoved(data); break;
+    }
+  };
+
+  this.script = null;
   this.populate = function(script) {
-    includesBox.populate(script.includes);
-    excludesBox.populate(script.excludes);
+    this.clear();
+    includesBox.populate(script, 'includes', script.includes);
+    excludesBox.populate(script, 'excludes', script.excludes);
+    this.script = script;
+    GM_getConfig().addObserver(this, this.script);
   };
 
   this.clear = function() {
+    if (this.script == null) return;
+    GM_getConfig().removeObserver(this, this.script);
     includesBox.clear();
     excludesBox.clear();
+    this.script = null;
   };
 
   function PagesBox(grpBox) {
@@ -17,29 +33,30 @@ function PagesControl(ctlPages) {
     var self = this;
     var selectedPage = null;
 
-    this.pages = null;
+    this.script = null;
+    this.type = null;
     this.groupbox = grpBox;
     this.listbox = grpBox.getElementsByTagName("listbox")[0];
     this.btnAdd = buttons[0];
-    this.btnEdit = buttons[1];
-    this.btnRemove = buttons[2];
+    this.btnRemove = buttons[1];
 
     this.listbox.addEventListener("select", updatePagesBox, true);
     this.btnAdd.addEventListener("command", promptForNewPage, true);
-    this.btnEdit.addEventListener("command", promptForEdit, true);
     this.btnRemove.addEventListener("command", remove, true);
 
-    this.populate = function(pages) {
+    this.populate = function(script, type, pages) {
       this.clear();
-      this.pages = pages;
+      this.script = script;
+      this.type = type;
 
-      for (var i = 0, page = null; (page = self.pages[i]); i++) {
+      for (var i = 0, page = null; (page = pages[i]); i++) {
         addPage(page);
       }
     };
 
     this.clear = function() {
-      this.pages = null;
+      this.script = null;
+      this.type = null;
 
       while (this.listbox.hasChildNodes()) {
         this.listbox.removeChild(this.listbox.childNodes[0]);
@@ -48,7 +65,6 @@ function PagesControl(ctlPages) {
 
     function updatePagesBox(ev) {
       selectedPage = self.listbox.getSelectedItem(0);
-      self.btnEdit.disabled = selectedPage == null;
       self.btnRemove.disabled = selectedPage == null;
     };
 
@@ -68,36 +84,31 @@ function PagesControl(ctlPages) {
         gmManageBundle.getString("promptForNewPage.title"));
 
       if (val && val != "") {
-        addPage(val);
-        self.pages.push(val);
+        self.type == 'includes'?
+          self.script.addInclude(val):
+          self.script.addExclude(val);
         dirty = true;
       }
     };
 
-    function promptForEdit(ev) {
-      var gmManageBundle = document.getElementById("gm-manage-bundle");
-      var val = gmPrompt(
-        gmManageBundle.getString("promptForEdit.msg"),
-        self.listbox.selectedItem.label,
-        gmManageBundle.getString("promptForEdit.title"));
-
-      if (val && val != "") {
-        self.listbox.selectedItem.label = val;
-        self.pages[self.listbox.selectedIndex] = val;
-
-        dirty = true;
-      }
+    this.pageAdded = function(val) {
+      addPage(val);
     };
 
     function remove(ev) {
-      self.pages.splice(self.listbox.selectedIndex, 1);
-      self.listbox.removeChild(self.listbox.getSelectedItem(0));
+      self.type == 'includes'?
+        self.script.removeIncludeAt(self.listbox.selectedIndex):
+        self.script.removeExcludeAt(self.listbox.selectedIndex);
 
       // it's sorta wierd that the button stays focused when it is disabled because nothing is selected
       if (self.listbox.length == 0) {
         self.listbox.focus();
         dirty = true;
       }
+    };
+
+    this.pageRemoved= function(index) {
+      self.listbox.removeChild(self.listbox.childNodes[index]);
     };
 
     function addPage(pageSpec) {
