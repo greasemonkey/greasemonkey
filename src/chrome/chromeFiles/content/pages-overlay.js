@@ -14,8 +14,8 @@ function PagesControl(ctlPages) {
   this.script = null;
   this.populate = function(script) {
     this.clear();
-    includesBox.populate(script, 'includes', script.includes);
-    excludesBox.populate(script, 'excludes', script.excludes);
+    includesBox.populate(script, "includes", script.includes);
+    excludesBox.populate(script, "excludes", script.excludes);
     this.script = script;
     GM_getConfig().addObserver(this, this.script);
   };
@@ -84,7 +84,7 @@ function PagesControl(ctlPages) {
         gmManageBundle.getString("promptForNewPage.title"));
 
       if (val && val != "") {
-        self.type == 'includes'?
+        self.type == "includes" ?
           self.script.addInclude(val):
           self.script.addExclude(val);
         dirty = true;
@@ -96,7 +96,7 @@ function PagesControl(ctlPages) {
     };
 
     function remove(ev) {
-      self.type == 'includes'?
+      self.type == "includes" ?
         self.script.removeIncludeAt(self.listbox.selectedIndex):
         self.script.removeExcludeAt(self.listbox.selectedIndex);
 

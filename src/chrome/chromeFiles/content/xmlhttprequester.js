@@ -97,10 +97,10 @@ function(unsafeContentWin, req, event, details) {
         readyState:req.readyState,
         responseHeaders:(req.readyState == 4 ?
                          req.getAllResponseHeaders() :
-                         ''),
+                         ""),
         status:(req.readyState == 4 ? req.status : 0),
-        statusText:(req.readyState == 4 ? req.statusText : ''),
-        finalUrl:(req.readyState == 4 ? req.channel.URI.spec : '')
+        statusText:(req.readyState == 4 ? req.statusText : ""),
+        finalUrl:(req.readyState == 4 ? req.channel.URI.spec : "")
       }
 
       // Pop back onto browser thread and call event handler.

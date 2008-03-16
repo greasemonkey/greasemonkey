@@ -93,11 +93,11 @@ function updateDetails() {
     for (var i = 0; i < desc.length; i++) {
       if (desc[i].length > wordLen) {
         for (var j = desc[i].length; j > 0; j -= wordLen) {
-          desc[i] = desc[i].substr(0,j) + '\u200B' + desc[i].substr(j);
+          desc[i] = desc[i].substr(0,j) + "\u200B" + desc[i].substr(j);
         }
       }
     }
-    desc = desc.join(' ');
+    desc = desc.join(" ");
 
     header.textContent = selectedScript.name;
     description.textContent = desc;
@@ -166,7 +166,7 @@ var dndObserver = {
   },
 
   onDragStart: function (event, transferData, action) {
-    if ('listitem' != event.target.tagName ) return false;
+    if ("listitem" != event.target.tagName ) return false;
 
     transferData.data = new TransferData();
     transferData.data.addDataForFlavour("text/unicode", event.target.index);
@@ -217,11 +217,11 @@ var dndObserver = {
       return false;
     } else {
       if (0 == newIndex) {
-        listbox.firstChild.setAttribute('dragover', 'top');
+        listbox.firstChild.setAttribute("dragover", "top");
       } else if (newIndex >= listbox.childNodes.length) {
-        listbox.lastChild.setAttribute('dragover', 'bottom');
+        listbox.lastChild.setAttribute("dragover", "bottom");
       } else {
-        listbox.childNodes[newIndex - 1].setAttribute('dragover', 'bottom');
+        listbox.childNodes[newIndex - 1].setAttribute("dragover", "bottom");
       }
     }
 
@@ -229,9 +229,9 @@ var dndObserver = {
   },
 
   clearFeedback: function() {
-    var box = document.getElementById('lstScripts');
+    var box = document.getElementById("lstScripts");
     for (var i = 0, el; el = box.childNodes[i]; i++) {
-      el.removeAttribute('dragover');
+      el.removeAttribute("dragover");
     }
   },
 

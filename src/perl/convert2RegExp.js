@@ -7,29 +7,29 @@ function convert2RegExp( pattern ) {
 
   for (var i = 0 ; i < s.length ; i++) {
     switch(s[i]) {
-      case '*' :
+      case "*" :
         res += ".*";
         break;
 
-      case '.' :
-      case '?' :
-      case '^' :
-      case '$' :
-      case '+' :
-      case '{' :
-      case '[' :
-      case '|' :
-      case '(' :
-      case ')' :
-      case ']' :
+      case "." :
+      case "?" :
+      case "^" :
+      case "$" :
+      case "+" :
+      case "{" :
+      case "[" :
+      case "|" :
+      case "(" :
+      case ")" :
+      case "]" :
         res += "\\" + s[i];
         break;
 
-      case '\\' :
+      case "\\" :
         res += "\\\\";
         break;
 
-      case ' ' :
+      case " " :
         // Remove spaces from URLs.
         break;
 
@@ -48,5 +48,5 @@ function convert2RegExp( pattern ) {
     // insert it
     res = tldRes[1] + tldStr + tldRes[3];
   }
-  return new RegExp(res + '$', "i");
+  return new RegExp(res + "$", "i");
 }

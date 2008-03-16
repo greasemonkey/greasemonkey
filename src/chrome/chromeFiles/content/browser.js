@@ -170,7 +170,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
       browser,
       "chrome://greasemonkey/content/icon_small.png",
       greeting,
-      this.bundle.getString('greeting.btn'),
+      this.bundle.getString("greeting.btn"),
       null /* default doc shell */,
       "install-userscript",
       null /* no popuup */,
@@ -196,7 +196,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
       "chrome://greasemonkey/content/icon_small.png",
       notificationBox.PRIORITY_WARNING_MEDIUM,
       [{
-        label: this.bundle.getString('greeting.btn'),
+        label: this.bundle.getString("greeting.btn"),
         accessKey: "I",
         popup: null,
         callback: GM_hitch(this, "installCurrentScript")
@@ -530,10 +530,10 @@ function GM_popupClicked(aEvent) {
 GM_BrowserUI.refreshStatus = function() {
   if (GM_getEnabled()) {
     this.statusImage.src = "chrome://greasemonkey/content/icon_small.png";
-    this.statusImage.tooltipText = this.bundle.getString('tooltip.enabled');
+    this.statusImage.tooltipText = this.bundle.getString("tooltip.enabled");
   } else {
     this.statusImage.src = "chrome://greasemonkey/content/icon_small_disabled.png";
-    this.statusImage.tooltipText = this.bundle.getString('tooltip.disabled');
+    this.statusImage.tooltipText = this.bundle.getString("tooltip.disabled");
   }
 
   this.statusImage.style.opacity = "1.0";
@@ -544,8 +544,8 @@ GM_BrowserUI.newUserScript = function() {
     .classes["@mozilla.org/embedcomp/window-watcher;1"]
     .getService(Components.interfaces.nsIWindowWatcher);
   windowWatcher.openWindow(
-    window, 'chrome://greasemonkey/content/newscript.xul', null,
-    'chrome,dependent,centerscreen,resizable,dialog', null
+    window, "chrome://greasemonkey/content/newscript.xul", null,
+    "chrome,dependent,centerscreen,resizable,dialog", null
   );
 };
 

@@ -25,7 +25,7 @@ var GMInstall = {
     this.bundle = document.getElementById("gm-browser-bundle");
     this.greetz = new Array();
     for(var i = 0; i < 6; i++){
-      this.greetz.push(this.bundle.getString('greetz.' + i));
+      this.greetz.push(this.bundle.getString("greetz." + i));
     }
 
     var pick = Math.round(Math.random() * (this.greetz.length - 1));

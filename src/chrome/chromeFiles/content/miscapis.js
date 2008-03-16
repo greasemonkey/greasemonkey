@@ -70,10 +70,10 @@ GM_ScriptLogger.prototype.log = function(message) {
 // under GPL: http://diveintogreasemonkey.org/license/gpl.html
 function GM_addStyle(doc, css) {
   var head, style;
-  head = doc.getElementsByTagName('head')[0];
+  head = doc.getElementsByTagName("head")[0];
   if (!head) { return; }
-  style = doc.createElement('style');
-  style.type = 'text/css';
+  style = doc.createElement("style");
+  style.type = "text/css";
   style.innerHTML = css;
   head.appendChild(style);
 }
@@ -95,7 +95,7 @@ function GM_console(script) {
   var logger = new GM_ScriptLogger(script);
   this.log = function() {
     logger.log(
-      Array.prototype.slice.apply(arguments).join('\n')
+      Array.prototype.slice.apply(arguments).join("\n")
     );
   };
 }

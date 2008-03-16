@@ -19,29 +19,35 @@ const APP_XPCOM_SERVICES = [
 /********************************************************************************
   en-US Localized strings
  ********************************************************************************/
-const MSG_ADDING = 'Adding ' + APP_PREFS_FILE + ' in ';
-const MSG_ERRCODE = 'Error code:';
-const MSG_PROMPT = 'Do you wish to install ' + APP_DISPLAY_NAME + ' to your profile?\n'
-                   + 'If you are in doubt, this is the preferred option: Select OK.\n'
-                   + '(Select Cancel to install in the Mozilla directory.)';
-const MSG_RETRYING = 'Chrome registration problem. This maybe transient, trying again...';
-const MSG_SUCCESS = APP_DISPLAY_NAME + ' ' + APP_VERSION + ' has been succesfully installed.\n'
-                    + 'Please restart your browser before continuing.';
+const MSG_ADDING = "Adding " + APP_PREFS_FILE + " in ";
+const MSG_ERRCODE = "Error code:";
+const MSG_PROMPT = "Do you wish to install " + APP_DISPLAY_NAME +
+  " to your profile?\n" +
+  "If you are in doubt, this is the preferred option: Select OK.\n" +
+  "(Select Cancel to install in the Mozilla directory.)";
 
-const MSG_FAILAPPNAME = 'Failed to create ' + APP_NAME + '\n'
-                        + 'You probably do not have appropriate permissions \n'
-                        + '(write access to profile or chrome directory). \n'
-                        + '_____________________________\nError code:';
+const MSG_RETRYING = "Chrome registration problem. This maybe transient, " +
+  "trying again...";
 
-const MSG_FAILWARNING = 'WARNING: PARTIAL INSTALLATION\n'
-                        + 'A component requiring write permissions failed in the SeaMonkey program directory.\n'
-                        + 'You will need to either reinstall ' + APP_DISPLAY_NAME + 'once as Adminstrator or root\n'
-                        + 'or install SeaMonkey in a user-writable location.';
+const MSG_SUCCESS = APP_DISPLAY_NAME + " " + APP_VERSION +
+  " has been succesfully installed.\n" +
+  "Please restart your browser before continuing.";
 
-const MSG_FAILINST = 'Install failed! Error code:';
+const MSG_FAILAPPNAME = "Failed to create " + APP_NAME + "\n" +
+  "You probably do not have appropriate permissions \n" +
+  "(write access to profile or chrome directory). \n" +
+  "_____________________________\nError code:";
 
-const MSG_TRANSIENT = 'This specific error may be transient:'
-                      + '\nIf you retry the install again, it may go away.';
+const MSG_FAILWARNING = "WARNING: PARTIAL INSTALLATION\n" +
+  "A component requiring write permissions failed in the SeaMonkey program directory.\n" +
+  "You will need to either reinstall " + APP_DISPLAY_NAME +
+  "once as Adminstrator or root\n" +
+  "or install SeaMonkey in a user-writable location.";
+
+const MSG_FAILINST = "Install failed! Error code:";
+
+const MSG_TRANSIENT = "This specific error may be transient:\n" +
+  "If you retry the install again, it may go away.";
 
 /********************************************************************************
   function PerformInstall
@@ -119,7 +125,7 @@ function PerformInstall(tryAgain) {
           return;
       }
     } else {
-      alert(((err == -239) ? MSG_FAILINST + '\n'+ MSG_TRANSIENT : MSG_FAILINST) + err);
+      alert(((err == -239) ? MSG_FAILINST + "\n"+ MSG_TRANSIENT : MSG_FAILINST) + err);
         cancelInstall(err);
           return;
     }

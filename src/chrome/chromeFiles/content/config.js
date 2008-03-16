@@ -321,7 +321,7 @@ Config.prototype = {
     // Make sure the user script is installed
     if (from == -1) return;
 
-    if (typeof destination == 'number') { // if destination is an offset
+    if (typeof destination == "number") { // if destination is an offset
       to = from + destination;
       to = Math.max(0, to);
       to = Math.min(this._scripts.length - 1, to);
@@ -333,7 +333,7 @@ Config.prototype = {
 
     var tmp = this._scripts.splice(from, 1)[0];
     this._scripts.splice(to, 0, tmp);
-    this._changed(script, 'move', to);
+    this._changed(script, "move", to);
   },
 
   get _scriptDir() {
@@ -412,14 +412,14 @@ Script.prototype = {
   get namespace() { return this._namespace; },
   get description() { return this._description; },
   get enabled() { return this._enabled; },
-  set enabled(enabled) { this._enabled = enabled; this._changed('edit-enabled', enabled); },
+  set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
 
   get includes() { return this._includes.concat(); },
   get excludes() { return this._excludes.concat(); },
-  addInclude: function(url) { this._includes.push(url); this._changed('edit-include-add', url); },
-  removeIncludeAt: function(index) { this._includes.splice(index, 1); this._changed('edit-include-remove', index); },
-  addExclude: function(url) { this._excludes.push(url); this._changed('edit-exclude-add', url); },
-  removeExcludeAt: function(index) { this._excludes.splice(index, 1); this._changed('edit-exclude-remove', index); },
+  addInclude: function(url) { this._includes.push(url); this._changed("edit-include-add", url); },
+  removeIncludeAt: function(index) { this._includes.splice(index, 1); this._changed("edit-include-remove", index); },
+  addExclude: function(url) { this._excludes.push(url); this._changed("edit-exclude-add", url); },
+  removeExcludeAt: function(index) { this._excludes.splice(index, 1); this._changed("edit-exclude-remove", index); },
 
   get requires() { return this._requires.concat(); },
   get resources() { return this._resources.concat(); },
@@ -451,8 +451,8 @@ Script.prototype = {
       name = name.substring(0, dotIndex);
     }
 
-    name = name.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, '');
-    ext = ext.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, '');
+    name = name.replace(/\s+/g, "_").replace(/[^-_A-Z0-9]+/gi, "");
+    ext = ext.replace(/\s+/g, "_").replace(/[^-_A-Z0-9]+/gi, "");
 
     // If no Latin characters found - use default
     if (!name) name = "gm_script";

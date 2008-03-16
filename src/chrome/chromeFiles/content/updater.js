@@ -146,7 +146,7 @@ ExtensionUpdater.prototype.getCurrent = function() {
                                  .replace(/%ITEM_STATUS%/g, "userEnabled")
                                  .replace(/%ITEM_VERSION%/g,
                                           this.currentVersion)
-                                 .replace(/%REQ_VERSION%/gi, '1');
+                                 .replace(/%REQ_VERSION%/gi, "1");
   GM_log("ExtensionUpdater: UpdateURL: " + this.updateURL);
   return true;
 };
@@ -264,11 +264,11 @@ ExtensionUpdater.prototype.installUpdate = function() {
 
     var items = [this.updateLink];
 
-    // Figure out if extension should be updated (default to 'yes')
+    // Figure out if extension should be updated (default to "yes")
     var autoupdate = GM_prefRoot.getValue("enableUpdate",
                                           AUTOUPDATE_DEFAULT_VALUE);
     if (autoupdate == false) {
-      this.success('Would have updated, except update is disabled');
+      this.success("Would have updated, except update is disabled");
     } else {
       GM_log("ExtensionUpdater: Extension '" + this.name + "' updating...");
       manager.initManagerFromChrome(items, items.length, this);

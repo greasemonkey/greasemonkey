@@ -44,7 +44,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
       // NOTE: Unlocalized string
-      alert('Error loading user script:\n' +
+      alert("Error loading user script:\n" +
       this.req_.status + ": " +
       this.req_.statusText);
       return;

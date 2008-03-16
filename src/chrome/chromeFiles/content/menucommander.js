@@ -27,9 +27,9 @@ GM_MenuCommander.prototype.registerMenuCommand =
       }
     }
 
-    GM_log('accelKey: ' + accelKey);
-    GM_log('modifiers: ' + accelModifiers);
-    GM_log('accessKey: ' + accessKey);
+    GM_log("accelKey: " + accelKey);
+    GM_log("modifiers: " + accelModifiers);
+    GM_log("accessKey: " + accessKey);
 
     var menuItem = this.createMenuItem(commandName, commandFunc, accessKey);
     var menuItem2 = this.createMenuItem(commandName, commandFunc, accessKey);

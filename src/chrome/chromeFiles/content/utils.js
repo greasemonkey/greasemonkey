@@ -54,10 +54,10 @@ function GM_unlisten(source, event, listener, opt_capture) {
  * Utility to create an error message in the log without throwing an error.
  */
 function GM_logError(e, opt_warn, fileName, lineNumber) {
-  var consoleService = Components.classes['@mozilla.org/consoleservice;1']
+  var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
     .getService(Components.interfaces.nsIConsoleService);
 
-  var consoleError = Components.classes['@mozilla.org/scripterror;1']
+  var consoleError = Components.classes["@mozilla.org/scripterror;1"]
     .createInstance(Components.interfaces.nsIScriptError);
 
   var flags = opt_warn ? 1 : 0;
@@ -304,11 +304,11 @@ function GM_compareVersions(aV1, aV2) {
   var numSubversions = (v1.length > v2.length) ? v1.length : v2.length;
 
   for (var i = 0; i < numSubversions; i++) {
-    if (typeof v2[i] == 'undefined') {
+    if (typeof v2[i] == "undefined") {
       return 1;
     }
 
-    if (typeof v1[i] == 'undefined') {
+    if (typeof v1[i] == "undefined") {
       return -1;
     }
 
