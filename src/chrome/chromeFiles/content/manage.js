@@ -24,28 +24,29 @@ var observer = {
         break;
 
     switch (event) {
-    case "edit-enabled":
-      node.style.color = data ? "" : "gray";
-      if (script == selectedScript)
-        chkEnabled.checked = data;
-      break;
-    case "install":
-      addListitem(script, -1);
-      break;
-    case "uninstall":
-      var selected = listbox.selectedItem == node;
-      listbox.removeChild(node);
-
-      if (selected && listbox.childNodes.length > 0) {
-        chooseScript(Math.max(Math.min(listbox.selectedIndex, listbox.childNodes.length - 1), 0));
-      }
-      break;
-    case "move":
-      listbox.removeChild(node);
-      listbox.insertBefore(node, listbox.childNodes[data]);
-      // then re-select the dropped script
-      listbox.selectedIndex = data;
-      break;
+      case "edit-enabled":
+        node.style.color = data ? "" : "gray";
+        if (script == selectedScript)
+          chkEnabled.checked = data;
+        break;
+      case "install":
+        addListitem(script, -1);
+        break;
+      case "uninstall":
+        var selected = listbox.selectedItem == node;
+        listbox.removeChild(node);
+  
+        if (selected && listbox.childNodes.length > 0) {
+          chooseScript(Math.max(Math.min(listbox.selectedIndex,
+                                         listbox.childNodes.length - 1), 0));
+        }
+        break;
+      case "move":
+        listbox.removeChild(node);
+        listbox.insertBefore(node, listbox.childNodes[data]);
+        // then re-select the dropped script
+        listbox.selectedIndex = data;
+        break;
     }
 
     // fix the listbox indexes
