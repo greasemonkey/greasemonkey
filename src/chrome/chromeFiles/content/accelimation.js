@@ -34,7 +34,7 @@ function Accelimation(obj, prop, to, time, zip, unit) {
   this.A = this.D / Math.abs(Math.pow(time, this.zip));
   this.id = Accelimation.instances.length;
   this.onend = null;
-};
+}
 
 //=====================================================================
 // public methods

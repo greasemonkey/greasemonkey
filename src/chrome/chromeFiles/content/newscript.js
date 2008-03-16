@@ -51,7 +51,7 @@ function doInstall() {
   GM_prefRoot.setValue("newscript_namespace", script.namespace);
 
   return true;
-};
+}
 
 // assemble the XUL fields into a script template
 function createScriptSource() {
@@ -97,4 +97,4 @@ function createScriptSource() {
   script = script.join("\n");
 
   return script;
-};
+}

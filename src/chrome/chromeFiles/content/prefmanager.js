@@ -140,4 +140,4 @@ function GM_PrefManager(startPoint) {
         removeObserver(prefName, observers[watcher]);
     }
   };
-};
+}

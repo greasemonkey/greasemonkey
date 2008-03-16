@@ -73,7 +73,7 @@ function loadControls() {
      if (selectedScript)
        selectedScript.enabled = chkEnabled.checked;
   }, false);
-};
+}
 
 function updateDetails() {
   if (listbox.selectedCount == 0) {
@@ -103,22 +103,22 @@ function updateDetails() {
     chkEnabled.checked = selectedScript.enabled;
     pagesControl.populate(selectedScript);
   }
-};
+}
 
 function handleEditButton() {
   openInEditor(selectedScript);
-};
+}
 
 function handleUninstallButton() {
   var uninstallPrefs = document.getElementById("chkUninstallPrefs").checked;
   config.uninstall(selectedScript, uninstallPrefs);
-};
+}
 
 function populateChooser() {
   var scripts = config.scripts;
   for (var i = 0, script = null; (script = scripts[i]); i++)
     addListitem(script, i);
-};
+}
 
 function addListitem(script, i) {
   var listitem = document.createElement("listitem");
@@ -133,12 +133,12 @@ function addListitem(script, i) {
   }
 
   listbox.appendChild(listitem);
-};
+}
 
 function chooseScript(index) {
   listbox.selectedIndex = index;
   listbox.focus();
-};
+}
 
 // allow reordering scripts with keyboard (alt- up and down)
 function listboxKeypress(event) {
@@ -152,7 +152,7 @@ function listboxKeypress(event) {
     move = config.move(listbox.selectedItem.script, -1);
   else if (KeyEvent.DOM_VK_DOWN == event.keyCode)
     move = config.move(listbox.selectedItem.script, 1);
-};
+}
 
 // allow reordering scripts with drag-and-drop
 var dndObserver = {

@@ -8,14 +8,14 @@ var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
 
 function GM_isDef(thing) {
   return typeof(thing) != "undefined";
-};
+}
 
 function GM_getConfig() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService(Components.interfaces.gmIGreasemonkeyService)
     .wrappedJSObject.config;
-};
+}
 
 function GM_hitch(obj, meth) {
   if (!obj[meth]) {
@@ -38,17 +38,17 @@ function GM_hitch(obj, meth) {
     // list of static and dynamic arguments.
     return obj[meth].apply(obj, args);
   };
-};
+}
 
 function GM_listen(source, event, listener, opt_capture) {
   Components.lookupMethod(source, "addEventListener")(
     event, listener, opt_capture);
-};
+}
 
 function GM_unlisten(source, event, listener, opt_capture) {
   Components.lookupMethod(source, "removeEventListener")(
     event, listener, opt_capture);
-};
+}
 
 /**
  * Utility to create an error message in the log without throwing an error.
@@ -68,13 +68,13 @@ function GM_logError(e, opt_warn, fileName, lineNumber) {
                     e.columnNumber, flags, null);
 
   consoleService.logMessage(consoleError);
-};
+}
 
 function GM_log(message, force) {
   if (force || GM_prefRoot.getValue("logChrome", false)) {
     GM_consoleService.logStringMessage(message);
   }
-};
+}
 
 function GM_openUserScriptManager() {
   var win = Components.classes["@mozilla.org/appshell/window-mediator;1"]
@@ -196,7 +196,7 @@ function parseScriptName(sourceUri) {
   name = name.substring(0, name.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;
-};
+}
 
 function getTempFile() {
   var file = Components.classes["@mozilla.org/file/directory_service;1"]
@@ -209,7 +209,7 @@ function getTempFile() {
   }
 
   return file;
-};
+}
 
 function getBinaryContents(file) {
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
@@ -225,7 +225,7 @@ function getBinaryContents(file) {
     var bytes = bstream.readBytes(bstream.available());
 
     return bytes;
-};
+}
 
 function getContents(file, charset) {
   if( !charset ) {
@@ -254,7 +254,7 @@ function getContents(file, charset) {
   } catch( e ) {
     return str;
   }
-};
+}
 
 function getWriteStream(file) {
   var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
@@ -263,7 +263,7 @@ function getWriteStream(file) {
   stream.init(file, 0x02 | 0x08 | 0x20, 420, -1);
 
   return stream;
-};
+}
 
 function GM_getUriFromFile(file) {
   return Components.classes["@mozilla.org/network/io-service;1"]
@@ -286,7 +286,7 @@ function getContentDir() {
   var file = proto.getFileFromURLSpec(fileURL.spec).parent;
 
   return file
-};
+}
 
 /**
  * Compares two version numbers
@@ -338,11 +338,11 @@ function gmPrompt(msg, defVal, title) {
   else {
     return null;
   }
-};
+}
 
 function ge(id) {
   return window.document.getElementById(id);
-};
+}
 
 
 function dbg(o) {
@@ -359,15 +359,15 @@ function dbg(o) {
   }
 
   alert(s);
-};
+}
 
 function delaydbg(o) {
   setTimeout(function() {dbg(o);}, 1000);
-};
+}
 
 function delayalert(s) {
   setTimeout(function() {alert(s);}, 1000);
-};
+}
 
 function GM_isGreasemonkeyable(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
@@ -377,7 +377,7 @@ function GM_isGreasemonkeyable(url) {
   return (scheme == "http" || scheme == "https" || scheme == "file" ||
           scheme == "ftp" || url.match(/^about:cache/)) &&
           !/hiddenWindow\.html$/.test(url);
-};
+}
 
 function GM_isFileScheme(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
@@ -385,15 +385,15 @@ function GM_isFileScheme(url) {
                .extractScheme(url);
 
   return scheme == "file";
-};
+}
 
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
-};
+}
 
 function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
-};
+}
 
 
 /**
@@ -404,7 +404,7 @@ function log(message) {
   if (GM_prefRoot.getValue("logChrome", false)) {
     logf.apply(null, arguments);
   }
-};
+}
 
 function logf(message) {
   for (var i = 1; i < arguments.length; i++) {
@@ -412,7 +412,7 @@ function logf(message) {
   }
 
   dump(message + "\n");
-};
+}
 
 /**
  * Loggifies an object. Every method of the object will have it's entrance,
@@ -424,7 +424,7 @@ function loggify(obj, name) {
       obj[p] = gen_loggify_wrapper(obj[p], name, p);
     }
   }
-};
+}
 
 function gen_loggify_wrapper(meth, objName, methName) {
   return function() {
@@ -447,4 +447,4 @@ function gen_loggify_wrapper(meth, objName, methName) {
           (typeof retVal == "undefined" ? "void" : retVal));
     }
   }
-};
+}

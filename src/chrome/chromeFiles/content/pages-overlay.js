@@ -66,7 +66,7 @@ function PagesControl(ctlPages) {
     function updatePagesBox(ev) {
       selectedPage = self.listbox.getSelectedItem(0);
       self.btnRemove.disabled = selectedPage == null;
-    };
+    }
 
     function promptForNewPage(ev) {
       var gmManageBundle = document.getElementById("gm-manage-bundle");
@@ -89,7 +89,7 @@ function PagesControl(ctlPages) {
           self.script.addExclude(val);
         dirty = true;
       }
-    };
+    }
 
     this.pageAdded = function(val) {
       addPage(val);
@@ -105,7 +105,7 @@ function PagesControl(ctlPages) {
         self.listbox.focus();
         dirty = true;
       }
-    };
+    }
 
     this.pageRemoved= function(index) {
       self.listbox.removeChild(self.listbox.childNodes[index]);
@@ -115,6 +115,6 @@ function PagesControl(ctlPages) {
       var listitem = document.createElement("listitem");
       listitem.setAttribute("label", pageSpec);
       self.listbox.appendChild(listitem);
-    };
+    }
   }
-};
+}

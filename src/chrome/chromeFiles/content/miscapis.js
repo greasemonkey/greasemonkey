@@ -4,7 +4,7 @@ function GM_ScriptStorage(script) {
                                      "/",
                                      script.name,
                                      "."].join(""));
-};
+}
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
   if (!GM_apiLeakCheck("GM_setValue")) {
@@ -24,7 +24,7 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
 
 function GM_Resources(script){
   this.script = script;
-};
+}
 
 GM_Resources.prototype.getResourceURL = function(name) {
   if (!GM_apiLeakCheck("GM_getResourceURL")) {
@@ -58,7 +58,7 @@ function GM_ScriptLogger(script) {
   }
 
   this.prefix = [namespace, script.name, ": "].join("");
-};
+}
 
 GM_ScriptLogger.prototype.log = function(message) {
   GM_log(this.prefix + message, true);
@@ -76,7 +76,7 @@ function GM_addStyle(doc, css) {
   style.type = 'text/css';
   style.innerHTML = css;
   head.appendChild(style);
-};
+}
 
 function GM_console(script) {
   // based on http://www.getfirebug.com/firebug/firebugx.js
@@ -98,7 +98,7 @@ function GM_console(script) {
       Array.prototype.slice.apply(arguments).join('\n')
     );
   };
-};
+}
 
 GM_console.prototype.log = function() {
 };

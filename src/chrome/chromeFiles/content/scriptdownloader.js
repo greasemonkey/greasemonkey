@@ -7,7 +7,7 @@ function ScriptDownloader(win, uri, bundle) {
   this.depQueue_ = [];
   this.dependenciesLoaded_ = false;
   this.installOnCompletion_ = false;
-};
+}
 
 ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
@@ -221,8 +221,7 @@ ScriptDownloader.prototype.showScriptView = function() {
   this.win_.GM_BrowserUI.showScriptView(this);
 };
 
-function NotificationCallbacks() {
-};
+function NotificationCallbacks() {}
 
 NotificationCallbacks.prototype.QueryInterface = function(aIID) {
   if (aIID.equals(Components.interfaces.nsIInterfaceRequestor)) {
@@ -241,11 +240,11 @@ NotificationCallbacks.prototype.getInterface = function(aIID) {
 };
 
 
-function PersistProgressListener(persist){
+function PersistProgressListener(persist) {
   this.persist = persist;
   this.onFinish = function(){};
   this.persiststate = "";
-};
+}
 
 PersistProgressListener.prototype.QueryInterface = function(aIID) {
  if (aIID.equals(Components.interfaces.nsIWebProgressListener)) {

@@ -10,7 +10,7 @@ function Config() {
 
   this._updateVersion();
   this._load();
-};
+}
 
 Config.prototype = {
   addObserver: function(observer, script) {
@@ -395,7 +395,7 @@ function Script(config) {
   this._excludes = [];
   this._requires = [];
   this._resources = [];
-};
+}
 
 Script.prototype = {
   matchesURL: function(url) {
@@ -499,7 +499,7 @@ function ScriptRequire(script) {
   this._downloadURL = null; // Only for scripts not installed
   this._tempFile = null; // Only for scripts not installed
   this._filename = null;
-};
+}
 
 ScriptRequire.prototype = {
   get _file() {
@@ -544,7 +544,7 @@ function ScriptResource(script) {
   this._charset = null;
 
   this._name = null;
-};
+}
 
 ScriptResource.prototype = {
   get name() { return this._name; },

@@ -128,7 +128,7 @@ function PerformInstall(tryAgain) {
       cancelInstall(err);
         return;
   }
-};
+}
 
 var InstToProfile = true;
 

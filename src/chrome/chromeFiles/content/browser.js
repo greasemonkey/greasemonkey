@@ -417,7 +417,7 @@ GM_BrowserUI.isMyWindow = function(domWindow) {
 function GM_showGeneralPopup(aEvent) {
   // set the enabled/disabled state
   GM_BrowserUI.generalMenuEnabledItem.setAttribute("checked", GM_getEnabled());
-};
+}
 
 function GM_showPopup(aEvent) {
   function urlsOfAllFrames(contentWindow) {
@@ -502,7 +502,7 @@ function GM_showPopup(aEvent) {
 
   var foundInjectedScript = !!(runsFramed.length + runsOnTop.length);
   document.getElementById("gm-status-no-scripts").collapsed = foundInjectedScript;
-};
+}
 
 /**
  * Handle clicking one of the items in the popup. Left-click toggles the enabled
@@ -520,7 +520,7 @@ function GM_popupClicked(aEvent) {
 
     closeMenus(aEvent.target);
   }
-};
+}
 
 /**
  * Greasemonkey's enabled state has changed, either as a result of clicking
@@ -628,11 +628,11 @@ GM_BrowserUI.hideStatusAnimationEnd = function() {
 };
 
 // necessary for webProgressListener implementation
-GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){}
-GM_BrowserUI.onStateChange = function(a,b,c,d){}
-GM_BrowserUI.onStatusChange = function(a,b,c,d){}
-GM_BrowserUI.onSecurityChange = function(a,b,c){}
-GM_BrowserUI.onLinkIconAvailable = function(a){}
+GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){};
+GM_BrowserUI.onStateChange = function(a,b,c,d){};
+GM_BrowserUI.onStatusChange = function(a,b,c,d){};
+GM_BrowserUI.onSecurityChange = function(a,b,c){};
+GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.showHorrayMessage = function(scriptName) {
   this.showStatus("'" + scriptName + "' " + this.bundle.getString("statusbar.installed"), true);

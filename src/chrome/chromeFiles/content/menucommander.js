@@ -1,4 +1,3 @@
-
 function GM_MenuCommander() {
   GM_log("> GM_MenuCommander")
 
@@ -15,7 +14,7 @@ function GM_MenuCommander() {
   this.menuItems2 = [];
 
   GM_log("< GM_MenuCommander")
-};
+}
 
 GM_MenuCommander.prototype.registerMenuCommand =
   function(commandName, commandFunc, accelKey, accelModifiers, accessKey) {

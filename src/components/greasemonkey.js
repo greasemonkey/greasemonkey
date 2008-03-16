@@ -14,7 +14,7 @@ function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
     .alert(null, "Greasemonkey alert", msg);
-};
+}
 
 // Examines the stack to determine if an API should be callable.
 function GM_apiLeakCheck(apiName) {
@@ -40,7 +40,7 @@ function GM_apiLeakCheck(apiName) {
   } while (stack);
 
   return true;
-};
+}
 
 var greasemonkeyService = {
   _config: null,
@@ -488,7 +488,7 @@ Factory.createInstance = function(outer, iid) {
 
 function NSGetModule(compMgr, fileSpec) {
   return Module;
-};
+}
 
 //loggify(Module, "greasemonkeyService:Module");
 //loggify(Factory, "greasemonkeyService:Factory");
