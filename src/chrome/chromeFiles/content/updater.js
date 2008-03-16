@@ -131,7 +131,7 @@ ExtensionUpdater.prototype.getCurrent = function() {
     GM_log("ExtensionUpdater: Could not find updateURL in preferences");
     return false;
   }
-  
+
   var xulRuntime = Cc["@mozilla.org/xre/app-info;1"]
                      .createInstance(Ci.nsIXULRuntime);
 

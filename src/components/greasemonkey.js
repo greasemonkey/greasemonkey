@@ -27,7 +27,7 @@ function GM_apiLeakCheck(apiName) {
       // NOTE: In FF 2.0.0.0, I saw that stack.filename can be null for JS/XPCOM
       // services. This didn't happen in FF 2.0.0.11; I'm not sure when it
       // changed.
-      if (stack.filename != null && 
+      if (stack.filename != null &&
           stack.filename != gmSvcFilename &&
           stack.filename.substr(0, 6) != 'chrome') {
         GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +

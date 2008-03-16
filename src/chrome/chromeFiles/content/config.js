@@ -46,7 +46,7 @@ Config.prototype = {
     name = aScript._name.toLowerCase();
 
     for (var i = 0, script; script = this._scripts[i]; i++) {
-      if (script._namespace.toLowerCase() == namespace 
+      if (script._namespace.toLowerCase() == namespace
         && script._name.toLowerCase() == name) {
         return i;
       }
@@ -451,8 +451,8 @@ Script.prototype = {
       name = name.substring(0, dotIndex);
     }
 
-    name = name.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, ''); 
-    ext = ext.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, ''); 
+    name = name.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, '');
+    ext = ext.replace(/\s+/g, '_').replace(/[^-_A-Z0-9]+/gi, '');
 
     // If no Latin characters found - use default
     if (!name) name = "gm_script";
@@ -461,7 +461,7 @@ Script.prototype = {
     if (name.length > 24) name = name.substring(0, 24);
 
     if (ext) name += "." + ext;
-  
+
     return name;
   },
 
@@ -485,7 +485,7 @@ Script.prototype = {
 
   get urlToDownload() { return this._downloadURL; },
   setDownloadedFile: function(file) { this._tempFile = file; },
-  
+
   get previewURL() {
     return Components.classes["@mozilla.org/network/io-service;1"]
                      .getService(Components.interfaces.nsIIOService)
