@@ -70,25 +70,25 @@ Config.prototype = {
 
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
         switch (childNode.nodeName) {
-          case "Include":
-            script._includes.push(childNode.firstChild.nodeValue);
-            break;
-          case "Exclude":
-            script._excludes.push(childNode.firstChild.nodeValue);
-            break;
-          case "Require":
-            var scriptRequire = new ScriptRequire(script);
-            scriptRequire._filename = childNode.getAttribute("filename");
-            script._requires.push(scriptRequire);
-            break;
-          case "Resource":
-            var scriptResource = new ScriptResource(script);
-            scriptResource._name = childNode.getAttribute("name");
-            scriptResource._filename = childNode.getAttribute("filename");
-            scriptResource._mimetype = childNode.getAttribute("mimetype");
-            scriptResource._charset = childNode.getAttribute("charset");
-            script._resources.push(scriptResource);
-            break;
+        case "Include":
+          script._includes.push(childNode.firstChild.nodeValue);
+          break;
+        case "Exclude":
+          script._excludes.push(childNode.firstChild.nodeValue);
+          break;
+        case "Require":
+          var scriptRequire = new ScriptRequire(script);
+          scriptRequire._filename = childNode.getAttribute("filename");
+          script._requires.push(scriptRequire);
+          break;
+        case "Resource":
+          var scriptResource = new ScriptResource(script);
+          scriptResource._name = childNode.getAttribute("name");
+          scriptResource._filename = childNode.getAttribute("filename");
+          scriptResource._mimetype = childNode.getAttribute("mimetype");
+          scriptResource._charset = childNode.getAttribute("charset");
+          script._resources.push(scriptResource);
+          break;
         }
       }
 

@@ -4,10 +4,10 @@ function PagesControl(ctlPages) {
 
   this.notifyEvent = function(script, event, data) {
     switch (event) {
-      case "edit-include-add":    includesBox.pageAdded(data);   break;
-      case "edit-include-remove": includesBox.pageRemoved(data); break;
-      case "edit-exclude-add":    excludesBox.pageAdded(data);   break;
-      case "edit-exclude-remove": excludesBox.pageRemoved(data); break;
+    case "edit-include-add": includesBox.pageAdded(data); break;
+    case "edit-include-remove": includesBox.pageRemoved(data); break;
+    case "edit-exclude-add": excludesBox.pageAdded(data); break;
+    case "edit-exclude-remove": excludesBox.pageRemoved(data); break;
     }
   };
 
