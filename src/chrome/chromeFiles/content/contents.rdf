@@ -14,7 +14,7 @@
     chrome:name="greasemonkey"
     chrome:extension="true"
     chrome:settingsURL="chrome://greasemonkey/content/manage.xul"
-    chrome:iconURL="chrome://greasemonkey/content/status_on.gif"
+    chrome:iconURL="chrome://greasemonkey/content/icon_small.png"
     chrome:xpcNativeWrappers="true"
     chrome:description="A user script manager for Firefox and SeaMonkey.">
   </RDF:Description>
