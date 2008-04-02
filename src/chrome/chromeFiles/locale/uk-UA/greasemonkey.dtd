@@ -1,35 +1,35 @@
 <!ENTITY manage.title "Керування скриптами">
-<!ENTITY manage.button.add "Додати...">
-<!ENTITY manage.button.edit "Редагувати...">
-<!ENTITY manage.button.remove "Видалити">
+<!ENTITY manage.button.add "Додати…">
+<!ENTITY manage.button.edit "Редагувати…">
+<!ENTITY manage.button.remove "Вилучити">
 <!ENTITY manage.label.grpIncluded "Охоплені сторінки">
 <!ENTITY manage.label.grpExcluded "Сторінки-винятки">
 <!ENTITY manage.label.btnEdit "Редагувати">
-<!ENTITY manage.label.chkEnabled "Увімкнути">
-<!ENTITY manage.label.btnUninstall "Видалити">
-<!ENTITY manage.label.chkUninstall "Видалити також пов&apos;язані налаштування">
+<!ENTITY manage.label.chkEnabled "Увімкнено">
+<!ENTITY manage.label.btnUninstall "Усунути">
+<!ENTITY manage.label.chkUninstall "Також прибрати пов’язані налаштування">
 <!ENTITY manage.reorderHelp "Перетягніть назву скрипту за допомогою миші або натисніть Alt-Вгору/Alt-Вниз, щоб змінити послідовність у списку.">
-<!ENTITY menu.install "Встановити скрипт...">
+<!ENTITY menu.install "Встановити скрипт…">
 <!ENTITY menu.install.accesskey "В">
 <!ENTITY menu.show "Переглянути початковий код скрипту">
 <!ENTITY menu.show.accesskey "П">
-<!ENTITY menu.commands "Команди скрипту...">
+<!ENTITY menu.commands "Команди скрипту…">
 <!ENTITY menu.commands.accesskey "К">
-<!ENTITY menu.new "Новий скрипт...">
+<!ENTITY menu.new "Новий скрипт…">
 <!ENTITY menu.new.accesskey "Н">
-<!ENTITY menu.manage "Керування скриптами...">
+<!ENTITY menu.manage "Керування скриптами…">
 <!ENTITY menu.manage.accesskey "е">
 <!ENTITY statusbar.noscripts "Не встановлено жодних скриптів!">
-<!ENTITY statusbar.enabled "Увімкнути">
+<!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">
 <!ENTITY install.runson "Працює на:">
 <!ENTITY install.butnoton "Не працює на:">
-<!ENTITY install.warning1 "Сумнівні скрипти можуть порушити вашу приватність і завдати шкоди вашій інформації!">
+<!ENTITY install.warning1 "Сумнівні скрипти можуть порушити вашу конфіденційність без вашого відома!">
 <!ENTITY install.warning2 "Встановлюйте скрипти тільки з тих джерел, яким довіряєте.">
 <!ENTITY install.showscriptsource "Показати початковий код скрипту">
 <!ENTITY install.installbutton "Встановити">
-<!ENTITY newscript.name "Ім&apos;я">
+<!ENTITY newscript.name "Ім’я">
 <!ENTITY newscript.namespace "Простір імен">
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Охоплення (одне на рядок)">

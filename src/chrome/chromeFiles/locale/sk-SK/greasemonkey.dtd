@@ -12,7 +12,7 @@
 <!ENTITY menu.install "Nainštalovať používateľský skript...">
 <!ENTITY menu.install.accesskey "N">
 <!ENTITY menu.show "Zobraziť zdrojový kód skriptu">
-<!ENTITY menu.show.accesskey "z">
+<!ENTITY menu.show.accesskey "Z">
 <!ENTITY menu.commands "Príkazy používateľského skriptu...">
 <!ENTITY menu.commands.accesskey "k">
 <!ENTITY menu.new "Nový používateľský skript...">

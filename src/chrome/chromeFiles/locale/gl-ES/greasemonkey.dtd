@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Administrar Scripts">
+<!ENTITY manage.button.add "Engadir...">
+<!ENTITY manage.button.edit "Editar...">
+<!ENTITY manage.button.remove "Eliminar">
+<!ENTITY manage.label.grpIncluded "Páxinas Incluídas">
+<!ENTITY manage.label.grpExcluded "Páxinas Excluídas">
+<!ENTITY manage.label.btnEdit "Editar">
+<!ENTITY manage.label.chkEnabled "Habilitado">
+<!ENTITY manage.label.btnUninstall "Desinstalar">
+<!ENTITY manage.label.chkUninstall "Tamén desinstalar preferencias asociadas">
+<!ENTITY manage.reorderHelp "Arrastar e soltar co rato ou premer AlT-Up/Alt-Down para volver ordenar os scripts nesta lista.">
+<!ENTITY menu.install "Instalar Script...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Ver o Código do Script">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Comandos dos Scripts...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Novo Script...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Administrar Scripts">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "¡Non hai scripts instalados!">
+<!ENTITY statusbar.enabled "Habilitado">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Instalación de Greasemonkey">
+<!ENTITY install.runson "funciona en:">
+<!ENTITY install.butnoton "non funciona en:">
+<!ENTITY install.warning1 "Scripts maliciosos poden violar a sua privacidade e actuar no seu nome sen o seu consentimento.">
+<!ENTITY install.warning2 "Só deberia instalar Scripts de fontes nas que vostede confie.">
+<!ENTITY install.showscriptsource "Mostrar o Código do Script">
+<!ENTITY install.installbutton "Instalar">
+<!ENTITY newscript.name "Nome">
+<!ENTITY newscript.namespace "Nomes">
+<!ENTITY newscript.description "Descrición">
+<!ENTITY newscript.includes "Inclua (Un por liña)">
+<!ENTITY newscript.excludes "Exclua (Un por liña)">

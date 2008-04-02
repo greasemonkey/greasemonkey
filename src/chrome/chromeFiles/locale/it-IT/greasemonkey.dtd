@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Gestione script utente">
+<!ENTITY manage.button.add "Aggiungi...">
+<!ENTITY manage.button.edit "Modifica...">
+<!ENTITY manage.button.remove "Rimuovi">
+<!ENTITY manage.label.grpIncluded "Pagine abilitate">
+<!ENTITY manage.label.grpExcluded "Pagine escluse">
+<!ENTITY manage.label.btnEdit "Modifica">
+<!ENTITY manage.label.chkEnabled "Attivo">
+<!ENTITY manage.label.btnUninstall "Disinstalla">
+<!ENTITY manage.label.chkUninstall "Disinstalla anche le preferenze associate">
+<!ENTITY manage.reorderHelp "Trascina-e-rilascia con il mouse oppure premi Alt-Su/Alt-Giù per riordinare gli script nella lista.">
+<!ENTITY menu.install "Installa script utente...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Mostra sorgente script utente">
+<!ENTITY menu.show.accesskey "M">
+<!ENTITY menu.commands "Comandi script utente...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Nuovo script utente...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Gestione script utente...">
+<!ENTITY menu.manage.accesskey "G">
+<!ENTITY statusbar.noscripts "Nessun script installato!">
+<!ENTITY statusbar.enabled "Attivo">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Installazione di Greasemonkey">
+<!ENTITY install.runson "Si attiva su:">
+<!ENTITY install.butnoton "Non si attiva su:">
+<!ENTITY install.warning1 "Script maliziosi possono violare la tua privacy e agire contro i tuoi interessi senza che tu ne sia a conoscenza.">
+<!ENTITY install.warning2 "Installa soltanto scripts da sorgenti di cui ti fidi.">
+<!ENTITY install.showscriptsource "Mostra sorgente script utente">
+<!ENTITY install.installbutton "Installa">
+<!ENTITY newscript.name "Nome">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Descrizione">
+<!ENTITY newscript.includes "Pagine abilitate (Una per riga)">
+<!ENTITY newscript.excludes "Pagine escluse (Una per riga)">

@@ -1,0 +1,36 @@
+<!ENTITY manage.title "Hantera användarskript">
+<!ENTITY manage.button.add "Lägg till...">
+<!ENTITY manage.button.edit "Redigera...">
+<!ENTITY manage.button.remove "Ta bort">
+<!ENTITY manage.label.grpIncluded "Inkluderade sidor">
+<!ENTITY manage.label.grpExcluded "Exkluderade sidor">
+<!ENTITY manage.label.btnEdit "Redigera">
+<!ENTITY manage.label.chkEnabled "Aktiverad">
+<!ENTITY manage.label.btnUninstall "Avinstallera">
+<!ENTITY manage.label.chkUninstall "Avinstallera även tillhörande inställningar">
+<!ENTITY manage.reorderHelp "Drag-och-släpp med musen eller tryck Alt+Upp/Alt+Ner för att omorganisera skript i den här listan.">
+<!ENTITY menu.install "Installera användarskript...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Visa användarskripts källkod">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Användarskript-kommandon...">
+<!ENTITY menu.commands.accesskey "K">
+<!ENTITY menu.new "Nytt användarskript...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Hantera användarskript...">
+<!ENTITY menu.manage.accesskey "H">
+<!ENTITY statusbar.noscripts "Inga skript installerade!">
+<!ENTITY statusbar.enabled "Aktiverad">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Greasemonkey-installering">
+<!ENTITY install.runson "kör på:">
+<!ENTITY install.butnoton "kör inte på:">
+<!ENTITY install.warning1 "Skadliga skript kan kränka din integritet och agera som dig utan din vetskap.">
+<!ENTITY install.warning2 "Du bör bara installera skript från källor som du litar på.">
+<!ENTITY install.showscriptsource "Visa skriptkällkod">
+<!ENTITY install.installbutton "Installera">
+<!ENTITY newscript.name "Namn">
+<!ENTITY newscript.namespace "Namnrymd">
+<!ENTITY newscript.description "Beskrivning">
+<!ENTITY newscript.includes "Inkluderar (En per rad)">
+<!ENTITY newscript.excludes "Exkluderar (En per rad)">

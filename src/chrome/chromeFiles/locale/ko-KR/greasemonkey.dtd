@@ -7,7 +7,7 @@
 <!ENTITY manage.label.btnEdit "편집">
 <!ENTITY manage.label.chkEnabled "사용">
 <!ENTITY manage.label.btnUninstall "삭제">
-<!ENTITY manage.label.chkUninstall "관련된 환경설정도 함께 삭제">
+<!ENTITY manage.label.chkUninstall "관련된 환경 설정도 함께 삭제">
 <!ENTITY manage.reorderHelp "마우스로 드래그 앤 드롭하시거나, Alt-Up/Alt-Down 키를 눌러서 스크립트 목록의 순서를 바꿀 수 있습니다.">
 <!ENTITY menu.install "유저 스크립트 설치...">
 <!ENTITY menu.install.accesskey "I">
@@ -22,7 +22,7 @@
 <!ENTITY statusbar.noscripts "설치된 스크립트가 없음!">
 <!ENTITY statusbar.enabled "사용">
 <!ENTITY statusbar.enabled.accesskey "E">
-<!ENTITY install.title "그리즈몽키 설치">
+<!ENTITY install.title "그리스몽키 설치">
 <!ENTITY install.runson "다음에서 동작:">
 <!ENTITY install.butnoton "다음에서 동작하지 않음:">
 <!ENTITY install.warning1 "악성 스크립트는 당신의 개인정보를 침해할 수 있으며, 당신이 모르는 사이에 당신을 대신하여 동작할 수 있습니다.">

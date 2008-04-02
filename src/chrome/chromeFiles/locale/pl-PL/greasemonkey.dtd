@@ -8,7 +8,7 @@
 <!ENTITY manage.label.chkEnabled "Włącz">
 <!ENTITY manage.label.btnUninstall "Usuń">
 <!ENTITY manage.label.chkUninstall "Usuń także skojarzone ustawienia">
-<!ENTITY manage.reorderHelp "Aby zmienić kolejność skryptów na liście przenieś je za pomocą myszy lub skorzystaj ze skótu Alt-Up/Alt-Down.">
+<!ENTITY manage.reorderHelp "Aby zmienić kolejność skryptów na liście przenieś je za pomocą myszy lub skorzystaj ze skrótu Alt-Up/Alt-Down.">
 <!ENTITY menu.install "Instaluj skrypt">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Zobacz kod źródłowy skryptu">
