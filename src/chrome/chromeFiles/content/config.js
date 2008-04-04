@@ -1,10 +1,8 @@
-// In this file protected properties (prefixed with an underscore) may be
-// used anywhere within this file and versioning.js
-
 function Config() {
   this._scripts = null;
   this._configFile = this._scriptDir;
   this._configFile.append("config.xml");
+  this._initScriptDir();
 
   this._observers = [];
 
@@ -337,26 +335,6 @@ Config.prototype = {
   },
 
   get _scriptDir() {
-    var newDir = this._newScriptDir;
-    if (newDir.exists()) return newDir;
-
-    var oldDir = this._oldScriptDir;
-    if (oldDir.exists()) return oldDir;
-
-    // if we called this function, we want a script dir.
-    // but, at this branch, neither the old nor new exists, so create one
-    newDir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
-
-    var defaultConfigFile = getContentDir();
-    defaultConfigFile.append("default-config.xml");
-
-    defaultConfigFile.copyTo(newDir, "config.xml");
-    defaultConfigFile.permissions = 0644;
-
-    return newDir;
-  },
-
-  get _newScriptDir() {
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
                          .getService(Components.interfaces.nsIProperties)
                          .get("ProfD", Components.interfaces.nsILocalFile);
@@ -364,19 +342,61 @@ Config.prototype = {
     return file;
   },
 
-  get _oldScriptDir() {
-    var file = getContentDir();
-    file.append("scripts");
-    return file;
+  /**
+   * Create an empty configuration if none exist.
+   */
+  _initScriptDir: function() {
+    var dir = this._scriptDir;
+
+    if (!dir.exists()) {
+      dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+
+      var configStream = getWriteStream(this._configFile);
+      var xml = "<UserScriptConfig/>";
+      configStream.write(xml, xml.length);
+      configStream.close();
+    }
   },
 
   get scripts() { return this._scripts.concat(); },
-  getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); }
-};
+  getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
 
-Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-  .getService(Components.interfaces.mozIJSSubScriptLoader)
-  .loadSubScript("chrome://greasemonkey/content/versioning.js");
+  /**
+   * Checks whether the version has changed since the last run and performs
+   * any necessary upgrades.
+   */
+  _updateVersion: function() {
+    log("> GM_updateVersion");
+
+    // this is the last version which has been run at least once
+    var initialized = GM_prefRoot.getValue("version", "0.0");
+
+    if (GM_compareVersions(initialized, "0.8") == -1)
+      this._pointEightBackup();
+
+    // update the currently initialized version so we don't do this work again.
+    var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
+      .getService(Components.interfaces.nsIExtensionManager);
+
+    var item = extMan.getItemForID(GM_GUID);
+    GM_prefRoot.setValue("version", item.version);
+
+    log("< GM_updateVersion");
+  },
+
+  /**
+   * In Greasemonkey 0.8 there was a format change to the gm_scripts folder and
+   * testing found several bugs where the entire folder would get nuked. So we
+   * are paranoid and backup the folder the first time 0.8 runs.
+   */
+  _pointEightBackup: function() {
+    var scriptDir = this._scriptDir;
+    var scriptDirBackup = scriptDir.clone();
+    scriptDirBackup.leafName += "_08bak";
+    if (scriptDir.exists() && !scriptDirBackup.exists())
+      scriptDir.copyTo(scriptDirBackup.parent, scriptDirBackup.leafName);
+  }
+};
 
 function Script(config) {
   this._config = config;

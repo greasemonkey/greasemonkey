@@ -271,23 +271,6 @@ function GM_getUriFromFile(file) {
                    .newFileURI(file);
 }
 
-function getContentDir() {
-  var reg = Components.classes["@mozilla.org/chrome/chrome-registry;1"]
-                      .getService(Components.interfaces.nsIChromeRegistry);
-
-  var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
-
-  var proto = Components.classes["@mozilla.org/network/protocol;1?name=file"]
-                        .getService(Components.interfaces.nsIFileProtocolHandler);
-
-  var chromeURL = ioSvc.newURI("chrome://greasemonkey/content", null, null);
-  var fileURL = reg.convertChromeURL(chromeURL);
-  var file = proto.getFileFromURLSpec(fileURL.spec).parent;
-
-  return file
-}
-
 /**
  * Compares two version numbers
  *
