@@ -1,59 +1,57 @@
 #!/bin/sh
-GMMAX=0
-GMMIN=8
+
+# Set up variables
+GMMAX=${1-0}
+GMMIN=${2-8}
+GMREL=${3-0}
 GMBUILD=`date +"%Y%m%d"`
-GMREL=0
-
 GMNAME=greasemonkey
-
 GMVER="$GMMAX.$GMMIN.$GMBUILD.$GMREL"
 GMXPI="$GMNAME-$GMVER.xpi"
 
 # Copy base structure to a temporary build directory and change to it
+echo "Creating working directory ..."
 rm -rf build
 mkdir build
-cp chrome.manifest build/
-cp install.js build/
-cp install.rdf build/
-cp license.txt build/
-cp -r defaults build/
-cp -r components build/
-cp -r chrome build/
+cp -r chrome.manifest install.js install.rdf license.txt \
+	defaults components chrome \
+	build/
 cd build
 
-# Generate locales for chrome.manifest from babelzilla directories, which
-# we assume have been placed in locale/.
+echo "Gathering all locales into chrome.manifest ..."
 GMLOC=\"en-US\"
-for entry in $(ls chrome/chromeFiles/locale/); do
+for entry in chrome/chromeFiles/locale/*; do
   if [ $entry != en-US ]; then
-    echo "locale  $GMNAME  "$entry"  chrome/chromeFiles/locale/"$entry"/" >> chrome.manifest
+    echo "locale  $GMNAME  $entry  chrome/chromeFiles/locale/$entry/" >> chrome.manifest
     GMLOC=$GMLOC,\ \"$entry\"
   fi
 done
 
-replace () {
-  TMP=`mktemp -t Greasemonkey-build.sh`
-  SRC=`echo "$1" | sed 's/[\/\\\\]/\\\\&/g'`
-  DST=`echo "$2" | sed 's/[\/\\\\]/\\\\&/g'`
-  sed "s/$SRC/$DST/g" "$3" > "$TMP"
-  if cmp -s "$3" "$TMP" ; then
-    # No change! Treat as a failure to react to in caller.
-    rm "$TMP"
-    return 1
-  fi
-  cp "$TMP" "$3"
-  rm "$TMP"
-  return 0
-}
+echo "Patching install.rdf version ..."
+sed "s!<em:version>.*</em:version>!<em:version>$GMVER</em:version>!" \
+  install.rdf > install.rdf.tmp
+mv install.rdf.tmp install.rdf
 
-replace '<em:version>.*</em:version>' \
-        '<em:version>'$GMVER'</em:version>' \
-        install.rdf
+echo "Cleaning up unwanted files ..."
+find . -depth -name '.svn' -exec rm -rf "{}" \;
+find . -depth -name '*~' -exec rm -rf "{}" \;
+find . -depth -name '#*' -exec rm -rf "{}" \;
 
-find . -name '.svn' -prune -or -name '.DS_Store' -or -name '*~' -or -name '#*' \
-  -or -print | zip -9X -@ "$GMXPI"
+echo "Creating $GMNAME.jar ..."
+cd chrome
+zip -qr0X "$GMNAME.jar" chromeFiles icons
+rm -rf chromeFiles icons
+cd ..
 
-mv "$GMXPI" ../
+echo "Patching chrome.manifest with jar ..."
+sed -e \
+	"/^content\|^skin\|^locale/s#\(.*\) chrome/\(.*\)#\1 jar:chrome/$GMNAME.jar!/\2#" \
+	chrome.manifest > chrome.manifest.jar
+mv chrome.manifest.jar chrome.manifest
 
-echo "Created $GMXPI"
-exit 0
+echo "Creating $GMXPI ..."
+zip -qr9X "../$GMXPI" *
+
+echo "Cleaning up temporary files ..."
+cd ..
+rm -rf build
