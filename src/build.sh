@@ -13,7 +13,7 @@ GMXPI="$GMNAME-$GMVER.xpi"
 echo "Creating working directory ..."
 rm -rf build
 mkdir build
-cp -r chrome.manifest install.js install.rdf license.txt \
+cp -r chrome.manifest install.rdf license.txt \
 	defaults components chrome \
 	build/
 cd build
