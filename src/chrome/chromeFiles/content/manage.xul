@@ -9,6 +9,7 @@
   windowtype="Greasemonkey:Manage"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   title="&manage.title;"
+  persist="screenX screenY width height"
   orient="vertical">
 
   <script type="application/x-javascript" src="chrome://global/content/nsDragAndDrop.js" />
