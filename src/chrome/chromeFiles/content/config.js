@@ -455,6 +455,7 @@ Script.prototype = {
   get _basedirFile() {
     var file = this._config._scriptDir;
     file.append(this._basedir);
+    file.normalize();
     return file;
   },
 
