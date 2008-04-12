@@ -39,7 +39,7 @@
       style="padding:0; overflow:auto; -moz-appearance:textfield; margin:2px 4px"
     >
       <vbox
-        style="background:InfoBackground; border-bottom:1px black dotted; padding:0.5em; margin:0; margin-bottom:0.5em"
+        style="background:InfoBackground; color: InfoText; border-bottom:1px black dotted; padding:0.5em; margin:0; margin-bottom:0.5em"
       >
         <description id="scriptDescription"
           style="margin:0" />
