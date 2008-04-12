@@ -176,7 +176,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
       null /* no popuup */,
       "top",
       true /* show close button */,
-      "I" /* access key */);
+      this.bundle.getString("greeting.btnAccess") /* access key */);
   } else {
     // Firefox 2.0+
     var notificationBox = this.tabBrowser.getNotificationBox(browser);
@@ -197,7 +197,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
       notificationBox.PRIORITY_WARNING_MEDIUM,
       [{
         label: this.bundle.getString("greeting.btn"),
-        accessKey: "I",
+        accessKey: this.bundle.getString("greeting.btnAccess"),
         popup: null,
         callback: GM_hitch(this, "installCurrentScript")
       }]
