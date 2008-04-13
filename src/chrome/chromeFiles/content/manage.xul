@@ -62,6 +62,8 @@
             <checkbox id="chkUninstallPrefs"
               label="&manage.label.chkUninstall;"
               checked="false" />
+            <spacer flex="1"/>
+            <button label="&manage.button.close;" oncommand="close();"/>
           </hbox>
         </vbox>
       </row>

@@ -38,10 +38,12 @@ function PagesControl(ctlPages) {
     this.groupbox = grpBox;
     this.listbox = grpBox.getElementsByTagName("listbox")[0];
     this.btnAdd = buttons[0];
-    this.btnRemove = buttons[1];
+    this.btnEdit = buttons[1]; 
+    this.btnRemove = buttons[2];
 
     this.listbox.addEventListener("select", updatePagesBox, true);
     this.btnAdd.addEventListener("command", promptForNewPage, true);
+    this.btnEdit.addEventListener("command", promptForEdit, true);
     this.btnRemove.addEventListener("command", remove, true);
 
     this.populate = function(script, type, pages) {
@@ -65,6 +67,7 @@ function PagesControl(ctlPages) {
 
     function updatePagesBox(ev) {
       selectedPage = self.listbox.getSelectedItem(0);
+      self.btnEdit.disabled = selectedPage == null;
       self.btnRemove.disabled = selectedPage == null;
     }
 
@@ -90,6 +93,25 @@ function PagesControl(ctlPages) {
         dirty = true;
       }
     }
+
+    function promptForEdit(ev) { 
+      var gmManageBundle = document.getElementById("gm-manage-bundle"); 
+      var val = gmPrompt(
+        gmManageBundle.getString("promptForEdit.msg"),
+        self.listbox.selectedItem.label,
+        gmManageBundle.getString("promptForEdit.title"));
+ 
+      if (val && val != "") {
+        self.type == "includes" ?
+          self.script.removeIncludeAt(self.listbox.selectedIndex):
+          self.script.removeExcludeAt(self.listbox.selectedIndex);
+        self.type == "includes" ?
+          self.script.addInclude(val):
+          self.script.addExclude(val);
+ 
+        dirty = true; 
+      }
+    };
 
     this.pageAdded = function(val) {
       addPage(val);

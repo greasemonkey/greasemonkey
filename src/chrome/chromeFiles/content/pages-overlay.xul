@@ -24,6 +24,9 @@
           <button
             label="&manage.button.add;" />
           <button
+            label="&manage.button.edit;" 
+            disabled="true" /> 
+          <button 
             label="&manage.button.remove;"
             disabled="true" />
           <spacer flex="1" />
@@ -44,6 +47,9 @@
         <vbox>
           <button
             label="&manage.button.add;" />
+          <button 
+            label="&manage.button.edit;" 
+            disabled="true" /> 
           <button label="&manage.button.remove;"
             disabled="true" />
           <spacer flex="1" />
