@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Управление скриптами">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Добавить...">
 <!ENTITY manage.button.edit "Изменить...">
 <!ENTITY manage.button.remove "Удалить">

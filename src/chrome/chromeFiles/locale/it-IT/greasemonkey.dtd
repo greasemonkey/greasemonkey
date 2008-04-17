@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Gestione script utente">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Aggiungi...">
 <!ENTITY manage.button.edit "Modifica...">
 <!ENTITY manage.button.remove "Rimuovi">

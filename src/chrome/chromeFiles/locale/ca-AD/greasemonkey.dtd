@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Manega Scripts d&apos;Usuari">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Afegeix...">
 <!ENTITY manage.button.edit "Edita...">
 <!ENTITY manage.button.remove "Elimina">

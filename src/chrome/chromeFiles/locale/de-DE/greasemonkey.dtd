@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Benutzerskripte verwalten">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Hinzufügen...">
 <!ENTITY manage.button.edit "Bearbeiten...">
 <!ENTITY manage.button.remove "Entfernen">

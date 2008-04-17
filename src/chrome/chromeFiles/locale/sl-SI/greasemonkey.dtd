@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Upravljaj z uporabniškimi skripti">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Dodaj ...">
 <!ENTITY manage.button.edit "Uredi ...">
 <!ENTITY manage.button.remove "Odstrani">

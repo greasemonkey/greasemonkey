@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Kudeatu Erabiltzaile Scriptak">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Gehitu...">
 <!ENTITY manage.button.edit "Aldatu...">
 <!ENTITY manage.button.remove "Ezabatu">

@@ -1,4 +1,5 @@
 <!ENTITY manage.title "유저 스크립트 관리">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "추가...">
 <!ENTITY manage.button.edit "수정...">
 <!ENTITY manage.button.remove "삭제">

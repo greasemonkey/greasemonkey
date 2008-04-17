@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Manage User Scripts">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Toevoegen">
 <!ENTITY manage.button.edit "Aanpassen">
 <!ENTITY manage.button.remove "Verwijderen">

@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Zarządzanie skryptami">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Dodaj">
 <!ENTITY manage.button.edit "Edytuj">
 <!ENTITY manage.button.remove "Usuń">

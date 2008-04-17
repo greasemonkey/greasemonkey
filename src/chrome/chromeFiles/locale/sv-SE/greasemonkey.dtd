@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Hantera användarskript">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Lägg till...">
 <!ENTITY manage.button.edit "Redigera...">
 <!ENTITY manage.button.remove "Ta bort">

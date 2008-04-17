@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Hallinnoi skriptejä">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Lisää...">
 <!ENTITY manage.button.edit "Muokkaa...">
 <!ENTITY manage.button.remove "Poista">

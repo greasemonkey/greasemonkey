@@ -1,4 +1,5 @@
 <!ENTITY manage.title "管理使用者腳本">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "新增...">
 <!ENTITY manage.button.edit "編輯...">
 <!ENTITY manage.button.remove "移除">

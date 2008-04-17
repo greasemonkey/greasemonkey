@@ -1,4 +1,5 @@
 <!ENTITY manage.title "Kullanıcı Script&apos;lerini Yönet">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "Ekle...">
 <!ENTITY manage.button.edit "Düzenle...">
 <!ENTITY manage.button.remove "Kaldır...">

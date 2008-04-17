@@ -1,4 +1,5 @@
 <!ENTITY manage.title "נהל סקריפטים">
+<!ENTITY manage.button.close "Close">
 <!ENTITY manage.button.add "הוסף...">
 <!ENTITY manage.button.edit "ערוך...">
 <!ENTITY manage.button.remove "הסר">
