@@ -7,6 +7,7 @@ function ScriptDownloader(win, uri, bundle) {
   this.depQueue_ = [];
   this.dependenciesLoaded_ = false;
   this.installOnCompletion_ = false;
+  this.tempFiles_ = [];
 }
 
 ScriptDownloader.prototype.startInstall = function() {
@@ -60,6 +61,11 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
+    file.createUnique(
+      Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE,
+      0640
+    );
+    this.tempFiles_.push(file);
 
     var converter =
       Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
@@ -121,6 +127,7 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
       var file = getTempFile();
+      this.tempFiles_.push(file);
 
       var progressListener = new PersistProgressListener(persist);
       progressListener.onFinish = GM_hitch(this,
@@ -203,6 +210,12 @@ ScriptDownloader.prototype.installScript = function(){
     this.win_.GM_BrowserUI.installScript(this.script)
   } else {
     this.installOnCompletion_ = true;
+  }
+};
+
+ScriptDownloader.prototype.cleanupTempFiles = function() {
+  for (var i = 0, file = null; file = this.tempFiles_[i]; i++) {
+    file.remove(false);
   }
 };
 

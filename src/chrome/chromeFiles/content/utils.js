@@ -200,10 +200,11 @@ function getTempFile() {
         .getService(Components.interfaces.nsIProperties)
         .get("TmpD", Components.interfaces.nsILocalFile);
 
-  file.append("gm_" + new Date().getTime() + Math.floor(Math.random()*65536));
-  if(file.exists()){
-    return getTempFile();
-  }
+  file.append("gm-temp");
+  file.createUnique(
+    Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE,
+    0640
+  );
 
   return file;
 }

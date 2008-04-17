@@ -106,6 +106,7 @@ var GMInstall = {
   },
 
   onCancel: function(){
+    this.scriptDownloader_.cleanupTempFiles();
     window.close();
   },
 
