@@ -302,15 +302,14 @@ var greasemonkeyService = {
       })
       script.offsets = offsets;
 
-      var scriptSrc = "(function(){\n" +
+      var scriptSrc = "\n" + // error line-number calculations depend on these
                          requires.join("\n") +
                          "\n" +
                          contents +
-                         "\n})()";
-      this.evalInSandbox(scriptSrc,
-                         url,
-                         sandbox,
-                         script);
+                         "\n";
+      if (!this.evalInSandbox(scriptSrc, url, sandbox, script))
+        this.evalInSandbox("(function(){"+ scriptSrc +"})()",
+                           url, sandbox, script);
     }
   },
 
@@ -346,6 +345,9 @@ var greasemonkeyService = {
         var lineFinder = new Error();
         Components.utils.evalInSandbox(code, sandbox);
       } catch (e) {
+        if ("return not in function" == e.message) // pre-0.8 GM compat:
+          return false; // this script depends on the function enclosure
+
         // try to find the line of the actual error line
         var line = e.lineNumber;
         if (4294967295 == line) {
@@ -378,6 +380,7 @@ var greasemonkeyService = {
         }
       }
     }
+    return true; // did not need a (function() {...})() enclosure.
   },
 
   findError: function(script, lineNumber){

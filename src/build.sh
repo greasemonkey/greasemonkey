@@ -44,9 +44,10 @@ rm -rf chromeFiles icons
 cd ..
 
 echo "Patching chrome.manifest with jar ..."
-sed -e \
-	"/^content\|^skin\|^locale/s#\(.*\) chrome/\(.*\)#\1 jar:chrome/$GMNAME.jar!/\2#" \
-	chrome.manifest > chrome.manifest.jar
+sed -e "/^content/s#\(.*\) chrome/\(.*\)#\1 jar:chrome/$GMNAME.jar!/\2#" \
+    -e  "/^locale/s#\(.*\) chrome/\(.*\)#\1 jar:chrome/$GMNAME.jar!/\2#" \
+    -e    "/^skin/s#\(.*\) chrome/\(.*\)#\1 jar:chrome/$GMNAME.jar!/\2#" \
+    chrome.manifest > chrome.manifest.jar
 mv chrome.manifest.jar chrome.manifest
 
 echo "Creating $GMXPI ..."
