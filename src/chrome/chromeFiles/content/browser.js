@@ -470,8 +470,9 @@ function GM_showPopup(aEvent) {
 
   // remove all the scripts from the list
   for (var i = popup.childNodes.length - 1; i >= 0; i--) {
-    if (popup.childNodes[i].script) {
-      popup.removeChild(popup.childNodes[i]);
+    var node = popup.childNodes[i];
+    if (node.script || node.getAttribute("value") == "hack") {
+      popup.removeChild(node);
     }
   }
 
@@ -494,9 +495,11 @@ function GM_showPopup(aEvent) {
   // build the new list of scripts
   if (runsFramed.length) {
     runsFramed.forEach(appendScriptToPopup);
-    var separator = document.createElement("menuseparator");
-    separator.setAttribute("value", "hack"); // to get removed in the loop above
-    popup.insertBefore(separator, tail);
+    if (runsOnTop.length) { // only add the separator if there is stuff below
+      var separator = document.createElement("menuseparator");
+      separator.setAttribute("value", "hack"); // remove it in the loop above
+      popup.insertBefore(separator, tail);
+    }
   }
   runsOnTop.forEach(appendScriptToPopup);
 
