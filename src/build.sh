@@ -21,6 +21,7 @@ cd build
 echo "Gathering all locales into chrome.manifest ..."
 GMLOC=\"en-US\"
 for entry in chrome/chromeFiles/locale/*; do
+  entry=`basename $entry`
   if [ $entry != en-US ]; then
     echo "locale  $GMNAME  $entry  chrome/chromeFiles/locale/$entry/" >> chrome.manifest
     GMLOC=$GMLOC,\ \"$entry\"
