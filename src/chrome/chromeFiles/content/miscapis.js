@@ -64,6 +64,13 @@ GM_ScriptLogger.prototype.log = function(message) {
   GM_log(this.prefix + message, true);
 };
 
+GM_ScriptStorage.prototype.deleteValue = function(name) {
+  return this.prefMan.remove(name);
+}
+
+GM_ScriptStorage.prototype.enumerateValues = function() {
+  return this.prefMan.enumerateValues();
+}
 
 // Based on Mark Pilgrim's GM_addGlobalStyle from
 // http://diveintogreasemonkey.org/patterns/add-css.html. Used by permission
