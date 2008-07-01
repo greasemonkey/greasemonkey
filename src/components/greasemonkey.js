@@ -125,38 +125,21 @@ var greasemonkeyService = {
 
 
   startup: function() {
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://global/content/XPCNativeWrapper.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/prefmanager.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/utils.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/config.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/miscapis.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
-
-    Cc["@mozilla.org/moz/jssubscript-loader;1"]
-      .getService(Ci.mozIJSSubScriptLoader)
-      .loadSubScript("chrome://greasemonkey/content/updater.js");
-
+    function load(urls) {
+      var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
+        .getService(Ci.mozIJSSubScriptLoader);
+      for (var i = 0; i < arguments.length; i++)
+        loader.loadSubScript(arguments[i]);
+    }
+  
+    load("chrome://global/content/XPCNativeWrapper.js",
+         "chrome://greasemonkey/content/prefmanager.js",
+         "chrome://greasemonkey/content/utils.js",
+         "chrome://greasemonkey/content/config.js",
+         "chrome://greasemonkey/content/convert2RegExp.js",
+         "chrome://greasemonkey/content/miscapis.js",
+         "chrome://greasemonkey/content/xmlhttprequester.js",
+         "chrome://greasemonkey/content/updater.js");
     //loggify(this, "GM_GreasemonkeyService");
   },
 
@@ -309,9 +292,11 @@ var greasemonkeyService = {
                          "\n" +
                          contents +
                          "\n";
-      if (!this.evalInSandbox(scriptSrc, url, sandbox, script))
+      if (!script.unwrap)
+        scriptSrc = "(function(){"+ scriptSrc +"})()";
+      if (!this.evalInSandbox(scriptSrc, url, sandbox, script) && script.unwrap)
         this.evalInSandbox("(function(){"+ scriptSrc +"})()",
-                           url, sandbox, script);
+                           url, sandbox, script); // wrap anyway on early return
     }
   },
 

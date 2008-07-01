@@ -87,6 +87,9 @@ Config.prototype = {
           scriptResource._charset = childNode.getAttribute("charset");
           script._resources.push(scriptResource);
           break;
+        case "Unwrap":
+          script._unwrap = true;
+          break;
         }
       }
 
@@ -148,6 +151,11 @@ Config.prototype = {
         scriptNode.appendChild(resourceNode);
       }
 
+      if (scriptObj._unwrap) {
+        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+        scriptNode.appendChild(doc.createElement("Unwrap"));
+      }
+
       scriptNode.appendChild(doc.createTextNode("\n\t"));
 
       scriptNode.setAttribute("filename", scriptObj._filename);
@@ -201,32 +209,36 @@ Config.prototype = {
           break;
         }
 
-        var match = result.match(/\/\/ \@(\S+)\s+([^\n]+)/);
-        if (match != null) {
-          switch (match[1]) {
+        var match = result.match(/\/\/ \@(\S+)(?:\s+([^\n]+))?/);
+        if (match === null) continue;
+
+        var header = match[1];
+        var value = match[2];
+        if (value) { // @header <value>
+          switch (header) {
             case "name":
             case "namespace":
             case "description":
-              script["_" + match[1]] = match[2];
+              script["_" + header] = value;
               break;
             case "include":
-              script._includes.push(match[2]);
+              script._includes.push(value);
               break;
             case "exclude":
-              script._excludes.push(match[2]);
+              script._excludes.push(value);
               break;
             case "require":
-              var reqUri = ioservice.newURI(match[2], null, uri);
+              var reqUri = ioservice.newURI(value, null, uri);
               var scriptRequire = new ScriptRequire(script);
               scriptRequire._downloadURL = reqUri.spec;
               script._requires.push(scriptRequire);
               break;
             case "resource":
-              var res = match[2].match(/(\S+)\s+(.*)/);
+              var res = value.match(/(\S+)\s+(.*)/);
               if (res === null) {
                 // NOTE: Unlocalized strings
                 throw new Error("Invalid syntax for @resource declaration '" +
-                                match[2] + "'. Resources are declared like: " +
+                                value + "'. Resources are declared like: " +
                                 "@resource <name> <url>.");
               }
 
@@ -244,6 +256,12 @@ Config.prototype = {
               scriptResource._name = resName;
               scriptResource._downloadURL = resUri.spec;
               script._resources.push(scriptResource);
+              break;
+          }
+        } else { // plain @header
+          switch (header) {
+            case "unwrap":
+              script._unwrap = true;
               break;
           }
         }
@@ -415,6 +433,7 @@ function Script(config) {
   this._excludes = [];
   this._requires = [];
   this._resources = [];
+  this._unwrap = false;
 }
 
 Script.prototype = {
@@ -443,6 +462,7 @@ Script.prototype = {
 
   get requires() { return this._requires.concat(); },
   get resources() { return this._resources.concat(); },
+  get unwrap() { return this._unwrap; },
 
   get _file() {
     var file = this._basedirFile;
