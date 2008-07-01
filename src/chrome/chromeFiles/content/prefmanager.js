@@ -30,11 +30,11 @@ function GM_PrefManager(startPoint) {
   };
 
   /**
-	 * enumerate preferences
-	 */
-	this.enumerateValues = function() {
-		return pref.getChildList("",{});
-	}
+   * enumerate preferences
+   */
+  this.listValues = function() {
+    return pref.getChildList("", {});
+  }
 
   /**
    * returns the named preference, or defaultValue if it does not exist
