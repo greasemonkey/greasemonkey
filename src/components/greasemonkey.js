@@ -392,23 +392,28 @@ var greasemonkeyService = {
   },
 
   getFirebugConsole: function(unsafeContentWin, chromeWin) {
-    var firebugConsoleCtor = null;
-    var firebugContext = null;
-
-    if (chromeWin && chromeWin.FirebugConsole) {
-      firebugConsoleCtor = chromeWin.FirebugConsole;
-      firebugContext = chromeWin.top.TabWatcher
-        .getContextByWindow(unsafeContentWin);
-
-      // on first load (of multiple tabs) the context might not exist
-      if (!firebugContext) firebugConsoleCtor = null;
+    if (!chromeWin) return null;
+    var firebugConsole = null;
+    var firebugContext = chromeWin.top.TabWatcher &&
+      chromeWin.top.TabWatcher.getContextByWindow(unsafeContentWin);
+    // on first load (of multiple tabs) the context might not exist
+    if (!firebugContext) return null;
+    if (chromeWin.FirebugConsole) { // < Firebug 1.2
+      firebugConsole = 
+        new chromeWin.FirebugConsole(firebugContext, unsafeContentWin);
+    } else if (chromeWin.Firebug.Console) { // >= Firebug 1.2
+      var firebug = chromeWin.Firebug.Console;
+      firebugConsole = {};
+      var commands = ["log", "debug", "info", "warn", "error"];
+      commands.forEach(function(command) {
+        firebugConsole[command] = function() {
+          firebug.logFormatted.call(
+            firebug, Array.slice(arguments), firebugContext, command
+          );
+        }
+      });
     }
-
-    if (firebugConsoleCtor && firebugContext) {
-      return new firebugConsoleCtor(firebugContext, unsafeContentWin);
-    } else {
-      return null;
-    }
+    return firebugConsole;
   }
 };
 
