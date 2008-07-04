@@ -403,6 +403,10 @@ var greasemonkeyService = {
         new chromeWin.FirebugConsole(firebugContext, unsafeContentWin);
     } else if (chromeWin.Firebug.Console) { // >= Firebug 1.2
       var firebug = chromeWin.Firebug.Console;
+      var fbContext = chromeWin.TabWatcher.getContextByWindow(unsafeContentWin);
+
+      if (!firebug.isEnabled(fbContext)) return null;
+
       firebugConsole = {};
       var commands = ["log", "debug", "info", "warn", "error"];
       commands.forEach(function(command) {
