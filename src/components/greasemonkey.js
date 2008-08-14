@@ -125,21 +125,16 @@ var greasemonkeyService = {
 
 
   startup: function() {
-    function load(urls) {
-      var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
-        .getService(Ci.mozIJSSubScriptLoader);
-      for (var i = 0; i < arguments.length; i++)
-        loader.loadSubScript(arguments[i]);
-    }
-  
-    load("chrome://global/content/XPCNativeWrapper.js",
-         "chrome://greasemonkey/content/prefmanager.js",
-         "chrome://greasemonkey/content/utils.js",
-         "chrome://greasemonkey/content/config.js",
-         "chrome://greasemonkey/content/convert2RegExp.js",
-         "chrome://greasemonkey/content/miscapis.js",
-         "chrome://greasemonkey/content/xmlhttprequester.js",
-         "chrome://greasemonkey/content/updater.js");
+    var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
+      .getService(Ci.mozIJSSubScriptLoader);
+    loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
+    loader.loadSubScript("chrome://greasemonkey/content/prefmanager.js");
+    loader.loadSubScript("chrome://greasemonkey/content/utils.js");
+    loader.loadSubScript("chrome://greasemonkey/content/config.js");
+    loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
+    loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
+    loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
+    loader.loadSubScript("chrome://greasemonkey/content/updater.js");
     //loggify(this, "GM_GreasemonkeyService");
   },
 
@@ -402,20 +397,12 @@ var greasemonkeyService = {
       firebugConsole = 
         new chromeWin.FirebugConsole(firebugContext, unsafeContentWin);
     } else if (chromeWin.Firebug.Console) { // >= Firebug 1.2
-      var firebug = chromeWin.Firebug.Console;
-      var fbContext = chromeWin.TabWatcher.getContextByWindow(unsafeContentWin);
-
-      if (!firebug.isEnabled(fbContext)) return null;
-
-      firebugConsole = {};
-      var commands = ["log", "debug", "info", "warn", "error"];
-      commands.forEach(function(command) {
-        firebugConsole[command] = function() {
-          firebug.logFormatted.call(
-            firebug, Array.slice(arguments), firebugContext, command
-          );
-        }
-      });
+      if (!chromeWin.Firebug.Console.isEnabled(firebugContext)) {
+        return null;
+      }
+      var handler = eval("FirebugConsoleHandler",
+                         chromeWin.Firebug.Console.injector.attachConsole);
+      firebugConsole = new handler(firebugContext, unsafeContentWin);
     }
     return firebugConsole;
   }
