@@ -400,9 +400,20 @@ var greasemonkeyService = {
       if (!chromeWin.Firebug.Console.isEnabled(firebugContext)) {
         return null;
       }
-      var handler = eval("FirebugConsoleHandler",
-                         chromeWin.Firebug.Console.injector.attachConsole);
-      firebugConsole = new handler(firebugContext, unsafeContentWin);
+      var safeWin = new XPCNativeWrapper(unsafeContentWin);
+      if (firebugContext.consoleHandler) {
+        for (var i = 0; i < firebugContext.consoleHandler.length; i++) {
+          if (firebugContext.consoleHandler[i].window == safeWin) {
+            return firebugContext.consoleHandler[i].handler;
+          }
+        }
+      }
+      var dummyElm = safeWin.document.createElement("div");
+      dummyElm.setAttribute("id", "_firebugConsole");
+      safeWin.document.documentElement.appendChild(dummyElm);
+      chromeWin.Firebug.Console.injector.addConsoleListener(firebugContext, safeWin);
+      dummyElm.parentNode.removeChild(dummyElm);
+      firebugConsole = firebugContext.consoleHandler.pop().handler;
     }
     return firebugConsole;
   }
