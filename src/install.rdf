@@ -51,7 +51,7 @@
       <Description>
         <em:id>songbird@songbirdnest.com</em:id>
         <em:minVersion>0.3pre</em:minVersion>
-        <em:maxVersion>0.3.*</em:maxVersion>
+        <em:maxVersion>1.0.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
