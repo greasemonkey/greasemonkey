@@ -1,5 +1,5 @@
-<!ENTITY manage.title "Administrar Scripts">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.title "Administrar Scripts de usuario">
+<!ENTITY manage.button.close "Pechar">
 <!ENTITY manage.button.add "Engadir...">
 <!ENTITY manage.button.edit "Editar...">
 <!ENTITY manage.button.remove "Eliminar">
@@ -8,17 +8,17 @@
 <!ENTITY manage.label.btnEdit "Editar">
 <!ENTITY manage.label.chkEnabled "Habilitado">
 <!ENTITY manage.label.btnUninstall "Desinstalar">
-<!ENTITY manage.label.chkUninstall "Tamén desinstalar preferencias asociadas">
-<!ENTITY manage.reorderHelp "Arrastar e soltar co rato ou premer AlT-Up/Alt-Down para volver ordenar os scripts nesta lista.">
+<!ENTITY manage.label.chkUninstall "Tamén desinstalar preferenzas asociadas">
+<!ENTITY manage.reorderHelp "Arrastar e soltar co rato ou premer AlT-Up/Alt-Down para volver a ordear os scripts nesta lista.">
 <!ENTITY menu.install "Instalar Script...">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "Ver o Código do Script">
+<!ENTITY menu.show "Ver o Código do Script de Usuario">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Comandos dos Scripts...">
+<!ENTITY menu.commands "Comandos dos Scripts de Usuario...">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "Novo Script...">
+<!ENTITY menu.new "Novo Script de Usuario...">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Administrar Scripts">
+<!ENTITY menu.manage "Administrar Scripts de Usuario">
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY statusbar.noscripts "¡Non hai scripts instalados!">
 <!ENTITY statusbar.enabled "Habilitado">

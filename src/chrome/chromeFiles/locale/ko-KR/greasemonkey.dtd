@@ -1,5 +1,5 @@
 <!ENTITY manage.title "유저 스크립트 관리">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.button.close "닫기">
 <!ENTITY manage.button.add "추가...">
 <!ENTITY manage.button.edit "수정...">
 <!ENTITY manage.button.remove "삭제">
@@ -27,7 +27,7 @@
 <!ENTITY install.runson "다음에서 동작:">
 <!ENTITY install.butnoton "다음에서 동작하지 않음:">
 <!ENTITY install.warning1 "악성 스크립트는 당신의 개인정보를 침해할 수 있으며, 당신이 모르는 사이에 당신을 대신하여 동작할 수 있습니다.">
-<!ENTITY install.warning2 "오직 신뢰할 수 있는 출처의 스크립트만 설치하여야 합니다.">
+<!ENTITY install.warning2 "신뢰할 수 있는 스크립트만 설치하여야 합니다.">
 <!ENTITY install.showscriptsource "스크립트 소스 보기">
 <!ENTITY install.installbutton "설치">
 <!ENTITY newscript.name "이름">

@@ -1,5 +1,5 @@
-<!ENTITY manage.title "Gerenciar Scripts de Usuários">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.title "Gerenciar scripts de Usuários">
+<!ENTITY manage.button.close "Fechar">
 <!ENTITY manage.button.add "Adicionar...">
 <!ENTITY manage.button.edit "Editar...">
 <!ENTITY manage.button.remove "Remover">
@@ -9,16 +9,16 @@
 <!ENTITY manage.label.chkEnabled "Ativado">
 <!ENTITY manage.label.btnUninstall "Desinstalar">
 <!ENTITY manage.label.chkUninstall "Desinstalar também as preferências  associadas">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
+<!ENTITY manage.reorderHelp "Clicar-e-arratar com mouse ou pressione Alt-Up/Alt-Down para reordenar os scripts da lista.">
 <!ENTITY menu.install "Instalar este Script...">
 <!ENTITY menu.install.accesskey "S">
-<!ENTITY menu.show "Ver o Código do Script">
+<!ENTITY menu.show "Ver o Código do script">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Comandos de Scripts">
+<!ENTITY menu.commands "Comandos de scripts">
 <!ENTITY menu.commands.accesskey "r">
-<!ENTITY menu.new "Novo Script de Usuário">
+<!ENTITY menu.new "Novo script de Usuário">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Gerenciar Scripts de Usuários...">
+<!ENTITY menu.manage "Gerenciar scripts de Usuários...">
 <!ENTITY menu.manage.accesskey "U">
 <!ENTITY statusbar.noscripts "Nenhum script instalado!">
 <!ENTITY statusbar.enabled "Ativado">
@@ -28,10 +28,10 @@
 <!ENTITY install.butnoton "Não executa em:">
 <!ENTITY install.warning1 "Scripts maliciosos podem violar sua privacidade e fazer coisas sem seu conhecimento.">
 <!ENTITY install.warning2 "Você somente deve instalar scripts de fontes que você conhece.">
-<!ENTITY install.showscriptsource "Mostrar código fonte do Script">
+<!ENTITY install.showscriptsource "Mostrar código fonte do script">
 <!ENTITY install.installbutton "Instalar">
-<!ENTITY newscript.name "Name">
-<!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (One per line)">
-<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY newscript.name "Nome">
+<!ENTITY newscript.namespace "Nome URI">
+<!ENTITY newscript.description "Descrição">
+<!ENTITY newscript.includes "Incluir (um por linha)">
+<!ENTITY newscript.excludes "Excluir (um por linha)">

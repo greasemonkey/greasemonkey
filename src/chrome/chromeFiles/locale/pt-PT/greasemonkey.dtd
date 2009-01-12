@@ -1,5 +1,5 @@
 <!ENTITY manage.title "Gestor de Scripts do Utilizador">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.button.close "Fechar">
 <!ENTITY manage.button.add "Adicionar...">
 <!ENTITY manage.button.edit "Editar...">
 <!ENTITY manage.button.remove "Remover">
@@ -31,7 +31,7 @@
 <!ENTITY install.showscriptsource "Mostrar código-fonte do script">
 <!ENTITY install.installbutton "Instalar">
 <!ENTITY newscript.name "Nome">
-<!ENTITY newscript.namespace "URI único">
+<!ENTITY newscript.namespace "URL único">
 <!ENTITY newscript.description "Descrição">
 <!ENTITY newscript.includes "Executar em (um URL por linha)">
 <!ENTITY newscript.excludes "Não executar em (um URL por linha)">
