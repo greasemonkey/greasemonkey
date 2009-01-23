@@ -387,35 +387,58 @@ var greasemonkeyService = {
   },
 
   getFirebugConsole: function(unsafeContentWin, chromeWin) {
-    if (!chromeWin) return null;
-    var firebugConsole = null;
-    var firebugContext = chromeWin.top.TabWatcher &&
-      chromeWin.top.TabWatcher.getContextByWindow(unsafeContentWin);
-    // on first load (of multiple tabs) the context might not exist
-    if (!firebugContext) return null;
-    if (chromeWin.FirebugConsole) { // < Firebug 1.2
-      firebugConsole = 
-        new chromeWin.FirebugConsole(firebugContext, unsafeContentWin);
-    } else if (chromeWin.Firebug.Console) { // >= Firebug 1.2
-      if (!chromeWin.Firebug.Console.isEnabled(firebugContext)) {
-        return null;
-      }
-      var safeWin = new XPCNativeWrapper(unsafeContentWin);
-      if (firebugContext.consoleHandler) {
-        for (var i = 0; i < firebugContext.consoleHandler.length; i++) {
-          if (firebugContext.consoleHandler[i].window == safeWin) {
-            return firebugContext.consoleHandler[i].handler;
+    try {
+      chromeWin = chromeWin.top;
+      var fbVersion = parseFloat(chromeWin.Firebug.version, 10);
+      var fbConsole = chromeWin.Firebug.Console;
+      var fbContext = chromeWin.TabWatcher &&
+        chromeWin.TabWatcher.getContextByWindow(unsafeContentWin);
+
+      function findActiveContext() {
+        for (var i=0; i<fbContext.activeConsoleHandlers.length; i++) {
+          if (fbContext.activeConsoleHandlers[i].window == unsafeContentWin) {
+            return fbContext.activeConsoleHandlers[i];
           }
         }
+        return null;
       }
-      var dummyElm = safeWin.document.createElement("div");
-      dummyElm.setAttribute("id", "_firebugConsole");
-      safeWin.document.documentElement.appendChild(dummyElm);
-      chromeWin.Firebug.Console.injector.addConsoleListener(firebugContext, safeWin);
-      dummyElm.parentNode.removeChild(dummyElm);
-      firebugConsole = firebugContext.consoleHandler.pop().handler;
+
+      try {
+        if (!fbConsole.isEnabled(fbContext)) return null;
+      } catch (e) {
+        // FB 1.1 can't be enabled/disabled.  Function to check doesn't exist.
+        // Silently ignore.
+      }
+
+      if (fbVersion < 1.2) {
+        return new chromeWin.FirebugConsole(fbContext, unsafeContentWin);
+      } else if (1.2 == fbVersion) {
+        var safeWin = new XPCNativeWrapper(unsafeContentWin);
+
+        if (fbContext.consoleHandler) {
+          for (var i = 0; i < fbContext.consoleHandler.length; i++) {
+            if (fbContext.consoleHandler[i].window == safeWin) {
+              return fbContext.consoleHandler[i].handler;
+            }
+          }
+        }
+
+        var dummyElm = safeWin.document.createElement("div");
+        dummyElm.setAttribute("id", "_firebugConsole");
+        safeWin.document.documentElement.appendChild(dummyElm);
+        chromeWin.Firebug.Console.injector.addConsoleListener(fbContext, safeWin);
+        dummyElm.parentNode.removeChild(dummyElm);
+
+        return fbContext.consoleHandler.pop().handler;
+      } else if (1.3 == fbVersion || 1.4 == fbVersion) {
+        fbConsole.injector.attachIfNeeded(fbContext, unsafeContentWin);
+        return findActiveContext();
+      }
+    } catch (e) {
+      dump('Greasemonkey getFirebugConsole() error:\n'+uneval(e)+'\n');
     }
-    return firebugConsole;
+
+	  return null;
   }
 };
 

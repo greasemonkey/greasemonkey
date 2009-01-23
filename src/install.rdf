@@ -7,7 +7,7 @@
 
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
     <!-- NOTE : build.sh will correct the em:version, if applicable -->
-    <em:version>0.8.20080609.0</em:version>
+    <em:version>0.8.20090123.1</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
@@ -42,7 +42,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>1.5</em:minVersion>
-        <em:maxVersion>3.0.*</em:maxVersion>
+        <em:maxVersion>3.1b2</em:maxVersion>
       </Description>
     </em:targetApplication>
 
