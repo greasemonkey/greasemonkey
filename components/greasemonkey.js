@@ -247,7 +247,7 @@ var greasemonkeyService = {
       sandbox.GM_listValues = GM_hitch(storage, "listValues");
       sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL");
       sandbox.GM_getResourceText = GM_hitch(resources, "getResourceText");
-      sandbox.GM_openInTab = GM_hitch(this, "openInTab", unsafeContentWin);
+      sandbox.GM_openInTab = GM_hitch(this, "openInTab", safeWin, chromeWin);
       sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
                                            "contentStartRequest");
       sandbox.GM_registerMenuCommand = GM_hitch(this,
@@ -298,12 +298,17 @@ var greasemonkeyService = {
     }
   },
 
-  openInTab: function(unsafeContentWin, url) {
-    var unsafeTop = new XPCNativeWrapper(unsafeContentWin, "top").top;
-
-    for (var i = 0; i < this.browserWindows.length; i++) {
-      this.browserWindows[i].openInTab(unsafeTop, url);
-    }
+  openInTab: function(safeContentWin, chromeWin, url) {
+    var newTab = chromeWin.openNewTabWith(
+      url, safeContentWin.document, null, null, null, null);
+    // Source:
+    // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
+    var newWindow = chromeWin.gBrowser
+      .getBrowserForTab(newTab)
+      .docShell
+      .QueryInterface(Ci.nsIInterfaceRequestor)
+      .getInterface(Ci.nsIDOMWindow);
+    return newWindow;
   },
 
   evalInSandbox: function(code, codebase, sandbox, script) {
