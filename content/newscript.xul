@@ -19,26 +19,26 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/newscript.js" />
 
   <vbox>
-    <label value="&newscript.name;" />
+    <label value="&newscript.name;" control="name" />
     <textbox id="name" />
     <separator class="thin" />
 
-    <label value="&newscript.namespace;" />
+    <label value="&newscript.namespace;" control="namespace" />
     <textbox id="namespace" />
     <separator class="thin" />
 
-    <label value="&newscript.description;" />
+    <label value="&newscript.description;" control="descr" />
     <textbox id="descr" />
     <separator class="thin" />
 
-    <label value="&newscript.includes;" />
+    <label value="&newscript.includes;" control="includes" />
     <textbox id="includes"
       multiline="true"
       rows="4"
       cols="60" />
     <separator class="thin" />
 
-    <label value="&newscript.excludes;" />
+    <label value="&newscript.excludes;" control="excludes" />
     <textbox id="excludes"
       multiline="true"
       rows="4"
