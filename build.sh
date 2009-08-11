@@ -13,28 +13,26 @@ GMXPI="$GMNAME-$GMVER.xpi"
 echo "Creating working directory ..."
 rm -rf build
 mkdir build
-cp -r chrome.manifest install.rdf license.txt \
-	defaults components chrome \
+cp -r \
+	chrome.manifest components content defaults install.rdf license.txt locale \
 	build/
 cd build
 
 echo "Gathering all locales into chrome.manifest ..."
-GMLOC=\"en-US\"
-for entry in chrome/chromeFiles/locale/*; do
+GMLOC="en-US"
+for entry in locale/*; do
   entry=`basename $entry`
   if [ $entry != en-US ]; then
     echo "locale  $GMNAME  $entry  chrome/chromeFiles/locale/$entry/" >> chrome.manifest
-    GMLOC=$GMLOC,\ \"$entry\"
+    GMLOC="$GMLOC, $entry"
   fi
 done
 
 echo "Patching install.rdf version ..."
-sed "s!<em:version>.*</em:version>!<em:version>$GMVER</em:version>!" \
-  install.rdf > install.rdf.tmp
-mv install.rdf.tmp install.rdf
+sed -i "s!<em:version>.*</em:version>!<em:version>$GMVER</em:version>!" \
+  install.rdf
 
 echo "Cleaning up unwanted files ..."
-find . -depth -name '.svn' -exec rm -rf "{}" \;
 find . -depth -name '*~' -exec rm -rf "{}" \;
 find . -depth -name '#*' -exec rm -rf "{}" \;
 
