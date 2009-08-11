@@ -1,3 +1,7 @@
+// This anonymous function exists to isolate generic names inside it to its
+// private scope.
+(function() {
+
 function ScriptDownloader(win, uri, bundle) {
   this.win_ = win;
   this.uri_ = uri;
@@ -9,6 +13,9 @@ function ScriptDownloader(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
 }
+
+// Export this one important value to the global namespace.
+window.GM_ScriptDownloader=ScriptDownloader;
 
 ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
@@ -279,3 +286,5 @@ PersistProgressListener.prototype.onStateChange =
       this.onFinish();
     }
   };
+
+})();

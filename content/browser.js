@@ -218,7 +218,7 @@ GM_BrowserUI.startInstallScript = function(uri, timer) {
     return;
   }
 
-  this.scriptDownloader_ = new ScriptDownloader(window, uri, this.bundle);
+  this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
   this.scriptDownloader_.startInstall();
 };
 
