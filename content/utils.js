@@ -355,9 +355,24 @@ function GM_isGreasemonkeyable(url) {
                .getService(Components.interfaces.nsIIOService)
                .extractScheme(url);
 
-  return (scheme == "http" || scheme == "https" || scheme == "file" ||
-          scheme == "ftp" || url.match(/^about:cache/)) &&
-          !/hiddenWindow\.html$/.test(url);
+  if ("http" == scheme) return true;
+  if ("https" == scheme) return true;
+  if ("ftp" == scheme) return true;
+  if ("data" == scheme) return true;
+
+  if ("file" == scheme) {
+    return GM_prefRoot.getValue('fileIsGreaseable');
+  }
+
+  if ("about" == scheme) {
+    // Always allow "about:blank".
+    if (/^about:blank/.test(url)) return true;
+
+    // Conditionally allow the rest of "about:".
+    return GM_prefRoot.getValue('aboutIsGreaseable');
+  }
+
+  return false;
 }
 
 function GM_isFileScheme(url) {
