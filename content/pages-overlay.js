@@ -79,7 +79,7 @@ function PagesControl(ctlPages) {
       var win = wmi.getMostRecentWindow("navigator:browser");
       var currentSite = GM_isGreasemonkeyable(win.content.location.href)
                         ? win.content.location.protocol + "//" +
-                          win.content.location.hostname + "/*"
+                          win.content.location.host + "/*"
                         : gmManageBundle.getString("promptForNewPage.defVal");
       var val = gmPrompt(
         gmManageBundle.getString("promptForNewPage.msg"),
