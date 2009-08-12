@@ -40,6 +40,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   // get all required DOM elements
   this.tabBrowser = document.getElementById("content");
   this.appContent = document.getElementById("appcontent");
+  this.sidebar = document.getElementById("sidebar");
   this.contextMenu = document.getElementById("contentAreaContextMenu");
   this.statusImage = document.getElementById("gm-status-image");
   this.statusLabel = document.getElementById("gm-status-label");
@@ -65,6 +66,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // hook various events
   GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"));
+  GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"));
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
