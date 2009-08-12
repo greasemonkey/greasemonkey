@@ -65,10 +65,18 @@ GM_ScriptLogger.prototype.log = function(message) {
 };
 
 GM_ScriptStorage.prototype.deleteValue = function(name) {
+  if (!GM_apiLeakCheck("GM_setValue")) {
+    return;
+  }
+
   return this.prefMan.remove(name);
 }
 
 GM_ScriptStorage.prototype.listValues = function() {
+  if (!GM_apiLeakCheck("GM_setValue")) {
+    return;
+  }
+
   return this.prefMan.listValues();
 }
 
