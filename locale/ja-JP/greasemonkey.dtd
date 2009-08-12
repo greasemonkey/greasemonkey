@@ -1,5 +1,5 @@
 <!ENTITY manage.title "ユーザスクリプトの管理">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.button.close "閉じる">
 <!ENTITY manage.button.add "追加...">
 <!ENTITY manage.button.edit "編集...">
 <!ENTITY manage.button.remove "削除">

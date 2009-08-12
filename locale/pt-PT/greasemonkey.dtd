@@ -8,7 +8,7 @@
 <!ENTITY manage.label.btnEdit "Editar">
 <!ENTITY manage.label.chkEnabled "Activo">
 <!ENTITY manage.label.btnUninstall "Desinstalar">
-<!ENTITY manage.label.chkUninstall "Desinstalar também a preferências associadas">
+<!ENTITY manage.label.chkUninstall "Desinstalar também as preferências associadas">
 <!ENTITY manage.reorderHelp "Arraste e largue com o rato ou prima Alt-Seta cima/Alt-Seta baixo para reordenar os scripts nesta lista.">
 <!ENTITY menu.install "Instalar Script...">
 <!ENTITY menu.install.accesskey "I">

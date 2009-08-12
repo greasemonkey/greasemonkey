@@ -1,36 +1,37 @@
-<!ENTITY manage.title "Уреди корисничке скрипте">
+<!ENTITY manage.title "Управљање корисничким скриптама">
+<!ENTITY manage.button.close "Затвори">
 <!ENTITY manage.button.add "Додај...">
-<!ENTITY manage.button.edit "Обради...">
+<!ENTITY manage.button.edit "Уреди...">
 <!ENTITY manage.button.remove "Уклони">
-<!ENTITY manage.label.grpIncluded "Укључене стране">
-<!ENTITY manage.label.grpExcluded "Искључене стране">
-<!ENTITY manage.label.btnEdit "Обради...">
+<!ENTITY manage.label.grpIncluded "Укључене странице">
+<!ENTITY manage.label.grpExcluded "Изузете странице">
+<!ENTITY manage.label.btnEdit "Уређивање">
 <!ENTITY manage.label.chkEnabled "Укључено">
-<!ENTITY manage.label.btnUninstall "Деинсталиши">
-<!ENTITY manage.label.chkUninstall "такође и повезана подешавања">
-<!ENTITY manage.reorderHelp "Повуци-и-пусти мишем или притисни Alt-Up/Alt-Down за преуређивање скрипти са ове листе.">
-<!ENTITY menu.install "Инсталиши корисничку скрипту...">
-<!ENTITY menu.install.accesskey "И">
-<!ENTITY menu.show "Погледај извор корисничке скрипте">
-<!ENTITY menu.show.accesskey "В">
+<!ENTITY manage.label.btnUninstall "Деинсталирај">
+<!ENTITY manage.label.chkUninstall "Деинсталирај и подешавања">
+<!ENTITY manage.reorderHelp "Превуците мишем и пустите или притисните алт+горе/алт+доле да бисте променили редослед скрипти">
+<!ENTITY menu.install "Инсталирај корисничку скрипту...">
+<!ENTITY menu.install.accesskey "и">
+<!ENTITY menu.show "Погледај изворни кôд странице">
+<!ENTITY menu.show.accesskey "п">
 <!ENTITY menu.commands "Наредбе корисничких скрипти...">
-<!ENTITY menu.commands.accesskey "Ц">
-<!ENTITY menu.new "Нова корисничка скрипта">
+<!ENTITY menu.commands.accesskey "К">
+<!ENTITY menu.new "Нова корисничка скрипта...">
 <!ENTITY menu.new.accesskey "Н">
-<!ENTITY menu.manage "Уреди корисничке скрипте">
-<!ENTITY menu.manage.accesskey "М">
-<!ENTITY statusbar.noscripts "Скрипте нису инсталисане !">
+<!ENTITY menu.manage "Управљање корисничким скриптама...">
+<!ENTITY menu.manage.accesskey "У">
+<!ENTITY statusbar.noscripts "Нема инсталираних скрипти!">
 <!ENTITY statusbar.enabled "Укључено">
-<!ENTITY statusbar.enabled.accesskey "Е">
+<!ENTITY statusbar.enabled.accesskey "Ч">
 <!ENTITY install.title "Greasemonkey инсталација">
 <!ENTITY install.runson "покреће на:">
 <!ENTITY install.butnoton "не покреће на:">
-<!ENTITY install.warning1 "Злоћудне скрипте могу нарушити твоју приватност и поступати мимо твог знања.">
-<!ENTITY install.warning2 "Требао би инсталисати само скрипте са извора којима верујеш.">
-<!ENTITY install.showscriptsource "Погледај извор скрипте">
-<!ENTITY install.installbutton "Инсталиши">
-<!ENTITY newscript.name "Назив">
-<!ENTITY newscript.namespace "Размак у називу">
+<!ENTITY install.warning1 "Сумњиве скрипте могу нарушити вашу приватност или деловати мимо вашег знања.">
+<!ENTITY install.warning2 "Скрипте требате инсталирати само са проверених извора.">
+<!ENTITY install.showscriptsource "Прикажи изворни кôд скрипте">
+<!ENTITY install.installbutton "Инсталирај">
+<!ENTITY newscript.name "Име">
+<!ENTITY newscript.namespace "Адреса">
 <!ENTITY newscript.description "Опис">
-<!ENTITY newscript.includes "Укључи (један по линији)">
-<!ENTITY newscript.excludes "Искључи (један по линији)">
+<!ENTITY newscript.includes "Укључи (једно по линији)">
+<!ENTITY newscript.excludes "Изузми (једно по линији)">
