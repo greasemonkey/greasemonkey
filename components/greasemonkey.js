@@ -380,12 +380,22 @@ var greasemonkeyService = {
   },
 
   getFirebugConsole: function(unsafeContentWin, chromeWin) {
+    // If we can't find this object, there's no chance the rest of this
+    // function will work.
+    if ('undefined'==typeof chromeWin.Firebug) return null;
+
     try {
       chromeWin = chromeWin.top;
       var fbVersion = parseFloat(chromeWin.Firebug.version, 10);
       var fbConsole = chromeWin.Firebug.Console;
       var fbContext = chromeWin.TabWatcher &&
         chromeWin.TabWatcher.getContextByWindow(unsafeContentWin);
+
+      // Firebug 1.4 will give no context, when disabled for the current site.
+      // We can't run that way.
+      if ('undefined'==typeof fbContext) {
+        return null;
+      }
 
       function findActiveContext() {
         for (var i=0; i<fbContext.activeConsoleHandlers.length; i++) {
@@ -436,8 +446,6 @@ var greasemonkeyService = {
 };
 
 greasemonkeyService.wrappedJSObject = greasemonkeyService;
-
-//loggify(greasemonkeyService, "greasemonkeyService");
 
 
 
