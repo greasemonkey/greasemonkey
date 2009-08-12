@@ -23,7 +23,7 @@ GMLOC="en-US"
 for entry in locale/*; do
   entry=`basename $entry`
   if [ $entry != en-US ]; then
-    echo "locale  $GMNAME  $entry  chrome/chromeFiles/locale/$entry/" >> chrome.manifest
+    echo "locale  $GMNAME  $entry  locale/$entry/" >> chrome.manifest
     GMLOC="$GMLOC, $entry"
   fi
 done
