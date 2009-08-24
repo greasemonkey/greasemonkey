@@ -286,6 +286,10 @@ var greasemonkeyService = {
 
   registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
                                 accelKey, accelModifiers, accessKey) {
+    if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
+      return;
+    }
+
     var command = {name: commandName,
                    accelKey: accelKey,
                    accelModifiers: accelModifiers,
@@ -299,6 +303,9 @@ var greasemonkeyService = {
   },
 
   openInTab: function(safeContentWin, chromeWin, url) {
+    if (!GM_apiLeakCheck("GM_openInTab")) {
+      return undefined;
+    }
     var newTab = chromeWin.openNewTabWith(
       url, safeContentWin.document, null, null, null, null);
     // Source:

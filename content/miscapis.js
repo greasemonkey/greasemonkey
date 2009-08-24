@@ -16,7 +16,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
   if (!GM_apiLeakCheck("GM_getValue")) {
-    return;
+    return undefined;
   }
 
   return this.prefMan.getValue(name, defVal);
@@ -28,7 +28,7 @@ function GM_Resources(script){
 
 GM_Resources.prototype.getResourceURL = function(name) {
   if (!GM_apiLeakCheck("GM_getResourceURL")) {
-    return;
+    return undefined;
   }
 
   return this.getDep_(name).dataContent;
@@ -36,7 +36,7 @@ GM_Resources.prototype.getResourceURL = function(name) {
 
 GM_Resources.prototype.getResourceText = function(name) {
   if (!GM_apiLeakCheck("GM_getResourceText")) {
-    return;
+    return undefined;
   }
 
   return this.getDep_(name).textContent;
@@ -65,20 +65,20 @@ GM_ScriptLogger.prototype.log = function(message) {
 };
 
 GM_ScriptStorage.prototype.deleteValue = function(name) {
-  if (!GM_apiLeakCheck("GM_setValue")) {
-    return;
+  if (!GM_apiLeakCheck("GM_deleteValue")) {
+    return undefined;
   }
 
   return this.prefMan.remove(name);
-}
+};
 
 GM_ScriptStorage.prototype.listValues = function() {
-  if (!GM_apiLeakCheck("GM_setValue")) {
-    return;
+  if (!GM_apiLeakCheck("GM_listValues")) {
+    return undefined;
   }
 
   return this.prefMan.listValues();
-}
+};
 
 // Based on Mark Pilgrim's GM_addGlobalStyle from
 // http://diveintogreasemonkey.org/patterns/add-css.html. Used by permission
