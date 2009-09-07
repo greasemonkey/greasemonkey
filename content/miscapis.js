@@ -7,6 +7,10 @@ function GM_ScriptStorage(script) {
 }
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
+  if (2 !== arguments.length) {
+    throw new Error("Second argument not specified: Value");
+  }
+
   if (!GM_apiLeakCheck("GM_setValue")) {
     return;
   }
@@ -44,9 +48,12 @@ GM_Resources.prototype.getResourceText = function(name) {
 
 GM_Resources.prototype.getDep_ = function(name) {
   var resources = this.script.resources;
-  for (var i = 0, resource; resource = resources[i]; i++)
-    if (resource.name == name)
+  for (var i = 0, resource; resource = resources[i]; i++) {
+    if (resource.name == name) {
       return resource;
+    }
+  }
+
   throw new Error("No resource with name: " + name); // NOTE: Non localised string
 };
 
