@@ -27,12 +27,10 @@ function GM_hitch(obj, meth) {
   return function() {
     // make a copy of staticArgs (don't modify it because it gets reused for
     // every invocation).
-    var args = staticArgs.concat();
+    var args = Array.prototype.slice.call(staticArgs);
 
     // add all the new arguments
-    for (var i = 0; i < arguments.length; i++) {
-      args.push(arguments[i]);
-    }
+    Array.prototype.push.apply(args, arguments);
 
     // invoke the original function with the correct this obj and the combined
     // list of static and dynamic arguments.
