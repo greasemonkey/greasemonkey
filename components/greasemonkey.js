@@ -10,6 +10,21 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 
 const gmSvcFilename = Components.stack.filename;
 
+const maxJSVersion = (function getMaxJSVersion() {
+  // Default to version 1.6, which FF1.5 and later support.
+  var jsVersion = 160;
+
+  var jsds = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService()
+               .QueryInterface(Ci.jsdIDebuggerService);
+  jsds.on();
+  jsds.enumerateContexts({ enumerateContext: function(context) {
+    if (context.version > jsVersion) jsVersion = context.version;
+  }});
+  jsds.off();
+
+  return (jsVersion / 100).toString();
+})();
+
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
@@ -326,7 +341,7 @@ var greasemonkeyService = {
     try {
       // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=307984
       var lineFinder = new Error();
-      Components.utils.evalInSandbox(code, sandbox);
+      Components.utils.evalInSandbox(code, sandbox, maxJSVersion);
     } catch (e) { // catches errors while running the script code
       try {
         if (e && "return not in function" == e.message)
