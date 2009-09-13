@@ -87,17 +87,15 @@ GM_ScriptStorage.prototype.listValues = function() {
   return this.prefMan.listValues();
 };
 
-// Based on Mark Pilgrim's GM_addGlobalStyle from
-// http://diveintogreasemonkey.org/patterns/add-css.html. Used by permission
-// under GPL: http://diveintogreasemonkey.org/license/gpl.html
 function GM_addStyle(doc, css) {
-  var head, style;
-  head = doc.getElementsByTagName("head")[0];
-  if (!head) { return; }
-  style = doc.createElement("style");
-  style.type = "text/css";
-  style.innerHTML = css;
-  head.appendChild(style);
+  var head = doc.getElementsByTagName("head")[0];
+  if (head) {
+    var style = doc.createElement("style");
+    style.textContent = css;
+    style.type = "text/css";
+    head.appendChild(style);
+  }
+  return style;
 }
 
 function GM_console(script) {
