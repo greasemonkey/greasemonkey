@@ -69,10 +69,16 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
     req.overrideMimeType(details.overrideMimeType);
   }
 
+  var contentTypeSet = false;
   if (details.headers) {
     for (var prop in details.headers) {
       req.setRequestHeader(prop, details.headers[prop]);
+      if (prop.toLowerCase() == "content-type") contentTypeSet = true;
     }
+  }
+  // If request method is POST, the content type needs to be set for it to work as expected
+  if (req.method.toUpperCase() == "POST" && !contentTypeSet) {
+    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   }
 
   req.send((details.data) ? details.data : null);
