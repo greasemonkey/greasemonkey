@@ -321,8 +321,19 @@ var greasemonkeyService = {
     if (!GM_apiLeakCheck("GM_openInTab")) {
       return undefined;
     }
-    var newTab = chromeWin.openNewTabWith(
-      url, safeContentWin.document, null, null, null, null);
+
+    var info = Cc["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+    if (parseFloat(info.version, 10) < 3.0) {
+      // Pre FF 3.0 wants the URL as the second argument.
+      var newTab = chromeWin.openNewTabWith(
+        url, safeContentWin.document.location.href, null, null, null, null);
+    } else {
+      // Post FF 3.0 wants the document as the second argument.
+      var newTab = chromeWin.openNewTabWith(
+        url, safeContentWin.document, null, null, null, null);
+    }
+
     // Source:
     // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
     var newWindow = chromeWin.gBrowser
