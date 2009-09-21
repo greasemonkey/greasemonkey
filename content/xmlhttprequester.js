@@ -77,7 +77,7 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
     }
   }
   // If request method is POST, the content type needs to be set for it to work as expected
-  if (req.method.toUpperCase() == "POST" && !contentTypeSet) {
+  if (details.method.toUpperCase() == "POST" && !contentTypeSet) {
     req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   }
 
