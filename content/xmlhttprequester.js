@@ -75,7 +75,21 @@ GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
     }
   }
 
-  req.send((details.data) ? details.data : null);
+  var body = details.data ? details.data : null;
+  if (details.binary) {
+    // xhr supports binary?
+    if (!req.sendAsBinary) {
+      var err = new Error("Unavailable feature: " +
+              "This version of Firefox does not support sending binary data " +
+              "(you should consider upgrading to version 3 or newer.)");
+      GM_logError(err);
+      throw err;
+    }
+    req.sendAsBinary(body);
+  } else {
+    req.send(body);
+  }
+
   GM_log("< GM_xmlhttpRequest.chromeStartRequest");
 }
 
