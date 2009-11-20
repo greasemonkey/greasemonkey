@@ -107,14 +107,18 @@ function(unsafeContentWin, req, event, details) {
       var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
-        responseText:req.responseText,
-        readyState:req.readyState,
-        responseHeaders:(req.readyState == 4 ?
-                         req.getAllResponseHeaders() :
-                         ""),
-        status:(req.readyState == 4 ? req.status : 0),
-        statusText:(req.readyState == 4 ? req.statusText : ""),
-        finalUrl:(req.readyState == 4 ? req.channel.URI.spec : "")
+        responseText: req.responseText,
+        readyState: req.readyState,
+        responseHeaders: null,
+        status: null,
+        statusText: null,
+        finalUrl: null
+      };
+      if (4 == req.readyState && 'onerror' != event) {
+        responseState.responseHeaders = req.getAllResponseHeaders();
+        responseState.status = req.status;
+        responseState.statusText = req.statusText;
+        finalUrl = req.channel.URI.spec;
       }
 
       // Pop back onto browser thread and call event handler.
