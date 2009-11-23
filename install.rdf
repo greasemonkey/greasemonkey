@@ -11,7 +11,7 @@
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
-    <em:iconURL>chrome://greasemonkey/content/icon_medium.png</em:iconURL>
+    <em:iconURL>chrome://greasemonkey/skin/icon_medium.png</em:iconURL>
 
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>

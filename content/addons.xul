@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/addons.dtd">
+<?xml-stylesheet href='chrome://greasemonkey/skin/addons.css' type='text/css'?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
+
+<radiogroup id="viewGroup">
+  <radio id='userscripts-view' label='&userscripts;'
+         insertafter="installs-view" persist="last-selected"
+         oncommand="showView('userscripts');">
+  </radio>
+</radiogroup>
+
+</overlay>
