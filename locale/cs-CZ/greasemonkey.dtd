@@ -1,5 +1,5 @@
-<!ENTITY manage.title "Manage User Scripts">
-<!ENTITY manage.button.close "Close">
+<!ENTITY manage.title "Spravovat uživatelské skripty">
+<!ENTITY manage.button.close "Zavřít">
 <!ENTITY manage.button.add "Přidat...">
 <!ENTITY manage.button.edit "Upravit...">
 <!ENTITY manage.button.remove "Odstranit">
@@ -9,29 +9,29 @@
 <!ENTITY manage.label.chkEnabled "Povolen">
 <!ENTITY manage.label.btnUninstall "Odinstalovat">
 <!ENTITY manage.label.chkUninstall "Odinstalovat i přidružená nastavení">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
+<!ENTITY manage.reorderHelp "Pro změnu pořadí skriptů v tomto seznamu je přetahujte myší, nebo stiskněte Alt-Nahoru/Alt-Dolů.">
 <!ENTITY menu.install "Instalovat tento uživatelský skript...">
-<!ENTITY menu.install.accesskey "S">
-<!ENTITY menu.show "View User Script Source">
-<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Zobrazit zdroj uživatelského skriptu">
+<!ENTITY menu.show.accesskey "Z">
 <!ENTITY menu.commands "Příkazy uživatelských skriptů">
-<!ENTITY menu.commands.accesskey "r">
+<!ENTITY menu.commands.accesskey "k">
 <!ENTITY menu.new "Nový uživatelský skript">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
-<!ENTITY menu.manage.accesskey "U">
+<!ENTITY menu.manage.accesskey "S">
 <!ENTITY statusbar.noscripts "Žádné skripty nejsou nainstalovány!">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
-<!ENTITY install.title "Greasemonkey Installation">
-<!ENTITY install.runson "runs on:">
-<!ENTITY install.butnoton "does not run on:">
-<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
-<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
-<!ENTITY install.showscriptsource "Show Script Source">
-<!ENTITY install.installbutton "Install">
-<!ENTITY newscript.name "Name">
-<!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (One per line)">
-<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY install.title "Greasemonkey Instalace">
+<!ENTITY install.runson "spouští se na:">
+<!ENTITY install.butnoton "nespouští se na:">
+<!ENTITY install.warning1 "Zákeřné skripty mohou poškodit vaše soukromí a act on your behalf bez vašeho vědomí.">
+<!ENTITY install.warning2 "Měli byste instalovat skripty pouze ze zdrojů, kterým věříte.">
+<!ENTITY install.showscriptsource "Zobrazit zdroj skriptu">
+<!ENTITY install.installbutton "Instalovat">
+<!ENTITY newscript.name "Název">
+<!ENTITY newscript.namespace "Jmenný prostor">
+<!ENTITY newscript.description "Popis">
+<!ENTITY newscript.includes "Zahrnuje (jeden na řádek)">
+<!ENTITY newscript.excludes "Vylučuje (jeden na řádek)">
