@@ -8,7 +8,7 @@ TODO: Add observer to put scripts installed, while the addons window is open,
 (function() {
 var _origShowView = showView;
 showView = function(aView) {
-  if ('userscripts'==aView) {
+  if ('userscripts' == aView) {
     greasemonkeyAddons.showView();
   } else {
     _origShowView(aView);
@@ -24,13 +24,13 @@ window.addEventListener('load', function() {
 
 var greasemonkeyAddons={
   showView: function() {
-    if ('userscripts'==gView) return;
+    if ('userscripts' == gView) return;
     updateLastSelected('userscripts');
     gView='userscripts';
 
     // Hide the native controls that don't work in the user scripts view.
     function $(id) { return document.getElementById(id); }
-    function hide(el) { if ('string'==typeof el) el=$(el); el && (el.hidden=true); }
+    function hide(el) { el=$(el); el && (el.hidden=true); }
     var elementIds=[
       'searchPanel', 'installFileButton', 'checkUpdatesAllButton',
       'skipDialogButton', 'themePreviewArea', 'themeSplitter',
@@ -38,13 +38,15 @@ var greasemonkeyAddons={
       'installUpdatesAllButton'];
     elementIds.forEach(hide);
 
-    var getMore = document.getElementById("getMore");
+    var getMore = document.getElementById('getMore');
     getMore.setAttribute('getMoreURL', 'http://userscripts.org/');
     getMore.hidden = false;
     getMore.value = 'Get User Scripts';
 
     greasemonkeyAddons.fillList();
     gExtensionsView.selectedItem = gExtensionsView.children[0];
+    // The setTimeout() here is for timing, to make sure the selection above
+    // has really happened.
     setTimeout(greasemonkeyAddons.onAddonSelect, 0);
   },
 
@@ -54,10 +56,12 @@ var greasemonkeyAddons={
     var config = GM_getConfig();
     var listbox = gExtensionsView;
 
+    // Remove any pre-existing contents.
     while (listbox.firstChild) {
       listbox.removeChild(listbox.firstChild);
     }
 
+    // Add a list item for each script.
     for (var i = 0, script = null; script = config.scripts[i]; i++) {
       var item = document.createElement('richlistitem');
       item.setAttribute('class', 'userscript');
@@ -84,8 +88,23 @@ var greasemonkeyAddons={
     }
   },
 
+  findSelectedScript: function() {
+    var scripts = GM_getConfig().scripts;
+    var selectedScriptId = gExtensionsView.selectedItem.getAttribute('addonId');
+    for (var i = 0, script = null; script=scripts[i]; i++) {
+      if (selectedScriptId == script.namespace+script.name) {
+        return script;
+      }
+    }
+    return null;
+  },
+
   onAddonSelect: function(aEvent) {
+    // We do all this work here, because the elements we want to change do
+    // not exist until the item is selected.
+
     if ('userscripts' != gView) return;
+    var script = greasemonkeyAddons.findSelectedScript();
 
     // Remove/change the anonymous nodes we don't want.
     var item = gExtensionsView.selectedItem;
@@ -105,11 +124,13 @@ var greasemonkeyAddons={
         item, 'command', 'cmd_enable');
     if (!button) return;
     button.setAttribute('command', 'cmd_userscript_enable');
+    button.setAttribute('disabled', 'false');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_disable');
     if (!button) return;
     button.setAttribute('command', 'cmd_userscript_disable');
+    button.setAttribute('disabled', 'false');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_uninstall');
@@ -119,24 +140,13 @@ var greasemonkeyAddons={
   },
 
   doCommand: function(command) {
-    var selectedListitem = gExtensionsView.selectedItem;
-
-    function findScript() {
-      var scripts = GM_getConfig().scripts;
-      var selectedScriptId = selectedListitem.getAttribute('addonId');
-      for (var i=0, script=null; script=scripts[i]; i++) {
-        if (selectedScriptId == script.namespace+script.name) {
-          return script;
-        }
-      }
-      return null;
-    }
-    var script = findScript();
+    var script = greasemonkeyAddons.findSelectedScript();
     if (!script) {
       alert('Crap, something went wrong!');
       return;
     }
 
+    var selectedListitem = gExtensionsView.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
       openInEditor(script);
