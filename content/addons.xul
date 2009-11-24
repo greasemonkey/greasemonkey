@@ -1,17 +1,28 @@
 <?xml version="1.0"?>
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/addons.dtd">
-<?xml-stylesheet href='chrome://greasemonkey/skin/addons.css' type='text/css'?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/addons.css" type="text/css"?>
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
 
 <radiogroup id="viewGroup">
-  <radio id='userscripts-view' label='&userscripts;'
+  <radio id="userscripts-view" label="&userscripts;"
          insertafter="installs-view" persist="last-selected"
          oncommand="showView('userscripts');">
   </radio>
 </radiogroup>
+
+<window>
+  <commandset id="userscripts-commands"
+    oncommand="greasemonkeyAddons.doCommand(event.target.id);">
+    <command id="cmd_userscript_edit"/>
+    <command id="cmd_userscript_enable"/>
+    <command id="cmd_userscript_disable"/>
+    <command id="cmd_userscript_uninstall"/>
+  </commandset>
+</window>
 
 </overlay>
