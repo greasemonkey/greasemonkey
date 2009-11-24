@@ -657,10 +657,6 @@ GM_BrowserUI.viewContextItemClicked = function() {
   this.scriptDownloader_.startViewScript();
 };
 
-GM_BrowserUI.manageMenuItemClicked = function() {
-   GM_openUserScriptManager();
-};
-
 //loggify(GM_BrowserUI, "GM_BrowserUI");
 
 log("calling init...");
