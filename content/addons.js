@@ -45,6 +45,7 @@ var greasemonkeyAddons={
 
     greasemonkeyAddons.fillList();
     gExtensionsView.selectedItem = gExtensionsView.children[0];
+    setTimeout(greasemonkeyAddons.onAddonSelect, 0);
   },
 
   fillList: function() {
@@ -93,6 +94,7 @@ var greasemonkeyAddons={
     // Replace 'preferences' with 'edit'.
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_options');
+    if (!button) return;
     button.setAttribute('label', 'Edit');
     button.setAttribute('accesskey', 'E');
     button.setAttribute('command', 'cmd_userscript_edit');
@@ -101,14 +103,17 @@ var greasemonkeyAddons={
     // Rewire enable, disable, uninstall.
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_enable');
+    if (!button) return;
     button.setAttribute('command', 'cmd_userscript_enable');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_disable');
+    if (!button) return;
     button.setAttribute('command', 'cmd_userscript_disable');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_uninstall');
+    if (!button) return;
     button.setAttribute('command', 'cmd_userscript_uninstall');
     button.setAttribute('disabled', 'false');
   },
