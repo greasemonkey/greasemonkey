@@ -96,7 +96,6 @@ function createScriptSource() {
 
   var ending = "\n";
   if (window.navigator.platform.match(/^Win/)) ending = "\r\n";
-  if (window.navigator.platform.match(/^Mac/)) ending = "\r";
   script = script.join(ending);
 
   return script;
