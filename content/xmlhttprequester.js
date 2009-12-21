@@ -118,7 +118,7 @@ function(unsafeContentWin, req, event, details) {
         responseState.responseHeaders = req.getAllResponseHeaders();
         responseState.status = req.status;
         responseState.statusText = req.statusText;
-        finalUrl = req.channel.URI.spec;
+        responseState.finalUrl = req.channel.URI.spec;
       }
 
       // Pop back onto browser thread and call event handler.

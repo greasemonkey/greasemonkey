@@ -6,8 +6,7 @@
   <Description about="urn:mozilla:install-manifest">
 
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <!-- NOTE: build.sh will correct the em:version. -->
-    <em:version>0.8.20090811.2</em:version>
+    <em:version>0.9.0</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
