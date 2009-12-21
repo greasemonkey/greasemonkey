@@ -14,6 +14,15 @@ showView = function(aView) {
     _origShowView(aView);
   }
 };
+
+var _origBuildContextMenu = buildContextMenu;
+buildContextMenu = function(aEvent) {
+  if ('userscripts' == gView) {
+    greasemonkeyAddons.buildContextMenu(aEvent);
+  } else {
+    _origBuildContextMenu(aEvent);
+  }
+};
 })();
 
 // Set event listeners.
@@ -165,5 +174,33 @@ var greasemonkeyAddons={
       selectedListitem.parentNode.removeChild(selectedListitem);
       break;
     }
+  },
+
+  buildContextMenu: function(aEvent) {
+    var script = greasemonkeyAddons.findSelectedScript();
+    if (!script) {
+      alert('Crap, something went wrong!');
+      return;
+    }
+
+    var popup = document.getElementById('addonContextMenu');
+    while (popup.hasChildNodes()) {
+      popup.removeChild(popup.firstChild);
+    }
+
+    function addMenuItem(label, command) {
+      var menuitem = document.createElement('menuitem');
+      menuitem.setAttribute('label', label);
+      menuitem.setAttribute('command', command);
+      popup.appendChild(menuitem);
+    }
+
+    addMenuItem('Edit', 'cmd_userscript_edit');
+    if (script.enabled) {
+      addMenuItem('Disable', 'cmd_userscript_disable');
+    } else {
+      addMenuItem('Enable', 'cmd_userscript_enable');
+    }
+    addMenuItem('Uninstall', 'cmd_userscript_uninstall');
   }
 };
