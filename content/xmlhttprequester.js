@@ -16,25 +16,21 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     return;
   }
 
-  // don't actually need the timer functionality, but this pops it
-  // out into chromeWindow's thread so that we get that security
-  // context.
   GM_log("> GM_xmlhttpRequest.contentStartRequest");
 
-  // important to store this locally so that content cannot trick us up with
-  // a fancy getter that checks the number of times it has been accessed,
-  // returning a dangerous URL the time that we actually use it.
-  var url = details.url;
+  // Store this value by looking at it exactly once, and guaranteeing (via null
+  // prepend) that it is a string, and not an object that might play tricks
+  // with multiple .toString() calls.
+  var url = '' + details.url;
 
-  // make sure that we have an actual string so that we can't be fooled with
-  // tricky toString() implementations.
-  if (typeof url != "string") {
-    throw new Error("Invalid url: url must be of type string");
+  try {
+    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                    .getService(Components.interfaces.nsIIOService);
+    var scheme = ioService.extractScheme(url);
+  } catch (e) {
+    // A malformed URL won't be parsed properly.
+    throw new Error('Invalid URL: '+url);
   }
-
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                  .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(url);
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
   // access to things like files and chrome. Careful.
@@ -42,21 +38,28 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-      this.chromeWindow.setTimeout(
-        GM_hitch(this, "chromeStartRequest", url, details), 0);
+        var req = new this.chromeWindow.XMLHttpRequest();
+        GM_hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
       throw new Error("Invalid url: " + url);
   }
 
   GM_log("< GM_xmlhttpRequest.contentStartRequest");
+
+  return {
+    abort: function() {
+      alert('got abort!');
+      req.abort();
+    }
+  };
 };
 
 // this function is intended to be called in chrome's security context, so
 // that it can access other domains without security warning
-GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
+GM_xmlhttpRequester.prototype.chromeStartRequest =
+function(safeUrl, details, req) {
   GM_log("> GM_xmlhttpRequest.chromeStartRequest");
-  var req = new this.chromeWindow.XMLHttpRequest();
 
   this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
   this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
