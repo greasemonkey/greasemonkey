@@ -11,18 +11,20 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 const gmSvcFilename = Components.stack.filename;
 
 const maxJSVersion = (function getMaxJSVersion() {
-  // Default to version 1.6, which FF1.5 and later support.
-  var jsVersion = 160;
+  var appInfo = Components
+      .classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components
+      .classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
 
-  var jsds = Cc["@mozilla.org/js/jsd/debugger-service;1"].getService()
-               .QueryInterface(Ci.jsdIDebuggerService);
-  jsds.on();
-  jsds.enumerateContexts({ enumerateContext: function(context) {
-    if (context.version > jsVersion) jsVersion = context.version;
-  }});
-  jsds.off();
+  // Firefox 3.5 and higher supports 1.8.
+  if (versionChecker.compare(appInfo.version, "3.5") >= 0) {
+    return "1.8";
+  }
 
-  return (jsVersion / 100).toString();
+  // Everything else supports 1.6.
+  return "1.6";
 })();
 
 function alert(msg) {
