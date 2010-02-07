@@ -49,7 +49,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 
   return {
     abort: function() {
-      alert('got abort!');
       req.abort();
     }
   };
