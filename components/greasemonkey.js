@@ -392,7 +392,7 @@ var greasemonkeyService = {
           );
         }
       } catch (e) { // catches errors we cause trying to inform the user
-	// Do nothing. More importantly: don't stop script incovation sequence.
+        // Do nothing. More importantly: don't stop script incovation sequence.
       }
     }
     return true; // did not need a (function() {...})() enclosure.

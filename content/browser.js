@@ -90,6 +90,10 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.gmSvc = Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
                          .getService(Components.interfaces.gmIGreasemonkeyService);
 
+  // reference this once, so that the getter is called at least once, and the
+  // initialization routines will run, no matter what
+  this.gmSvc.wrappedJSObject.config;
+  
   this.gmSvc.registerBrowser(this);
 };
 
