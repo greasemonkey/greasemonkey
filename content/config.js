@@ -399,7 +399,11 @@ Config.prototype = {
       var chromeWin = windowManager.getMostRecentWindow("navigator:browser");
       // if we found it, use it to open a welcome tab
       if (chromeWin.gBrowser) {
-        chromeWin.gBrowser.addTab("http://wiki.greasespot.net/Welcome");
+        // the setTimeout makes sure we do not execute too early -- sometimes
+        // the window isn't quite ready to add a tab yet
+        chromeWin.setTimeout(
+            "gBrowser.selectedTab = gBrowser.addTab(" +
+            "'http://wiki.greasespot.net/Welcome')", 0);
       }
     }
 
