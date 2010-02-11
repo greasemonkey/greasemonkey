@@ -473,7 +473,7 @@ var greasemonkeyService = {
         dummyElm.parentNode.removeChild(dummyElm);
 
         return fbContext.consoleHandler.pop().handler;
-      } else if (1.3 == fbVersion || 1.4 == fbVersion) {
+      } else if (1.3 == fbVersion || 1.4 == fbVersion || 1.5 == fbVersion) {
         fbConsole.injector.attachIfNeeded(fbContext, unsafeContentWin);
         return findActiveContext();
       }
