@@ -72,7 +72,9 @@ function(safeUrl, details, req) {
 
   if (details.headers) {
     for (var prop in details.headers) {
-      req.setRequestHeader(prop, details.headers[prop]);
+      if (details.headers.hasOwnProperty(prop)) {
+        req.setRequestHeader(prop, details.headers[prop]);
+      }
     }
   }
 
