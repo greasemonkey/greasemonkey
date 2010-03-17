@@ -294,7 +294,7 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
  * avoid leaking it's memory.
  */
 GM_BrowserUI.contentUnload = function(e) {
-  if (e.persisted || !this.menuCommanders) {
+  if (e.persisted || !this.menuCommanders || this.menuCommanders.length == 0) {
     return;
   }
 
