@@ -294,14 +294,11 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
  * avoid leaking it's memory.
  */
 GM_BrowserUI.contentUnload = function(e) {
-  if (e.persisted) {
+  if (e.persisted || !this.menuCommanders) {
     return;
   }
 
-  var unsafeWin = e.target.defaultView;
-
-  // remove the commander for this document
-  var commander = null;
+  var item, unsafeWin = e.target.defaultView;
 
   // looping over commanders rather than using getCommander because we need
   // the index into commanders.splice.
