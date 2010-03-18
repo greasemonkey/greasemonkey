@@ -30,8 +30,9 @@ Config.prototype = {
     }
   },
 
-  _changed: function(script, event, data) {
-    this._save();
+  _changed: function(script, event, data, dontSave) {
+    if (!dontSave)
+      this._save();
     this._notifyObservers(script, event, data);
   },
 
@@ -58,7 +59,8 @@ Config.prototype = {
                               .createInstance(Components.interfaces.nsIDOMParser);
     var configContents = getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
-    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
+    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null),
+        dataModified = false;
 
     this._scripts = [];
 
@@ -66,18 +68,33 @@ Config.prototype = {
       var file = this._scriptDir.clone();
       file.append(node.getAttribute("basedir"));
       file.append(node.getAttribute("filename"));
-      var parsedScript = this.parse(getContents(file), null);
-      var script = new Script(this);
-      script._includes = parsedScript._includes;
-      script._excludes = parsedScript._excludes;
+      var script = new Script(this),
+          fileModified = false;
+
+      if (!node.getAttribute("modified")) {
+        script._modified = file.lastModifiedTime;
+        dataModified = true;
+      } else
+        script._modified = node.getAttribute("modified");
+
+      if (script._modified != file.lastModifiedTime) {
+        script._modified = file.lastModifiedTime;
+        var parsedScript = this.parse(getContents(file), null);
+        script._includes = parsedScript._includes;
+        script._excludes = parsedScript._excludes;
+        fileModified = dataModified = true;
+      }
+
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
         switch (childNode.nodeName) {
-          /*case "Include":
-          script._includes.push(childNode.firstChild.nodeValue);
+          case "Include":
+          if (!fileModified)
+            script._includes.push(childNode.firstChild.nodeValue);
           break;
         case "Exclude":
-          script._excludes.push(childNode.firstChild.nodeValue);
-          break;*/
+          if (!fileModified)
+            script._excludes.push(childNode.firstChild.nodeValue);
+          break;
         case "Require":
           var scriptRequire = new ScriptRequire(script);
           scriptRequire._filename = childNode.getAttribute("filename");
@@ -100,12 +117,17 @@ Config.prototype = {
       script._filename = node.getAttribute("filename");
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
-      script._description = parsedScript._description;
+      script._description = fileModified ? parsedScript._description : node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
       script._basedir = node.getAttribute("basedir") || ".";
 
       this._scripts.push(script);
+      if (fileModified)
+        this._changed(script, "modified", null, true);
     }
+    
+    if (dataModified)
+      this._save();
   },
   _save: function() {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
@@ -167,6 +189,7 @@ Config.prototype = {
       scriptNode.setAttribute("description", scriptObj._description);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
+      scriptNode.setAttribute("modified", scriptObj._modified);
 
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
