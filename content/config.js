@@ -56,7 +56,6 @@ Config.prototype = {
   _load: function() {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
                               .createInstance(Components.interfaces.nsIDOMParser);
-
     var configContents = getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
     var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
@@ -64,16 +63,21 @@ Config.prototype = {
     this._scripts = [];
 
     for (var node = null; node = nodes.iterateNext(); ) {
+      var file = this._scriptDir.clone();
+      file.append(node.getAttribute("basedir"));
+      file.append(node.getAttribute("filename"));
+      var parsedScript = this.parse(getContents(file), null);
       var script = new Script(this);
-
+      script._includes = parsedScript._includes;
+      script._excludes = parsedScript._excludes;
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
         switch (childNode.nodeName) {
-        case "Include":
+          /*case "Include":
           script._includes.push(childNode.firstChild.nodeValue);
           break;
         case "Exclude":
           script._excludes.push(childNode.firstChild.nodeValue);
-          break;
+          break;*/
         case "Require":
           var scriptRequire = new ScriptRequire(script);
           scriptRequire._filename = childNode.getAttribute("filename");
@@ -91,19 +95,18 @@ Config.prototype = {
           script._unwrap = true;
           break;
         }
-      }
+        }
 
       script._filename = node.getAttribute("filename");
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
-      script._description = node.getAttribute("description");
+      script._description = parsedScript._description;
       script._enabled = node.getAttribute("enabled") == true.toString();
       script._basedir = node.getAttribute("basedir") || ".";
 
       this._scripts.push(script);
     }
   },
-
   _save: function() {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser)
@@ -183,8 +186,11 @@ Config.prototype = {
                               .getService(Components.interfaces.nsIIOService);
 
     var script = new Script(this);
-    script._downloadURL = uri.spec;
-    script._enabled = true;
+    
+    if (uri !== null) {
+      script._downloadURL = uri.spec;
+      script._enabled = true;
+    }
 
     // read one line at a time looking for start meta delimiter or EOF
     var lines = source.match(/.+/g);
@@ -269,8 +275,8 @@ Config.prototype = {
     }
 
     // if no meta info, default to reasonable values
-    if (script._name == null) script._name = parseScriptName(uri);
-    if (script._namespace == null) script._namespace = uri.host;
+    if (script._name == null && uri !== null) script._name = parseScriptName(uri);
+    if (script._namespace == null && uri !== null) script._namespace = uri.host;
     if (!script._description) script._description = "";
     if (script._includes.length == 0) script._includes.push("*");
 
