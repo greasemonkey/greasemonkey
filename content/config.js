@@ -65,21 +65,23 @@ Config.prototype = {
     this._scripts = [];
 
     for (var node = null; node = nodes.iterateNext(); ) {
-      var file = this._scriptDir.clone();
-      file.append(node.getAttribute("basedir"));
-      file.append(node.getAttribute("filename"));
-      var script = new Script(this),
-          fileModified = false;
+      var script = new Script(this);
+
+      script._filename = node.getAttribute("filename");
+      script._basedir = node.getAttribute("basedir") || ".";
+
+      var fileModified = false;
+      var lastModified = script._file.lastModifiedTime;
 
       if (!node.getAttribute("modified")) {
-        script._modified = file.lastModifiedTime;
+        script._modified = lastModified;
         dataModified = true;
       } else
         script._modified = node.getAttribute("modified");
 
-      if (script._modified != file.lastModifiedTime) {
-        script._modified = file.lastModifiedTime;
-        var parsedScript = this.parse(getContents(file), null);
+      if (script._modified != lastModified) {
+        script._modified = lastModified;
+        var parsedScript = this.parse(getContents(script._file), null);
         script._includes = parsedScript._includes;
         script._excludes = parsedScript._excludes;
         fileModified = dataModified = true;
@@ -114,12 +116,11 @@ Config.prototype = {
         }
         }
 
-      script._filename = node.getAttribute("filename");
+      
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
       script._description = fileModified ? parsedScript._description : node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
-      script._basedir = node.getAttribute("basedir") || ".";
 
       this._scripts.push(script);
       if (fileModified)
@@ -189,7 +190,8 @@ Config.prototype = {
       scriptNode.setAttribute("description", scriptObj._description);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
-      scriptNode.setAttribute("modified", scriptObj._modified);
+      if (scriptObj._modified)
+        scriptNode.setAttribute("modified", scriptObj._modified);
 
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
@@ -407,6 +409,26 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
+  updateModifiedScripts: function(scriptModified) {
+    var scripts = this._scripts.filter(scriptModified);
+    var fileModified = false;
+
+    for (var i = 0; script = scripts[i]; i++) {
+      var lastModified = script._file.lastModifiedTime;
+      script._modified = lastModified;
+
+      var parsedScript = this.parse(getContents(script._file), null);
+      script._includes = parsedScript._includes;
+      script._excludes = parsedScript._excludes;
+      script._description = parsedScript._description;
+
+      this._changed(script, "modified", null, true);
+      fileModified = true;
+    }
+
+    if (fileModified)
+      this._save();
+  },
 
   /**
    * Checks whether the version has changed since the last run and performs
