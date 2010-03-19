@@ -212,7 +212,7 @@ ScriptDownloader.prototype.finishInstall = function(){
 };
 
 ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
-  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg, true);
+  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   if (this.installOnCompletion_) {
     alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {
