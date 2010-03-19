@@ -622,7 +622,9 @@ ScriptRequire.prototype = {
 
     file.append(name);
 
-    if (!this.updateScript)
+    // Some other checking needs to be done here so that dependencies
+    // with the same name remotely get a unique name
+    if (!this.updateScript || file.leafName == this._script._filename)
       file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
 
