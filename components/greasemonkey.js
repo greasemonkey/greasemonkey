@@ -217,7 +217,14 @@ var greasemonkeyService = {
       return script.enabled && script.matchesURL(url);
     }
 
-    return GM_getConfig().getMatchingScripts(testMatch);
+    function scriptModified(script) {
+      return script._modified != script._file.lastModifiedTime;
+    }
+
+    var config = GM_getConfig();
+
+    config.updateModifiedScripts(scriptModified);
+    return config.getMatchingScripts(testMatch);
   },
 
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
