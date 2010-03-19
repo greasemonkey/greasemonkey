@@ -490,6 +490,7 @@ function Script(config) {
   this._excludes = [];
   this._requires = [];
   this._resources = [];
+  this._depNames = {}; // Only for updating dependencies
   this._unwrap = false;
 }
 
@@ -622,11 +623,13 @@ ScriptRequire.prototype = {
 
     file.append(name);
 
-    // Some other checking needs to be done here so that dependencies
-    // with the same name remotely get a unique name
-    if (!this.updateScript || file.leafName == this._script._filename)
+    // Make sure we don't overwrite script or other dependencies
+    if (!this.updateScript || file.leafName == this._script._filename || this._script._depNames[file.leafName])
       file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
+
+    if (this.updateScript)
+      this._script._depNames[file.leafName] = true;
 
     GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
 
