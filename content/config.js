@@ -410,6 +410,14 @@ Config.prototype = {
       script._requires = parsedScript._requires;
       script._resources = parsedScript._resources;
 
+      // Get rid of old dependencies
+      var dirFiles = script._basedirFile.directoryEntries;
+      while (dirFiles.hasMoreElements()) {
+        var nextFile = dirFiles.getNext().QueryInterface(Components.interfaces.nsIFile);
+        if (!nextFile.equals(script._file))
+          nextFile.remove(true);
+      }
+
       var scriptDownloader = new this.ScriptDownloader(null, null, null);
       scriptDownloader.script = script;
       scriptDownloader.updateScript = true;
