@@ -397,7 +397,6 @@ Config.prototype = {
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   updateModifiedScripts: function(scriptModified) {
     var scripts = this._scripts.filter(scriptModified);
-    var fileModified = false;
 
     for (var i = 0; script = scripts[i]; i++) {
       var lastModified = script._file.lastModifiedTime;
@@ -408,12 +407,16 @@ Config.prototype = {
       script._excludes = parsedScript._excludes;
       script._description = parsedScript._description;
 
-      this._changed(script, "modified", null, true);
-      fileModified = true;
-    }
+      script._requires = parsedScript._requires;
+      script._resources = parsedScript._resources;
 
-    if (fileModified)
-      this._save();
+      var scriptDownloader = new this.ScriptDownloader(null, null, null);
+      scriptDownloader.script = script;
+      scriptDownloader.updateScript = true;
+      scriptDownloader.fetchDependencies();
+
+      this._changed(script, "modified", null, true);
+    }
   },
 
   /**
@@ -594,6 +597,7 @@ function ScriptRequire(script) {
   this._downloadURL = null; // Only for scripts not installed
   this._tempFile = null; // Only for scripts not installed
   this._filename = null;
+  this.updateScript = false;
 }
 
 ScriptRequire.prototype = {
@@ -611,22 +615,32 @@ ScriptRequire.prototype = {
     if(name.indexOf("?") > 0) {
       name = name.substr(0, name.indexOf("?"));
     }
+
     name = this._script._initFileName(name, true);
 
     var file = this._script._basedirFile;
+
     file.append(name);
-    file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
+
+    if (!this.updateScript)
+      file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
 
     GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
 
-    file.remove(true);
+    if (file.exists())
+      file.remove(true);
+
     this._tempFile.moveTo(file.parent, file.leafName);
     this._tempFile = null;
   },
 
   get urlToDownload() { return this._downloadURL; },
-  setDownloadedFile: function(file) { this._tempFile = file; }
+  setDownloadedFile: function(file) { 
+    this._tempFile = file;
+    if (this.updateScript)
+      this._initFile();
+  }
 };
 
 function ScriptResource(script) {
@@ -637,6 +651,7 @@ function ScriptResource(script) {
   this._filename = null;
   this._mimetype = null;
   this._charset = null;
+  this.updateScript = false;
 
   this._name = null;
 }
@@ -675,5 +690,7 @@ ScriptResource.prototype = {
     this._tempFile = tempFile;
     this._mimetype = mimetype;
     this._charset = charset;
+    if (this.updateScript)
+      this._initFile();
   }
 };

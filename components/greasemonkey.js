@@ -141,6 +141,7 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
@@ -488,7 +489,7 @@ var greasemonkeyService = {
       dump('Greasemonkey getFirebugConsole() error:\n'+uneval(e)+'\n');
     }
 
-	  return null;
+      return null;
   }
 };
 
