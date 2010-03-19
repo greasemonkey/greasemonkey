@@ -57,10 +57,11 @@ Config.prototype = {
   _load: function() {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
                               .createInstance(Components.interfaces.nsIDOMParser);
+
     var configContents = getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
-    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null),
-        dataModified = false;
+    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
+    var fileModified = false;
 
     this._scripts = [];
 
@@ -70,32 +71,19 @@ Config.prototype = {
       script._filename = node.getAttribute("filename");
       script._basedir = node.getAttribute("basedir") || ".";
 
-      var fileModified = false;
-      var lastModified = script._file.lastModifiedTime;
-
       if (!node.getAttribute("modified")) {
-        script._modified = lastModified;
-        dataModified = true;
+        script._modified = script._file.lastModifiedTime;
+        fileModified = true;
       } else
         script._modified = node.getAttribute("modified");
 
-      if (script._modified != lastModified) {
-        script._modified = lastModified;
-        var parsedScript = this.parse(getContents(script._file), null);
-        script._includes = parsedScript._includes;
-        script._excludes = parsedScript._excludes;
-        fileModified = dataModified = true;
-      }
-
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
         switch (childNode.nodeName) {
-          case "Include":
-          if (!fileModified)
-            script._includes.push(childNode.firstChild.nodeValue);
+        case "Include":
+          script._includes.push(childNode.firstChild.nodeValue);
           break;
         case "Exclude":
-          if (!fileModified)
-            script._excludes.push(childNode.firstChild.nodeValue);
+          script._excludes.push(childNode.firstChild.nodeValue);
           break;
         case "Require":
           var scriptRequire = new ScriptRequire(script);
@@ -114,22 +102,20 @@ Config.prototype = {
           script._unwrap = true;
           break;
         }
-        }
+      }
 
-      
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
-      script._description = fileModified ? parsedScript._description : node.getAttribute("description");
+      script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
 
       this._scripts.push(script);
-      if (fileModified)
-        this._changed(script, "modified", null, true);
     }
-    
-    if (dataModified)
+
+    if (fileModified)
       this._save();
   },
+
   _save: function() {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser)
