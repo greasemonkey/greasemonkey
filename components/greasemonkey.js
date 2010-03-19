@@ -141,6 +141,7 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
     //loggify(this, "GM_GreasemonkeyService");
   },
 
