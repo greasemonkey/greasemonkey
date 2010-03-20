@@ -71,11 +71,15 @@ Config.prototype = {
       script._filename = node.getAttribute("filename");
       script._basedir = node.getAttribute("basedir") || ".";
 
-      if (!node.getAttribute("modified")) {
+      if (!node.getAttribute("modified") || !node.getAttribute("metahash")) {
         script._modified = script._file.lastModifiedTime;
+        var rawMeta = this.parse(getContents(script._file), null)._rawMeta;
+        script._metahash = SHA1(rawMeta);
         fileModified = true;
-      } else
+      } else {
         script._modified = node.getAttribute("modified");
+        script._metahash = node.getAttribute("metahash");
+      }
 
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
         switch (childNode.nodeName) {
@@ -179,6 +183,9 @@ Config.prototype = {
       if (scriptObj._modified)
         scriptNode.setAttribute("modified", scriptObj._modified);
 
+      if (scriptObj._metahash)
+        scriptNode.setAttribute("metahash", scriptObj._modified);
+
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
     }
@@ -220,6 +227,7 @@ Config.prototype = {
     if (foundMeta) {
       // used for duplicate resource name detection
       var previousResourceNames = {};
+      script._rawMeta = "";
 
       while ((result = lines[lnIdx++])) {
         if (result.indexOf("// ==/UserScript==") == 0) {
@@ -232,6 +240,7 @@ Config.prototype = {
         var header = match[1];
         var value = match[2];
         if (value) { // @header <value>
+          script._rawMeta += "@"+header+" "+value;
           switch (header) {
             case "name":
             case "namespace":
@@ -276,6 +285,7 @@ Config.prototype = {
               break;
           }
         } else { // plain @header
+          script._rawMeta += "@" + header;
           switch (header) {
             case "unwrap":
               script._unwrap = true;
@@ -284,7 +294,7 @@ Config.prototype = {
         }
       }
     }
-
+    
     // if no meta info, default to reasonable values
     if (script._name == null && uri !== null) script._name = parseScriptName(uri);
     if (script._namespace == null && uri !== null) script._namespace = uri.host;
@@ -397,12 +407,23 @@ Config.prototype = {
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   updateModifiedScripts: function(scriptModified) {
     var scripts = this._scripts.filter(scriptModified);
+    var needSave = false;
 
     for (var i = 0; script = scripts[i]; i++) {
       var lastModified = script._file.lastModifiedTime;
       script._modified = lastModified;
 
       var parsedScript = this.parse(getContents(script._file), null);
+      var storedMetahash = SHA1(parsedScript._rawMeta);
+
+      if (storedMetahash == script._metahash) {
+        script._metahash = storedMetahash;
+        needSave = true;
+        continue;
+      } else {
+        needSave = false;
+      }
+
       script._includes = parsedScript._includes;
       script._excludes = parsedScript._excludes;
       script._description = parsedScript._description;
@@ -425,6 +446,9 @@ Config.prototype = {
 
       this._changed(script, "modified", null, true);
     }
+    
+    if (needSave)
+      this._save();
   },
 
   /**
@@ -489,6 +513,8 @@ function Script(config) {
   this._tempFile = null; // Only for scripts not installed
   this._basedir = null;
   this._filename = null;
+  this._modified = null;
+  this._metahash = null;
 
   this._name = null;
   this._namespace = null;
@@ -500,6 +526,7 @@ function Script(config) {
   this._resources = [];
   this._depNames = {}; // Only for updating dependencies
   this._unwrap = false;
+  this._rawMeta = null;
 }
 
 Script.prototype = {
