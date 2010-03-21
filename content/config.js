@@ -184,7 +184,7 @@ Config.prototype = {
         scriptNode.setAttribute("modified", scriptObj._modified);
 
       if (scriptObj._metahash)
-        scriptNode.setAttribute("metahash", scriptObj._modified);
+        scriptNode.setAttribute("metahash", scriptObj._metahash);
 
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
@@ -240,7 +240,7 @@ Config.prototype = {
         var header = match[1];
         var value = match[2];
         if (value) { // @header <value>
-          script._rawMeta += "@"+header+" "+value;
+          script._rawMeta += "@" + header + " "+ value;
           switch (header) {
             case "name":
             case "namespace":
@@ -294,7 +294,7 @@ Config.prototype = {
         }
       }
     }
-    
+
     // if no meta info, default to reasonable values
     if (script._name == null && uri !== null) script._name = parseScriptName(uri);
     if (script._namespace == null && uri !== null) script._namespace = uri.host;
@@ -322,6 +322,9 @@ Config.prototype = {
     for (var i = 0; i < script._resources.length; i++) {
       script._resources[i]._initFile();
     }
+
+    script._modified = script._file.lastModifiedTime;
+    script._metahash = SHA1(script._rawMeta);
 
     this._scripts.push(script);
     this._changed(script, "install", null);
@@ -524,7 +527,6 @@ function Script(config) {
   this._excludes = [];
   this._requires = [];
   this._resources = [];
-  this._depNames = {}; // Only for updating dependencies
   this._unwrap = false;
   this._rawMeta = null;
 }
@@ -651,20 +653,13 @@ ScriptRequire.prototype = {
     if(name.indexOf("?") > 0) {
       name = name.substr(0, name.indexOf("?"));
     }
-
     name = this._script._initFileName(name, true);
 
     var file = this._script._basedirFile;
-
     file.append(name);
 
-    // Make sure we don't overwrite script or other dependencies
-    if (!this.updateScript || file.leafName == this._script._filename || this._script._depNames[file.leafName])
-      file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
+    file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
-
-    if (this.updateScript)
-      this._script._depNames[file.leafName] = true;
 
     GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
 
