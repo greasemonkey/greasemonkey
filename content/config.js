@@ -180,11 +180,8 @@ Config.prototype = {
       scriptNode.setAttribute("description", scriptObj._description);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
-      if (scriptObj._modified)
-        scriptNode.setAttribute("modified", scriptObj._modified);
-
-      if (scriptObj._metahash)
-        scriptNode.setAttribute("metahash", scriptObj._metahash);
+      scriptNode.setAttribute("modified", scriptObj._modified);
+      scriptNode.setAttribute("metahash", scriptObj._metahash);
 
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
