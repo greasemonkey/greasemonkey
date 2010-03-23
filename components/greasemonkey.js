@@ -125,6 +125,9 @@ var greasemonkeyService = {
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
     var scripts = this.initScripts(href);
 
+    // Save arguements so they can be retrieved for late injection
+    this.injectionArgs = [href, unsafeWin, chromeWin];
+
     if (scripts.length > 0) {
       this.injectScripts(scripts, href, unsafeWin, chromeWin);
     }
@@ -217,14 +220,29 @@ var greasemonkeyService = {
 
   initScripts: function(url) {
     function testMatch(script) {
-      return script.enabled && script.matchesURL(url);
+      return !script.delayInjection && script.enabled && script.matchesURL(url);
     }
 
     function scriptModified(script) {
-      return script._modified != script._file.lastModifiedTime;
+      if (script._modified != script._file.lastModifiedTime) {
+        script._modified = script._file.lastModifiedTime;
+        script._parsedScript = script._config.parse(getContents(script._file), null);
+        var metahash = script._metahash;
+        script._metahash = SHA1(script._parsedScript._rawMeta);
+        if (metahash != script._metahash)
+          return true;
+        else {
+          script._parsedScript = null;
+          script._config._save();
+        }
+      }
+      return false;
     }
 
     var config = GM_getConfig();
+
+    // Pass a reference to config for late injection
+    config.gmService = this;
 
     config.updateModifiedScripts(scriptModified);
     return config.getMatchingScripts(testMatch);

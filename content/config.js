@@ -407,27 +407,14 @@ Config.prototype = {
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   updateModifiedScripts: function(scriptModified) {
     var scripts = this._scripts.filter(scriptModified);
-    var needSave = false;
 
     for (var i = 0; script = scripts[i]; i++) {
-      var lastModified = script._file.lastModifiedTime;
-      script._modified = lastModified;
+      var parsedScript = script._parsedScript;
 
-      var parsedScript = this.parse(getContents(script._file), null);
-      var storedMetahash = SHA1(parsedScript._rawMeta);
-
-      if (storedMetahash == script._metahash) {
-        script._metahash = storedMetahash;
-        needSave = true;
-        continue;
-      } else {
-        needSave = false;
-      }
-
+      // Copy new values
       script._includes = parsedScript._includes;
       script._excludes = parsedScript._excludes;
       script._description = parsedScript._description;
-
       script._requires = parsedScript._requires;
       script._resources = parsedScript._resources;
 
@@ -435,21 +422,21 @@ Config.prototype = {
       var dirFiles = script._basedirFile.directoryEntries;
       while (dirFiles.hasMoreElements()) {
         var nextFile = dirFiles.getNext().QueryInterface(Components.interfaces.nsIFile);
-        if (!nextFile.equals(script._file)) {
+        if (!nextFile.equals(script._file))
           nextFile.remove(true);
-        }
       }
 
+      // Redownload dependencies
       var scriptDownloader = new this.ScriptDownloader(null, null, null);
       scriptDownloader.script = script;
       scriptDownloader.updateScript = true;
       scriptDownloader.fetchDependencies();
 
       this._changed(script, "modified", null, true);
+
+      script.delayInjection = true;
+      script._parsedScript = null; // free unused memory
     }
-    
-    if (needSave)
-      this._save();
   },
 
   /**
@@ -526,6 +513,7 @@ function Script(config) {
   this._requires = [];
   this._resources = [];
   this._unwrap = false;
+  this.delayInjection = false;
   this._rawMeta = null;
 }
 
