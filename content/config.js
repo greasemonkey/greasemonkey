@@ -435,8 +435,9 @@ Config.prototype = {
       var dirFiles = script._basedirFile.directoryEntries;
       while (dirFiles.hasMoreElements()) {
         var nextFile = dirFiles.getNext().QueryInterface(Components.interfaces.nsIFile);
-        if (!nextFile.equals(script._file))
+        if (!nextFile.equals(script._file)) {
           nextFile.remove(true);
+        }
       }
 
       var scriptDownloader = new this.ScriptDownloader(null, null, null);
@@ -651,18 +652,15 @@ ScriptRequire.prototype = {
       name = name.substr(0, name.indexOf("?"));
     }
     name = this._script._initFileName(name, true);
-
+ 
     var file = this._script._basedirFile;
     file.append(name);
-
     file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
-
+ 
     GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
-
-    if (file.exists())
-      file.remove(true);
-
+ 
+    file.remove(true);
     this._tempFile.moveTo(file.parent, file.leafName);
     this._tempFile = null;
   },
