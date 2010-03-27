@@ -196,12 +196,12 @@ Config.prototype = {
     configStream.close();
   },
 
-  parse: function(source, uri) {
+  parse: function parse_config(source, uri) {
     var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
                               .getService(Components.interfaces.nsIIOService);
 
     var script = new Script(this);
-    
+
     if (uri !== null) {
       script._downloadURL = uri.spec;
       script._enabled = true;
@@ -251,6 +251,11 @@ Config.prototype = {
               script._excludes.push(value);
               break;
             case "require":
+              try {
+                var reqUri = ioservice.newURI(value, null, uri);
+              } catch (e) {
+                throw new Error('Failed to @require '+ res[2]);
+              }
               var reqUri = ioservice.newURI(value, null, uri);
               var scriptRequire = new ScriptRequire(script);
               scriptRequire._downloadURL = reqUri.spec;
@@ -274,7 +279,12 @@ Config.prototype = {
                 previousResourceNames[resName] = true;
               }
 
-              var resUri = ioservice.newURI(res[2], null, uri);
+              try {
+                var resUri = ioservice.newURI(res[2], null, uri);
+              } catch (e) {
+                throw new Error('Failed to get @resource '+ resName +' from '+
+                                res[2]);
+              }
               var scriptResource = new ScriptResource(script);
               scriptResource._name = resName;
               scriptResource._downloadURL = resUri.spec;
@@ -640,21 +650,21 @@ ScriptRequire.prototype = {
       name = name.substr(0, name.indexOf("?"));
     }
     name = this._script._initFileName(name, true);
- 
+
     var file = this._script._basedirFile;
     file.append(name);
     file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
     this._filename = file.leafName;
- 
+
     GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
- 
+
     file.remove(true);
     this._tempFile.moveTo(file.parent, file.leafName);
     this._tempFile = null;
   },
 
   get urlToDownload() { return this._downloadURL; },
-  setDownloadedFile: function(file) { 
+  setDownloadedFile: function(file) {
     this._tempFile = file;
     if (this.updateScript)
       this._initFile();
