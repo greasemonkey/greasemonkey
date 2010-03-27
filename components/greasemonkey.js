@@ -145,7 +145,7 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
-    loader.loadSubScript("chrome://greasemonkey/content/webtoolkit.sha1.js");
+    loader.loadSubScript("chrome://greasemonkey/content/sha1.js");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
