@@ -206,8 +206,7 @@ ScriptDownloader.prototype.checkDependencyURL = function(url) {
 ScriptDownloader.prototype.finishInstall = function(){
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
-    var args = this.script._config.gmService.injectionArgs;
-    this.script._config.gmService.injectScripts([this.script], args[0], args[1], args[2]);
+    this.script._config.injectScript(this.script);
 
     // Save new values to config.xml
     this.script._config._save();

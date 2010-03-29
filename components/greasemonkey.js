@@ -123,10 +123,7 @@ var greasemonkeyService = {
     var unsafeWin = wrappedContentWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
-    var scripts = this.initScripts(href);
-
-    // Save arguements so they can be retrieved for late injection
-    this.injectionArgs = [href, unsafeWin, chromeWin];
+    var scripts = this.initScripts(href, wrappedContentWin, chromeWin);
 
     if (scripts.length > 0) {
       this.injectScripts(scripts, href, unsafeWin, chromeWin);
@@ -217,12 +214,13 @@ var greasemonkeyService = {
     return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
   },
 
-  initScripts: function(url) {
+  initScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
       return !script.delayInjection && script.enabled && script.matchesURL(url);
     }
 
     function scriptModified(script) {
+      script.delayInjection = false;
       if (script._modified != script._file.lastModifiedTime) {
         script._modified = script._file.lastModifiedTime;
         script._parsedScript = script._config.parse(getContents(script._file), null);
@@ -239,9 +237,8 @@ var greasemonkeyService = {
     }
 
     var config = GM_getConfig();
-
-    // Pass a reference to config for late injection
-    config.gmService = this;
+    config.wrappedContentWin = wrappedContentWin;
+    config.chromeWin = chromeWin;
 
     config.updateModifiedScripts(scriptModified);
     return config.getMatchingScripts(testMatch);
