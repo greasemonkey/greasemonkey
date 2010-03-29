@@ -415,6 +415,13 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
+  injectScript: function(script) {
+    var unsafeWin = this.wrappedContentWin.wrappedJSObject;
+    var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
+    var href = new XPCNativeWrapper(unsafeLoc, "href").href;
+
+    greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
+  },
   updateModifiedScripts: function(scriptModified) {
     var scripts = this._scripts.filter(scriptModified);
 
