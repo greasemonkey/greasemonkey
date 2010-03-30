@@ -115,6 +115,7 @@ Config.prototype = {
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
+      script._version = node.getAttribute("version");
       script._enabled = node.getAttribute("enabled") == true.toString();
 
       this._scripts.push(script);
@@ -195,6 +196,7 @@ Config.prototype = {
       scriptNode.setAttribute("name", scriptObj._name);
       scriptNode.setAttribute("namespace", scriptObj._namespace);
       scriptNode.setAttribute("description", scriptObj._description);
+      scriptNode.setAttribute("version", scriptObj._version);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
@@ -269,6 +271,7 @@ Config.prototype = {
           case "name":
           case "namespace":
           case "description":
+          case "version":
             script["_" + header] = value;
             break;
           case "include":
@@ -334,6 +337,7 @@ Config.prototype = {
     if (!script._name && uri) script._name = GM_parseScriptName(uri);
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
+    if (!script._version) script._version = "";
     if (script._includes.length == 0) script._includes.push("*");
 
     return script;
