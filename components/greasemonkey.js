@@ -223,15 +223,7 @@ var greasemonkeyService = {
       script.delayInjection = false;
       if (script._modified != script._file.lastModifiedTime) {
         script._modified = script._file.lastModifiedTime;
-        script._parsedScript = script._config.parse(getContents(script._file), null);
-        var metahash = script._metahash;
-        script._metahash = SHA1(script._parsedScript._rawMeta);
-        if (metahash != script._metahash)
-          return true;
-        else {
-          script._parsedScript = null;
-          script._config._save();
-        }
+        return true;
       }
       return false;
     }
