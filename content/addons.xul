@@ -32,4 +32,13 @@
   </commandset>
 </window>
 
+<hbox id="commandBarBottom">
+  <button id="new-user-script"
+          label="&writenew;"
+          accesskey="&writenew.ak;"
+          tooltiptext="&writenew.tt;"
+          oncommand="greasemonkeyAddons.newUserScript()"
+          hidden="true" />
+</hbox>
+
 </overlay>

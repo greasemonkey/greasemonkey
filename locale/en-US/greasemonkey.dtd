@@ -26,3 +26,6 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
 <!ENTITY userscripts "User Scripts">
+<!ENTITY writenew "Write New Script">
+<!ENTITY writenew.tt "Make a new user script">
+<!ENTITY writenew.ak "W">

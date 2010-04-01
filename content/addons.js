@@ -15,6 +15,7 @@ showView = function(aView) {
   if ('userscripts' == aView) {
     greasemonkeyAddons.showView();
   } else {
+    greasemonkeyAddons.hideView();
     _origShowView(aView);
   }
 };
@@ -92,14 +93,23 @@ window.addEventListener('load', function() {
   if (stylishRadio) {
     stylishRadio.addEventListener(
         'command',
-        function() { gView = 'userstyles' },
+        function() {
+          greasemonkeyAddons.hideView();
+          gView = 'userstyles';
+        },
         false);
   }
 }, false);
 
 var greasemonkeyAddons = {
+  hideView: function() {
+    if("userscripts" != gView) return;
+
+    // hide the 'New User Script' button
+    document.getElementById("new-user-script").hidden = true;
+  },
+
   showView: function() {
-    if ('userscripts' == gView) return;
     updateLastSelected('userscripts');
     gView='userscripts';
 
@@ -117,6 +127,9 @@ var greasemonkeyAddons = {
       // Stylish injects these elements.
       'copy-style-info', 'new-style'];
     elementIds.forEach(hide);
+
+    // show the 'New User Script' button
+    $("new-user-script").hidden = false;
 
     var getMore = document.getElementById('getMore');
     getMore.setAttribute('getMoreURL', 'http://userscripts.org/');
@@ -332,5 +345,16 @@ var greasemonkeyAddons = {
 
     addMenuItem('Sort Scripts', 'cmd_userscript_sort',
         gExtensionsView.itemCount > 1);
+  },
+
+  newUserScript: function() {
+    var windowWatcher = Components
+      .classes["@mozilla.org/embedcomp/window-watcher;1"]
+      .getService(Components.interfaces.nsIWindowWatcher);
+
+    windowWatcher.openWindow(
+      window, "chrome://greasemonkey/content/newscript.xul", null,
+      "chrome,dependent,centerscreen,resizable,dialog", null
+    );
   }
 };
