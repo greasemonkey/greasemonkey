@@ -16,11 +16,12 @@ function convert2RegExp( pattern ) {
       case "$" :
       case "+" :
       case "{" :
+      case "}" :
       case "[" :
+      case "]" :
       case "|" :
       case "(" :
       case ")" :
-      case "]" :
         res += "\\" + s[i];
         break;
 
