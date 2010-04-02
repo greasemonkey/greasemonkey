@@ -392,4 +392,3 @@ function GM_memoize(func, limit) {
     return result;
   }
 }
-
