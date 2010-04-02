@@ -50,3 +50,4 @@ function convert2RegExp( pattern ) {
   }
   return new RegExp(res + "$", "i");
 }
+convert2RegExp = GM_memoize(convert2RegExp);

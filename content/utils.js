@@ -312,6 +312,7 @@ function GM_isGreasemonkeyable(url) {
 
   return false;
 }
+GM_isGreasemonkeyable = GM_memoize(GM_isGreasemonkeyable);
 
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
@@ -319,4 +320,31 @@ function GM_getEnabled() {
 
 function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
+}
+
+// Decorate a function with a memoization wrapper, with a limited-size cache
+// to reduce peak memory utilization.  Simple usage:
+//
+// function foo(arg1, arg2) { /* complex operation */ }
+// foo = GM_memoize(foo);
+//
+// The memoized function may have any number of arguments, but they must be
+// primitives (able to be used as object keys).
+function GM_memoize(func, limit) {
+  limit = limit || 1000;
+  var cache = {};
+  var keylist = [];
+
+  return function(a) {
+    var args = Array.prototype.slice.call(arguments);
+    if (args in cache) return cache[args];
+
+    var result = func.apply(null, args);
+
+    cache[args] = result;
+    keylist.push(args);
+    while (keylist.length > limit) keylist.shift();
+
+    return result;
+  }
 }
