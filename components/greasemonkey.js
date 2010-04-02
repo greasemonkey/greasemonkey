@@ -141,7 +141,6 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
-    //loggify(this, "GM_GreasemonkeyService");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
@@ -551,6 +550,3 @@ Factory.createInstance = function(outer, iid) {
 function NSGetModule(compMgr, fileSpec) {
   return Module;
 }
-
-//loggify(Module, "greasemonkeyService:Module");
-//loggify(Factory, "greasemonkeyService:Factory");

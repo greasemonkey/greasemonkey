@@ -302,52 +302,6 @@ function GM_compareVersions(aV1, aV2) {
   return 0;
 }
 
-/**
- * Takes the place of the traditional prompt() function which became broken
- * in FF 1.0.1. :(
- */
-function gmPrompt(msg, defVal, title) {
-  var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                                .getService(Components.interfaces.nsIPromptService);
-  var result = {value:defVal};
-
-  if (promptService.prompt(null, title, msg, result, null, {value:0})) {
-    return result.value;
-  }
-  else {
-    return null;
-  }
-}
-
-function ge(id) {
-  return window.document.getElementById(id);
-}
-
-
-function dbg(o) {
-  var s = "";
-  var i = 0;
-
-  for (var p in o) {
-    s += p + ":" + o[p] + "\n";
-
-    if (++i % 15 == 0) {
-      alert(s);
-      s = "";
-    }
-  }
-
-  alert(s);
-}
-
-function delaydbg(o) {
-  setTimeout(function() {dbg(o);}, 1000);
-}
-
-function delayalert(s) {
-  setTimeout(function() {alert(s);}, 1000);
-}
-
 function GM_isGreasemonkeyable(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
                .getService(Components.interfaces.nsIIOService)
@@ -372,14 +326,7 @@ function GM_isGreasemonkeyable(url) {
 
   return false;
 }
-
-function GM_isFileScheme(url) {
-  var scheme = Components.classes["@mozilla.org/network/io-service;1"]
-               .getService(Components.interfaces.nsIIOService)
-               .extractScheme(url);
-
-  return scheme == "file";
-}
+GM_isGreasemonkeyable = GM_memoize(GM_isGreasemonkeyable);
 
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
@@ -389,56 +336,29 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
+// Decorate a function with a memoization wrapper, with a limited-size cache
+// to reduce peak memory utilization.  Simple usage:
+//
+// function foo(arg1, arg2) { /* complex operation */ }
+// foo = GM_memoize(foo);
+//
+// The memoized function may have any number of arguments, but they must be
+// primitives (able to be used as object keys).
+function GM_memoize(func, limit) {
+  limit = limit || 1000;
+  var cache = {};
+  var keylist = [];
 
-/**
- * Logs a message to the console. The message can have python style %s
- * thingers which will be interpolated with additional parameters passed.
- */
-function log(message) {
-  if (GM_prefRoot.getValue("logChrome", false)) {
-    logf.apply(null, arguments);
-  }
-}
+  return function(a) {
+    var args = Array.prototype.slice.call(arguments);
+    if (args in cache) return cache[args];
 
-function logf(message) {
-  for (var i = 1; i < arguments.length; i++) {
-    message = message.replace(/\%s/, arguments[i]);
-  }
+    var result = func.apply(null, args);
 
-  dump(message + "\n");
-}
+    cache[args] = result;
+    keylist.push(args);
+    while (keylist.length > limit) keylist.shift();
 
-/**
- * Loggifies an object. Every method of the object will have it's entrance,
- * any parameters, any errors, and it's exit logged automatically.
- */
-function loggify(obj, name) {
-  for (var p in obj) {
-    if (typeof obj[p] == "function") {
-      obj[p] = gen_loggify_wrapper(obj[p], name, p);
-    }
-  }
-}
-
-function gen_loggify_wrapper(meth, objName, methName) {
-  return function() {
-     var retVal;
-    //var args = new Array(arguments.length);
-    var argString = "";
-    for (var i = 0; i < arguments.length; i++) {
-      //args[i] = arguments[i];
-      argString += arguments[i] + (((i+1)<arguments.length)? ", " : "");
-    }
-
-    log("> %s.%s(%s)", objName, methName, argString); //args.join(", "));
-
-    try {
-      return retVal = meth.apply(this, arguments);
-    } finally {
-      log("< %s.%s: %s",
-          objName,
-          methName,
-          (typeof retVal == "undefined" ? "void" : retVal));
-    }
+    return result;
   }
 }
