@@ -1,6 +1,7 @@
-function GM_xmlhttpRequester(unsafeContentWin, chromeWindow) {
+function GM_xmlhttpRequester(unsafeContentWin, chromeWindow, originUrl) {
   this.unsafeContentWin = unsafeContentWin;
   this.chromeWindow = chromeWindow;
+  this.originUrl = originUrl;
 }
 
 // this function gets called by user scripts in content security scope to
@@ -23,13 +24,23 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   // with multiple .toString() calls.
   var url = '' + details.url;
 
+  // If this URL does not start with a scheme, but does start with a slash,
+  // assume it is a host-relative URL and prepend the origin's scheme and host.
+  // (Empty parens are to avoid "//" sequences in the regex.)
+  if (!url.match(/^[a-z]+:/) && url.match(/^\/()/)) {
+    var m = this.originUrl.match(/^[a-z]+:\/\/[^\/]+/);
+    if (m) {
+      url = m[0] + url;
+    }
+  }
+
   try {
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                     .getService(Components.interfaces.nsIIOService);
     var scheme = ioService.extractScheme(url);
   } catch (e) {
     // A malformed URL won't be parsed properly.
-    throw new Error('Invalid URL: '+url);
+    throw new Error("Invalid URL: " + details.url);
   }
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
@@ -42,7 +53,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
         GM_hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
-      throw new Error("Invalid url: " + url);
+      throw new Error("Invalid url: " + details.url);
   }
 
   GM_log("< GM_xmlhttpRequest.contentStartRequest");
