@@ -344,7 +344,7 @@ function GM_memoize(func, limit) {
 
     cache[key] = result;
 
-	if (keylist.push(key) > limit) delete cache[keylist.shift()];
+    if (keylist.push(key) > limit) delete cache[keylist.shift()];
 
     return result;
   }
