@@ -65,8 +65,8 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", this.enabledWatcher);
 
   // hook various events
-  GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"));
-  GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"));
+  GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+  GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
@@ -93,7 +93,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
   this.gmSvc.wrappedJSObject.config;
-  
+
   this.gmSvc.registerBrowser(this);
 };
 
