@@ -471,7 +471,7 @@ Config.prototype = {
    * any necessary upgrades.
    */
   _updateVersion: function() {
-    log("> GM_updateVersion");
+    GM_log("> GM_updateVersion");
 
     // this is the last version which has been run at least once
     var initialized = GM_prefRoot.getValue("version", "0.0");
@@ -503,7 +503,7 @@ Config.prototype = {
     var item = extMan.getItemForID(GM_GUID);
     GM_prefRoot.setValue("version", item.version);
 
-    log("< GM_updateVersion");
+    GM_log("< GM_updateVersion");
   },
 
   /**
