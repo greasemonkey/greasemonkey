@@ -38,7 +38,7 @@ function PagesControl(ctlPages) {
     this.groupbox = grpBox;
     this.listbox = grpBox.getElementsByTagName("listbox")[0];
     this.btnAdd = buttons[0];
-    this.btnEdit = buttons[1]; 
+    this.btnEdit = buttons[1];
     this.btnRemove = buttons[2];
 
     this.listbox.addEventListener("select", updatePagesBox, true);
@@ -81,7 +81,7 @@ function PagesControl(ctlPages) {
                         ? win.content.location.protocol + "//" +
                           win.content.location.host + "/*"
                         : gmManageBundle.getString("promptForNewPage.defVal");
-      var val = gmPrompt(
+      var val = prompt(
         gmManageBundle.getString("promptForNewPage.msg"),
         currentSite,
         gmManageBundle.getString("promptForNewPage.title"));
@@ -94,13 +94,13 @@ function PagesControl(ctlPages) {
       }
     }
 
-    function promptForEdit(ev) { 
-      var gmManageBundle = document.getElementById("gm-manage-bundle"); 
-      var val = gmPrompt(
+    function promptForEdit(ev) {
+      var gmManageBundle = document.getElementById("gm-manage-bundle");
+      var val = prompt(
         gmManageBundle.getString("promptForEdit.msg"),
         self.listbox.selectedItem.label,
         gmManageBundle.getString("promptForEdit.title"));
- 
+
       if (val && val != "") {
         self.type == "includes" ?
           self.script.removeIncludeAt(self.listbox.selectedIndex):
@@ -108,8 +108,8 @@ function PagesControl(ctlPages) {
         self.type == "includes" ?
           self.script.addInclude(val):
           self.script.addExclude(val);
- 
-        dirty = true; 
+
+        dirty = true;
       }
     };
 
