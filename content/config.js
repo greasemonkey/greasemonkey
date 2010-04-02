@@ -40,8 +40,8 @@ Config.prototype = {
   },
 
   _find: function(aScript) {
-    namespace = aScript._namespace.toLowerCase();
-    name = aScript._name.toLowerCase();
+    var namespace = aScript._namespace.toLowerCase();
+    var name = aScript._name.toLowerCase();
 
     for (var i = 0, script; script = this._scripts[i]; i++) {
       if (script._namespace.toLowerCase() == namespace

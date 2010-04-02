@@ -244,7 +244,8 @@ var greasemonkeyService = {
 
       storage = new GM_ScriptStorage(script);
       xmlhttpRequester = new GM_xmlhttpRequester(unsafeContentWin,
-                                                 appSvc.hiddenDOMWindow);
+                                                 appSvc.hiddenDOMWindow,
+                                                 url);
       resources = new GM_Resources(script);
 
       sandbox.window = safeWin;
