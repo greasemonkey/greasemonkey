@@ -59,6 +59,8 @@ Config.prototype = {
   _load: function() {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
                               .createInstance(Components.interfaces.nsIDOMParser);
+    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                              .getService(Components.interfaces.nsIIOService);
 
     var configContents = getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
