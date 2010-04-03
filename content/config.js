@@ -114,6 +114,7 @@ Config.prototype = {
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
+      script._downloadURL = node.getAttribute("installurl") || null;
 
       this._scripts.push(script);
     }
@@ -185,6 +186,10 @@ Config.prototype = {
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
 
+      if (scriptObj._downloadURL !== null) {
+        scriptNode.setAttribute("installurl", scriptObj._downloadURL);
+      }
+
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
       doc.firstChild.appendChild(scriptNode);
     }
@@ -198,7 +203,7 @@ Config.prototype = {
     configStream.close();
   },
 
-  parse: function parse_config(source, uri) {
+  parse: function parse_config(source, uri, updating) {
     var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
                               .getService(Components.interfaces.nsIIOService);
 
@@ -254,14 +259,17 @@ Config.prototype = {
             case "require":
               try {
                 var reqUri = ioservice.newURI(value, null, uri);
+                var scriptRequire = new ScriptRequire(script);
+                scriptRequire._downloadURL = reqUri.spec;
+                script._requires.push(scriptRequire);
+                script._rawMeta += header + '\0' + value + '\0';
               } catch (e) {
-                throw new Error('Failed to @require '+ res[2]);
+                if (updating) {
+                  script._dependFail = true;
+                } else {
+                  throw new Error('Failed to @require '+ value);
+                }
               }
-              var reqUri = ioservice.newURI(value, null, uri);
-              var scriptRequire = new ScriptRequire(script);
-              scriptRequire._downloadURL = reqUri.spec;
-              script._requires.push(scriptRequire);
-              script._rawMeta += header + '\0' + value + '\0';
               break;
             case "resource":
               var res = value.match(/(\S+)\s+(.*)/);
@@ -283,15 +291,19 @@ Config.prototype = {
 
               try {
                 var resUri = ioservice.newURI(res[2], null, uri);
+                var scriptResource = new ScriptResource(script);
+                scriptResource._name = resName;
+                scriptResource._downloadURL = resUri.spec;
+                script._resources.push(scriptResource);
+                script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
               } catch (e) {
-                throw new Error('Failed to get @resource '+ resName +' from '+
-                                res[2]);
+                if (updating) {
+                  script._dependFail = true;
+                } else {
+                  throw new Error('Failed to get @resource '+ resName +' from '+
+                                  res[2]);
+                }
               }
-              var scriptResource = new ScriptResource(script);
-              scriptResource._name = resName;
-              scriptResource._downloadURL = resUri.spec;
-              script._resources.push(scriptResource);
-              script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
               break;
           }
         } else { // plain @header
@@ -422,14 +434,18 @@ Config.prototype = {
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
-    greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
+    if (script.enabled && script.matchesURL(href))
+      greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
   },
   updateModifiedScripts: function(scriptModified) {
     var scripts = this._scripts.filter(scriptModified);
+    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                              .getService(Components.interfaces.nsIIOService);
     var needSave = false;
 
     for (var i = 0; script = scripts[i]; i++) {
-      var parsedScript = this.parse(getContents(script._file), null);
+      var uri = script._downloadURL !== null ? ioService.newURI(script._downloadURL, null, null) : null;
+      var parsedScript = this.parse(getContents(script._file), uri, true);
       needSave = true;
 
       // Copy new values
@@ -440,7 +456,7 @@ Config.prototype = {
       var dependhash = script._dependhash;
       script._dependhash = SHA1(parsedScript._rawMeta);
 
-      if (dependhash != script._dependhash) {
+      if (dependhash != script._dependhash && !parsedScript._dependFail) {
         script._requires = parsedScript._requires;
         script._resources = parsedScript._resources;
 
@@ -459,6 +475,8 @@ Config.prototype = {
         scriptDownloader.fetchDependencies();
 
         script.delayInjection = true;
+      } else {
+        script._dependhash = dependhash;
       }
 
       this._changed(script, "modified", null, true);
@@ -543,6 +561,7 @@ function Script(config) {
   this._requires = [];
   this._resources = [];
   this._unwrap = false;
+  this._dependFail = false
   this.delayInjection = false;
   this._rawMeta = null;
 }
