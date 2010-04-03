@@ -31,8 +31,10 @@ Config.prototype = {
   },
 
   _changed: function(script, event, data, dontSave) {
-    if (!dontSave)
+    if (!dontSave) {
       this._save();
+    }
+
     this._notifyObservers(script, event, data);
   },
 
@@ -259,7 +261,7 @@ Config.prototype = {
               var scriptRequire = new ScriptRequire(script);
               scriptRequire._downloadURL = reqUri.spec;
               script._requires.push(scriptRequire);
-              script._rawMeta += header + " " + value;
+              script._rawMeta += header + '\0' + value + '\0';
               break;
             case "resource":
               var res = value.match(/(\S+)\s+(.*)/);
@@ -289,7 +291,7 @@ Config.prototype = {
               scriptResource._name = resName;
               scriptResource._downloadURL = resUri.spec;
               script._resources.push(scriptResource);
-              script._rawMeta += header + " " + value;
+              script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
               break;
           }
         } else { // plain @header
@@ -462,8 +464,9 @@ Config.prototype = {
       this._changed(script, "modified", null, true);
     }
     
-    if (needSave)
+    if (needSave) {
       this._save();
+    }
   },
 
   /**
