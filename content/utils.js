@@ -343,21 +343,26 @@ function GM_setEnabled(enabled) {
 // foo = GM_memoize(foo);
 //
 // The memoized function may have any number of arguments, but they must be
-// primitives (able to be used as object keys).
+// be serializable, and uniquely.  It's safest to use this only on functions
+// that accept primitives.
 function GM_memoize(func, limit) {
-  limit = limit || 1000;
+  limit = limit || 3000;
   var cache = {};
   var keylist = [];
 
   return function(a) {
     var args = Array.prototype.slice.call(arguments);
-    if (args in cache) return cache[args];
+    var key = uneval(args);
+    if (key in cache) return cache[key];
 
     var result = func.apply(null, args);
 
-    cache[args] = result;
-    keylist.push(args);
-    while (keylist.length > limit) keylist.shift();
+    cache[key] = result;
+    keylist.push(key);
+    while (keylist.length > limit) {
+      key = keylist.shift();
+      del(cache[key]);
+    }
 
     return result;
   }
