@@ -72,10 +72,12 @@ Config.prototype = {
 
       script._filename = node.getAttribute("filename");
       script._basedir = node.getAttribute("basedir") || ".";
+      script._downloadURL = node.getAttribute("installurl") || null;
 
       if (!node.getAttribute("modified") || !node.getAttribute("dependhash")) {
         script._modified = script._file.lastModifiedTime;
-        var rawMeta = this.parse(getContents(script._file), null)._rawMeta;
+        var uri = script._downloadURL !== null ? ioService.newURI(script._downloadURL, null, null) : null;
+        var rawMeta = this.parse(getContents(script._file), uri, true)._rawMeta;
         script._dependhash = SHA1(rawMeta);
         fileModified = true;
       } else {
@@ -114,13 +116,13 @@ Config.prototype = {
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
-      script._downloadURL = node.getAttribute("installurl") || null;
 
       this._scripts.push(script);
     }
 
-    if (fileModified)
+    if (fileModified) {
       this._save();
+    }
   },
 
   _save: function() {
