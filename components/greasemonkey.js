@@ -172,9 +172,9 @@ var greasemonkeyService = {
 
       if (!this.ignoreNextScript_) {
         if (!this.isTempScript(cl)) {
-          var winMan = Cc['@mozilla.org/appshell/window-mediator;1']
-            .getService(Ci.nsIWindowMediator);
-          var win = winMan.getMostRecentWindow(null);
+          var win = Cc['@mozilla.org/appshell/window-mediator;1']
+            .getService(Ci.nsIWindowMediator)
+            .getMostRecentWindow("navigator:browser");
           if (win && win.GM_BrowserUI) {
             win.GM_BrowserUI.startInstallScript(cl);
             ret = Ci.nsIContentPolicy.REJECT_REQUEST;
