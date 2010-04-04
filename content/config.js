@@ -115,6 +115,16 @@ Config.prototype = {
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
+      var icon = node.getAttribute("icon");
+      if (/^data:/i.test(icon)) {
+        // icon is a data scheme
+        script._icon = {_filename: icon, fileURL: icon};
+      } else if (icon != "") {
+        // icon is a file
+        var scriptRequire = new ScriptRequire(script);
+        scriptRequire._filename = node.getAttribute("icon");
+        script._icon = scriptRequire;
+      }
       script._enabled = node.getAttribute("enabled") == true.toString();
 
       this._scripts.push(script);
@@ -195,6 +205,9 @@ Config.prototype = {
       scriptNode.setAttribute("name", scriptObj._name);
       scriptNode.setAttribute("namespace", scriptObj._namespace);
       scriptNode.setAttribute("description", scriptObj._description);
+      if(scriptObj._icon && scriptObj._icon._filename) {
+        scriptNode.setAttribute("icon", scriptObj._icon._filename);
+      }
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
@@ -277,6 +290,20 @@ Config.prototype = {
           case "exclude":
             script._excludes.push(value);
             break;
+          case "icon":
+            script._rawMeta += header + '\0' + value + '\0';
+            // aceept data scheme 
+            if(value.match(/^data:/i)){
+              script._icon = {_filename: value};
+              break;
+            }
+            // ignore non images
+            if (!value.match(/\.(jpe?g|gif|png|bmp|ico)$/i)) break;
+            var reqUri = GM_uriFromUrl(value, uri);
+            var scriptRequire = new ScriptRequire(script);
+            scriptRequire._downloadURL = reqUri.spec;
+            script._icon = scriptRequire;
+            break;
           case "require":
             try {
               var reqUri = GM_uriFromUrl(value, uri);
@@ -334,6 +361,7 @@ Config.prototype = {
     if (!script._name && uri) script._name = GM_parseScriptName(uri);
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
+    if (!script._icon) script._icon = null;
     if (script._includes.length == 0) script._includes.push("*");
 
     return script;
@@ -349,6 +377,16 @@ Config.prototype = {
 
     script._initFile(script._tempFile);
     script._tempFile = null;
+
+    if (script._icon) {
+      if(!script.icon._filename) {
+        // icon is a file
+        script._icon._initFile();
+      } else {
+        // icon is a data scheme
+        script._icon.fileURL = script._icon._filename;
+      }
+    }
 
     for (var i = 0; i < script._requires.length; i++) {
       script._requires[i]._initFile();

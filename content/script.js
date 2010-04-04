@@ -12,6 +12,7 @@ function Script(config) {
   this._name = null;
   this._namespace = null;
   this._description = null;
+  this._icon = null;
   this._enabled = true;
   this._includes = [];
   this._excludes = [];
@@ -39,6 +40,7 @@ Script.prototype = {
   get prefroot() { return [
       "scriptvals.", this.namespace, "/", this.name, "."].join(""); },
   get description() { return this._description; },
+  get icon() { return this._icon; },
   get enabled() { return this._enabled; },
   set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
 
@@ -132,6 +134,7 @@ Script.prototype = {
   },
 
   updateFromNewScript: function(newScript) {
+    GM_log("> Updating Modified User Script");
     // Migrate preferences.
     if (this.prefroot != newScript.prefroot) {
       var storageOld = new GM_ScriptStorage(this);
@@ -149,12 +152,15 @@ Script.prototype = {
     this._excludes = newScript._excludes;
     this._name = newScript._name;
     this._namespace = newScript._namespace;
-    this._description = newScript._description;
+    this._description = newScript._description;;
     this._unwrap = newScript._unwrap;
 
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
+      GM_log("Updating Dependencies");
+
       this._dependhash = dependhash;
+      this._icon = newScript._icon
       this._requires = newScript._requires;
       this._resources = newScript._resources;
 
@@ -174,5 +180,6 @@ Script.prototype = {
 
       this.delayInjection = true;
     }
+    GM_log("< Updating Modified User Script");
   }
 };

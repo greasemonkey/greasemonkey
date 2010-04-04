@@ -89,7 +89,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     if(this.installing_){
       this.showInstallDialog();
-    }else{
+    } else {
       this.showScriptView();
     }
   } catch (e) {
@@ -99,9 +99,14 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   }
 };
 
+
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
+  // if this.script.icon._filename exists then the icon is a data scheme
+  if(this.script.icon && !this.script.icon._filename) {
+    deps.push(this.script.icon);
+  }
   for (var i = 0; i < deps.length; i++) {
     var dep = deps[i];
     if (this.checkDependencyURL(dep.urlToDownload)) {
@@ -140,7 +145,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
         "handleDependencyDownloadComplete", dep, file, sourceChannel);
       persist.progressListener = progressListener;
 
-      persist.saveChannel(sourceChannel,  file);
+      persist.saveChannel(sourceChannel, file);
     } catch(e) {
       GM_log("Download exception " + e);
       this.errorInstallDependency(this.script, dep, e);
@@ -189,10 +194,10 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
     case "http":
     case "https":
     case "ftp":
-        return true;
+      return true;
     case "file":
-        var scriptScheme = ioService.extractScheme(this.uri_.spec);
-        return (scriptScheme == "file")
+      var scriptScheme = ioService.extractScheme(this.uri_.spec);
+      return (scriptScheme == "file")
     default:
       return false;
   }

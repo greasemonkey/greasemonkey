@@ -88,6 +88,9 @@ var greasemonkeyAddons={
       item.setAttribute('addonId', id);
       item.setAttribute('name', script.name);
       item.setAttribute('description', script.description);
+      if(script.icon && script.icon.fileURL) {
+        item.setAttribute('iconURL', script.icon.fileURL);
+      }
       item.setAttribute('id', 'urn:greasemonkey:item:'+id);
       item.setAttribute('isDisabled', !script.enabled);
       // These hide extension-specific bits we don't want to display.
