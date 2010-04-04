@@ -172,11 +172,11 @@ var greasemonkeyService = {
 
       if (!this.ignoreNextScript_) {
         if (!this.isTempScript(cl)) {
-          var winWat = Cc["@mozilla.org/embedcomp/window-watcher;1"]
-            .getService(Ci.nsIWindowWatcher);
-
-          if (winWat.activeWindow && winWat.activeWindow.GM_BrowserUI) {
-            winWat.activeWindow.GM_BrowserUI.startInstallScript(cl);
+          var winMan = Cc['@mozilla.org/appshell/window-mediator;1']
+            .getService(Ci.nsIWindowMediator);
+          var win = winMan.getMostRecentWindow(null);
+          if (win && win.GM_BrowserUI) {
+            win.GM_BrowserUI.startInstallScript(cl);
             ret = Ci.nsIContentPolicy.REJECT_REQUEST;
           }
         }
