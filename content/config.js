@@ -119,7 +119,7 @@ Config.prototype = {
       if (/^data:/i.test(icon)) {
         // icon is a data scheme
         script._icon = {_filename: icon, fileURL: icon};
-      } else if (icon != "") {
+      } else if (icon) {
         // icon is a file
         var scriptRequire = new ScriptRequire(script);
         scriptRequire._filename = node.getAttribute("icon");

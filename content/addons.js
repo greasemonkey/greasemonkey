@@ -88,8 +88,10 @@ var greasemonkeyAddons={
       item.setAttribute('addonId', id);
       item.setAttribute('name', script.name);
       item.setAttribute('description', script.description);
-      if(script.icon && script.icon.fileURL) {
+      if (script.icon && script.icon.fileURL) {
         item.setAttribute('iconURL', script.icon.fileURL);
+      } else {
+        item.setAttribute('iconURL', "chrome://greasemonkey/skin/userscript.png");
       }
       item.setAttribute('id', 'urn:greasemonkey:item:'+id);
       item.setAttribute('isDisabled', !script.enabled);
