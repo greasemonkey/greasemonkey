@@ -60,6 +60,17 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
       return;
     }
 
+    // If there is a 'Content-Type' header and it contains 'text/html',
+    // then do not install the file, and display it instead.
+    if (/text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
+      Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
+      .getService().wrappedJSObject
+      .ignoreNextScript();
+
+      content.location.href = this.uri_.spec;
+      return;
+    }
+
     var source = this.req_.responseText;
 
     this.script = GM_getConfig().parse(source, this.uri_);

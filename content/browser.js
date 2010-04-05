@@ -141,7 +141,9 @@ GM_BrowserUI.contentLoad = function(e) {
   // Show the greasemonkey install banner if we are navigating to a .user.js
   // file in a top-level tab.  If the file was previously cached it might have
   // been given a number after .user, like gmScript.user-12.js
-  if (href.match(/\.user(?:-\d+)?\.js$/) && safeWin == safeWin.top) {
+  if (safeWin == safeWin.top &&
+      href.match(/\.user(?:-\d+)?\.js$/) &&
+      !/text\/html/i.test(safeWin.document.contentType)) {
     var browser = this.tabBrowser.getBrowserForDocument(safeWin.document);
     this.showInstallBanner(browser);
   }
