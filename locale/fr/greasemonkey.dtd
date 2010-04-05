@@ -1,0 +1,37 @@
+<!ENTITY manage.title "Gérer les scripts">
+<!ENTITY manage.button.close "Close">
+<!ENTITY manage.button.add "Ajouter…">
+<!ENTITY manage.button.edit "Éditer…">
+<!ENTITY manage.button.remove "Supprimer">
+<!ENTITY manage.label.grpIncluded "Pages autorisées">
+<!ENTITY manage.label.grpExcluded "Pages interdites">
+<!ENTITY manage.label.btnEdit "Éditer">
+<!ENTITY manage.label.chkEnabled "Activer">
+<!ENTITY manage.label.btnUninstall "Désinstaller">
+<!ENTITY manage.label.chkUninstall "Désinstaller en même temps les préférences associées">
+<!ENTITY manage.reorderHelp "Pour modifier l&apos;ordre de la liste de scripts, glissez-déposez avec la souris ou utilisez Alt+Haut / Alt+Bas.">
+<!ENTITY menu.install "Installer un script…">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Voir le code source du script">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Commandes du script…">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Nouveau script…">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Gérer les scripts…">
+<!ENTITY menu.manage.accesskey "G">
+<!ENTITY statusbar.noscripts "Aucun script n&apos;est installé !">
+<!ENTITY statusbar.enabled "Activer">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Installation pour Greasemonkey">
+<!ENTITY install.runson "fonctionne pour :">
+<!ENTITY install.butnoton "ne fonctionne pas pour :">
+<!ENTITY install.warning1 "Des scripts malveillants peuvent accéder à des données concernant votre vie privée, ainsi que les utiliser à votre insu.">
+<!ENTITY install.warning2 "Vous ne devriez installer que des scripts provenant de sites auxquels vous faites confiance.">
+<!ENTITY install.showscriptsource "Voir le code source du script">
+<!ENTITY install.installbutton "Installer">
+<!ENTITY newscript.name "Nom">
+<!ENTITY newscript.namespace "Espace de noms">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Va inclure (un élément par ligne)">
+<!ENTITY newscript.excludes "Va exclure (un élément par ligne)">
