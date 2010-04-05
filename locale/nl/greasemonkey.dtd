@@ -1,37 +1,37 @@
-<!ENTITY manage.title "Manage User Scripts">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Add...">
-<!ENTITY manage.button.edit "Edit...">
-<!ENTITY manage.button.remove "Remove">
-<!ENTITY manage.label.grpIncluded "Included Pages">
-<!ENTITY manage.label.grpExcluded "Excluded Pages">
-<!ENTITY manage.label.btnEdit "Edit">
-<!ENTITY manage.label.chkEnabled "Enabled">
-<!ENTITY manage.label.btnUninstall "Uninstall">
-<!ENTITY manage.label.chkUninstall "Also uninstall associated preferences">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
-<!ENTITY menu.install "Install User Script...">
-<!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "View User Script Source">
-<!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "User Script Commands...">
-<!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "New User Script...">
+<!ENTITY manage.title "Gebruikersscripts beheren">
+<!ENTITY manage.button.close "Sluiten">
+<!ENTITY manage.button.add "Toevoegen…">
+<!ENTITY manage.button.edit "Bewerken…">
+<!ENTITY manage.button.remove "Verwijderen">
+<!ENTITY manage.label.grpIncluded "Inclusief deze pagina’s">
+<!ENTITY manage.label.grpExcluded "Exclusief deze pagina’s">
+<!ENTITY manage.label.btnEdit "Bewerken">
+<!ENTITY manage.label.chkEnabled "Ingeschakeld">
+<!ENTITY manage.label.btnUninstall "Deïnstalleren">
+<!ENTITY manage.label.chkUninstall "De bijbehorende instellingen ook verwijderen">
+<!ENTITY manage.reorderHelp "Sleep met uw muis of druk Alt-Up/Alt-Down op scripts in deze lijst opnieuw te sorteren.">
+<!ENTITY menu.install "Dit gebruikersscript installeren…">
+<!ENTITY menu.install.accesskey "S">
+<!ENTITY menu.show "Broncode gebruikersscript bekijken">
+<!ENTITY menu.show.accesskey "k">
+<!ENTITY menu.commands "Gebruikersscriptopdrachten…">
+<!ENTITY menu.commands.accesskey "r">
+<!ENTITY menu.new "Nieuw gebruikersscript…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Manage User Scripts...">
-<!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "No scripts installed!">
-<!ENTITY statusbar.enabled "Enabled">
-<!ENTITY statusbar.enabled.accesskey "E">
-<!ENTITY install.title "Greasemonkey Installation">
-<!ENTITY install.runson "runs on:">
-<!ENTITY install.butnoton "does not run on:">
-<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
-<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
-<!ENTITY install.showscriptsource "Show Script Source">
-<!ENTITY install.installbutton "Install">
-<!ENTITY newscript.name "Name">
+<!ENTITY menu.manage "Gebruikersscripts beheren…">
+<!ENTITY menu.manage.accesskey "U">
+<!ENTITY statusbar.noscripts "Er zijn geen scripts geïnstalleerd!">
+<!ENTITY statusbar.enabled "Ingeschakeld">
+<!ENTITY statusbar.enabled.accesskey "I">
+<!ENTITY install.title "Greasemonkey installatie">
+<!ENTITY install.runson "draait op:">
+<!ENTITY install.butnoton "draait niet op:">
+<!ENTITY install.warning1 "Kwaadaardige scripts kunnen uw privacy aantasten en namens u dingen uitvoeren zonder dat u het weet.">
+<!ENTITY install.warning2 "U dient alleen scripts uit vertrouwde bronnen te installeren.">
+<!ENTITY install.showscriptsource "Scriptbron weergeven">
+<!ENTITY install.installbutton "Installeren">
+<!ENTITY newscript.name "Naam">
 <!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (One per line)">
-<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY newscript.description "Beschrijving">
+<!ENTITY newscript.includes "Inclusief (één per regel)">
+<!ENTITY newscript.excludes "Exclusief (één per regel)">
