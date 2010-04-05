@@ -172,11 +172,11 @@ var greasemonkeyService = {
 
       if (!this.ignoreNextScript_) {
         if (!this.isTempScript(cl)) {
-          var winWat = Cc["@mozilla.org/embedcomp/window-watcher;1"]
-            .getService(Ci.nsIWindowWatcher);
-
-          if (winWat.activeWindow && winWat.activeWindow.GM_BrowserUI) {
-            winWat.activeWindow.GM_BrowserUI.startInstallScript(cl);
+          var win = Cc['@mozilla.org/appshell/window-mediator;1']
+            .getService(Ci.nsIWindowMediator)
+            .getMostRecentWindow("navigator:browser");
+          if (win && win.GM_BrowserUI) {
+            win.GM_BrowserUI.startInstallScript(cl);
             ret = Ci.nsIContentPolicy.REJECT_REQUEST;
           }
         }
@@ -473,7 +473,7 @@ var greasemonkeyService = {
         dummyElm.parentNode.removeChild(dummyElm);
 
         return fbContext.consoleHandler.pop().handler;
-      } else if (1.3 == fbVersion || 1.4 == fbVersion || 1.5 == fbVersion) {
+      } else if (fbVersion >= 1.3) {
         fbConsole.injector.attachIfNeeded(fbContext, unsafeContentWin);
         return findActiveContext();
       }

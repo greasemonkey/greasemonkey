@@ -294,29 +294,27 @@ GM_BrowserUI.onLocationChange = function(a,b,c) {
  * avoid leaking it's memory.
  */
 GM_BrowserUI.contentUnload = function(e) {
-  if (e.persisted) {
+  if (e.persisted || !this.menuCommanders || 0 == this.menuCommanders.length) {
     return;
   }
 
   var unsafeWin = e.target.defaultView;
 
-  // remove the commander for this document
-  var commander = null;
-
   // looping over commanders rather than using getCommander because we need
   // the index into commanders.splice.
-  for (var i = 0; item = this.menuCommanders[i]; i++) {
-    if (item.win == unsafeWin) {
-
-      if (item.commander == this.currentMenuCommander) {
-        this.currentMenuCommander.detach();
-        this.currentMenuCommander = null;
-      }
-
-      this.menuCommanders.splice(i, 1);
-
-      break;
+  for (var i = 0, item; item = this.menuCommanders[i]; i++) {
+    if (item.win != unsafeWin) {
+      continue;
     }
+
+    if (item.commander == this.currentMenuCommander) {
+      this.currentMenuCommander.detach();
+      this.currentMenuCommander = null;
+    }
+
+    this.menuCommanders.splice(i, 1);
+
+    break;
   }
 };
 
