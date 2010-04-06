@@ -11,18 +11,18 @@
 <!ENTITY manage.label.chkUninstall "Деинсталирај и подешавања">
 <!ENTITY manage.reorderHelp "Превуците мишем и пустите или притисните алт+горе/алт+доле да бисте променили редослед скрипти">
 <!ENTITY menu.install "Инсталирај корисничку скрипту...">
-<!ENTITY menu.install.accesskey "и">
+<!ENTITY menu.install.accesskey "И">
 <!ENTITY menu.show "Погледај изворни кôд странице">
-<!ENTITY menu.show.accesskey "п">
+<!ENTITY menu.show.accesskey "П">
 <!ENTITY menu.commands "Наредбе корисничких скрипти...">
-<!ENTITY menu.commands.accesskey "К">
+<!ENTITY menu.commands.accesskey "Ц">
 <!ENTITY menu.new "Нова корисничка скрипта...">
 <!ENTITY menu.new.accesskey "Н">
 <!ENTITY menu.manage "Управљање корисничким скриптама...">
-<!ENTITY menu.manage.accesskey "У">
+<!ENTITY menu.manage.accesskey "М">
 <!ENTITY statusbar.noscripts "Нема инсталираних скрипти!">
 <!ENTITY statusbar.enabled "Укључено">
-<!ENTITY statusbar.enabled.accesskey "Ч">
+<!ENTITY statusbar.enabled.accesskey "Е">
 <!ENTITY install.title "Greasemonkey инсталација">
 <!ENTITY install.runson "покреће на:">
 <!ENTITY install.butnoton "не покреће на:">
