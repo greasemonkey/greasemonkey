@@ -42,8 +42,24 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
+  this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
   this.req_.send(null);
+};
+
+ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
+  // If there is a 'Content-Type' header and it contains 'text/html',
+  // then do not install the file, and display it instead.
+  if (this.req_.readyState == 2 && /text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
+    this.req_.abort();
+
+    Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
+    .getService().wrappedJSObject
+    .ignoreNextScript();
+
+    content.location.href = this.uri_.spec;
+    return;
+ }
 };
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
@@ -57,17 +73,6 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
       alert("Error loading user script:\n" +
       this.req_.status + ": " +
       this.req_.statusText);
-      return;
-    }
-
-    // If there is a 'Content-Type' header and it contains 'text/html',
-    // then do not install the file, and display it instead.
-    if (/text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
-      Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-      .getService().wrappedJSObject
-      .ignoreNextScript();
-
-      content.location.href = this.uri_.spec;
       return;
     }
 
