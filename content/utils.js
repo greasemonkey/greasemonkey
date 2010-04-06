@@ -312,7 +312,6 @@ function GM_isGreasemonkeyable(url) {
 
   return false;
 }
-GM_isGreasemonkeyable = GM_memoize(GM_isGreasemonkeyable);
 
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
