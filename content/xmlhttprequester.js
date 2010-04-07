@@ -59,10 +59,29 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   GM_log("> GM_xmlhttpRequest.chromeStartRequest");
 
-  this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
+  this.setupRequestEvent(this.unsafeContentWin, req, "load", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "error", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "readystatechange",
                          details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "progress", details);
+  this.setupRequestEvent(this.unsafeContentWin, req, "abort", details);
+
+  // Let users attach upload events
+  if (details.uploadProgress) {
+    // xhr supports upload events?
+    if (!req.upload) {
+            var err = new Error("Unavailable feature: " +
+              "This version of Firefox does not support upload events " +
+              "(you should consider upgrading to version 3.5 or newer.)");
+            GM_logError(err);
+            throw err;
+    }
+
+    this.setupRequestEvent(this.unsafeContentWin, req.upload, "progress", details.uploadProgress);
+    this.setupRequestEvent(this.unsafeContentWin, req.upload, "load", details.uploadProgress);
+    this.setupRequestEvent(this.unsafeContentWin, req.upload, "error", details.uploadProgress);
+    this.setupRequestEvent(this.unsafeContentWin, req.upload, "abort", details.uploadProgress);
+  } 
 
   req.open(details.method, safeUrl);
 
@@ -103,25 +122,29 @@ GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(unsafeContentWin, req, event, details) {
   GM_log("> GM_xmlhttpRequester.setupRequestEvent");
 
-  if (details[event]) {
-    req[event] = function() {
+  if (details["on" + event]) {
+    req.addEventListener(event, function(evt) {
       GM_log("> GM_xmlhttpRequester -- callback for " + event);
 
       var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
-        responseText: req.responseText,
-        readyState: req.readyState,
+        responseText: evt.responseText,
+        readyState: evt.readyState,
         responseHeaders: null,
         status: null,
         statusText: null,
         finalUrl: null
       };
-      if (4 == req.readyState && 'onerror' != event) {
-        responseState.responseHeaders = req.getAllResponseHeaders();
-        responseState.status = req.status;
-        responseState.statusText = req.statusText;
-        responseState.finalUrl = req.channel.URI.spec;
+
+      if ("progress" == event && evt.lengthComputable) {
+        responseState.loaded = evt.loaded;
+        responseState.total = evt.total;
+      } else if (4 == evt.readyState && 'onerror' != event) {
+        responseState.responseHeaders = evt.getAllResponseHeaders();
+        responseState.status = evt.status;
+        responseState.statusText = evt.statusText;
+        responseState.finalUrl = evt.channel.URI.spec;
       }
 
       // Pop back onto browser thread and call event handler.
@@ -129,10 +152,10 @@ function(unsafeContentWin, req, event, details) {
       // otherwise details[event].apply can point to window.setTimeout, which
       // can be abused to get increased priveledges.
       new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
-        .setTimeout(function(){details[event](responseState);}, 0);
+        .setTimeout(function(){details["on" + event](responseState);}, 0);
 
       GM_log("< GM_xmlhttpRequester -- callback for " + event);
-    }
+    }, false);
   }
 
   GM_log("< GM_xmlhttpRequester.setupRequestEvent");
