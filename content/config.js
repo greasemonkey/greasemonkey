@@ -261,75 +261,71 @@ Config.prototype = {
 
         var header = match[1];
         var value = match[2];
-        if (value) { // @header <value>
-          switch (header) {
-            case "name":
-            case "namespace":
-            case "description":
-              script["_" + header] = value;
-              break;
-            case "include":
-              script._includes.push(value);
-              break;
-            case "exclude":
-              script._excludes.push(value);
-              break;
-            case "require":
-              try {
-                var reqUri = ioservice.newURI(value, null, uri);
-                var scriptRequire = new ScriptRequire(script);
-                scriptRequire._downloadURL = reqUri.spec;
-                script._requires.push(scriptRequire);
-                script._rawMeta += header + '\0' + value + '\0';
-              } catch (e) {
-                if (updating) {
-                  script._dependFail = true;
-                } else {
-                  throw new Error('Failed to @require '+ value);
-                }
-              }
-              break;
-            case "resource":
-              var res = value.match(/(\S+)\s+(.*)/);
-              if (res === null) {
-                // NOTE: Unlocalized strings
-                throw new Error("Invalid syntax for @resource declaration '" +
-                                value + "'. Resources are declared like: " +
-                                "@resource <name> <url>.");
-              }
 
-              var resName = res[1];
-              if (previousResourceNames[resName]) {
-                throw new Error("Duplicate resource name '" + resName + "' " +
-                                "detected. Each resource must have a unique " +
-                                "name.");
+        switch (header) {
+          case "name":
+          case "namespace":
+          case "description":
+            script["_" + header] = value;
+            break;
+          case "include":
+            script._includes.push(value);
+            break;
+          case "exclude":
+            script._excludes.push(value);
+            break;
+          case "require":
+            try {
+              var reqUri = ioservice.newURI(value, null, uri);
+              var scriptRequire = new ScriptRequire(script);
+              scriptRequire._downloadURL = reqUri.spec;
+              script._requires.push(scriptRequire);
+              script._rawMeta += header + '\0' + value + '\0';
+            } catch (e) {
+              if (updating) {
+                script._dependFail = true;
               } else {
-                previousResourceNames[resName] = true;
+                throw new Error('Failed to @require '+ value);
               }
+            }
+            break;
+          case "resource":
+            var res = value.match(/(\S+)\s+(.*)/);
+            if (res === null) {
+              // NOTE: Unlocalized strings
+              throw new Error("Invalid syntax for @resource declaration '" +
+                              value + "'. Resources are declared like: " +
+                              "@resource <name> <url>.");
+            }
 
-              try {
-                var resUri = ioservice.newURI(res[2], null, uri);
-                var scriptResource = new ScriptResource(script);
-                scriptResource._name = resName;
-                scriptResource._downloadURL = resUri.spec;
-                script._resources.push(scriptResource);
-                script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
-              } catch (e) {
-                if (updating) {
-                  script._dependFail = true;
-                } else {
-                  throw new Error('Failed to get @resource '+ resName +' from '+
-                                  res[2]);
-                }
+            var resName = res[1];
+            if (previousResourceNames[resName]) {
+              throw new Error("Duplicate resource name '" + resName + "' " +
+                              "detected. Each resource must have a unique " +
+                              "name.");
+            } else {
+              previousResourceNames[resName] = true;
+            }
+
+            try {
+              var resUri = ioservice.newURI(res[2], null, uri);
+              var scriptResource = new ScriptResource(script);
+              scriptResource._name = resName;
+              scriptResource._downloadURL = resUri.spec;
+              script._resources.push(scriptResource);
+              script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
+            } catch (e) {
+              if (updating) {
+                script._dependFail = true;
+              } else {
+                throw new Error('Failed to get @resource '+ resName +' from '+
+                                res[2]);
               }
-              break;
-          }
-        } else { // plain @header
-          switch (header) {
-            case "unwrap":
-              script._unwrap = true;
-              break;
-          }
+            }
+            break;
+          case "unwrap":
+            script._unwrap = true;
+            break;
         }
       }
     }
@@ -481,6 +477,7 @@ Config.prototype = {
       script._includes = parsedScript._includes;
       script._excludes = parsedScript._excludes;
       script._description = parsedScript._description;
+      script._unwrap = parsedScript._unwrap;
 
       var dependhash = SHA1(parsedScript._rawMeta);
 
