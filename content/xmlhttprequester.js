@@ -58,16 +58,17 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   GM_log("> GM_xmlhttpRequest.chromeStartRequest");
+  var setupReq = this.setupRequestEvent;
+  var unsafeContentWin = this.unsafeContentWin;
 
-  this.setupRequestEvent(this.unsafeContentWin, req, "load", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "error", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "readystatechange",
-                         details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "progress", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "abort", details);
+  setupReq(unsafeContentWin, req, "load", details);
+  setupReq(unsafeContentWin, req, "error", details);
+  setupReq(unsafeContentWin, req, "readystatechange", details);
+  setupReq(unsafeContentWin, req, "progress", details);
+  setupReq(unsafeContentWin, req, "abort", details);
 
   // Let users attach upload events
-  if (details.uploadProgress) {
+  if (details.upload) {
     // xhr supports upload events?
     if (!req.upload) {
             var err = new Error("Unavailable feature: " +
@@ -77,10 +78,10 @@ function(safeUrl, details, req) {
             throw err;
     }
 
-    this.setupRequestEvent(this.unsafeContentWin, req.upload, "progress", details.uploadProgress);
-    this.setupRequestEvent(this.unsafeContentWin, req.upload, "load", details.uploadProgress);
-    this.setupRequestEvent(this.unsafeContentWin, req.upload, "error", details.uploadProgress);
-    this.setupRequestEvent(this.unsafeContentWin, req.upload, "abort", details.uploadProgress);
+    setupReq(unsafeContentWin, req.upload, "progress", details.upload);
+    setupReq(unsafeContentWin, req.upload, "load", details.upload);
+    setupReq(unsafeContentWin, req.upload, "error", details.upload);
+    setupReq(unsafeContentWin, req.upload, "abort", details.upload);
   } 
 
   req.open(details.method, safeUrl);
@@ -129,22 +130,29 @@ function(unsafeContentWin, req, event, details) {
       var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
-        responseText: evt.responseText,
-        readyState: evt.readyState,
+        responseText: req.responseText,
+        readyState: req.readyState,
         responseHeaders: null,
         status: null,
         statusText: null,
         finalUrl: null
       };
 
-      if ("progress" == event && evt.lengthComputable) {
-        responseState.loaded = evt.loaded;
-        responseState.total = evt.total;
-      } else if (4 == evt.readyState && 'onerror' != event) {
-        responseState.responseHeaders = evt.getAllResponseHeaders();
-        responseState.status = evt.status;
-        responseState.statusText = evt.statusText;
-        responseState.finalUrl = evt.channel.URI.spec;
+      switch (event) {
+        case "progress":
+          responseState.lengthComputable = evt.lengthComputable;
+          responseState.loaded = evt.loaded;
+          responseState.total = evt.total;
+          break;
+        case "error":
+          break;
+        default:
+          if (4 != req.readyState) break;
+          responseState.responseHeaders = req.getAllResponseHeaders();
+          responseState.status = req.status;
+          responseState.statusText = req.statusText;
+          responseState.finalUrl = req.channel.URI.spec;
+          break;
       }
 
       // Pop back onto browser thread and call event handler.
