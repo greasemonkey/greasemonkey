@@ -133,7 +133,7 @@ Config.prototype = {
                 .getMostRecentWindow("navigator:browser");
 
     if (win != null) {
-      win.setTimeout(GM_hitch(this,"_saveConfigToFile"));
+      win.setTimeout(GM_hitch(this,"_saveConfigToFile"), 250);
     }
     else {
       this._saveConfigToFile();
