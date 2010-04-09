@@ -128,6 +128,21 @@ Config.prototype = {
   },
 
   _save: function() {
+    var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+                .getService(Ci.nsIWindowMediator)
+                .getMostRecentWindow("navigator:browser");
+
+    if (win != null) {
+      (function(config) {
+        win.setTimeout(function() {config._saveConfigToFile()}, 0);
+      })(this);
+    }
+    else {
+      this._saveConfigToFile();
+    }
+  },
+
+  _saveConfigToFile: function(config) {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser)
       .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
@@ -485,7 +500,7 @@ Config.prototype = {
 
       this._changed(script, "modified", null, true);
     }
-    
+
     if (needSave) {
       this._save();
     }
