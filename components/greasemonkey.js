@@ -219,20 +219,11 @@ var greasemonkeyService = {
       return !script.delayInjection && script.enabled && script.matchesURL(url);
     }
 
-    function scriptModified(script) {
-      script.delayInjection = false;
-      if (script._modified != script._file.lastModifiedTime) {
-        script._modified = script._file.lastModifiedTime;
-        return true;
-      }
-      return false;
-    }
-
     var config = GM_getConfig();
     config.wrappedContentWin = wrappedContentWin;
     config.chromeWin = chromeWin;
 
-    config.updateModifiedScripts(scriptModified);
+    config.updateModifiedScripts();
     return config.getMatchingScripts(testMatch);
   },
 

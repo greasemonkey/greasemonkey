@@ -213,6 +213,7 @@ Config.prototype = {
 
     doc.firstChild.appendChild(doc.createTextNode("\n"));
 
+    GM_log("Saving GM config.xml");
     var configStream = getWriteStream(this._configFile);
     Components.classes["@mozilla.org/xmlextras/xmlserializer;1"]
       .createInstance(Components.interfaces.nsIDOMSerializer)
@@ -454,26 +455,37 @@ Config.prototype = {
     if (script.enabled && script.matchesURL(href))
       greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
   },
-  updateModifiedScripts: function(scriptModified) {
-    var scripts = this._scripts.filter(scriptModified);
+  updateModifiedScripts: function() {
+    // Find any updated scripts
+    var scripts = this.getMatchingScripts(function (script) {
+      script.delayInjection = false;
+      if (script._modified != script._file.lastModifiedTime) {
+        script._modified = script._file.lastModifiedTime;
+        return true;
+      }
+      return false;
+    });
+
+    if (!scripts.length) {
+      return;
+    }
+
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                               .getService(Components.interfaces.nsIIOService);
-    var needSave = false;
 
-    for (var i = 0; script = scripts[i]; i++) {
+    for (var i = 0, script; script = scripts[i]; i++) {
       var uri = script._downloadURL !== null ? ioService.newURI(script._downloadURL, null, null) : null;
       var parsedScript = this.parse(getContents(script._file), uri, true);
-      needSave = true;
 
       // Copy new values
       script._includes = parsedScript._includes;
       script._excludes = parsedScript._excludes;
       script._description = parsedScript._description;
 
-      var dependhash = script._dependhash;
-      script._dependhash = SHA1(parsedScript._rawMeta);
+      var dependhash = SHA1(parsedScript._rawMeta);
 
       if (dependhash != script._dependhash && !parsedScript._dependFail) {
+        script._dependhash = dependhash;
         script._requires = parsedScript._requires;
         script._resources = parsedScript._resources;
 
@@ -492,16 +504,12 @@ Config.prototype = {
         scriptDownloader.fetchDependencies();
 
         script.delayInjection = true;
-      } else {
-        script._dependhash = dependhash;
       }
 
       this._changed(script, "modified", null, true);
     }
 
-    if (needSave) {
-      this._save();
-    }
+    this._save();
   },
 
   /**
