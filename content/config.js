@@ -324,7 +324,7 @@ Config.prototype = {
             }
             break;
           case "unwrap":
-            script._unwrap = true;
+            if (!value) script._unwrap = true;
             break;
         }
       }
