@@ -223,7 +223,9 @@ var greasemonkeyService = {
     config.wrappedContentWin = wrappedContentWin;
     config.chromeWin = chromeWin;
 
-    config.updateModifiedScripts();
+    if (!GM_prefRoot.getValue('disableLiveEditing',false)) {
+      config.updateModifiedScripts();
+    }
     return config.getMatchingScripts(testMatch);
   },
 
