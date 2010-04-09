@@ -346,7 +346,7 @@ function GM_setEnabled(enabled) {
 // that accept primitives.
 function GM_memoize(func, limit) {
   limit = limit || 3000;
-  var cache = {};
+  var cache = {__proto__: null};
   var keylist = [];
 
   return function(a) {
@@ -357,11 +357,8 @@ function GM_memoize(func, limit) {
     var result = func.apply(null, args);
 
     cache[key] = result;
-    keylist.push(key);
-    while (keylist.length > limit) {
-      key = keylist.shift();
-      del(cache[key]);
-    }
+
+	if (keylist.push(key) > limit) delete cache[keylist.shift()];
 
     return result;
   }
