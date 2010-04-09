@@ -133,16 +133,14 @@ Config.prototype = {
                 .getMostRecentWindow("navigator:browser");
 
     if (win != null) {
-      (function(config) {
-        win.setTimeout(function() {config._saveConfigToFile()}, 0);
-      })(this);
+      win.setTimeout(GM_hitch(this,"_saveConfigToFile"));
     }
     else {
       this._saveConfigToFile();
     }
   },
 
-  _saveConfigToFile: function(config) {
+  _saveConfigToFile: function() {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser)
       .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
