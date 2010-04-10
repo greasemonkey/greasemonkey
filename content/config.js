@@ -262,6 +262,16 @@ Config.prototype = {
         var header = match[1];
         var value = match[2];
 
+        if (!value) {
+          switch (header) {
+            case "unwrap":
+              script._unwrap = true;
+              break;
+            default:
+              continue;
+          }
+        }
+
         switch (header) {
           case "name":
           case "namespace":
@@ -322,9 +332,6 @@ Config.prototype = {
                                 res[2]);
               }
             }
-            break;
-          case "unwrap":
-            if (!value) script._unwrap = true;
             break;
         }
       }
