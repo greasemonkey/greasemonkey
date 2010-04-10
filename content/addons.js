@@ -242,6 +242,7 @@ var greasemonkeyAddons = {
     if (!button) return;
     button.setAttribute('tooltiptext', GM_string('Uninstall.tooltip'));
     button.setAttribute('command', 'cmd_userscript_uninstall');
+
     button.setAttribute('disabled', 'false');
   },
 
@@ -345,16 +346,5 @@ var greasemonkeyAddons = {
 
     addMenuItem('Sort Scripts', 'cmd_userscript_sort',
         gExtensionsView.itemCount > 1);
-  },
-
-  newUserScript: function() {
-    var windowWatcher = Components
-      .classes["@mozilla.org/embedcomp/window-watcher;1"]
-      .getService(Components.interfaces.nsIWindowWatcher);
-
-    windowWatcher.openWindow(
-      window, "chrome://greasemonkey/content/newscript.xul", null,
-      "chrome,dependent,centerscreen,resizable,dialog", null
-    );
   }
 };

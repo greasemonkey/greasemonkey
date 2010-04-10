@@ -67,7 +67,7 @@
       <menuitem id="userscript-tools-new"
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
-        oncommand="GM_BrowserUI.newUserScript();" />
+        oncommand="GM_newUserScript();" />
       <menu id="userscript-commands-sb2"
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
@@ -117,7 +117,7 @@
         <menuseparator />
         <menuitem accesskey="&menu.new.accesskey;"
           label="&menu.new;"
-          oncommand="GM_BrowserUI.newUserScript();" />
+          oncommand="GM_newUserScript();" />
         <menuitem accesskey="&menu.manage.accesskey;"
           label="&menu.manage;"
           oncommand="BrowserOpenAddonsMgr('userscripts');" />

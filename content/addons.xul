@@ -37,7 +37,7 @@
           label="&writenew;"
           accesskey="&writenew.ak;"
           tooltiptext="&writenew.tt;"
-          oncommand="greasemonkeyAddons.newUserScript()"
+          oncommand="GM_newUserScript()"
           hidden="true" />
 </hbox>
 
