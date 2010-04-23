@@ -307,26 +307,25 @@ function GM_isGreasemonkeyable(url) {
                .getService(Components.interfaces.nsIIOService)
                .extractScheme(url);
 
-  if ("http" == scheme) return true;
-  if ("https" == scheme) return true;
-  if ("ftp" == scheme) return true;
-  if ("data" == scheme) return true;
-
-  if ("file" == scheme) {
-    return GM_prefRoot.getValue('fileIsGreaseable');
-  }
-
-  if ("about" == scheme) {
-    // Always allow "about:blank".
-    if (/^about:blank/.test(url)) return true;
-
-    // Conditionally allow the rest of "about:".
-    return GM_prefRoot.getValue('aboutIsGreaseable');
+  switch (scheme) {
+    case "http":
+    case "https":
+    case "ftp":
+    case "data":
+      return true;
+    case "about":
+      // Always allow "about:blank".
+      if (/^about:blank/.test(url)) return true;
+      // Conditionally allow the rest of "about:".
+      return GM_prefRoot.getValue('aboutIsGreaseable');
+    case "file":
+      return GM_prefRoot.getValue('fileIsGreaseable');
+    case "unmht":
+      return GM_prefRoot.getValue('unmhtIsGreaseable');
   }
 
   return false;
 }
-GM_isGreasemonkeyable = GM_memoize(GM_isGreasemonkeyable);
 
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
@@ -347,7 +346,7 @@ function GM_setEnabled(enabled) {
 // that accept primitives.
 function GM_memoize(func, limit) {
   limit = limit || 3000;
-  var cache = {};
+  var cache = {__proto__: null};
   var keylist = [];
 
   return function(a) {
@@ -358,11 +357,8 @@ function GM_memoize(func, limit) {
     var result = func.apply(null, args);
 
     cache[key] = result;
-    keylist.push(key);
-    while (keylist.length > limit) {
-      key = keylist.shift();
-      del(cache[key]);
-    }
+
+	if (keylist.push(key) > limit) delete cache[keylist.shift()];
 
     return result;
   }
