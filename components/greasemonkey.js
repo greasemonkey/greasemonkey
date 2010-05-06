@@ -138,6 +138,9 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/prefmanager.js");
     loader.loadSubScript("chrome://greasemonkey/content/utils.js");
     loader.loadSubScript("chrome://greasemonkey/content/config.js");
+    loader.loadSubScript("chrome://greasemonkey/content/script.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptresource.js");
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
