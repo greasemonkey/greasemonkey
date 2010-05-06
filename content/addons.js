@@ -165,7 +165,7 @@ var greasemonkeyAddons={
     var selectedListitem = gExtensionsView.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
-      openInEditor(script);
+      GM_openInEditor(script);
       break;
     case 'cmd_userscript_enable':
       selectedListitem.setAttribute('isDisabled', 'false');

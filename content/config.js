@@ -60,7 +60,7 @@ Config.prototype = {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
                               .createInstance(Components.interfaces.nsIDOMParser);
 
-    var configContents = getContents(this._configFile);
+    var configContents = GM_getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
     var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
     var fileModified = false;
@@ -77,7 +77,7 @@ Config.prototype = {
       if (!node.getAttribute("modified") || !node.getAttribute("dependhash")) {
         script._modified = script._file.lastModifiedTime;
         var rawMeta = this.parse(
-            getContents(script._file), script._downloadURL, true)._rawMeta;
+            GM_getContents(script._file), script._downloadURL, true)._rawMeta;
         script._dependhash = GM_sha1(rawMeta);
         fileModified = true;
       } else {
@@ -210,7 +210,7 @@ Config.prototype = {
 
     doc.firstChild.appendChild(doc.createTextNode("\n"));
 
-    var configStream = getWriteStream(this._configFile);
+    var configStream = GM_getWriteStream(this._configFile);
     Components.classes["@mozilla.org/xmlextras/xmlserializer;1"]
       .createInstance(Components.interfaces.nsIDOMSerializer)
       .serializeToStream(doc, configStream, "utf-8");
@@ -331,7 +331,7 @@ Config.prototype = {
     }
 
     // if no meta info, default to reasonable values
-    if (!script._name && uri) script._name = parseScriptName(uri);
+    if (!script._name && uri) script._name = GM_parseScriptName(uri);
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
     if (script._includes.length == 0) script._includes.push("*");
@@ -434,7 +434,7 @@ Config.prototype = {
     if (!dir.exists()) {
       dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
 
-      var configStream = getWriteStream(this._configFile);
+      var configStream = GM_getWriteStream(this._configFile);
       var xml = "<UserScriptConfig/>";
       configStream.write(xml, xml.length);
       configStream.close();
@@ -461,7 +461,7 @@ Config.prototype = {
 
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
-          getContents(script._file), script._downloadURL, true);
+          GM_getContents(script._file), script._downloadURL, true);
       script.updateFromNewScript(parsedScript);
       this._changed(script, "modified", null, true);
     }

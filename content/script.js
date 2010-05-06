@@ -67,7 +67,7 @@ Script.prototype = {
   },
 
   get fileURL() { return GM_getUriFromFile(this._file).spec; },
-  get textContent() { return getContents(this._file); },
+  get textContent() { return GM_getContents(this._file); },
 
   _initFileName: function(name, useExt) {
     var ext = "";

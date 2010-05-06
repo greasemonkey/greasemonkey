@@ -22,8 +22,8 @@ function doInstall() {
   if (!script) return false;
 
   // put this created script into a file -- only way to install it
-  var tempFile = getTempFile();
-  var foStream = getWriteStream(tempFile);
+  var tempFile = GM_getTempFile();
+  var foStream = GM_getWriteStream(tempFile);
   foStream.write(script, script.length);
   foStream.close();
 
@@ -45,7 +45,7 @@ function doInstall() {
   config.install(script);
 
   // and fire up the editor!
-  openInEditor(script);
+  GM_openInEditor(script);
 
   // persist namespace value
   GM_prefRoot.setValue("newscript_namespace", script.namespace);

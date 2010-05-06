@@ -77,20 +77,20 @@ function GM_log(message, force) {
 // TODO: this stuff was copied wholesale and not refactored at all. Lots of
 // the UI and Config rely on it. Needs rethinking.
 
-function openInEditor(script) {
+function GM_openInEditor(script) {
   var file = script.editFile;
   var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
-  var editor = getEditor(stringBundle);
+  var editor = GM_getEditor(stringBundle);
   if (!editor) {
     // The user did not choose an editor.
     return;
   }
 
   try {
-    launchApplicationWithDoc(editor, file);
+    GM_launchApplicationWithDoc(editor, file);
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
@@ -100,7 +100,7 @@ function openInEditor(script) {
   }
 }
 
-function getEditor(stringBundle) {
+function GM_getEditor(stringBundle) {
   var editorPath = GM_prefRoot.getValue("editor");
 
   if (editorPath) {
@@ -151,7 +151,7 @@ function getEditor(stringBundle) {
   }
 }
 
-function launchApplicationWithDoc(appFile, docFile) {
+function GM_launchApplicationWithDoc(appFile, docFile) {
   var args=[docFile.path];
 
   // For the mac, wrap with a call to "open".
@@ -172,14 +172,14 @@ function launchApplicationWithDoc(appFile, docFile) {
   process.run(false, args, args.length);
 }
 
-function parseScriptName(sourceUri) {
+function GM_parseScriptName(sourceUri) {
   var name = sourceUri.spec;
   name = name.substring(0, name.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;
 }
 
-function getTempFile() {
+function GM_getTempFile() {
   var file = Components.classes["@mozilla.org/file/directory_service;1"]
         .getService(Components.interfaces.nsIProperties)
         .get("TmpD", Components.interfaces.nsILocalFile);
@@ -193,7 +193,7 @@ function getTempFile() {
   return file;
 }
 
-function getBinaryContents(file) {
+function GM_getBinaryContents(file) {
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                               .getService(Components.interfaces.nsIIOService);
 
@@ -209,7 +209,7 @@ function getBinaryContents(file) {
     return bytes;
 }
 
-function getContents(file, charset) {
+function GM_getContents(file, charset) {
   if( !charset ) {
     charset = "UTF-8"
   }
@@ -225,7 +225,13 @@ function getContents(file, charset) {
   unicodeConverter.charset = charset;
 
   var channel = ioService.newChannelFromURI(GM_getUriFromFile(file));
-  var input=channel.open();
+  try {
+    var input=channel.open();
+  } catch (e) {
+    GM_logError(new Error("Could not open file: " + file.path));
+    return "";
+  }
+
   scriptableStream.init(input);
   var str=scriptableStream.read(input.available());
   scriptableStream.close();
@@ -238,7 +244,7 @@ function getContents(file, charset) {
   }
 }
 
-function getWriteStream(file) {
+function GM_getWriteStream(file) {
   var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
                          .createInstance(Components.interfaces.nsIFileOutputStream);
 
@@ -253,6 +259,7 @@ function GM_getUriFromFile(file) {
                    .newFileURI(file);
 }
 
+// Todo: replace with nsIVersionComparator?
 /**
  * Compares two version numbers
  *
