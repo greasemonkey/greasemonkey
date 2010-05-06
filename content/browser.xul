@@ -13,7 +13,6 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/dochandler.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/accelimation.js" />
