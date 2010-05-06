@@ -324,9 +324,10 @@ function GM_setEnabled(enabled) {
 function GM_uriFromUrl(url, baseUrl) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                                      .getService(Components.interfaces.nsIIOService);
-  var baseUri = GM_uriFromUrl(baseUrl);
+  var baseUri = null;
+  if (baseUrl) baseUri = GM_uriFromUrl(baseUrl);
   try {
-    return ioService.newURI(script._downloadURL, null, baseUri);
+    return ioService.newURI(url, null, baseUri);
   } catch (e) {
     return null;
   }
