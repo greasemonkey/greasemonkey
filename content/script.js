@@ -127,5 +127,38 @@ Script.prototype = {
       return true;
     }
     return false;
+  },
+
+  updateFromNewScript: function(newScript) {
+    // Copy new values.
+    this._includes = newScript._includes;
+    this._excludes = newScript._excludes;
+    this._name = newScript._name;
+    this._namespace = newScript._namespace;
+    this._description = newScript._description;
+    this._unwrap = newScript._unwrap;
+
+    var dependhash = SHA1(newScript._rawMeta);
+    if (dependhash != this._dependhash && !newScript._dependFail) {
+      this._dependhash = dependhash;
+      this._requires = newScript._requires;
+      this._resources = newScript._resources;
+
+      // Get rid of old dependencies.
+      var dirFiles = this._basedirFile.directoryEntries;
+      while (dirFiles.hasMoreElements()) {
+        var nextFile = dirFiles.getNext()
+            .QueryInterface(Components.interfaces.nsIFile);
+        if (!nextFile.equals(this._file)) nextFile.remove(true);
+      }
+
+      // Redownload dependencies.
+      var scriptDownloader = new GM_ScriptDownloader(null, null, null);
+      scriptDownloader.script = this;
+      scriptDownloader.updateScript = true;
+      scriptDownloader.fetchDependencies();
+
+      this.delayInjection = true;
+    }
   }
 };

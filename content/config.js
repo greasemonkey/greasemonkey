@@ -463,39 +463,7 @@ Config.prototype = {
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
           getContents(script._file), script._downloadURL, true);
-
-      // Copy new values
-      script._includes = parsedScript._includes;
-      script._excludes = parsedScript._excludes;
-      script._name = parsedScript._name;
-      script._namespace = parsedScript._namespace;
-      script._description = parsedScript._description;
-      script._unwrap = parsedScript._unwrap;
-
-      var dependhash = SHA1(parsedScript._rawMeta);
-
-      if (dependhash != script._dependhash && !parsedScript._dependFail) {
-        script._dependhash = dependhash;
-        script._requires = parsedScript._requires;
-        script._resources = parsedScript._resources;
-
-        // Get rid of old dependencies
-        var dirFiles = script._basedirFile.directoryEntries;
-        while (dirFiles.hasMoreElements()) {
-          var nextFile = dirFiles.getNext().QueryInterface(Components.interfaces.nsIFile);
-          if (!nextFile.equals(script._file))
-            nextFile.remove(true);
-        }
-
-        // Redownload dependencies
-        var scriptDownloader = new this.ScriptDownloader(null, null, null);
-        scriptDownloader.script = script;
-        scriptDownloader.updateScript = true;
-        scriptDownloader.fetchDependencies();
-
-        script.delayInjection = true;
-      }
-
+      script.updateFromNewScript(parsedScript);
       this._changed(script, "modified", null, true);
     }
 
