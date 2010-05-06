@@ -321,6 +321,18 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
+function GM_uriFromUrl(url, baseUrl) {
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                                     .getService(Components.interfaces.nsIIOService);
+  var baseUri = GM_uriFromUrl(baseUrl);
+  try {
+    return ioService.newURI(script._downloadURL, null, baseUri);
+  } catch (e) {
+    return null;
+  }
+}
+GM_uriFromUrl = GM_memoize(GM_uriFromUrl);
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
@@ -349,3 +361,4 @@ function GM_memoize(func, limit) {
     return result;
   }
 }
+

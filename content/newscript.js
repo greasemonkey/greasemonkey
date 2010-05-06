@@ -30,7 +30,7 @@ function doInstall() {
   var config = GM_getConfig();
 
   // create a script object with parsed metadata,
-  script = config.parse(script, tempFile);
+  script = config.parse(script);
 
   // make sure entered details will not ruin an existing file
   if (config.installIsUpdate(script)) {

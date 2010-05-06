@@ -59,8 +59,6 @@ Config.prototype = {
   _load: function() {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
                               .createInstance(Components.interfaces.nsIDOMParser);
-    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
 
     var configContents = getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
@@ -78,8 +76,8 @@ Config.prototype = {
 
       if (!node.getAttribute("modified") || !node.getAttribute("dependhash")) {
         script._modified = script._file.lastModifiedTime;
-        var uri = script._downloadURL !== null ? ioService.newURI(script._downloadURL, null, null) : null;
-        var rawMeta = this.parse(getContents(script._file), uri, true)._rawMeta;
+        var rawMeta = this.parse(
+            getContents(script._file), script._downloadURL, true)._rawMeta;
         script._dependhash = SHA1(rawMeta);
         fileModified = true;
       } else {
@@ -222,9 +220,6 @@ Config.prototype = {
   },
 
   parse: function parse_config(source, uri, updating) {
-    var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
-
     var script = new Script(this);
 
     if (uri !== null) {
@@ -286,7 +281,7 @@ Config.prototype = {
             break;
           case "require":
             try {
-              var reqUri = ioservice.newURI(value, null, uri);
+              var reqUri = GM_uriFromUrl(value, uri);
               var scriptRequire = new ScriptRequire(script);
               scriptRequire._downloadURL = reqUri.spec;
               script._requires.push(scriptRequire);
@@ -318,7 +313,7 @@ Config.prototype = {
             }
 
             try {
-              var resUri = ioservice.newURI(res[2], null, uri);
+              var resUri = GM_uriFromUrl(res[2], uri);
               var scriptResource = new ScriptResource(script);
               scriptResource._name = resName;
               scriptResource._downloadURL = resUri.spec;
@@ -473,12 +468,9 @@ Config.prototype = {
       return;
     }
 
-    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
-
     for (var i = 0, script; script = scripts[i]; i++) {
-      var uri = script._downloadURL !== null ? ioService.newURI(script._downloadURL, null, null) : null;
-      var parsedScript = this.parse(getContents(script._file), uri, true);
+      var parsedScript = this.parse(
+          getContents(script._file), script._downloadURL, true);
 
       // Copy new values
       script._includes = parsedScript._includes;
