@@ -130,10 +130,9 @@ Config.prototype = {
                 .getService(Ci.nsIWindowMediator)
                 .getMostRecentWindow("navigator:browser");
 
-    if (win != null) {
-      win.setTimeout(GM_hitch(this,"_saveConfigToFile"), 250);
-    }
-    else {
+    if (win) {
+      win.setTimeout(GM_hitch(this, "_saveConfigToFile"), 250);
+    } else {
       this._saveConfigToFile();
     }
   },
@@ -201,7 +200,7 @@ Config.prototype = {
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
 
-      if (scriptObj._downloadURL !== null) {
+      if (scriptObj._downloadURL) {
         scriptNode.setAttribute("installurl", scriptObj._downloadURL);
       }
 
@@ -211,7 +210,6 @@ Config.prototype = {
 
     doc.firstChild.appendChild(doc.createTextNode("\n"));
 
-    GM_log("Saving GM config.xml");
     var configStream = getWriteStream(this._configFile);
     Components.classes["@mozilla.org/xmlextras/xmlserializer;1"]
       .createInstance(Components.interfaces.nsIDOMSerializer)
@@ -219,10 +217,10 @@ Config.prototype = {
     configStream.close();
   },
 
-  parse: function parse_config(source, uri, updating) {
+  parse: function(source, uri, updating) {
     var script = new Script(this);
 
-    if (uri !== null) {
+    if (uri) {
       script._downloadURL = uri.spec;
       script._enabled = true;
     }
@@ -333,8 +331,8 @@ Config.prototype = {
     }
 
     // if no meta info, default to reasonable values
-    if (script._name == null && uri !== null) script._name = parseScriptName(uri);
-    if (script._namespace == null && uri !== null) script._namespace = uri.host;
+    if (!script._name && uri) script._name = parseScriptName(uri);
+    if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
     if (script._includes.length == 0) script._includes.push("*");
 
@@ -450,8 +448,9 @@ Config.prototype = {
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
-    if (script.enabled && script.matchesURL(href))
+    if (script.enabled && script.matchesURL(href)) {
       greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
+    }
   },
 
   updateModifiedScripts: function() {
