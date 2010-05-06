@@ -32,10 +32,17 @@ window.addEventListener('load', function() {
 }, false);
 
 var greasemonkeyAddons={
+  gmSvc: Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
+                   .getService(Components.interfaces.gmIGreasemonkeyService)
+                   .wrappedJSObject,
+
   showView: function() {
     if ('userscripts' == gView) return;
     updateLastSelected('userscripts');
     gView='userscripts';
+
+    // Update any possibly modified scripts.
+    this.gmSvc.config.updateModifiedScripts();
 
     // Hide the native controls that don't work in the user scripts view.
     function $(id) { return document.getElementById(id); }
