@@ -453,20 +453,12 @@ Config.prototype = {
     if (script.enabled && script.matchesURL(href))
       greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
   },
+
   updateModifiedScripts: function() {
     // Find any updated scripts
-    var scripts = this.getMatchingScripts(function (script) {
-      script.delayInjection = false;
-      if (script._modified != script._file.lastModifiedTime) {
-        script._modified = script._file.lastModifiedTime;
-        return true;
-      }
-      return false;
-    });
-
-    if (!scripts.length) {
-      return;
-    }
+    var scripts = this.getMatchingScripts(
+        function (script) { return script.isModified(); });
+    if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
@@ -682,6 +674,15 @@ Script.prototype = {
     return Components.classes["@mozilla.org/network/io-service;1"]
                      .getService(Components.interfaces.nsIIOService)
                      .newFileURI(this._tempFile).spec;
+  },
+
+  isModified: function() {
+    this.delayInjection = false;
+    if (this._modified != this._file.lastModifiedTime) {
+      this._modified = this._file.lastModifiedTime;
+      return true;
+    }
+    return false;
   }
 };
 
