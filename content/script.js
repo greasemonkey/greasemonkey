@@ -138,7 +138,7 @@ Script.prototype = {
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
 
-    var dependhash = SHA1(newScript._rawMeta);
+    var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
       this._dependhash = dependhash;
       this._requires = newScript._requires;

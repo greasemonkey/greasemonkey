@@ -334,6 +334,28 @@ function GM_uriFromUrl(url, baseUrl) {
 }
 GM_uriFromUrl = GM_memoize(GM_uriFromUrl);
 
+// UTF-8 encodes input, SHA-1 hashes it and returns the 40-char hex version.
+function GM_sha1(unicode) {
+  var unicodeConverter = Components
+      .classes["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  unicodeConverter.charset = "UTF-8";
+
+  var data = unicodeConverter.convertToByteArray(unicode, {});
+  var ch = Components.classes["@mozilla.org/security/hash;1"]
+      .createInstance(Components.interfaces.nsICryptoHash);
+  ch.init(ch.SHA1);
+  ch.update(data, data.length);
+  var hash = ch.finish(false); // hash as raw octets
+
+  var hex = [];
+  for (var i = 0; i < hash.length; i++) {
+    hex.push( ("0" + hash.charCodeAt(i).toString(16)).slice(-2) );
+  }
+  return hex.join('');
+}
+GM_sha1 = GM_memoize(GM_sha1);
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //

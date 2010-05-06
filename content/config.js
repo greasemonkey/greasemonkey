@@ -78,7 +78,7 @@ Config.prototype = {
         script._modified = script._file.lastModifiedTime;
         var rawMeta = this.parse(
             getContents(script._file), script._downloadURL, true)._rawMeta;
-        script._dependhash = SHA1(rawMeta);
+        script._dependhash = GM_sha1(rawMeta);
         fileModified = true;
       } else {
         script._modified = node.getAttribute("modified");
@@ -361,7 +361,7 @@ Config.prototype = {
     }
 
     script._modified = script._file.lastModifiedTime;
-    script._metahash = SHA1(script._rawMeta);
+    script._metahash = GM_sha1(script._rawMeta);
 
     this._scripts.push(script);
     this._changed(script, "install", null);
