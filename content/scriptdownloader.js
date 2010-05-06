@@ -79,7 +79,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     converter.charset = "UTF-8";
     source = converter.ConvertFromUnicode(source);
 
-    var ws = getWriteStream(file);
+    var ws = GM_getWriteStream(file);
     ws.write(source, source.length);
     ws.close();
 
@@ -132,7 +132,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
-      var file = getTempFile();
+      var file = GM_getTempFile();
       this.tempFiles_.push(file);
 
       var progressListener = new PersistProgressListener(persist);
