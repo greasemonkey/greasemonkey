@@ -467,6 +467,8 @@ Config.prototype = {
       // Copy new values
       script._includes = parsedScript._includes;
       script._excludes = parsedScript._excludes;
+      script._name = parsedScript._name;
+      script._namespace = parsedScript._namespace;
       script._description = parsedScript._description;
       script._unwrap = parsedScript._unwrap;
 
