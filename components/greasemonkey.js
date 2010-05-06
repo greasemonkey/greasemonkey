@@ -221,14 +221,15 @@ var greasemonkeyService = {
       return !script.delayInjection && script.enabled && script.matchesURL(url);
     }
 
-    var config = GM_getConfig();
-    config.wrappedContentWin = wrappedContentWin;
-    config.chromeWin = chromeWin;
+    // Todo: Try to implement this w/out global state.
+    this.config.wrappedContentWin = wrappedContentWin;
+    this.config.chromeWin = chromeWin;
 
-    if (!GM_prefRoot.getValue('disableLiveEditing',false)) {
-      config.updateModifiedScripts();
+    if (GM_prefRoot.getValue('enableScriptRefreshing')) {
+      this.config.updateModifiedScripts();
     }
-    return config.getMatchingScripts(testMatch);
+
+    return this.config.getMatchingScripts(testMatch);
   },
 
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
