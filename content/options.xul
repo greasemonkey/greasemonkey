@@ -8,16 +8,18 @@
 ]>
 
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<dialog 
+<dialog
   title="Greasemonkey - &prefWindow.titleWin;"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept"
-	
+
   id="greasemonkey-options-dialog"
   persist="screenX screenY"
+  onload="GM_onloadOptions()"
 >
 <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/options.js" />
 
 <dialogheader title="Greasemonkey" description="&prefWindow.titleWin;"/>
 
@@ -25,6 +27,13 @@
   <groupbox>
     <caption label="&options.editor;" />
     <button oncommand="GM_getEditor(true)"><label>&options.changeEditor;</label></button>
+  </groupbox>
+
+  <groupbox>
+    <caption label="&manage.label.btnUninstall;" />
+    <checkbox id="check-uninstall"
+      label="&manage.label.chkUninstall;" 
+      oncommand="GM_setUninstallPrefs(this)" />
   </groupbox>
 </vbox>
 
