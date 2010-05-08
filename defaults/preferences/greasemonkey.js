@@ -2,4 +2,4 @@ pref("extensions.{e4a8a97b-f2ed-450b-b12d-ee082ba24781}.description", "chrome://
 pref("greasemonkey.aboutIsGreaseable", false);
 pref("greasemonkey.fileIsGreaseable", false);
 pref("greasemonkey.unmhtIsGreaseable", false);
-pref("greasemonkey.enableScriptRefreshing", false);
+pref("greasemonkey.enableScriptRefreshing", true);
