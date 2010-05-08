@@ -367,7 +367,7 @@ Config.prototype = {
     GM_log("< Config.install");
   },
 
-  uninstall: function(script, uninstallPrefs) {
+  uninstall: function(script) {
     var idx = this._find(script);
     this._scripts.splice(idx, 1);
     this._changed(script, "uninstall", null);
@@ -381,9 +381,9 @@ Config.prototype = {
       script._file.remove(false);
     }
 
-    if (uninstallPrefs) {
+    if (GM_prefRoot.getValue("uninstallPreferences")) {
       // Remove saved preferences
-      GM_prefRoot.remove("scriptvals." + script._namespace + "/" + script._name + ".");
+      GM_prefRoot.remove(script.prefroot);
     }
   },
 
