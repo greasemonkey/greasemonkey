@@ -6,6 +6,11 @@ const NAMESPACE = "http://youngpup.net/greasemonkey";
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
+var GM_stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
+
 function GM_isDef(thing) {
   return typeof(thing) != "undefined";
 }
@@ -79,11 +84,7 @@ function GM_log(message, force) {
 
 function GM_openInEditor(script) {
   var file = script.editFile;
-  var stringBundle = Components
-    .classes["@mozilla.org/intl/stringbundle;1"]
-    .getService(Components.interfaces.nsIStringBundleService)
-    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
-  var editor = GM_getEditor(stringBundle);
+  var editor = GM_getEditor();
   if (!editor) {
     // The user did not choose an editor.
     return;
@@ -94,16 +95,16 @@ function GM_openInEditor(script) {
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
-    alert(stringBundle.GetStringFromName("editor.could_not_launch") + "\n" + e);
+    alert(GM_stringBundle.GetStringFromName("editor.could_not_launch") + "\n" + e);
     GM_prefRoot.remove("editor");
     throw e;
   }
 }
 
-function GM_getEditor(stringBundle) {
+function GM_getEditor(change) {
   var editorPath = GM_prefRoot.getValue("editor");
 
-  if (editorPath) {
+  if (!change && editorPath) {
     GM_log("Found saved editor preference: " + editorPath);
 
     var editor = Components.classes["@mozilla.org/file/local;1"]
@@ -129,7 +130,7 @@ function GM_getEditor(stringBundle) {
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
                                .createInstance(nsIFilePicker);
 
-    filePicker.init(window, stringBundle.GetStringFromName("editor.prompt"),
+    filePicker.init(window, GM_stringBundle.GetStringFromName("editor.prompt"),
                     nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
@@ -146,7 +147,7 @@ function GM_getEditor(stringBundle) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
       return filePicker.file;
     } else {
-      alert(stringBundle.GetStringFromName("editor.please_pick_executable"));
+      alert(GM_stringBundle.GetStringFromName("editor.please_pick_executable"));
     }
   }
 }
