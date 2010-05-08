@@ -13,7 +13,7 @@
     <em:iconURL>chrome://greasemonkey/skin/icon_medium.png</em:iconURL>
     <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL> 
 
-	<em:name>Greasemonkey</em:name>
+    <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
 
     <em:contributor>Anthony Lieuallen; http://arantius.com/</em:contributor>
