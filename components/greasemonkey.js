@@ -493,7 +493,7 @@ var greasemonkeyService = {
       dump('Greasemonkey getFirebugConsole() error:\n'+uneval(e)+'\n');
     }
 
-	  return null;
+    return null;
   }
 };
 
