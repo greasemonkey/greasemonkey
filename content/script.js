@@ -36,6 +36,8 @@ Script.prototype = {
 
   get name() { return this._name; },
   get namespace() { return this._namespace; },
+  get prefroot() { return [
+      "scriptvals.", this.namespace, "/", this.name, "."].join(""); },
   get description() { return this._description; },
   get enabled() { return this._enabled; },
   set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
@@ -130,6 +132,18 @@ Script.prototype = {
   },
 
   updateFromNewScript: function(newScript) {
+    // Migrate preferences.
+    if (this.prefroot != newScript.prefroot) {
+      var storageOld = new GM_ScriptStorage(this);
+      var storageNew = new GM_ScriptStorage(newScript);
+
+      var names = storageOld.listValues();
+      for (var i = 0, name = null; name = names[i]; i++) {
+        storageNew.setValue(name, storageOld.getValue(name));
+        storageOld.deleteValue(name);
+      }
+    }
+
     // Copy new values.
     this._includes = newScript._includes;
     this._excludes = newScript._excludes;
