@@ -30,6 +30,8 @@
     <command id="cmd_userscript_move_down"/>
     <command id="cmd_userscript_move_top"/>
     <command id="cmd_userscript_move_bottom"/>
+
+    <command id="cmd_userscript_sort"/>
   </commandset>
 </window>
 
