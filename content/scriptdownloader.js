@@ -1,8 +1,9 @@
 // This anonymous function exists to isolate generic names inside it to its
 // private scope.
+var GM_ScriptDownloader;
 (function() {
 
-function ScriptDownloader(win, uri, bundle) {
+GM_ScriptDownloader = function(win, uri, bundle) {
   this.win_ = win;
   this.uri_ = uri;
   this.bundle_ = bundle;
@@ -12,22 +13,20 @@ function ScriptDownloader(win, uri, bundle) {
   this.dependenciesLoaded_ = false;
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
+  this.updateScript = false;
 }
 
-// Export this one important value to the global namespace.
-window.GM_ScriptDownloader=ScriptDownloader;
-
-ScriptDownloader.prototype.startInstall = function() {
+GM_ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
   this.startDownload();
 };
 
-ScriptDownloader.prototype.startViewScript = function(uri) {
+GM_ScriptDownloader.prototype.startViewScript = function(uri) {
   this.installing_ = false;
   this.startDownload();
 };
 
-ScriptDownloader.prototype.startDownload = function() {
+GM_ScriptDownloader.prototype.startDownload = function() {
   this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
   this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
   this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
@@ -44,7 +43,7 @@ ScriptDownloader.prototype.startDownload = function() {
   this.req_.send(null);
 };
 
-ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
+GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   this.win_.GM_BrowserUI.refreshStatus();
   this.win_.GM_BrowserUI.hideStatusImmediately();
 
@@ -60,7 +59,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.script = GM_getConfig().parse(source, this.uri_);
+    this.script = GM_getConfig().parse(source, this.uri_.spec);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
                          .getService(Components.interfaces.nsIProperties)
@@ -80,7 +79,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     converter.charset = "UTF-8";
     source = converter.ConvertFromUnicode(source);
 
-    var ws = getWriteStream(file);
+    var ws = GM_getWriteStream(file);
     ws.write(source, source.length);
     ws.close();
 
@@ -100,7 +99,7 @@ ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   }
 };
 
-ScriptDownloader.prototype.fetchDependencies = function(){
+GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
   for (var i = 0; i < deps.length; i++) {
@@ -116,7 +115,7 @@ ScriptDownloader.prototype.fetchDependencies = function(){
   this.downloadNextDependency();
 };
 
-ScriptDownloader.prototype.downloadNextDependency = function(){
+GM_ScriptDownloader.prototype.downloadNextDependency = function(){
   if (this.depQueue_.length > 0) {
     var dep = this.depQueue_.pop();
     try {
@@ -129,11 +128,11 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
       var ioservice =
         Components.classes["@mozilla.org/network/io-service;1"]
         .getService(Components.interfaces.nsIIOService);
-      var sourceUri = ioservice.newURI(dep.urlToDownload, null, null);
+      var sourceUri = GM_uriFromUrl(dep.urlToDownload);
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
-      var file = getTempFile();
+      var file = GM_getTempFile();
       this.tempFiles_.push(file);
 
       var progressListener = new PersistProgressListener(persist);
@@ -152,7 +151,7 @@ ScriptDownloader.prototype.downloadNextDependency = function(){
   }
 };
 
-ScriptDownloader.prototype.handleDependencyDownloadComplete =
+GM_ScriptDownloader.prototype.handleDependencyDownloadComplete =
 function(dep, file, channel) {
   GM_log("Dependency Download complete " + dep.urlToDownload);
   try {
@@ -164,6 +163,10 @@ function(dep, file, channel) {
 
   if (httpChannel) {
     if (httpChannel.requestSucceeded) {
+      if (this.updateScript) {
+        dep._script = this.script;
+        dep.updateScript = true;
+      }
       dep.setDownloadedFile(file, channel.contentType, channel.contentCharset ? channel.contentCharset : null);
       this.downloadNextDependency();
     } else {
@@ -177,7 +180,7 @@ function(dep, file, channel) {
   }
 };
 
-ScriptDownloader.prototype.checkDependencyURL = function(url) {
+GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                             .getService(Components.interfaces.nsIIOService);
   var scheme = ioService.extractScheme(url);
@@ -195,14 +198,20 @@ ScriptDownloader.prototype.checkDependencyURL = function(url) {
   }
 };
 
-ScriptDownloader.prototype.finishInstall = function(){
-  if (this.installOnCompletion_) {
+GM_ScriptDownloader.prototype.finishInstall = function(){
+  if (this.updateScript) {
+    // Inject the script now that we have the new dependencies
+    this.script._config.injectScript(this.script);
+
+    // Save new values to config.xml
+    this.script._config._save();
+  } else if (this.installOnCompletion_) {
     this.installScript();
   }
 };
 
-ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
-  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg)
+GM_ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
+  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   if (this.installOnCompletion_) {
     alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {
@@ -210,7 +219,7 @@ ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
   }
 };
 
-ScriptDownloader.prototype.installScript = function(){
+GM_ScriptDownloader.prototype.installScript = function(){
   if (this.dependencyError) {
     alert(this.dependencyError);
   } else if(this.dependenciesLoaded_) {
@@ -220,13 +229,13 @@ ScriptDownloader.prototype.installScript = function(){
   }
 };
 
-ScriptDownloader.prototype.cleanupTempFiles = function() {
+GM_ScriptDownloader.prototype.cleanupTempFiles = function() {
   for (var i = 0, file = null; file = this.tempFiles_[i]; i++) {
     file.remove(false);
   }
 };
 
-ScriptDownloader.prototype.showInstallDialog = function(timer) {
+GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
   if (!timer) {
     // otherwise, the status bar stays in the loading state.
     this.win_.setTimeout(GM_hitch(this, "showInstallDialog", true), 0);
@@ -237,7 +246,7 @@ ScriptDownloader.prototype.showInstallDialog = function(timer) {
                        this);
 };
 
-ScriptDownloader.prototype.showScriptView = function() {
+GM_ScriptDownloader.prototype.showScriptView = function() {
   this.win_.GM_BrowserUI.showScriptView(this);
 };
 

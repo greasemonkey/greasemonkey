@@ -123,7 +123,7 @@ var greasemonkeyService = {
     var unsafeWin = wrappedContentWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
-    var scripts = this.initScripts(href);
+    var scripts = this.initScripts(href, wrappedContentWin, chromeWin);
 
     if (scripts.length > 0) {
       this.injectScripts(scripts, href, unsafeWin, chromeWin);
@@ -138,9 +138,13 @@ var greasemonkeyService = {
     loader.loadSubScript("chrome://greasemonkey/content/prefmanager.js");
     loader.loadSubScript("chrome://greasemonkey/content/utils.js");
     loader.loadSubScript("chrome://greasemonkey/content/config.js");
+    loader.loadSubScript("chrome://greasemonkey/content/script.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptresource.js");
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
@@ -212,12 +216,20 @@ var greasemonkeyService = {
     return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
   },
 
-  initScripts: function(url) {
+  initScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
-      return script.enabled && script.matchesURL(url);
+      return !script.delayInjection && script.enabled && script.matchesURL(url);
     }
 
-    return GM_getConfig().getMatchingScripts(testMatch);
+    // Todo: Try to implement this w/out global state.
+    this.config.wrappedContentWin = wrappedContentWin;
+    this.config.chromeWin = chromeWin;
+
+    if (GM_prefRoot.getValue('enableScriptRefreshing')) {
+      this.config.updateModifiedScripts();
+    }
+
+    return this.config.getMatchingScripts(testMatch);
   },
 
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
@@ -481,7 +493,7 @@ var greasemonkeyService = {
       dump('Greasemonkey getFirebugConsole() error:\n'+uneval(e)+'\n');
     }
 
-	  return null;
+    return null;
   }
 };
 

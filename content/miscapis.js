@@ -1,9 +1,5 @@
 function GM_ScriptStorage(script) {
-  this.prefMan = new GM_PrefManager(["scriptvals.",
-                                     script.namespace,
-                                     "/",
-                                     script.name,
-                                     "."].join(""));
+  this.prefMan = new GM_PrefManager(script.prefroot);
 }
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
@@ -25,6 +21,24 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
 
   return this.prefMan.getValue(name, defVal);
 };
+
+GM_ScriptStorage.prototype.deleteValue = function(name) {
+  if (!GM_apiLeakCheck("GM_deleteValue")) {
+    return undefined;
+  }
+
+  return this.prefMan.remove(name);
+};
+
+GM_ScriptStorage.prototype.listValues = function() {
+  if (!GM_apiLeakCheck("GM_listValues")) {
+    return undefined;
+  }
+
+  return this.prefMan.listValues();
+};
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function GM_Resources(script){
   this.script = script;
@@ -57,6 +71,8 @@ GM_Resources.prototype.getDep_ = function(name) {
   throw new Error("No resource with name: " + name); // NOTE: Non localised string
 };
 
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
 function GM_ScriptLogger(script) {
   var namespace = script.namespace;
 
@@ -71,21 +87,7 @@ GM_ScriptLogger.prototype.log = function(message) {
   GM_log(this.prefix + message, true);
 };
 
-GM_ScriptStorage.prototype.deleteValue = function(name) {
-  if (!GM_apiLeakCheck("GM_deleteValue")) {
-    return undefined;
-  }
-
-  return this.prefMan.remove(name);
-};
-
-GM_ScriptStorage.prototype.listValues = function() {
-  if (!GM_apiLeakCheck("GM_listValues")) {
-    return undefined;
-  }
-
-  return this.prefMan.listValues();
-};
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function GM_addStyle(doc, css) {
   var head = doc.getElementsByTagName("head")[0];
@@ -97,6 +99,8 @@ function GM_addStyle(doc, css) {
   }
   return style;
 }
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function GM_console(script) {
   // based on http://www.getfirebug.com/firebug/firebugx.js
