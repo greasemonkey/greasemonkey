@@ -73,18 +73,14 @@ window.addEventListener('load', function() {
       'select', greasemonkeyAddons.onAddonSelect, false);
 }, false);
 
-var greasemonkeyAddons={
-  gmSvc: Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-                   .getService(Components.interfaces.gmIGreasemonkeyService)
-                   .wrappedJSObject,
-
+var greasemonkeyAddons = {
   showView: function() {
     if ('userscripts' == gView) return;
     updateLastSelected('userscripts');
     gView='userscripts';
 
     // Update any possibly modified scripts.
-    this.gmSvc.config.updateModifiedScripts();
+    GM_config.updateModifiedScripts();
 
     // Hide the native controls that don't work in the user scripts view.
     function $(id) { return document.getElementById(id); }
@@ -234,6 +230,12 @@ var greasemonkeyAddons={
     case 'cmd_userscript_move_top':
       GM_config.move(script, -1 * GM_config.scripts.length);
       break;
+    case 'cmd_userscript_sort':
+      function scriptCmp(a, b) { return a.name < b.name ? -1 : 1; }
+      GM_config._scripts.sort(scriptCmp);
+      GM_config._save();
+      greasemonkeyAddons.fillList();
+      break;
     case 'cmd_userscript_uninstall':
       GM_config.uninstall(script);
       break;
@@ -273,5 +275,9 @@ var greasemonkeyAddons={
     addMenuItem('Move Down', 'cmd_userscript_move_down');
     addMenuItem('Move To Top', 'cmd_userscript_move_top');
     addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom');
+
+    popup.appendChild(document.createElement('menuseparator'));
+
+    addMenuItem('Sort Scripts', 'cmd_userscript_sort');
   }
 };
