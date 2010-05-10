@@ -222,6 +222,18 @@ var greasemonkeyAddons={
     case 'cmd_userscript_disable':
       script.enabled = false;
       break;
+    case 'cmd_userscript_move_down':
+      GM_config.move(script, 1);
+      break;
+    case 'cmd_userscript_move_bottom':
+      GM_config.move(script, GM_config.scripts.length);
+      break;
+    case 'cmd_userscript_move_up':
+      GM_config.move(script, -1);
+      break;
+    case 'cmd_userscript_move_top':
+      GM_config.move(script, -1 * GM_config.scripts.length);
+      break;
     case 'cmd_userscript_uninstall':
       GM_config.uninstall(script);
       break;
@@ -254,5 +266,12 @@ var greasemonkeyAddons={
       addMenuItem('Enable', 'cmd_userscript_enable');
     }
     addMenuItem('Uninstall', 'cmd_userscript_uninstall');
+
+    popup.appendChild(document.createElement('menuseparator'));
+
+    addMenuItem('Move Up', 'cmd_userscript_move_up');
+    addMenuItem('Move Down', 'cmd_userscript_move_down');
+    addMenuItem('Move To Top', 'cmd_userscript_move_top');
+    addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom');
   }
 };
