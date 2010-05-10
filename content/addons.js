@@ -105,10 +105,11 @@ var greasemonkeyAddons={
   },
 
   findSelectedScript: function() {
+    if (!gExtensionsView.selectedItem) return null;
     var scripts = GM_getConfig().scripts;
     var selectedScriptId = gExtensionsView.selectedItem.getAttribute('addonId');
-    for (var i = 0, script = null; script=scripts[i]; i++) {
-      if (selectedScriptId == script.namespace+script.name) {
+    for (var i = 0, script = null; script = scripts[i]; i++) {
+      if (selectedScriptId == script.namespace + script.name) {
         return script;
       }
     }
