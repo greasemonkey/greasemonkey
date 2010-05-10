@@ -1,11 +1,9 @@
-/*
-TODO: Add observer to put scripts installed, while the addons window is open,
-      into the list.
-*/
+// Globals.
+var GM_config = GM_getConfig();
 
+(function() {
 // Override some built-in functions, with a closure reference to the original
 // function, to either handle or delegate the call.
-(function() {
 var _origShowView = showView;
 showView = function(aView) {
   if ('userscripts' == aView) {
@@ -23,12 +21,56 @@ buildContextMenu = function(aEvent) {
     _origBuildContextMenu(aEvent);
   }
 };
+
+// Set up an "observer" on the config, to keep the displayed items up to date
+// with their actual state.
+var config = GM_config;
+window.addEventListener("load", function() {
+  config.addObserver(observer);
+}, false);
+window.addEventListener("unload", function() {
+  config.removeObserver(observer);
+}, false);
+
+var observer = {
+  notifyEvent: function(script, event, data) {
+    if (event == "install") {
+      var item = greasemonkeyAddons.addScriptToList(script);
+      gExtensionsView.selectedItem = item;
+      return;
+    }
+
+    var listbox = gExtensionsView;
+    var node;
+    var scriptId = script.namespace + script.name;
+    for (var i = 0; node = listbox.childNodes[i]; i++) {
+      if (node.getAttribute('addonId') == scriptId) {
+        break;
+      }
+    }
+    if (!node) return;
+
+    switch (event) {
+      case "edit-enabled":
+        node.setAttribute('isDisabled', !data);
+        break;
+      case "uninstall":
+        listbox.removeChild(node);
+        break;
+      case "move":
+        listbox.removeChild(node);
+        listbox.insertBefore(node, listbox.childNodes[data]);
+        break;
+    }
+  }
+};
 })();
 
 // Set event listeners.
 window.addEventListener('load', function() {
   greasemonkeyAddons.onAddonSelect();
-  gExtensionsView.addEventListener('select', greasemonkeyAddons.onAddonSelect, false);
+  gExtensionsView.addEventListener(
+      'select', greasemonkeyAddons.onAddonSelect, false);
 }, false);
 
 var greasemonkeyAddons={
@@ -67,9 +109,7 @@ var greasemonkeyAddons={
   },
 
   fillList: function() {
-    // I'd much prefer to use the inbuilt templates/rules mechanism that the
-    // native FFX bits of this dialog use, but this works as P.O.C.
-    var config = GM_getConfig();
+    var config = GM_config;
     var listbox = gExtensionsView;
 
     // Remove any pre-existing contents.
@@ -79,34 +119,42 @@ var greasemonkeyAddons={
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = config.scripts[i]; i++) {
-      var item = document.createElement('richlistitem');
-      item.setAttribute('class', 'userscript');
-      // Fake this for now.
-      var id = script.namespace + script.name;
-      // Setting these attributes inherits the values into the same place they
-      // would go for extensions.
-      item.setAttribute('addonId', id);
-      item.setAttribute('name', script.name);
-      item.setAttribute('description', script.description);
-      item.setAttribute('id', 'urn:greasemonkey:item:'+id);
-      item.setAttribute('isDisabled', !script.enabled);
-      // These hide extension-specific bits we don't want to display.
-      item.setAttribute('blocklisted', 'false');
-      item.setAttribute('blocklistedsoft', 'false');
-      item.setAttribute('compatible', 'true');
-      item.setAttribute('locked', 'false');
-      item.setAttribute('providesUpdatesSecurely', 'true');
-      item.setAttribute('satisfiesDependencies', 'true');
-      item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
-
-      // Place this item in the container.
-      listbox.appendChild(item);
+      greasemonkeyAddons.addScriptToList(script);
     }
+  },
+
+  listitemForScript: function(script) {
+    var item = document.createElement('richlistitem');
+    item.setAttribute('class', 'userscript');
+    // Fake this for now.
+    var id = script.namespace + script.name;
+    // Setting these attributes inherits the values into the same place they
+    // would go for extensions.
+    item.setAttribute('addonId', id);
+    item.setAttribute('name', script.name);
+    item.setAttribute('description', script.description);
+    item.setAttribute('id', 'urn:greasemonkey:item:'+id);
+    item.setAttribute('isDisabled', !script.enabled);
+    // These hide extension-specific bits we don't want to display.
+    item.setAttribute('blocklisted', 'false');
+    item.setAttribute('blocklistedsoft', 'false');
+    item.setAttribute('compatible', 'true');
+    item.setAttribute('locked', 'false');
+    item.setAttribute('providesUpdatesSecurely', 'true');
+    item.setAttribute('satisfiesDependencies', 'true');
+    item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
+    return item;
+  },
+
+  addScriptToList: function(script, beforeNode) {
+    var item = greasemonkeyAddons.listitemForScript(script);
+    gExtensionsView.insertBefore(item, beforeNode || null);
+    return item;
   },
 
   findSelectedScript: function() {
     if (!gExtensionsView.selectedItem) return null;
-    var scripts = GM_getConfig().scripts;
+    var scripts = GM_config.scripts;
     var selectedScriptId = gExtensionsView.selectedItem.getAttribute('addonId');
     for (var i = 0, script = null; script = scripts[i]; i++) {
       if (selectedScriptId == script.namespace + script.name) {
@@ -169,17 +217,13 @@ var greasemonkeyAddons={
       GM_openInEditor(script);
       break;
     case 'cmd_userscript_enable':
-      selectedListitem.setAttribute('isDisabled', 'false');
       script.enabled = true;
       break;
     case 'cmd_userscript_disable':
-      selectedListitem.setAttribute('isDisabled', 'true');
       script.enabled = false;
       break;
     case 'cmd_userscript_uninstall':
-      // todo, make this "true" configurable?
-      GM_getConfig().uninstall(script, true);
-      selectedListitem.parentNode.removeChild(selectedListitem);
+      GM_config.uninstall(script);
       break;
     }
   },
