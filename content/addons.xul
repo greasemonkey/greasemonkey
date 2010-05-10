@@ -25,6 +25,11 @@
     <command id="cmd_userscript_enable"/>
     <command id="cmd_userscript_disable"/>
     <command id="cmd_userscript_uninstall"/>
+
+    <command id="cmd_userscript_move_up"/>
+    <command id="cmd_userscript_move_down"/>
+    <command id="cmd_userscript_move_top"/>
+    <command id="cmd_userscript_move_bottom"/>
   </commandset>
 </window>
 
