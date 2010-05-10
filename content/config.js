@@ -344,7 +344,7 @@ Config.prototype = {
 
     var existingIndex = this._find(script);
     if (existingIndex > -1) {
-      this.uninstall(this._scripts[existingIndex], false);
+      this.uninstall(this._scripts[existingIndex]);
     }
 
     script._initFile(script._tempFile);
