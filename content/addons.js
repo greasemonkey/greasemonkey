@@ -71,6 +71,16 @@ window.addEventListener('load', function() {
   greasemonkeyAddons.onAddonSelect();
   gExtensionsView.addEventListener(
       'select', greasemonkeyAddons.onAddonSelect, false);
+
+  // Work-around for Stylish compatibility, which does not update gView in
+  // its overridden showView() function.
+  var stylishRadio = document.getElementById('userstyles-view');
+  if (stylishRadio) {
+    stylishRadio.addEventListener(
+        'command',
+        function() { gView = 'userstyles' },
+        false);
+  }
 }, false);
 
 var greasemonkeyAddons = {
@@ -89,7 +99,9 @@ var greasemonkeyAddons = {
       'searchPanel', 'installFileButton', 'checkUpdatesAllButton',
       'skipDialogButton', 'themePreviewArea', 'themeSplitter',
       'showUpdateInfoButton', 'hideUpdateInfoButton',
-      'installUpdatesAllButton'];
+      'installUpdatesAllButton',
+      // Stylish injects these elements.
+      'copy-style-info', 'new-style'];
     elementIds.forEach(hide);
 
     var getMore = document.getElementById('getMore');

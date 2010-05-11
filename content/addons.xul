@@ -13,9 +13,6 @@
          insertafter="installs-view" persist="last-selected"
          oncommand="showView('userscripts');">
   </radio>
-
-  <!-- Bugfix, overlay Stylish to act like the default tabs. -->
-  <radio id="userstyles-view" oncommand="gView='userstyles';" />
 </radiogroup>
 
 <window>
