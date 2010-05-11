@@ -212,6 +212,9 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_edit':
       GM_openInEditor(script);
       break;
+    case 'cmd_userscript_show':
+      GM_openFolder(script._file);
+      break;
     case 'cmd_userscript_enable':
       script.enabled = true;
       break;
@@ -262,6 +265,7 @@ var greasemonkeyAddons = {
     }
 
     addMenuItem('Edit', 'cmd_userscript_edit');
+    addMenuItem('Show Containing Folder', 'cmd_userscript_show');
     if (script.enabled) {
       addMenuItem('Disable', 'cmd_userscript_disable');
     } else {

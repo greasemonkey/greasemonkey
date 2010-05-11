@@ -173,6 +173,32 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   process.run(false, args, args.length);
 }
 
+// Based on http://mxr.mozilla.org/seamonkey/source/toolkit/mozapps/downloads/content/downloads.js
+function GM_openFolder(aFile) {
+  try {
+    // Show the directory containing the file and select the file
+    aFile.reveal();
+    } catch (e) {
+    // Either the file doesn't exist or reveal is not implemented
+    var fParent = aFile.parent;
+
+    try {
+      // Lauch the parent directory if the file doesn't exist
+      if (fParent.exists())
+        fParent.launch();
+    } catch (e) {
+      // If launch also fails let the
+      // OS handler try to open the parent
+      var uri = Components.classes["@mozilla.org/network/io-service;1"]
+        .getService(Components.interfaces.nsIIOService).newFileURI(fParent);
+      var protocolSvc = Components.classes["@mozilla.org/uriloader/external-protocol-service;1"]
+        .getService(Components.interfaces.nsIExternalProtocolService);
+
+      protocolSvc.loadUrl(uri);
+    }
+  }
+}
+
 function GM_parseScriptName(sourceUri) {
   var name = sourceUri.spec;
   name = name.substring(0, name.indexOf(".user.js"));
