@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Manage User Scripts">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Toevoegen">
-<!ENTITY manage.button.edit "Aanpassen">
-<!ENTITY manage.button.remove "Verwijderen">
-<!ENTITY manage.label.grpIncluded "Inclusief deze paginas">
-<!ENTITY manage.label.grpExcluded "Exclusief deze paginas">
-<!ENTITY manage.label.btnEdit "Aanpassen">
-<!ENTITY manage.label.chkEnabled "Ingeschakeld">
-<!ENTITY manage.label.btnUninstall "Verwijderen">
-<!ENTITY manage.label.chkUninstall "Verwijder ook de bijbehorende instellingen">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
 <!ENTITY menu.install "Installeer dit User Script...">
 <!ENTITY menu.install.accesskey "S">
 <!ENTITY menu.show "View User Script Source">
