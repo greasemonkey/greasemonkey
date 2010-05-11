@@ -132,6 +132,7 @@ var greasemonkeyAddons={
     if (!button) return;
     button.setAttribute('label', 'Edit');
     button.setAttribute('accesskey', 'E');
+    button.setAttribute('tooltiptext', 'Edit the selected User Script');
     button.setAttribute('command', 'cmd_userscript_edit');
     button.setAttribute('disabled', 'false');
 
@@ -139,18 +140,21 @@ var greasemonkeyAddons={
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_enable');
     if (!button) return;
+    button.setAttribute('tooltiptext', 'Enable the selected User Script');
     button.setAttribute('command', 'cmd_userscript_enable');
     button.setAttribute('disabled', 'false');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_disable');
     if (!button) return;
+    button.setAttribute('tooltiptext', 'Disable the selected User Script');
     button.setAttribute('command', 'cmd_userscript_disable');
     button.setAttribute('disabled', 'false');
 
     button = item.ownerDocument.getAnonymousElementByAttribute(
         item, 'command', 'cmd_uninstall');
     if (!button) return;
+    button.setAttribute('tooltiptext', 'Uninstall the selected User Script');
     button.setAttribute('command', 'cmd_userscript_uninstall');
     button.setAttribute('disabled', 'false');
   },
