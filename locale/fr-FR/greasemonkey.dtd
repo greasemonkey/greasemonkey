@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Gérer les scripts">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Ajouter…">
-<!ENTITY manage.button.edit "Éditer…">
-<!ENTITY manage.button.remove "Supprimer">
-<!ENTITY manage.label.grpIncluded "Pages autorisées">
-<!ENTITY manage.label.grpExcluded "Pages interdites">
-<!ENTITY manage.label.btnEdit "Éditer">
-<!ENTITY manage.label.chkEnabled "Activer">
-<!ENTITY manage.label.btnUninstall "Désinstaller">
-<!ENTITY manage.label.chkUninstall "Désinstaller en même temps les préférences associées">
-<!ENTITY manage.reorderHelp "Pour modifier l&apos;ordre de la liste de scripts, glissez-déposez avec la souris ou utilisez Alt+Haut / Alt+Bas.">
 <!ENTITY menu.install "Installer un script…">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Voir le code source du script">

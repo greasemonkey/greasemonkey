@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Hallinnoi skriptejä">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Lisää...">
-<!ENTITY manage.button.edit "Muokkaa...">
-<!ENTITY manage.button.remove "Poista">
-<!ENTITY manage.label.grpIncluded "Käytä sivuilla">
-<!ENTITY manage.label.grpExcluded "Pois lukien sivut">
-<!ENTITY manage.label.btnEdit "Muokkaa">
-<!ENTITY manage.label.chkEnabled "Käytössä">
-<!ENTITY manage.label.btnUninstall "Poista skripti">
-<!ENTITY manage.label.chkUninstall "Poista myös skriptin asetukset">
-<!ENTITY manage.reorderHelp "Voit järjestää skriptejä vetämällä niitä hiirellä tai painamalla Alt-nuoli ylös/Alt-nuoli alas.">
 <!ENTITY menu.install "Asenna skripti...">
 <!ENTITY menu.install.accesskey "A">
 <!ENTITY menu.show "Näytä skriptin lähdekoodi">
