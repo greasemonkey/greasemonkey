@@ -74,15 +74,17 @@ Config.prototype = {
       script._basedir = node.getAttribute("basedir") || ".";
       script._downloadURL = node.getAttribute("installurl") || null;
 
-      if (!node.getAttribute("modified") || !node.getAttribute("dependhash")) {
+      if (!node.getAttribute("modified") || !node.getAttribute("dependhash") || !node.getAttribute("version")) {
         script._modified = script._file.lastModifiedTime;
-        var rawMeta = this.parse(
-            GM_getContents(script._file), script._downloadURL, true)._rawMeta;
-        script._dependhash = GM_sha1(rawMeta);
+        var parsedScript = this.parse(
+            GM_getContents(script._file), script._downloadURL, true);
+        script._dependhash = GM_sha1(parsedScript._rawMeta);
+        script._version = parsedScript._version;
         fileModified = true;
       } else {
         script._modified = node.getAttribute("modified");
         script._dependhash = node.getAttribute("dependhash");
+        script._version = node.getAttribute("version");
       }
 
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
@@ -115,7 +117,6 @@ Config.prototype = {
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
-      script._version = node.getAttribute("version");
       script._enabled = node.getAttribute("enabled") == true.toString();
 
       this._scripts.push(script);
