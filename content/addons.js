@@ -40,6 +40,9 @@ window.addEventListener("unload", function() {
 
 var observer = {
   notifyEvent: function(script, event, data) {
+    // if the currently open tab is not the userscripts tab, then ignore event.
+    if (gView != 'userscripts') return;
+
     if (event == "install") {
       var item = greasemonkeyAddons.addScriptToList(script);
       gExtensionsView.selectedItem = item;
