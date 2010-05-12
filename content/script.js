@@ -152,7 +152,7 @@ Script.prototype = {
     this._excludes = newScript._excludes;
     this._name = newScript._name;
     this._namespace = newScript._namespace;
-    this._description = newScript._description;;
+    this._description = newScript._description;
     this._unwrap = newScript._unwrap;
 
     var dependhash = GM_sha1(newScript._rawMeta);
