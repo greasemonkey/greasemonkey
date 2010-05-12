@@ -49,6 +49,7 @@ var observer = {
       return;
     }
 
+    // find the script's node in the listbox
     var listbox = gExtensionsView;
     var node;
     var scriptId = script.namespace + script.name;
@@ -69,6 +70,10 @@ var observer = {
       case "move":
         listbox.removeChild(node);
         listbox.insertBefore(node, listbox.childNodes[data]);
+        break;
+      case "modified":
+        var item = greasemonkeyAddons.listitemForScript(script);
+        gExtensionsView.replaceChild(item, node);
         break;
     }
   }
