@@ -156,6 +156,7 @@ Script.prototype = {
     this._namespace = newScript._namespace;
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
+    this._version = newScript._version;
 
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
