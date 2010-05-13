@@ -2,8 +2,8 @@ function Script(config) {
   this._config = config;
   this._observers = [];
 
-  this._downloadURL = null; // Only for scripts not installed
-  this._tempFile = null; // Only for scripts not installed
+  this._downloadURL = null;
+  this._tempFile = null;
   this._basedir = null;
   this._filename = null;
   this._modified = null;
@@ -22,6 +22,9 @@ function Script(config) {
   this._dependFail = false
   this.delayInjection = false;
   this._rawMeta = null;
+  this._lastUpdateCheck = null;
+  this._updateAvailable = null;
+  this._req = null;
 }
 
 Script.prototype = {
@@ -175,6 +178,29 @@ Script.prototype = {
       scriptDownloader.fetchDependencies();
 
       this.delayInjection = true;
+    }
+  },
+
+  checkForRemoteUpdate: function(currentTime, updateCheckingInterval) {
+    if (currentTime > this._lastUpdateCheck + updateCheckingInterval) {
+      this._lastUpdateCheck = currentTime;
+      this._req = new XMLHttpRequest();
+      this._req.open("GET", this._downloadURL, true);
+      this._req.onload = GM_hitch(this, "checkRemoteVersion");
+      this._req.send(null); 
+    }
+  },
+
+  checkRemoteVersion: function() {
+    if (this.req_.status != 200 && this.req_.status != 0)
+      return;
+
+    var source = this.req_.responseText;
+    var remoteScript = this._config.parse(source, GM_uriFromUrl(this._downloadURL, null), true);
+
+    if (remoteScript._version && remoteScript._version != this._version) {
+      this._updateAvailable = true;
+      this._config._save();
     }
   }
 };

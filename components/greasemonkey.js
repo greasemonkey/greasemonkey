@@ -127,6 +127,7 @@ var greasemonkeyService = {
 
     if (scripts.length > 0) {
       this.injectScripts(scripts, href, unsafeWin, chromeWin);
+      this.checkScriptsForRemoteUpdates(scripts);
     }
   },
 
@@ -232,6 +233,17 @@ var greasemonkeyService = {
     return this.config.getMatchingScripts(testMatch);
   },
 
+  checkScriptsForRemoteUpdates: function(scripts) {
+
+    var currentTime = new Date().getTime();
+    var updateCheckingInterval = 1000*60*60*24*2; // hard coded to 2 days for now
+
+    scripts.forEach(function(script) {
+        if (!script._updateAvailable && script._downloadURL)
+          script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
+      });
+  },
+
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
     var sandbox;
     var script;
@@ -246,7 +258,7 @@ var greasemonkeyService = {
     // detect and grab reference to firebug console and context, if it exists
     var firebugConsole = this.getFirebugConsole(unsafeContentWin, chromeWin);
 
-    for (var i = 0; script = scripts[i]; i++) {
+    for (var i = 0, script; script = scripts[i]; i++) {
       sandbox = new Components.utils.Sandbox(safeWin);
 
       logger = new GM_ScriptLogger(script);

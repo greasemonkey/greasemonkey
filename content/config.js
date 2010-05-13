@@ -74,6 +74,7 @@ Config.prototype = {
       script._basedir = node.getAttribute("basedir") || ".";
       script._downloadURL = node.getAttribute("installurl") || null;
 
+      // Migration for values that must be parsed from installed scripts
       if (!node.getAttribute("modified") || !node.getAttribute("dependhash") || !node.getAttribute("version")) {
         script._modified = script._file.lastModifiedTime;
         var parsedScript = this.parse(
@@ -85,6 +86,16 @@ Config.prototype = {
         script._modified = node.getAttribute("modified");
         script._dependhash = node.getAttribute("dependhash");
         script._version = node.getAttribute("version");
+      }
+
+      // Migration with default values
+      if (!node.getAttribute("updateAvailable") || !node.getAttribute("lastUpdateCheck")) {
+        script._updateAvailable = false;
+        script._lastUpdateCheck = script._modified;
+        fileModified = true;
+      } else {
+        script._updateAvailable = node.getAttribute("updateAvailable") == true.toString();
+        script._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
       }
 
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
@@ -202,6 +213,8 @@ Config.prototype = {
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
+      scriptNode.setAttribute("updateAvailable", scriptObj._updateAvailable);
+      scriptNode.setAttribute("lastUpdateCheck", scriptObj._lastUpdateCheck);
 
       if (scriptObj._downloadURL) {
         scriptNode.setAttribute("installurl", scriptObj._downloadURL);
@@ -365,6 +378,8 @@ Config.prototype = {
 
     script._modified = script._file.lastModifiedTime;
     script._metahash = GM_sha1(script._rawMeta);
+    script._updateAvailable = false;
+    script._lastUpdateCheck = script._modified;
 
     this._scripts.push(script);
     this._changed(script, "install", null);
