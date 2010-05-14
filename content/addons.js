@@ -182,6 +182,7 @@ var greasemonkeyAddons = {
     // We do all this work here, because the elements we want to change do
     // not exist until the item is selected.
 
+    if (!gExtensionsView.selectedItem) return;
     if ('userscripts' != gView) return;
     var script = greasemonkeyAddons.findSelectedScript();
 
