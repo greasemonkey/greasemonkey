@@ -6,6 +6,7 @@ function ScriptResource(script) {
   this._filename = null;
   this._mimetype = null;
   this._charset = null;
+  this.type = "resource";
   this.updateScript = false;
 
   this._name = null;
@@ -20,6 +21,7 @@ ScriptResource.prototype = {
     return file;
   },
 
+  get fileURL() { return GM_getUriFromFile(this._file).spec; },
   get textContent() { return GM_getContents(this._file); },
 
   get dataContent() {

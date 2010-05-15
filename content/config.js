@@ -121,9 +121,9 @@ Config.prototype = {
         script._icon = {_filename: icon, fileURL: icon};
       } else if (icon) {
         // icon is a file
-        var scriptRequire = new ScriptRequire(script);
-        scriptRequire._filename = node.getAttribute("icon");
-        script._icon = scriptRequire;
+        var scriptIcon = new ScriptResource(script);
+        scriptIcon._filename = node.getAttribute("icon");
+        script._icon = scriptIcon;
       }
       script._enabled = node.getAttribute("enabled") == true.toString();
 
@@ -292,17 +292,24 @@ Config.prototype = {
             break;
           case "icon":
             script._rawMeta += header + '\0' + value + '\0';
-            // aceept data scheme 
-            if(value.match(/^data:/i)){
+            // aceept data uri schemes for image MIME types
+            if(/^data:image\//i.test(value)){
               script._icon = {_filename: value};
               break;
             }
-            // ignore non images
-            if (!value.match(/\.(jpe?g|gif|png|bmp|ico)$/i)) break;
-            var reqUri = GM_uriFromUrl(value, uri);
-            var scriptRequire = new ScriptRequire(script);
-            scriptRequire._downloadURL = reqUri.spec;
-            script._icon = scriptRequire;
+            try {
+              var resUri = GM_uriFromUrl(value, uri);
+              var scriptIcon = new ScriptResource(script);
+              scriptIcon._downloadURL = resUri.spec;
+              scriptIcon.type = "icon";
+              script._icon = scriptIcon;
+            } catch (e) {
+              if (updating) {
+                script._dependFail = true;
+              } else {
+                throw new Error('Failed to get @icon '+ value);
+              }
+            }
             break;
           case "require":
             try {

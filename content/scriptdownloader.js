@@ -172,6 +172,12 @@ function(dep, file, channel) {
         dep._script = this.script;
         dep.updateScript = true;
       }
+
+      if (dep.type && dep.type == "icon" && !/^image\//i.test(channel.contentType)) {
+        this.errorInstallDependency(this.script, dep,
+          "Error! @icon is not a image MIME type");
+      }
+
       dep.setDownloadedFile(file, channel.contentType, channel.contentCharset ? channel.contentCharset : null);
       this.downloadNextDependency();
     } else {
