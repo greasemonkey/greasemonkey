@@ -125,10 +125,10 @@ var greasemonkeyService = {
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
     var scripts = this.initScripts(href, wrappedContentWin, chromeWin);
 
-    if (scripts.length > 0) {
-      this.injectScripts(scripts, href, unsafeWin, chromeWin);
-      this.checkScriptsForRemoteUpdates(scripts);
-    }
+    if (scripts.length <= 0) return;
+
+    this.injectScripts(scripts, href, unsafeWin, chromeWin);
+    this.checkScriptsForRemoteUpdates(scripts);
   },
 
 
@@ -234,14 +234,13 @@ var greasemonkeyService = {
   },
 
   checkScriptsForRemoteUpdates: function(scripts) {
-
     var currentTime = new Date().getTime();
     var updateCheckingInterval = 1000*60*60*24*2; // hard coded to 2 days for now
 
     scripts.forEach(function(script) {
-        if (!script._updateAvailable && script._downloadURL)
-          script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
-      });
+      if (!script._updateAvailable && script._downloadURL)
+        script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
+    });
   },
 
   injectScripts: function(scripts, url, unsafeContentWin, chromeWin) {
