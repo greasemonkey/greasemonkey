@@ -59,8 +59,8 @@ Script.prototype = {
   get unwrap() { return this._unwrap; },
 
   get updateURL() {
-    if (this.updateURL) return this.updateURL;
-    if (this.downloadURL) return this.downloadURL;
+    if (this._updateURL) return this._updateURL;
+    if (this._downloadURL) return this._downloadURL;
     return null;
   },
 
@@ -188,41 +188,45 @@ Script.prototype = {
     }
   },
 
-  checkForRemoteUpdate: function(currentTime, updateCheckingInterval) {
+  checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval) {
     var updateURL = this.updateURL;
     if (this._updateAvailable ||
         !updateURL ||
         currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
       return;
     }
+    GM_log("Checking user script for an update.");
 
     // check if the url is from userscripts.org
     var usoURL = updateURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL) {
       updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
     }
+    GM_log(updateURL);
 
     this._lastUpdateCheck = currentTime;
 
     var lastTimeoutID = null;
     var timeoutHandler = function(timeoutID) {
-      if (lastTimeoutID) clearTimeout(lastTimeoutID);
+      if (lastTimeoutID) chromeWin.clearTimeout(lastTimeoutID);
       lastTimeoutID = timeoutID;
     };
 
-    var req = new XMLHttpRequest();
+    var req = new chromeWin.XMLHttpRequest();
     req.open("GET", updateURL, true);
-    req.onload = GM_hitch(this, "checkRemoteVersion", req, timeoutHandler);
+    req.onload = GM_hitch(this, "checkRemoteVersion", chromeWin, req, timeoutHandler);
     req.send(null);
   },
 
-  checkRemoteVersion: function(req, timeoutHandler) {
+  checkRemoteVersion: function(chromeWin, req, timeoutHandler) {
     if (req.status != 200 && req.status != 0) {
       return;
     }
+    GM_log("Checking user script version for an update.");
 
     var source = req.responseText;
     var remoteVersion = this._config.parseVersion(source);
+    GM_log("version:" + remoteVersion);
 
     if (remoteVersion) {
       var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
@@ -230,7 +234,10 @@ Script.prototype = {
 
       if(versionChecker.compare(this._version, remoteVersion) < 0) {
         this._updateAvailable = true;
-        timeoutHandler(setTimeout(function() {this._config._save();}, 1000));
+        var config = this._config;
+        timeoutHandler(chromeWin.setTimeout(function() {
+          config._save();
+        }, 1000));
       }
     }
   }
