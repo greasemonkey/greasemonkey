@@ -72,10 +72,13 @@ Config.prototype = {
 
       script._filename = node.getAttribute("filename");
       script._basedir = node.getAttribute("basedir") || ".";
-      script._downloadURL = node.getAttribute("installurl") || null;
+      script._downloadURL = node.getAttribute("downloadURL") || null;
+      script._updateURL = node.getAttribute("updateURL") || null;
 
       // Migration for values that must be parsed from installed scripts
-      if (!node.getAttribute("modified") || !node.getAttribute("dependhash") || !node.getAttribute("version")) {
+      if (!node.getAttribute("modified") ||
+          !node.getAttribute("dependhash") ||
+          !node.getAttribute("version")) {
         script._modified = script._file.lastModifiedTime;
         var parsedScript = this.parse(
             GM_getContents(script._file), script._downloadURL, true);
@@ -89,7 +92,8 @@ Config.prototype = {
       }
 
       // Migration with default values
-      if (!node.getAttribute("updateAvailable") || !node.getAttribute("lastUpdateCheck")) {
+      if (!node.getAttribute("updateAvailable") ||
+          !node.getAttribute("lastUpdateCheck")) {
         script._updateAvailable = false;
         script._lastUpdateCheck = script._modified;
         fileModified = true;
@@ -217,7 +221,10 @@ Config.prototype = {
       scriptNode.setAttribute("lastUpdateCheck", scriptObj._lastUpdateCheck);
 
       if (scriptObj._downloadURL) {
-        scriptNode.setAttribute("installurl", scriptObj._downloadURL);
+        scriptNode.setAttribute("downloadURL", scriptObj._downloadURL);
+      }
+      if (scriptObj._updateURL) {
+        scriptNode.setAttribute("updateURL", scriptObj._updateURL);
       }
 
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
@@ -286,6 +293,7 @@ Config.prototype = {
           case "namespace":
           case "description":
           case "version":
+          case "updateURL":
             script["_" + header] = value;
             break;
           case "include":

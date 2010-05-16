@@ -13,6 +13,7 @@ function Script(config) {
   this._namespace = null;
   this._description = null;
   this._version = null;
+  this._updateURL = null;
   this._enabled = true;
   this._includes = [];
   this._excludes = [];
@@ -24,7 +25,6 @@ function Script(config) {
   this._rawMeta = null;
   this._lastUpdateCheck = null;
   this._updateAvailable = null;
-  this._req = null;
 }
 
 Script.prototype = {
@@ -57,6 +57,12 @@ Script.prototype = {
   get requires() { return this._requires.concat(); },
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
+
+  get updateURL() {
+    if (this.updateURL) return this.updateURL;
+    if (this.downloadURL) return this.downloadURL;
+    return null;
+  }
 
   get _file() {
     var file = this._basedirFile;
@@ -184,11 +190,11 @@ Script.prototype = {
 
   checkForRemoteUpdate: function(currentTime, updateCheckingInterval) {
     if (!this._updateAvailable &&
-        this._downloadURL &&
+        this.updateURL &&
         currentTime > this._lastUpdateCheck + updateCheckingInterval) {
       this._lastUpdateCheck = currentTime;
       var req = new XMLHttpRequest();
-      req.open("GET", this._downloadURL, true);
+      req.open("GET", this.updateURL, true);
       req.onload = GM_hitch(this, "checkRemoteVersion", req);
       req.send(null); 
     }
