@@ -130,7 +130,7 @@ var greasemonkeyService = {
     if (scripts.length <= 0) return;
 
     this.injectScripts(scripts, href, unsafeWin, chromeWin);
-    this.checkScriptsForRemoteUpdates(scripts);
+    this.checkScriptsForRemoteUpdates(chromeWin, scripts);
   },
 
 
@@ -235,11 +235,11 @@ var greasemonkeyService = {
     return this.config.getMatchingScripts(testMatch);
   },
 
-  checkScriptsForRemoteUpdates: function(scripts) {
+  checkScriptsForRemoteUpdates: function(chromeWin, scripts) {
     var currentTime = new Date().getTime();
 
     scripts.forEach(function(script) {
-      script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
+      script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval);
     });
   },
 
