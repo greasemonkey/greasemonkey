@@ -241,10 +241,33 @@ Config.prototype = {
   },
 
   parseVersion: function(source) {
-    var match = source.match(/\n\s*\/\/ ==UserScript==.*\n\s*\/\/ \@version\s+([^\n]+).*\n\s*\/\/ ==\/UserScript==/);
-    if (match === null) return null;
+    // read one line at a time looking for start meta delimiter or EOF
+    var lines = source.match(/.+/g);
+    var lnIdx = 0;
+    var result = {};
+    var foundMeta = false;
 
-    return match[1];
+    while ((result = lines[lnIdx++])) {
+      if (result.indexOf("// ==UserScript==") == 0) {
+        foundMeta = true;
+        break;
+      }
+    }
+    if (!foundMeta) return;
+
+
+    while ((result = lines[lnIdx++])) {
+      if (result.indexOf("// ==/UserScript==") == 0) {
+        break;
+      }
+
+      var match = result.match(/\/\/ \@version\s+([^\n]+)/);
+      if (match === null) continue;
+
+      return match[1];
+    }
+
+    return null;
   },
 
   parse: function(source, uri, updating) {
