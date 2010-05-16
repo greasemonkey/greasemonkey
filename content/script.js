@@ -189,18 +189,34 @@ Script.prototype = {
   },
 
   checkForRemoteUpdate: function(currentTime, updateCheckingInterval) {
-    if (!this._updateAvailable &&
-        this.updateURL &&
-        currentTime > this._lastUpdateCheck + updateCheckingInterval) {
-      this._lastUpdateCheck = currentTime;
-      var req = new XMLHttpRequest();
-      req.open("GET", this.updateURL, true);
-      req.onload = GM_hitch(this, "checkRemoteVersion", req);
-      req.send(null); 
+    var updateURL = this.updateURL;
+    if (this._updateAvailable ||
+        !updateURL ||
+        currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
+      return;
     }
+
+    // check if the url is from userscripts.org
+    var usoURL = updateURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
+    if (usoURL) {
+      updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
+    }
+
+    this._lastUpdateCheck = currentTime;
+
+    var lastTimeoutID = null;
+    var timeoutHandler = function(timeoutID) {
+      if (lastTimeoutID) clearTimeout(lastTimeoutID);
+      lastTimeoutID = timeoutID;
+    };
+
+    var req = new XMLHttpRequest();
+    req.open("GET", updateURL, true);
+    req.onload = GM_hitch(this, "checkRemoteVersion", req, timeoutHandler);
+    req.send(null);
   },
 
-  checkRemoteVersion: function(req) {
+  checkRemoteVersion: function(req, timeoutHandler) {
     if (req.status != 200 && req.status != 0) {
       return;
     }
@@ -214,7 +230,7 @@ Script.prototype = {
 
       if(versionChecker.compare(this._version, remoteVersion) < 0) {
         this._updateAvailable = true;
-        this._config._save();
+        timeoutHandler(setTimeout(function() {this._config._save();}, 1000));
       }
     }
   }
