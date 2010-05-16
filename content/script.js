@@ -195,14 +195,12 @@ Script.prototype = {
         currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
       return;
     }
-    GM_log("Checking user script for an update.");
 
     // check if the url is from userscripts.org
     var usoURL = updateURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL) {
       updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
     }
-    GM_log(updateURL);
 
     this._lastUpdateCheck = currentTime;
 
@@ -222,11 +220,9 @@ Script.prototype = {
     if (req.status != 200 && req.status != 0) {
       return;
     }
-    GM_log("Checking user script version for an update.");
 
     var source = req.responseText;
     var remoteVersion = this._config.parseVersion(source);
-    GM_log("version:" + remoteVersion);
 
     if (remoteVersion) {
       var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
