@@ -399,7 +399,7 @@ Config.prototype = {
 
     var existingIndex = this._find(script);
     if (existingIndex > -1) {
-      this.uninstall(this._scripts[existingIndex], false);
+      this.uninstall(this._scripts[existingIndex]);
     }
 
     script._initFile(script._tempFile);
@@ -449,8 +449,8 @@ Config.prototype = {
    *
    * @param script The script to be moved.
    * @param destination Can be either (a) a numeric offset for the script to be
-   *                    moved or (b) another installet script to which position
-   *                    the script will be moved.
+   *                    moved by, or (b) another installed script to which
+   *                    position the script will be moved.
    */
   move: function(script, destination) {
     var from = this._scripts.indexOf(script);
