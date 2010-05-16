@@ -247,24 +247,23 @@ Config.prototype = {
     var result = {};
     var foundMeta = false;
 
+    var start = "// ==UserScript==";
+    var end = "// ==/UserScript==";
+    var version = /\/\/ \@version\s+([^\n]+)/;
+
     while ((result = lines[lnIdx++])) {
-      if (result.indexOf("// ==UserScript==") == 0) {
-        foundMeta = true;
-        break;
-      }
+      if (result.indexOf(start) != 0) continue;
+
+      foundMeta = true;
+      break;
     }
     if (!foundMeta) return;
 
-
     while ((result = lines[lnIdx++])) {
-      if (result.indexOf("// ==/UserScript==") == 0) {
-        break;
-      }
+      if (result.indexOf(end) == 0) break;
 
-      var match = result.match(/\/\/ \@version\s+([^\n]+)/);
-      if (match === null) continue;
-
-      return match[1];
+      var match = result.match(version);
+      if (match !== null) return match[1];
     }
 
     return null;
