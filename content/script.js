@@ -193,15 +193,21 @@ Script.prototype = {
   },
 
   checkRemoteVersion: function() {
-    if (this.req_.status != 200 && this.req_.status != 0)
+    if (this.req_.status != 200 && this.req_.status != 0) {
       return;
+    }
 
     var source = this.req_.responseText;
     var remoteScript = this._config.parse(source, GM_uriFromUrl(this._downloadURL, null), true);
 
-    if (remoteScript._version && remoteScript._version != this._version) {
-      this._updateAvailable = true;
-      this._config._save();
+    if (remoteScript._version) {
+      var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
+                             .getService(Components.interfaces.nsIVersionComparator);
+
+      if(versionChecker.compare(this._version, remoteScript._version) < 0) {
+        this._updateAvailable = true;
+        this._config._save();
+      }
     }
   }
 };
