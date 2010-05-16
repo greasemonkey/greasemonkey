@@ -10,6 +10,8 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 
 const gmSvcFilename = Components.stack.filename;
 
+const updateCheckingInterval = 1000*60*60*24*2; // hard coded to 2 days for now
+
 const maxJSVersion = (function getMaxJSVersion() {
   var appInfo = Components
       .classes["@mozilla.org/xre/app-info;1"]
@@ -235,11 +237,9 @@ var greasemonkeyService = {
 
   checkScriptsForRemoteUpdates: function(scripts) {
     var currentTime = new Date().getTime();
-    var updateCheckingInterval = 1000*60*60*24*2; // hard coded to 2 days for now
 
     scripts.forEach(function(script) {
-      if (!script._updateAvailable && script._downloadURL)
-        script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
+      script.checkForRemoteUpdate(currentTime, updateCheckingInterval);
     });
   },
 

@@ -183,21 +183,23 @@ Script.prototype = {
   },
 
   checkForRemoteUpdate: function(currentTime, updateCheckingInterval) {
-    if (currentTime > this._lastUpdateCheck + updateCheckingInterval) {
+    if (!this._updateAvailable &&
+        this._downloadURL &&
+        currentTime > this._lastUpdateCheck + updateCheckingInterval) {
       this._lastUpdateCheck = currentTime;
-      this._req = new XMLHttpRequest();
-      this._req.open("GET", this._downloadURL, true);
-      this._req.onload = GM_hitch(this, "checkRemoteVersion");
-      this._req.send(null); 
+      var req = new XMLHttpRequest();
+      req.open("GET", this._downloadURL, true);
+      req.onload = GM_hitch(this, "checkRemoteVersion", req);
+      req.send(null); 
     }
   },
 
-  checkRemoteVersion: function() {
-    if (this.req_.status != 200 && this.req_.status != 0) {
+  checkRemoteVersion: function(req) {
+    if (req.status != 200 && req.status != 0) {
       return;
     }
 
-    var source = this.req_.responseText;
+    var source = req.responseText;
     var remoteScript = this._config.parse(source, GM_uriFromUrl(this._downloadURL, null), true);
 
     if (remoteScript._version) {
