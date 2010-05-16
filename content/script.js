@@ -206,13 +206,13 @@ Script.prototype = {
     }
 
     var source = req.responseText;
-    var remoteScript = this._config.parse(source, GM_uriFromUrl(this._downloadURL, null), true);
+    var remoteVersion = this._config.parseVersion(source);
 
-    if (remoteScript._version) {
+    if (remoteVersion) {
       var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                              .getService(Components.interfaces.nsIVersionComparator);
 
-      if(versionChecker.compare(this._version, remoteScript._version) < 0) {
+      if(versionChecker.compare(this._version, remoteVersion) < 0) {
         this._updateAvailable = true;
         this._config._save();
       }

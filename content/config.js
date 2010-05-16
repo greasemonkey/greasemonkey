@@ -240,6 +240,13 @@ Config.prototype = {
     configStream.close();
   },
 
+  parseVersion: function(source) {
+    var match = source.match(/\n\s*\/\/ ==UserScript==.*\n\s*\/\/ \@version\s+([^\n]+).*\n\s*\/\/ ==\/UserScript==/);
+    if (match === null) return null;
+
+    return match[1];
+  },
+
   parse: function(source, uri, updating) {
     var script = new Script(this);
 
