@@ -62,7 +62,7 @@ Script.prototype = {
     if (this.updateURL) return this.updateURL;
     if (this.downloadURL) return this.downloadURL;
     return null;
-  }
+  },
 
   get _file() {
     var file = this._basedirFile;

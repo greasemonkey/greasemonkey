@@ -251,7 +251,7 @@ Config.prototype = {
     var script = new Script(this);
 
     if (uri) {
-      script._downloadURL = uri.spec;
+      script._downloadURL = uri;
       script._enabled = true;
     }
 
