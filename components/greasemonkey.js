@@ -294,6 +294,10 @@ var greasemonkeyService = {
                                                 "registerMenuCommand",
                                                 unsafeContentWin);
 
+      // Let updaters out there already know that this version
+      // of GM has an updater.
+      sandbox.GM_updatingEnabled = true;
+
       sandbox.__proto__ = safeWin;
 
       var contents = script.textContent;
