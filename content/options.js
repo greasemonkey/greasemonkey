@@ -21,7 +21,7 @@ function GM_setUpdatePrefs(checkbox) {
 
 function GM_setMinUpdateInterval(input) {
   var days = parseFloat(document.getElementById("txt-updateInterval").value);
-  if (isNaN(days) && days < 1) return;
+  if (isNaN(days) || days < 1) return;
 
   GM_prefRoot.setValue("minIntervalBetweenUpdateChecks", days);
 }
