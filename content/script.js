@@ -25,6 +25,7 @@ function Script(config) {
   this._rawMeta = null;
   this._lastUpdateCheck = null;
   this._updateAvailable = null;
+  this._updateVersion = null;
 }
 
 Script.prototype = {
@@ -230,6 +231,11 @@ Script.prototype = {
 
       if(versionChecker.compare(this._version, remoteVersion) < 0) {
         this._updateAvailable = true;
+        this._updateVersion = remoteVersion;
+        this._changed("update-found", {
+          version: remoteVersion,
+          url: this.updateURL
+        });
         var config = this._config;
         timeoutHandler(chromeWin.setTimeout(function() {
           config._save();

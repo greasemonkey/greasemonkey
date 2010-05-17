@@ -54,6 +54,11 @@ var observer = {
       case "edit-enabled":
         node.setAttribute('isDisabled', !data);
         break;
+      case "update-found":
+        node.setAttribute('updateable', "true");
+        node.setAttribute('availableUpdateVersion', data.version);
+        node.setAttribute('availableUpdateURL', data.url);
+        break;
       case "uninstall":
         listbox.removeChild(node);
         break;
@@ -152,6 +157,12 @@ var greasemonkeyAddons = {
     item.setAttribute('providesUpdatesSecurely', 'true');
     item.setAttribute('satisfiesDependencies', 'true');
     item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
+    if (script._updateAvailable) {
+      item.setAttribute('updateable', 'true');
+      item.setAttribute('availableUpdateVersion', script._updateVersion);
+      item.setAttribute('availableUpdateURL', script.updateURL);
+    }
+
     return item;
   },
 

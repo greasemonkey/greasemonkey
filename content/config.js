@@ -99,6 +99,7 @@ Config.prototype = {
         fileModified = true;
       } else {
         script._updateAvailable = node.getAttribute("updateAvailable") == true.toString();
+        script._updateVersion= node.getAttribute("updateVersion") || null;
         script._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
       }
 
@@ -218,6 +219,9 @@ Config.prototype = {
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
       scriptNode.setAttribute("updateAvailable", scriptObj._updateAvailable);
+      if (scriptObj._updateVersion) {
+        scriptNode.setAttribute("updateVersion", scriptObj._updateVersion);
+      }
       scriptNode.setAttribute("lastUpdateCheck", scriptObj._lastUpdateCheck);
 
       if (scriptObj._downloadURL) {
