@@ -9,6 +9,9 @@
 <!ENTITY manage.label.chkEnabled "Enabled">
 <!ENTITY manage.label.btnUninstall "Uninstall">
 <!ENTITY manage.label.chkUninstall "Also uninstall associated preferences">
+<!ENTITY manage.label.btnUpdate "Update Checking">
+<!ENTITY manage.label.chkUpdate "Enable automatic update checking of scripts">
+<!ENTITY manage.label.txtUpdateInterval "Minimum number of days between update checks">
 <!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
 <!ENTITY menu.install "Install User Script...">
 <!ENTITY menu.install.accesskey "I">
