@@ -162,6 +162,7 @@ Script.prototype = {
     this._name = newScript._name;
     this._namespace = newScript._namespace;
     this._description = newScript._description;
+    this._updateURL = newScript._updateURL;
     this._unwrap = newScript._unwrap;
     this._version = newScript._version;
 
