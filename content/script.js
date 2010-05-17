@@ -61,7 +61,7 @@ Script.prototype = {
 
   get updateURL() {
     if (this._updateURL) return this._updateURL;
-    if (this._downloadURL) return this._downloadURL;
+    if (this._downloadURL && /^[h|f]ttps?:\/\//.test(this._downloadURL)) return this._downloadURL;
     return null;
   },
 
@@ -201,7 +201,7 @@ Script.prototype = {
     // check if the url is from userscripts.org
     var usoURL = updateURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL) {
-      updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
+      updateURL = usoURL[1].replace(/^http/, "https").replace(/\.user\.js$/,".meta.js");
     }
 
     this._lastUpdateCheck = currentTime;
