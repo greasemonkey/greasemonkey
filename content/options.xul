@@ -35,6 +35,19 @@
       label="&manage.label.chkUninstall;" 
       oncommand="GM_setUninstallPrefs(this)" />
   </groupbox>
+
+  <groupbox>
+    <caption label="&manage.label.btnUpdate;" />
+    <checkbox id="check-update"
+      label="&manage.label.chkUpdate;" 
+      oncommand="GM_setUpdatePrefs(this)" />
+    <label 
+      value="&manage.label.txtUpdateInterval;"
+      control="txt-updateInterval" />
+    <textbox type="textbox.number"
+      id="txt-updateInterval"
+      oninput="GM_setMinUpdateInterval(this)" />
+  </groupbox>
 </vbox>
 
 </dialog>

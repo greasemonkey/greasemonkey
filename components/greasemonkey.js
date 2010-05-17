@@ -10,8 +10,6 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 
 const gmSvcFilename = Components.stack.filename;
 
-const updateCheckingInterval = 1000*60*60*24*2; // hard coded to 2 days for now
-
 const maxJSVersion = (function getMaxJSVersion() {
   var appInfo = Components
       .classes["@mozilla.org/xre/app-info;1"]
@@ -130,7 +128,9 @@ var greasemonkeyService = {
     if (scripts.length <= 0) return;
 
     this.injectScripts(scripts, href, unsafeWin, chromeWin);
-    this.checkScriptsForRemoteUpdates(chromeWin, scripts);
+
+    if (GM_prefRoot.getValue("enableUpdateChecking"))
+      this.checkScriptsForRemoteUpdates(chromeWin, scripts);
   },
 
 
@@ -237,6 +237,7 @@ var greasemonkeyService = {
 
   checkScriptsForRemoteUpdates: function(chromeWin, scripts) {
     var currentTime = new Date().getTime();
+    var updateCheckingInterval = 86400000 * GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
 
     scripts.forEach(function(script) {
       script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval);

@@ -4,3 +4,5 @@ pref("greasemonkey.fileIsGreaseable", false);
 pref("greasemonkey.unmhtIsGreaseable", false);
 pref("greasemonkey.enableScriptRefreshing", true);
 pref("greasemonkey.uninstallPreferences", true);
+pref("greasemonkey.enableUpdateChecking", true);
+pref("greasemonkey.minIntervalBetweenUpdateChecks", 7);
