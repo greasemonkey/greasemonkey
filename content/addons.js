@@ -135,9 +135,13 @@ var greasemonkeyAddons = {
       var scripts = config.getMatchingScripts(
           function (script) { return script._updateAvailable; });
 
-      window.addEventListener("unload", function() {
-          config._showUpdates = false;
-      }, false);
+      if (scripts.length > 0) {
+        window.addEventListener("unload", function() {
+            config._showUpdates = false;
+          }, false);
+      } else {
+        var scripts = config.scripts;
+      }
     } else {
       var scripts = config.scripts;
     }
@@ -279,6 +283,12 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_uninstall':
       GM_config.uninstall(script);
       break;
+    case 'cmd_userscript_update':
+      var scriptDownloader = new GM_ScriptDownloader(null, GM_uriFromUrl(script._downloadURL), null);
+      scriptDownloader.replacedScript = script;
+      scriptDownloader.installOnCompletion_ = true;
+      scriptDownloader.startInstall();
+      break;
     }
   },
 
@@ -299,6 +309,10 @@ var greasemonkeyAddons = {
       menuitem.setAttribute('label', label);
       menuitem.setAttribute('command', command);
       popup.appendChild(menuitem);
+    }
+
+    if (script._updateAvailable) {
+      addMenuItem('Install Update', 'cmd_userscript_update');
     }
 
     addMenuItem('Edit', 'cmd_userscript_edit');

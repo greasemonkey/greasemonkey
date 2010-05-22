@@ -6,6 +6,7 @@
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
 
 <radiogroup id="viewGroup">
@@ -18,6 +19,7 @@
 <window>
   <commandset id="userscripts-commands"
     oncommand="greasemonkeyAddons.doCommand(event.target.id);">
+    <command id="cmd_userscript_update"/>
     <command id="cmd_userscript_edit"/>
     <command id="cmd_userscript_enable"/>
     <command id="cmd_userscript_disable"/>

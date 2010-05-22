@@ -28,11 +28,13 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
-  this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
-  this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
+  if (this.win_) {
+    this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
+    this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
+    this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
 
-  this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
+    this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
+  }
 
   Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService().wrappedJSObject
@@ -45,8 +47,10 @@ GM_ScriptDownloader.prototype.startDownload = function() {
 };
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
-  this.win_.GM_BrowserUI.refreshStatus();
-  this.win_.GM_BrowserUI.hideStatusImmediately();
+  if (this.win_) {
+    this.win_.GM_BrowserUI.refreshStatus();
+    this.win_.GM_BrowserUI.hideStatusImmediately();
+  }
 
   try {
     // If loading from file, status might be zero on success
@@ -88,10 +92,12 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
-    if(this.installing_){
-      this.showInstallDialog();
-    }else{
-      this.showScriptView();
+    if (!this.replacedScript) {
+      if(this.installing_){
+        this.showInstallDialog();
+      }else{
+        this.showScriptView();
+      }
     }
   } catch (e) {
     // NOTE: unlocalized string
