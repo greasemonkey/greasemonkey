@@ -130,8 +130,20 @@ var greasemonkeyAddons = {
       listbox.removeChild(listbox.firstChild);
     }
 
+    // Show scripts with updates
+    if (config._showUpdates) {
+      var scripts = config.getMatchingScripts(
+          function (script) { return script._updateAvailable; });
+
+      window.addEventListener("unload", function() {
+          config._showUpdates = false;
+      }, false);
+    } else {
+      var scripts = config.scripts;
+    }
+
     // Add a list item for each script.
-    for (var i = 0, script = null; script = config.scripts[i]; i++) {
+    for (var i = 0, script = null; script = scripts[i]; i++) {
       greasemonkeyAddons.addScriptToList(script);
     }
   },

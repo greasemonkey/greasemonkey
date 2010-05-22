@@ -8,6 +8,8 @@ function Config() {
 
   this._updateVersion();
   this._load();
+  this._showUpdates = false;
+  this._notifyUpdates();
 }
 
 Config.prototype = {
@@ -528,6 +530,18 @@ Config.prototype = {
     }
 
     this._save();
+  },
+
+  _notifyUpdates: function() {
+    var scripts = this.getMatchingScripts(
+        function (script) { return script._updateAvailable; });
+    if (0 == scripts.length) return;
+    
+    this._showUpdates = true;
+    var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+        .getService(Ci.nsIWindowMediator)
+        .getMostRecentWindow("navigator:browser");
+    win.BrowserOpenAddonsMgr('userscripts');
   },
 
   /**
