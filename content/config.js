@@ -407,7 +407,7 @@ Config.prototype = {
       var existingIndex = this._find(newScript);
 
       if (existingIndex > -1) {
-        oldScript = this._scripts[existingIndex];
+        var oldScript = this._scripts[existingIndex];
       }
     }
 

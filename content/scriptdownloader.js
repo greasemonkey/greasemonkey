@@ -14,6 +14,7 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
   this.updateScript = false;
+  this.replacedScript = null;
 }
 
 GM_ScriptDownloader.prototype.startInstall = function() {
@@ -223,7 +224,11 @@ GM_ScriptDownloader.prototype.installScript = function(){
   if (this.dependencyError) {
     alert(this.dependencyError);
   } else if(this.dependenciesLoaded_) {
-    this.win_.GM_BrowserUI.installScript(this.script)
+    if (this.replacedScript) {
+      this.script._config.install(this.script, this.replacedScript);
+    } else {
+      this.win_.GM_BrowserUI.installScript(this.script);
+    }
   } else {
     this.installOnCompletion_ = true;
   }
