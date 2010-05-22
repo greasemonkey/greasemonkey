@@ -400,32 +400,39 @@ Config.prototype = {
     return script;
   },
 
-  install: function(script) {
+  install: function(newScript, oldScript) {
     GM_log("> Config.install");
 
-    var existingIndex = this._find(script);
-    if (existingIndex > -1) {
-      this.uninstall(this._scripts[existingIndex]);
+    if (!oldScript) {
+      var existingIndex = this._find(newScript);
+
+      if (existingIndex > -1) {
+        oldScript = this._scripts[existingIndex];
+      }
     }
 
-    script._initFile(script._tempFile);
-    script._tempFile = null;
-
-    for (var i = 0; i < script._requires.length; i++) {
-      script._requires[i]._initFile();
+    if (oldScript) {
+      this.uninstall(oldScript);
     }
 
-    for (var i = 0; i < script._resources.length; i++) {
-      script._resources[i]._initFile();
+    newScript._initFile(newScript._tempFile);
+    newScript._tempFile = null;
+
+    for (var i = 0; i < newScript._requires.length; i++) {
+      newScript._requires[i]._initFile();
     }
 
-    script._modified = script._file.lastModifiedTime;
-    script._metahash = GM_sha1(script._rawMeta);
-    script._updateAvailable = false;
-    script._lastUpdateCheck = script._modified;
+    for (var i = 0; i < newScript._resources.length; i++) {
+      newScript._resources[i]._initFile();
+    }
 
-    this._scripts.push(script);
-    this._changed(script, "install", null);
+    newScript._modified = newScript._file.lastModifiedTime;
+    newScript._metahash = GM_sha1(newScript._rawMeta);
+    newScript._updateAvailable = false;
+    newScript._lastUpdateCheck = newScript._modified;
+
+    this._scripts.push(newScript);
+    this._changed(newScript, "install", null);
 
     GM_log("< Config.install");
   },
