@@ -141,6 +141,7 @@ var greasemonkeyAddons = {
           }, false);
       } else {
         var scripts = config.scripts;
+        config._showUpdates = false;
       }
     } else {
       var scripts = config.scripts;
