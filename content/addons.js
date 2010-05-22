@@ -34,7 +34,7 @@ window.addEventListener("unload", function() {
 
 var observer = {
   notifyEvent: function(script, event, data) {
-    if (event == "install") {
+    if (event == "install" && !config._showUpdates) {
       var item = greasemonkeyAddons.addScriptToList(script);
       gExtensionsView.selectedItem = item;
       return;
