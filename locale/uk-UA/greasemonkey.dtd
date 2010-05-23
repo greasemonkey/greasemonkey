@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Керування скриптами">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Додати…">
-<!ENTITY manage.button.edit "Редагувати…">
-<!ENTITY manage.button.remove "Вилучити">
-<!ENTITY manage.label.grpIncluded "Охоплені сторінки">
-<!ENTITY manage.label.grpExcluded "Сторінки-винятки">
-<!ENTITY manage.label.btnEdit "Редагувати">
-<!ENTITY manage.label.chkEnabled "Увімкнено">
-<!ENTITY manage.label.btnUninstall "Усунути">
-<!ENTITY manage.label.chkUninstall "Також прибрати пов’язані налаштування">
-<!ENTITY manage.reorderHelp "Перетягніть назву скрипту за допомогою миші або натисніть Alt-Вгору/Alt-Вниз, щоб змінити послідовність у списку.">
 <!ENTITY menu.install "Встановити скрипт…">
 <!ENTITY menu.install.accesskey "В">
 <!ENTITY menu.show "Переглянути початковий код скрипту">
