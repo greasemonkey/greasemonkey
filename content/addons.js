@@ -280,11 +280,25 @@ var greasemonkeyAddons = {
       popup.removeChild(popup.firstChild);
     }
 
-    function addMenuItem(label, command) {
+    function forceDisabled(aEvent) {
+      if ('disabled' != aEvent.attrName) return;
+      if ('true' == aEvent.newValue) return;
+      aEvent.target.setAttribute('disabled', 'true');
+    }
+    function addMenuItem(label, command, enabled) {
       var menuitem = document.createElement('menuitem');
       menuitem.setAttribute('label', GM_string(label));
       menuitem.setAttribute('accesskey', GM_string(label+'.accesskey'));
       menuitem.setAttribute('command', command);
+
+      if ('undefined' == typeof enabled) enabled = true;
+      if (!enabled) {
+        menuitem.setAttribute('disabled', 'true');
+        // Something is un-setting the disabled attribute.  Work around that,
+        // this way for now.
+        menuitem.addEventListener('DOMAttrModified', forceDisabled, true);
+      }
+
       popup.appendChild(menuitem);
     }
 
@@ -298,13 +312,19 @@ var greasemonkeyAddons = {
 
     popup.appendChild(document.createElement('menuseparator'));
 
-    addMenuItem('Move Up', 'cmd_userscript_move_up');
-    addMenuItem('Move Down', 'cmd_userscript_move_down');
-    addMenuItem('Move To Top', 'cmd_userscript_move_top');
-    addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom');
+    var selectedItem = gExtensionsView.selectedItem;
+    addMenuItem('Move Up', 'cmd_userscript_move_up',
+        !!selectedItem.previousSibling);
+    addMenuItem('Move Down', 'cmd_userscript_move_down',
+        !!selectedItem.nextSibling);
+    addMenuItem('Move To Top', 'cmd_userscript_move_top',
+        !!selectedItem.previousSibling);
+    addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom',
+        !!selectedItem.nextSibling);
 
     popup.appendChild(document.createElement('menuseparator'));
 
-    addMenuItem('Sort Scripts', 'cmd_userscript_sort');
+    addMenuItem('Sort Scripts', 'cmd_userscript_sort',
+        gExtensionsView.itemCount > 1);
   }
 };
