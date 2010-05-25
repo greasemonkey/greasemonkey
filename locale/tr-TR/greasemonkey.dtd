@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Kullanıcı Betiklerini Yönet">
-<!ENTITY manage.button.close "Kapat">
-<!ENTITY manage.button.add "Ekle...">
-<!ENTITY manage.button.edit "Düzenle...">
-<!ENTITY manage.button.remove "Kaldır">
-<!ENTITY manage.label.grpIncluded "Dahil Edilen Sayfalar">
-<!ENTITY manage.label.grpExcluded "Hariç Tutulan Sayfalar">
-<!ENTITY manage.label.btnEdit "Düzenle">
-<!ENTITY manage.label.chkEnabled "Devrede">
-<!ENTITY manage.label.btnUninstall "Kaldır">
-<!ENTITY manage.label.chkUninstall "İlgili tercihleri de kaldır">
-<!ENTITY manage.reorderHelp "Bu listedeki betikleri sıralamak için fareyle sürükleyip bırakın veya Alt+Yukarı ok/Alt+Aşağı ok tuşlarına basın.">
 <!ENTITY menu.install "Kullanıcı betiği kur...">
 <!ENTITY menu.install.accesskey "Y">
 <!ENTITY menu.show "Kullanıcı betiği kaynağını göster">
