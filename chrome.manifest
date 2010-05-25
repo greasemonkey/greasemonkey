@@ -2,8 +2,12 @@ content    greasemonkey    content/
 skin       greasemonkey    classic/1.0 skin/
 
 overlay    chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
-overlay    chrome://songbird/content/xul/mainScriptsOverlay.xul    chrome://greasemonkey/content/browser.xul
+overlay    chrome://songbird/content/xul/mainScriptsOverlay.xul chrome://greasemonkey/content/browser.xul
 overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul
+
+overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/content/closewindow.xul
+overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul
+overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
 
 style      chrome://greasemonkey/content/addons.xul    chrome://greasemonkey/skin/addons-mac.css os=Darwin
 
