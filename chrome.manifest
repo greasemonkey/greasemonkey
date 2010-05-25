@@ -5,4 +5,6 @@ overlay    chrome://browser/content/browser.xul    chrome://greasemonkey/content
 overlay    chrome://songbird/content/xul/mainScriptsOverlay.xul    chrome://greasemonkey/content/browser.xul
 overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul
 
+style      chrome://greasemonkey/content/addons.xul    chrome://greasemonkey/skin/addons-mac.css os=Darwin
+
 locale     greasemonkey  en-US  locale/en-US/
