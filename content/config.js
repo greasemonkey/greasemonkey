@@ -501,10 +501,19 @@ Config.prototype = {
       this._pointEightBackup();
 
     // update the currently initialized version so we don't do this work again.
-    var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
-      .getService(Components.interfaces.nsIExtensionManager);
-    var item = extMan.getItemForID(GM_GUID);
-    GM_prefRoot.setValue("version", item.version);
+    if ("@mozilla.org/extensions/manager;1" in Components.classes) {
+      // Firefox <= 3.6.*
+      var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
+          .getService(Components.interfaces.nsIExtensionManager);
+      var item = extMan.getItemForID(GM_GUID);
+      GM_prefRoot.setValue("version", item.version);
+    } else {
+      // Firefox 3.7+
+      Components.utils.import("resource://gre/modules/AddonManager.jsm");
+      AddonManager.getAddonByID(GM_GUID, function(addon) {
+         GM_prefRoot.setValue("version", addon.version);
+      });
+    }
 
     GM_log("< GM_updateVersion");
   },
