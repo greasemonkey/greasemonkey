@@ -12,6 +12,7 @@ function Script(config) {
   this._name = null;
   this._namespace = null;
   this._description = null;
+  this._version = null;
   this._enabled = true;
   this._includes = [];
   this._excludes = [];
@@ -39,6 +40,7 @@ Script.prototype = {
   get prefroot() { return [
       "scriptvals.", this.namespace, "/", this.name, "."].join(""); },
   get description() { return this._description; },
+  get version() { return this._version; },
   get enabled() { return this._enabled; },
   set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
 
@@ -151,6 +153,7 @@ Script.prototype = {
     this._namespace = newScript._namespace;
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
+    this._version = newScript._version;
 
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {

@@ -74,15 +74,20 @@ Config.prototype = {
       script._basedir = node.getAttribute("basedir") || ".";
       script._downloadURL = node.getAttribute("installurl") || null;
 
-      if (!node.getAttribute("modified") || !node.getAttribute("dependhash")) {
+      if (!node.getAttribute("modified")
+          || !node.getAttribute("dependhash")
+          || !node.getAttribute("version")
+      ) {
         script._modified = script._file.lastModifiedTime;
-        var rawMeta = this.parse(
-            GM_getContents(script._file), script._downloadURL, true)._rawMeta;
-        script._dependhash = GM_sha1(rawMeta);
+        var parsedScript = this.parse(
+            GM_getContents(script._file), script._downloadURL, true);
+        script._dependhash = GM_sha1(parsedScript._rawMeta);
+        script._version = parsedScript._version;
         fileModified = true;
       } else {
         script._modified = node.getAttribute("modified");
         script._dependhash = node.getAttribute("dependhash");
+        script._version = node.getAttribute("version");
       }
 
       for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
@@ -195,6 +200,7 @@ Config.prototype = {
       scriptNode.setAttribute("name", scriptObj._name);
       scriptNode.setAttribute("namespace", scriptObj._namespace);
       scriptNode.setAttribute("description", scriptObj._description);
+      scriptNode.setAttribute("version", scriptObj._version);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
@@ -269,6 +275,7 @@ Config.prototype = {
           case "name":
           case "namespace":
           case "description":
+          case "version":
             script["_" + header] = value;
             break;
           case "include":
@@ -334,6 +341,7 @@ Config.prototype = {
     if (!script._name && uri) script._name = GM_parseScriptName(uri);
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
+    if (!script._version) script._version = "";
     if (script._includes.length == 0) script._includes.push("*");
 
     return script;
