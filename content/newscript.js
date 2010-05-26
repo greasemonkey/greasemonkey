@@ -10,10 +10,10 @@ window.addEventListener("load", function() {
       GM_prefRoot.getValue("newscript_namespace", "");
 
   // default the includes with the current page's url
-  if(window.opener.document.getElementById("content")) {
+  var content = window.opener.document.getElementById("content");
+  if (content) {
     document.getElementById("includes").value =
-      window.opener.document.getElementById("content").selectedBrowser
-      .contentWindow.location.href;
+      content.selectedBrowser.contentWindow.location.href;
   }
 }, false);
 
