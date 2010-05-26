@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Quản lí Mã kịch bản Người dùng">
-<!ENTITY manage.button.close "Đóng">
-<!ENTITY manage.button.add "Thêm...">
-<!ENTITY manage.button.edit "Chỉnh sửa...">
-<!ENTITY manage.button.remove "Xóa">
-<!ENTITY manage.label.grpIncluded "Các trang Được bao gồm">
-<!ENTITY manage.label.grpExcluded "Các trang Bị loại trừ">
-<!ENTITY manage.label.btnEdit "Chỉnh sửa">
-<!ENTITY manage.label.chkEnabled "Đã bật">
-<!ENTITY manage.label.btnUninstall "Gỡ bỏ">
-<!ENTITY manage.label.chkUninstall "Cũng gỡ bỏ các tùy chỉnh đi kèm">
-<!ENTITY manage.reorderHelp "Kéo và thả bằng chuột hoặc ấn Alt-Lên/Alt-Xuống để sắp xếp lại mã kịch bản trong danh sách này.">
 <!ENTITY menu.install "Cài đặt Mã kịch bản Người dùng...">
 <!ENTITY menu.install.accesskey "C">
 <!ENTITY menu.show "Xem mã nguồn Mã kịch bản Người dùng">

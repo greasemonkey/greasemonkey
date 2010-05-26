@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Gebruikersscripts beheren">
-<!ENTITY manage.button.close "Sluiten">
-<!ENTITY manage.button.add "Toevoegen…">
-<!ENTITY manage.button.edit "Bewerken…">
-<!ENTITY manage.button.remove "Verwijderen">
-<!ENTITY manage.label.grpIncluded "Inclusief deze pagina’s">
-<!ENTITY manage.label.grpExcluded "Exclusief deze pagina’s">
-<!ENTITY manage.label.btnEdit "Bewerken">
-<!ENTITY manage.label.chkEnabled "Ingeschakeld">
-<!ENTITY manage.label.btnUninstall "Deïnstalleren">
-<!ENTITY manage.label.chkUninstall "De bijbehorende instellingen ook verwijderen">
-<!ENTITY manage.reorderHelp "Sleep met uw muis of druk Alt-Up/Alt-Down op scripts in deze lijst opnieuw te sorteren.">
 <!ENTITY menu.install "Dit gebruikersscript installeren…">
 <!ENTITY menu.install.accesskey "S">
 <!ENTITY menu.show "Broncode gebruikersscript bekijken">

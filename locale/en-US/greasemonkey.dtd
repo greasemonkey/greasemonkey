@@ -40,3 +40,4 @@
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">
