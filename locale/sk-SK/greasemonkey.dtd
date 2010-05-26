@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Správa používateľských skriptov">
-<!ENTITY manage.button.close "Zavrieť">
-<!ENTITY manage.button.add "Pridať...">
-<!ENTITY manage.button.edit "Upraviť...">
-<!ENTITY manage.button.remove "Odstrániť">
-<!ENTITY manage.label.grpIncluded "Zahrnuté stránky">
-<!ENTITY manage.label.grpExcluded "Vylúčené stránky">
-<!ENTITY manage.label.btnEdit "Upraviť">
-<!ENTITY manage.label.chkEnabled "Povolené">
-<!ENTITY manage.label.btnUninstall "Odinštalovať">
-<!ENTITY manage.label.chkUninstall "Odinštalovať aj priradené nastavenia">
-<!ENTITY manage.reorderHelp "Zoznam skriptov usporiadate presunutím položiek pomocou myši alebo stlačením Alt-Up/Alt-Down.">
 <!ENTITY menu.install "Nainštalovať používateľský skript...">
 <!ENTITY menu.install.accesskey "N">
 <!ENTITY menu.show "Zobraziť zdrojový kód skriptu">

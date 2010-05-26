@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Manage User Scripts">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Add...">
-<!ENTITY manage.button.edit "Edit...">
-<!ENTITY manage.button.remove "Remove">
-<!ENTITY manage.label.grpIncluded "Included Pages">
-<!ENTITY manage.label.grpExcluded "Excluded Pages">
-<!ENTITY manage.label.btnEdit "Edit">
-<!ENTITY manage.label.chkEnabled "Enabled">
-<!ENTITY manage.label.btnUninstall "Uninstall">
-<!ENTITY manage.label.chkUninstall "Also uninstall associated preferences">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
 <!ENTITY menu.install "Install User Script...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "View User Script Source">
@@ -37,3 +25,4 @@
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">

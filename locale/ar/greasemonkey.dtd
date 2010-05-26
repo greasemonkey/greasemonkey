@@ -1,15 +1,3 @@
-<!ENTITY manage.title "مدير السكربتات">
-<!ENTITY manage.button.close "إغلاق">
-<!ENTITY manage.button.add "إضافة…">
-<!ENTITY manage.button.edit "تحرير…">
-<!ENTITY manage.button.remove "إزالة">
-<!ENTITY manage.label.grpIncluded "يشمل الصفحات">
-<!ENTITY manage.label.grpExcluded "لايشمل الصفحات">
-<!ENTITY manage.label.btnEdit "تحرير">
-<!ENTITY manage.label.chkEnabled "تمكين">
-<!ENTITY manage.label.btnUninstall "إزالة التثبيت">
-<!ENTITY manage.label.chkUninstall "أيضا إزالة الاعدادات المرتبطه بها">
-<!ENTITY manage.reorderHelp "لترتيب قائمة السكربتات استخدم زر  (Alt+سهم للاعلى) او استخدم (Alt+سهم للاسفل) .">
 <!ENTITY menu.install "تثبيت السكربتات…">
 <!ENTITY menu.install.accesskey "ت">
 <!ENTITY menu.show "أظهار مصدر السكربت">

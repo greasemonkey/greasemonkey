@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Управление скриптами">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Добавить...">
-<!ENTITY manage.button.edit "Изменить...">
-<!ENTITY manage.button.remove "Удалить">
-<!ENTITY manage.label.grpIncluded "Охватываемые адреса">
-<!ENTITY manage.label.grpExcluded "Исключаемые адреса">
-<!ENTITY manage.label.btnEdit "Изменить">
-<!ENTITY manage.label.chkEnabled "Использовать">
-<!ENTITY manage.label.btnUninstall "Удалить скрипт">
-<!ENTITY manage.label.chkUninstall "Удалять ассоциированные настройки">
-<!ENTITY manage.reorderHelp "Перетаскивайте мышью или нажмите Alt-Up/Alt-Down для переупорядочивания скриптов в списке.">
 <!ENTITY menu.install "Установить скрипт...">
 <!ENTITY menu.install.accesskey "и">
 <!ENTITY menu.show "Показать код скрипта">

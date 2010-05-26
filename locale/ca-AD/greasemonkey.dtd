@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Manega Scripts d&apos;Usuari">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Afegeix...">
-<!ENTITY manage.button.edit "Edita...">
-<!ENTITY manage.button.remove "Elimina">
-<!ENTITY manage.label.grpIncluded "Pàgines incloses">
-<!ENTITY manage.label.grpExcluded "Pàgines excloses">
-<!ENTITY manage.label.btnEdit "Edita">
-<!ENTITY manage.label.chkEnabled "Habilitat">
-<!ENTITY manage.label.btnUninstall "Desinstal.la">
-<!ENTITY manage.label.chkUninstall "També desinstal.la les preferències associades">
-<!ENTITY manage.reorderHelp "Arrossega i allibera amb el ratolí o prem Alt-Amunt/Alt-Avall per reordenar els scripts d&apos;aquesta llista">
 <!ENTITY menu.install "Instal.la l&apos;Script d&apos;Usuari">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Veure el codi font de l&apos;Script d&apos;Usuari">

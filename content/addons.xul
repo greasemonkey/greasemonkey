@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/addons.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons.css" type="text/css"?>
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -13,14 +13,11 @@
          insertafter="installs-view" persist="last-selected"
          oncommand="showView('userscripts');">
   </radio>
-
-  <!-- Bugfix, overlay Stylish to act like the default tabs. -->
-  <radio id="userstyles-view" oncommand="gView='userstyles';" />
 </radiogroup>
 
 <window>
   <commandset id="userscripts-commands"
-    oncommand="greasemonkeyAddons.doCommand(event.target.id);">
+      oncommand="greasemonkeyAddons.doCommand(event.target.id);">
     <command id="cmd_userscript_edit"/>
     <command id="cmd_userscript_show"/>
     <command id="cmd_userscript_enable"/>
