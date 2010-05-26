@@ -21,7 +21,8 @@ cd build
 
 if [ "official" != "$1" ]; then
   echo "Patching install.rdf version ..."
-  sed -i "s/<em:version>.*<\/em:version>/<em:version>$GMVER<\/em:version>/" \
+  sed -i "" \
+    -e "s/<em:version>.*<\/em:version>/<em:version>$GMVER<\/em:version>/" \
     install.rdf
 fi
 
@@ -34,12 +35,12 @@ for entry in locale/*; do
 done
 
 echo "Creating greasemonkey.jar ..."
-sed -i \
+sed -i "" \
     -e "s/^content  *\([^ ]*\)  *\([^ ]*\)/content \1 jar:chrome\/greasemonkey.jar!\/\2/" \
     -e "s/^skin  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/skin \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
     -e "s/^locale  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/locale \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
     chrome.manifest
-find content/ skin/ locale/ | sort | \
+find content skin locale | sort | \
   zip -r -0 -@ "greasemonkey.jar" > /dev/null
 rm -fr content/ skin/ locale/
 mkdir chrome
