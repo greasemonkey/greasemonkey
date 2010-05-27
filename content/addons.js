@@ -171,6 +171,11 @@ var greasemonkeyAddons = {
     item.setAttribute('providesUpdatesSecurely', 'true');
     item.setAttribute('satisfiesDependencies', 'true');
     item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
+
+    if (script.id in GM_uninstallQueue) {
+      item.setAttribute('opType', 'needs-uninstall');
+    }
+
     return item;
   },
 
