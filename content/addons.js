@@ -13,8 +13,11 @@ function GM_string(key) { return GM_stringBundle.GetStringFromName(key); }
 var _origShowView = showView;
 showView = function(aView) {
   if ('userscripts' == aView) {
+    gExtensionsView.className += ' userscripts';
     greasemonkeyAddons.showView();
   } else {
+    gExtensionsView.className = gExtensionsView.className.replace(
+        / ?\buserscripts\b/, '');
     _origShowView(aView);
   }
 };
@@ -197,6 +200,7 @@ var greasemonkeyAddons = {
     return null;
   },
 
+  // Todo: Completely replace this with overlaid XBL, like UninstallCancel.
   onAddonSelect: function(aEvent) {
     // We do all this work here, because the elements we want to change do
     // not exist until the item is selected.
@@ -288,17 +292,6 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_uninstall':
       GM_uninstallQueue[script.id] = script;
       selectedListitem.setAttribute('opType', 'needs-uninstall');
-      // This setTimeout puts this after the opType set has taken effect, and
-      // the element is created.
-      // Todo: is there a way to do this sooner/simpler?
-      setTimeout(function() {
-        var labelBox = selectedListitem.ownerDocument
-            .getAnonymousElementByAttribute(
-                selectedListitem, 'anonid', 'addonOpType');
-        var label = labelBox.ownerDocument.getAnonymousNodes(labelBox)[0];
-        label.setAttribute('value', GM_string('UninstallCancel'));
-      }, 0);
-      
       break;
     case 'cmd_userscript_uninstall_cancel':
       delete(GM_uninstallQueue[script.id]);
