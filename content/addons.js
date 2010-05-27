@@ -242,7 +242,6 @@ var greasemonkeyAddons = {
     if (!button) return;
     button.setAttribute('tooltiptext', GM_string('Uninstall.tooltip'));
     button.setAttribute('command', 'cmd_userscript_uninstall');
-
     button.setAttribute('disabled', 'false');
   },
 

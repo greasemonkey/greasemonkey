@@ -35,8 +35,8 @@
 <hbox id="commandBarBottom">
   <button id="new-user-script"
           label="&writenew;"
-          accesskey="&writenew.ak;"
-          tooltiptext="&writenew.tt;"
+          accesskey="&writenew.accesskey;"
+          tooltiptext="&writenew.tooltip;"
           oncommand="GM_newUserScript()"
           hidden="true" />
 </hbox>
