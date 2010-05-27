@@ -230,6 +230,13 @@ var greasemonkeyAddons = {
     button.setAttribute('tooltiptext', GM_string('Uninstall.tooltip'));
     button.setAttribute('command', 'cmd_userscript_uninstall');
     button.setAttribute('disabled', 'false');
+
+    button = item.ownerDocument.getAnonymousElementByAttribute(
+        item, 'command', 'cmd_cancelUninstall');
+    if (!button) return;
+    button.setAttribute('tooltiptext', GM_string('UninstallCancel.tooltip'));
+    button.setAttribute('command', 'cmd_userscript_uninstall_cancel');
+    button.setAttribute('disabled', 'false');
   },
 
   doCommand: function(command) {
@@ -269,6 +276,23 @@ var greasemonkeyAddons = {
       greasemonkeyAddons.fillList();
       break;
     case 'cmd_userscript_uninstall':
+      selectedListitem.setAttribute('opType', 'needs-uninstall');
+      // This setTimeout puts this after the opType set has taken effect, and
+      // the element is created.
+      // Todo: is there a way to do this sooner, that's still not too late?
+      setTimeout(function() {
+        var labelBox = selectedListitem.ownerDocument
+            .getAnonymousElementByAttribute(
+                selectedListitem, 'anonid', 'addonOpType');
+        var label = labelBox.ownerDocument.getAnonymousNodes(labelBox)[0];
+        label.setAttribute('value', GM_string('UninstallCancel'));
+      }, 0);
+      
+      break;
+    case 'cmd_userscript_uninstall_cancel':
+      selectedListitem.removeAttribute('opType');
+      break;
+    case 'cmd_userscript_uninstall_now':
       GM_config.uninstall(script);
       break;
     }
@@ -281,6 +305,7 @@ var greasemonkeyAddons = {
       return;
     }
 
+    var selectedItem = gExtensionsView.selectedItem;
     var popup = document.getElementById('addonContextMenu');
     while (popup.hasChildNodes()) {
       popup.removeChild(popup.firstChild);
@@ -314,11 +339,15 @@ var greasemonkeyAddons = {
     } else {
       addMenuItem('Enable', 'cmd_userscript_enable');
     }
-    addMenuItem('Uninstall', 'cmd_userscript_uninstall');
+
+    if ('needs-uninstall' == selectedItem.getAttribute('opType')) {
+      addMenuItem('UninstallNow', 'cmd_userscript_uninstall_now');
+    } else {
+      addMenuItem('Uninstall', 'cmd_userscript_uninstall');
+    }
 
     popup.appendChild(document.createElement('menuseparator'));
 
-    var selectedItem = gExtensionsView.selectedItem;
     addMenuItem('Move Up', 'cmd_userscript_move_up',
         !!selectedItem.previousSibling);
     addMenuItem('Move Down', 'cmd_userscript_move_down',
