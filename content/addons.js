@@ -104,6 +104,9 @@ window.addEventListener('unload', function() {
     GM_config.uninstall(GM_uninstallQueue[id]);
     delete(GM_uninstallQueue[id]);
   }
+  // Guarantee that the config.xml is saved to disk.
+  // Todo: This without dipping into private members.
+  GM_config._save(true);
 }, false);
 
 var greasemonkeyAddons = {

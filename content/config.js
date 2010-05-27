@@ -130,19 +130,19 @@ Config.prototype = {
     }
   },
 
-  _save: function() {
-    var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
-                .getService(Ci.nsIWindowMediator)
-                .getMostRecentWindow("navigator:browser");
-
-    if (win) {
-      win.setTimeout(GM_hitch(this, "_saveConfigToFile"), 250);
-    } else {
-      this._saveConfigToFile();
+  _save: function(saveNow) {
+    // If we have not explicitly been told to save now, then defer execution
+    // via a timer, to avoid locking up the UI.
+    if (!saveNow) {
+      var timer = Components.classes["@mozilla.org/timer;1"]
+          .createInstance(Components.interfaces.nsITimer);
+      var _save = GM_hitch(this, "_save"); // dereference 'this' for the closure
+      timer.initWithCallback(
+          {'notify': function() { _save(true); }}, 50,
+          Components.interfaces.nsITimer.TYPE_ONE_SHOT);
+      return;
     }
-  },
 
-  _saveConfigToFile: function() {
     var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser)
       .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
