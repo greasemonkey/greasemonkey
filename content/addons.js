@@ -348,33 +348,33 @@ var greasemonkeyAddons = {
       popup.appendChild(menuitem);
     }
 
-    addMenuItem('Edit', 'cmd_userscript_edit');
-    if (script.enabled) {
-      addMenuItem('Disable', 'cmd_userscript_disable');
-    } else {
-      addMenuItem('Enable', 'cmd_userscript_enable');
-    }
-
     if ('needs-uninstall' == selectedItem.getAttribute('opType')) {
+      addMenuItem('UninstallCancel', 'cmd_userscript_uninstall_cancel');
       addMenuItem('UninstallNow', 'cmd_userscript_uninstall_now');
     } else {
+      addMenuItem('Edit', 'cmd_userscript_edit');
+      if (script.enabled) {
+        addMenuItem('Disable', 'cmd_userscript_disable');
+      } else {
+        addMenuItem('Enable', 'cmd_userscript_enable');
+      }
       addMenuItem('Uninstall', 'cmd_userscript_uninstall');
+
+      popup.appendChild(document.createElement('menuseparator'));
+
+      addMenuItem('Move Up', 'cmd_userscript_move_up',
+          !!selectedItem.previousSibling);
+      addMenuItem('Move Down', 'cmd_userscript_move_down',
+          !!selectedItem.nextSibling);
+      addMenuItem('Move To Top', 'cmd_userscript_move_top',
+          !!selectedItem.previousSibling);
+      addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom',
+          !!selectedItem.nextSibling);
+
+      popup.appendChild(document.createElement('menuseparator'));
+
+      addMenuItem('Sort Scripts', 'cmd_userscript_sort',
+          gExtensionsView.itemCount > 1);
     }
-
-    popup.appendChild(document.createElement('menuseparator'));
-
-    addMenuItem('Move Up', 'cmd_userscript_move_up',
-        !!selectedItem.previousSibling);
-    addMenuItem('Move Down', 'cmd_userscript_move_down',
-        !!selectedItem.nextSibling);
-    addMenuItem('Move To Top', 'cmd_userscript_move_top',
-        !!selectedItem.previousSibling);
-    addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom',
-        !!selectedItem.nextSibling);
-
-    popup.appendChild(document.createElement('menuseparator'));
-
-    addMenuItem('Sort Scripts', 'cmd_userscript_sort',
-        gExtensionsView.itemCount > 1);
   }
 };
