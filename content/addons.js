@@ -300,6 +300,7 @@ var greasemonkeyAddons = {
       selectedListitem.removeAttribute('opType');
       break;
     case 'cmd_userscript_uninstall_now':
+      delete(GM_uninstallQueue[script.id]);
       GM_config.uninstall(script);
       break;
     }
