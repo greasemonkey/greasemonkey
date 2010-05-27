@@ -1,4 +1,5 @@
 function Config() {
+  this._saveTimer = null;
   this._scripts = null;
   this._configFile = this._scriptDir;
   this._configFile.append("config.xml");
@@ -134,11 +135,17 @@ Config.prototype = {
     // If we have not explicitly been told to save now, then defer execution
     // via a timer, to avoid locking up the UI.
     if (!saveNow) {
-      var timer = Components.classes["@mozilla.org/timer;1"]
+      // Reduce work in the case of many changes near to each other in time.
+      if (this._saveTimer) {
+        this._saveTimer.cancel(this._saveTimer);
+      }
+
+      this._saveTimer = Components.classes["@mozilla.org/timer;1"]
           .createInstance(Components.interfaces.nsITimer);
+
       var _save = GM_hitch(this, "_save"); // dereference 'this' for the closure
-      timer.initWithCallback(
-          {'notify': function() { _save(true); }}, 50,
+      this._saveTimer.initWithCallback(
+          {'notify': function() { _save(true); }}, 250,
           Components.interfaces.nsITimer.TYPE_ONE_SHOT);
       return;
     }
