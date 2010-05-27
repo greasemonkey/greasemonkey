@@ -13,11 +13,9 @@ function GM_string(key) { return GM_stringBundle.GetStringFromName(key); }
 var _origShowView = showView;
 showView = function(aView) {
   if ('userscripts' == aView) {
-    gExtensionsView.className += ' userscripts';
     greasemonkeyAddons.showView();
   } else {
-    gExtensionsView.className = gExtensionsView.className.replace(
-        / ?\buserscripts\b/, '');
+    greasemonkeyAddons.hideView();
     _origShowView(aView);
   }
 };
@@ -94,7 +92,10 @@ window.addEventListener('load', function() {
   if (stylishRadio) {
     stylishRadio.addEventListener(
         'command',
-        function() { gView = 'userstyles' },
+        function() {
+          greasemonkeyAddons.hideView();
+          gView = 'userstyles'
+        },
         false);
   }
 }, false);
@@ -112,8 +113,12 @@ window.addEventListener('unload', function() {
 var greasemonkeyAddons = {
   showView: function() {
     if ('userscripts' == gView) return;
+
+    greasemonkeyAddons.hideView();
+
     updateLastSelected('userscripts');
     gView='userscripts';
+    document.documentElement.className += ' userscripts';
 
     // Update any possibly modified scripts.
     GM_config.updateModifiedScripts();
@@ -155,6 +160,12 @@ var greasemonkeyAddons = {
     for (var i = 0, script = null; script = config.scripts[i]; i++) {
       greasemonkeyAddons.addScriptToList(script);
     }
+  },
+
+  hideView: function() {
+    if ('userscripts' != gView) return;
+    document.className = gExtensionsView.className.replace(
+        / ?\buserscripts\b/, '');
   },
 
   listitemForScript: function(script) {
