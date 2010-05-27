@@ -1,6 +1,6 @@
 // Globals.
 var GM_config = GM_getConfig();
-
+var GM_uninstallQueue = {};
 var GM_stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
@@ -93,6 +93,13 @@ window.addEventListener('load', function() {
         'command',
         function() { gView = 'userstyles' },
         false);
+  }
+}, false);
+
+window.addEventListener('unload', function() {
+  for (var id in GM_uninstallQueue) {
+    GM_config.uninstall(GM_uninstallQueue[id]);
+    delete(GM_uninstallQueue[id]);
   }
 }, false);
 
@@ -274,6 +281,7 @@ var greasemonkeyAddons = {
       greasemonkeyAddons.fillList();
       break;
     case 'cmd_userscript_uninstall':
+      GM_uninstallQueue[script.id] = script;
       selectedListitem.setAttribute('opType', 'needs-uninstall');
       // This setTimeout puts this after the opType set has taken effect, and
       // the element is created.
@@ -288,6 +296,7 @@ var greasemonkeyAddons = {
       
       break;
     case 'cmd_userscript_uninstall_cancel':
+      delete(GM_uninstallQueue[script.id]);
       selectedListitem.removeAttribute('opType');
       break;
     case 'cmd_userscript_uninstall_now':
