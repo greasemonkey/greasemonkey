@@ -285,7 +285,7 @@ var greasemonkeyAddons = {
       selectedListitem.setAttribute('opType', 'needs-uninstall');
       // This setTimeout puts this after the opType set has taken effect, and
       // the element is created.
-      // Todo: is there a way to do this sooner, that's still not too late?
+      // Todo: is there a way to do this sooner/simpler?
       setTimeout(function() {
         var labelBox = selectedListitem.ownerDocument
             .getAnonymousElementByAttribute(
