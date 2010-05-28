@@ -48,15 +48,6 @@
       </Description>
     </em:targetApplication>
 
-    <!-- Songbird -->
-    <em:targetApplication>
-      <Description>
-        <em:id>songbird@songbirdnest.com</em:id>
-        <em:minVersion>0.3pre</em:minVersion>
-        <em:maxVersion>1.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-
     <em:file>
       <Description about="urn:mozilla:extension:file:greasemonkey">
         <em:package>content/</em:package>
