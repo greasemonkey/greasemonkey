@@ -52,12 +52,7 @@ var observer = {
 
     // find the script's node in the listbox
     var listbox = gExtensionsView;
-    var node;
-    for (var i = 0; node = listbox.childNodes[i]; i++) {
-      if (node.getAttribute('addonId') == script.id) {
-        break;
-      }
-    }
+    var node = document.getElementById('urn:greasemonkey:item:'+script.id);
     if (!node) return;
 
     switch (event) {
