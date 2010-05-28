@@ -130,26 +130,22 @@ GM_BrowserUI.contentLoad = function(e) {
   var safeWin;
   var unsafeWin;
   var href;
-  var commander;
 
-  if (!GM_getEnabled()) {
-    return;
-  }
+  if (!GM_getEnabled()) return;
 
   safeWin = e.target.defaultView;
   unsafeWin = safeWin.wrappedJSObject;
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    commander = this.getCommander(unsafeWin);
-
     // if this content load is in the focused tab, attach the menuCommaander
     if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
+      var commander = this.getCommander(safeWin);
       this.currentMenuCommander = commander;
       this.currentMenuCommander.attach();
     }
 
-    this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin }, window);
+    this.gmSvc.domContentLoaded(safeWin, window);
 
     GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }

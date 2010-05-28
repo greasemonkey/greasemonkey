@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+<bindings id="addonUserscriptsBindings"
+  xmlns="http://www.mozilla.org/xbl"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xbl="http://www.mozilla.org/xbl"
+>
+
+<binding id="addon-needs-uninstall">
+  <content>
+    <xul:label value="&UninstallCancelDescription;" crop="end"/>
+  </content>
+</binding>
+
+</bindings>

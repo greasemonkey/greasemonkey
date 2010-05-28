@@ -38,6 +38,7 @@ Script.prototype = {
 
   get name() { return this._name; },
   get namespace() { return this._namespace; },
+  get id() { return this._name + this._namespace; },
   get prefroot() { return [
       "scriptvals.", this.namespace, "/", this.name, "."].join(""); },
   get description() { return this._description; },
@@ -127,7 +128,6 @@ Script.prototype = {
   },
 
   isModified: function() {
-    this.delayInjection = false;
     if (this._modified != this._file.lastModifiedTime) {
       this._modified = this._file.lastModifiedTime;
       return true;
