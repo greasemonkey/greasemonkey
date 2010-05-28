@@ -2,8 +2,6 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<!-- Note: Contains Firefox-specific overlay -->
-
 <overlay id="greasemonkey-browser-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
