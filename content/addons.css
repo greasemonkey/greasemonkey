@@ -1,0 +1,4 @@
+.userscripts richlistitem[opType="needs-uninstall"] hbox.addon-optype,
+.userscripts richlistitem[opType="needs-uninstall"] hbox.addon-description {
+  -moz-binding: url("chrome://greasemonkey/content/addons.xml#addon-needs-uninstall");
+}
