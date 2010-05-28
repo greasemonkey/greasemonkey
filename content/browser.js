@@ -50,16 +50,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.toolsMenu = document.getElementById("menu_ToolsPopup");
   this.bundle = document.getElementById("gm-browser-bundle");
 
-  // seamonkey compat
-  if (!this.toolsMenu) {
-    this.toolsMenu = document.getElementById("taskPopup");
-  }
-
-  // songbird compat
-  if (!this.appContent && this.tabBrowser) {
-    this.appContent = this.tabBrowser.parentNode;
-  }
-
   // update visual status when enabled state changes
   this.enabledWatcher = GM_hitch(this, "refreshStatus");
   GM_prefRoot.watch("enabled", this.enabledWatcher);
