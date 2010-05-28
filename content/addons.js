@@ -171,7 +171,6 @@ var greasemonkeyAddons = {
   listitemForScript: function(script) {
     var item = document.createElement('richlistitem');
     item.setAttribute('class', 'userscript');
-    // Fake this for now.
     // Setting these attributes inherits the values into the same place they
     // would go for extensions.
     item.setAttribute('addonId', script.id);
