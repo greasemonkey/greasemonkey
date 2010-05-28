@@ -27,16 +27,9 @@
       insertbefore="context-openlink" />
   </popup>
 
-  <!-- Firefox -->
   <menupopup id="menu_ToolsPopup">
     <menu id="gm_general_menu"
       insertbefore="javascriptConsole" />
-  </menupopup>
-
-  <!-- SeaMonkey -->
-  <menupopup id="taskPopup">
-    <menu id="gm_general_menu"
-      insertbefore="downloadMgr" />
   </menupopup>
 
   <!--
