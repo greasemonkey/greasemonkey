@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+<?xml-stylesheet href="chrome://greasemonkey/content/addons.css" type="text/css"?>
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons.css" type="text/css"?>
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -23,6 +24,8 @@
     <command id="cmd_userscript_enable"/>
     <command id="cmd_userscript_disable"/>
     <command id="cmd_userscript_uninstall"/>
+    <command id="cmd_userscript_uninstall_cancel"/>
+    <command id="cmd_userscript_uninstall_now"/>
 
     <command id="cmd_userscript_move_up"/>
     <command id="cmd_userscript_move_down"/>
