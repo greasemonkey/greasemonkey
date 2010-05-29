@@ -8,5 +8,4 @@ interface gmIGreasemonkeyService : nsISupports
   void registerBrowser(in gmIBrowserWindow window);
   void unregisterBrowser(in gmIBrowserWindow window);
   void domContentLoaded(in nsISupports contentWin, in nsISupports chromeWin);
-  void documentStart(in nsISupports contentWin, in nsISupports chromeWin);
 };
