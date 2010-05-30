@@ -226,7 +226,7 @@ var greasemonkeyService = {
     function testMatch(script) {
       return !script.delayInjection && script.enabled && script.earlyInject && script.matchesURL(url);
     }
-    this.checkRefreshing(url, wrappedContentWin, chromeWin)
+    this.updateModifiedScripts(url, wrappedContentWin, chromeWin)
 
     return GM_getConfig().getMatchingScripts(testMatch);
   },
@@ -235,16 +235,16 @@ var greasemonkeyService = {
     function testMatch(script) {
       return !script.delayInjection && script.enabled  && !script.earlyInject && script.matchesURL(url);
     }
-    this.checkRefreshing(url, wrappedContentWin, chromeWin)//should possibly only be done once (above)
+    this.updateModifiedScripts(url, wrappedContentWin, chromeWin)//should possibly only be done once (above)
 
     return this.config.getMatchingScripts(testMatch);
   },
 
-  checkRefreshing: function(url, wrappedContentWin, chromeWin) {
+  updateModifiedScripts: function(url, wrappedContentWin, chromeWin) {
+  	// Todo: Try to implement this w/out global state.
+    this.config.wrappedContentWin = wrappedContentWin;
+    this.config.chromeWin = chromeWin;
     if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-      // Todo: Try to implement this w/out global state.
-      this.config.wrappedContentWin = wrappedContentWin;
-      this.config.chromeWin = chromeWin;
       this.config.updateModifiedScripts();
     }
   },
