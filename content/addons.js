@@ -110,8 +110,6 @@ var greasemonkeyAddons = {
   showView: function() {
     if ('userscripts' == gView) return;
 
-    greasemonkeyAddons.hideView();
-
     updateLastSelected('userscripts');
     gView='userscripts';
     document.documentElement.className += ' userscripts';
@@ -161,7 +159,7 @@ var greasemonkeyAddons = {
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className = 
-      document.documentElement.className.replace(/ *\buserscripts\b/, '');
+      document.documentElement.className.replace(/ *\buserscripts\b/g, '');
   },
 
   listitemForScript: function(script) {
