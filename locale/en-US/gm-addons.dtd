@@ -1,1 +1,4 @@
+<!ENTITY Edit "Edit">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Edit this User Script">
 <!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">

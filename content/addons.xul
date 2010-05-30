@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
-<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % extensionsDTD SYSTEM "chrome://mozapps/locale/extensions/extensions.dtd">
+%extensionsDTD;
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%greasemonkeyDTD;
+]>
+
 <?xml-stylesheet href="chrome://greasemonkey/content/addons.css" type="text/css"?>
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons.css" type="text/css"?>
 
@@ -16,7 +25,28 @@
   </radio>
 </radiogroup>
 
-<window>
+<notificationbox id="addonsMsg">
+  <vbox id="userscriptsBox" insertafter="extensionsBox" flex="1">
+    <hbox flex="1">
+      <richlistbox id="userscriptsView" flex="1"/>
+    </hbox>
+  </vbox>
+</notificationbox>
+
+<hbox id="commandBarBottom">
+  <label id="getMoreUserscripts" class="text-link" 
+    onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
+    value="Get User Scripts" 
+    getMoreURL="http://userscripts.org/"
+  />
+  <button id="findUpdatesUserscripts"
+    oncommand="alert('Remove me, or implement me, before 0.9 release.')"
+    label="&cmd.checkUpdatesAll.label;"
+    accesskey="&cmd.checkUpdatesAll.accesskey;"
+  />
+</hbox>
+
+<window id="extensionsManager">
   <commandset id="userscripts-commands"
       oncommand="greasemonkeyAddons.doCommand(event.target.id);">
     <command id="cmd_userscript_edit"/>

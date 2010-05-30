@@ -1,6 +1,7 @@
 // Globals.
 var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
+var gUserscriptsView = null;
 var GM_stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
@@ -29,14 +30,20 @@ buildContextMenu = function(aEvent) {
   }
 };
 
+var _origStartup = Startup;
+Startup = function() {
+  gUserscriptsView = document.getElementById("userscriptsView");
+  greasemonkeyAddons.fillList();
+  _origStartup();
+};
+
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
-var config = GM_config;
 window.addEventListener("load", function() {
-  config.addObserver(observer);
+  GM_config.addObserver(observer);
 }, false);
 window.addEventListener("unload", function() {
-  config.removeObserver(observer);
+  GM_config.removeObserver(observer);
 }, false);
 
 var observer = {
@@ -46,14 +53,13 @@ var observer = {
 
     if (event == "install") {
       var item = greasemonkeyAddons.addScriptToList(script);
-      gExtensionsView.selectedItem = item;
+      gUserscriptsView.selectedItem = item;
       return;
     }
 
     // find the script's node in the listbox
-    var listbox = gExtensionsView;
     var node;
-    for (var i = 0; node = listbox.childNodes[i]; i++) {
+    for (var i = 0; node = gUserscriptsView.childNodes[i]; i++) {
       if (node.getAttribute('addonId') == script.id) {
         break;
       }
@@ -65,15 +71,15 @@ var observer = {
         node.setAttribute('isDisabled', !data);
         break;
       case "uninstall":
-        listbox.removeChild(node);
+        gUserscriptsView.removeChild(node);
         break;
       case "move":
-        listbox.removeChild(node);
-        listbox.insertBefore(node, listbox.childNodes[data]);
+        gUserscriptsView.removeChild(node);
+        gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
         break;
       case "modified":
         var item = greasemonkeyAddons.listitemForScript(script);
-        gExtensionsView.replaceChild(item, node);
+        gUserscriptsView.replaceChild(item, node);
         break;
     }
   }
@@ -82,10 +88,6 @@ var observer = {
 
 // Set event listeners.
 window.addEventListener('load', function() {
-  greasemonkeyAddons.onAddonSelect();
-  gExtensionsView.addEventListener(
-      'select', greasemonkeyAddons.onAddonSelect, false);
-
   // Work-around for Stylish compatibility, which does not update gView in
   // its overridden showView() function.
   var stylishRadio = document.getElementById('userstyles-view');
@@ -114,52 +116,26 @@ var greasemonkeyAddons = {
   showView: function() {
     if ('userscripts' == gView) return;
 
-    greasemonkeyAddons.hideView();
-
     updateLastSelected('userscripts');
     gView='userscripts';
     document.documentElement.className += ' userscripts';
 
     // Update any possibly modified scripts.
     GM_config.updateModifiedScripts();
-
-    // Hide the native controls that don't work in the user scripts view.
-    function $(id) { return document.getElementById(id); }
-    function hide(el) { el=$(el); el && (el.hidden=true); }
-    var elementIds=[
-      'searchPanel', 'installFileButton', 'checkUpdatesAllButton',
-      'skipDialogButton', 'themePreviewArea', 'themeSplitter',
-      'showUpdateInfoButton', 'hideUpdateInfoButton',
-      'installUpdatesAllButton',
-      // Stylish injects these elements.
-      'copy-style-info', 'new-style'];
-    elementIds.forEach(hide);
-
-    var getMore = document.getElementById('getMore');
-    getMore.setAttribute('getMoreURL', 'http://userscripts.org/');
-    getMore.hidden = false;
-    getMore.value = 'Get User Scripts';
-
-    greasemonkeyAddons.fillList();
-    gExtensionsView.selectedItem = gExtensionsView.children[0];
-    // The setTimeout() here is for timing, to make sure the selection above
-    // has really happened.
-    setTimeout(greasemonkeyAddons.onAddonSelect, 0);
   },
 
   fillList: function() {
-    var config = GM_config;
-    var listbox = gExtensionsView;
-
     // Remove any pre-existing contents.
-    while (listbox.firstChild) {
-      listbox.removeChild(listbox.firstChild);
+    while (gUserscriptsView.firstChild) {
+      gUserscriptsView.removeChild(gUserscriptsView.firstChild);
     }
 
     // Add a list item for each script.
-    for (var i = 0, script = null; script = config.scripts[i]; i++) {
+    for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {
       greasemonkeyAddons.addScriptToList(script);
     }
+
+    gUserscriptsView.selectedIndex = 0;
   },
 
   hideView: function() {
@@ -179,7 +155,8 @@ var greasemonkeyAddons = {
     item.setAttribute('version', script.version);
     item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
-    // These hide extension-specific bits we don't want to display.
+
+    // Keeps native Firefox code from breaking.
     item.setAttribute('blocklisted', 'false');
     item.setAttribute('blocklistedsoft', 'false');
     item.setAttribute('compatible', 'true');
@@ -187,6 +164,9 @@ var greasemonkeyAddons = {
     item.setAttribute('providesUpdatesSecurely', 'true');
     item.setAttribute('satisfiesDependencies', 'true');
     item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
+    /*
+    // These hide extension-specific bits we don't want to display.
+    */
 
     if (script.id in GM_uninstallQueue) {
       item.setAttribute('opType', 'needs-uninstall');
@@ -197,14 +177,14 @@ var greasemonkeyAddons = {
 
   addScriptToList: function(script, beforeNode) {
     var item = greasemonkeyAddons.listitemForScript(script);
-    gExtensionsView.insertBefore(item, beforeNode || null);
+    gUserscriptsView.insertBefore(item, beforeNode || null);
     return item;
   },
 
   findSelectedScript: function() {
-    if (!gExtensionsView.selectedItem) return null;
+    if (!gUserscriptsView.selectedItem) return null;
     var scripts = GM_config.scripts;
-    var selectedScriptId = gExtensionsView.selectedItem.getAttribute('addonId');
+    var selectedScriptId = gUserscriptsView.selectedItem.getAttribute('addonId');
     for (var i = 0, script = null; script = scripts[i]; i++) {
       if (selectedScriptId == script.id) {
         return script;
@@ -213,17 +193,18 @@ var greasemonkeyAddons = {
     return null;
   },
 
+  /*
   // Todo: Completely replace this with overlaid XBL, like UninstallCancel.
   onAddonSelect: function(aEvent) {
     // We do all this work here, because the elements we want to change do
     // not exist until the item is selected.
 
-    if (!gExtensionsView.selectedItem) return;
+    if (!gUserscriptsView.selectedItem) return;
     if ('userscripts' != gView) return;
     var script = greasemonkeyAddons.findSelectedScript();
 
     // Remove/change the anonymous nodes we don't want.
-    var item = gExtensionsView.selectedItem;
+    var item = gUserscriptsView.selectedItem;
     var button;
 
     // Replace 'preferences' with 'edit'.
@@ -265,6 +246,7 @@ var greasemonkeyAddons = {
     button.setAttribute('command', 'cmd_userscript_uninstall_cancel');
     button.setAttribute('disabled', 'false');
   },
+  */
 
   doCommand: function(command) {
     var script = greasemonkeyAddons.findSelectedScript();
@@ -273,7 +255,7 @@ var greasemonkeyAddons = {
       return;
     }
 
-    var selectedListitem = gExtensionsView.selectedItem;
+    var selectedListitem = gUserscriptsView.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
       GM_openInEditor(script);
@@ -330,7 +312,7 @@ var greasemonkeyAddons = {
       return;
     }
 
-    var selectedItem = gExtensionsView.selectedItem;
+    var selectedItem = gUserscriptsView.selectedItem;
     var popup = document.getElementById('addonContextMenu');
     while (popup.hasChildNodes()) {
       popup.removeChild(popup.firstChild);
@@ -384,7 +366,7 @@ var greasemonkeyAddons = {
       popup.appendChild(document.createElement('menuseparator'));
 
       addMenuItem('Sort Scripts', 'cmd_userscript_sort',
-          gExtensionsView.itemCount > 1);
+          gUserscriptsView.itemCount > 1);
     }
   }
 };
