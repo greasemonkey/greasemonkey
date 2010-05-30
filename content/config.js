@@ -122,7 +122,7 @@ Config.prototype = {
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
-
+      script._earlyInject = node.getAttribute("earlyInject") == true.toString();
       this._scripts.push(script);
     }
 
@@ -209,6 +209,7 @@ Config.prototype = {
       scriptNode.setAttribute("description", scriptObj._description);
       scriptNode.setAttribute("version", scriptObj._version);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
+      scriptNode.setAttribute("earlyInject", scriptObj._earlyInject);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
@@ -284,6 +285,10 @@ Config.prototype = {
           case "description":
           case "version":
             script["_" + header] = value;
+            break;
+          case "run-at":
+            if(value=="document-start")
+              script._earlyInject=true;
             break;
           case "include":
             script._includes.push(value);
