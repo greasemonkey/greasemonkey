@@ -111,6 +111,12 @@ var greasemonkeyAddons = {
     GM_config.updateModifiedScripts();
   },
 
+  hideView: function() {
+    if ('userscripts' != gView) return;
+    document.documentElement.className = 
+      document.documentElement.className.replace(/ *\buserscripts\b/, '');
+  },
+
   fillList: function() {
     // Remove any pre-existing contents.
     while (gUserscriptsView.firstChild) {
@@ -123,12 +129,6 @@ var greasemonkeyAddons = {
     }
 
     gUserscriptsView.selectedIndex = 0;
-  },
-
-  hideView: function() {
-    if ('userscripts' != gView) return;
-    document.documentElement.className = 
-      document.documentElement.className.replace(/ *\buserscripts\b/, '');
   },
 
   listitemForScript: function(script) {
