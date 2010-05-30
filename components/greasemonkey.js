@@ -224,7 +224,7 @@ var greasemonkeyService = {
 
   initEarlyScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
-      return !script.delayInjection && script.enabled && script.earlyinject && script.matchesURL(url);
+      return !script.delayInjection && script.enabled && script.earlyInject && script.matchesURL(url);
     }
     //this.checkRefreshing(url, wrappedContentWin, chromeWin)
 
@@ -233,7 +233,7 @@ var greasemonkeyService = {
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
-      return !script.delayInjection && script.enabled  && !script.earlyinject && script.matchesURL(url);
+      return !script.delayInjection && script.enabled  && !script.earlyInject && script.matchesURL(url);
     }
     this.checkRefreshing(url, wrappedContentWin, chromeWin)
 
