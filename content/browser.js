@@ -64,11 +64,24 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.enabledWatcher = GM_hitch(this, "refreshStatus");
   GM_prefRoot.watch("enabled", this.enabledWatcher);
 
+  //Definte tab progress listener to catch document-start event onLocationChange on each tab
+  var tabProgressListener = {
+    onLocationChange:function(aBrowser,webProg,request,location){
+      GM_BrowserUI.locationChange(aBrowser._contentWindow);
+    },
+    onProgressChange:function(aBrowser,webProg,request,curProg,maxProg,curTotalProg,maxTotalProg){ },
+    onStateChange:function(aBrowser,webProg,request,aStateFlags,aStatus){ },
+    onStatusChange:function(aBrowser,webProg,request,aStatus,aMessage){ },
+    onSecurityChange:function(aBrowser,webProg,request,aState){ },
+    onRefreshAttempted:function(aBrowser,webProg,aRefreshURI,aMillis,aSameURI){ }
+  }
+
   // hook various events
   GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
+  window.gBrowser.addTabsProgressListener(tabProgressListener);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
@@ -118,6 +131,38 @@ GM_BrowserUI.registerMenuCommand = function(menuCommand) {
 GM_BrowserUI.openInTab = function(domWindow, url) {
   if (this.isMyWindow(domWindow)) {
     this.tabBrowser.addTab(url);
+  }
+};
+
+
+/**
+ * Gets called when a tab-onLocationChange event occurs somewhere in the browser.
+ * and is used to implement run-at document-start early-injection scripts
+ * If that document is in in the top-level window of the focused tab, find
+ * it's menu items and activate them.
+ */
+GM_BrowserUI.locationChange = function(e) {
+  var safeWin;
+  var unsafeWin;
+  var href;
+
+  if (!GM_getEnabled()) return;
+
+  safeWin = e;
+  unsafeWin = safeWin.wrappedJSObject;
+  href = safeWin.location.href;
+
+  if (GM_isGreasemonkeyable(href)) {
+    // if this content load is in the focused tab, attach the menuCommaander
+    if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
+      var commander = this.getCommander(safeWin);
+      this.currentMenuCommander = commander;
+      this.currentMenuCommander.attach();
+    }
+
+    this.gmSvc.documentStart(safeWin, window);
+
+    GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 };
 
