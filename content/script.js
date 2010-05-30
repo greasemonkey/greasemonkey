@@ -20,6 +20,7 @@ function Script(config) {
   this._resources = [];
   this._unwrap = false;
   this._dependFail = false
+  this._earlyInject = false;
   this.delayInjection = false;
   this._rawMeta = null;
 }
@@ -43,6 +44,7 @@ Script.prototype = {
   get description() { return this._description; },
   get version() { return this._version; },
   get enabled() { return this._enabled; },
+  get earlyInject() { return this._earlyInject; },
   set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
 
   get includes() { return this._includes.concat(); },
@@ -154,6 +156,7 @@ Script.prototype = {
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
     this._version = newScript._version;
+    this._earlyInject = newScript._earlyInject;
 
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
