@@ -21,22 +21,6 @@ showView = function(aView) {
   }
 };
 
-var _origBuildContextMenu = buildContextMenu;
-buildContextMenu = function(aEvent) {
-  if ('userscripts' == gView) {
-    greasemonkeyAddons.buildContextMenu(aEvent);
-  } else {
-    _origBuildContextMenu(aEvent);
-  }
-};
-
-var _origStartup = Startup;
-Startup = function() {
-  gUserscriptsView = document.getElementById("userscriptsView");
-  greasemonkeyAddons.fillList();
-  _origStartup();
-};
-
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 window.addEventListener("load", function() {
@@ -88,6 +72,9 @@ var observer = {
 
 // Set event listeners.
 window.addEventListener('load', function() {
+  gUserscriptsView = document.getElementById('userscriptsView');
+  greasemonkeyAddons.fillList();
+
   // Work-around for Stylish compatibility, which does not update gView in
   // its overridden showView() function.
   var stylishRadio = document.getElementById('userstyles-view');
@@ -146,7 +133,7 @@ var greasemonkeyAddons = {
 
   listitemForScript: function(script) {
     var item = document.createElement('richlistitem');
-    item.setAttribute('class', 'userscript');
+
     // Setting these attributes inherits the values into the same place they
     // would go for extensions.
     item.setAttribute('addonId', script.id);
@@ -155,19 +142,6 @@ var greasemonkeyAddons = {
     item.setAttribute('version', script.version);
     item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
-
-    // Keeps native Firefox code from breaking.
-    item.setAttribute('blocklisted', 'false');
-    item.setAttribute('blocklistedsoft', 'false');
-    item.setAttribute('compatible', 'true');
-    item.setAttribute('locked', 'false');
-    item.setAttribute('providesUpdatesSecurely', 'true');
-    item.setAttribute('satisfiesDependencies', 'true');
-    item.setAttribute('type', nsIUpdateItem.TYPE_EXTENSION);
-    /*
-    // These hide extension-specific bits we don't want to display.
-    */
-
     if (script.id in GM_uninstallQueue) {
       item.setAttribute('opType', 'needs-uninstall');
     }
@@ -192,61 +166,6 @@ var greasemonkeyAddons = {
     }
     return null;
   },
-
-  /*
-  // Todo: Completely replace this with overlaid XBL, like UninstallCancel.
-  onAddonSelect: function(aEvent) {
-    // We do all this work here, because the elements we want to change do
-    // not exist until the item is selected.
-
-    if (!gUserscriptsView.selectedItem) return;
-    if ('userscripts' != gView) return;
-    var script = greasemonkeyAddons.findSelectedScript();
-
-    // Remove/change the anonymous nodes we don't want.
-    var item = gUserscriptsView.selectedItem;
-    var button;
-
-    // Replace 'preferences' with 'edit'.
-    button = item.ownerDocument.getAnonymousElementByAttribute(
-        item, 'command', 'cmd_options');
-    if (!button) return;
-    button.setAttribute('label', GM_string('Edit'));
-    button.setAttribute('accesskey', GM_string('Edit.accesskey'));
-    button.setAttribute('tooltiptext', GM_string('Edit.tooltip'));
-    button.setAttribute('command', 'cmd_userscript_edit');
-    button.setAttribute('disabled', 'false');
-
-    // Rewire enable, disable, uninstall.
-    button = item.ownerDocument.getAnonymousElementByAttribute(
-        item, 'command', 'cmd_enable');
-    if (!button) return;
-    button.setAttribute('tooltiptext', GM_string('Enable.tooltip'));
-    button.setAttribute('command', 'cmd_userscript_enable');
-    button.setAttribute('disabled', 'false');
-
-    button = item.ownerDocument.getAnonymousElementByAttribute(
-        item, 'command', 'cmd_disable');
-    if (!button) return;
-    button.setAttribute('tooltiptext', GM_string('Disable.tooltip'));
-    button.setAttribute('command', 'cmd_userscript_disable');
-    button.setAttribute('disabled', 'false');
-
-    button = item.ownerDocument.getAnonymousElementByAttribute(
-        item, 'command', 'cmd_uninstall');
-    if (!button) return;
-    button.setAttribute('tooltiptext', GM_string('Uninstall.tooltip'));
-    button.setAttribute('command', 'cmd_userscript_uninstall');
-    button.setAttribute('disabled', 'false');
-
-    button = item.ownerDocument.getAnonymousElementByAttribute(
-        item, 'command', 'cmd_cancelUninstall');
-    if (!button) return;
-    button.setAttribute('tooltiptext', GM_string('UninstallCancel.tooltip'));
-    button.setAttribute('command', 'cmd_userscript_uninstall_cancel');
-    button.setAttribute('disabled', 'false');
-  },
-  */
 
   doCommand: function(command) {
     var script = greasemonkeyAddons.findSelectedScript();
@@ -312,61 +231,50 @@ var greasemonkeyAddons = {
       return;
     }
 
-    var selectedItem = gUserscriptsView.selectedItem;
-    var popup = document.getElementById('addonContextMenu');
-    while (popup.hasChildNodes()) {
-      popup.removeChild(popup.firstChild);
-    }
-
-    function forceDisabled(aEvent) {
-      if ('disabled' != aEvent.attrName) return;
-      if ('true' == aEvent.newValue) return;
-      aEvent.target.setAttribute('disabled', 'true');
-    }
-    function addMenuItem(label, command, enabled) {
-      var menuitem = document.createElement('menuitem');
-      menuitem.setAttribute('label', GM_string(label));
-      menuitem.setAttribute('accesskey', GM_string(label+'.accesskey'));
-      menuitem.setAttribute('command', command);
-
-      if ('undefined' == typeof enabled) enabled = true;
-      if (!enabled) {
-        menuitem.setAttribute('disabled', 'true');
-        // Something is un-setting the disabled attribute.  Work around that,
-        // this way for now.
-        menuitem.addEventListener('DOMAttrModified', forceDisabled, true);
-      }
-
-      popup.appendChild(menuitem);
-    }
-
-    if ('needs-uninstall' == selectedItem.getAttribute('opType')) {
-      addMenuItem('UninstallCancel', 'cmd_userscript_uninstall_cancel');
-      addMenuItem('UninstallNow', 'cmd_userscript_uninstall_now');
-    } else {
-      addMenuItem('Edit', 'cmd_userscript_edit');
-      if (script.enabled) {
-        addMenuItem('Disable', 'cmd_userscript_disable');
+    function $(id) { return document.getElementById(id); }
+    function setItemsHidden(hidden, idList) {
+      if (idList) {
+        var items = idList.map(function(id) {
+          return $('userscript_context_' + id);
+        });
       } else {
-        addMenuItem('Enable', 'cmd_userscript_enable');
+        var items = $('userscriptContextMenu').childNodes;
+        items = Array.prototype.slice.call(items);
       }
-      addMenuItem('Uninstall', 'cmd_userscript_uninstall');
+      items.forEach(function(item) {
+        item.setAttribute('hidden', hidden);
+      });
+    }
 
-      popup.appendChild(document.createElement('menuseparator'));
+    var standardItems = [
+      'move_up', 'move_down', 'move_top', 'move_bottom', 'sort',
+      'move_separator',
+      'edit', 'uninstall'];
+    var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
-      addMenuItem('Move Up', 'cmd_userscript_move_up',
-          !!selectedItem.previousSibling);
-      addMenuItem('Move Down', 'cmd_userscript_move_down',
-          !!selectedItem.nextSibling);
-      addMenuItem('Move To Top', 'cmd_userscript_move_top',
-          !!selectedItem.previousSibling);
-      addMenuItem('Move To Bottom', 'cmd_userscript_move_bottom',
-          !!selectedItem.nextSibling);
+    // Set everything hidden now, reveal the right selection below.
+    setItemsHidden(true);
 
-      popup.appendChild(document.createElement('menuseparator'));
-
-      addMenuItem('Sort Scripts', 'cmd_userscript_sort',
-          gUserscriptsView.itemCount > 1);
+    var selectedItem = gUserscriptsView.selectedItem;
+    if ('needs-uninstall' == selectedItem.getAttribute('opType')) {
+      setItemsHidden(false, uninstallItems);
+    } else {
+      // Set visibility.
+      setItemsHidden(false, standardItems);
+      setItemsHidden(false, script.enabled ? ['disable'] : ['enable']);
+      // Set disabled.
+      var atBottom = !selectedItem.nextSibling;
+      var atTop = !selectedItem.previousSibling;
+      // This setTimeout moves to after whatever black magic is removing
+      // these values.
+      // Todo: better fix.
+      setTimeout(function() {
+            setElementDisabledByID('userscript_context_move_up', atTop);
+            setElementDisabledByID('userscript_context_move_down', atBottom);
+            setElementDisabledByID('userscript_context_move_top', atTop);
+            setElementDisabledByID('userscript_context_move_bottom', atBottom);
+            setElementDisabledByID('userscript_context_sort', (atTop && atBottom));
+          }, 0);
     }
   }
 };

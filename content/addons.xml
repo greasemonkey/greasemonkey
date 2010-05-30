@@ -67,7 +67,9 @@
             tooltiptext="&cmd.cancelUninstall.tooltip;"
             command="cmd_userscript_uninstall_cancel"
           />
+          
           <!--
+          Todo: Make install/upgrade buttons like extensions if/when added.
           <xul:button class="installShow cancelInstallButton" label="&cancelInstall.label;"
                       accesskey="&cancelInstall.accesskey;" tooltiptext="&cmd.cancelInstall.tooltip;"
                       command="cmd_cancelInstall"/>
@@ -77,7 +79,6 @@
           -->
         </xul:hbox>
       </xul:vbox>
-
     </xul:hbox>
   </content>
 </binding>

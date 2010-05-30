@@ -7,6 +7,8 @@
 %extensionsDTD;
 <!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 %greasemonkeyDTD;
+<!ENTITY % greasemonkeyAddonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+%greasemonkeyAddonsDTD;
 ]>
 
 <?xml-stylesheet href="chrome://greasemonkey/content/addons.css" type="text/css"?>
@@ -28,23 +30,24 @@
 <notificationbox id="addonsMsg">
   <vbox id="userscriptsBox" insertafter="extensionsBox" flex="1">
     <hbox flex="1">
-      <richlistbox id="userscriptsView" flex="1"/>
+      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"/>
     </hbox>
   </vbox>
 </notificationbox>
 
 <hbox id="commandBarBottom">
-  <label id="getMoreUserscripts" class="text-link" 
+  <label id="getMoreUserscripts" class="text-link"
     onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
-    value="Get User Scripts" 
+    value="Get User Scripts"
     getMoreURL="http://userscripts.org/"
   />
   <button id="findUpdatesUserscripts"
-    oncommand="alert('Remove me, or implement me, before 0.9 release.')"
+    oncommand="alert('ReMoveme, or implement me, before 0.9 release.')"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
   />
 </hbox>
+
 
 <window id="extensionsManager">
   <commandset id="userscripts-commands"
@@ -63,6 +66,68 @@
 
     <command id="cmd_userscript_sort"/>
   </commandset>
+
+  <menupopup id="userscriptContextMenu"
+    onpopupshowing="greasemonkeyAddons.buildContextMenu(event);"
+  >
+    <menuitem id="userscript_context_move_up" command="cmd_userscript_move_up"
+      label="&MoveUp;" accesskey="&MoveUp.accesskey;"
+    />
+    <menuitem id="userscript_context_move_down" command="cmd_userscript_move_down"
+      label="&MoveDown;" accesskey="&MoveDown.accesskey;"
+    />
+    <menuitem id="userscript_context_move_top" command="cmd_userscript_move_top"
+      label="&MoveToTop;" accesskey="&MoveToTop.accesskey;"
+    />
+    <menuitem id="userscript_context_move_bottom" command="cmd_userscript_move_bottom"
+      label="&MoveToBottom;" accesskey="&MoveToBottom.accesskey;"
+    />
+    <menuitem id="userscript_context_sort" command="cmd_userscript_sort"
+      label="&SortScripts;" accesskey="&SortScripts.accesskey;"
+    />
+
+    <menuseparator id="userscript_context_move_separator"/>
+
+    <menuitem id="userscript_context_edit" command="cmd_userscript_edit"
+      label="&Edit;" accesskey="&Edit.accesskey;"
+    />
+
+    <menuitem id="userscript_context_uninstall" command="cmd_userscript_uninstall"
+      label="&cmd.uninstall.label;" accesskey="&cmd.uninstall2.accesskey;"
+    />
+    <menuitem id="userscript_context_uninstall_now" command="cmd_userscript_uninstall_now"
+      label="&UninstallNow;" accesskey="&UninstallNow.accesskey;"
+    />
+    <menuitem id="userscript_context_cancelUninstall" command="cmd_userscript_uninstall_cancel"
+      label="&cmd.cancelUninstall.label;" accesskey="&cmd.cancelUninstall.accesskey;"
+    />
+
+    <menuseparator/>
+
+    <!--
+    Todo: Make install/upgrade menu items like extensions if/when added.
+    <menuitem id="userscript_context_cancelInstall" command="cmd_cancelInstall"
+      label="&cmd.cancelInstall.label;" accesskey="&cmd.cancelInstall.accesskey;"/>
+    <menuitem id="userscript_context_cancelUpgrade" command="cmd_cancelUpgrade"
+      label="&cmd.cancelUpgrade.label;" accesskey="&cmd.cancelUpgrade.accesskey;"/>
+    <menuitem id="userscript_context_checkUpdate" command="cmd_checkUpdate"
+      label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
+    -->
+
+    <menuitem id="userscript_context_enable" command="cmd_userscript_enable"
+      label="&cmd.enable.label;" accesskey="&cmd.enable.accesskey;"/>
+    <menuitem id="userscript_context_disable" command="cmd_userscript_disable"
+      label="&cmd.disable.label;" accesskey="&cmd.disable.accesskey;"/>
+
+    <!--
+    Todo: as above.
+    <menuitem id="userscript_context_installUpdate" command="cmd_installUpdate"
+      label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"/>
+    <menuitem id="userscript_context_includeUpdate" command="cmd_includeUpdate"
+      label="&cmd.includeUpdate.label;" accesskey="&cmd.includeUpdate.accesskey;"
+      type="checkbox"/>
+    -->
+  </menupopup>
 </window>
 
 </overlay>
