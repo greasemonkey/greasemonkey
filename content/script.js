@@ -13,7 +13,7 @@ function Script(config) {
   this._namespace = null;
   this._description = null;
   this._version = null;
-  this._icon = null;
+  this._icon = new ScriptIcon(this);
   this._enabled = true;
   this._includes = [];
   this._excludes = [];
@@ -149,6 +149,8 @@ Script.prototype = {
       }
     }
 
+    var oldScriptID = this.id;
+
     // Copy new values.
     this._includes = newScript._includes;
     this._excludes = newScript._excludes;
@@ -164,6 +166,7 @@ Script.prototype = {
 
       this._dependhash = dependhash;
       this._icon = newScript._icon
+      this._icon._script = this;
       this._requires = newScript._requires;
       this._resources = newScript._resources;
 
@@ -183,6 +186,9 @@ Script.prototype = {
 
       this.delayInjection = true;
     }
+
+    this._changed("modified", oldScriptID);
+
     GM_log("< Updating Modified User Script");
   }
 };

@@ -21,7 +21,6 @@ ScriptResource.prototype = {
     return file;
   },
 
-  get fileURL() { return GM_getUriFromFile(this._file).spec; },
   get textContent() { return GM_getContents(this._file); },
 
   get dataContent() {

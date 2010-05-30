@@ -52,7 +52,8 @@ var observer = {
 
     // find the script's node in the listbox
     var listbox = gExtensionsView;
-    var node = document.getElementById('urn:greasemonkey:item:'+script.id);
+    var oldScriptID = (event == "modified") ? (data || script.id) : script.id;
+    var node = document.getElementById('urn:greasemonkey:item:' + oldScriptID);
     if (!node) return;
 
     switch (event) {
@@ -68,7 +69,7 @@ var observer = {
         break;
       case "modified":
         var item = greasemonkeyAddons.listitemForScript(script);
-        gExtensionsView.replaceChild(item, node);
+        listbox.replaceChild(item, node);
         break;
     }
   }
@@ -173,11 +174,7 @@ var greasemonkeyAddons = {
     item.setAttribute('name', script.name);
     item.setAttribute('description', script.description);
     item.setAttribute('version', script.version);
-    if (script.icon && script.icon.fileURL) {
-      item.setAttribute('iconURL', script.icon.fileURL);
-    } else {
-      item.setAttribute('iconURL', "chrome://greasemonkey/skin/userscript.png");
-    }
+    item.setAttribute('iconURL', script.icon.fileURL);
     item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
     // These hide extension-specific bits we don't want to display.

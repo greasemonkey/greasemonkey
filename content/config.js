@@ -121,16 +121,7 @@ Config.prototype = {
       script._name = node.getAttribute("name");
       script._namespace = node.getAttribute("namespace");
       script._description = node.getAttribute("description");
-      var icon = node.getAttribute("icon");
-      if (/^data:/i.test(icon)) {
-        // icon is a data scheme
-        script._icon = {_filename: icon, fileURL: icon};
-      } else if (icon) {
-        // icon is a file
-        var scriptIcon = new ScriptResource(script);
-        scriptIcon._filename = node.getAttribute("icon");
-        script._icon = scriptIcon;
-      }
+      script.icon.fileURL = node.getAttribute("icon");
       script._enabled = node.getAttribute("enabled") == true.toString();
 
       this._scripts.push(script);
@@ -218,9 +209,7 @@ Config.prototype = {
       scriptNode.setAttribute("namespace", scriptObj._namespace);
       scriptNode.setAttribute("description", scriptObj._description);
       scriptNode.setAttribute("version", scriptObj._version);
-      if(scriptObj._icon && scriptObj._icon._filename) {
-        scriptNode.setAttribute("icon", scriptObj._icon._filename);
-      }
+      scriptNode.setAttribute("icon", scriptObj.icon.filename);
       scriptNode.setAttribute("enabled", scriptObj._enabled);
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
@@ -308,15 +297,12 @@ Config.prototype = {
             script._rawMeta += header + '\0' + value + '\0';
             // aceept data uri schemes for image MIME types
             if(/^data:image\//i.test(value)){
-              script._icon = {_filename: value};
+              script.icon._dataURI = value;
               break;
             }
             try {
               var resUri = GM_uriFromUrl(value, uri);
-              var scriptIcon = new ScriptResource(script);
-              scriptIcon._downloadURL = resUri.spec;
-              scriptIcon.type = "icon";
-              script._icon = scriptIcon;
+              script.icon._downloadURL = resUri.spec;
             } catch (e) {
               if (updating) {
                 script._dependFail = true;
@@ -383,7 +369,6 @@ Config.prototype = {
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
     if (!script._version) script._version = "";
-    if (!script._icon) script._icon = null;
     if (script._includes.length == 0) script._includes.push("*");
 
     return script;
@@ -400,14 +385,9 @@ Config.prototype = {
     script._initFile(script._tempFile);
     script._tempFile = null;
 
-    if (script._icon) {
-      if(!script.icon._filename) {
-        // icon is a file
-        script._icon._initFile();
-      } else {
-        // icon is a data scheme
-        script._icon.fileURL = script._icon._filename;
-      }
+    // if icon had a file to download, then move the file
+    if(script.icon.hasDownloadURL()) {
+      script.icon._initFile();
     }
 
     for (var i = 0; i < script._requires.length; i++) {
@@ -523,7 +503,6 @@ Config.prototype = {
       var parsedScript = this.parse(
           GM_getContents(script._file), script._downloadURL, true);
       script.updateFromNewScript(parsedScript);
-      this._changed(script, "modified", null, true);
     }
 
     this._save();

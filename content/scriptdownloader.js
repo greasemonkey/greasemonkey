@@ -103,10 +103,12 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
+
   // if this.script.icon._filename exists then the icon is a data scheme
-  if(this.script.icon && !this.script.icon._filename) {
+  if (this.script.icon.hasDownloadURL()) {
     deps.push(this.script.icon);
   }
+
   for (var i = 0; i < deps.length; i++) {
     var dep = deps[i];
     if (this.checkDependencyURL(dep.urlToDownload)) {
@@ -173,7 +175,9 @@ function(dep, file, channel) {
         dep.updateScript = true;
       }
 
-      if (dep.type && dep.type == "icon" && !/^image\//i.test(channel.contentType)) {
+      // if the dependency type is icon, then check it's mime type
+      if (dep.type == "icon" &&
+          !/^image\//i.test(channel.contentType)) {
         this.errorInstallDependency(this.script, dep,
           "Error! @icon is not a image MIME type");
       }
@@ -214,6 +218,8 @@ GM_ScriptDownloader.prototype.finishInstall = function(){
     // Inject the script now that we have the new dependencies
     this.script._config.injectScript(this.script);
     this.delayInjection = false;
+
+    this.script._changed("modified", null);
 
     // Save new values to config.xml
     this.script._config._save();
