@@ -81,6 +81,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
+  //addTabsProgressListener requires firefox 3.5
   window.gBrowser.addTabsProgressListener(tabProgressListener);
 
   // listen for clicks on the install bar
@@ -137,9 +138,9 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 /**
  * This attaches the menu commander and is called from either of the functions
  * tabLocationChange or contentLoad below.
+ * if this content load is in the focused tab, attach the menuCommaander
  */
 GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
-  // if this content load is in the focused tab, attach the menuCommaander
   if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
     var commander = this.getCommander(safeWin);
     this.currentMenuCommander = commander;
@@ -166,11 +167,11 @@ GM_BrowserUI.tabLocationChange = function(contentWindow) {
 
   if (GM_isGreasemonkeyable(href)) {  
   	  
-    this.attachMenuCommander(safeWin,unsafeWin);
+    //this.attachMenuCommander(safeWin,unsafeWin);
 
     this.gmSvc.documentStart(safeWin, window);
 
-    GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
+    //GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 };
 
@@ -192,11 +193,11 @@ GM_BrowserUI.contentLoad = function(e) {
 
   if (GM_isGreasemonkeyable(href)) {
   	
-    //this.attachMenuCommander(safeWin,unsafeWin);//this should possibly only occur once see (above)
+    this.attachMenuCommander(safeWin,unsafeWin);//this should possibly only occur once see (above)
 
     this.gmSvc.domContentLoaded(safeWin, window);
 
-    //GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));//this should possibly only occur once see (above)
+    GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
