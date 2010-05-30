@@ -226,7 +226,7 @@ var greasemonkeyService = {
     function testMatch(script) {
       return !script.delayInjection && script.enabled && script.earlyInject && script.matchesURL(url);
     }
-    //this.checkRefreshing(url, wrappedContentWin, chromeWin)
+    this.checkRefreshing(url, wrappedContentWin, chromeWin)
 
     return GM_getConfig().getMatchingScripts(testMatch);
   },
@@ -235,7 +235,7 @@ var greasemonkeyService = {
     function testMatch(script) {
       return !script.delayInjection && script.enabled  && !script.earlyInject && script.matchesURL(url);
     }
-    this.checkRefreshing(url, wrappedContentWin, chromeWin)
+    this.checkRefreshing(url, wrappedContentWin, chromeWin)//should possibly only be done once (above)
 
     return this.config.getMatchingScripts(testMatch);
   },
