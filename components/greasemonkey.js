@@ -119,6 +119,15 @@ var greasemonkeyService = {
     throw new Error("Browser window is not registered.");
   },
 
+  documentStart: function(wrappedContentWin, chromeWin) {
+    var url = wrappedContentWin.document.location.href;
+    var scripts = this.initEarlyScripts(url, wrappedContentWin, chromeWin);
+
+    if (scripts.length > 0) {
+      this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
+    }
+  },
+
   domContentLoaded: function(wrappedContentWin, chromeWin) {
     var url = wrappedContentWin.document.location.href;
     var scripts = this.initScripts(url, wrappedContentWin, chromeWin);
@@ -213,20 +222,31 @@ var greasemonkeyService = {
     return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
   },
 
+  initEarlyScripts: function(url, wrappedContentWin, chromeWin) {
+    function testMatch(script) {
+      return !script.delayInjection && script.enabled && script.earlyinject && script.matchesURL(url);
+    }
+    this.checkRefreshing(url, wrappedContentWin, chromeWin)
+
+    return GM_getConfig().getMatchingScripts(testMatch);
+  },
+
   initScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
-      return !script.delayInjection && script.enabled && script.matchesURL(url);
+      return !script.delayInjection && script.enabled  && !script.earlyinject && script.matchesURL(url);
     }
-
-    // Todo: Try to implement this w/out global state.
-    this.config.wrappedContentWin = wrappedContentWin;
-    this.config.chromeWin = chromeWin;
-
-    if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-      this.config.updateModifiedScripts();
-    }
+    this.checkRefreshing(url, wrappedContentWin, chromeWin)
 
     return this.config.getMatchingScripts(testMatch);
+  },
+
+  checkRefreshing: function(url, wrappedContentWin, chromeWin) {
+    if (GM_prefRoot.getValue('enableScriptRefreshing')) {
+      // Todo: Try to implement this w/out global state.
+      this.config.wrappedContentWin = wrappedContentWin;
+      this.config.chromeWin = chromeWin;
+      this.config.updateModifiedScripts();
+    }
   },
 
   injectScripts: function(scripts, url, wrappedContentWin, chromeWin) {
