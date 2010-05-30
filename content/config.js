@@ -296,7 +296,7 @@ Config.prototype = {
           case "icon":
             script._rawMeta += header + '\0' + value + '\0';
             // aceept data uri schemes for image MIME types
-            if(/^data:image\//i.test(value)){
+            if (/^data:image\//i.test(value)){
               script.icon._dataURI = value;
               break;
             }
@@ -386,7 +386,7 @@ Config.prototype = {
     script._tempFile = null;
 
     // if icon had a file to download, then move the file
-    if(script.icon.hasDownloadURL()) {
+    if (script.icon.hasDownloadURL()) {
       script.icon._initFile();
     }
 

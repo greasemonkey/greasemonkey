@@ -211,7 +211,7 @@ function GM_getBinaryContents(file) {
 }
 
 function GM_getContents(file, charset) {
-  if( !charset ) {
+  if (!charset) {
     charset = "UTF-8"
   }
   var ioService=Components.classes["@mozilla.org/network/io-service;1"]

@@ -87,7 +87,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
-    if(this.installing_){
+    if (this.installing_){
       this.showInstallDialog();
     } else {
       this.showScriptView();
@@ -240,7 +240,7 @@ GM_ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg
 GM_ScriptDownloader.prototype.installScript = function(){
   if (this.dependencyError) {
     alert(this.dependencyError);
-  } else if(this.dependenciesLoaded_) {
+  } else if (this.dependenciesLoaded_) {
     this.win_.GM_BrowserUI.installScript(this.script)
   } else {
     this.installOnCompletion_ = true;
