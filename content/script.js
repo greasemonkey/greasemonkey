@@ -133,7 +133,6 @@ Script.prototype = {
   },
 
   isModified: function() {
-    this.delayInjection = false;
     if (this._modified != this._file.lastModifiedTime) {
       this._modified = this._file.lastModifiedTime;
       return true;

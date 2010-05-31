@@ -202,6 +202,7 @@ GM_ScriptDownloader.prototype.finishInstall = function(){
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
     this.script._config.injectScript(this.script);
+    this.delayInjection = false;
 
     // Save new values to config.xml
     this.script._config._save();

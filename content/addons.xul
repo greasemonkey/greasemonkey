@@ -48,7 +48,6 @@
   />
 </hbox>
 
-
 <window id="extensionsManager">
   <commandset id="userscripts-commands"
       oncommand="greasemonkeyAddons.doCommand(event.target.id);">
