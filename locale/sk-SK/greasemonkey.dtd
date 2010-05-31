@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Popis">
 <!ENTITY newscript.includes "Zahŕňa (jeden na riadok)">
 <!ENTITY newscript.excludes "Vylučuje (jeden na riadok)">
+<!ENTITY Uninstall "Odinštalovať">
+<!ENTITY AlsoUninstallPrefs "Odinštalovať aj priradené nastavenia">

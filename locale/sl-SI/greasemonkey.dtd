@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Vključuje (eno na vrstico)">
 <!ENTITY newscript.excludes "Izključuje (eno na vrstico)">
+<!ENTITY Uninstall "Odstrani">
+<!ENTITY AlsoUninstallPrefs "Odstrani tudi povezane nastavitve">

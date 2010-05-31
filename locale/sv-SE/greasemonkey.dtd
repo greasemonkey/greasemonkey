@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Beskrivning">
 <!ENTITY newscript.includes "Inkluderar (En per rad)">
 <!ENTITY newscript.excludes "Exkluderar (En per rad)">
+<!ENTITY Uninstall "Avinstallera">
+<!ENTITY AlsoUninstallPrefs "Avinstallera även tillhörande inställningar">

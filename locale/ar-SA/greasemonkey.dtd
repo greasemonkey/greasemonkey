@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "الوصف">
 <!ENTITY newscript.includes "يشمل الصفحات (واحد في كل سطر)">
 <!ENTITY newscript.excludes "لايشمل الصفحات (واحد في كل سطر)">
+<!ENTITY Uninstall "إزالة التثبيت">
+<!ENTITY AlsoUninstallPrefs "أيضا إزالة الاعدادات المرتبطه بها">

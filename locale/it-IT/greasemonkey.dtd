@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Descrizione">
 <!ENTITY newscript.includes "Pagine incluse (una per riga)">
 <!ENTITY newscript.excludes "Pagine escluse (una per riga)">
+<!ENTITY Uninstall "Disinstalla">
+<!ENTITY AlsoUninstallPrefs "Disinstalla anche le preferenze associate">

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Охоплення (одне на рядок)">
 <!ENTITY newscript.excludes "Винятки (один на рядок)">
+<!ENTITY Uninstall "Усунути">
+<!ENTITY AlsoUninstallPrefs "Також прибрати пов’язані налаштування">

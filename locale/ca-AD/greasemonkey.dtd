@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Descripció">
 <!ENTITY newscript.includes "Inclou (Un per línia)">
 <!ENTITY newscript.excludes "Exclou (Un per línia)">
+<!ENTITY Uninstall "Desinstal.la">
+<!ENTITY AlsoUninstallPrefs "També desinstal.la les preferències associades">
