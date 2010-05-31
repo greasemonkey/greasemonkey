@@ -135,7 +135,7 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 
 /**
  * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them (attach the menuCommaander).
+ * it's menu items and activate them.
  */
 GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
   if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
