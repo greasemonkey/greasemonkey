@@ -12,6 +12,10 @@ showView = function(aView) {
     greasemonkeyAddons.showView();
   } else {
     greasemonkeyAddons.hideView();
+
+    // Native code will break us, so hide from it before running it.
+    if ('userscripts' == gView) gView = null;
+
     _origShowView(aView);
   }
 };
@@ -58,6 +62,9 @@ window.addEventListener('load', function() {
   gUserscriptsView = document.getElementById('userscriptsView');
   greasemonkeyAddons.fillList();
 
+  gUserscriptsView.addEventListener(
+      'select', greasemonkeyAddons.updateLastSelected, false);
+
   GM_config.addObserver(observer);
 
   // Work-around for Stylish compatibility, which does not update gView in
@@ -89,13 +96,15 @@ window.addEventListener('unload', function() {
 
 var greasemonkeyAddons = {
   showView: function() {
+    gUserscriptsView = document.getElementById('userscriptsView');
     if ('userscripts' == gView) return;
 
-    updateLastSelected('userscripts');
+    document.getElementById('viewGroup')
+        .setAttribute('last-selected', 'userscripts');
+    greasemonkeyAddons.reselectLastSelected();
     gView='userscripts';
     document.documentElement.className += ' userscripts';
 
-    // Update any possibly modified scripts.
     GM_config.updateModifiedScripts();
   },
 
@@ -103,6 +112,15 @@ var greasemonkeyAddons = {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/, '');
+  },
+
+  updateLastSelected: function() {
+    if (!gUserscriptsView.selectedItem) return;
+    var userscriptsRadio = document.getElementById('userscripts-view');
+    var selectedId = gUserscriptsView.selectedItem.getAttribute('id');
+    if (selectedId) {
+      userscriptsRadio.setAttribute('last-selected', selectedId);
+    }
   },
 
   fillList: function() {
@@ -116,7 +134,25 @@ var greasemonkeyAddons = {
       greasemonkeyAddons.addScriptToList(script);
     }
 
-    gUserscriptsView.selectedIndex = 0;
+    greasemonkeyAddons.reselectLastSelected();
+  },
+
+  reselectLastSelected: function() {
+    if (!gUserscriptsView) return;
+
+    var userscriptsRadio = document.getElementById('userscripts-view');
+    var lastId = userscriptsRadio.getAttribute('last-selected');
+
+    // I have no idea why, but this setTimeout makes it work.
+    setTimeout(function() {
+          if ('userscripts' == gView) {
+            if (lastId) {
+              gUserscriptsView.selectedItem = document.getElementById(lastId);
+            }
+            gUserscriptsView.scrollBoxObject
+                .scrollToElement(gUserscriptsView.selectedItem);
+          }
+        }, 0);
   },
 
   listitemForScript: function(script) {
