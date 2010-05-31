@@ -134,9 +134,8 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 };
 
 /**
- * This attaches the menu commander and is called from either of the functions
- * tabLocationChange or contentLoad below.
- * if this content load is in the focused tab, attach the menuCommaander
+ * If that document is in in the top-level window of the focused tab, find
+ * it's menu items and activate them (attach the menuCommaander).
  */
 GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
   if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
@@ -148,9 +147,7 @@ GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
 
 /**
  * Gets called when a tab-onLocationChange event occurs in the browser.
- * and is used to implement run-at document-start early-injection scripts
- * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them.
+ * used to implement run-at document-start early-injection scripts
  */
 GM_BrowserUI.tabLocationChange = function(contentWindow) {
   var safeWin;
@@ -164,18 +161,14 @@ GM_BrowserUI.tabLocationChange = function(contentWindow) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    //this.attachMenuCommander(safeWin,unsafeWin);
+    //this.attachMenuCommander(safeWin, unsafeWin);
 
     this.gmSvc.documentStart(safeWin, window);
-
-    //GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
 };
 
 /**
  * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
- * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them.
  */
 GM_BrowserUI.contentLoad = function(e) {
   var safeWin;
@@ -189,7 +182,7 @@ GM_BrowserUI.contentLoad = function(e) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    this.attachMenuCommander(safeWin,unsafeWin);
+    this.attachMenuCommander(safeWin, unsafeWin);
 
     this.gmSvc.domContentLoaded(safeWin, window);
 
