@@ -6,19 +6,13 @@ Hide native view/buttons, when user scripts view is open.
 #getMoreUserscripts,
 #findUpdatesUserscripts,
 .userscripts #extensionsBox,
-.userscripts #installFileButton,
 .userscripts #getMore,
-.userscripts #continueDialogButton,
-.userscripts #installUpdatesAllButton,
-.userscripts #checkUpdatesAllButton,
-.userscripts #skipDialogButton,
-.userscripts #showUpdateInfoButton,
-.userscripts #hideUpdateInfoButton
+.userscripts #commandBarBottom button
 {
   display: none;
 }
 .userscripts #userscriptsBox,
-.userscripts #findUpdatesUserscripts,
+.userscripts #commandBarBottom button#findUpdatesUserscripts,
 .userscripts #getMoreUserscripts
 {
   display: -moz-box;

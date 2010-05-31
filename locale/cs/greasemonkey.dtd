@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Popis">
 <!ENTITY newscript.includes "Zahrnuje (jeden na řádek)">
 <!ENTITY newscript.excludes "Vylučuje (jeden na řádek)">
+<!ENTITY Uninstall "Odinstalovat">
+<!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
