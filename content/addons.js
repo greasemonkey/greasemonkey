@@ -99,6 +99,9 @@ var greasemonkeyAddons = {
 
     document.getElementById('viewGroup')
         .setAttribute('last-selected', 'userscripts');
+    var userscriptsRadio = document.getElementById('userscripts-view');
+    var viewGroup = document.getElementById("viewGroup");
+    viewGroup.selectedItem = userscriptsRadio;
     greasemonkeyAddons.reselectLastSelected();
     gView='userscripts';
     document.documentElement.className += ' userscripts';
@@ -149,8 +152,10 @@ var greasemonkeyAddons = {
             if (lastId) {
               gUserscriptsView.selectedItem = document.getElementById(lastId);
             }
-            gUserscriptsView.scrollBoxObject
-                .scrollToElement(gUserscriptsView.selectedItem);
+            if (gUserscriptsView.selectedItem) {
+              gUserscriptsView.scrollBoxObject
+                  .scrollToElement(gUserscriptsView.selectedItem);
+            }
           }
         }, 0);
   },
