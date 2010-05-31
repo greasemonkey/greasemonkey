@@ -245,7 +245,10 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin, testMatch) {
-    this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
+    if (!docStartEnabled) {
+      this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
+    }
+
     return this.config.getMatchingScripts(testMatch);
   },
 
