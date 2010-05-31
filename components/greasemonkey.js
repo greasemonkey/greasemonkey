@@ -232,9 +232,9 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
-  	
-  	var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart", true);
-  	
+    
+    var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart", true);
+    
     function testMatch(script) {
       return !script.delayInjection && script.enabled  && ( !docStartEnabled || !script.earlyInject ) && script.matchesURL(url);
     }
@@ -244,7 +244,7 @@ var greasemonkeyService = {
   },
 
   updateModifiedScripts: function(url, wrappedContentWin, chromeWin) {
-  	// Todo: Try to implement this w/out global state.
+    // Todo: Try to implement this w/out global state.
     this.config.wrappedContentWin = wrappedContentWin;
     this.config.chromeWin = chromeWin;
     if (GM_prefRoot.getValue('enableScriptRefreshing')) {

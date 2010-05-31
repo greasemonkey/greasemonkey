@@ -64,33 +64,32 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.enabledWatcher = GM_hitch(this, "refreshStatus");
   GM_prefRoot.watch("enabled", this.enabledWatcher);
 
-  //Definte tab progress listener to catch document-start event onLocationChange on each tab
-  var tabProgressListener = {
-    onLocationChange:function(aBrowser,webProg,request,location){
-      GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
-    },
-    onProgressChange:function(aBrowser,webProg,request,curProg,maxProg,curTotalProg,maxTotalProg){ },
-    onStateChange:function(aBrowser,webProg,request,aStateFlags,aStatus){ },
-    onStatusChange:function(aBrowser,webProg,request,aStatus,aMessage){ },
-    onSecurityChange:function(aBrowser,webProg,request,aState){ },
-    onRefreshAttempted:function(aBrowser,webProg,aRefreshURI,aMillis,aSameURI){ }
-  }
-
   // hook various events
   GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
-  
-  //addTabsProgressListener requires firefox 3.5
-  if( GM_prefRoot.getValue("enableDocumentStart", true) ){
-	  try { 
-	  	window.gBrowser.addTabsProgressListener(tabProgressListener);
-		} catch (e) {
-			GM_prefRoot.setValue("enableDocumentStart", false)
-		}
-	}
-	
+
+  //document-start - addTabsProgressListener requires firefox 3.5
+  if (GM_prefRoot.getValue("enableDocumentStart", true)) {
+    try {
+      //Definte tab progress listener to catch document-start event onLocationChange per tab
+      var tabProgressListener = {
+        onLocationChange:function(aBrowser,webProg,request,location){
+          GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
+        },
+        onProgressChange:function(aBrowser,webProg,request,curProg,maxProg,curTotalProg,maxTotalProg){ },
+        onStateChange:function(aBrowser,webProg,request,aStateFlags,aStatus){ },
+        onStatusChange:function(aBrowser,webProg,request,aStatus,aMessage){ },
+        onSecurityChange:function(aBrowser,webProg,request,aState){ },
+        onRefreshAttempted:function(aBrowser,webProg,aRefreshURI,aMillis,aSameURI){ }
+      }
+      window.gBrowser.addTabsProgressListener(tabProgressListener);
+    } catch (e) {
+      GM_prefRoot.setValue("enableDocumentStart", false)
+    }
+  }
+
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
             .getService(Components.interfaces.nsIObserverService)
