@@ -30,8 +30,7 @@ var observer = {
       return;
     }
 
-    // find the script's node in the listbox
-    var listbox = gExtensionsView;
+    // find the script's node
     var node = document.getElementById('urn:greasemonkey:item:'+script.id);
     if (!node) return;
 
