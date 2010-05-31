@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
+<!ENTITY Uninstall "Usuń">
+<!ENTITY AlsoUninstallPrefs "Usuń także skojarzone ustawienia">

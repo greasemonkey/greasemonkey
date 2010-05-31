@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Descriere">
 <!ENTITY newscript.includes "Include (unu pe linie)">
 <!ENTITY newscript.excludes "Exclude (unu pe linie)">
+<!ENTITY Uninstall "Dezinstaleaza">
+<!ENTITY AlsoUninstallPrefs "Dezinstaleaza si preferintele asociate">

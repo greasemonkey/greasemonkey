@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Beschreibung:">
 <!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
+<!ENTITY Uninstall "Deinstallieren">
+<!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">

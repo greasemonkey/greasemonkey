@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Tanım">
 <!ENTITY newscript.includes "Dahil olanlar (Her satıra bir tane)">
 <!ENTITY newscript.excludes "Hariç olanlar (Her satıra bir tane)">
+<!ENTITY Uninstall "Kaldır">
+<!ENTITY AlsoUninstallPrefs "İlgili tercihleri de kaldır">
