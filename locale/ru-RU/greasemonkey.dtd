@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Описание">
 <!ENTITY newscript.includes "Включения (одно на строку)">
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
+<!ENTITY Uninstall "Удалить скрипт">
+<!ENTITY AlsoUninstallPrefs "Удалять ассоциированные настройки">

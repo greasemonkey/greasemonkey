@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Kuvaus">
 <!ENTITY newscript.includes "Käytä sivuilla (yksi per rivi)">
 <!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
+<!ENTITY Uninstall "Poista skripti">
+<!ENTITY AlsoUninstallPrefs "Poista myös skriptin asetukset">

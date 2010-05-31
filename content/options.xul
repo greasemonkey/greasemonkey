@@ -30,9 +30,9 @@
   </groupbox>
 
   <groupbox>
-    <caption label="&manage.label.btnUninstall;" />
+    <caption label="&Uninstall;" />
     <checkbox id="check-uninstall"
-      label="&manage.label.chkUninstall;" 
+      label="&AlsoUninstallPrefs;" 
       oncommand="GM_setUninstallPrefs(this)" />
   </groupbox>
 </vbox>

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Укључи (једно по линији)">
 <!ENTITY newscript.excludes "Изузми (једно по линији)">
+<!ENTITY Uninstall "Деинсталирај">
+<!ENTITY AlsoUninstallPrefs "Деинсталирај и подешавања">

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "腳本將套用到下列網頁 (每行一個網址)">
 <!ENTITY newscript.excludes "例外網頁 (每行一個網址)">
+<!ENTITY Uninstall "移除腳本">
+<!ENTITY AlsoUninstallPrefs "同時清除腳本的相關設定">

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "説明">
 <!ENTITY newscript.includes "実行するページ (改行で複数指定)">
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
+<!ENTITY Uninstall "アンインストール">
+<!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">

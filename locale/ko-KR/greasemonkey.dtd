@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "설명">
 <!ENTITY newscript.includes "동작할 페이지 (한 줄당 하나)">
 <!ENTITY newscript.excludes "동작하지 않을 페이지 (한 줄당 하나)">
+<!ENTITY Uninstall "삭제">
+<!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 함께 삭제">
