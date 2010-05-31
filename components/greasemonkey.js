@@ -120,25 +120,8 @@ var greasemonkeyService = {
   },
 
   prepareScripts: function (event, wrappedContentWin, chromeWin) {
-    function allMatch(script) {
-       return !script.delayInjection && script.enabled &&
-                script.matchesURL(url);
-    }
-    function loadedMatch(script) {
-      return !script.delayInjection && script.enabled &&
-              !script.earlyInject && script.matchesURL(url);
-    }
-
-    function earlyMatch(script) {
-        return !script.delayInjection && script.enabled &&
-                script.earlyInject && script.matchesURL(url);
-    }
-
-    var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart");
-    var testMatch = 'start' == event ? earlyMatch : docStartEnabled ? loadedMatch : allMatch;
     var url = wrappedContentWin.document.location.href;
-    var scripts = this['start' == event ? 'initEarlyScripts' : 
-        'initScripts'](url, wrappedContentWin, chromeWin, testMatch);
+    var scripts = this.initScripts(url, wrappedContentWin, chromeWin, event);
 
     if (scripts.length > 0) {
       this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
@@ -239,13 +222,26 @@ var greasemonkeyService = {
     return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
   },
 
-  initEarlyScripts: function(url, wrappedContentWin, chromeWin, testMatch) {
-    this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
-    return this.config.getMatchingScripts(testMatch);
-  },
+  initScripts: function(url, wrappedContentWin, chromeWin, event) {
+    function allMatch(script) {
+       return !script.delayInjection && script.enabled &&
+                script.matchesURL(url);
+    }
+    function loadedMatch(script) {
+      return !script.delayInjection && script.enabled &&
+              !script.earlyInject && script.matchesURL(url);
+    }
 
-  initScripts: function(url, wrappedContentWin, chromeWin, testMatch) {
-    if (!docStartEnabled) {
+    function earlyMatch(script) {
+        return !script.delayInjection && script.enabled &&
+                script.earlyInject && script.matchesURL(url);
+    }
+
+    var enableDocumentStart = GM_prefRoot.getValue("enableDocumentStart");
+    var testMatch = 'start' == event ? earlyMatch : 
+        enableDocumentStart ? loadedMatch : allMatch;
+
+    if (!enableDocumentStart || event == "start") {
       this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
     }
 
