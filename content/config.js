@@ -123,6 +123,7 @@ Config.prototype = {
       script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
       script._earlyInject = node.getAttribute("earlyInject") == true.toString();
+      
       this._scripts.push(script);
     }
 

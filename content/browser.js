@@ -62,21 +62,23 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   //document-start - addTabsProgressListener requires firefox 3.5
   if (GM_prefRoot.getValue("enableDocumentStart", true)) {
+  	//Tab progress listener for document-start event (onLocationChange per tab)
+    var tabProgressListener = {
+      onLocationChange: function(aBrowser, webProg, request, location) {
+        GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
+      },
+      onProgressChange: function(b, wProg, r, cProg, mProg, cTProg, mTProg) { },
+      onStateChange: function(b, wProg, r, aStateFlags, aStatus) { },
+      onStatusChange: function(b, wProg, r, aStatus, aMessage) { },
+      onSecurityChange: function(b, wProg, r, aState) { },
+      onRefreshAttempted: function(b, wProg, aRefreshURI, ms, aSameURI) { }
+    }
+    // Attempt to attach the listener, requires firefox 3.5
     try {
-      //Define tab progress listener to catch document-start event onLocationChange per tab
-      var tabProgressListener = {
-        onLocationChange: function(aBrowser, webProg, request, location) {
-          GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
-        },
-        onProgressChange: function(aBrowser, wProg, req, curProg, maxProg, curTotProg, maxTotProg) { },
-        onStateChange: function(aBrowser, wProg, req, aStateFlags, aStatus) { },
-        onStatusChange: function(aBrowser, wProg, req, aStatus, aMessage) { },
-        onSecurityChange: function(aBrowser, wProg, req, aState) { },
-        onRefreshAttempted: function(aBrowser, wProg, aRefreshURI, aMillis, aSameURI) { }
-      }
       window.gBrowser.addTabsProgressListener(tabProgressListener);
     } catch (e) {
-      GM_prefRoot.setValue("enableDocumentStart", false)
+      GM_prefRoot.setValue("enableDocumentStart", false);
+      tabProgressListener = null;
     }
   }
 
@@ -162,7 +164,6 @@ GM_BrowserUI.tabLocationChange = function(contentWindow) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-
     //this.attachMenuCommander(safeWin,unsafeWin);
 
     this.gmSvc.documentStart(safeWin, window);
@@ -188,7 +189,6 @@ GM_BrowserUI.contentLoad = function(e) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-
     this.attachMenuCommander(safeWin,unsafeWin);//this should possibly only occur once see (above)
 
     this.gmSvc.domContentLoaded(safeWin, window);

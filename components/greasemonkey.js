@@ -234,7 +234,6 @@ var greasemonkeyService = {
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
     var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart", true);
-
     function testMatch(script) {
       return !script.delayInjection && script.enabled  &&
              ( !docStartEnabled || !script.earlyInject ) &&
@@ -252,6 +251,7 @@ var greasemonkeyService = {
     // Todo: Try to implement this w/out global state.
     this.config.wrappedContentWin = wrappedContentWin;
     this.config.chromeWin = chromeWin;
+
     if (GM_prefRoot.getValue('enableScriptRefreshing')) {
       this.config.updateModifiedScripts();
     }
