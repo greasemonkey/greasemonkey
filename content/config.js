@@ -287,8 +287,7 @@ Config.prototype = {
             script["_" + header] = value;
             break;
           case "run-at":
-            if(value=="document-start")
-              script._earlyInject=true;
+            if (value=="document-start") script._earlyInject=true;
             break;
           case "include":
             script._includes.push(value);
