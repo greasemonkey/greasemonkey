@@ -161,8 +161,8 @@ GM_BrowserUI.tabLocationChange = function(contentWindow) {
   unsafeWin = safeWin.wrappedJSObject;
   href = safeWin.location.href;
 
-  if (GM_isGreasemonkeyable(href)) {  
-  	  
+  if (GM_isGreasemonkeyable(href)) {
+
     //this.attachMenuCommander(safeWin,unsafeWin);
 
     this.gmSvc.documentStart(safeWin, window);
@@ -188,7 +188,7 @@ GM_BrowserUI.contentLoad = function(e) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-  	
+
     this.attachMenuCommander(safeWin,unsafeWin);//this should possibly only occur once see (above)
 
     this.gmSvc.domContentLoaded(safeWin, window);
