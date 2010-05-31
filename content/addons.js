@@ -64,6 +64,8 @@ window.addEventListener('load', function() {
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
+  gUserscriptsView.addEventListener(
+      'keypress', greasemonkeyAddons.onKeypress, false);
 
   GM_config.addObserver(observer);
 
@@ -106,12 +108,14 @@ var greasemonkeyAddons = {
     document.documentElement.className += ' userscripts';
 
     GM_config.updateModifiedScripts();
+    gUserscriptsView.focus();
   },
 
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/, '');
+    gExtensionsView.focus();
   },
 
   updateLastSelected: function() {
@@ -302,5 +306,22 @@ var greasemonkeyAddons = {
             setElementDisabledByID('userscript_context_sort', (atTop && atBottom));
           }, 0);
     }
+  },
+
+  onKeypress: function(aEvent) {
+    var viewGroup = document.getElementById("viewGroup");
+    switch (aEvent.keyCode) {
+      case aEvent.DOM_VK_LEFT:
+      case aEvent.DOM_VK_RIGHT:
+        let nextFlag = (aEvent.keyCode == aEvent.DOM_VK_RIGHT);
+        if (getComputedStyle(viewGroup, "").direction == "rtl")
+          nextFlag = !nextFlag;
+        viewGroup.checkAdjacentElement(nextFlag);
+        break;
+      default:
+        return; // don't consume the event
+    }
+    aEvent.stopPropagation();
+    aEvent.preventDefault();
   }
 };
