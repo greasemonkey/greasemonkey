@@ -2,11 +2,6 @@
 var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
-var GM_stringBundle = Components
-    .classes["@mozilla.org/intl/stringbundle;1"]
-    .getService(Components.interfaces.nsIStringBundleService)
-    .createBundle("chrome://greasemonkey/locale/gm-manage.properties");
-function GM_string(key) { return GM_stringBundle.GetStringFromName(key); }
 
 (function() {
 // Override some built-in functions, with a closure reference to the original
@@ -23,13 +18,6 @@ showView = function(aView) {
 
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
-window.addEventListener("load", function() {
-  GM_config.addObserver(observer);
-}, false);
-window.addEventListener("unload", function() {
-  GM_config.removeObserver(observer);
-}, false);
-
 var observer = {
   notifyEvent: function(script, event, data) {
     // if the currently open tab is not the userscripts tab, then ignore event.
@@ -68,12 +56,13 @@ var observer = {
     }
   }
 };
-})();
 
 // Set event listeners.
 window.addEventListener('load', function() {
   gUserscriptsView = document.getElementById('userscriptsView');
   greasemonkeyAddons.fillList();
+
+  GM_config.addObserver(observer);
 
   // Work-around for Stylish compatibility, which does not update gView in
   // its overridden showView() function.
@@ -90,6 +79,8 @@ window.addEventListener('load', function() {
 }, false);
 
 window.addEventListener('unload', function() {
+  GM_config.removeObserver(observer);
+
   for (var id in GM_uninstallQueue) {
     GM_config.uninstall(GM_uninstallQueue[id]);
     delete(GM_uninstallQueue[id]);
@@ -98,6 +89,7 @@ window.addEventListener('unload', function() {
   // Todo: This without dipping into private members.
   GM_config._save(true);
 }, false);
+})();
 
 var greasemonkeyAddons = {
   showView: function() {
@@ -113,7 +105,7 @@ var greasemonkeyAddons = {
 
   hideView: function() {
     if ('userscripts' != gView) return;
-    document.documentElement.className = 
+    document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/, '');
   },
 
@@ -198,7 +190,9 @@ var greasemonkeyAddons = {
       GM_config.move(script, -1 * GM_config.scripts.length);
       break;
     case 'cmd_userscript_sort':
-      function scriptCmp(a, b) { return a.name < b.name ? -1 : 1; }
+      function scriptCmp(a, b) {
+        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+      }
       GM_config._scripts.sort(scriptCmp);
       GM_config._save();
       greasemonkeyAddons.fillList();
