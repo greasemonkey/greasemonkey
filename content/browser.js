@@ -62,7 +62,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   //document-start - addTabsProgressListener requires firefox 3.5
   if (GM_prefRoot.getValue("enableDocumentStart", true)) {
-  	//Tab progress listener for document-start event (onLocationChange per tab)
+    //Tab progress listener for document-start event (onLocationChange per tab)
     var tabProgressListener = {
       onLocationChange: function(aBrowser, webProg, request, location) {
         GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
@@ -189,7 +189,7 @@ GM_BrowserUI.contentLoad = function(e) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    this.attachMenuCommander(safeWin,unsafeWin);//this should possibly only occur once see (above)
+    this.attachMenuCommander(safeWin,unsafeWin);
 
     this.gmSvc.domContentLoaded(safeWin, window);
 

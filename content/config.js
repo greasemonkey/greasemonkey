@@ -123,7 +123,7 @@ Config.prototype = {
       script._description = node.getAttribute("description");
       script._enabled = node.getAttribute("enabled") == true.toString();
       script._earlyInject = node.getAttribute("earlyInject") == true.toString();
-      
+
       this._scripts.push(script);
     }
 
@@ -288,7 +288,7 @@ Config.prototype = {
             script["_" + header] = value;
             break;
           case "run-at":
-            if (value=="document-start") script._earlyInject=true;
+            if (value=="document-start") script._earlyInject = true;
             break;
           case "include":
             script._includes.push(value);
