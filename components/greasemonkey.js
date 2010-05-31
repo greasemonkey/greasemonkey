@@ -225,7 +225,7 @@ var greasemonkeyService = {
   initEarlyScripts: function(url, wrappedContentWin, chromeWin) {
     function testMatch(script) {
       return !script.delayInjection && script.enabled &&
-             script.earlyInject && script.matchesURL(url);
+              script.earlyInject && script.matchesURL(url);
     }
     this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
 
@@ -234,10 +234,16 @@ var greasemonkeyService = {
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
     var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart", true);
-    function testMatch(script) {
-      return !script.delayInjection && script.enabled  &&
-             ( !docStartEnabled || !script.earlyInject ) &&
-             script.matchesURL(url);
+    if (docStartEnabled) {
+      function testMatch(script) {
+        return !script.delayInjection && script.enabled &&
+               !script.earlyInject && script.matchesURL(url);
+      }
+    } else {
+      function testMatch(script) {
+        return !script.delayInjection && script.enabled &&
+                script.matchesURL(url);
+      }
     }
 
     if (!docStartEnabled) {
