@@ -61,7 +61,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
   //document-start - addTabsProgressListener requires firefox 3.5
-  if (GM_prefRoot.getValue("enableDocumentStart", true)) {
+  if (GM_prefRoot.getValue("enableDocumentStart")) {
     //Tab progress listener for document-start event (onLocationChange per tab)
     var tabProgressListener = {
       onLocationChange: function(aBrowser, webProg, request, location) {

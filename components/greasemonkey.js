@@ -119,22 +119,35 @@ var greasemonkeyService = {
     throw new Error("Browser window is not registered.");
   },
 
-  documentStart: function(wrappedContentWin, chromeWin) {
-    var url = wrappedContentWin.document.location.href;
-    var scripts = this.initEarlyScripts(url, wrappedContentWin, chromeWin);
+  prepareScripts: function (event, wrappedContentWin, chromeWin) {
+    function loadedMatch(script) {
+      return !script.delayInjection && script.enabled &&
+              script.earlyInject && script.matchesURL(url);
+    }
 
+    function earlyMatch(script) {
+        return !script.delayInjection && script.enabled &&
+                script.matchesURL(url);
+    }
+
+    var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart");
+    var testMatch = 'start' == event || !docStartEnabled ? earlyMatch : loadedMatch;
+    var url = wrappedContentWin.document.location.href;
+    var scripts = this['start' == event ? 'initEarlyScripts' : 
+        'initScripts'](url, wrappedContentWin, chromeWin, testMatch);
+    
     if (scripts.length > 0) {
       this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
     }
   },
 
-  domContentLoaded: function(wrappedContentWin, chromeWin) {
-    var url = wrappedContentWin.document.location.href;
-    var scripts = this.initScripts(url, wrappedContentWin, chromeWin);
+  documentStart: function(wrappedContentWin, chromeWin) {
+    if (!GM_prefRoot.getValue("enableDocumentStart")) return;
+    this.prepareScripts('start', wrappedContentWin, chromeWin);
+  },
 
-    if (scripts.length > 0) {
-      this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
-    }
+  domContentLoaded: function(wrappedContentWin, chromeWin) {
+    this.prepareScripts('loaded', wrappedContentWin, chromeWin);
   },
 
   startup: function() {
@@ -222,34 +235,13 @@ var greasemonkeyService = {
     return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
   },
 
-  initEarlyScripts: function(url, wrappedContentWin, chromeWin) {
-    function testMatch(script) {
-      return !script.delayInjection && script.enabled &&
-              script.earlyInject && script.matchesURL(url);
-    }
+  initEarlyScripts: function(url, wrappedContentWin, chromeWin, testMatch) {
     this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
-
-    return GM_getConfig().getMatchingScripts(testMatch);
+    return this.config.getMatchingScripts(testMatch);
   },
 
-  initScripts: function(url, wrappedContentWin, chromeWin) {
-    var docStartEnabled = GM_prefRoot.getValue("enableDocumentStart", true);
-    if (docStartEnabled) {
-      function testMatch(script) {
-        return !script.delayInjection && script.enabled &&
-               !script.earlyInject && script.matchesURL(url);
-      }
-    } else {
-      function testMatch(script) {
-        return !script.delayInjection && script.enabled &&
-                script.matchesURL(url);
-      }
-    }
-
-    if (!docStartEnabled) {
-      this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
-    }
-
+  initScripts: function(url, wrappedContentWin, chromeWin, testMatch) {
+    this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
     return this.config.getMatchingScripts(testMatch);
   },
 
