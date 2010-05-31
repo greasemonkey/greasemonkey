@@ -82,8 +82,12 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
   //addTabsProgressListener requires firefox 3.5
-  window.gBrowser.addTabsProgressListener(tabProgressListener);
-
+  try {
+  	window.gBrowser.addTabsProgressListener(tabProgressListener);
+	} catch (e) {
+		GM_log(e.message,true);
+	}
+	
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
             .getService(Components.interfaces.nsIObserverService)
