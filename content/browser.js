@@ -67,11 +67,11 @@ GM_BrowserUI.chromeLoad = function(e) {
       onLocationChange: function(aBrowser, webProg, request, location) {
         GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
       },
-      onProgressChange: function(b, wProg, r, cProg, mProg, cTProg, mTProg) { },
-      onStateChange: function(b, wProg, r, aStateFlags, aStatus) { },
-      onStatusChange: function(b, wProg, r, aStatus, aMessage) { },
-      onSecurityChange: function(b, wProg, r, aState) { },
-      onRefreshAttempted: function(b, wProg, aRefreshURI, ms, aSameURI) { }
+      onProgressChange: function(b, prog, r, cProg, mProg, cTProg, mTProg) { },
+      onStateChange: function(b, prog, r, aStateFlags, aStatus) { },
+      onStatusChange: function(b, prog, r, aStatus, aMessage) { },
+      onSecurityChange: function(b, prog, r, aState) { },
+      onRefreshAttempted: function(b, prog, aRefreshURI, ms, aSameURI) { }
     }
     // Attempt to attach the listener, requires firefox 3.5
     try {
@@ -147,7 +147,7 @@ GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
 };
 
 /**
- * Gets called when a tab-onLocationChange event occurs somewhere in the browser.
+ * Gets called when a tab-onLocationChange event occurs in the browser.
  * and is used to implement run-at document-start early-injection scripts
  * If that document is in in the top-level window of the focused tab, find
  * it's menu items and activate them.
