@@ -81,11 +81,14 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
+  
   //addTabsProgressListener requires firefox 3.5
-  try {
-  	window.gBrowser.addTabsProgressListener(tabProgressListener);
-	} catch (e) {
-		GM_log(e.message,true);
+  if( GM_prefRoot.getValue("enableDocumentStart", true) ){
+	  try { 
+	  	window.gBrowser.addTabsProgressListener(tabProgressListener);
+		} catch (e) {
+			GM_prefRoot.setValue("enableDocumentStart", false)
+		}
 	}
 	
   // listen for clicks on the install bar
