@@ -242,7 +242,7 @@ var greasemonkeyService = {
              script.matchesURL(url);
     }
     
-    if( !docStartEnabled ){
+    if (!docStartEnabled) {
       this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
     }
 
