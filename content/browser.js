@@ -75,14 +75,14 @@ GM_BrowserUI.chromeLoad = function(e) {
     try {
       //Definte tab progress listener to catch document-start event onLocationChange per tab
       var tabProgressListener = {
-        onLocationChange:function(aBrowser,webProg,request,location){
+        onLocationChange: function(aBrowser, webProg, request, location) {
           GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
         },
-        onProgressChange:function(aBrowser,webProg,request,curProg,maxProg,curTotalProg,maxTotalProg){ },
-        onStateChange:function(aBrowser,webProg,request,aStateFlags,aStatus){ },
-        onStatusChange:function(aBrowser,webProg,request,aStatus,aMessage){ },
-        onSecurityChange:function(aBrowser,webProg,request,aState){ },
-        onRefreshAttempted:function(aBrowser,webProg,aRefreshURI,aMillis,aSameURI){ }
+        onProgressChange: function(aBrowser, wProg, req, curProg, maxProg, curTotProg, maxTotProg) { },
+        onStateChange: function(aBrowser, wProg, req, aStateFlags, aStatus) { },
+        onStatusChange: function(aBrowser, wProg, req, aStatus, aMessage) { },
+        onSecurityChange: function(aBrowser, wProg, req, aState) { },
+        onRefreshAttempted: function(aBrowser, wProg, aRefreshURI, aMillis, aSameURI) { }
       }
       window.gBrowser.addTabsProgressListener(tabProgressListener);
     } catch (e) {
