@@ -60,10 +60,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
-
-  // addTabsProgressListener requires firefox 3.5
+  //Tab progress listener for document-start event (onLocationChange per tab)
   try {
-    //Tab progress listener for document-start event (onLocationChange per tab)
+    // addTabsProgressListener requires firefox 3.5
     var tabProgressListener = {
       onLocationChange: function(aBrowser, webProg, request, location) {
         GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
@@ -89,7 +88,9 @@ GM_BrowserUI.chromeLoad = function(e) {
 
         throw Components.results.NS_NOINTERFACE;      
       },
-      onLocationChange: function(aProgress, aRequest, aURI) { },
+      onLocationChange: function(aProgress, aRequest, aURI) {
+        GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
+      },
       onStateChange: function(aWebProgress, aRequest, aFlag, aStatus) { },   
       onProgressChange: function(aWebProgress, aRequest, curSelf, maxSelf, curTot, maxTot) { },
       onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) { },
@@ -98,18 +99,12 @@ GM_BrowserUI.chromeLoad = function(e) {
 
     GM_listen(tabContainer, "TabOpen", function(event) {
         var aBrowser = event.target.linkedBrowser;
-        tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
-          GM_BrowserUI.tabLocationChange(aBrowser.contentWindow);
-        };
         aBrowser.addProgressListener(tabProgressListener, 
             Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
     });
 
     GM_listen(tabContainer, "TabClose", function(event) {
         var aBrowser = event.target.linkedBrowser;
-        tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
-          GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
-        };
         aBrowser.removeProgressListener(tabProgressListener);
     });
   }
