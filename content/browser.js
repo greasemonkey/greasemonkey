@@ -78,16 +78,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   } catch (e) {
     // Fallback method of adding progress listeners to each tab   
     var tabContainer = gBrowser.tabContainer;
-    tabProgressListener.QueryInterface = function(aIID) {
-      if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-          aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-          aIID.equals(Components.interfaces.nsISupports))
-      {
-        return this;
-      }
-
-      throw Components.results.NS_NOINTERFACE;      
-    };
+    tabProgressListener.QueryInterface = this.QueryInterface;
 
     // Rewrite onLocationChange callback
     tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
@@ -158,18 +149,6 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 };
 
 /**
- * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them.
- */
-GM_BrowserUI.attachMenuCommander = function(safeWin, unsafeWin) {
-  if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
-    var commander = this.getCommander(safeWin);
-    this.currentMenuCommander = commander;
-    this.currentMenuCommander.attach();
-  }
-};
-
-/**
  * Gets called when a tab-onLocationChange event occurs in the browser.
  * used to implement run-at document-start early-injection scripts
  */
@@ -185,14 +164,14 @@ GM_BrowserUI.tabLocationChange = function(contentWindow) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    //this.attachMenuCommander(safeWin, unsafeWin);
-
     this.gmSvc.documentStart(safeWin, window);
   }
 };
 
 /**
  * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
+ * If that document is in in the top-level window of the focused tab, find
+ * it's menu items and activate them.
  */
 GM_BrowserUI.contentLoad = function(e) {
   var safeWin;
@@ -206,7 +185,12 @@ GM_BrowserUI.contentLoad = function(e) {
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    this.attachMenuCommander(safeWin, unsafeWin);
+    // if this content load is in the focused tab, attach the menuCommaander
+    if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
+      var commander = this.getCommander(safeWin);
+      this.currentMenuCommander = commander;
+      this.currentMenuCommander.attach();
+    }
 
     this.gmSvc.domContentLoaded(safeWin, window);
 
