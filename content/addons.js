@@ -44,6 +44,7 @@ var observer = {
       case "move":
         gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
+        greasemonkeyAddons.reselectLastSelected();
         break;
       case "modified":
         var item = greasemonkeyAddons.listitemForScript(script);
@@ -233,6 +234,7 @@ var greasemonkeyAddons = {
       GM_config._scripts.sort(scriptCmp);
       GM_config._save();
       greasemonkeyAddons.fillList();
+      greasemonkeyAddons.reselectLastSelected();
       break;
     case 'cmd_userscript_uninstall':
       GM_uninstallQueue[script.id] = script;
