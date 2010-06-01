@@ -129,7 +129,6 @@ var greasemonkeyService = {
   },
 
   documentStart: function(wrappedContentWin, chromeWin) {
-    if (!GM_prefRoot.getValue("enableDocumentStart")) return;
     this.prepareScripts('start', wrappedContentWin, chromeWin);
   },
 
@@ -223,10 +222,6 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin, event) {
-    function allMatch(script) {
-       return !script.delayInjection && script.enabled &&
-                script.matchesURL(url);
-    }
     function loadedMatch(script) {
       return !script.delayInjection && script.enabled &&
               !script.earlyInject && script.matchesURL(url);
@@ -237,11 +232,9 @@ var greasemonkeyService = {
                 script.earlyInject && script.matchesURL(url);
     }
 
-    var enableDocumentStart = GM_prefRoot.getValue("enableDocumentStart");
-    var testMatch = 'start' == event ? earlyMatch : 
-        enableDocumentStart ? loadedMatch : allMatch;
+    var testMatch = 'start' == event ? earlyMatch : loadedMatch;
 
-    if (!enableDocumentStart || event == "start") {
+    if (event == "start") {
       this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
     }
 

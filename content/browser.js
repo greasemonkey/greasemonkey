@@ -60,19 +60,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
-  //document-start - addTabsProgressListener requires firefox 3.5
-  var enableDocumentStart = GM_prefRoot.getValue("enableDocumentStart");
-  if (!enableDocumentStart) {
-    var info = Cc["@mozilla.org/xre/app-info;1"]
-        .getService(Components.interfaces.nsIXULAppInfo);
-    // If Firefox version >= 3.5 turn feature back on
-    if (parseFloat(info.version, 10) >= 3.5) {
-      enableDocumentStart = true;
-      GM_prefRoot.setValue("enableDocumentStart", true);
-    }
-  }
 
-  if (enableDocumentStart) {
+  // addTabsProgressListener requires firefox 3.5
+  try {
     //Tab progress listener for document-start event (onLocationChange per tab)
     var tabProgressListener = {
       onLocationChange: function(aBrowser, webProg, request, location) {
@@ -83,14 +73,45 @@ GM_BrowserUI.chromeLoad = function(e) {
       onStatusChange: function(b, prog, r, aStatus, aMessage) { },
       onSecurityChange: function(b, prog, r, aState) { },
       onRefreshAttempted: function(b, prog, aRefreshURI, ms, aSameURI) { }
-    }
-    // Attempt to attach the listener, requires firefox 3.5
-    try {
-      window.gBrowser.addTabsProgressListener(tabProgressListener);
-    } catch (e) {
-      GM_prefRoot.setValue("enableDocumentStart", false);
-      tabProgressListener = null;
-    }
+    };
+    window.gBrowser.addTabsProgressListener(tabProgressListener);
+  } catch (e) {
+    // Fallback method of adding progress listeners to each tab   
+    var tabContainer = gBrowser.tabContainer;
+    var tabProgressListener = {
+      QueryInterface: function(aIID) {
+        if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+            aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+            aIID.equals(Components.interfaces.nsISupports))
+        {
+          return this;
+        }
+
+        throw Components.results.NS_NOINTERFACE;      
+      },
+      onLocationChange: function(aProgress, aRequest, aURI) { },
+      onStateChange: function(aWebProgress, aRequest, aFlag, aStatus) { },   
+      onProgressChange: function(aWebProgress, aRequest, curSelf, maxSelf, curTot, maxTot) { },
+      onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) { },
+      onSecurityChange: function(aWebProgress, aRequest, aState) { }
+    };
+
+    GM_listen(tabContainer, "TabOpen", function(event) {
+        var aBrowser = event.target.linkedBrowser;
+        tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
+          GM_BrowserUI.tabLocationChange(aBrowser.contentWindow);
+        };
+        aBrowser.addProgressListener(tabProgressListener, 
+            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+    });
+
+    GM_listen(tabContainer, "TabClose", function(event) {
+        var aBrowser = event.target.linkedBrowser;
+        tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
+          GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
+        };
+        aBrowser.removeProgressListener(tabProgressListener);
+    });
   }
 
   // listen for clicks on the install bar
