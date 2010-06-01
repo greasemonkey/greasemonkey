@@ -60,41 +60,38 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
-  //Tab progress listener for document-start event (onLocationChange per tab)
+  // Tab progress listener for document-start event (onLocationChange per tab)
+  var tabProgressListener = {
+    onLocationChange: function(aBrowser, webProg, request, location) {
+      GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
+    },
+    onProgressChange: function() { },
+    onStateChange: function() { },
+    onStatusChange: function() { },
+    onSecurityChange: function() { },
+    onRefreshAttempted: function() { }
+  };
+
   try {
-    // addTabsProgressListener requires firefox 3.5
-    var tabProgressListener = {
-      onLocationChange: function(aBrowser, webProg, request, location) {
-        GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
-      },
-      onProgressChange: function(b, prog, r, cProg, mProg, cTProg, mTProg) { },
-      onStateChange: function(b, prog, r, aStateFlags, aStatus) { },
-      onStatusChange: function(b, prog, r, aStatus, aMessage) { },
-      onSecurityChange: function(b, prog, r, aState) { },
-      onRefreshAttempted: function(b, prog, aRefreshURI, ms, aSameURI) { }
-    };
+    // addTabsProgressListener requires Firefox 3.5
     window.gBrowser.addTabsProgressListener(tabProgressListener);
   } catch (e) {
     // Fallback method of adding progress listeners to each tab   
     var tabContainer = gBrowser.tabContainer;
-    var tabProgressListener = {
-      QueryInterface: function(aIID) {
-        if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
-            aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
-            aIID.equals(Components.interfaces.nsISupports))
-        {
-          return this;
-        }
+    tabProgressListener.QueryInterface = function(aIID) {
+      if (aIID.equals(Components.interfaces.nsIWebProgressListener) ||
+          aIID.equals(Components.interfaces.nsISupportsWeakReference) ||
+          aIID.equals(Components.interfaces.nsISupports))
+      {
+        return this;
+      }
 
-        throw Components.results.NS_NOINTERFACE;      
-      },
-      onLocationChange: function(aProgress, aRequest, aURI) {
-        GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
-      },
-      onStateChange: function(aWebProgress, aRequest, aFlag, aStatus) { },   
-      onProgressChange: function(aWebProgress, aRequest, curSelf, maxSelf, curTot, maxTot) { },
-      onStatusChange: function(aWebProgress, aRequest, aStatus, aMessage) { },
-      onSecurityChange: function(aWebProgress, aRequest, aState) { }
+      throw Components.results.NS_NOINTERFACE;      
+    };
+
+    // Rewrite onLocationChange callback
+    tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
+      GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
     };
 
     GM_listen(tabContainer, "TabOpen", function(event) {
