@@ -43,6 +43,7 @@ var observer = {
         gUserscriptsView.removeChild(node);
         break;
       case "move":
+        gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
         break;
       case "modified":
