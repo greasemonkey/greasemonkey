@@ -85,6 +85,10 @@ GM_BrowserUI.chromeLoad = function(e) {
       GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
     };
 
+    // Add progress listener to "the" existing tab(s!), critical during restore'
+    window.gBrowser.selectedBrowser.addProgressListener(tabProgressListener,
+            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+
     GM_listen(tabContainer, "TabOpen", function(event) {
         var aBrowser = event.target.linkedBrowser;
         aBrowser.addProgressListener(tabProgressListener,
