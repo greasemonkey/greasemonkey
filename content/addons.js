@@ -30,8 +30,7 @@ var observer = {
       return;
     }
 
-    // find the script's node in the listbox
-    var listbox = gExtensionsView;
+    // find the script's node
     var node = document.getElementById('urn:greasemonkey:item:'+script.id);
     if (!node) return;
 
@@ -43,7 +42,9 @@ var observer = {
         gUserscriptsView.removeChild(node);
         break;
       case "move":
+        gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
+        greasemonkeyAddons.reselectLastSelected();
         break;
       case "modified":
         var item = greasemonkeyAddons.listitemForScript(script);
@@ -62,6 +63,12 @@ window.addEventListener('load', function() {
       'select', greasemonkeyAddons.updateLastSelected, false);
   gUserscriptsView.addEventListener(
       'keypress', greasemonkeyAddons.onKeypress, false);
+  gUserscriptsView.addEventListener(
+      'dragenter', greasemonkeyAddons.onDragEnter, false);
+  gUserscriptsView.addEventListener(
+      'dragover', greasemonkeyAddons.onDragOver, false);
+  gUserscriptsView.addEventListener(
+      'drop', greasemonkeyAddons.onDrop, false);
 
   GM_config.addObserver(observer);
 
@@ -115,6 +122,29 @@ var greasemonkeyAddons = {
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/, '');
     gExtensionsView.focus();
+  },
+
+  onDragEnter: function(event) {
+    event.preventDefault();
+  },
+
+  onDragOver: function(event) {
+    var types = event.dataTransfer.types;
+    var supportedTypes = ["text/x-moz-url"];
+    var requiredExtension = ".user.js";
+    types = supportedTypes.filter(function (value) types.contains(value));
+    if (types.length) {
+      var data = event.dataTransfer.getData(types[0]);
+      if (data.lastIndexOf(requiredExtension) == data.length-requiredExtension.length) {
+        event.preventDefault();
+      }
+    }
+  },
+
+  onDrop: function(event) {
+    //install script
+    var scriptURI = event.dataTransfer.getData("text/x-moz-url");
+    alert("NEXT STEP: Install this .user.js script: " + scriptURI);
   },
 
   updateLastSelected: function() {
