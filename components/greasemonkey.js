@@ -447,16 +447,9 @@ var greasemonkeyService = {
         return null;
       }
 
-      try {
-        if (!fbConsole.isEnabled(fbContext)) return null;
-      } catch (e) {
-        // FB 1.1 can't be enabled/disabled.  Function to check doesn't exist.
-        // Silently ignore.
-      }
+      if (!fbConsole.isEnabled(fbContext)) return null;
 
-      if (fbVersion < 1.2) {
-        return new chromeWin.FirebugConsole(fbContext, unsafeContentWin);
-      } else if (1.2 == fbVersion) {
+      if (1.2 == fbVersion) {
         var safeWin = new XPCNativeWrapper(unsafeContentWin);
 
         if (fbContext.consoleHandler) {

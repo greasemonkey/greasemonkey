@@ -30,8 +30,7 @@ var observer = {
       return;
     }
 
-    // find the script's node in the listbox
-    var listbox = gExtensionsView;
+    // find the script's node
     var node = document.getElementById('urn:greasemonkey:item:'+script.id);
     if (!node) return;
 
@@ -43,7 +42,9 @@ var observer = {
         gUserscriptsView.removeChild(node);
         break;
       case "move":
+        gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
+        greasemonkeyAddons.reselectLastSelected();
         break;
       case "modified":
         var item = greasemonkeyAddons.listitemForScript(script);
