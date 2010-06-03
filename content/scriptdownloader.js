@@ -38,6 +38,7 @@ GM_ScriptDownloader.prototype.startDownload = function() {
     .ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
+  this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
   this.req_.send(null);

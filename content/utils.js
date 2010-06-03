@@ -1,8 +1,5 @@
 const GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
-// TODO: properly scope this constant
-const NAMESPACE = "http://youngpup.net/greasemonkey";
-
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
