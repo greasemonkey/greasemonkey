@@ -142,9 +142,9 @@ var greasemonkeyAddons = {
   },
 
   onDrop: function(event) {
-    //install script
+    //is validated during onDragOver (above)
     var scriptURI = event.dataTransfer.getData("text/x-moz-url");
-    alert("NEXT STEP: Install this .user.js script: " + scriptURI);
+    alert("NEXT STEP: Install this .user.js script: \n\n" + scriptURI);
   },
 
   updateLastSelected: function() {
