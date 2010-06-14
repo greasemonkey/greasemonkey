@@ -9,6 +9,10 @@
 <!ENTITY MoveToTop.accesskey "T">
 <!ENTITY MoveUp "Move Up">
 <!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Create New Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Show Containing Folder">
+<!ENTITY Show.accesskey "S">
 <!ENTITY SortScripts "Sort Scripts">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "Cancel Uninstall">
@@ -17,5 +21,3 @@
 <!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
 <!ENTITY UninstallNow "Uninstall Now">
 <!ENTITY UninstallNow.accesskey "N">
-<!ENTITY NewScript "Create New Script">
-<!ENTITY NewScript.accesskey "C">

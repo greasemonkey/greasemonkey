@@ -209,6 +209,9 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_edit':
       GM_openInEditor(script);
       break;
+    case 'cmd_userscript_show':
+      GM_openFolder(script._file);
+      break;
     case 'cmd_userscript_enable':
       script.enabled = true;
       break;
@@ -281,7 +284,9 @@ var greasemonkeyAddons = {
     var standardItems = [
       'move_up', 'move_down', 'move_top', 'move_bottom', 'sort',
       'move_separator',
-      'edit', 'uninstall'];
+      'edit', 'show',
+      'edit_separator',
+      'uninstall'];
     var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
     // Set everything hidden now, reveal the right selection below.
