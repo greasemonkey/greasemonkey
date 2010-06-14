@@ -37,14 +37,22 @@
 
 <hbox id="commandBarBottom">
   <label id="getMoreUserscripts" class="text-link"
+    insertafter="getMore"
     onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
     value="Get User Scripts"
     getMoreURL="http://userscripts.org/"
   />
   <button id="findUpdatesUserscripts"
-    oncommand="alert('ReMoveme, or implement me, before 0.9 release.')"
+    insertafter="getMore"
+    oncommand="alert('Remove me, or implement me, before 0.9 release.')"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
+  />
+
+  <button id="newUserscript"
+    label="&NewScript;"
+    accesskey="&NewScript.accesskey;"
+    oncommand="GM_newUserScript()"
   />
 </hbox>
 

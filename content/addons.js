@@ -74,7 +74,7 @@ window.addEventListener('load', function() {
         'command',
         function() {
           greasemonkeyAddons.hideView();
-          gView = 'userstyles'
+          gView = 'userstyles';
         },
         false);
   }
