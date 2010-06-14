@@ -115,3 +115,8 @@ var GMInstall = {
     window.setTimeout("window.close()", 0);
   }
 };
+
+// See: closewindow.xul .
+function GM_onClose() {
+  GMInstall.onCancel();
+}
