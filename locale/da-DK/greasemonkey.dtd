@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Beskrivelse">
 <!ENTITY newscript.includes "Inkluder (En pr. linje)">
 <!ENTITY newscript.excludes "Udeluk (En pr. linje)">
+<!ENTITY Uninstall "Afinstaller">
+<!ENTITY AlsoUninstallPrefs "Afinstaller også tilknyttede indstillinger">

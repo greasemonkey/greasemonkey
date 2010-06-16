@@ -336,18 +336,8 @@ var greasemonkeyService = {
       return undefined;
     }
 
-    var info = Cc["@mozilla.org/xre/app-info;1"]
-      .getService(Components.interfaces.nsIXULAppInfo);
-    if (parseFloat(info.version, 10) < 3.0) {
-      // Pre FF 3.0 wants the URL as the second argument.
-      var newTab = chromeWin.openNewTabWith(
-        url, safeContentWin.document.location.href, null, null, null, null);
-    } else {
-      // Post FF 3.0 wants the document as the second argument.
-      var newTab = chromeWin.openNewTabWith(
-        url, safeContentWin.document, null, null, null, null);
-    }
-
+    var newTab = chromeWin.openNewTabWith(
+      url, safeContentWin.document, null, null, null, null);
     // Source:
     // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
     var newWindow = chromeWin.gBrowser
@@ -458,16 +448,9 @@ var greasemonkeyService = {
         return null;
       }
 
-      try {
-        if (!fbConsole.isEnabled(fbContext)) return null;
-      } catch (e) {
-        // FB 1.1 can't be enabled/disabled.  Function to check doesn't exist.
-        // Silently ignore.
-      }
+      if (!fbConsole.isEnabled(fbContext)) return null;
 
-      if (fbVersion < 1.2) {
-        return new chromeWin.FirebugConsole(fbContext, unsafeContentWin);
-      } else if (1.2 == fbVersion) {
+      if (1.2 == fbVersion) {
         var safeWin = new XPCNativeWrapper(unsafeContentWin);
 
         if (fbContext.consoleHandler) {

@@ -1,4 +1,51 @@
+/*
+Hide user scripts view/buttons, unless user scripts tab is open.
+Hide native view/buttons, when user scripts view is open.
+*/
+#userscriptsBox,
+#commandBarBottom #getMoreUserscripts,
+#commandBarBottom #findUpdatesUserscripts,
+#commandBarBottom #newUserscript,
+.userscripts #extensionsBox,
+.userscripts #getMore,
+.userscripts #commandBarBottom button
+{
+  display: none;
+}
+.userscripts #userscriptsBox,
+.userscripts #commandBarBottom #getMoreUserscripts,
+.userscripts #commandBarBottom #findUpdatesUserscripts,
+.userscripts #commandBarBottom #newUserscript
+{
+  display: -moz-box;
+}
+
+/* XBL Bindings */
 .userscripts richlistitem[opType="needs-uninstall"] hbox.addon-optype,
-.userscripts richlistitem[opType="needs-uninstall"] hbox.addon-description {
+.userscripts richlistitem[opType="needs-uninstall"] hbox.addon-description
+{
   -moz-binding: url("chrome://greasemonkey/content/addons.xml#addon-needs-uninstall");
+}
+.userscripts richlistitem[selected="true"] {
+  -moz-binding: url("chrome://greasemonkey/content/addons.xml#userscript-selected");
+}
+
+/* Appearance */
+#userscriptsView {
+  margin: 0;
+  min-width: 245px;
+}
+
+#userscriptsBox {
+  margin: 10px 10px 0px 10px;
+  min-width: 1px;
+}
+
+#userscriptsView:focus > richlistitem[selected="true"] {
+  background-image: url("chrome://mozapps/skin/extensions/itemEnabledFader.png");
+  background-color: Highlight;
+  color: HighlightText;
+}
+#userscriptsView:focus > richlistitem[selected="true"][isDisabled="true"] {
+  background-image: url("chrome://mozapps/skin/extensions/itemDisabledFader.png");
 }

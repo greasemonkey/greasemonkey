@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
-<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % extensionsDTD SYSTEM "chrome://mozapps/locale/extensions/extensions.dtd">
+%extensionsDTD;
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+%greasemonkeyDTD;
+]>
+
 <bindings id="addonUserscriptsBindings"
   xmlns="http://www.mozilla.org/xbl"
   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -8,7 +17,69 @@
 
 <binding id="addon-needs-uninstall">
   <content>
-    <xul:label value="&UninstallCancelDescription;" crop="end"/>
+    <xul:label flex="1">&UninstallCancelDescription;</xul:label>
+  </content>
+</binding>
+
+<binding id="userscript-selected" extends="chrome://mozapps/content/extensions/extensions.xml#addon-base">
+  <content>
+    <xul:hbox flex="1">
+      <xul:vbox class="addon-icon" xbl:inherits="iconURL"/>
+
+      <xul:vbox flex="1" class="addonTextBox">
+        <xul:hbox anonid="addonNameVersion" class="addon-name-version" xbl:inherits="name, version"/>
+        <xul:label anonid="addonDescriptionWrap" class="descriptionWrap" xbl:inherits="xbl:text=description"/>
+
+        <xul:vbox anonid="addonSelectedStatusMsgs" class="selectedStatusMsgs">
+          <xul:hbox anonid="addonOpType" class="addon-optype attention" align="center" xbl:inherits="newVersion"/>
+          <xul:hbox flex="1" class="updateAvailableBox attention">
+            <xul:label xbl:inherits="value=updateAvailableMsg" crop="end"/>
+          </xul:hbox>
+        </xul:vbox>
+
+        <xul:hbox anonid="selectedButtons" flex="1" class="selectedButtons">
+          <xul:button class="uninstallHide editButton"
+            label="&Edit;" accesskey="&Edit.accesskey;"
+            tooltiptext="&Edit.tooltip;"
+            command="cmd_userscript_edit"
+          />
+
+          <xul:spacer flex="1"/>
+
+          <xul:button class="disableShow enableHide uninstallHide enableButton"
+            label="&cmd.enable.label;" accesskey="&cmd.enable.accesskey;"
+            tooltiptext="&cmd.enable.tooltip;"
+            command="cmd_userscript_enable"
+          />
+          <xul:button class="enableShow disableHide uninstallHide disableButton" 
+            label="&cmd.disable.label;" accesskey="&cmd.disable.accesskey;"
+            tooltiptext="&cmd.disable.tooltip;"
+            command="cmd_userscript_disable"
+          />
+
+          <xul:button class="uninstallHide uninstallButton"
+            label="&cmd.uninstall.label;" accesskey="&cmd.uninstall2.accesskey;"
+            tooltiptext="&cmd.uninstall2.tooltip;"
+            command="cmd_userscript_uninstall"
+          />
+          <xul:button class="uninstallShow cancelUninstallButton"
+            label="&cancel.label;" accesskey="&cancel.accesskey;"
+            tooltiptext="&cmd.cancelUninstall.tooltip;"
+            command="cmd_userscript_uninstall_cancel"
+          />
+          
+          <!--
+          Todo: Make install/upgrade buttons like extensions if/when added.
+          <xul:button class="installShow cancelInstallButton" label="&cancelInstall.label;"
+                      accesskey="&cancelInstall.accesskey;" tooltiptext="&cmd.cancelInstall.tooltip;"
+                      command="cmd_cancelInstall"/>
+          <xul:button class="upgradeShow cancelUpgradeButton" label="&cancelUpgrade.label;"
+                      accesskey="&cancelUpgrade.accesskey;" tooltiptext="&cmd.cancelUpgrade.tooltip;"
+                      command="cmd_cancelUpgrade"/>
+          -->
+        </xul:hbox>
+      </xul:vbox>
+    </xul:hbox>
   </content>
 </binding>
 

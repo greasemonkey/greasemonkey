@@ -26,3 +26,5 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
 <!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Uninstall">
+<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
