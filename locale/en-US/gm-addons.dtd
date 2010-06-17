@@ -9,6 +9,10 @@
 <!ENTITY MoveToTop.accesskey "T">
 <!ENTITY MoveUp "Move Up">
 <!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Create New Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Show Containing Folder">
+<!ENTITY Show.accesskey "S">
 <!ENTITY SortScripts "Sort Scripts">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "Cancel Uninstall">

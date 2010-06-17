@@ -17,7 +17,7 @@
 
 <binding id="addon-needs-uninstall">
   <content>
-    <xul:label value="&UninstallCancelDescription;" crop="end"/>
+    <xul:label flex="1">&UninstallCancelDescription;</xul:label>
   </content>
 </binding>
 
