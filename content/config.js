@@ -310,6 +310,10 @@ Config.prototype = {
 
     var existingIndex = this._find(script);
     if (existingIndex > -1) {
+      // save the old script's state
+      script._enabled = this._scripts[existingIndex].enabled;
+
+      // unintall the old script
       this.uninstall(this._scripts[existingIndex]);
     }
 
