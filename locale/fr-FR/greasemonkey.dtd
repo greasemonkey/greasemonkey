@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Description">
 <!ENTITY newscript.includes "Va inclure (un élément par ligne)">
 <!ENTITY newscript.excludes "Va exclure (un élément par ligne)">
+<!ENTITY Uninstall "Désinstaller">
+<!ENTITY AlsoUninstallPrefs "Désinstaller en même temps les préférences associées">

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Beschrijving">
 <!ENTITY newscript.includes "Inclusief (één per regel)">
 <!ENTITY newscript.excludes "Exclusief (één per regel)">
+<!ENTITY Uninstall "Deïnstalleren">
+<!ENTITY AlsoUninstallPrefs "De bijbehorende instellingen ook verwijderen">

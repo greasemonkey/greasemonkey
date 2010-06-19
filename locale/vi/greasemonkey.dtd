@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "Mô tả">
 <!ENTITY newscript.includes "Bao gồm (Mỗi cái một dòng)">
 <!ENTITY newscript.excludes "Loại trừ (Mỗi cái một dòng)">
+<!ENTITY Uninstall "Gỡ bỏ">
+<!ENTITY AlsoUninstallPrefs "Cũng gỡ bỏ các tùy chỉnh đi kèm">

@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "脚本应用到下列网页（每行一条网页地址）">
 <!ENTITY newscript.excludes "不包括下列网页（每行一条网页地址）">
+<!ENTITY Uninstall "卸载">
+<!ENTITY AlsoUninstallPrefs "同时清除相关的首选项设置">

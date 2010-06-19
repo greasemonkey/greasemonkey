@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "תיאור">
 <!ENTITY newscript.includes "כלול (אחד הכל שורה)">
 <!ENTITY newscript.excludes "אל-תכללול (אחד בכל שורה)">
+<!ENTITY Uninstall "מחיקה">
+<!ENTITY AlsoUninstallPrefs "מחק גם את כל ההגדרות הקשורות">

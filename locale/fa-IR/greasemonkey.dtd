@@ -23,3 +23,5 @@
 <!ENTITY newscript.description "شرح">
 <!ENTITY newscript.includes "شامل کردن (یکی در هر خط)">
 <!ENTITY newscript.excludes "مستثنى کردن (یکی در هر خط)">
+<!ENTITY Uninstall "حذف">
+<!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">

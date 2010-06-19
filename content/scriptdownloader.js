@@ -41,6 +41,7 @@ GM_ScriptDownloader.prototype.startDownload = function() {
     .ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
+  this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
   this.req_.send(null);
@@ -209,6 +210,7 @@ GM_ScriptDownloader.prototype.finishInstall = function(){
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
     this.script._config.injectScript(this.script);
+    this.script.delayInjection = false;
 
     // Save new values to config.xml
     this.script._config._save();
