@@ -37,12 +37,12 @@
   </groupbox>
 
   <groupbox>
-    <caption label="&manage.label.btnUpdate;" />
+    <caption label="&UpdateChecking;" />
     <checkbox id="check-update"
-      label="&manage.label.chkUpdate;" 
+      label="&EnableUpdateChecking;" 
       oncommand="GM_setUpdatePrefs(this)" />
     <label 
-      value="&manage.label.txtUpdateInterval;"
+      value="&UpdateInterval;"
       control="txt-updateInterval" />
     <textbox type="textbox.number"
       id="txt-updateInterval"
