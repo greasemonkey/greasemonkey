@@ -9,7 +9,7 @@ function Config() {
 
   this._updateVersion();
   this._load();
-  this._showUpdates = false;
+  this.showUpdates = false;
   this._notifyUpdates();
 }
 
@@ -97,11 +97,11 @@ Config.prototype = {
       // Migration with default values
       if (!node.getAttribute("updateAvailable") ||
           !node.getAttribute("lastUpdateCheck")) {
-        script._updateAvailable = false;
+        script.updateAvailable = false;
         script._lastUpdateCheck = script._modified;
         fileModified = true;
       } else {
-        script._updateAvailable = node.getAttribute("updateAvailable") == true.toString();
+        script.updateAvailable = node.getAttribute("updateAvailable") == true.toString();
         script._updateVersion= node.getAttribute("updateVersion") || null;
         script._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
       }
@@ -227,7 +227,7 @@ Config.prototype = {
       scriptNode.setAttribute("basedir", scriptObj._basedir);
       scriptNode.setAttribute("modified", scriptObj._modified);
       scriptNode.setAttribute("dependhash", scriptObj._dependhash);
-      scriptNode.setAttribute("updateAvailable", scriptObj._updateAvailable);
+      scriptNode.setAttribute("updateAvailable", scriptObj.updateAvailable);
       if (scriptObj._updateVersion) {
         scriptNode.setAttribute("updateVersion", scriptObj._updateVersion);
       }
@@ -435,7 +435,7 @@ Config.prototype = {
 
     newScript._modified = newScript._file.lastModifiedTime;
     newScript._metahash = GM_sha1(newScript._rawMeta);
-    newScript._updateAvailable = false;
+    newScript.updateAvailable = false;
     newScript._lastUpdateCheck = newScript._modified;
 
     this._scripts.push(newScript);
@@ -548,10 +548,10 @@ Config.prototype = {
 
   _notifyUpdates: function() {
     var scripts = this.getMatchingScripts(
-        function (script) { return script._updateAvailable; });
+        function (script) { return script.updateAvailable; });
     if (0 == scripts.length) return;
     
-    this._showUpdates = true;
+    this.showUpdates = true;
     var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
         .getService(Ci.nsIWindowMediator)
         .getMostRecentWindow("navigator:browser");

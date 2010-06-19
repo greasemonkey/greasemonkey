@@ -26,7 +26,7 @@ function Script(config) {
   this.delayInjection = false;
   this._rawMeta = null;
   this._lastUpdateCheck = null;
-  this._updateAvailable = null;
+  this.updateAvailable = null;
   this._updateVersion = null;
 }
 
@@ -203,7 +203,7 @@ Script.prototype = {
 
   checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval) {
     var updateURL = this.updateURL;
-    if (this._updateAvailable ||
+    if (this.updateAvailable ||
         !updateURL ||
         currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
       return;
@@ -242,7 +242,7 @@ Script.prototype = {
                              .getService(Components.interfaces.nsIVersionComparator);
 
       if(versionChecker.compare(this._version, remoteVersion) < 0) {
-        this._updateAvailable = true;
+        this.updateAvailable = true;
         this._updateVersion = remoteVersion;
         this._changed("update-found", {
           version: remoteVersion,

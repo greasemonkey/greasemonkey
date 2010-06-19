@@ -132,25 +132,23 @@ var greasemonkeyAddons = {
     }
   },
 
-  fillList: function() {
+  fillList: function(showUpdates) {
     // Remove any pre-existing contents.
     while (gUserscriptsView.firstChild) {
       gUserscriptsView.removeChild(gUserscriptsView.firstChild);
     }
 
     // Show scripts with updates
-    if (GM_config._showUpdates) {
-      var scripts = GM_config.getMatchingScripts(
-          function (script) { return script._updateAvailable; });
+    if (showUpdates || GM_config.showUpdates) {
 
-      if (scripts.length > 0) {
+      if (GM_config.showUpdates) {
         window.addEventListener("unload", function() {
-            GM_config._showUpdates = false;
-          }, false);
-      } else {
-        var scripts = GM_config.scripts;
-        GM_config._showUpdates = false;
+            GM_config.showUpdates = false;
+        }, false);
       }
+        
+      var scripts = GM_config.getMatchingScripts(
+          function (script) { return script.updateAvailable; });
     } else {
       var scripts = GM_config.scripts;
     }
