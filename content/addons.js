@@ -24,7 +24,7 @@ showView = function(aView) {
 // with their actual state.
 var observer = {
   notifyEvent: function(script, event, data) {
-    if (event == "install" && !config._showUpdates) {
+    if (event == "install" && !config.showUpdates) {
       var item = greasemonkeyAddons.addScriptToList(script);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
       return;
@@ -193,7 +193,7 @@ var greasemonkeyAddons = {
     item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
 
-    if (script._updateAvailable) {
+    if (script.updateAvailable) {
       item.setAttribute('updateable', 'true');
       item.setAttribute('availableUpdateVersion', script._updateVersion);
       item.setAttribute('availableUpdateURL', script.updateURL);
@@ -326,7 +326,7 @@ var greasemonkeyAddons = {
     // Set everything hidden now, reveal the right selection below.
     setItemsHidden(true);
 
-    if (!script._updateAvailable) {
+    if (!script.updateAvailable) {
       setItemsHidden(false, ['installUpdate']);
     }
 
@@ -337,7 +337,6 @@ var greasemonkeyAddons = {
       // Set visibility.
       setItemsHidden(false, standardItems);
       setItemsHidden(false, script.enabled ? ['disable'] : ['enable']);
-      // 
       // Set disabled.
       var atBottom = !selectedItem.nextSibling;
       var atTop = !selectedItem.previousSibling;
