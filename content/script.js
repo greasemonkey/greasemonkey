@@ -217,22 +217,14 @@ Script.prototype = {
 
     this._lastUpdateCheck = currentTime;
 
-    var lastTimeoutID = null;
-    var timeoutHandler = function(timeoutID) {
-      if (lastTimeoutID) chromeWin.clearTimeout(lastTimeoutID);
-      lastTimeoutID = timeoutID;
-    };
-
     var req = new chromeWin.XMLHttpRequest();
     req.open("GET", updateURL, true);
-    req.onload = GM_hitch(this, "checkRemoteVersion", chromeWin, req, timeoutHandler);
+    req.onload = GM_hitch(this, "checkRemoteVersion", req);
     req.send(null);
   },
 
-  checkRemoteVersion: function(chromeWin, req, timeoutHandler) {
-    if (req.status != 200 && req.status != 0) {
-      return;
-    }
+  checkRemoteVersion: function(req) {
+    if (req.status != 200 && req.status != 0) return;
 
     var source = req.responseText;
     var remoteVersion = this._config.parseVersion(source);
@@ -248,10 +240,7 @@ Script.prototype = {
           version: remoteVersion,
           url: this.updateURL
         });
-        var config = this._config;
-        timeoutHandler(chromeWin.setTimeout(function() {
-          config._save();
-        }, 1000));
+        this._config._save();
       }
     }
   }
