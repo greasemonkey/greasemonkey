@@ -74,7 +74,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   try {
     // addTabsProgressListener requires Firefox 3.5
-    window.gBrowser.addTabsProgressListener(tabProgressListener);
+    gBrowser.addTabsProgressListener(tabProgressListener);
   } catch (e) {
     // Fallback method of adding progress listeners to each tab
     var tabContainer = gBrowser.tabContainer;
@@ -85,10 +85,13 @@ GM_BrowserUI.chromeLoad = function(e) {
       GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
     };
 
-    // Add progress listener to "the" existing tab(s!), critical during restore'
-    window.gBrowser.selectedBrowser.addProgressListener(tabProgressListener,
-            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+    // Add progress listeners to open tabs
+    for (var i = 0, len = gBrowser.browsers.length ; i < len; ++i) {
+      gBrowser.getBrowserAtIndex(i).addProgressListener(tabProgressListener,
+          Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+    }
 
+    // Add listeners to detect new tabs
     GM_listen(tabContainer, "TabOpen", function(event) {
         var aBrowser = event.target.linkedBrowser;
         aBrowser.addProgressListener(tabProgressListener,
