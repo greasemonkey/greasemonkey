@@ -578,16 +578,6 @@ GM_BrowserUI.refreshStatus = function() {
   this.statusImage.style.opacity = "1.0";
 };
 
-GM_BrowserUI.newUserScript = function() {
-  var windowWatcher = Components
-    .classes["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Components.interfaces.nsIWindowWatcher);
-  windowWatcher.openWindow(
-    window, "chrome://greasemonkey/content/newscript.xul", null,
-    "chrome,dependent,centerscreen,resizable,dialog", null
-  );
-};
-
 GM_BrowserUI.showStatus = function(message, autoHide) {
   if (this.statusLabel.collapsed) {
     this.statusLabel.collapsed = false;

@@ -3,8 +3,9 @@ Hide user scripts view/buttons, unless user scripts tab is open.
 Hide native view/buttons, when user scripts view is open.
 */
 #userscriptsBox,
-#getMoreUserscripts,
-#findUpdatesUserscripts,
+#commandBarBottom #getMoreUserscripts,
+#commandBarBottom #findUpdatesUserscripts,
+#commandBarBottom #newUserscript,
 .userscripts #extensionsBox,
 .userscripts #getMore,
 .userscripts #commandBarBottom button
@@ -12,8 +13,9 @@ Hide native view/buttons, when user scripts view is open.
   display: none;
 }
 .userscripts #userscriptsBox,
-.userscripts #commandBarBottom button#findUpdatesUserscripts,
-.userscripts #getMoreUserscripts
+.userscripts #commandBarBottom #getMoreUserscripts,
+.userscripts #commandBarBottom #findUpdatesUserscripts,
+.userscripts #commandBarBottom #newUserscript
 {
   display: -moz-box;
 }
