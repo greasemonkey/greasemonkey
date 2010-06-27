@@ -1,9 +1,14 @@
-const CLASSNAME = "GM_GreasemonkeyService";
+
+// XPCOM info
+const DESCRIPTION = "GM_GreasemonkeyService";
 const CONTRACTID = "@greasemonkey.mozdev.org/greasemonkey-service;1";
-const CID = Components.ID("{77bf3650-1cd6-11da-8cd6-0800200c9a66}");
+const CLASSID = Components.ID("{77bf3650-1cd6-11da-8cd6-0800200c9a66}");
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const Cu = Components.utils;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
                  .getService(Ci.nsIAppShellService);
@@ -11,12 +16,10 @@ const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
 const gmSvcFilename = Components.stack.filename;
 
 const maxJSVersion = (function getMaxJSVersion() {
-  var appInfo = Components
-      .classes["@mozilla.org/xre/app-info;1"]
-      .getService(Components.interfaces.nsIXULAppInfo);
-  var versionChecker = Components
-      .classes["@mozilla.org/xpcom/version-comparator;1"]
-      .getService(Components.interfaces.nsIVersionComparator);
+  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
+      .getService(Ci.nsIXULAppInfo);
+  var versionChecker = Cc["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Ci.nsIVersionComparator);
 
   // Firefox 3.5 and higher supports 1.8.
   if (versionChecker.compare(appInfo.version, "3.5") >= 0) {
@@ -59,7 +62,34 @@ function GM_apiLeakCheck(apiName) {
   return true;
 }
 
-var greasemonkeyService = {
+
+function GM_GreasemonkeyService() {
+  this.wrappedJSObject = this;
+}
+
+GM_GreasemonkeyService.prototype = {
+  classDescription:  DESCRIPTION,
+  classID:           CLASSID,
+  contractID:        CONTRACTID,
+  _xpcom_categories: [{category: "app-startup",
+                       entry: DESCRIPTION,
+                       value: CONTRACTID,
+                       service: true},
+                      {category: "content-policy",
+                       entry: CONTRACTID,
+                       value: CONTRACTID,
+                       service: true}],
+
+  // nsISupports
+  QueryInterface: XPCOMUtils.generateQI([
+      Ci.nsIObserver,
+      Ci.nsISupports,
+      Ci.nsISupportsWeakReference,
+      Ci.gmIGreasemonkeyService,
+      Ci.nsIWindowMediatorListener,
+      Ci.nsIContentPolicy
+  ]),
+
   _config: null,
   get config() {
     if (!this._config) {
@@ -73,22 +103,6 @@ var greasemonkeyService = {
     return this._config;
   },
   browserWindows: [],
-
-
-  // nsISupports
-  QueryInterface: function(aIID) {
-    if (!aIID.equals(Ci.nsIObserver) &&
-        !aIID.equals(Ci.nsISupports) &&
-        !aIID.equals(Ci.nsISupportsWeakReference) &&
-        !aIID.equals(Ci.gmIGreasemonkeyService) &&
-        !aIID.equals(Ci.nsIWindowMediatorListener) &&
-        !aIID.equals(Ci.nsIContentPolicy)) {
-      throw Components.results.NS_ERROR_NO_INTERFACE;
-    }
-
-    return this;
-  },
-
 
   // nsIObserver
   observe: function(aSubject, aTopic, aData) {
@@ -478,68 +492,7 @@ var greasemonkeyService = {
   }
 };
 
-greasemonkeyService.wrappedJSObject = greasemonkeyService;
-
-
-
-/**
- * XPCOM Registration goop
- */
-var Module = new Object();
-
-Module.registerSelf = function(compMgr, fileSpec, location, type) {
-  compMgr = compMgr.QueryInterface(Ci.nsIComponentRegistrar);
-  compMgr.registerFactoryLocation(CID,
-                                  CLASSNAME,
-                                  CONTRACTID,
-                                  fileSpec,
-                                  location,
-                                  type);
-
-  var catMgr = Cc["@mozilla.org/categorymanager;1"]
-                 .getService(Ci.nsICategoryManager);
-
-  catMgr.addCategoryEntry("app-startup",
-                          CLASSNAME,
-                          CONTRACTID,
-                          true,
-                          true);
-
-  catMgr.addCategoryEntry("content-policy",
-                          CONTRACTID,
-                          CONTRACTID,
-                          true,
-                          true);
-};
-
-Module.getClassObject = function(compMgr, cid, iid) {
-  if (!cid.equals(CID)) {
-    throw Components.results.NS_ERROR_NOT_IMPLEMENTED;
-  }
-
-  if (!iid.equals(Ci.nsIFactory)) {
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-  }
-
-  return Factory;
-};
-
-Module.canUnload = function(compMgr) {
-  return true;
-};
-
-
-var Factory = new Object();
-
-Factory.createInstance = function(outer, iid) {
-  if (outer != null) {
-    throw Components.results.NS_ERROR_NO_AGGREGATION;
-  }
-
-  return greasemonkeyService;
-};
-
-
+// XPCOM module registration.
 function NSGetModule(compMgr, fileSpec) {
-  return Module;
+  return XPCOMUtils.generateModule([GM_GreasemonkeyService]);
 }
