@@ -27,9 +27,11 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
+  this.win_.GM_BrowserUI.statusImage.src =
+      "chrome://greasemonkey/content/third-party/throbber.gif";
   this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
-  this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
+  this.win_.GM_BrowserUI.statusImage.tooltipText =
+      this.bundle_.getString("tooltip.loading");
 
   this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
 
