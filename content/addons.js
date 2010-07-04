@@ -27,6 +27,7 @@ var observer = {
     if (event == "install") {
       var item = greasemonkeyAddons.addScriptToList(script);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
+      item.setAttribute('newAddon', 'true');
       return;
     }
 
