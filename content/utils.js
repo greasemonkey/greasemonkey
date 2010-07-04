@@ -361,6 +361,18 @@ function GM_sha1(unicode) {
 }
 GM_sha1 = GM_memoize(GM_sha1);
 
+GM_scriptDirCache = null;
+function GM_scriptDir() {
+  if (!GM_scriptDirCache) {
+    GM_scriptDirCache = Components
+        .classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsILocalFile);
+    GM_scriptDirCache.append("gm_scripts");
+  }
+  return GM_scriptDirCache.clone();
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //

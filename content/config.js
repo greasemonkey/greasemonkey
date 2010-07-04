@@ -1,7 +1,7 @@
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
-  this._configFile = this._scriptDir;
+  this._configFile = GM_scriptDir();
   this._configFile.append("config.xml");
   this._initScriptDir();
 
@@ -69,7 +69,7 @@ Config.prototype = {
     this._scripts = [];
 
     for (var node = null; node = nodes.iterateNext(); ) {
-      var script = new Script(this);
+      var script = new Script();
 
       script._filename = node.getAttribute("filename");
       script._basedir = node.getAttribute("basedir") || ".";
@@ -231,7 +231,7 @@ Config.prototype = {
   },
 
   parse: function(source, uri, updating) {
-    var script = new Script(this);
+    var script = new Script();
 
     if (uri) {
       script._downloadURL = uri.spec;
@@ -388,7 +388,7 @@ Config.prototype = {
     this._changed(script, "uninstall", null);
 
     // watch out for cases like basedir="." and basedir="../gm_scripts"
-    if (!script._basedirFile.equals(this._scriptDir)) {
+    if (!script._basedirFile.equals(GM_scriptDir())) {
       // if script has its own dir, remove the dir + contents
       script._basedirFile.remove(true);
     } else {
@@ -432,20 +432,11 @@ Config.prototype = {
     this._changed(script, "move", to);
   },
 
-  get _scriptDir() {
-    var file = Components.classes["@mozilla.org/file/directory_service;1"]
-                         .getService(Components.interfaces.nsIProperties)
-                         .get("ProfD", Components.interfaces.nsILocalFile);
-    file.append("gm_scripts");
-    return file;
-  },
-
   /**
    * Create an empty configuration if none exist.
    */
   _initScriptDir: function() {
-    var dir = this._scriptDir;
-
+    var dir = GM_scriptDir();
     if (!dir.exists()) {
       dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
 
@@ -539,7 +530,7 @@ Config.prototype = {
    * are paranoid and backup the folder the first time 0.8 runs.
    */
   _pointEightBackup: function() {
-    var scriptDir = this._scriptDir;
+    var scriptDir = GM_scriptDir();
     var scriptDirBackup = scriptDir.clone();
     scriptDirBackup.leafName += "_08bak";
     if (scriptDir.exists() && !scriptDirBackup.exists())

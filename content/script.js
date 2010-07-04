@@ -1,5 +1,4 @@
-function Script(config) {
-  this._config = config;
+function Script() {
   this._observers = [];
 
   this._downloadURL = null; // Only for scripts not installed
@@ -35,7 +34,9 @@ Script.prototype = {
     return this._includes.some(test) && !this._excludes.some(test);
   },
 
-  _changed: function(event, data) { this._config._changed(this, event, data); },
+  _changed: function(event, data) {
+    GM_getConfig()._changed(this, event, data);
+  },
 
   get name() { return this._name; },
   get namespace() { return this._namespace; },
@@ -72,7 +73,7 @@ Script.prototype = {
   get editFile() { return this._file; },
 
   get _basedirFile() {
-    var file = this._config._scriptDir;
+    var file = GM_scriptDir();
     file.append(this._basedir);
     file.normalize();
     return file;
@@ -106,12 +107,12 @@ Script.prototype = {
   },
 
   _initFile: function(tempFile) {
-    var file = this._config._scriptDir;
     var name = this._initFileName(this._name, false);
+    this._basedir = name;
 
+    var file = GM_scriptDir();
     file.append(name);
     file.createUnique(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
-    this._basedir = file.leafName;
 
     file.append(name + ".user.js");
     file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
