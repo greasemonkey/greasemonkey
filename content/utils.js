@@ -80,7 +80,6 @@ function GM_log(message, force) {
 // the UI and Config rely on it. Needs rethinking.
 
 function GM_openInEditor(script) {
-  var file = script.editFile;
   var editor = GM_getEditor();
   if (!editor) {
     // The user did not choose an editor.
@@ -88,7 +87,7 @@ function GM_openInEditor(script) {
   }
 
   try {
-    GM_launchApplicationWithDoc(editor, file);
+    GM_launchApplicationWithDoc(editor, script.file);
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
@@ -360,6 +359,18 @@ function GM_sha1(unicode) {
   return hex.join('');
 }
 GM_sha1 = GM_memoize(GM_sha1);
+
+GM_scriptDirCache = null;
+function GM_scriptDir() {
+  if (!GM_scriptDirCache) {
+    GM_scriptDirCache = Components
+        .classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsILocalFile);
+    GM_scriptDirCache.append("gm_scripts");
+  }
+  return GM_scriptDirCache.clone();
+}
 
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:

@@ -199,14 +199,14 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
   }
 };
 
-GM_ScriptDownloader.prototype.finishInstall = function(){
+GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
-    this.script._config.injectScript(this.script);
+    GM_getConfig().injectScript(this.script);
     this.script.delayInjection = false;
 
     // Save new values to config.xml
-    this.script._config._save();
+    GM_getConfig()._save();
   } else if (this.installOnCompletion_) {
     this.installScript();
   }

@@ -62,8 +62,14 @@ function GM_apiLeakCheck(apiName) {
 var greasemonkeyService = {
   _config: null,
   get config() {
-    if (!this._config)
+    if (!this._config) {
+      // First guarantee instantiation and existence.  (So that anything,
+      // including stuff inside i.e. config._load(), can call
+      // i.e. config._changed().)
       this._config = new Config();
+      // Then initialize.
+      this._config.initialize();
+    }
     return this._config;
   },
   browserWindows: [],

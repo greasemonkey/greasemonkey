@@ -237,6 +237,7 @@ var greasemonkeyAddons = {
       GM_config._scripts.sort(scriptCmp);
       GM_config._save();
       greasemonkeyAddons.fillList();
+      greasemonkeyAddons.reselectLastSelected();
       break;
     case 'cmd_userscript_uninstall':
       GM_uninstallQueue[script.id] = script;
