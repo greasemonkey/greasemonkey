@@ -383,6 +383,13 @@ function GM_installUri(uri) {
   return false;
 }
 
+function GM_scriptMatchesUrlAndRuns(script, url) {
+  return !script.delayInjection 
+      && script.enabled
+      && !script.needsUninstall
+      && script.matchesURL(url);
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //

@@ -275,16 +275,12 @@ var greasemonkeyAddons = {
       break;
     case 'cmd_userscript_uninstall':
       GM_uninstallQueue[script.id] = script;
-      // Todo: This without dipping into private members?
-      script.needsUninstallEnabled = script._enabled;
-      script._enabled = false;
+      script.needsUninstall = true;
       selectedListitem.setAttribute('opType', 'needs-uninstall');
       break;
     case 'cmd_userscript_uninstall_cancel':
       delete(GM_uninstallQueue[script.id]);
-      // Todo: This without dipping into private members?
-      script._enabled = script.needsUninstallEnabled;
-      delete(script.needsUninstallDisabled);
+      script.needsUninstall = false;
       selectedListitem.removeAttribute('opType');
       break;
     case 'cmd_userscript_uninstall_now':

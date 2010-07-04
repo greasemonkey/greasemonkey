@@ -215,10 +215,6 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
-    function testMatch(script) {
-      return !script.delayInjection && script.enabled && script.matchesURL(url);
-    }
-
     // Todo: Try to implement this w/out global state.
     this.config.wrappedContentWin = wrappedContentWin;
     this.config.chromeWin = chromeWin;
@@ -227,7 +223,9 @@ var greasemonkeyService = {
       this.config.updateModifiedScripts();
     }
 
-    return this.config.getMatchingScripts(testMatch);
+    return this.config.getMatchingScripts(function(script) {
+          return GM_scriptMatchesUrlAndRuns(script, url)
+        });
   },
 
   injectScripts: function(scripts, url, wrappedContentWin, chromeWin) {
