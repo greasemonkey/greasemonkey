@@ -15,6 +15,7 @@ function Script(configNode) {
   this._description = null;
   this._version = null;
   this._enabled = true;
+  this.needsUninstall = false;
   this._includes = [];
   this._excludes = [];
   this._requires = [];

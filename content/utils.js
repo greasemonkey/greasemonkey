@@ -372,6 +372,13 @@ function GM_scriptDir() {
   return GM_scriptDirCache.clone();
 }
 
+function GM_scriptMatchesUrlAndRuns(script, url) {
+  return !script.delayInjection 
+      && script.enabled
+      && !script.needsUninstall
+      && script.matchesURL(url);
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
