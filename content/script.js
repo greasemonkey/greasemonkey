@@ -24,7 +24,7 @@ function Script(configNode) {
   this.delayInjection = false;
   this._rawMeta = null;
   
-  this._loadFromConfigNode(configNode);
+  if (configNode) this._loadFromConfigNode(configNode);
 }
 
 Script.prototype = {
@@ -119,8 +119,8 @@ Script.prototype = {
           this.textContent, this._downloadURL, true);
 
       this._modified = this.file.lastModifiedTime;
-      this._dependhash = GM_sha1(parsedthis._rawMeta);
-      this._version = parsedthis._version;
+      this._dependhash = GM_sha1(parsedScript._rawMeta);
+      this._version = parsedScript._version;
 
       GM_getConfig()._changed(this, "modified", null);
     } else {
@@ -138,12 +138,12 @@ Script.prototype = {
         this._excludes.push(childNode.textContent);
         break;
       case "Require":
-        var scriptRequire = new ScriptRequire(script);
+        var scriptRequire = new ScriptRequire(this);
         scriptRequire._filename = childNode.getAttribute("filename");
         this._requires.push(scriptRequire);
         break;
       case "Resource":
-        var scriptResource = new ScriptResource(script);
+        var scriptResource = new ScriptResource(this);
         scriptResource._name = childNode.getAttribute("name");
         scriptResource._filename = childNode.getAttribute("filename");
         scriptResource._mimetype = childNode.getAttribute("mimetype");
