@@ -317,7 +317,7 @@ Config.prototype = {
       script._resources[i]._initFile();
     }
 
-    script._modified = script._file.lastModifiedTime;
+    script._modified = script.file.lastModifiedTime;
     script._metahash = GM_sha1(script._rawMeta);
 
     this._scripts.push(script);
@@ -337,7 +337,7 @@ Config.prototype = {
       script._basedirFile.remove(true);
     } else {
       // if script is in the root, just remove the file
-      script._file.remove(false);
+      script.file.remove(false);
     }
 
     if (GM_prefRoot.getValue("uninstallPreferences")) {
@@ -411,7 +411,7 @@ Config.prototype = {
 
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
-          GM_getContents(script._file), script._downloadURL, true);
+          script.textContent, script._downloadURL, true);
       script.updateFromNewScript(parsedScript);
       this._changed(script, "modified", null, true);
     }

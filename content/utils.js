@@ -80,7 +80,6 @@ function GM_log(message, force) {
 // the UI and Config rely on it. Needs rethinking.
 
 function GM_openInEditor(script) {
-  var file = script.editFile;
   var editor = GM_getEditor();
   if (!editor) {
     // The user did not choose an editor.
@@ -88,7 +87,7 @@ function GM_openInEditor(script) {
   }
 
   try {
-    GM_launchApplicationWithDoc(editor, file);
+    GM_launchApplicationWithDoc(editor, script.file);
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.

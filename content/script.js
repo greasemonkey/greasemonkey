@@ -66,13 +66,11 @@ Script.prototype = {
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
 
-  get _file() {
+  get file() {
     var file = this._basedirFile;
     file.append(this._filename);
     return file;
   },
-
-  get editFile() { return this._file; },
 
   get _basedirFile() {
     var file = GM_scriptDir();
@@ -81,8 +79,8 @@ Script.prototype = {
     return file;
   },
 
-  get fileURL() { return GM_getUriFromFile(this._file).spec; },
-  get textContent() { return GM_getContents(this._file); },
+  get fileURL() { return GM_getUriFromFile(this.file).spec; },
+  get textContent() { return GM_getContents(this.file); },
 
   _initFileName: function(name, useExt) {
     var ext = "";
@@ -120,7 +118,7 @@ Script.prototype = {
       var parsedScript = GM_getConfig().parse(
           this.textContent, this._downloadURL, true);
 
-      this._modified = this._file.lastModifiedTime;
+      this._modified = this.file.lastModifiedTime;
       this._dependhash = GM_sha1(parsedthis._rawMeta);
       this._version = parsedthis._version;
 
@@ -192,8 +190,8 @@ Script.prototype = {
   },
 
   isModified: function() {
-    if (this._modified != this._file.lastModifiedTime) {
-      this._modified = this._file.lastModifiedTime;
+    if (this._modified != this.file.lastModifiedTime) {
+      this._modified = this.file.lastModifiedTime;
       return true;
     }
     return false;
@@ -236,7 +234,7 @@ Script.prototype = {
       while (dirFiles.hasMoreElements()) {
         var nextFile = dirFiles.getNext()
             .QueryInterface(Components.interfaces.nsIFile);
-        if (!nextFile.equals(this._file)) nextFile.remove(true);
+        if (!nextFile.equals(this.file)) nextFile.remove(true);
       }
 
       // Redownload dependencies.
