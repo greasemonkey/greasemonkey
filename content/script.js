@@ -75,7 +75,12 @@ Script.prototype = {
   get _basedirFile() {
     var file = GM_scriptDir();
     file.append(this._basedir);
-    file.normalize();
+    try {
+      // Can fail if this path does not exist.
+      file.normalize();
+    } catch (e) {
+      // no-op
+    }
     return file;
   },
 
@@ -107,13 +112,15 @@ Script.prototype = {
   },
 
   _loadFromConfigNode: function(node) {
+    if (!this.fileExists(this._basedirFile)) return;
+
     this._filename = node.getAttribute("filename");
     this._basedir = node.getAttribute("basedir") || ".";
     this._downloadURL = node.getAttribute("installurl") || null;
 
-    if (!node.getAttribute("modified")
-        || !node.getAttribute("dependhash")
-        || !node.getAttribute("version")
+    if (!node.hasAttribute("modified")
+        || !node.hasAttribute("dependhash")
+        || !node.hasAttribute("version")
     ) {
       var parsedScript = GM_getConfig().parse(
           this.textContent, this._downloadURL, true);
@@ -190,6 +197,7 @@ Script.prototype = {
   },
 
   isModified: function() {
+    if (!this.fileExists(this.file)) return false;
     if (this._modified != this.file.lastModifiedTime) {
       this._modified = this.file.lastModifiedTime;
       return true;
@@ -245,5 +253,57 @@ Script.prototype = {
 
       this.delayInjection = true;
     }
+  },
+  
+  allFiles: function() {
+    var files = [];
+    if (!this._basedirFile.equals(GM_scriptDir())) {
+      files.push(this._basedirFile);
+    }
+    files.push(this.file);
+    for (var i = 0, r = null; r = this._requires[i]; i++) {
+      files.push(r.file);
+    }
+    for (var i = 0, r = null; r = this._resources[i]; i++) {
+      files.push(r.file);
+    }
+    return files;
+  },
+  
+  fileExists: function(file) {
+    try {
+      return file.exists();
+    } catch (e) {
+      return false;
+    }
+  },
+    
+  allFilesExist: function() {
+    return this.allFiles().every(this.fileExists);
+  },
+
+  uninstall: function() {
+    if (this._basedirFile.equals(GM_scriptDir())) {
+      // if script is in the root, just remove the file
+      try {
+        this.file.remove(false);
+      } catch (e) {
+        // Fail silently if it already does not exist.
+      }
+    } else {
+      // if script has its own dir, remove the dir + contents
+      try {
+        this._basedirFile.remove(true);
+      } catch (e) {
+        // Fail silently if it already does not exist.
+      }
+    }
+
+    if (GM_prefRoot.getValue("uninstallPreferences")) {
+      // Remove saved preferences
+      GM_prefRoot.remove(this.prefroot);
+    }
+
+    GM_getConfig()._changed(this, "uninstall", null);
   }
 };

@@ -71,7 +71,14 @@ Config.prototype = {
     var node = null;
     while (node = nodes.iterateNext()) {
       var script = new Script(node);
-      this._scripts.push(script);
+      if (script.allFilesExist()) {
+        this._scripts.push(script);
+      } else {
+        // TODO: Add a user prompt to restore the missing script here?
+        // Perhaps sometime after update works, and we know where to
+        // download the script from?
+        script.uninstall();
+      }
     }
   },
 
@@ -329,21 +336,7 @@ Config.prototype = {
   uninstall: function(script) {
     var idx = this._find(script);
     this._scripts.splice(idx, 1);
-    this._changed(script, "uninstall", null);
-
-    // watch out for cases like basedir="." and basedir="../gm_scripts"
-    if (!script._basedirFile.equals(GM_scriptDir())) {
-      // if script has its own dir, remove the dir + contents
-      script._basedirFile.remove(true);
-    } else {
-      // if script is in the root, just remove the file
-      script.file.remove(false);
-    }
-
-    if (GM_prefRoot.getValue("uninstallPreferences")) {
-      // Remove saved preferences
-      GM_prefRoot.remove(script.prefroot);
-    }
+    script.uninstall();
   },
 
   /**
