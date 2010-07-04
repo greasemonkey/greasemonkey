@@ -361,6 +361,17 @@ function GM_sha1(unicode) {
 }
 GM_sha1 = GM_memoize(GM_sha1);
 
+function GM_installUri(uri) {
+  var win = Cc['@mozilla.org/appshell/window-mediator;1']
+    .getService(Ci.nsIWindowMediator)
+    .getMostRecentWindow("navigator:browser");
+  if (win && win.GM_BrowserUI) {
+    win.GM_BrowserUI.startInstallScript(uri);
+    return true;
+  }
+  return false;
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
