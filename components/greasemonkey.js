@@ -177,16 +177,11 @@ var greasemonkeyService = {
       dump("shouldload: " + cl.spec + "\n");
       dump("ignorescript: " + this.ignoreNextScript_ + "\n");
 
-      if (!this.ignoreNextScript_) {
-        if (!this.isTempScript(cl)) {
-          var win = Cc['@mozilla.org/appshell/window-mediator;1']
-            .getService(Ci.nsIWindowMediator)
-            .getMostRecentWindow("navigator:browser");
-          if (win && win.GM_BrowserUI) {
-            win.GM_BrowserUI.startInstallScript(cl);
-            ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-          }
-        }
+      if (!this.ignoreNextScript_
+        && !this.isTempScript(cl)
+        && GM_installUri(cl)
+      ) {
+        ret = Ci.nsIContentPolicy.REJECT_REQUEST;
       }
     }
 
