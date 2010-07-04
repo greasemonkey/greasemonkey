@@ -6,12 +6,14 @@ function Config() {
   this._initScriptDir();
 
   this._observers = [];
-
-  this._updateVersion();
-  this._load();
 }
 
 Config.prototype = {
+  initialize: function() {
+    this._updateVersion();
+    this._load();
+  },
+
   addObserver: function(observer, script) {
     var observers = script ? script._observers : this._observers;
     observers.push(observer);
