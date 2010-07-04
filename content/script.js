@@ -206,10 +206,6 @@ Script.prototype = {
   },
 
   updateFromNewScript: function(newScript) {
-    // Empty cached values.
-    this._id = null;
-    this._prefroot = null;
-
     // Migrate preferences.
     if (this.prefroot != newScript.prefroot) {
       var storageOld = new GM_ScriptStorage(this);
@@ -221,6 +217,10 @@ Script.prototype = {
         storageOld.deleteValue(name);
       }
     }
+
+    // Empty cached values.
+    this._id = null;
+    this._prefroot = null;
 
     // Copy new values.
     this._includes = newScript._includes;
