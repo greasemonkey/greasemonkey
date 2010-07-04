@@ -1,4 +1,4 @@
-function Script() {
+function Script(configNode) {
   this._observers = [];
 
   this._downloadURL = null; // Only for scripts not installed
@@ -23,6 +23,8 @@ function Script() {
   this._dependFail = false
   this.delayInjection = false;
   this._rawMeta = null;
+  
+  this._loadFromConfigNode(configNode);
 }
 
 Script.prototype = {
@@ -106,6 +108,62 @@ Script.prototype = {
     return name;
   },
 
+  _loadFromConfigNode: function(node) {
+    this._filename = node.getAttribute("filename");
+    this._basedir = node.getAttribute("basedir") || ".";
+    this._downloadURL = node.getAttribute("installurl") || null;
+
+    if (!node.getAttribute("modified")
+        || !node.getAttribute("dependhash")
+        || !node.getAttribute("version")
+    ) {
+      var parsedScript = GM_getConfig().parse(
+          this.textContent, this._downloadURL, true);
+
+      this._modified = this._file.lastModifiedTime;
+      this._dependhash = GM_sha1(parsedthis._rawMeta);
+      this._version = parsedthis._version;
+
+      GM_getConfig()._changed(this, "modified", null);
+    } else {
+      this._modified = node.getAttribute("modified");
+      this._dependhash = node.getAttribute("dependhash");
+      this._version = node.getAttribute("version");
+    }
+
+    for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
+      switch (childNode.nodeName) {
+      case "Include":
+        this._includes.push(childNode.textContent);
+        break;
+      case "Exclude":
+        this._excludes.push(childNode.textContent);
+        break;
+      case "Require":
+        var scriptRequire = new ScriptRequire(script);
+        scriptRequire._filename = childNode.getAttribute("filename");
+        this._requires.push(scriptRequire);
+        break;
+      case "Resource":
+        var scriptResource = new ScriptResource(script);
+        scriptResource._name = childNode.getAttribute("name");
+        scriptResource._filename = childNode.getAttribute("filename");
+        scriptResource._mimetype = childNode.getAttribute("mimetype");
+        scriptResource._charset = childNode.getAttribute("charset");
+        this._resources.push(scriptResource);
+        break;
+      case "Unwrap":
+        this._unwrap = true;
+        break;
+      }
+    }
+
+    this._name = node.getAttribute("name");
+    this._namespace = node.getAttribute("namespace");
+    this._description = node.getAttribute("description");
+    this._enabled = node.getAttribute("enabled") == true.toString();
+  },
+  
   _initFile: function(tempFile) {
     var name = this._initFileName(this._name, false);
     this._basedir = name;
