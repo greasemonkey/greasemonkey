@@ -390,8 +390,23 @@ var greasemonkeyAddons = {
         $('commandBarBottom').insertBefore(
             $('getMoreUserscripts'), $('newUserscript').nextSibling);
       }
+    } else if ('Linux' == osString) {
+      if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+        // Linux, Firefox 3.0
+        $('commandBarBottom').appendChild($('newUserscript'));
+      } else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+        // Linux, Firefox 3.5
+        $('commandBarBottom').insertBefore(
+            $('getMoreUserscripts'), $('skipDialogButton'));
+        $('commandBarBottom').insertBefore(
+            $('newUserscript'), $('skipDialogButton'));
+      } else {
+        // Linux, Firefox 3.6
+        $('commandBarBottom').insertBefore(
+            $('newUserscript'), $('skipDialogButton'));
+      }
     } else {
-      alert('unknown');
+      alert('unknown\n'+osString+'\n'+appInfo.version);
     }
   }
 };
