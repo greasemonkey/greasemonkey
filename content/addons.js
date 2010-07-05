@@ -366,7 +366,7 @@ var greasemonkeyAddons = {
   
   // See: http://github.com/greasemonkey/greasemonkey/issues/#issue/1149
   // Since every Firefox version/platform has a different order of controls
-  // in this dialog, rearrange ours to fit in.
+  // in this dialog, rearrange ours to blend in with that scheme.
   fixButtonOrder: function() {
     function $(id) { return document.getElementById(id); }
 
@@ -381,32 +381,24 @@ var greasemonkeyAddons = {
         .getService(Components.interfaces.nsIXULRuntime)
         .OS;
 
-    if ('WINNT' == osString) {
-      if (versionChecker.compare(appInfo.version, '3.5') < 0) {
-        // Windows, Firefox 3.0
-        $('commandBarBottom').appendChild($('newUserscript'));
-      } else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+    if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+      // All platforms, Firefox 3.0
+      $('commandBarBottom').appendChild($('newUserscript'));
+    } else if ('WINNT' == osString) {
+      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
         // Windows, Firefox 3.5
         $('commandBarBottom').insertBefore(
             $('getMoreUserscripts'), $('newUserscript').nextSibling);
       }
-    } else if ('Linux' == osString) {
-      if (versionChecker.compare(appInfo.version, '3.5') < 0) {
-        // Linux, Firefox 3.0
-        $('commandBarBottom').appendChild($('newUserscript'));
-      } else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
-        // Linux, Firefox 3.5
+    } else {
+      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+        // Mac/Linux, Firefox 3.5
         $('commandBarBottom').insertBefore(
             $('getMoreUserscripts'), $('skipDialogButton'));
-        $('commandBarBottom').insertBefore(
-            $('newUserscript'), $('skipDialogButton'));
-      } else {
-        // Linux, Firefox 3.6
-        $('commandBarBottom').insertBefore(
-            $('newUserscript'), $('skipDialogButton'));
       }
-    } else {
-      alert('unknown\n'+osString+'\n'+appInfo.version);
+      // Mac/Linux, Firefox 3.5 and 3.6
+      $('commandBarBottom').insertBefore(
+          $('newUserscript'), $('skipDialogButton'));
     }
   }
 };
