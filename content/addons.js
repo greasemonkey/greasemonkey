@@ -59,6 +59,7 @@ var observer = {
 window.addEventListener('load', function() {
   gUserscriptsView = document.getElementById('userscriptsView');
   greasemonkeyAddons.fillList();
+  greasemonkeyAddons.fixButtonOrder();
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
@@ -361,5 +362,43 @@ var greasemonkeyAddons = {
     }
     aEvent.stopPropagation();
     aEvent.preventDefault();
+  },
+  
+  // See: http://github.com/greasemonkey/greasemonkey/issues/#issue/1149
+  // Since every Firefox version/platform has a different order of controls
+  // in this dialog, rearrange ours to blend in with that scheme.
+  fixButtonOrder: function() {
+    function $(id) { return document.getElementById(id); }
+
+    var appInfo = Components
+        .classes["@mozilla.org/xre/app-info;1"]  
+        .getService(Components.interfaces.nsIXULAppInfo);
+    var versionChecker = Components
+        .classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
+    var osString = Components
+        .classes["@mozilla.org/xre/app-info;1"]
+        .getService(Components.interfaces.nsIXULRuntime)
+        .OS;
+
+    if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+      // All platforms, Firefox 3.0
+      $('commandBarBottom').appendChild($('newUserscript'));
+    } else if ('WINNT' == osString) {
+      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+        // Windows, Firefox 3.5
+        $('commandBarBottom').insertBefore(
+            $('getMoreUserscripts'), $('newUserscript').nextSibling);
+      }
+    } else {
+      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+        // Mac/Linux, Firefox 3.5
+        $('commandBarBottom').insertBefore(
+            $('getMoreUserscripts'), $('skipDialogButton'));
+      }
+      // Mac/Linux, Firefox 3.5 and 3.6
+      $('commandBarBottom').insertBefore(
+          $('newUserscript'), $('skipDialogButton'));
+    }
   }
 };
