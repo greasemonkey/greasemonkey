@@ -77,7 +77,8 @@ Config.prototype = {
         // TODO: Add a user prompt to restore the missing script here?
         // Perhaps sometime after update works, and we know where to
         // download the script from?
-        script.uninstall();
+        node.parentNode.removeChild(node);
+        this._changed(script, "missing-removed", null);
       }
     }
   },
