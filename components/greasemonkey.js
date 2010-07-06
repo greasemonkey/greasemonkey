@@ -62,8 +62,14 @@ function GM_apiLeakCheck(apiName) {
 var greasemonkeyService = {
   _config: null,
   get config() {
-    if (!this._config)
+    if (!this._config) {
+      // First guarantee instantiation and existence.  (So that anything,
+      // including stuff inside i.e. config._load(), can call
+      // i.e. config._changed().)
       this._config = new Config();
+      // Then initialize.
+      this._config.initialize();
+    }
     return this._config;
   },
   browserWindows: [],
@@ -171,16 +177,11 @@ var greasemonkeyService = {
       dump("shouldload: " + cl.spec + "\n");
       dump("ignorescript: " + this.ignoreNextScript_ + "\n");
 
-      if (!this.ignoreNextScript_) {
-        if (!this.isTempScript(cl)) {
-          var win = Cc['@mozilla.org/appshell/window-mediator;1']
-            .getService(Ci.nsIWindowMediator)
-            .getMostRecentWindow("navigator:browser");
-          if (win && win.GM_BrowserUI) {
-            win.GM_BrowserUI.startInstallScript(cl);
-            ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-          }
-        }
+      if (!this.ignoreNextScript_
+        && !this.isTempScript(cl)
+        && GM_installUri(cl)
+      ) {
+        ret = Ci.nsIContentPolicy.REJECT_REQUEST;
       }
     }
 
@@ -214,10 +215,6 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
-    function testMatch(script) {
-      return !script.delayInjection && script.enabled && script.matchesURL(url);
-    }
-
     // Todo: Try to implement this w/out global state.
     this.config.wrappedContentWin = wrappedContentWin;
     this.config.chromeWin = chromeWin;
@@ -226,7 +223,9 @@ var greasemonkeyService = {
       this.config.updateModifiedScripts();
     }
 
-    return this.config.getMatchingScripts(testMatch);
+    return this.config.getMatchingScripts(function(script) {
+          return GM_scriptMatchesUrlAndRuns(script, url)
+        });
   },
 
   injectScripts: function(scripts, url, wrappedContentWin, chromeWin) {
