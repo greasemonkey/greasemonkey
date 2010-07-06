@@ -113,11 +113,12 @@ Script.prototype = {
   },
 
   _loadFromConfigNode: function(node) {
-    if (!this.fileExists(this._basedirFile)) return;
-
     this._filename = node.getAttribute("filename");
     this._basedir = node.getAttribute("basedir") || ".";
     this._downloadURL = node.getAttribute("installurl") || null;
+
+    if (!this.fileExists(this._basedirFile)) return;
+    if (!this.fileExists(this.file)) return;
 
     if (!node.hasAttribute("modified")
         || !node.hasAttribute("dependhash")
