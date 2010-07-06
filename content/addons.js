@@ -3,6 +3,31 @@ var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 
+var GM_firefoxVersion;
+var GM_os;
+(function() {
+var appInfo = Components
+    .classes["@mozilla.org/xre/app-info;1"]  
+    .getService(Components.interfaces.nsIXULAppInfo);
+var versionChecker = Components
+    .classes["@mozilla.org/xpcom/version-comparator;1"]
+    .getService(Components.interfaces.nsIVersionComparator);
+var xulRuntime = Components
+    .classes["@mozilla.org/xre/app-info;1"]
+    .getService(Components.interfaces.nsIXULRuntime);
+
+// Detect fixed possible compatible Firefox versions.
+if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+  GM_firefoxVersion = '3.0';
+} else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+  GM_firefoxVersion = '3.5';
+} else {
+  GM_firefoxVersion = '3.6';
+}
+
+GM_os = xulRuntime.OS;
+})();
+
 (function() {
 // Override some built-in functions, with a closure reference to the original
 // function, to either handle or delegate the call.
@@ -63,9 +88,11 @@ window.addEventListener('load', function() {
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
-  gUserscriptsView.addEventListener(
-      'keypress', greasemonkeyAddons.onKeypress, false);
-
+  if ('3.6' == GM_firefoxVersion) {
+    gUserscriptsView.addEventListener(
+        'keypress', greasemonkeyAddons.onKeypress, false);
+  }
+  
   window.addEventListener(
       'dragover', greasemonkeyAddons.onDragOver, false);
   window.addEventListener(
@@ -115,14 +142,14 @@ var greasemonkeyAddons = {
     document.documentElement.className += ' userscripts';
 
     GM_config.updateModifiedScripts();
-    gUserscriptsView.focus();
+    if ('3.6' == GM_firefoxVersion) gUserscriptsView.focus();
   },
 
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/g, '');
-    gExtensionsView.focus();
+    if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
   },
 
   urlFromDragEvent: function(event) {
@@ -370,28 +397,17 @@ var greasemonkeyAddons = {
   fixButtonOrder: function() {
     function $(id) { return document.getElementById(id); }
 
-    var appInfo = Components
-        .classes["@mozilla.org/xre/app-info;1"]  
-        .getService(Components.interfaces.nsIXULAppInfo);
-    var versionChecker = Components
-        .classes["@mozilla.org/xpcom/version-comparator;1"]
-        .getService(Components.interfaces.nsIVersionComparator);
-    var osString = Components
-        .classes["@mozilla.org/xre/app-info;1"]
-        .getService(Components.interfaces.nsIXULRuntime)
-        .OS;
-
-    if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+    if ('3.0' == GM_firefoxVersion) {
       // All platforms, Firefox 3.0
       $('commandBarBottom').appendChild($('newUserscript'));
-    } else if ('WINNT' == osString) {
-      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+    } else if ('WINNT' == GM_os) {
+      if ('3.5' == GM_firefoxVersion) {
         // Windows, Firefox 3.5
         $('commandBarBottom').insertBefore(
             $('getMoreUserscripts'), $('newUserscript').nextSibling);
       }
     } else {
-      if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+      if ('3.5' == GM_firefoxVersion) {
         // Mac/Linux, Firefox 3.5
         $('commandBarBottom').insertBefore(
             $('getMoreUserscripts'), $('skipDialogButton'));
