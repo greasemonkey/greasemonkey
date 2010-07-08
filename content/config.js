@@ -1,19 +1,21 @@
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
-  this._configFile = this._scriptDir;
+  this._configFile = GM_scriptDir();
   this._configFile.append("config.xml");
   this._initScriptDir();
 
   this._observers = [];
-
-  this._updateVersion();
-  this._load();
   this.showUpdates = false;
-  this._notifyUpdates();
 }
 
 Config.prototype = {
+  initialize: function() {
+    this._updateVersion();
+    this._load();
+    this._notifyUpdates();
+  },
+
   addObserver: function(observer, script) {
     var observers = script ? script._observers : this._observers;
     observers.push(observer);
@@ -61,88 +63,25 @@ Config.prototype = {
 
   _load: function() {
     var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
-                              .createInstance(Components.interfaces.nsIDOMParser);
+        .createInstance(Components.interfaces.nsIDOMParser);
 
     var configContents = GM_getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
     var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
-    var fileModified = false;
 
     this._scripts = [];
-
-    for (var node = null; node = nodes.iterateNext(); ) {
-      var script = new Script(this);
-
-      script._filename = node.getAttribute("filename");
-      script._basedir = node.getAttribute("basedir") || ".";
-      script._downloadURL = node.getAttribute("downloadURL") || null;
-      script._updateURL = node.getAttribute("updateURL") || null;
-
-      // Migration for values that must be parsed from installed scripts
-      if (!node.getAttribute("modified") ||
-          !node.getAttribute("dependhash") ||
-          !node.getAttribute("version")) {
-        script._modified = script._file.lastModifiedTime;
-        var parsedScript = this.parse(
-            GM_getContents(script._file), script._downloadURL, true);
-        script._dependhash = GM_sha1(parsedScript._rawMeta);
-        script._version = parsedScript._version;
-        fileModified = true;
+    var node = null;
+    while (node = nodes.iterateNext()) {
+      var script = new Script(node);
+      if (script.allFilesExist()) {
+        this._scripts.push(script);
       } else {
-        script._modified = node.getAttribute("modified");
-        script._dependhash = node.getAttribute("dependhash");
-        script._version = node.getAttribute("version");
+        // TODO: Add a user prompt to restore the missing script here?
+        // Perhaps sometime after update works, and we know where to
+        // download the script from?
+        node.parentNode.removeChild(node);
+        this._changed(script, "missing-removed", null);
       }
-
-      // Migration with default values
-      if (!node.getAttribute("updateAvailable") ||
-          !node.getAttribute("lastUpdateCheck")) {
-        script.updateAvailable = false;
-        script._lastUpdateCheck = script._modified;
-        fileModified = true;
-      } else {
-        script.updateAvailable = node.getAttribute("updateAvailable") == true.toString();
-        script._updateVersion= node.getAttribute("updateVersion") || null;
-        script._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
-      }
-
-      for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
-        switch (childNode.nodeName) {
-        case "Include":
-          script._includes.push(childNode.firstChild.nodeValue);
-          break;
-        case "Exclude":
-          script._excludes.push(childNode.firstChild.nodeValue);
-          break;
-        case "Require":
-          var scriptRequire = new ScriptRequire(script);
-          scriptRequire._filename = childNode.getAttribute("filename");
-          script._requires.push(scriptRequire);
-          break;
-        case "Resource":
-          var scriptResource = new ScriptResource(script);
-          scriptResource._name = childNode.getAttribute("name");
-          scriptResource._filename = childNode.getAttribute("filename");
-          scriptResource._mimetype = childNode.getAttribute("mimetype");
-          scriptResource._charset = childNode.getAttribute("charset");
-          script._resources.push(scriptResource);
-          break;
-        case "Unwrap":
-          script._unwrap = true;
-          break;
-        }
-      }
-
-      script._name = node.getAttribute("name");
-      script._namespace = node.getAttribute("namespace");
-      script._description = node.getAttribute("description");
-      script._enabled = node.getAttribute("enabled") == true.toString();
-
-      this._scripts.push(script);
-    }
-
-    if (fileModified) {
-      this._save();
     }
   },
 
@@ -283,7 +222,7 @@ Config.prototype = {
   },
 
   parse: function(source, uri, updating) {
-    var script = new Script(this);
+    var script = new Script();
 
     if (uri) {
       script._downloadURL = uri;
@@ -419,6 +358,10 @@ Config.prototype = {
     }
 
     if (oldScript) {
+      // save the old script's state
+      newScript._enabled = oldScript.enabled;
+
+      // uninstall the old script
       this.uninstall(oldScript);
     }
 
@@ -447,21 +390,7 @@ Config.prototype = {
   uninstall: function(script) {
     var idx = this._find(script);
     this._scripts.splice(idx, 1);
-    this._changed(script, "uninstall", null);
-
-    // watch out for cases like basedir="." and basedir="../gm_scripts"
-    if (!script._basedirFile.equals(this._scriptDir)) {
-      // if script has its own dir, remove the dir + contents
-      script._basedirFile.remove(true);
-    } else {
-      // if script is in the root, just remove the file
-      script._file.remove(false);
-    }
-
-    if (GM_prefRoot.getValue("uninstallPreferences")) {
-      // Remove saved preferences
-      GM_prefRoot.remove(script.prefroot);
-    }
+    script.uninstall();
   },
 
   /**
@@ -494,20 +423,11 @@ Config.prototype = {
     this._changed(script, "move", to);
   },
 
-  get _scriptDir() {
-    var file = Components.classes["@mozilla.org/file/directory_service;1"]
-                         .getService(Components.interfaces.nsIProperties)
-                         .get("ProfD", Components.interfaces.nsILocalFile);
-    file.append("gm_scripts");
-    return file;
-  },
-
   /**
    * Create an empty configuration if none exist.
    */
   _initScriptDir: function() {
-    var dir = this._scriptDir;
-
+    var dir = GM_scriptDir();
     if (!dir.exists()) {
       dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
 
@@ -525,8 +445,9 @@ Config.prototype = {
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
-    if (script.enabled && script.matchesURL(href)) {
-      greasemonkeyService.injectScripts([script], href, unsafeWin, this.chromeWin);
+    if (GM_scriptMatchesUrlAndRuns(script, href)) {
+      greasemonkeyService.injectScripts(
+          [script], href, unsafeWin, this.chromeWin);
     }
   },
 
@@ -538,7 +459,7 @@ Config.prototype = {
 
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
-          GM_getContents(script._file), script._downloadURL, true);
+          script.textContent, script._downloadURL, true);
       script.updateFromNewScript(parsedScript);
       this._changed(script, "modified", null, true);
     }
@@ -613,7 +534,7 @@ Config.prototype = {
    * are paranoid and backup the folder the first time 0.8 runs.
    */
   _pointEightBackup: function() {
-    var scriptDir = this._scriptDir;
+    var scriptDir = GM_scriptDir();
     var scriptDirBackup = scriptDir.clone();
     scriptDirBackup.leafName += "_08bak";
     if (scriptDir.exists() && !scriptDirBackup.exists())

@@ -1,5 +1,4 @@
-function Script(config) {
-  this._config = config;
+function Script(configNode) {
   this._observers = [];
 
   this._downloadURL = null;
@@ -17,6 +16,7 @@ function Script(config) {
   this._version = null;
   this._updateURL = null;
   this._enabled = true;
+  this.needsUninstall = false;
   this._includes = [];
   this._excludes = [];
   this._requires = [];
@@ -28,6 +28,8 @@ function Script(config) {
   this._lastUpdateCheck = null;
   this.updateAvailable = null;
   this._updateVersion = null;
+  
+  if (configNode) this._loadFromConfigNode(configNode);
 }
 
 Script.prototype = {
@@ -39,7 +41,9 @@ Script.prototype = {
     return this._includes.some(test) && !this._excludes.some(test);
   },
 
-  _changed: function(event, data) { this._config._changed(this, event, data); },
+  _changed: function(event, data) {
+    GM_getConfig()._changed(this, event, data);
+  },
 
   get name() { return this._name; },
   get namespace() { return this._namespace; },
@@ -73,23 +77,26 @@ Script.prototype = {
     return null;
   },
 
-  get _file() {
+  get file() {
     var file = this._basedirFile;
     file.append(this._filename);
     return file;
   },
 
-  get editFile() { return this._file; },
-
   get _basedirFile() {
-    var file = this._config._scriptDir;
+    var file = GM_scriptDir();
     file.append(this._basedir);
-    file.normalize();
+    try {
+      // Can fail if this path does not exist.
+      file.normalize();
+    } catch (e) {
+      // no-op
+    }
     return file;
   },
 
-  get fileURL() { return GM_getUriFromFile(this._file).spec; },
-  get textContent() { return GM_getContents(this._file); },
+  get fileURL() { return GM_getUriFromFile(this.file).spec; },
+  get textContent() { return GM_getContents(this.file); },
 
   _initFileName: function(name, useExt) {
     var ext = "";
@@ -115,13 +122,86 @@ Script.prototype = {
     return name;
   },
 
-  _initFile: function(tempFile) {
-    var file = this._config._scriptDir;
-    var name = this._initFileName(this._name, false);
+  _loadFromConfigNode: function(node) {
+    this._filename = node.getAttribute("filename");
+    this._basedir = node.getAttribute("basedir") || ".";
+    this._downloadURL = node.getAttribute("downloadURL") || null;
+    thi._updateURL = node.getAttribute("updateURL") || null;
 
+    if (!this.fileExists(this._basedirFile)) return;
+    if (!this.fileExists(this.file)) return;
+
+    if (!node.hasAttribute("modified")
+        || !node.hasAttribute("dependhash")
+        || !node.hasAttribute("version")
+    ) {
+      var parsedScript = GM_getConfig().parse(
+          this.textContent, this._downloadURL, true);
+
+      this._modified = this.file.lastModifiedTime;
+      this._dependhash = GM_sha1(parsedScript._rawMeta);
+      this._version = parsedScript._version;
+
+      GM_getConfig()._changed(this, "modified", null);
+    } else {
+      this._modified = node.getAttribute("modified");
+      this._dependhash = node.getAttribute("dependhash");
+      this._version = node.getAttribute("version");
+    }
+
+    // Migration with default values
+    if (!node.getAttribute("updateAvailable") ||
+        !node.getAttribute("lastUpdateCheck")) {
+      this.updateAvailable = false;
+      this._lastUpdateCheck = this._modified;
+      
+      GM_getConfig()._changed(this, "modified", null);
+    } else {
+        this.updateAvailable = node.getAttribute("updateAvailable") == true.toString();
+        this._updateVersion= node.getAttribute("updateVersion") || null;
+        this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
+    }
+
+    for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
+      switch (childNode.nodeName) {
+      case "Include":
+        this._includes.push(childNode.textContent);
+        break;
+      case "Exclude":
+        this._excludes.push(childNode.textContent);
+        break;
+      case "Require":
+        var scriptRequire = new ScriptRequire(this);
+        scriptRequire._filename = childNode.getAttribute("filename");
+        this._requires.push(scriptRequire);
+        break;
+      case "Resource":
+        var scriptResource = new ScriptResource(this);
+        scriptResource._name = childNode.getAttribute("name");
+        scriptResource._filename = childNode.getAttribute("filename");
+        scriptResource._mimetype = childNode.getAttribute("mimetype");
+        scriptResource._charset = childNode.getAttribute("charset");
+        this._resources.push(scriptResource);
+        break;
+      case "Unwrap":
+        this._unwrap = true;
+        break;
+      }
+    }
+
+    this._name = node.getAttribute("name");
+    this._namespace = node.getAttribute("namespace");
+    this._description = node.getAttribute("description");
+    this._enabled = node.getAttribute("enabled") == true.toString();
+  },
+  
+  _initFile: function(tempFile) {
+    var name = this._initFileName(this._name, false);
+    this._basedir = name;
+
+    var file = GM_scriptDir();
     file.append(name);
     file.createUnique(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
-    this._basedir = file.leafName;
 
     file.append(name + ".user.js");
     file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
@@ -143,18 +223,15 @@ Script.prototype = {
   },
 
   isModified: function() {
-    if (this._modified != this._file.lastModifiedTime) {
-      this._modified = this._file.lastModifiedTime;
+    if (!this.fileExists(this.file)) return false;
+    if (this._modified != this.file.lastModifiedTime) {
+      this._modified = this.file.lastModifiedTime;
       return true;
     }
     return false;
   },
 
   updateFromNewScript: function(newScript) {
-    // Empty cached values.
-    this._id = null;
-    this._prefroot = null;
-
     // Migrate preferences.
     if (this.prefroot != newScript.prefroot) {
       var storageOld = new GM_ScriptStorage(this);
@@ -166,6 +243,10 @@ Script.prototype = {
         storageOld.deleteValue(name);
       }
     }
+
+    // Empty cached values.
+    this._id = null;
+    this._prefroot = null;
 
     // Copy new values.
     this._includes = newScript._includes;
@@ -188,7 +269,7 @@ Script.prototype = {
       while (dirFiles.hasMoreElements()) {
         var nextFile = dirFiles.getNext()
             .QueryInterface(Components.interfaces.nsIFile);
-        if (!nextFile.equals(this._file)) nextFile.remove(true);
+        if (!nextFile.equals(this.file)) nextFile.remove(true);
       }
 
       // Redownload dependencies.
@@ -243,5 +324,57 @@ Script.prototype = {
         this._config._save();
       }
     }
+  },
+  
+  allFiles: function() {
+    var files = [];
+    if (!this._basedirFile.equals(GM_scriptDir())) {
+      files.push(this._basedirFile);
+    }
+    files.push(this.file);
+    for (var i = 0, r = null; r = this._requires[i]; i++) {
+      files.push(r.file);
+    }
+    for (var i = 0, r = null; r = this._resources[i]; i++) {
+      files.push(r.file);
+    }
+    return files;
+  },
+  
+  fileExists: function(file) {
+    try {
+      return file.exists();
+    } catch (e) {
+      return false;
+    }
+  },
+    
+  allFilesExist: function() {
+    return this.allFiles().every(this.fileExists);
+  },
+
+  uninstall: function() {
+    if (this._basedirFile.equals(GM_scriptDir())) {
+      // if script is in the root, just remove the file
+      try {
+        this.file.remove(false);
+      } catch (e) {
+        // Fail silently if it already does not exist.
+      }
+    } else {
+      // if script has its own dir, remove the dir + contents
+      try {
+        this._basedirFile.remove(true);
+      } catch (e) {
+        // Fail silently if it already does not exist.
+      }
+    }
+
+    if (GM_prefRoot.getValue("uninstallPreferences")) {
+      // Remove saved preferences
+      GM_prefRoot.remove(this.prefroot);
+    }
+
+    GM_getConfig()._changed(this, "uninstall", null);
   }
 };

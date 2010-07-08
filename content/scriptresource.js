@@ -14,20 +14,20 @@ function ScriptResource(script) {
 ScriptResource.prototype = {
   get name() { return this._name; },
 
-  get _file() {
+  get file() {
     var file = this._script._basedirFile;
     file.append(this._filename);
     return file;
   },
 
-  get textContent() { return GM_getContents(this._file); },
+  get textContent() { return GM_getContents(this.file); },
 
   get dataContent() {
     var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
                            .getService(Components.interfaces.nsIAppShellService);
 
     var window = appSvc.hiddenDOMWindow;
-    var binaryContents = GM_getBinaryContents(this._file);
+    var binaryContents = GM_getBinaryContents(this.file);
 
     var mimetype = this._mimetype;
     if (this._charset && this._charset.length > 0) {

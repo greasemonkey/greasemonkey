@@ -38,12 +38,20 @@
 </notificationbox>
 
 <hbox id="commandBarBottom">
+  <button id="findUpdatesUserscripts"
+    insertafter="checkUpdatesAllButton"
+    label="&cmd.checkUpdatesAll.label;"
+    accesskey="&cmd.checkUpdatesAll.accesskey;"
+    disabled="true"
+  />
+
   <label id="getMoreUserscripts" class="text-link"
     insertafter="getMore"
     onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
     value="Get User Scripts"
     getMoreURL="http://userscripts.org/"
   />
+
   <button id="findUpdatesUserscripts"
     insertafter="getMore"
     oncommand="greasemonkeyAddons.fillList(true);"
@@ -52,6 +60,7 @@
   />
 
   <button id="newUserscript"
+    insertafter="installFileButton"
     label="&NewScript;"
     accesskey="&NewScript.accesskey;"
     oncommand="GM_newUserScript()"
