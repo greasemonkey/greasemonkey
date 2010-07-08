@@ -373,8 +373,8 @@ function GM_scriptDir() {
 }
 
 function GM_installUri(uri) {
-  var win = Cc['@mozilla.org/appshell/window-mediator;1']
-    .getService(Ci.nsIWindowMediator)
+  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+    .getService(Components.interfaces.nsIWindowMediator)
     .getMostRecentWindow("navigator:browser");
   if (win && win.GM_BrowserUI) {
     win.GM_BrowserUI.startInstallScript(uri);
