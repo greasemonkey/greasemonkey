@@ -50,16 +50,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.toolsMenu = document.getElementById("menu_ToolsPopup");
   this.bundle = document.getElementById("gm-browser-bundle");
 
-  // seamonkey compat
-  if (!this.toolsMenu) {
-    this.toolsMenu = document.getElementById("taskPopup");
-  }
-
-  // songbird compat
-  if (!this.appContent && this.tabBrowser) {
-    this.appContent = this.tabBrowser.parentNode;
-  }
-
   // update visual status when enabled state changes
   this.enabledWatcher = GM_hitch(this, "refreshStatus");
   GM_prefRoot.watch("enabled", this.enabledWatcher);
@@ -130,26 +120,22 @@ GM_BrowserUI.contentLoad = function(e) {
   var safeWin;
   var unsafeWin;
   var href;
-  var commander;
 
-  if (!GM_getEnabled()) {
-    return;
-  }
+  if (!GM_getEnabled()) return;
 
   safeWin = e.target.defaultView;
   unsafeWin = safeWin.wrappedJSObject;
   href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    commander = this.getCommander(unsafeWin);
-
     // if this content load is in the focused tab, attach the menuCommaander
     if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
+      var commander = this.getCommander(safeWin);
       this.currentMenuCommander = commander;
       this.currentMenuCommander.attach();
     }
 
-    this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin }, window);
+    this.gmSvc.domContentLoaded(safeWin, window);
 
     GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
   }
@@ -171,45 +157,29 @@ GM_BrowserUI.contentLoad = function(e) {
 GM_BrowserUI.showInstallBanner = function(browser) {
   var greeting = this.bundle.getString("greeting.msg");
 
-  if (this.tabBrowser.showMessage) {
-    // Firefox 1.5 and lower
-    this.tabBrowser.showMessage(
-      browser,
-      "chrome://greasemonkey/content/icon_small.png",
-      greeting,
-      this.bundle.getString("greeting.btn"),
-      null /* default doc shell */,
-      "install-userscript",
-      null /* no popuup */,
-      "top",
-      true /* show close button */,
-      this.bundle.getString("greeting.btnAccess") /* access key */);
-  } else {
-    // Firefox 2.0+
-    var notificationBox = this.tabBrowser.getNotificationBox(browser);
+  var notificationBox = this.tabBrowser.getNotificationBox(browser);
 
-    // Remove existing notifications. Notifications get removed
-    // automatically onclick and on page navigation, but we need to remove
-    // them ourselves in the case of reload, or they stack up.
-    for (var i = 0, child; child = notificationBox.childNodes[i]; i++) {
-      if (child.getAttribute("value") == "install-userscript") {
-        notificationBox.removeNotification(child);
-      }
+  // Remove existing notifications. Notifications get removed
+  // automatically onclick and on page navigation, but we need to remove
+  // them ourselves in the case of reload, or they stack up.
+  for (var i = 0, child; child = notificationBox.childNodes[i]; i++) {
+    if (child.getAttribute("value") == "install-userscript") {
+      notificationBox.removeNotification(child);
     }
-
-    var notification = notificationBox.appendNotification(
-      greeting,
-      "install-userscript",
-      "chrome://greasemonkey/content/icon_small.png",
-      notificationBox.PRIORITY_WARNING_MEDIUM,
-      [{
-        label: this.bundle.getString("greeting.btn"),
-        accessKey: this.bundle.getString("greeting.btnAccess"),
-        popup: null,
-        callback: GM_hitch(this, "installCurrentScript")
-      }]
-    );
   }
+
+  var notification = notificationBox.appendNotification(
+    greeting,
+    "install-userscript",
+    "chrome://greasemonkey/skin/icon_small.png",
+    notificationBox.PRIORITY_WARNING_MEDIUM,
+    [{
+      label: this.bundle.getString("greeting.btn"),
+      accessKey: this.bundle.getString("greeting.btnAccess"),
+      popup: null,
+      callback: GM_hitch(this, "installCurrentScript")
+    }]
+  );
 };
 
 /**
@@ -459,6 +429,7 @@ function GM_showPopup(aEvent) {
   }
 
   function appendScriptToPopup(script) {
+    if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.name);
     mi.script = script;
@@ -524,7 +495,7 @@ function GM_popupClicked(aEvent) {
     if (aEvent.button == 0) // left-click: toggle enabled state
       script.enabled =! script.enabled;
     else // right-click: open in editor
-      openInEditor(script);
+      GM_openInEditor(script);
 
     closeMenus(aEvent.target);
   }
@@ -537,24 +508,14 @@ function GM_popupClicked(aEvent) {
  */
 GM_BrowserUI.refreshStatus = function() {
   if (GM_getEnabled()) {
-    this.statusImage.src = "chrome://greasemonkey/content/icon_small.png";
+    this.statusImage.src = "chrome://greasemonkey/skin/icon_small.png";
     this.statusImage.tooltipText = this.bundle.getString("tooltip.enabled");
   } else {
-    this.statusImage.src = "chrome://greasemonkey/content/icon_small_disabled.png";
+    this.statusImage.src = "chrome://greasemonkey/skin/icon_small_disabled.png";
     this.statusImage.tooltipText = this.bundle.getString("tooltip.disabled");
   }
 
   this.statusImage.style.opacity = "1.0";
-};
-
-GM_BrowserUI.newUserScript = function() {
-  var windowWatcher = Components
-    .classes["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Components.interfaces.nsIWindowWatcher);
-  windowWatcher.openWindow(
-    window, "chrome://greasemonkey/content/newscript.xul", null,
-    "chrome,dependent,centerscreen,resizable,dialog", null
-  );
 };
 
 GM_BrowserUI.showStatus = function(message, autoHide) {
@@ -657,10 +618,6 @@ GM_BrowserUI.viewContextItemClicked = function() {
 
   this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
   this.scriptDownloader_.startViewScript();
-};
-
-GM_BrowserUI.manageMenuItemClicked = function() {
-   GM_openUserScriptManager();
 };
 
 GM_BrowserUI.init();

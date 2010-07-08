@@ -2,8 +2,6 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
-<!-- Note: Contains Firefox-specific overlay -->
-
 <overlay id="greasemonkey-browser-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -13,7 +11,6 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/dochandler.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/accelimation.js" />
@@ -28,16 +25,9 @@
       insertbefore="context-openlink" />
   </popup>
 
-  <!-- Firefox -->
   <menupopup id="menu_ToolsPopup">
     <menu id="gm_general_menu"
       insertbefore="javascriptConsole" />
-  </menupopup>
-
-  <!-- SeaMonkey -->
-  <menupopup id="taskPopup">
-    <menu id="gm_general_menu"
-      insertbefore="downloadMgr" />
   </menupopup>
 
   <!--
@@ -64,11 +54,11 @@
       <menuitem
         accesskey="&menu.manage.accesskey;"
         label="&menu.manage;"
-        oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
+        oncommand="BrowserOpenAddonsMgr('userscripts');" />
       <menuitem id="userscript-tools-new"
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
-        oncommand="GM_BrowserUI.newUserScript();" />
+        oncommand="GM_newUserScript();" />
       <menu id="userscript-commands-sb2"
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
@@ -96,7 +86,7 @@
         height="16"
         mousethrough="never"
         onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
-                    else if (event.button == 1) GM_BrowserUI.manageMenuItemClicked();"
+                    else if (event.button == 1) BrowserOpenAddonsMgr('userscripts');"
         context="gm-status-popup" />
       <popup id="gm-status-popup"
         position="before_end"
@@ -118,10 +108,10 @@
         <menuseparator />
         <menuitem accesskey="&menu.new.accesskey;"
           label="&menu.new;"
-          oncommand="GM_BrowserUI.newUserScript();" />
+          oncommand="GM_newUserScript();" />
         <menuitem accesskey="&menu.manage.accesskey;"
           label="&menu.manage;"
-          oncommand="GM_BrowserUI.manageMenuItemClicked(event);" />
+          oncommand="BrowserOpenAddonsMgr('userscripts');" />
         <menuseparator />
         <menuitem id="gm-status-enabled-item"
           accesskey="&statusbar.enabled.accesskey;"

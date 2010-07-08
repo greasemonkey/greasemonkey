@@ -1,15 +1,3 @@
-<!ENTITY manage.title "ユーザスクリプトの管理">
-<!ENTITY manage.button.close "閉じる">
-<!ENTITY manage.button.add "追加...">
-<!ENTITY manage.button.edit "編集...">
-<!ENTITY manage.button.remove "削除">
-<!ENTITY manage.label.grpIncluded "ユーザスクリプトを実行するページ">
-<!ENTITY manage.label.grpExcluded "ユーザスクリプトを実行しないページ">
-<!ENTITY manage.label.btnEdit "編集">
-<!ENTITY manage.label.chkEnabled "有効にする">
-<!ENTITY manage.label.btnUninstall "アンインストール">
-<!ENTITY manage.label.chkUninstall "関連付けられた設定も削除">
-<!ENTITY manage.reorderHelp "マウスのドラッグアンドドロップ、もしくはAlt-Up/Alt-Downで、このリストのスクリプトを並べ替え">
 <!ENTITY menu.install "ユーザスクリプトをインストール...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "ユーザスクリプトの閲覧">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "説明">
 <!ENTITY newscript.includes "実行するページ (改行で複数指定)">
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
+<!ENTITY Uninstall "アンインストール">
+<!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">

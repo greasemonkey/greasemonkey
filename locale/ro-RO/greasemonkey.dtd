@@ -1,14 +1,3 @@
-<!ENTITY manage.title "Organizeaza scripturile utilizator">
-<!ENTITY manage.button.add "Adauga...">
-<!ENTITY manage.button.edit "Editeaza...">
-<!ENTITY manage.button.remove "Sterge">
-<!ENTITY manage.label.grpIncluded "Pagini incluse">
-<!ENTITY manage.label.grpExcluded "Pagini excluse">
-<!ENTITY manage.label.btnEdit "Editeaza">
-<!ENTITY manage.label.chkEnabled "Activat">
-<!ENTITY manage.label.btnUninstall "Dezinstaleaza">
-<!ENTITY manage.label.chkUninstall "Dezinstaleaza si preferintele asociate">
-<!ENTITY manage.reorderHelp "Apasa ALT+sageti pentru a reordona scripturile sau muta-le cu mouse-ul.">
 <!ENTITY menu.install "Instaleaza script utilizator...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Vizualizeaza sursa scriptului utilizator">
@@ -34,4 +23,5 @@
 <!ENTITY newscript.description "Descriere">
 <!ENTITY newscript.includes "Include (unu pe linie)">
 <!ENTITY newscript.excludes "Exclude (unu pe linie)">
-<!ENTITY manage.button.close "Close">
+<!ENTITY Uninstall "Dezinstaleaza">
+<!ENTITY AlsoUninstallPrefs "Dezinstaleaza si preferintele asociate">

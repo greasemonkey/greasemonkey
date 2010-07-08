@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Håndter User Scripts">
-<!ENTITY manage.button.close "Luk">
-<!ENTITY manage.button.add "Tilføj...">
-<!ENTITY manage.button.edit "Rediger...">
-<!ENTITY manage.button.remove "Fjern">
-<!ENTITY manage.label.grpIncluded "Inkluderede sider">
-<!ENTITY manage.label.grpExcluded "Udelukkede sider">
-<!ENTITY manage.label.btnEdit "Rediger">
-<!ENTITY manage.label.chkEnabled "Aktiveret">
-<!ENTITY manage.label.btnUninstall "Afinstaller">
-<!ENTITY manage.label.chkUninstall "Afinstaller også tilknyttede indstillinger">
-<!ENTITY manage.reorderHelp "Brug musen eller tryk Alt-Op/Alt-Ned for at omorganisere scriptene i listen.">
 <!ENTITY menu.install "Installer User Script...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Vis User Scriptens kildekode">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Beskrivelse">
 <!ENTITY newscript.includes "Inkluder (En pr. linje)">
 <!ENTITY newscript.excludes "Udeluk (En pr. linje)">
+<!ENTITY Uninstall "Afinstaller">
+<!ENTITY AlsoUninstallPrefs "Afinstaller også tilknyttede indstillinger">

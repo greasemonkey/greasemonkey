@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Kudeatu Erabiltzaile Scriptak">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Gehitu...">
-<!ENTITY manage.button.edit "Aldatu...">
-<!ENTITY manage.button.remove "Ezabatu">
-<!ENTITY manage.label.grpIncluded "Eraginpeko orriak">
-<!ENTITY manage.label.grpExcluded "Baztertutako orriak">
-<!ENTITY manage.label.btnEdit "Aldatu">
-<!ENTITY manage.label.chkEnabled "Gaituta">
-<!ENTITY manage.label.btnUninstall "Desinstalatu">
-<!ENTITY manage.label.chkUninstall "Honi loturiko hobespenak ere desinstalatu">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
 <!ENTITY menu.install "Instalatu Scripta...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Ikusi Scriptaren Iturburua">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Description">
 <!ENTITY newscript.includes "Includes (One per line)">
 <!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY Uninstall "Desinstalatu">
+<!ENTITY AlsoUninstallPrefs "Honi loturiko hobespenak ere desinstalatu">

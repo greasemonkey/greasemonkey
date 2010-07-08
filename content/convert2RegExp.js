@@ -22,11 +22,8 @@ function convert2RegExp( pattern ) {
       case "|" :
       case "(" :
       case ")" :
-        res += "\\" + s[i];
-        break;
-
       case "\\" :
-        res += "\\\\";
+        res += "\\" + s[i];
         break;
 
       case " " :

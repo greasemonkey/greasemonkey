@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window [
+<!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
+%brandDTD;
+<!ENTITY % extensionsDTD SYSTEM "chrome://mozapps/locale/extensions/extensions.dtd">
+%extensionsDTD;
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%greasemonkeyDTD;
+<!ENTITY % greasemonkeyAddonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+%greasemonkeyAddonsDTD;
+]>
+
+<?xml-stylesheet href="chrome://greasemonkey/content/addons.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/addons.css" type="text/css"?>
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
+
+<radiogroup id="viewGroup">
+  <radio id="userscripts-view" label="&userscripts;"
+         insertafter="installs-view" persist="last-selected"
+         oncommand="showView('userscripts');">
+  </radio>
+</radiogroup>
+
+<notificationbox id="addonsMsg">
+  <vbox id="userscriptsBox" insertafter="extensionsBox" flex="1">
+    <hbox flex="1">
+      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"/>
+    </hbox>
+  </vbox>
+</notificationbox>
+
+<hbox id="commandBarBottom">
+  <button id="findUpdatesUserscripts"
+    insertafter="checkUpdatesAllButton"
+    label="&cmd.checkUpdatesAll.label;"
+    accesskey="&cmd.checkUpdatesAll.accesskey;"
+    disabled="true"
+  />
+
+  <label id="getMoreUserscripts" class="text-link"
+    insertafter="getMore"
+    onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
+    value="Get User Scripts"
+    getMoreURL="http://userscripts.org/"
+  />
+
+  <button id="newUserscript"
+    insertafter="installFileButton"
+    label="&NewScript;"
+    accesskey="&NewScript.accesskey;"
+    oncommand="GM_newUserScript()"
+  />
+</hbox>
+
+<window id="extensionsManager">
+  <commandset id="userscripts-commands"
+      oncommand="greasemonkeyAddons.doCommand(event.target.id);">
+    <command id="cmd_userscript_edit"/>
+    <command id="cmd_userscript_show"/>
+    <command id="cmd_userscript_enable"/>
+    <command id="cmd_userscript_disable"/>
+    <command id="cmd_userscript_uninstall"/>
+    <command id="cmd_userscript_uninstall_cancel"/>
+    <command id="cmd_userscript_uninstall_now"/>
+
+    <command id="cmd_userscript_move_up"/>
+    <command id="cmd_userscript_move_down"/>
+    <command id="cmd_userscript_move_top"/>
+    <command id="cmd_userscript_move_bottom"/>
+
+    <command id="cmd_userscript_sort"/>
+  </commandset>
+
+  <menupopup id="userscriptContextMenu"
+    onpopupshowing="greasemonkeyAddons.buildContextMenu(event);"
+  >
+    <menuitem id="userscript_context_move_up" command="cmd_userscript_move_up"
+      label="&MoveUp;" accesskey="&MoveUp.accesskey;"
+    />
+    <menuitem id="userscript_context_move_down" command="cmd_userscript_move_down"
+      label="&MoveDown;" accesskey="&MoveDown.accesskey;"
+    />
+    <menuitem id="userscript_context_move_top" command="cmd_userscript_move_top"
+      label="&MoveToTop;" accesskey="&MoveToTop.accesskey;"
+    />
+    <menuitem id="userscript_context_move_bottom" command="cmd_userscript_move_bottom"
+      label="&MoveToBottom;" accesskey="&MoveToBottom.accesskey;"
+    />
+    <menuitem id="userscript_context_sort" command="cmd_userscript_sort"
+      label="&SortScripts;" accesskey="&SortScripts.accesskey;"
+    />
+
+    <menuseparator id="userscript_context_move_separator"/>
+
+    <menuitem id="userscript_context_edit" command="cmd_userscript_edit"
+      label="&Edit;" accesskey="&Edit.accesskey;"
+    />
+    <menuitem id="userscript_context_show" command="cmd_userscript_show"
+      label="&Show;" accesskey="&Show.accesskey;"
+    />
+
+    <menuseparator id="userscript_context_edit_separator"/>
+
+    <menuitem id="userscript_context_uninstall" command="cmd_userscript_uninstall"
+      label="&cmd.uninstall.label;" accesskey="&cmd.uninstall2.accesskey;"
+    />
+    <menuitem id="userscript_context_uninstall_now" command="cmd_userscript_uninstall_now"
+      label="&UninstallNow;" accesskey="&UninstallNow.accesskey;"
+    />
+    <menuitem id="userscript_context_cancelUninstall" command="cmd_userscript_uninstall_cancel"
+      label="&cmd.cancelUninstall.label;" accesskey="&cmd.cancelUninstall.accesskey;"
+    />
+
+    <menuseparator/>
+
+    <!--
+    Todo: Make install/upgrade menu items like extensions if/when added.
+    <menuitem id="userscript_context_cancelInstall" command="cmd_cancelInstall"
+      label="&cmd.cancelInstall.label;" accesskey="&cmd.cancelInstall.accesskey;"/>
+    <menuitem id="userscript_context_cancelUpgrade" command="cmd_cancelUpgrade"
+      label="&cmd.cancelUpgrade.label;" accesskey="&cmd.cancelUpgrade.accesskey;"/>
+    <menuitem id="userscript_context_checkUpdate" command="cmd_checkUpdate"
+      label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
+    -->
+
+    <menuitem id="userscript_context_enable" command="cmd_userscript_enable"
+      label="&cmd.enable.label;" accesskey="&cmd.enable.accesskey;"/>
+    <menuitem id="userscript_context_disable" command="cmd_userscript_disable"
+      label="&cmd.disable.label;" accesskey="&cmd.disable.accesskey;"/>
+
+    <!--
+    Todo: as above.
+    <menuitem id="userscript_context_installUpdate" command="cmd_installUpdate"
+      label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"/>
+    <menuitem id="userscript_context_includeUpdate" command="cmd_includeUpdate"
+      label="&cmd.includeUpdate.label;" accesskey="&cmd.includeUpdate.accesskey;"
+      type="checkbox"/>
+    -->
+  </menupopup>
+</window>
+
+</overlay>

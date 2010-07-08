@@ -1,0 +1,11 @@
+Greasemonkey is Open Source, released under the terms of the MIT license;
+see the LICENSE.mit file.
+
+Greasemonkey contains code derived from FireBug ( http://getfirebug.com/ ),
+reused under the terms of the BSD license; see LICENSE.bsd.
+
+Greasemonkey also contains code derived from Mozilla projects, including
+Firefox ( http://mozilla.org/ ).  This code is reused under the MPL license;
+see the LICENSE.mpl file.  All such code is located in the content/third-party/
+directory, and all such files contain the appropriate licensing disclaimers
+and notifications.

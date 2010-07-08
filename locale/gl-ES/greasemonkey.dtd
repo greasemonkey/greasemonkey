@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Administrar Scripts de usuario">
-<!ENTITY manage.button.close "Pechar">
-<!ENTITY manage.button.add "Engadir...">
-<!ENTITY manage.button.edit "Editar...">
-<!ENTITY manage.button.remove "Eliminar">
-<!ENTITY manage.label.grpIncluded "Páxinas Incluídas">
-<!ENTITY manage.label.grpExcluded "Páxinas Excluídas">
-<!ENTITY manage.label.btnEdit "Editar">
-<!ENTITY manage.label.chkEnabled "Habilitado">
-<!ENTITY manage.label.btnUninstall "Desinstalar">
-<!ENTITY manage.label.chkUninstall "Tamén desinstalar preferenzas asociadas">
-<!ENTITY manage.reorderHelp "Arrastar e soltar co rato ou premer AlT-Up/Alt-Down para volver a ordear os scripts nesta lista.">
 <!ENTITY menu.install "Instalar Script...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Ver o Código do Script de Usuario">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Descrición">
 <!ENTITY newscript.includes "Inclua (Un por liña)">
 <!ENTITY newscript.excludes "Exclua (Un por liña)">
+<!ENTITY Uninstall "Desinstalar">
+<!ENTITY AlsoUninstallPrefs "Tamén desinstalar preferenzas asociadas">

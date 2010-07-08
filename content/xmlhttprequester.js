@@ -19,12 +19,9 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 
   GM_log("> GM_xmlhttpRequest.contentStartRequest");
 
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                  .getService(Components.interfaces.nsIIOService);
   try {
     // Validate and parse the (possibly relative) given URL.
-    var originUri = ioService.newURI(this.originUrl, null, null);
-    var uri = ioService.newURI(details.url, null, originUri);
+    var uri = GM_uriFromUrl(details.url, this.originUrl);
     var url = uri.spec;
   } catch (e) {
     // A malformed URL won't be parsed properly.
@@ -91,9 +88,11 @@ function(safeUrl, details, req) {
   }
 
   if (details.headers) {
-    for (var prop in details.headers) {
-      if (details.headers.hasOwnProperty(prop)) {
-        req.setRequestHeader(prop, details.headers[prop]);
+    var headers = details.headers;
+
+    for (var prop in headers) {
+      if (Object.prototype.hasOwnProperty.call(headers, prop)) {
+        req.setRequestHeader(prop, headers[prop]);
       }
     }
   }

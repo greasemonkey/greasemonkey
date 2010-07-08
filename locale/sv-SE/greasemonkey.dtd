@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Hantera användarskript">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Lägg till...">
-<!ENTITY manage.button.edit "Redigera...">
-<!ENTITY manage.button.remove "Ta bort">
-<!ENTITY manage.label.grpIncluded "Inkluderade sidor">
-<!ENTITY manage.label.grpExcluded "Exkluderade sidor">
-<!ENTITY manage.label.btnEdit "Redigera">
-<!ENTITY manage.label.chkEnabled "Aktiverad">
-<!ENTITY manage.label.btnUninstall "Avinstallera">
-<!ENTITY manage.label.chkUninstall "Avinstallera även tillhörande inställningar">
-<!ENTITY manage.reorderHelp "Drag-och-släpp med musen eller tryck Alt+Upp/Alt+Ner för att omorganisera skript i den här listan.">
 <!ENTITY menu.install "Installera användarskript...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Visa användarskripts källkod">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Beskrivning">
 <!ENTITY newscript.includes "Inkluderar (En per rad)">
 <!ENTITY newscript.excludes "Exkluderar (En per rad)">
+<!ENTITY Uninstall "Avinstallera">
+<!ENTITY AlsoUninstallPrefs "Avinstallera även tillhörande inställningar">

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:em="http://www.mozilla.org/2004/em-rdf#">
@@ -6,61 +6,46 @@
   <Description about="urn:mozilla:install-manifest">
 
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <!-- NOTE: build.sh will correct the em:version. -->
-    <em:version>0.8.20090811.2</em:version>
+    <em:version>0.9.0</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
-    <em:optionsURL>chrome://greasemonkey/content/manage.xul</em:optionsURL>
-    <em:iconURL>chrome://greasemonkey/content/icon_medium.png</em:iconURL>
+    <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL>
+    <em:iconURL>chrome://greasemonkey/skin/icon_medium.png</em:iconURL>
 
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
 
-    <em:contributor>Anthony Lieuallen; http://arantius.com</em:contributor>
-    <em:contributor>Chris Feldmann; http://axlotl.net</em:contributor>
+    <em:contributor>Anthony Lieuallen; http://arantius.com/</em:contributor>
+    <em:contributor>Chris Feldmann; http://axlotl.net/</em:contributor>
     <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
     <em:contributor>Erik Vold; http://erikvold.com/</em:contributor>
-    <em:contributor>Gareth Andrew; http://freegarethandrew.org</em:contributor>
+    <em:contributor>Gareth Andrew; http://freegarethandrew.org/</em:contributor>
     <em:contributor>Hisateru Tanaka</em:contributor>
     <em:contributor>Jeremy Dunck; http://dunck.us/anabasis/</em:contributor>
-    <em:contributor>Jesper Kristensen &lt;mail&#64;jesperkristensen.dk&gt;</em:contributor>
+    <em:contributor>Jesper Kristensen; &lt;mail&#64;jesperkristensen.dk&gt;</em:contributor>
     <em:contributor>Johan Sundström; http://ecmanaut.blogspot.com/</em:contributor>
     <em:contributor>JP Sugarbroad</em:contributor>
     <em:contributor>Juan Pablo Guereca Alonso</em:contributor>
     <em:contributor>Manpreet Singh</em:contributor>
-    <em:contributor>Mark Pilgrim; http://diveintomark.org</em:contributor>
+    <em:contributor>Mark Pilgrim; http://diveintomark.org/</em:contributor>
     <em:contributor>Marti Martz</em:contributor>
     <em:contributor>Matthias Bauer; http://moeffju.net/</em:contributor>
     <em:contributor>Matthew Gray; http://mkgray.com:8000/</em:contributor>
+    <em:contributor>Mike Medley; http://sizzlemctwizzle.com/</em:contributor>
     <em:contributor>Nikolas Coukouma; http://atrus.org/</em:contributor>
     <em:contributor>Ori Avtallon</em:contributor>
     <em:contributor>Pak Kei (logo); http://arkidect.com/</em:contributor>
-    <em:contributor>Sergio Abreu; http://sitedosergio.sitesbr.net</em:contributor>
-    <em:contributor>Tommi Rautava</em:contributor>
+    <em:contributor>Sergio Abreu; http://sitedosergio.sitesbr.net/</em:contributor>
+    <em:contributor>Tommi Rautava/</em:contributor>
 
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>1.5</em:minVersion>
+        <em:minVersion>3.0</em:minVersion>
         <em:maxVersion>3.6.*</em:maxVersion>
       </Description>
     </em:targetApplication>
-
-    <!-- Songbird -->
-    <em:targetApplication>
-      <Description>
-        <em:id>songbird@songbirdnest.com</em:id>
-        <em:minVersion>0.3pre</em:minVersion>
-        <em:maxVersion>1.0.*</em:maxVersion>
-      </Description>
-    </em:targetApplication>
-
-    <em:file>
-      <Description about="urn:mozilla:extension:file:greasemonkey">
-        <em:package>content/</em:package>
-      </Description>
-    </em:file>
 
   </Description>
 

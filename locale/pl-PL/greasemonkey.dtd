@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Zarządzanie skryptami">
-<!ENTITY manage.button.close "Zamknij">
-<!ENTITY manage.button.add "Dodaj">
-<!ENTITY manage.button.edit "Edytuj">
-<!ENTITY manage.button.remove "Usuń">
-<!ENTITY manage.label.grpIncluded "Witryny, na których skrypt jest uruchamiany">
-<!ENTITY manage.label.grpExcluded "Witryny, na których skrypt nie jest uruchamiany">
-<!ENTITY manage.label.btnEdit "Edytuj">
-<!ENTITY manage.label.chkEnabled "Włącz">
-<!ENTITY manage.label.btnUninstall "Usuń">
-<!ENTITY manage.label.chkUninstall "Usuń także skojarzone ustawienia">
-<!ENTITY manage.reorderHelp "Aby zmienić kolejność skryptów na liście, przenieś je za pomocą myszy lub skorzystaj ze skrótu Alt-Up/Alt-Down.">
 <!ENTITY menu.install "Instaluj skrypt">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Zobacz kod źródłowy skryptu">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
+<!ENTITY Uninstall "Usuń">
+<!ENTITY AlsoUninstallPrefs "Usuń także skojarzone ustawienia">
