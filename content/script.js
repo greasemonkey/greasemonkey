@@ -170,6 +170,72 @@ Script.prototype = {
     this._description = node.getAttribute("description");
     this._enabled = node.getAttribute("enabled") == true.toString();
   },
+
+  toConfigNode: function(doc) {
+    var scriptNode = doc.createElement("Script");
+
+    for (var j = 0; j < this._includes.length; j++) {
+      var includeNode = doc.createElement("Include");
+      includeNode.appendChild(doc.createTextNode(this._includes[j]));
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(includeNode);
+    }
+
+    for (var j = 0; j < this._excludes.length; j++) {
+      var excludeNode = doc.createElement("Exclude");
+      excludeNode.appendChild(doc.createTextNode(this._excludes[j]));
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(excludeNode);
+    }
+
+    for (var j = 0; j < this._requires.length; j++) {
+      var req = this._requires[j];
+      var resourceNode = doc.createElement("Require");
+
+      resourceNode.setAttribute("filename", req._filename);
+
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(resourceNode);
+    }
+
+    for (var j = 0; j < this._resources.length; j++) {
+      var imp = this._resources[j];
+      var resourceNode = doc.createElement("Resource");
+
+      resourceNode.setAttribute("name", imp._name);
+      resourceNode.setAttribute("filename", imp._filename);
+      resourceNode.setAttribute("mimetype", imp._mimetype);
+      if (imp._charset) {
+        resourceNode.setAttribute("charset", imp._charset);
+      }
+
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(resourceNode);
+    }
+
+    if (this._unwrap) {
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(doc.createElement("Unwrap"));
+    }
+
+    scriptNode.appendChild(doc.createTextNode("\n\t"));
+
+    scriptNode.setAttribute("filename", this._filename);
+    scriptNode.setAttribute("name", this._name);
+    scriptNode.setAttribute("namespace", this._namespace);
+    scriptNode.setAttribute("description", this._description);
+    scriptNode.setAttribute("version", this._version);
+    scriptNode.setAttribute("enabled", this._enabled);
+    scriptNode.setAttribute("basedir", this._basedir);
+    scriptNode.setAttribute("modified", this._modified);
+    scriptNode.setAttribute("dependhash", this._dependhash);
+
+    if (this._downloadURL) {
+      scriptNode.setAttribute("installurl", this._downloadURL);
+    }
+
+    return scriptNode;
+  },
   
   _initFile: function(tempFile) {
     var name = this._initFileName(this._name, false);

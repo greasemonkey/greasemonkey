@@ -107,70 +107,8 @@ Config.prototype = {
       .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
 
     for (var i = 0, scriptObj; scriptObj = this._scripts[i]; i++) {
-      var scriptNode = doc.createElement("Script");
-
-      for (var j = 0; j < scriptObj._includes.length; j++) {
-        var includeNode = doc.createElement("Include");
-        includeNode.appendChild(doc.createTextNode(scriptObj._includes[j]));
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(includeNode);
-      }
-
-      for (var j = 0; j < scriptObj._excludes.length; j++) {
-        var excludeNode = doc.createElement("Exclude");
-        excludeNode.appendChild(doc.createTextNode(scriptObj._excludes[j]));
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(excludeNode);
-      }
-
-      for (var j = 0; j < scriptObj._requires.length; j++) {
-        var req = scriptObj._requires[j];
-        var resourceNode = doc.createElement("Require");
-
-        resourceNode.setAttribute("filename", req._filename);
-
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(resourceNode);
-      }
-
-      for (var j = 0; j < scriptObj._resources.length; j++) {
-        var imp = scriptObj._resources[j];
-        var resourceNode = doc.createElement("Resource");
-
-        resourceNode.setAttribute("name", imp._name);
-        resourceNode.setAttribute("filename", imp._filename);
-        resourceNode.setAttribute("mimetype", imp._mimetype);
-        if (imp._charset) {
-          resourceNode.setAttribute("charset", imp._charset);
-        }
-
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(resourceNode);
-      }
-
-      if (scriptObj._unwrap) {
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(doc.createElement("Unwrap"));
-      }
-
-      scriptNode.appendChild(doc.createTextNode("\n\t"));
-
-      scriptNode.setAttribute("filename", scriptObj._filename);
-      scriptNode.setAttribute("name", scriptObj._name);
-      scriptNode.setAttribute("namespace", scriptObj._namespace);
-      scriptNode.setAttribute("description", scriptObj._description);
-      scriptNode.setAttribute("version", scriptObj._version);
-      scriptNode.setAttribute("enabled", scriptObj._enabled);
-      scriptNode.setAttribute("basedir", scriptObj._basedir);
-      scriptNode.setAttribute("modified", scriptObj._modified);
-      scriptNode.setAttribute("dependhash", scriptObj._dependhash);
-
-      if (scriptObj._downloadURL) {
-        scriptNode.setAttribute("installurl", scriptObj._downloadURL);
-      }
-
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
-      doc.firstChild.appendChild(scriptNode);
+      doc.firstChild.appendChild(scriptObj.toConfigNode(doc));
     }
 
     doc.firstChild.appendChild(doc.createTextNode("\n"));
