@@ -46,12 +46,8 @@ Config.prototype = {
   },
 
   _find: function(aScript) {
-    var namespace = aScript._namespace.toLowerCase();
-    var name = aScript._name.toLowerCase();
-
     for (var i = 0, script; script = this._scripts[i]; i++) {
-      if (script._namespace.toLowerCase() == namespace
-        && script._name.toLowerCase() == name) {
+      if (script.id == aScript.id) {
         return i;
       }
     }
