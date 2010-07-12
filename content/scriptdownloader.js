@@ -204,8 +204,8 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
 GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
-    GM_getConfig().injectScript(this.script);
     this.script.delayInjection = false;
+    GM_getConfig().injectScript(this.script);
 
     // Save new values to config.xml
     GM_getConfig()._save();
