@@ -60,50 +60,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
   GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
 
-  // Tab progress listener for document-start event (onLocationChange per tab)
-  var tabProgressListener = {
-    onLocationChange: function(aBrowser, webProg, request, location) {
-      GM_BrowserUI.tabLocationChange(aBrowser._contentWindow);
-    },
-    onProgressChange: function() { },
-    onStateChange: function() { },
-    onStatusChange: function() { },
-    onSecurityChange: function() { },
-    onRefreshAttempted: function() { }
-  };
-
-  try {
-    // addTabsProgressListener requires Firefox 3.5
-    gBrowser.addTabsProgressListener(tabProgressListener);
-  } catch (e) {
-    // Fallback method of adding progress listeners to each tab
-    var tabContainer = gBrowser.tabContainer;
-    tabProgressListener.QueryInterface = this.QueryInterface;
-
-    // Rewrite onLocationChange callback
-    tabProgressListener.onLocationChange = function(aProgress, aRequest, aURI) {
-      GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
-    };
-
-    // Add progress listeners to open tabs
-    for (var i = 0, len = gBrowser.browsers.length ; i < len; ++i) {
-      gBrowser.getBrowserAtIndex(i).addProgressListener(tabProgressListener,
-          Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
-    }
-
-    // Add listeners to detect new tabs
-    GM_listen(tabContainer, "TabOpen", function(event) {
-        var aBrowser = event.target.linkedBrowser;
-        aBrowser.addProgressListener(tabProgressListener,
-            Components.interfaces.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
-    });
-
-    GM_listen(tabContainer, "TabClose", function(event) {
-        var aBrowser = event.target.linkedBrowser;
-        aBrowser.removeProgressListener(tabProgressListener);
-    });
-  }
-
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
             .getService(Components.interfaces.nsIObserverService)
@@ -304,11 +260,13 @@ GM_BrowserUI.installScript = function(script){
 };
 
 /**
- * The browser's location has changed. Usually, we don't care. But in the case
- * of tab switching we need to change the list of commands displayed in the
- * User Script Commands submenu.
+ * The browser's location has changed.
  */
-GM_BrowserUI.onLocationChange = function(a,b,c) {
+GM_BrowserUI.onLocationChange = function(aProgress, aRequest, aURI) {
+  // Detect location change for document-start event
+  GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
+
+  // change the list of commands displayed in the User Script Commands submenu.
   if (this.currentMenuCommander != null) {
     this.currentMenuCommander.detach();
     this.currentMenuCommander = null;
