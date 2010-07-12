@@ -24,7 +24,7 @@ function Script(configNode) {
   this._dependFail = false
   this.delayInjection = false;
   this._rawMeta = null;
-  this.wins = null;
+  this.pendingExec = null;
   
   if (configNode) this._loadFromConfigNode(configNode);
 }
@@ -315,8 +315,8 @@ Script.prototype = {
       }
 
       // Store window references for late injection
-      this.wins = [];
-      this.wins.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+      this.pendingExec = [];
+      this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
 
       // Redownload dependencies.
       var scriptDownloader = new GM_ScriptDownloader(null, null, null);

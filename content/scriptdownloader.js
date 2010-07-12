@@ -206,11 +206,11 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     // Now that we have the new dependencies
     // Inject the script in all windows that have been waiting
     this.script.delayInjection = false;
-    var wins = this.script.wins;
-    for (var i = 0, len = wins.length; i < len; ++i) {
-      GM_getConfig().injectScript(this.script, wins[i]);
+    var pendingExec = this.script.pendingExec;
+    for (var i = 0, len = pendingExec.length; i < len; ++i) {
+      GM_getConfig().injectScript(this.script, pendingExec[i]);
     }
-    this.script.wins = null;
+    this.script.pendingExec = null;
 
     // Save new values to config.xml
     GM_getConfig()._save();

@@ -329,18 +329,18 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
-  injectScript: function(script, win) {
+  injectScript: function(script, pendingExec) {
     // don't inject if the window has closed
-    if (win.safeWin.closed)
+    if (pendingExec.safeWin.closed)
       return;
 
-    var unsafeWin = win.safeWin.wrappedJSObject;
+    var unsafeWin = pendingExec.safeWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
     if (GM_scriptMatchesUrlAndRuns(script, href)) {
       greasemonkeyService.injectScripts(
-          [script], href, unsafeWin, win.chromeWin);
+          [script], href, unsafeWin, pendingExec.chromeWin);
     }
   },
 
@@ -351,7 +351,7 @@ Config.prototype = {
     if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
-      if (!script.delayInjection) {
+      if (!script.pendingExec) {
         var parsedScript = this.parse(
             script.textContent, script._downloadURL, true);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
@@ -359,7 +359,7 @@ Config.prototype = {
       } else {
         // We are already downloading dependencies for this script
         // so add its window to the list
-        script.wins.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+        script.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
       }
     }
 
