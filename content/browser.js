@@ -115,26 +115,6 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
 };
 
 /**
- * Gets called when a tab-onLocationChange event occurs in the browser.
- * used to implement run-at document-start early-injection scripts
- */
-GM_BrowserUI.tabLocationChange = function(contentWindow) {
-  var safeWin;
-  var unsafeWin;
-  var href;
-
-  if (!GM_getEnabled()) return;
-
-  safeWin = contentWindow;
-  unsafeWin = safeWin.wrappedJSObject;
-  href = safeWin.location.href;
-
-  if (GM_isGreasemonkeyable(href)) {
-    this.gmSvc.documentStart(safeWin, window);
-  }
-};
-
-/**
  * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
  * If that document is in in the top-level window of the focused tab, find
  * it's menu items and activate them.
@@ -263,11 +243,17 @@ GM_BrowserUI.installScript = function(script){
 };
 
 /**
- * The browser's location has changed.
+ * The browser's location has changed. Detect tab changes for @run-at
+ * document-start, and to register the User Script Commands menu listener
  */
 GM_BrowserUI.onLocationChange = function(aProgress, aRequest, aURI) {
-  // Detect location change for document-start event
-  GM_BrowserUI.tabLocationChange(aProgress.DOMWindow);
+  
+  // Inject scripts early
+  var safeWin = aProgress.DOMWindow;
+  var href = safeWin.location.href;
+  if (GM_getEnabled() && GM_isGreasemonkeyable(href)) {
+    this.gmSvc.documentStart(safeWin, window);
+  }
 
   // change the list of commands displayed in the User Script Commands submenu.
   if (this.currentMenuCommander != null) {
