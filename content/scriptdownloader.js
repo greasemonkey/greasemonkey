@@ -14,8 +14,6 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
   this.updateScript = false;
-  this.safeWin = null;
-  this.chromeWin = null;
 }
 
 GM_ScriptDownloader.prototype.startInstall = function() {
@@ -205,9 +203,14 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
 
 GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
-    // Inject the script now that we have the new dependencies
+    // Now that we have the new dependencies
+    // Inject the script in all windows that have been waiting
     this.script.delayInjection = false;
-    GM_getConfig().injectScript(this.script, this.safeWin, this.chromeWin);
+    var wins = this.script.scriptDownloader.wins;
+    for (var i = 0, len = wins.length; i < len; ++i) {
+      GM_getConfig().injectScript(this.script, wins[i][0], wins[i][1]);
+    }
+    this.script.scriptDownloader = null;
 
     // Save new values to config.xml
     GM_getConfig()._save();

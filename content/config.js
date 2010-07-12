@@ -347,10 +347,16 @@ Config.prototype = {
     if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
-      var parsedScript = this.parse(
-          script.textContent, script._downloadURL, true);
-      script.updateFromNewScript(parsedScript, safeWin, chromeWin);
-      this._changed(script, "modified", null, true);
+      if (!script.delayInjection) {
+        var parsedScript = this.parse(
+            script.textContent, script._downloadURL, true);
+        script.updateFromNewScript(parsedScript, safeWin, chromeWin);
+        this._changed(script, "modified", null, true);
+      } else {
+        // We are already downloading dependencies for this script
+        // Add its window to the list
+        script.scriptDownloader.wins.push([safeWin, chromeWin]);
+      }
     }
 
     this._save();
