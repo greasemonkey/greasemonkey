@@ -330,6 +330,10 @@ Config.prototype = {
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   injectScript: function(script, win) {
+    // don't inject if window has closed
+    if (win.safeWin === null)
+      return;
+
     var unsafeWin = win.safeWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
