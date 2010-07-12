@@ -451,6 +451,7 @@ function GM_showPopup(aEvent) {
   }
 
   function appendScriptToPopup(script) {
+    if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.name);
     mi.script = script;
@@ -639,10 +640,6 @@ GM_BrowserUI.viewContextItemClicked = function() {
 
   this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
   this.scriptDownloader_.startViewScript();
-};
-
-GM_BrowserUI.manageMenuItemClicked = function() {
-   GM_openUserScriptManager();
 };
 
 GM_BrowserUI.init();

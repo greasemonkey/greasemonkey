@@ -3,6 +3,31 @@ var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 
+var GM_firefoxVersion;
+var GM_os;
+(function() {
+var appInfo = Components
+    .classes["@mozilla.org/xre/app-info;1"]  
+    .getService(Components.interfaces.nsIXULAppInfo);
+var versionChecker = Components
+    .classes["@mozilla.org/xpcom/version-comparator;1"]
+    .getService(Components.interfaces.nsIVersionComparator);
+var xulRuntime = Components
+    .classes["@mozilla.org/xre/app-info;1"]
+    .getService(Components.interfaces.nsIXULRuntime);
+
+// Detect fixed possible compatible Firefox versions.
+if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+  GM_firefoxVersion = '3.0';
+} else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+  GM_firefoxVersion = '3.5';
+} else {
+  GM_firefoxVersion = '3.6';
+}
+
+GM_os = xulRuntime.OS;
+})();
+
 (function() {
 // Override some built-in functions, with a closure reference to the original
 // function, to either handle or delegate the call.
@@ -27,6 +52,7 @@ var observer = {
     if (event == "install") {
       var item = greasemonkeyAddons.addScriptToList(script);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
+      item.setAttribute('newAddon', 'true');
       return;
     }
 
@@ -58,11 +84,19 @@ var observer = {
 window.addEventListener('load', function() {
   gUserscriptsView = document.getElementById('userscriptsView');
   greasemonkeyAddons.fillList();
+  greasemonkeyAddons.fixButtonOrder();
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
-  gUserscriptsView.addEventListener(
-      'keypress', greasemonkeyAddons.onKeypress, false);
+  if ('3.6' == GM_firefoxVersion) {
+    gUserscriptsView.addEventListener(
+        'keypress', greasemonkeyAddons.onKeypress, false);
+  }
+  
+  window.addEventListener(
+      'dragover', greasemonkeyAddons.onDragOver, false);
+  window.addEventListener(
+      'drop', greasemonkeyAddons.onDrop, false);
 
   GM_config.addObserver(observer);
 
@@ -108,16 +142,44 @@ var greasemonkeyAddons = {
     document.documentElement.className += ' userscripts';
 
     GM_config.updateModifiedScripts();
-    gUserscriptsView.focus();
+    if ('3.6' == GM_firefoxVersion) gUserscriptsView.focus();
   },
 
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/g, '');
-    gExtensionsView.focus();
+    if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
   },
 
+  urlFromDragEvent: function(event) {
+    var types = event.dataTransfer.types;
+    var url = null;
+    if (types.contains('text/uri-list')) {
+      url = event.dataTransfer.mozGetDataAt('text/uri-list', 0);
+    } else if (types.contains('application/x-moz-file')) {
+      var file = event.dataTransfer
+          .mozGetDataAt('application/x-moz-file', 0)
+          .QueryInterface(Components.interfaces.nsIFile);
+      url = GM_getUriFromFile(file).spec;
+    }
+    return url;
+  },
+
+  onDragOver: function(event) {
+    var url = greasemonkeyAddons.urlFromDragEvent(event);
+    if (url && url.match(/\.user\.js$/)) {
+      // Cancel the default do-not-allow behavior.
+      event.preventDefault();
+    }
+  },
+
+  onDrop: function(event) {
+    var uri = GM_uriFromUrl(greasemonkeyAddons.urlFromDragEvent(event));
+    // TODO: Make this UI appear attached to addons, rather than the browser?
+    GM_installUri(uri);
+  },
+  
   updateLastSelected: function() {
     if (!gUserscriptsView.selectedItem) return;
     var userscriptsRadio = document.getElementById('userscripts-view');
@@ -237,19 +299,16 @@ var greasemonkeyAddons = {
       GM_config._scripts.sort(scriptCmp);
       GM_config._save();
       greasemonkeyAddons.fillList();
+      greasemonkeyAddons.reselectLastSelected();
       break;
     case 'cmd_userscript_uninstall':
       GM_uninstallQueue[script.id] = script;
-      // Todo: This without dipping into private members?
-      script.needsUninstallEnabled = script._enabled;
-      script._enabled = false;
+      script.needsUninstall = true;
       selectedListitem.setAttribute('opType', 'needs-uninstall');
       break;
     case 'cmd_userscript_uninstall_cancel':
       delete(GM_uninstallQueue[script.id]);
-      // Todo: This without dipping into private members?
-      script._enabled = script.needsUninstallEnabled;
-      delete(script.needsUninstallDisabled);
+      script.needsUninstall = false;
       selectedListitem.removeAttribute('opType');
       break;
     case 'cmd_userscript_uninstall_now':
@@ -330,5 +389,32 @@ var greasemonkeyAddons = {
     }
     aEvent.stopPropagation();
     aEvent.preventDefault();
+  },
+  
+  // See: http://github.com/greasemonkey/greasemonkey/issues/#issue/1149
+  // Since every Firefox version/platform has a different order of controls
+  // in this dialog, rearrange ours to blend in with that scheme.
+  fixButtonOrder: function() {
+    function $(id) { return document.getElementById(id); }
+
+    if ('3.0' == GM_firefoxVersion) {
+      // All platforms, Firefox 3.0
+      $('commandBarBottom').appendChild($('newUserscript'));
+    } else if ('WINNT' == GM_os) {
+      if ('3.5' == GM_firefoxVersion) {
+        // Windows, Firefox 3.5
+        $('commandBarBottom').insertBefore(
+            $('getMoreUserscripts'), $('newUserscript').nextSibling);
+      }
+    } else {
+      if ('3.5' == GM_firefoxVersion) {
+        // Mac/Linux, Firefox 3.5
+        $('commandBarBottom').insertBefore(
+            $('getMoreUserscripts'), $('skipDialogButton'));
+      }
+      // Mac/Linux, Firefox 3.5 and 3.6
+      $('commandBarBottom').insertBefore(
+          $('newUserscript'), $('skipDialogButton'));
+    }
   }
 };

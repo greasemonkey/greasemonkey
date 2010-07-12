@@ -27,9 +27,11 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
+  this.win_.GM_BrowserUI.statusImage.src =
+      "chrome://greasemonkey/content/third-party/throbber.gif";
   this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
-  this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
+  this.win_.GM_BrowserUI.statusImage.tooltipText =
+      this.bundle_.getString("tooltip.loading");
 
   this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
 
@@ -60,7 +62,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.script = GM_getConfig().parse(source, this.uri_.spec);
+    this.script = GM_getConfig().parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
                          .getService(Components.interfaces.nsIProperties)
@@ -199,14 +201,14 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
   }
 };
 
-GM_ScriptDownloader.prototype.finishInstall = function(){
+GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
-    this.script._config.injectScript(this.script);
+    GM_getConfig().injectScript(this.script);
     this.script.delayInjection = false;
 
     // Save new values to config.xml
-    this.script._config._save();
+    GM_getConfig()._save();
   } else if (this.installOnCompletion_) {
     this.installScript();
   }

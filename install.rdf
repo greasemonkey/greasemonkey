@@ -9,9 +9,8 @@
     <em:version>0.9.0</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
-    <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL> 
+    <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL>
     <em:iconURL>chrome://greasemonkey/skin/icon_medium.png</em:iconURL>
-    <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL> 
 
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
