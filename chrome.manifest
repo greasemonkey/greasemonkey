@@ -1,3 +1,12 @@
+interfaces components/gmIBrowserWindow.xpt
+interfaces components/gmIGreasemonkeyService.xpt
+interfaces components/gmIMenuCommand.xpt
+
+component {77bf3650-1cd6-11da-8cd6-0800200c9a66} components/greasemonkey.js
+contract  @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8cd6-0800200c9a66}
+category  profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+category  content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+
 content    greasemonkey    content/
 overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
 overlay	   chrome://songbird/content/xul/mainScriptsOverlay.xul    chrome://greasemonkey/content/browser.xul

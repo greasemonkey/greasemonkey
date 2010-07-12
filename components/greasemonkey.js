@@ -1,4 +1,3 @@
-
 // XPCOM info
 const DESCRIPTION = "GM_GreasemonkeyService";
 const CONTRACTID = "@greasemonkey.mozdev.org/greasemonkey-service;1";
@@ -29,6 +28,8 @@ const maxJSVersion = (function getMaxJSVersion() {
   // Everything else supports 1.6.
   return "1.6";
 })();
+
+var gStartupHasRun = false;
 
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
@@ -100,8 +101,11 @@ GM_GreasemonkeyService.prototype = {
 
   // nsIObserver
   observe: function(aSubject, aTopic, aData) {
-    if (aTopic == "app-startup") {
-      this.startup();
+    switch (aTopic) {
+      case 'app-startup':
+      case 'profile-after-change':
+        this.startup();
+        break;
     }
   },
 
@@ -146,6 +150,9 @@ GM_GreasemonkeyService.prototype = {
 
 
   startup: function() {
+    if (gStartupHasRun) return;
+    gStartupHasRun = true;
+
     var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
     loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
@@ -499,7 +506,12 @@ GM_GreasemonkeyService.prototype = {
   }
 };
 
-// XPCOM module registration.
-function NSGetModule(compMgr, fileSpec) {
-  return XPCOMUtils.generateModule([GM_GreasemonkeyService]);
+/**
+* XPCOMUtils.generateNSGetFactory was introduced in Mozilla 2 (Firefox 4).
+* XPCOMUtils.generateNSGetModule is for Mozilla 1.9.2 (Firefox 3.6).
+*/
+if (XPCOMUtils.generateNSGetFactory) {
+    var NSGetFactory = XPCOMUtils.generateNSGetFactory([GM_GreasemonkeyService]);
+} else {
+    var NSGetModule = XPCOMUtils.generateNSGetModule([GM_GreasemonkeyService]);
 }
