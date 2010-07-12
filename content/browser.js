@@ -28,6 +28,13 @@ GM_BrowserUI.init = function() {
   this.menuCommanders = [];
   this.currentMenuCommander = null;
 
+  // Add listeners to detect new tabs and add progress listeners to those tabs
+  GM_listen(gBrowser.tabContainer, "TabOpen", function(event) {
+      var aBrowser = event.target.linkedBrowser;
+      aBrowser.addProgressListener(GM_BrowserUI,
+          Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+  });
+
   GM_listen(window, "load", GM_hitch(this, "chromeLoad"));
   GM_listen(window, "unload", GM_hitch(this, "chromeUnload"));
 };
@@ -68,10 +75,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // we use this to determine if we are the active window sometimes
   this.winWat = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
                           .getService(Components.interfaces.nsIWindowWatcher);
-
-  // this gives us onLocationChange
-  this.tabBrowser.addProgressListener(this,
-    Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
   // update enabled icon
   this.refreshStatus();
