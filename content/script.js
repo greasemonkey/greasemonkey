@@ -24,7 +24,7 @@ function Script(configNode) {
   this._dependFail = false
   this.delayInjection = false;
   this._rawMeta = null;
-  this.wins = [];
+  this.wins = null;
   
   if (configNode) this._loadFromConfigNode(configNode);
 }
@@ -314,15 +314,15 @@ Script.prototype = {
         if (!nextFile.equals(this.file)) nextFile.remove(true);
       }
 
+      // Store window references for late injection
+      this.wins = [];
+      this.wins.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+
       // Redownload dependencies.
       var scriptDownloader = new GM_ScriptDownloader(null, null, null);
       scriptDownloader.script = this;
       scriptDownloader.updateScript = true;
       scriptDownloader.fetchDependencies();
-
-      // Store window references for late injection
-      this.wins = [];
-      this.wins.push({'safeWin': safeWin, 'chromeWin': chromeWin});
 
       this.delayInjection = true;
     }

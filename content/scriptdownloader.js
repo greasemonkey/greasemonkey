@@ -210,7 +210,7 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     for (var i = 0, len = wins.length; i < len; ++i) {
       GM_getConfig().injectScript(this.script, wins[i]);
     }
-    this.script.wins = [];
+    this.script.wins = null;
 
     // Save new values to config.xml
     GM_getConfig()._save();
