@@ -273,7 +273,7 @@ Script.prototype = {
     return false;
   },
 
-  updateFromNewScript: function(newScript) {
+  updateFromNewScript: function(newScript, safeWin, chromeWin) {
     // Migrate preferences.
     if (this.prefroot != newScript.prefroot) {
       var storageOld = new GM_ScriptStorage(this);
@@ -316,6 +316,8 @@ Script.prototype = {
       // Redownload dependencies.
       var scriptDownloader = new GM_ScriptDownloader(null, null, null);
       scriptDownloader.script = this;
+      scriptDownloader.safeWin = safeWin;
+      scriptDownloader.chromeWin = chromeWin;
       scriptDownloader.updateScript = true;
       scriptDownloader.fetchDependencies();
 

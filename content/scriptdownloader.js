@@ -14,6 +14,8 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
   this.updateScript = false;
+  this.safeWin = null;
+  this.chromeWin = null;
 }
 
 GM_ScriptDownloader.prototype.startInstall = function() {
@@ -205,7 +207,7 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script now that we have the new dependencies
     this.script.delayInjection = false;
-    GM_getConfig().injectScript(this.script);
+    GM_getConfig().injectScript(this.script, this.safeWin, this.chromeWin);
 
     // Save new values to config.xml
     GM_getConfig()._save();

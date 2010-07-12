@@ -329,18 +329,18 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
-  injectScript: function(script) {
-    var unsafeWin = this.wrappedContentWin.wrappedJSObject;
+  injectScript: function(script, safeWin, chromeWin) {
+    var unsafeWin = safeWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
     if (GM_scriptMatchesUrlAndRuns(script, href)) {
       greasemonkeyService.injectScripts(
-          [script], href, unsafeWin, this.chromeWin);
+          [script], href, unsafeWin, chromeWin);
     }
   },
 
-  updateModifiedScripts: function() {
+  updateModifiedScripts: function(safeWin, chromeWin) {
     // Find any updated scripts
     var scripts = this.getMatchingScripts(
         function (script) { return script.isModified(); });
@@ -349,7 +349,7 @@ Config.prototype = {
     for (var i = 0, script; script = scripts[i]; i++) {
       var parsedScript = this.parse(
           script.textContent, script._downloadURL, true);
-      script.updateFromNewScript(parsedScript);
+      script.updateFromNewScript(parsedScript, safeWin, chromeWin);
       this._changed(script, "modified", null, true);
     }
 

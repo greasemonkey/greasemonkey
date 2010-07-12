@@ -215,12 +215,8 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin) {
-    // Todo: Try to implement this w/out global state.
-    this.config.wrappedContentWin = wrappedContentWin;
-    this.config.chromeWin = chromeWin;
-
     if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-      this.config.updateModifiedScripts();
+      this.config.updateModifiedScripts(wrappedContentWin, chromeWin);
     }
 
     return this.config.getMatchingScripts(function(script) {
