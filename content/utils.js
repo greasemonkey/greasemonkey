@@ -383,11 +383,12 @@ function GM_installUri(uri) {
   return false;
 }
 
-function GM_scriptMatchesUrlAndRuns(script, url) {
+function GM_scriptMatchesUrlAndRuns(script, url, early) {
   return !script.delayInjection 
       && script.enabled
       && !script.needsUninstall
       && script.matchesURL(url);
+      && (early ? script.earlyInject : !script.earlyInject)
 }
 
 // Decorate a function with a memoization wrapper, with a limited-size cache

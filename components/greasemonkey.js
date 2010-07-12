@@ -223,24 +223,14 @@ var greasemonkeyService = {
   },
 
   initScripts: function(url, wrappedContentWin, chromeWin, event) {
-    function loadedMatch(script) {
-      return !script.delayInjection && script.enabled &&
-              !script.earlyInject && script.matchesURL(url);
-    }
+    var earlyInject = 'start' == event;
 
-    function earlyMatch(script) {
-        return !script.delayInjection && script.enabled &&
-                script.earlyInject && script.matchesURL(url);
-    }
-
-    var testMatch = 'start' == event ? earlyMatch : loadedMatch;
-
-    if (event == "start") {
+    if (earlyInject) {
       this.updateModifiedScripts(url, wrappedContentWin, chromeWin);
     }
 
     return this.config.getMatchingScripts(function(script) {
-          return GM_scriptMatchesUrlAndRuns(script, url)
+        return GM_scriptMatchesUrlAndRuns(script, url, earlyInject)
     });
   },
 
