@@ -337,10 +337,17 @@ Config.prototype = {
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
     var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
-    if (GM_scriptMatchesUrlAndRuns(script, href)) {
+    // Temporarily overwrite early injection setting to preform late injection
+    var savedInjection = script.earlyInject;
+    script.earlyInject = false;
+
+    if (GM_scriptMatchesUrlAndRuns(script, href, false)) {
       greasemonkeyService.injectScripts(
           [script], href, unsafeWin, this.chromeWin);
     }
+
+    // Restore early injection setting
+    script.earlyInject = savedInjection;
   },
 
   updateModifiedScripts: function() {
