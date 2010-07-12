@@ -339,9 +339,9 @@ Config.prototype = {
 
     // Temporarily overwrite early injection setting to preform late injection
     var savedInjection = script.earlyInject;
-    script.earlyInject = false;
+    script.earlyInject = true;
 
-    if (GM_scriptMatchesUrlAndRuns(script, href, false)) {
+    if (GM_scriptMatchesUrlAndRuns(script, href, true)) {
       greasemonkeyService.injectScripts(
           [script], href, unsafeWin, this.chromeWin);
     }

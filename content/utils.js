@@ -387,8 +387,8 @@ function GM_scriptMatchesUrlAndRuns(script, url, early) {
   return !script.delayInjection 
       && script.enabled
       && !script.needsUninstall
-      && script.matchesURL(url)
-      && (early ? script.earlyInject : !script.earlyInject);
+      && (early ? script.earlyInject : !script.earlyInject)
+      && script.matchesURL(url);
 }
 
 // Decorate a function with a memoization wrapper, with a limited-size cache
