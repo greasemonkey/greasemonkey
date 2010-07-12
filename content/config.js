@@ -330,8 +330,8 @@ Config.prototype = {
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   injectScript: function(script, win) {
-    // don't inject if window has closed
-    if (win.safeWin === null)
+    // don't inject if the window has closed
+    if (win.safeWin.closed)
       return;
 
     var unsafeWin = win.safeWin.wrappedJSObject;
