@@ -345,13 +345,13 @@ Config.prototype = {
   },
 
   updateModifiedScripts: function(safeWin, chromeWin) {
-    // Find any updated scripts
+    // Find any updated scripts or scripts with delayed injection
     var scripts = this.getMatchingScripts(
-        function (script) { return script.isModified(); });
+        function (script) { return script.delayInjection || script.isModified(); });
     if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
-      if (!script.pendingExec) {
+      if (!script.delayInjection) {
         var parsedScript = this.parse(
             script.textContent, script._downloadURL, true);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
