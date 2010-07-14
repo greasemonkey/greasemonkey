@@ -331,8 +331,7 @@ Config.prototype = {
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
   injectScript: function(script, pendingExec) {
     // don't inject if the window has closed
-    if (pendingExec.safeWin.closed)
-      return;
+    if (pendingExec.safeWin.closed) return;
 
     var unsafeWin = pendingExec.safeWin.wrappedJSObject;
     var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
@@ -347,11 +346,11 @@ Config.prototype = {
   updateModifiedScripts: function(safeWin, chromeWin) {
     // Find any updated scripts or scripts with delayed injection
     var scripts = this.getMatchingScripts(
-        function (script) { return script.delayInjection || script.isModified(); });
+        function (script) { return script.pendingExec || script.isModified(); });
     if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
-      if (!script.delayInjection) {
+      if (!script.pendingExec) {
         var parsedScript = this.parse(
             script.textContent, script._downloadURL, true);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);

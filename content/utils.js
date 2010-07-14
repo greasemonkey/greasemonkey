@@ -384,7 +384,7 @@ function GM_installUri(uri) {
 }
 
 function GM_scriptMatchesUrlAndRuns(script, url) {
-  return !script.delayInjection 
+  return !script.pendingExec 
       && script.enabled
       && !script.needsUninstall
       && script.matchesURL(url);
