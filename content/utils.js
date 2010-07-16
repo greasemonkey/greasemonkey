@@ -8,10 +8,6 @@ var GM_stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
-function GM_isDef(thing) {
-  return typeof(thing) != "undefined";
-}
-
 function GM_getConfig() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
