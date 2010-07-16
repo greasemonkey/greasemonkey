@@ -268,7 +268,7 @@ Config.prototype = {
     }
 
     script._modified = script.file.lastModifiedTime;
-    script._metahash = GM_sha1(script._rawMeta);
+    script._dependhash = GM_sha1(script._rawMeta);
 
     this._scripts.push(script);
     this._changed(script, "install", null);
