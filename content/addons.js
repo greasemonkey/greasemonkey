@@ -272,7 +272,7 @@ var greasemonkeyAddons = {
       GM_openInEditor(script);
       break;
     case 'cmd_userscript_show':
-      GM_openFolder(script._file);
+      GM_openFolder(script.file);
       break;
     case 'cmd_userscript_enable':
       script.enabled = true;

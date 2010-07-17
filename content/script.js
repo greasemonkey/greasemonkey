@@ -273,28 +273,40 @@ Script.prototype = {
     return false;
   },
 
-  updateFromNewScript: function(newScript, safeWin, chromeWin) {
-    // Migrate preferences.
-    if (this.prefroot != newScript.prefroot) {
-      var storageOld = new GM_ScriptStorage(this);
-      var storageNew = new GM_ScriptStorage(newScript);
+  updateFromNewScript: function(newScript) {
+    // if the @name and @namespace have changed
+    // make sure they don't conflict with another installed script
+    if (newScript.id != this.id) {
+      if (!GM_getConfig().installIsUpdate(newScript)) {
+        // Migrate preferences.
+        if (this.prefroot != newScript.prefroot) {
+          var storageOld = new GM_ScriptStorage(this);
+          var storageNew = new GM_ScriptStorage(newScript);
 
-      var names = storageOld.listValues();
-      for (var i = 0, name = null; name = names[i]; i++) {
-        storageNew.setValue(name, storageOld.getValue(name));
-        storageOld.deleteValue(name);
+          var names = storageOld.listValues();
+          for (var i = 0, name = null; name = names[i]; i++) {
+            storageNew.setValue(name, storageOld.getValue(name));
+            storageOld.deleteValue(name);
+          }
+        }
+
+        // Empty cached values.
+        this._id = null;
+        this._prefroot = null;
+
+        this._name = newScript._name;
+        this._namespace = newScript._namespace;
+      } else {
+        // Notify the user of the conflict
+        alert('Error: Another script with @name: "' + newScript._name +
+              '" and @namespace: "' + newScript._namespace +
+              '" is already installed.\nThese values must be unique.');
       }
     }
-
-    // Empty cached values.
-    this._id = null;
-    this._prefroot = null;
 
     // Copy new values.
     this._includes = newScript._includes;
     this._excludes = newScript._excludes;
-    this._name = newScript._name;
-    this._namespace = newScript._namespace;
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
     this._version = newScript._version;
