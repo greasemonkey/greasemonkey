@@ -273,7 +273,7 @@ Script.prototype = {
     return false;
   },
 
-  updateFromNewScript: function(newScript) {
+  updateFromNewScript: function(newScript, safeWin, chromeWin) {
     // if the @name and @namespace have changed
     // make sure they don't conflict with another installed script
     if (newScript.id != this.id) {
