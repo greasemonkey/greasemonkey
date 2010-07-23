@@ -61,11 +61,12 @@ Config.prototype = {
 
     var configContents = GM_getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
-    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
+    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null,
+        7 /* XPathResult.ORDERED_NODE_SNAPSHOT_TYPE */,
+        null);
 
     this._scripts = [];
-    var node = null;
-    while (node = nodes.iterateNext()) {
+    for (var i=0, node=null; node=nodes.snapshotItem(i); i++) {
       var script = new Script(node);
       if (script.allFilesExist()) {
         this._scripts.push(script);
