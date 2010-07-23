@@ -211,7 +211,12 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     // Inject the script in all windows that have been waiting
     var pendingExec;
     while (pendingExec = pendingList.shift()) {
-      GM_getConfig().injectScript(this.script, pendingExec);
+      if (pendingExec.safeWin.closed) continue;
+      var url = pendingExec.safeWin.location.href;
+      if (GM_scriptMatchesUrlAndRuns(script, url)) {
+          greasemonkeyService.injectScripts(
+              [script], url, unsafeWin, pendingExec.chromeWin);
+        }
     }
 
     // Save new values to config.xml

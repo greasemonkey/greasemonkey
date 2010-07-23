@@ -325,19 +325,6 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
-  injectScript: function(script, pendingExec) {
-    // don't inject if the window has closed
-    if (pendingExec.safeWin.closed) return;
-
-    var unsafeWin = pendingExec.safeWin.wrappedJSObject;
-    var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
-    var href = new XPCNativeWrapper(unsafeLoc, "href").href;
-
-    if (GM_scriptMatchesUrlAndRuns(script, href)) {
-      greasemonkeyService.injectScripts(
-          [script], href, unsafeWin, pendingExec.chromeWin);
-    }
-  },
 
   updateModifiedScripts: function(safeWin, chromeWin) {
     // Find any updated scripts or scripts with delayed injection
