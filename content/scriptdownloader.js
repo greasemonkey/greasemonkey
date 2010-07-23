@@ -203,19 +203,14 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
 
 GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
-    // Make a copy of window list and set script.pendingExec to null
-    // so script can be injected the old fashion way by other windows
-    var pendingList = this.script.pendingExec;
-    this.script.pendingExec = null;
-
     // Inject the script in all windows that have been waiting
     var pendingExec;
-    while (pendingExec = pendingList.shift()) {
+    while (pendingExec = this.script.pendingExec.shift()) {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
       if (GM_scriptMatchesUrlAndRuns(script, url)) {
           greasemonkeyService.injectScripts(
-              [script], url, unsafeWin, pendingExec.chromeWin);
+              [script], url, pendingExec.safeWin, pendingExec.chromeWin);
         }
     }
 

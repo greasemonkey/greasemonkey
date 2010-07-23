@@ -23,7 +23,7 @@ function Script(configNode) {
   this._unwrap = false;
   this._dependFail = false
   this._rawMeta = null;
-  this.pendingExec = null;
+  this.pendingExec = [];
 
   if (configNode) this._loadFromConfigNode(configNode);
 }
@@ -326,7 +326,6 @@ Script.prototype = {
       }
 
       // Store window references for late injection
-      this.pendingExec = [];
       this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
 
       // Redownload dependencies.

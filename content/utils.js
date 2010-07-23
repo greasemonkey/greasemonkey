@@ -380,7 +380,7 @@ function GM_installUri(uri) {
 }
 
 function GM_scriptMatchesUrlAndRuns(script, url) {
-  return !script.pendingExec 
+  return !script.pendingExec.length
       && script.enabled
       && !script.needsUninstall
       && script.matchesURL(url);
