@@ -208,10 +208,10 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     while (pendingExec = this.script.pendingExec.shift()) {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
-      if (GM_scriptMatchesUrlAndRuns(script, url)) {
-          greasemonkeyService.injectScripts(
-              [script], url, pendingExec.safeWin, pendingExec.chromeWin);
-        }
+      if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
+        GM_getService().injectScripts(
+            [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
+      }
     }
 
     // Save new values to config.xml

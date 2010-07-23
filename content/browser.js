@@ -117,15 +117,11 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
  * it's menu items and activate them.
  */
 GM_BrowserUI.contentLoad = function(e) {
-  var safeWin;
-  var unsafeWin;
-  var href;
-
   if (!GM_getEnabled()) return;
 
-  safeWin = e.target.defaultView;
-  unsafeWin = safeWin.wrappedJSObject;
-  href = safeWin.location.href;
+  var safeWin = e.target.defaultView;
+  var unsafeWin = safeWin.wrappedJSObject;
+  var href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
     // if this content load is in the focused tab, attach the menuCommaander

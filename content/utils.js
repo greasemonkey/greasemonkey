@@ -8,11 +8,15 @@ var GM_stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
-function GM_getConfig() {
+function GM_getService() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService(Components.interfaces.gmIGreasemonkeyService)
-    .wrappedJSObject.config;
+    .wrappedJSObject;
+}
+
+function GM_getConfig() {
+  return GM_getService().config;
 }
 
 function GM_hitch(obj, meth) {
