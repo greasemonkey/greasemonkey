@@ -24,7 +24,7 @@ function Script(configNode) {
   this._dependFail = false
   this._rawMeta = null;
   this.pendingExec = null;
-  
+
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
@@ -47,7 +47,7 @@ Script.prototype = {
     if (!this._id) this._id = this._namespace + "/" + this._name;
     return this._id;
   },
-  get prefroot() { 
+  get prefroot() {
     if (!this._prefroot) this._prefroot = ["scriptvals.", this.id, "."].join("");
     return this._prefroot;
   },
@@ -236,7 +236,7 @@ Script.prototype = {
 
     return scriptNode;
   },
-  
+
   _initFile: function(tempFile) {
     var name = this._initFileName(this._name, false);
     this._basedir = name;
@@ -336,7 +336,7 @@ Script.prototype = {
       scriptDownloader.fetchDependencies();
     }
   },
-  
+
   allFiles: function() {
     var files = [];
     if (!this._basedirFile.equals(GM_scriptDir())) {
@@ -351,7 +351,7 @@ Script.prototype = {
     }
     return files;
   },
-  
+
   fileExists: function(file) {
     try {
       return file.exists();
@@ -359,7 +359,7 @@ Script.prototype = {
       return false;
     }
   },
-    
+
   allFilesExist: function() {
     return this.allFiles().every(this.fileExists);
   },
