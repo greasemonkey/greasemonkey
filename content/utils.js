@@ -38,16 +38,6 @@ function GM_hitch(obj, meth) {
   };
 }
 
-function GM_listen(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "addEventListener")(
-    event, listener, opt_capture);
-}
-
-function GM_unlisten(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "removeEventListener")(
-    event, listener, opt_capture);
-}
-
 /**
  * Utility to create an error message in the log without throwing an error.
  */

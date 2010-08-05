@@ -28,8 +28,8 @@ GM_BrowserUI.init = function() {
   this.menuCommanders = [];
   this.currentMenuCommander = null;
 
-  GM_listen(window, "load", GM_hitch(this, "chromeLoad"));
-  GM_listen(window, "unload", GM_hitch(this, "chromeUnload"));
+  window.addEventListener("load", GM_hitch(this, "chromeLoad"), false);
+  window.addEventListener("unload", GM_hitch(this, "chromeUnload"), false);
 };
 
 /**
@@ -37,27 +37,24 @@ GM_BrowserUI.init = function() {
  * listeners and wrapper objects.
  */
 GM_BrowserUI.chromeLoad = function(e) {
-  // get all required DOM elements
+  // Grab some DOM element references.
+  var appContent = document.getElementById("appcontent");
+  var sidebar = document.getElementById("sidebar");
+  var contextMenu = document.getElementById("contentAreaContextMenu");
+  var toolsMenu = document.getElementById("menu_ToolsPopup") ||
+      document.getElementById("taskPopup"); // seamonkey compat
+
+  // Store other DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
-  this.appContent = document.getElementById("appcontent");
-  this.sidebar = document.getElementById("sidebar");
-  this.contextMenu = document.getElementById("contentAreaContextMenu");
   this.statusImage = document.getElementById("gm-status-image");
   this.statusLabel = document.getElementById("gm-status-label");
-  this.statusPopup = document.getElementById("gm-status-popup");
   this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
   this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
-  this.toolsMenu = document.getElementById("menu_ToolsPopup");
   this.bundle = document.getElementById("gm-browser-bundle");
 
-  // seamonkey compat
-  if (!this.toolsMenu) {
-    this.toolsMenu = document.getElementById("taskPopup");
-  }
-
   // songbird compat
-  if (!this.appContent && this.tabBrowser) {
-    this.appContent = this.tabBrowser.parentNode;
+  if (!appContent && this.tabBrowser) {
+    appContent = this.tabBrowser.parentNode;
   }
 
   // update visual status when enabled state changes
@@ -65,10 +62,10 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", this.enabledWatcher);
 
   // hook various events
-  GM_listen(this.appContent, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
-  GM_listen(this.sidebar, "DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
-  GM_listen(this.contextMenu, "popupshowing", GM_hitch(this, "contextMenuShowing"));
-  GM_listen(this.toolsMenu, "popupshowing", GM_hitch(this, "toolsMenuShowing"));
+  appContent.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+  sidebar.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+  contextMenu.addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
+  toolsMenu.addEventListener("popupshowing", GM_hitch(this, "toolsMenuShowing"), false);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
@@ -151,7 +148,7 @@ GM_BrowserUI.contentLoad = function(e) {
 
     this.gmSvc.domContentLoaded({ wrappedJSObject: unsafeWin }, window);
 
-    GM_listen(unsafeWin, "pagehide", GM_hitch(this, "contentUnload"));
+    safeWin.addEventListener("pagehide", GM_hitch(this, "contentUnload"), false);
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
