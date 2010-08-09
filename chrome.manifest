@@ -10,4 +10,9 @@ category  content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @grease
 content    greasemonkey    content/
 overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
 overlay	   chrome://songbird/content/xul/mainScriptsOverlay.xul    chrome://greasemonkey/content/browser.xul
+
+# Todo: ensure this resource line does not reveal Greasemonkey's presence to web content.
+resource greasemonkey content/
+overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
+
 locale  greasemonkey  en-US  locale/en-US/
