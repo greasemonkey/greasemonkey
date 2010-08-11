@@ -122,8 +122,8 @@ function ScriptAddon_prototype_setter_userDisabled(val) {
 ScriptAddon.prototype.__defineGetter__('permissions',
 function ScriptAddon_prototype_getter_permissions() {
   var perms = AddonManager.PERM_CAN_UNINSTALL;
-  perms |= this._script.enabled 
-      ? AddonManager.PERM_CAN_ENABLE 
+  perms |= this._script.enabled
+      ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
   return perms;
 });
