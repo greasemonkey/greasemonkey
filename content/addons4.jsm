@@ -37,7 +37,7 @@ GM_getConfig = scope.GM_getConfig;
 
 var AddonProvider = {
   getAddonByID: function(aId, aCallback) {
-    aCallback(ScriptAddon(aId));
+    aCallback(ScriptAddonFactoryById(aId));
   },
 
   getAddonsByTypes: function(aTypes, aCallback) {
@@ -46,64 +46,73 @@ var AddonProvider = {
     } else {
       var scriptAddons = [];
       GM_getConfig().scripts.forEach(function(script) {
-        scriptAddons.push(new ScriptAddon(null, script));
+        scriptAddons.push(ScriptAddonFactoryByScript(script));
       });
       aCallback(scriptAddons);
     }
   }
 };
 
-function ScriptAddon(aId, aScript) {
-  if (!aId && aScript) {
-    this._script = aScript
-    aId = aScript.namespace + aScript.name;
-  } else if (aId) {
-    var scripts = GM_getConfig().getMatchingScripts(
-      function(script) { return aId == (script.namespace + script.name); });
-    if (1 == scripts.length) {
-      this._script = scripts[0];
-    } else {
-      // Todo: Handle this error better??
-      return;
-    }
-  } else {
-      // Todo: Handle this error better??
-      return;
-  }
+// TODO: Use the built-in version in 0.9, instead.
+function scriptId(aScript) {
+  return (aScript.namespace + aScript.name + SCRIPT_ID_SUFFIX);
+}
 
-  this.id = aId + SCRIPT_ID_SUFFIX;
-  this._id = aId;
+var ScriptAddonCache = {};
+function ScriptAddonFactoryByScript(aScript) {
+  var id = scriptId(aScript);
+  if (!(id in ScriptAddonCache)) {
+    ScriptAddonCache[id] = new ScriptAddon(aScript);
+  }
+  return ScriptAddonCache[id];
+}
+function ScriptAddonFactoryById(aId) {
+  var scripts = GM_getConfig().getMatchingScripts(
+      function(script) {
+        return scriptId(script) == aId;
+      });
+  if (1 == scripts.length) return ScriptAddonFactoryByScript(scripts[0]);
+  // TODO: throw an error instead?
+  return null;
+}
+
+
+// https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
+function ScriptAddon(aScript) {
+  this._script = aScript
+
+  this.id = scriptId(aScript);
   this.name = this._script.name;
   //this.version = this._script.version;
   //this.creator = this._script.author;
   this.description = this._script.description;
-  //this.homepageURL = this._script.uri;
-  this.enabled = this._script.enabled;
+
+  // TODO: Calculate size.
 }
 
-ScriptAddon.prototype._id = null;
+// Required attributes.
+ScriptAddon.prototype.id = null;
 ScriptAddon.prototype.version = null;
 ScriptAddon.prototype.type = 'user-script';
-
 ScriptAddon.prototype.isCompatible = true;
 ScriptAddon.prototype.providesUpdatesSecurely = true;
 ScriptAddon.prototype.blocklistState = 0;
 ScriptAddon.prototype.appDisabled = false;
 ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
 ScriptAddon.prototype.isActive = true;
+ScriptAddon.prototype.name = null;
+ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
 
-ScriptAddon.prototype.name = null;
-ScriptAddon.prototype.version = null;
+// Optional attributes
 ScriptAddon.prototype.description = null;
-ScriptAddon.prototype.creator = null;
-ScriptAddon.prototype.homepageURL = null;
+ScriptAddon.prototype.size = null;
 
+// Private, custom, attributes.
 ScriptAddon.prototype._script = null;
 
 ScriptAddon.prototype.__defineGetter__('userDisabled',
 function ScriptAddon_prototype_getter_userDisabled() {
-  dump('userDisabled() for '+this.id+'\n');
   return !this._script.enabled;
 });
 
@@ -113,16 +122,17 @@ function ScriptAddon_prototype_setter_userDisabled(val) {
     return val;
   }
 
-  var addonManagerChange = val ? 'onEnabling' : 'onDisabling';
-  AddonManagerPrivate.callAddonListeners(addonManagerChange, this, false);
-  this._script.enabled = val;
-  AddonManagerPrivate.callAddonListeners(addonManagerChange, this);
+  AddonManagerPrivate.callAddonListeners(
+      val ? 'onEnabling' : 'onDisabling', this, false);
+  this._script.enabled = !val;
+  AddonManagerPrivate.callAddonListeners(
+      val ? 'onEnabled' : 'onDisabled', this);
 });
 
 ScriptAddon.prototype.__defineGetter__('permissions',
 function ScriptAddon_prototype_getter_permissions() {
   var perms = AddonManager.PERM_CAN_UNINSTALL;
-  perms |= this._script.enabled
+  perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
   return perms;
@@ -144,10 +154,16 @@ ScriptAddon.prototype.findUpdates = function(aListener) {
   }
 };
 
-ScriptAddon.prototype.uninstall = function(a) {
-  // Todo: properly consider 'uninstall prefs' parameter.
-  GM_getConfig().uninstall(this._script);
-  // Todo: Bugfix, item does not disappear from the addons list now.
+ScriptAddon.prototype.uninstall = function() {
+  AddonManagerPrivate.callAddonListeners("onUninstalling", this, false);
+  // TODO: pick an appropriate time, and act on these pending uninstalls.
+  this.pendingOperations |= AddonManager.PENDING_UNINSTALL;
+  AddonManagerPrivate.callAddonListeners("onUninstalled", this);
+};
+
+ScriptAddon.prototype.cancelUninstall = function() {
+  this.pendingOperations ^= AddonManager.PENDING_UNINSTALL;
+  AddonManagerPrivate.callAddonListeners("onOperationCancelled", this);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +242,7 @@ var WindowObserver = {
     }, this);
   },
 
-  /* Todo: restore when we are restartless for FF4.
+  /* TODO: restore when we are restartless for FF4.
   removeFromAddonsManagers: function() {
     var managers = this.findAllAddonsManagers();
     managers.forEach(function(aWindow) {
@@ -259,7 +275,7 @@ function addonsStartup(aParams) {
   WindowObserver.addToAddonsManagers();
 }
 
-/* Todo: restore when we are restartless for FF4.
+/* TODO: restore when we are restartless for FF4.
 function addonsShutdown() {
   WindowObserver.removeFromAddonsManagers();
   AddonManagerPrivate.unregisterProvider(AddonProvider);
