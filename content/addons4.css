@@ -1,6 +1,0 @@
-#category-scripts > .category-icon,
-.addon[type=user-script] .icon,
-#detail-view[type=user-script] #detail-icon
-{
-  list-style-image: url(chrome://greasemonkey/content/icon_medium.png);
-}

@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Spravovat uživatelské skripty">
-<!ENTITY manage.button.close "Zavřít">
-<!ENTITY manage.button.add "Přidat...">
-<!ENTITY manage.button.edit "Upravit...">
-<!ENTITY manage.button.remove "Odstranit">
-<!ENTITY manage.label.grpIncluded "Zahrnout stránky">
-<!ENTITY manage.label.grpExcluded "Vyjmout stránky">
-<!ENTITY manage.label.btnEdit "Upravit">
-<!ENTITY manage.label.chkEnabled "Povolen">
-<!ENTITY manage.label.btnUninstall "Odinstalovat">
-<!ENTITY manage.label.chkUninstall "Odinstalovat i přidružená nastavení">
-<!ENTITY manage.reorderHelp "Pro změnu pořadí skriptů v tomto seznamu je přetahujte myší, nebo stiskněte Alt-Nahoru/Alt-Dolů.">
 <!ENTITY menu.install "Instalovat tento uživatelský skript...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Zobrazit zdroj uživatelského skriptu">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Popis">
 <!ENTITY newscript.includes "Zahrnuje (jeden na řádek)">
 <!ENTITY newscript.excludes "Vylučuje (jeden na řádek)">
+<!ENTITY Uninstall "Odinstalovat">
+<!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">

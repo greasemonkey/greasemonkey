@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Управљање корисничким скриптама">
-<!ENTITY manage.button.close "Затвори">
-<!ENTITY manage.button.add "Додај...">
-<!ENTITY manage.button.edit "Уреди...">
-<!ENTITY manage.button.remove "Уклони">
-<!ENTITY manage.label.grpIncluded "Укључене странице">
-<!ENTITY manage.label.grpExcluded "Изузете странице">
-<!ENTITY manage.label.btnEdit "Уређивање">
-<!ENTITY manage.label.chkEnabled "Укључено">
-<!ENTITY manage.label.btnUninstall "Деинсталирај">
-<!ENTITY manage.label.chkUninstall "Деинсталирај и подешавања">
-<!ENTITY manage.reorderHelp "Превуците мишем и пустите или притисните алт+горе/алт+доле да бисте променили редослед скрипти">
 <!ENTITY menu.install "Инсталирај корисничку скрипту...">
 <!ENTITY menu.install.accesskey "И">
 <!ENTITY menu.show "Погледај изворни кôд странице">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Укључи (једно по линији)">
 <!ENTITY newscript.excludes "Изузми (једно по линији)">
+<!ENTITY Uninstall "Деинсталирај">
+<!ENTITY AlsoUninstallPrefs "Деинсталирај и подешавања">

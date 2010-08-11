@@ -1,20 +1,22 @@
 const GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
-// TODO: properly scope this constant
-const NAMESPACE = "http://youngpup.net/greasemonkey";
-
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
-function GM_isDef(thing) {
-  return typeof(thing) != "undefined";
-}
+var GM_stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
-function GM_getConfig() {
+function GM_getService() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService(Components.interfaces.gmIGreasemonkeyService)
-    .wrappedJSObject.config;
+    .wrappedJSObject;
+}
+
+function GM_getConfig() {
+  return GM_getService().config;
 }
 
 function GM_hitch(obj, meth) {
@@ -64,50 +66,31 @@ function GM_log(message, force) {
   }
 }
 
-function GM_openUserScriptManager() {
-  var win = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-                      .getService(Components.interfaces.nsIWindowMediator)
-                      .getMostRecentWindow("Greasemonkey:Manage");
-  if (win) {
-    win.focus();
-  } else {
-    var parentWindow = (!window.opener || window.opener.closed) ?
-      window : window.opener;
-    parentWindow.openDialog("chrome://greasemonkey/content/manage.xul",
-      "_blank", "resizable,dialog=no,centerscreen");
-  }
-}
-
 // TODO: this stuff was copied wholesale and not refactored at all. Lots of
 // the UI and Config rely on it. Needs rethinking.
 
-function openInEditor(script) {
-  var file = script.editFile;
-  var stringBundle = Components
-    .classes["@mozilla.org/intl/stringbundle;1"]
-    .getService(Components.interfaces.nsIStringBundleService)
-    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
-  var editor = getEditor(stringBundle);
+function GM_openInEditor(script) {
+  var editor = GM_getEditor();
   if (!editor) {
     // The user did not choose an editor.
     return;
   }
 
   try {
-    launchApplicationWithDoc(editor, file);
+    GM_launchApplicationWithDoc(editor, script.file);
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
-    alert(stringBundle.GetStringFromName("editor.could_not_launch") + "\n" + e);
+    alert(GM_stringBundle.GetStringFromName("editor.could_not_launch") + "\n" + e);
     GM_prefRoot.remove("editor");
     throw e;
   }
 }
 
-function getEditor(stringBundle) {
+function GM_getEditor(change) {
   var editorPath = GM_prefRoot.getValue("editor");
 
-  if (editorPath) {
+  if (!change && editorPath) {
     GM_log("Found saved editor preference: " + editorPath);
 
     var editor = Components.classes["@mozilla.org/file/local;1"]
@@ -133,7 +116,7 @@ function getEditor(stringBundle) {
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
                                .createInstance(nsIFilePicker);
 
-    filePicker.init(window, stringBundle.GetStringFromName("editor.prompt"),
+    filePicker.init(window, GM_stringBundle.GetStringFromName("editor.prompt"),
                     nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
@@ -150,12 +133,12 @@ function getEditor(stringBundle) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
       return filePicker.file;
     } else {
-      alert(stringBundle.GetStringFromName("editor.please_pick_executable"));
+      alert(GM_stringBundle.GetStringFromName("editor.please_pick_executable"));
     }
   }
 }
 
-function launchApplicationWithDoc(appFile, docFile) {
+function GM_launchApplicationWithDoc(appFile, docFile) {
   var args=[docFile.path];
 
   // For the mac, wrap with a call to "open".
@@ -176,14 +159,14 @@ function launchApplicationWithDoc(appFile, docFile) {
   process.run(false, args, args.length);
 }
 
-function parseScriptName(sourceUri) {
+function GM_parseScriptName(sourceUri) {
   var name = sourceUri.spec;
   name = name.substring(0, name.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;
 }
 
-function getTempFile() {
+function GM_getTempFile() {
   var file = Components.classes["@mozilla.org/file/directory_service;1"]
         .getService(Components.interfaces.nsIProperties)
         .get("TmpD", Components.interfaces.nsILocalFile);
@@ -197,7 +180,7 @@ function getTempFile() {
   return file;
 }
 
-function getBinaryContents(file) {
+function GM_getBinaryContents(file) {
     var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                               .getService(Components.interfaces.nsIIOService);
 
@@ -213,7 +196,7 @@ function getBinaryContents(file) {
     return bytes;
 }
 
-function getContents(file, charset) {
+function GM_getContents(file, charset) {
   if( !charset ) {
     charset = "UTF-8"
   }
@@ -229,7 +212,13 @@ function getContents(file, charset) {
   unicodeConverter.charset = charset;
 
   var channel = ioService.newChannelFromURI(GM_getUriFromFile(file));
-  var input=channel.open();
+  try {
+    var input=channel.open();
+  } catch (e) {
+    GM_logError(new Error("Could not open file: " + file.path));
+    return "";
+  }
+
   scriptableStream.init(input);
   var str=scriptableStream.read(input.available());
   scriptableStream.close();
@@ -242,7 +231,7 @@ function getContents(file, charset) {
   }
 }
 
-function getWriteStream(file) {
+function GM_getWriteStream(file) {
   var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
                          .createInstance(Components.interfaces.nsIFileOutputStream);
 
@@ -257,6 +246,7 @@ function GM_getUriFromFile(file) {
                    .newFileURI(file);
 }
 
+// Todo: replace with nsIVersionComparator?
 /**
  * Compares two version numbers
  *
@@ -325,6 +315,71 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
+function GM_uriFromUrl(url, baseUrl) {
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+                                     .getService(Components.interfaces.nsIIOService);
+  var baseUri = null;
+  if (baseUrl) baseUri = GM_uriFromUrl(baseUrl);
+  try {
+    return ioService.newURI(url, null, baseUri);
+  } catch (e) {
+    return null;
+  }
+}
+GM_uriFromUrl = GM_memoize(GM_uriFromUrl);
+
+// UTF-8 encodes input, SHA-1 hashes it and returns the 40-char hex version.
+function GM_sha1(unicode) {
+  var unicodeConverter = Components
+      .classes["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  unicodeConverter.charset = "UTF-8";
+
+  var data = unicodeConverter.convertToByteArray(unicode, {});
+  var ch = Components.classes["@mozilla.org/security/hash;1"]
+      .createInstance(Components.interfaces.nsICryptoHash);
+  ch.init(ch.SHA1);
+  ch.update(data, data.length);
+  var hash = ch.finish(false); // hash as raw octets
+
+  var hex = [];
+  for (var i = 0; i < hash.length; i++) {
+    hex.push( ("0" + hash.charCodeAt(i).toString(16)).slice(-2) );
+  }
+  return hex.join('');
+}
+GM_sha1 = GM_memoize(GM_sha1);
+
+GM_scriptDirCache = null;
+function GM_scriptDir() {
+  if (!GM_scriptDirCache) {
+    GM_scriptDirCache = Components
+        .classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsILocalFile);
+    GM_scriptDirCache.append("gm_scripts");
+  }
+  return GM_scriptDirCache.clone();
+}
+
+function GM_installUri(uri) {
+  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+    .getService(Components.interfaces.nsIWindowMediator)
+    .getMostRecentWindow("navigator:browser");
+  if (win && win.GM_BrowserUI) {
+    win.GM_BrowserUI.startInstallScript(uri);
+    return true;
+  }
+  return false;
+}
+
+function GM_scriptMatchesUrlAndRuns(script, url) {
+  return !script.pendingExec.length
+      && script.enabled
+      && !script.needsUninstall
+      && script.matchesURL(url);
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
@@ -336,7 +391,7 @@ function GM_setEnabled(enabled) {
 // that accept primitives.
 function GM_memoize(func, limit) {
   limit = limit || 3000;
-  var cache = {};
+  var cache = {__proto__: null};
   var keylist = [];
 
   return function(a) {
@@ -347,12 +402,19 @@ function GM_memoize(func, limit) {
     var result = func.apply(null, args);
 
     cache[key] = result;
-    keylist.push(key);
-    while (keylist.length > limit) {
-      key = keylist.shift();
-      del(cache[key]);
-    }
+
+    if (keylist.push(key) > limit) delete cache[keylist.shift()];
 
     return result;
   }
+}
+
+function GM_newUserScript() {
+  var windowWatcher = Components
+    .classes["@mozilla.org/embedcomp/window-watcher;1"]
+    .getService(Components.interfaces.nsIWindowWatcher);
+  windowWatcher.openWindow(
+    window, "chrome://greasemonkey/content/newscript.xul", null,
+    "chrome,dependent,centerscreen,resizable,dialog", null
+  );
 }

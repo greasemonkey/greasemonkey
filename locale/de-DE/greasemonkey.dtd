@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Benutzerskripte verwalten">
-<!ENTITY manage.button.close "Schließen">
-<!ENTITY manage.button.add "Hinzufügen...">
-<!ENTITY manage.button.edit "Bearbeiten...">
-<!ENTITY manage.button.remove "Entfernen">
-<!ENTITY manage.label.grpIncluded "Auf diese Seiten anwenden:">
-<!ENTITY manage.label.grpExcluded "Nicht auf diese Seiten anwenden:">
-<!ENTITY manage.label.btnEdit "Bearbeiten...">
-<!ENTITY manage.label.chkEnabled "Aktiviert">
-<!ENTITY manage.label.btnUninstall "Deinstallieren">
-<!ENTITY manage.label.chkUninstall "Zugehörige Einstellungen ebenfalls entfernen">
-<!ENTITY manage.reorderHelp "Umordnen der Skripte durch Ziehen mit der Maus oder Drücken von Alt+Hoch/Alt+Runter.">
 <!ENTITY menu.install "Benutzerskript installieren...">
 <!ENTITY menu.install.accesskey "s">
 <!ENTITY menu.show "Benutzerskript-Quelle anzeigen">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "Beschreibung:">
 <!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
+<!ENTITY Uninstall "Deinstallieren">
+<!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">

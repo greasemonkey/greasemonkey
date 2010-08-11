@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<overlay id="greasemonkey-close-window-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<commandset>
+  <command id="cmd_close" oncommand="GM_onClose &amp;&amp; GM_onClose(); window.close();" />
+</commandset>
+
+<keyset>
+  <key command="cmd_close" key="w" modifiers="accel" />
+  <key command="cmd_close" keycode="VK_ESCAPE" />
+</keyset>
+
+</overlay>

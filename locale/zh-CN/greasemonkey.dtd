@@ -1,15 +1,3 @@
-<!ENTITY manage.title "管理用户脚本">
-<!ENTITY manage.button.close "关闭">
-<!ENTITY manage.button.add "添加...">
-<!ENTITY manage.button.edit "编辑...">
-<!ENTITY manage.button.remove "删除">
-<!ENTITY manage.label.grpIncluded "脚本应用到下列网页">
-<!ENTITY manage.label.grpExcluded "不包括下列网页">
-<!ENTITY manage.label.btnEdit "编辑">
-<!ENTITY manage.label.chkEnabled "启用">
-<!ENTITY manage.label.btnUninstall "卸载">
-<!ENTITY manage.label.chkUninstall "同时清除相关的首选项设置">
-<!ENTITY manage.reorderHelp "使用鼠标拖动并释放或按 Alt-向上/Alt-向下 键重新排列列表中的脚本。">
 <!ENTITY menu.install "安装用户脚本...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "查看用户脚本源代码">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "脚本应用到下列网页（每行一条网页地址）">
 <!ENTITY newscript.excludes "不包括下列网页（每行一条网页地址）">
+<!ENTITY Uninstall "卸载">
+<!ENTITY AlsoUninstallPrefs "同时清除相关的首选项设置">

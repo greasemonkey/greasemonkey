@@ -1,15 +1,3 @@
-<!ENTITY manage.title "נהל סקריפטים">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "הוסף...">
-<!ENTITY manage.button.edit "ערוך...">
-<!ENTITY manage.button.remove "הסר">
-<!ENTITY manage.label.grpIncluded "כלול דפים">
-<!ENTITY manage.label.grpExcluded "אל תכלול דפים">
-<!ENTITY manage.label.btnEdit "עריכה">
-<!ENTITY manage.label.chkEnabled "פועל">
-<!ENTITY manage.label.btnUninstall "מחיקה">
-<!ENTITY manage.label.chkUninstall "מחק גם את כל ההגדרות הקשורות">
-<!ENTITY manage.reorderHelp "גרור-ושחרר באמצעות העכבר או לחץ Alt-Up/Alt-Down לשנות את סדר הסריפטים ברשימה זו.">
 <!ENTITY menu.install "התקן סקריפט...">
 <!ENTITY menu.install.accesskey "ה">
 <!ENTITY menu.show "צפה בקוד המקור של הסקריפט">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "תיאור">
 <!ENTITY newscript.includes "כלול (אחד הכל שורה)">
 <!ENTITY newscript.excludes "אל-תכללול (אחד בכל שורה)">
+<!ENTITY Uninstall "מחיקה">
+<!ENTITY AlsoUninstallPrefs "מחק גם את כל ההגדרות הקשורות">

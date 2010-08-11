@@ -1,0 +1,8 @@
+radio#userscripts-view {
+  list-style-image: url(chrome://greasemonkey/skin/icon_medium.png);
+}
+
+#userscripts {
+  margin: 8px;
+  margin-bottom: 0;
+}

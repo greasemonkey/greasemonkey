@@ -2,17 +2,27 @@ interfaces components/gmIBrowserWindow.xpt
 interfaces components/gmIGreasemonkeyService.xpt
 interfaces components/gmIMenuCommand.xpt
 
-component {77bf3650-1cd6-11da-8cd6-0800200c9a66} components/greasemonkey.js
-contract  @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8cd6-0800200c9a66}
-category  profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
-category  content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+component  {77bf3650-1cd6-11da-8cd6-0800200c9a66} components/greasemonkey.js
+contract   @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8cd6-0800200c9a66}
+category   profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+category   content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
 
-content    greasemonkey    content/
-overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
-overlay	   chrome://songbird/content/xul/mainScriptsOverlay.xul    chrome://greasemonkey/content/browser.xul
+content    greasemonkey content/
+skin       greasemonkey classic/1.0 skin/
 
+overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
+
+# Firefox <=3.5.* Add-Ons window integration.
+overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul
+style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/addons-mac.css os=Darwin
+
+# Firefox >=4.0 Add-Ons Manager integration.
 # Todo: ensure this resource line does not reveal Greasemonkey's presence to web content.
-resource greasemonkey content/
-overlay	   chrome://browser/content/browser.xul    chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
+resource   greasemonkey content/
+overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
 
-locale  greasemonkey  en-US  locale/en-US/
+overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/content/closewindow.xul
+overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul
+overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
+
+locale     greasemonkey en-US locale/en-US/

@@ -1,15 +1,3 @@
-<!ENTITY manage.title "مدیریت نویسه های کاربری(User Scripts)">
-<!ENTITY manage.button.close "بستن">
-<!ENTITY manage.button.add "اضافه کردن...">
-<!ENTITY manage.button.edit "ویرایش...">
-<!ENTITY manage.button.remove "پاک کردن">
-<!ENTITY manage.label.grpIncluded "صفحه های شامل شده">
-<!ENTITY manage.label.grpExcluded "صفحه های مستثنى شده">
-<!ENTITY manage.label.btnEdit "ویرایش">
-<!ENTITY manage.label.chkEnabled "فعال">
-<!ENTITY manage.label.btnUninstall "حذف">
-<!ENTITY manage.label.chkUninstall "همچنین حذف تنظیمات وابسته">
-<!ENTITY manage.reorderHelp "برای دوباره مرتب کردن نویسه ها در فهرست، با موس بکشید و رها کنید یا کلید های Alt-بالا/Alt-پایین را  فشار دهید.">
 <!ENTITY menu.install "نصب نویسه کاربری...">
 <!ENTITY menu.install.accesskey "ن">
 <!ENTITY menu.show "نمایش متن نویسه کاربری">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "شرح">
 <!ENTITY newscript.includes "شامل کردن (یکی در هر خط)">
 <!ENTITY newscript.excludes "مستثنى کردن (یکی در هر خط)">
+<!ENTITY Uninstall "حذف">
+<!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">

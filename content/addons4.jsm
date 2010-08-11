@@ -216,9 +216,8 @@ var WindowObserver = {
     var styles = doc.createElementNS(NS_XHTML, 'style');
     styles.setAttribute('id', 'script-styles');
     styles.setAttribute('type', 'text/css');
-    styles.setAttribute('src', 'chrome://greasemonkey/content/addons4.css');
     styles.appendChild(doc.createTextNode(
-        '@import url(chrome://greasemonkey/content/addons4.css);'));
+        '@import url(chrome://greasemonkey/skin/addons4.css);'));
     doc.documentElement.appendChild(styles);
   },
 

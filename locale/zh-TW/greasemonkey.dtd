@@ -1,15 +1,3 @@
-<!ENTITY manage.title "管理使用者腳本">
-<!ENTITY manage.button.close "關閉">
-<!ENTITY manage.button.add "新增...">
-<!ENTITY manage.button.edit "編輯...">
-<!ENTITY manage.button.remove "移除">
-<!ENTITY manage.label.grpIncluded "腳本將套用到的網址">
-<!ENTITY manage.label.grpExcluded "例外網址">
-<!ENTITY manage.label.btnEdit "編輯">
-<!ENTITY manage.label.chkEnabled "啟用">
-<!ENTITY manage.label.btnUninstall "移除腳本">
-<!ENTITY manage.label.chkUninstall "同時清除腳本的相關設定">
-<!ENTITY manage.reorderHelp "用滑鼠拖放或按 Alt-Up/Alt-Down 來重新排列腳本。">
 <!ENTITY menu.install "安裝腳本">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "檢視腳本原始碼">
@@ -35,3 +23,5 @@
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "腳本將套用到下列網頁 (每行一個網址)">
 <!ENTITY newscript.excludes "例外網頁 (每行一個網址)">
+<!ENTITY Uninstall "移除腳本">
+<!ENTITY AlsoUninstallPrefs "同時清除腳本的相關設定">
