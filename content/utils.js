@@ -420,10 +420,5 @@ function GM_newUserScript() {
 }
 
 // Open the addons manager and show the installed user scripts
-function GM_OpenScriptsMgr() {
-  if (parseFloat(Cc["@mozilla.org/xre/app-info;1"]
-      .getService(Components.interfaces.nsIXULAppInfo).version, 10) < 4.0)
-    BrowserOpenAddonsMgr('userscripts');
-  else
-    BrowserOpenAddonsMgr('addons://list/user-script');
-}
+if (typeof GM_OpenScriptsMgr == "undefined")
+  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts') }

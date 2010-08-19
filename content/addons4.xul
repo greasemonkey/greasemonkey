@@ -8,5 +8,10 @@
 Components.utils.import("resource://greasemonkey/addons4.jsm");  
 addonsStartup();
 })();
+
+// Open the addons manager in Firefox >= 4.0
+function GM_OpenScriptsMgr() {
+    BrowserOpenAddonsMgr('addons://list/user-script');
+}
 </script>
 </overlay>
