@@ -53,14 +53,9 @@ var AddonProvider = {
   }
 };
 
-// TODO: Use the built-in version in 0.9, instead.
-function scriptId(aScript) {
-  return (aScript.namespace + aScript.name + SCRIPT_ID_SUFFIX);
-}
-
 var ScriptAddonCache = {};
 function ScriptAddonFactoryByScript(aScript) {
-  var id = scriptId(aScript);
+  var id = aScript.id;
   if (!(id in ScriptAddonCache)) {
     ScriptAddonCache[id] = new ScriptAddon(aScript);
   }
@@ -69,7 +64,7 @@ function ScriptAddonFactoryByScript(aScript) {
 function ScriptAddonFactoryById(aId) {
   var scripts = GM_getConfig().getMatchingScripts(
       function(script) {
-        return scriptId(script) == aId;
+        return script.id == aId;
       });
   if (1 == scripts.length) return ScriptAddonFactoryByScript(scripts[0]);
   // TODO: throw an error instead?
@@ -81,7 +76,7 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddon(aScript) {
   this._script = aScript
 
-  this.id = scriptId(aScript);
+  this.id = aScript.id;
   this.name = this._script.name;
   //this.version = this._script.version;
   //this.creator = this._script.author;
