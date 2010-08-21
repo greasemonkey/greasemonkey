@@ -55,7 +55,7 @@ var AddonProvider = {
 
 var ScriptAddonCache = {};
 function ScriptAddonFactoryByScript(aScript) {
-  var id = aScript.id;
+  var id = aScript.id + SCRIPT_ID_SUFFIX;
   if (!(id in ScriptAddonCache)) {
     ScriptAddonCache[id] = new ScriptAddon(aScript);
   }
@@ -64,7 +64,7 @@ function ScriptAddonFactoryByScript(aScript) {
 function ScriptAddonFactoryById(aId) {
   var scripts = GM_getConfig().getMatchingScripts(
       function(script) {
-        return script.id == aId;
+        return (script.id + SCRIPT_ID_SUFFIX) == aId;
       });
   if (1 == scripts.length) return ScriptAddonFactoryByScript(scripts[0]);
   // TODO: throw an error instead?
@@ -76,7 +76,7 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddon(aScript) {
   this._script = aScript
 
-  this.id = aScript.id;
+  this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.name = this._script.name;
   //this.version = this._script.version;
   //this.creator = this._script.author;
