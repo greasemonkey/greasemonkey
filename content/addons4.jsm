@@ -81,6 +81,7 @@ function ScriptAddon(aScript) {
   this.version = this._script.version;
   //this.creator = this._script.author;
   this.description = this._script.description;
+  this.size = this._script.size;
 
   // TODO: Calculate size.
 }

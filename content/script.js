@@ -88,6 +88,13 @@ Script.prototype = {
   get fileURL() { return GM_getUriFromFile(this.file).spec; },
   get textContent() { return GM_getContents(this.file); },
 
+  get size() {
+    var size = this.file.fileSize;
+    for each (var r in this._requires) size += r.file.fileSize;
+    for each (var r in this._resources) size += r.file.fileSize;
+    return size;
+  },
+
   _initFileName: function(name, useExt) {
     var ext = "";
     name = name.toLowerCase();
