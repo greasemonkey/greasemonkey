@@ -145,7 +145,7 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
                              .getService(Components.interfaces.nsIXULRuntime);
   if ("Darwin"==xulRuntime.OS) {
-    args=["-a", appFile.path, docFile.path]
+    args = ["-a", appFile.path, docFile.path];
 
     appFile = Components.classes["@mozilla.org/file/local;1"]
                         .createInstance(Components.interfaces.nsILocalFile);
@@ -197,9 +197,8 @@ function GM_getBinaryContents(file) {
 }
 
 function GM_getContents(file, charset) {
-  if( !charset ) {
-    charset = "UTF-8"
-  }
+  if (!charset) charset = "UTF-8";
+
   var ioService=Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
   var scriptableStream=Components
@@ -419,6 +418,7 @@ function GM_newUserScript() {
   );
 }
 
-// Open the addons manager and show the installed user scripts
-if (typeof GM_OpenScriptsMgr == "undefined")
-  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts') }
+// Open the add-ons manager and show the installed user scripts.
+if (typeof GM_OpenScriptsMgr == "undefined") {
+  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
+}

@@ -74,7 +74,7 @@ function ScriptAddonFactoryById(aId) {
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
 function ScriptAddon(aScript) {
-  this._script = aScript
+  this._script = aScript;
 
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.name = this._script.name;

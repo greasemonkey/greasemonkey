@@ -14,7 +14,7 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
   this.updateScript = false;
-}
+};
 
 GM_ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
@@ -195,7 +195,7 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
         return true;
     case "file":
         var scriptScheme = ioService.extractScheme(this.uri_.spec);
-        return (scriptScheme == "file")
+        return (scriptScheme == "file");
     default:
       return false;
   }
@@ -234,7 +234,7 @@ GM_ScriptDownloader.prototype.installScript = function(){
   if (this.dependencyError) {
     alert(this.dependencyError);
   } else if(this.dependenciesLoaded_) {
-    this.win_.GM_BrowserUI.installScript(this.script)
+    this.win_.GM_BrowserUI.installScript(this.script);
   } else {
     this.installOnCompletion_ = true;
   }

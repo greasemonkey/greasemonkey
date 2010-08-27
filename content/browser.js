@@ -188,7 +188,7 @@ GM_BrowserUI.startInstallScript = function(uri, timer) {
     // docs for nsicontentpolicy say we're not supposed to block, so short
     // timer.
     window.setTimeout(
-      function() { GM_BrowserUI.startInstallScript(uri, true) }, 0);
+      function() { GM_BrowserUI.startInstallScript(uri, true); }, 0);
 
     return;
   }
