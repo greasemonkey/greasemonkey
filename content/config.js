@@ -48,12 +48,8 @@ Config.prototype = {
   },
 
   _find: function(aScript) {
-    var namespace = aScript._namespace.toLowerCase();
-    var name = aScript._name.toLowerCase();
-
     for (var i = 0, script; script = this._scripts[i]; i++) {
-      if (script._namespace.toLowerCase() == namespace
-        && script._name.toLowerCase() == name) {
+      if (script.id == aScript.id) {
         return i;
       }
     }
@@ -67,11 +63,12 @@ Config.prototype = {
 
     var configContents = GM_getContents(this._configFile);
     var doc = domParser.parseFromString(configContents, "text/xml");
-    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null, 0, null);
+    var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null,
+        7 /* XPathResult.ORDERED_NODE_SNAPSHOT_TYPE */,
+        null);
 
     this._scripts = [];
-    var node = null;
-    while (node = nodes.iterateNext()) {
+    for (var i=0, node=null; node=nodes.snapshotItem(i); i++) {
       var script = new Script(node);
       if (script.allFilesExist()) {
         this._scripts.push(script);
@@ -109,78 +106,8 @@ Config.prototype = {
       .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
 
     for (var i = 0, scriptObj; scriptObj = this._scripts[i]; i++) {
-      var scriptNode = doc.createElement("Script");
-
-      for (var j = 0; j < scriptObj._includes.length; j++) {
-        var includeNode = doc.createElement("Include");
-        includeNode.appendChild(doc.createTextNode(scriptObj._includes[j]));
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(includeNode);
-      }
-
-      for (var j = 0; j < scriptObj._excludes.length; j++) {
-        var excludeNode = doc.createElement("Exclude");
-        excludeNode.appendChild(doc.createTextNode(scriptObj._excludes[j]));
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(excludeNode);
-      }
-
-      for (var j = 0; j < scriptObj._requires.length; j++) {
-        var req = scriptObj._requires[j];
-        var resourceNode = doc.createElement("Require");
-
-        resourceNode.setAttribute("filename", req._filename);
-
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(resourceNode);
-      }
-
-      for (var j = 0; j < scriptObj._resources.length; j++) {
-        var imp = scriptObj._resources[j];
-        var resourceNode = doc.createElement("Resource");
-
-        resourceNode.setAttribute("name", imp._name);
-        resourceNode.setAttribute("filename", imp._filename);
-        resourceNode.setAttribute("mimetype", imp._mimetype);
-        if (imp._charset) {
-          resourceNode.setAttribute("charset", imp._charset);
-        }
-
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(resourceNode);
-      }
-
-      if (scriptObj._unwrap) {
-        scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-        scriptNode.appendChild(doc.createElement("Unwrap"));
-      }
-
-      scriptNode.appendChild(doc.createTextNode("\n\t"));
-
-      scriptNode.setAttribute("filename", scriptObj._filename);
-      scriptNode.setAttribute("name", scriptObj._name);
-      scriptNode.setAttribute("namespace", scriptObj._namespace);
-      scriptNode.setAttribute("description", scriptObj._description);
-      scriptNode.setAttribute("version", scriptObj._version);
-      scriptNode.setAttribute("enabled", scriptObj._enabled);
-      scriptNode.setAttribute("basedir", scriptObj._basedir);
-      scriptNode.setAttribute("modified", scriptObj._modified);
-      scriptNode.setAttribute("dependhash", scriptObj._dependhash);
-      scriptNode.setAttribute("updateAvailable", scriptObj.updateAvailable);
-      if (scriptObj._updateVersion) {
-        scriptNode.setAttribute("updateVersion", scriptObj._updateVersion);
-      }
-      scriptNode.setAttribute("lastUpdateCheck", scriptObj._lastUpdateCheck);
-
-      if (scriptObj._downloadURL) {
-        scriptNode.setAttribute("downloadURL", scriptObj._downloadURL);
-      }
-      if (scriptObj._updateURL) {
-        scriptNode.setAttribute("updateURL", scriptObj._updateURL);
-      }
-
       doc.firstChild.appendChild(doc.createTextNode("\n\t"));
-      doc.firstChild.appendChild(scriptNode);
+      doc.firstChild.appendChild(scriptObj.toConfigNode(doc));
     }
 
     doc.firstChild.appendChild(doc.createTextNode("\n"));
@@ -225,7 +152,7 @@ Config.prototype = {
     var script = new Script();
 
     if (uri) {
-      script._downloadURL = uri;
+      script._downloadURL = uri.spec;
       script._enabled = true;
     }
 
@@ -377,7 +304,7 @@ Config.prototype = {
     }
 
     newScript._modified = newScript._file.lastModifiedTime;
-    newScript._metahash = GM_sha1(newScript._rawMeta);
+    newScript._dependhash = GM_sha1(newScript._rawMeta);
     newScript.updateAvailable = false;
     newScript._lastUpdateCheck = newScript._modified;
 
@@ -440,28 +367,26 @@ Config.prototype = {
 
   get scripts() { return this._scripts.concat(); },
   getMatchingScripts: function(testFunc) { return this._scripts.filter(testFunc); },
-  injectScript: function(script) {
-    var unsafeWin = this.wrappedContentWin.wrappedJSObject;
-    var unsafeLoc = new XPCNativeWrapper(unsafeWin, "location").location;
-    var href = new XPCNativeWrapper(unsafeLoc, "href").href;
 
-    if (GM_scriptMatchesUrlAndRuns(script, href)) {
-      greasemonkeyService.injectScripts(
-          [script], href, unsafeWin, this.chromeWin);
-    }
-  },
-
-  updateModifiedScripts: function() {
-    // Find any updated scripts
+  updateModifiedScripts: function(safeWin, chromeWin) {
+    // Find any updated scripts or scripts with delayed injection
     var scripts = this.getMatchingScripts(
-        function (script) { return script.isModified(); });
+        function (script) {
+          return script.isModified() || 0 != script.pendingExec.length;
+        });
     if (0 == scripts.length) return;
 
     for (var i = 0, script; script = scripts[i]; i++) {
-      var parsedScript = this.parse(
-          script.textContent, script._downloadURL, true);
-      script.updateFromNewScript(parsedScript);
-      this._changed(script, "modified", null, true);
+      if (0 == script.pendingExec.length) {
+        var parsedScript = this.parse(
+            script.textContent, script._downloadURL, true);
+        script.updateFromNewScript(parsedScript, safeWin, chromeWin);
+        this._changed(script, "modified", null, true);
+      } else {
+        // We are already downloading dependencies for this script
+        // so add its window to the list
+        script.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+      }
     }
 
     this._save();
@@ -476,7 +401,7 @@ Config.prototype = {
     var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
         .getService(Ci.nsIWindowMediator)
         .getMostRecentWindow("navigator:browser");
-    win.BrowserOpenAddonsMgr('userscripts');
+    win.GM_OpenScriptsMgr();
   },
 
   /**

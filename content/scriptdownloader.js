@@ -15,7 +15,7 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.tempFiles_ = [];
   this.updateScript = false;
   this.replacedScript = null;
-}
+};
 
 GM_ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
@@ -202,7 +202,7 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
         return true;
     case "file":
         var scriptScheme = ioService.extractScheme(this.uri_.spec);
-        return (scriptScheme == "file")
+        return (scriptScheme == "file");
     default:
       return false;
   }
@@ -210,9 +210,16 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
 
 GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
-    // Inject the script now that we have the new dependencies
-    GM_getConfig().injectScript(this.script);
-    this.script.delayInjection = false;
+    // Inject the script in all windows that have been waiting
+    var pendingExec;
+    while (pendingExec = this.script.pendingExec.shift()) {
+      if (pendingExec.safeWin.closed) continue;
+      var url = pendingExec.safeWin.location.href;
+      if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
+        GM_getService().injectScripts(
+            [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
+      }
+    }
 
     // Save new values to config.xml
     GM_getConfig()._save();

@@ -14,7 +14,6 @@ function Script(configNode) {
   this._prefroot = null;
   this._description = null;
   this._version = null;
-  this._updateURL = null;
   this._enabled = true;
   this.needsUninstall = false;
   this._includes = [];
@@ -23,12 +22,12 @@ function Script(configNode) {
   this._resources = [];
   this._unwrap = false;
   this._dependFail = false
-  this.delayInjection = false;
   this._rawMeta = null;
   this._lastUpdateCheck = null;
   this.updateAvailable = null;
   this._updateVersion = null;
-  
+  this.pendingExec = [];
+
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
@@ -51,7 +50,7 @@ Script.prototype = {
     if (!this._id) this._id = this._namespace + "/" + this._name;
     return this._id;
   },
-  get prefroot() { 
+  get prefroot() {
     if (!this._prefroot) this._prefroot = ["scriptvals.", this.id, "."].join("");
     return this._prefroot;
   },
@@ -70,12 +69,6 @@ Script.prototype = {
   get requires() { return this._requires.concat(); },
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
-
-  get updateURL() {
-    if (this._updateURL) return this._updateURL;
-    if (this._downloadURL && /^[h|f]ttps?:\/\//.test(this._downloadURL)) return this._downloadURL;
-    return null;
-  },
 
   get file() {
     var file = this._basedirFile;
@@ -97,6 +90,13 @@ Script.prototype = {
 
   get fileURL() { return GM_getUriFromFile(this.file).spec; },
   get textContent() { return GM_getContents(this.file); },
+
+  get size() {
+    var size = this.file.fileSize;
+    for each (var r in this._requires) size += r.file.fileSize;
+    for each (var r in this._resources) size += r.file.fileSize;
+    return size;
+  },
 
   _initFileName: function(name, useExt) {
     var ext = "";
@@ -125,8 +125,7 @@ Script.prototype = {
   _loadFromConfigNode: function(node) {
     this._filename = node.getAttribute("filename");
     this._basedir = node.getAttribute("basedir") || ".";
-    this._downloadURL = node.getAttribute("downloadURL") || null;
-    thi._updateURL = node.getAttribute("updateURL") || null;
+    this._downloadURL = node.getAttribute("installurl") || null;
 
     if (!this.fileExists(this._basedirFile)) return;
     if (!this.fileExists(this.file)) return;
@@ -158,7 +157,7 @@ Script.prototype = {
       GM_getConfig()._changed(this, "modified", null);
     } else {
         this.updateAvailable = node.getAttribute("updateAvailable") == true.toString();
-        this._updateVersion= node.getAttribute("updateVersion") || null;
+        this._updateVersion = node.getAttribute("updateVersion") || null;
         this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
     }
 
@@ -194,7 +193,79 @@ Script.prototype = {
     this._description = node.getAttribute("description");
     this._enabled = node.getAttribute("enabled") == true.toString();
   },
-  
+
+  toConfigNode: function(doc) {
+    var scriptNode = doc.createElement("Script");
+
+    for (var j = 0; j < this._includes.length; j++) {
+      var includeNode = doc.createElement("Include");
+      includeNode.appendChild(doc.createTextNode(this._includes[j]));
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(includeNode);
+    }
+
+    for (var j = 0; j < this._excludes.length; j++) {
+      var excludeNode = doc.createElement("Exclude");
+      excludeNode.appendChild(doc.createTextNode(this._excludes[j]));
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(excludeNode);
+    }
+
+    for (var j = 0; j < this._requires.length; j++) {
+      var req = this._requires[j];
+      var resourceNode = doc.createElement("Require");
+
+      resourceNode.setAttribute("filename", req._filename);
+
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(resourceNode);
+    }
+
+    for (var j = 0; j < this._resources.length; j++) {
+      var imp = this._resources[j];
+      var resourceNode = doc.createElement("Resource");
+
+      resourceNode.setAttribute("name", imp._name);
+      resourceNode.setAttribute("filename", imp._filename);
+      resourceNode.setAttribute("mimetype", imp._mimetype);
+      if (imp._charset) {
+        resourceNode.setAttribute("charset", imp._charset);
+      }
+
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(resourceNode);
+    }
+
+    if (this._unwrap) {
+      scriptNode.appendChild(doc.createTextNode("\n\t\t"));
+      scriptNode.appendChild(doc.createElement("Unwrap"));
+    }
+
+    scriptNode.appendChild(doc.createTextNode("\n\t"));
+
+    scriptNode.setAttribute("filename", this._filename);
+    scriptNode.setAttribute("name", this._name);
+    scriptNode.setAttribute("namespace", this._namespace);
+    scriptNode.setAttribute("description", this._description);
+    scriptNode.setAttribute("version", this._version);
+    scriptNode.setAttribute("enabled", this._enabled);
+    scriptNode.setAttribute("basedir", this._basedir);
+    scriptNode.setAttribute("modified", this._modified);
+    scriptNode.setAttribute("dependhash", this._dependhash);
+    scriptNode.setAttribute("updateAvailable", this.updateAvailable);
+    scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
+
+    if (this._updateVersion) {
+      scriptNode.setAttribute("updateVersion", this._updateVersion);
+    }
+
+    if (this._downloadURL) {
+      scriptNode.setAttribute("installurl", this._downloadURL);
+    }
+
+    return scriptNode;
+  },
+
   _initFile: function(tempFile) {
     var name = this._initFileName(this._name, false);
     this._basedir = name;
@@ -231,30 +302,41 @@ Script.prototype = {
     return false;
   },
 
-  updateFromNewScript: function(newScript) {
-    // Migrate preferences.
-    if (this.prefroot != newScript.prefroot) {
-      var storageOld = new GM_ScriptStorage(this);
-      var storageNew = new GM_ScriptStorage(newScript);
+  updateFromNewScript: function(newScript, safeWin, chromeWin) {
+    // if the @name and @namespace have changed
+    // make sure they don't conflict with another installed script
+    if (newScript.id != this.id) {
+      if (!GM_getConfig().installIsUpdate(newScript)) {
+        // Migrate preferences.
+        if (this.prefroot != newScript.prefroot) {
+          var storageOld = new GM_ScriptStorage(this);
+          var storageNew = new GM_ScriptStorage(newScript);
 
-      var names = storageOld.listValues();
-      for (var i = 0, name = null; name = names[i]; i++) {
-        storageNew.setValue(name, storageOld.getValue(name));
-        storageOld.deleteValue(name);
+          var names = storageOld.listValues();
+          for (var i = 0, name = null; name = names[i]; i++) {
+            storageNew.setValue(name, storageOld.getValue(name));
+            storageOld.deleteValue(name);
+          }
+        }
+
+        // Empty cached values.
+        this._id = null;
+        this._prefroot = null;
+
+        this._name = newScript._name;
+        this._namespace = newScript._namespace;
+      } else {
+        // Notify the user of the conflict
+        alert('Error: Another script with @name: "' + newScript._name +
+              '" and @namespace: "' + newScript._namespace +
+              '" is already installed.\nThese values must be unique.');
       }
     }
-
-    // Empty cached values.
-    this._id = null;
-    this._prefroot = null;
 
     // Copy new values.
     this._includes = newScript._includes;
     this._excludes = newScript._excludes;
-    this._name = newScript._name;
-    this._namespace = newScript._namespace;
     this._description = newScript._description;
-    this._updateURL = newScript._updateURL;
     this._unwrap = newScript._unwrap;
     this._version = newScript._version;
 
@@ -272,18 +354,19 @@ Script.prototype = {
         if (!nextFile.equals(this.file)) nextFile.remove(true);
       }
 
+      // Store window references for late injection
+      this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+
       // Redownload dependencies.
       var scriptDownloader = new GM_ScriptDownloader(null, null, null);
       scriptDownloader.script = this;
       scriptDownloader.updateScript = true;
       scriptDownloader.fetchDependencies();
-
-      this.delayInjection = true;
     }
   },
 
   checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval) {
-    var updateURL = this.updateURL;
+    var updateURL = this._downloadURL;
     if (this.updateAvailable ||
         !updateURL ||
         currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
@@ -340,7 +423,7 @@ Script.prototype = {
     }
     return files;
   },
-  
+
   fileExists: function(file) {
     try {
       return file.exists();
@@ -348,7 +431,7 @@ Script.prototype = {
       return false;
     }
   },
-    
+
   allFilesExist: function() {
     return this.allFiles().every(this.fileExists);
   },

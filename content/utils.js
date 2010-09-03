@@ -8,15 +8,15 @@ var GM_stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
-function GM_isDef(thing) {
-  return typeof(thing) != "undefined";
-}
-
-function GM_getConfig() {
+function GM_getService() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService(Components.interfaces.gmIGreasemonkeyService)
-    .wrappedJSObject.config;
+    .wrappedJSObject;
+}
+
+function GM_getConfig() {
+  return GM_getService().config;
 }
 
 function GM_hitch(obj, meth) {
@@ -38,16 +38,6 @@ function GM_hitch(obj, meth) {
     // list of static and dynamic arguments.
     return obj[meth].apply(obj, args);
   };
-}
-
-function GM_listen(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "addEventListener")(
-    event, listener, opt_capture);
-}
-
-function GM_unlisten(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "removeEventListener")(
-    event, listener, opt_capture);
 }
 
 /**
@@ -155,7 +145,7 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
                              .getService(Components.interfaces.nsIXULRuntime);
   if ("Darwin"==xulRuntime.OS) {
-    args=["-a", appFile.path, docFile.path]
+    args = ["-a", appFile.path, docFile.path];
 
     appFile = Components.classes["@mozilla.org/file/local;1"]
                         .createInstance(Components.interfaces.nsILocalFile);
@@ -207,9 +197,8 @@ function GM_getBinaryContents(file) {
 }
 
 function GM_getContents(file, charset) {
-  if( !charset ) {
-    charset = "UTF-8"
-  }
+  if (!charset) charset = "UTF-8";
+
   var ioService=Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
   var scriptableStream=Components
@@ -373,8 +362,8 @@ function GM_scriptDir() {
 }
 
 function GM_installUri(uri) {
-  var win = Cc['@mozilla.org/appshell/window-mediator;1']
-    .getService(Ci.nsIWindowMediator)
+  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+    .getService(Components.interfaces.nsIWindowMediator)
     .getMostRecentWindow("navigator:browser");
   if (win && win.GM_BrowserUI) {
     win.GM_BrowserUI.startInstallScript(uri);
@@ -384,7 +373,7 @@ function GM_installUri(uri) {
 }
 
 function GM_scriptMatchesUrlAndRuns(script, url) {
-  return !script.delayInjection 
+  return !script.pendingExec.length
       && script.enabled
       && !script.needsUninstall
       && script.matchesURL(url);
@@ -427,4 +416,9 @@ function GM_newUserScript() {
     window, "chrome://greasemonkey/content/newscript.xul", null,
     "chrome,dependent,centerscreen,resizable,dialog", null
   );
+}
+
+// Open the add-ons manager and show the installed user scripts.
+if (typeof GM_OpenScriptsMgr == "undefined") {
+  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }

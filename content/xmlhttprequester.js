@@ -61,7 +61,7 @@ function(safeUrl, details, req) {
   this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
                          details);
 
-  req.open(details.method, safeUrl);
+  req.open(details.method, safeUrl, true, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
@@ -93,7 +93,7 @@ function(safeUrl, details, req) {
   }
 
   GM_log("< GM_xmlhttpRequest.chromeStartRequest");
-}
+};
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content
@@ -131,7 +131,7 @@ function(unsafeContentWin, req, event, details) {
         .setTimeout(function(){details[event](responseState);}, 0);
 
       GM_log("< GM_xmlhttpRequester -- callback for " + event);
-    }
+    };
   }
 
   GM_log("< GM_xmlhttpRequester.setupRequestEvent");

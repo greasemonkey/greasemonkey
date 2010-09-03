@@ -16,6 +16,9 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+<script src="chrome://global/content/nsDragAndDrop.js" />
+<script src="chrome://global/content/nsTransferable.js" />
+
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
@@ -32,7 +35,10 @@
 <notificationbox id="addonsMsg">
   <vbox id="userscriptsBox" insertafter="extensionsBox" flex="1">
     <hbox flex="1">
-      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"/>
+      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"
+        ondragover="nsDragAndDrop.dragOver(event, greasemonkeyDragObserver)"
+        ondragdrop="nsDragAndDrop.drop(event, greasemonkeyDragObserver)"
+      />
     </hbox>
   </vbox>
 </notificationbox>

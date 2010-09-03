@@ -7,7 +7,7 @@ var GM_firefoxVersion;
 var GM_os;
 (function() {
 var appInfo = Components
-    .classes["@mozilla.org/xre/app-info;1"]  
+    .classes["@mozilla.org/xre/app-info;1"]
     .getService(Components.interfaces.nsIXULAppInfo);
 var versionChecker = Components
     .classes["@mozilla.org/xpcom/version-comparator;1"]
@@ -97,11 +97,6 @@ window.addEventListener('load', function() {
     gUserscriptsView.addEventListener(
         'keypress', greasemonkeyAddons.onKeypress, false);
   }
-  
-  window.addEventListener(
-      'dragover', greasemonkeyAddons.onDragOver, false);
-  window.addEventListener(
-      'drop', greasemonkeyAddons.onDrop, false);
 
   GM_config.addObserver(observer);
 
@@ -157,34 +152,6 @@ var greasemonkeyAddons = {
     if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
   },
 
-  urlFromDragEvent: function(event) {
-    var types = event.dataTransfer.types;
-    var url = null;
-    if (types.contains('text/uri-list')) {
-      url = event.dataTransfer.mozGetDataAt('text/uri-list', 0);
-    } else if (types.contains('application/x-moz-file')) {
-      var file = event.dataTransfer
-          .mozGetDataAt('application/x-moz-file', 0)
-          .QueryInterface(Components.interfaces.nsIFile);
-      url = GM_getUriFromFile(file).spec;
-    }
-    return url;
-  },
-
-  onDragOver: function(event) {
-    var url = greasemonkeyAddons.urlFromDragEvent(event);
-    if (url && url.match(/\.user\.js$/)) {
-      // Cancel the default do-not-allow behavior.
-      event.preventDefault();
-    }
-  },
-
-  onDrop: function(event) {
-    var uri = GM_uriFromUrl(greasemonkeyAddons.urlFromDragEvent(event));
-    // TODO: Make this UI appear attached to addons, rather than the browser?
-    GM_installUri(uri);
-  },
-  
   updateLastSelected: function() {
     if (!gUserscriptsView.selectedItem) return;
     var userscriptsRadio = document.getElementById('userscripts-view');
@@ -258,7 +225,7 @@ var greasemonkeyAddons = {
     if (script.updateAvailable) {
       item.setAttribute('updateable', 'true');
       item.setAttribute('availableUpdateVersion', script._updateVersion);
-      item.setAttribute('availableUpdateURL', script.updateURL);
+      item.setAttribute('availableUpdateURL', script._downloadURL);
     }
 
     if (script.id in GM_uninstallQueue) {
@@ -299,7 +266,7 @@ var greasemonkeyAddons = {
       GM_openInEditor(script);
       break;
     case 'cmd_userscript_show':
-      GM_openFolder(script._file);
+      GM_openFolder(script.file);
       break;
     case 'cmd_userscript_enable':
       script.enabled = true;
@@ -428,7 +395,7 @@ var greasemonkeyAddons = {
     aEvent.stopPropagation();
     aEvent.preventDefault();
   },
-  
+
   // See: http://github.com/greasemonkey/greasemonkey/issues/#issue/1149
   // Since every Firefox version/platform has a different order of controls
   // in this dialog, rearrange ours to blend in with that scheme.
@@ -454,5 +421,31 @@ var greasemonkeyAddons = {
       $('commandBarBottom').insertBefore(
           $('newUserscript'), $('skipDialogButton'));
     }
+  }
+};
+
+// See: https://developer.mozilla.org/en/drag_and_drop_javascript_wrapper
+var greasemonkeyDragObserver = {
+  onDragOver: function(event, flavor, session) {
+    // no-op
+  },
+  onDrop: function(event, dropData, session) {
+    var url;
+    if ('text/uri-list' == dropData.flavour.contentType) {
+      url = dropData.data;
+    } else if ('application/x-moz-file' == dropData.flavour.contentType) {
+      url = GM_getUriFromFile(dropData.data).spec;
+    }
+    dump("Dropped url: ["+url+"]\n");
+    if (url && url.match(/\.user\.js$/)) {
+      // TODO: Make this UI appear in the addons win, rather than the browser?
+      GM_installUri(GM_uriFromUrl(url));
+    }
+  },
+  getSupportedFlavours: function() {
+    var flavours = new FlavourSet();
+    flavours.appendFlavour('application/x-moz-file', 'nsIFile');
+    flavours.appendFlavour('text/uri-list');
+    return flavours;
   }
 };
