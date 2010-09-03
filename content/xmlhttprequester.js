@@ -61,9 +61,7 @@ function(safeUrl, details, req) {
   this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
                          details);
 
-  if (details.mozBackgroundRequest) {
-      req.mozBackgroundRequest = true;
-  }
+  req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
   req.open(details.method, safeUrl, true, details.user || "", details.password || "");
 
