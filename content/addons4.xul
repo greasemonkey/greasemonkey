@@ -5,7 +5,7 @@
 <!-- Just injects the Firefox 4+ specific addons integration code. -->
 <script type="application/x-javascript">
 (function() {
-Components.utils.import("resource://greasemonkey/addons4.jsm");  
+Components.utils.import("resource://greasemonkey/addons4.js");  
 addonsStartup();
 })();
 
