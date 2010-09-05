@@ -95,7 +95,6 @@ ScriptAddon.prototype.providesUpdatesSecurely = true;
 ScriptAddon.prototype.blocklistState = 0;
 ScriptAddon.prototype.appDisabled = false;
 ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
-ScriptAddon.prototype.isActive = true;
 ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
@@ -106,6 +105,11 @@ ScriptAddon.prototype.size = null;
 
 // Private, custom, attributes.
 ScriptAddon.prototype._script = null;
+
+ScriptAddon.prototype.__defineGetter__('isActive',
+function ScriptAddon_prototype_getter_isActive() {
+	return this._script.enabled;
+});
 
 ScriptAddon.prototype.__defineGetter__('userDisabled',
 function ScriptAddon_prototype_getter_userDisabled() {
