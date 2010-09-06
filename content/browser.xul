@@ -88,7 +88,7 @@
         onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
                     else if (event.button == 1) GM_OpenScriptsMgr();"
         context="gm-status-popup" />
-      <popup id="gm-status-popup"
+      <menupopup id="gm-status-popup"
         position="before_end"
         onpopupshowing="GM_showPopup(event); event.stopPropagation();"
         onclick="GM_popupClicked(event); event.stopPropagation();"
@@ -118,7 +118,7 @@
           label="&statusbar.enabled;"
           type="checkbox"
           oncommand="GM_setEnabled(!GM_getEnabled());" />
-      </popup>
+      </menupopup>
     </statusbarpanel>
   </statusbar>
 
