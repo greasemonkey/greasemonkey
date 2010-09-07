@@ -338,7 +338,7 @@ Config.prototype = {
     for (var i = 0, script; script = scripts[i]; i++) {
       if (0 == script.pendingExec.length) {
         var parsedScript = this.parse(
-            script.textContent, script._downloadURL, true);
+            script.textContent, GM_uriFromUrl(script._downloadURL), true);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
         this._changed(script, "modified", null, true);
       } else {
