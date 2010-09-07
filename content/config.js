@@ -120,10 +120,7 @@ Config.prototype = {
   parse: function(source, uri, updating) {
     var script = new Script();
 
-    if (uri) {
-      script._downloadURL = uri.spec;
-      script._enabled = true;
-    }
+    if (uri) script._downloadURL = uri.spec;
 
     // read one line at a time looking for start meta delimiter or EOF
     var lines = source.match(/.+/g);
