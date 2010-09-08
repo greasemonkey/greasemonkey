@@ -9,7 +9,7 @@ function Script(configNode) {
   this._dependhash = null;
 
   this._name = null;
-  this._namespace = null;
+  this._namespace = "";
   this._id = null;
   this._prefroot = null;
   this._description = null;
@@ -67,6 +67,7 @@ Script.prototype = {
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
 
+  get filename() { return this._filename; },
   get file() {
     var file = this._basedirFile;
     file.append(this._filename);
@@ -132,7 +133,7 @@ Script.prototype = {
         || !node.hasAttribute("version")
     ) {
       var parsedScript = GM_getConfig().parse(
-          this.textContent, GM_uriFromUrl(this._downloadURL), true);
+          this.textContent, GM_uriFromUrl(this._downloadURL), this);
 
       this._modified = this.file.lastModifiedTime;
       this._dependhash = GM_sha1(parsedScript._rawMeta);

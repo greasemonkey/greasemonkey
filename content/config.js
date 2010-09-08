@@ -117,7 +117,7 @@ Config.prototype = {
     configStream.close();
   },
 
-  parse: function(source, uri, updating) {
+  parse: function(source, uri, updateScript) {
     var script = new Script();
 
     if (uri) script._downloadURL = uri.spec;
@@ -183,7 +183,7 @@ Config.prototype = {
               script._requires.push(scriptRequire);
               script._rawMeta += header + '\0' + value + '\0';
             } catch (e) {
-              if (updating) {
+              if (updateScript) {
                 script._dependFail = true;
               } else {
                 throw new Error('Failed to @require '+ value);
@@ -216,7 +216,7 @@ Config.prototype = {
               script._resources.push(scriptResource);
               script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
             } catch (e) {
-              if (updating) {
+              if (updateScript) {
                 script._dependFail = true;
               } else {
                 throw new Error('Failed to get @resource '+ resName +' from '+
@@ -229,7 +229,10 @@ Config.prototype = {
     }
 
     // if no meta info, default to reasonable values
-    if (!script._name && uri) script._name = GM_parseScriptName(uri);
+    if (!script._name) {
+      if (updateScript) script._name = updateScript.filename;
+      else if (uri) script._name = GM_parseScriptName(uri);
+    }
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
     if (!script._version) script._version = "";
@@ -335,7 +338,7 @@ Config.prototype = {
     for (var i = 0, script; script = scripts[i]; i++) {
       if (0 == script.pendingExec.length) {
         var parsedScript = this.parse(
-            script.textContent, GM_uriFromUrl(script._downloadURL), true);
+            script.textContent, GM_uriFromUrl(script._downloadURL), script);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
         this._changed(script, "modified", null, true);
       } else {
