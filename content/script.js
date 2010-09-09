@@ -2,6 +2,7 @@ function Script(configNode) {
   this._observers = [];
 
   this._downloadURL = null;
+  this._updateURL = null;
   this._tempFile = null;
   this._basedir = null;
   this._filename = null;
@@ -69,6 +70,17 @@ Script.prototype = {
   get requires() { return this._requires.concat(); },
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
+
+  get _updateURL() {
+    if (!this._downloadURL) return null;
+
+    // check if the url is from userscripts.org
+    var usoURL = this._downloadURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
+    if (usoURL)
+      return usoURL[1].replace(/^http/, "https").replace(/\.user\.js$/,".meta.js");
+    else
+      return this._downloadURL;
+  }
 
   get file() {
     var file = this._basedirFile;
@@ -366,17 +378,11 @@ Script.prototype = {
   },
 
   checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval) {
-    var updateURL = this._downloadURL;
+    var updateURL = this._updateURL;
     if (this.updateAvailable ||
         !updateURL ||
         currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
       return;
-    }
-
-    // check if the url is from userscripts.org
-    var usoURL = updateURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
-    if (usoURL) {
-      updateURL = usoURL[1].replace(/^http/, "https").replace(/\.user\.js$/,".meta.js");
     }
 
     this._lastUpdateCheck = currentTime;
