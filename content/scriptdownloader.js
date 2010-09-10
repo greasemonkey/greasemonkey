@@ -47,7 +47,7 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_.send(null);
 };
 
-ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
+GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
   // If there is a 'Content-Type' header and it contains 'text/html',
   // then do not install the file, and display it instead.
   if (this.req_.readyState == 2 && /text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
@@ -273,7 +273,7 @@ GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
                        this);
 };
 
-ScriptDownloader.prototype.hideFetchMsg = function() {
+GM_ScriptDownloader.prototype.hideFetchMsg = function() {
   this.win_.GM_BrowserUI.refreshStatus();
   this.win_.GM_BrowserUI.hideStatusImmediately();
 };
