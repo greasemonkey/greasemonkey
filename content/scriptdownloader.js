@@ -52,6 +52,7 @@ ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
   // then do not install the file, and display it instead.
   if (this.req_.readyState == 2 && /text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
     this.req_.abort();
+    this.hideFetchMsg();
 
     Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService().wrappedJSObject
@@ -63,8 +64,7 @@ ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
 };
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
-  this.win_.GM_BrowserUI.refreshStatus();
-  this.win_.GM_BrowserUI.hideStatusImmediately();
+  this.hideFetchMsg();
 
   try {
     // If loading from file, status might be zero on success
@@ -271,6 +271,11 @@ GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
                        "chrome,centerscreen,modal,dialog,titlebar,resizable",
                        this);
+};
+
+ScriptDownloader.prototype.hideFetchMsg = function() {
+  this.win_.GM_BrowserUI.refreshStatus();
+  this.win_.GM_BrowserUI.hideStatusImmediately();
 };
 
 GM_ScriptDownloader.prototype.showScriptView = function() {
