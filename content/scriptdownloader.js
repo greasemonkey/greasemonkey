@@ -35,9 +35,7 @@ GM_ScriptDownloader.prototype.startDownload = function() {
 
   this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
 
-  Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-    .getService().wrappedJSObject
-    .ignoreNextScript();
+  GM_getService().ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
@@ -54,10 +52,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
     this.req_.abort();
     this.hideFetchMsg();
 
-    Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-    .getService().wrappedJSObject
-    .ignoreNextScript();
-
+    GM_getService().ignoreNextScript();
     content.location.href = this.uri_.spec;
     return;
  }
