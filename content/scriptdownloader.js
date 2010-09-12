@@ -3,10 +3,14 @@
 var GM_ScriptDownloader;
 (function() {
 
-GM_ScriptDownloader = function(win, uri, bundle) {
+GM_ScriptDownloader = function(win, uri, bundle, ctxWin) {
   this.win_ = win;
   this.uri_ = uri;
   this.bundle_ = bundle;
+
+  // The window in which the script has been opened. Defaults to current tab.
+  this.contextWindow_ = ctxWin || content;
+
   this.req_ = null;
   this.script = null;
   this.depQueue_ = [];
@@ -53,7 +57,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
     this.hideFetchMsg();
 
     GM_getService().ignoreNextScript();
-    content.location.href = this.uri_.spec;
+    this.contextWindow_.location.href = this.uri_.spec;
     return;
  }
 };
@@ -62,6 +66,10 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   this.hideFetchMsg();
 
   try {
+    // If the script has been opened in a new tab, close that tab.
+    if (this.contextWindow_ != content) {
+      this.contextWindow_.close();
+    }
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
       // NOTE: Unlocalized string

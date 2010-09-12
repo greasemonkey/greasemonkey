@@ -361,12 +361,12 @@ function GM_scriptDir() {
   return GM_scriptDirCache.clone();
 }
 
-function GM_installUri(uri) {
+function GM_installUri(uri, contextWin) {
   var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
     .getService(Components.interfaces.nsIWindowMediator)
     .getMostRecentWindow("navigator:browser");
   if (win && win.GM_BrowserUI) {
-    win.GM_BrowserUI.startInstallScript(uri);
+    win.GM_BrowserUI.startInstallScript(uri, contextWin);
     return true;
   }
   return false;

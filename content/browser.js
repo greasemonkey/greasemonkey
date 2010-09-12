@@ -185,17 +185,18 @@ GM_BrowserUI.showInstallBanner = function(browser) {
 /**
  * Called from greasemonkey service when we should load a user script.
  */
-GM_BrowserUI.startInstallScript = function(uri, timer) {
+GM_BrowserUI.startInstallScript = function(uri, win, timer) {
   if (!timer) {
     // docs for nsicontentpolicy say we're not supposed to block, so short
     // timer.
     window.setTimeout(
-      function() { GM_BrowserUI.startInstallScript(uri, true); }, 0);
+      function() { GM_BrowserUI.startInstallScript(uri, win, true); }, 0);
 
     return;
   }
 
-  this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
+  this.scriptDownloader_ =
+    new GM_ScriptDownloader(window, uri, this.bundle, win);
   this.scriptDownloader_.startInstall();
 };
 
