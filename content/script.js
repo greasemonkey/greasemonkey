@@ -133,7 +133,7 @@ Script.prototype = {
         || !node.hasAttribute("version")
     ) {
       var parsedScript = GM_getConfig().parse(
-          this.textContent, GM_uriFromUrl(this._downloadURL), this);
+          this.textContent, GM_uriFromUrl(this._downloadURL), !!this);
 
       this._modified = this.file.lastModifiedTime;
       this._dependhash = GM_sha1(parsedScript._rawMeta);

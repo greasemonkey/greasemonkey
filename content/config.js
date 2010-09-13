@@ -230,8 +230,11 @@ Config.prototype = {
 
     // if no meta info, default to reasonable values
     if (!script._name) {
-      if (updateScript) script._name = updateScript.filename;
-      else if (uri) script._name = GM_parseScriptName(uri);
+      if (uri) {
+        script._name = GM_parseScriptName(uri);
+      } else if (updateScript) {
+        script._name = updateScript.filename;
+      }
     }
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
@@ -338,7 +341,7 @@ Config.prototype = {
     for (var i = 0, script; script = scripts[i]; i++) {
       if (0 == script.pendingExec.length) {
         var parsedScript = this.parse(
-            script.textContent, GM_uriFromUrl(script._downloadURL), script);
+            script.textContent, GM_uriFromUrl(script._downloadURL), !!script);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
         this._changed(script, "modified", null, true);
       } else {
