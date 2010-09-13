@@ -322,9 +322,9 @@ GM_GreasemonkeyService.prototype = {
                          "\n";
       if (!script.unwrap)
         scriptSrc = "(function(){"+ scriptSrc +"})()";
-      if (!this.evalInSandbox(scriptSrc, url, sandbox, script) && script.unwrap)
+      if (!this.evalInSandbox(scriptSrc, sandbox, script) && script.unwrap)
         this.evalInSandbox("(function(){"+ scriptSrc +"})()",
-                           url, sandbox, script); // wrap anyway on early return
+            sandbox, script); // wrap anyway on early return
     }
   },
 
@@ -363,7 +363,7 @@ GM_GreasemonkeyService.prototype = {
     return newWindow;
   },
 
-  evalInSandbox: function(code, codebase, sandbox, script) {
+  evalInSandbox: function(code, sandbox, script) {
     if (!(Components.utils && Components.utils.Sandbox)) {
       var e = new Error("Could not create sandbox.");
       GM_logError(e, 0, e.fileName, e.lineNumber);
