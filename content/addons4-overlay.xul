@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://greasemonkey/skin/addons4.css" type="text/css"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
+<overlay id="greasemonkey-browser-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
+
+<richlistbox id="categories">
+  <richlistitem id="category-scripts" class="category"
+      value="addons://list/user-script" name="&userscripts;"
+  />
+</richlistbox>
+
+</overlay>

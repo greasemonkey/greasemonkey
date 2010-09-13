@@ -20,6 +20,7 @@ style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/a
 # Todo: ensure this resource line does not reveal Greasemonkey's presence to web content.
 resource   greasemonkey content/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
+overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul appversion>=4.0b1
 
 overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul

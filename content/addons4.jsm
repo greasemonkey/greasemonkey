@@ -168,57 +168,13 @@ ScriptAddon.prototype.cancelUninstall = function() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function ExtendedStringBundle(aBase, strings) {
-  this.basebundle = aBase;
-  this.strings = strings || {};
-}
-
-ExtendedStringBundle.prototype = {
-  strings: null,
-  basebundle: null,
-
-  GetStringFromName: function(aName) {
-    if (aName in this.strings) {
-      return this.strings[aName];
-    }
-    return this.basebundle.GetStringFromName(aName);
-  },
-
-  formatStringFromName: function(aName, aArgs, aLength) {
-    return this.basebundle.formatStringFromName(aName, aArgs, aLength);
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
 var WindowObserver = {
   // Inject the 'User Scripts' choice into the list of add-on types.
   addToAddonsManager: function(aWindow) {
-    var doc = aWindow.document;
-    var win = aWindow.wrappedJSObject;
-
-    // Extend the existing string bundle, to put our name in the header.
-    var bundle = new ExtendedStringBundle(
-        win.gStrings.ext,
-        {'header-user-script': 'User Scripts'});
-    win.gStrings.ext = bundle;
-
-    // Put a choice in the add-on types listed on the left.
-    var plugins = doc.getElementById('category-plugins');
-    var scripts = doc.createElement('richlistitem');
-    scripts.setAttribute('id', 'category-scripts');
-    scripts.setAttribute('value', 'addons://list/user-script');
-    scripts.setAttribute('class', 'category');
-    scripts.setAttribute('name', 'User Scripts');
-    plugins.parentNode.insertBefore(scripts, plugins);
-
-    // Inject styles to control the appearance of our added elements.
-    var styles = doc.createElementNS(NS_XHTML, 'style');
-    styles.setAttribute('id', 'script-styles');
-    styles.setAttribute('type', 'text/css');
-    styles.appendChild(doc.createTextNode(
-        '@import url(chrome://greasemonkey/skin/addons4.css);'));
-    doc.documentElement.appendChild(styles);
+    // This function used to handle tasks that are now done in a XUL overlay.
+    // Leaving the function here in case the routing to make it run at the
+    // right time proves useful.
+    // TODO: Remove once Firefox 4 is final, if it is still unused.
   },
 
   findAllAddonsManagers: function() {
