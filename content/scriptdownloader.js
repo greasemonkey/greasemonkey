@@ -9,7 +9,7 @@ GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.bundle_ = bundle;
 
   // The window in which the script has been opened. Defaults to current tab.
-  this.contentWindow_ = contentWin || content;
+  this.contentWindow_ = contentWin || null;
 
   this.req_ = null;
   this.script = null;
@@ -49,27 +49,24 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_.send(null);
 };
 
+_htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
 GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
-  // If there is a 'Content-Type' header and it contains 'text/html',
-  // then do not install the file, and display it instead.
-  if (this.req_.readyState == 2 && /text\/html/i.test(this.req_.getResponseHeader("Content-Type"))) {
-    this.req_.abort();
-    this.hideFetchMsg();
+  if (2 != this.req_.readyState) return;
+  if (!_htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))) return;
+  if (!this.contentWindow_) return;
 
-    GM_getService().ignoreNextScript();
-    this.contentWindow_.location.href = this.uri_.spec;
-    return;
- }
+  // If there is a 'Content-Type' header and it contains 'text/html',
+  // then do not install the file, display it instead.
+  this.req_.abort();
+  this.hideFetchMsg();
+  GM_getService().ignoreNextScript();
+  this.contentWindow_.location.assign(this.uri_.spec);
 };
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   this.hideFetchMsg();
 
   try {
-    // If the script has been opened in a new tab, close that tab.
-    if (this.contextWindow_ != content) {
-      this.contextWindow_.close();
-    }
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
       // NOTE: Unlocalized string
