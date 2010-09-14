@@ -200,7 +200,7 @@ GM_GreasemonkeyService.prototype = {
 
       if (!this.ignoreNextScript_
         && !this.isTempScript(cl)
-        && GM_installUri(cl)
+        && GM_installUri(cl, ctx.contentWindow)
       ) {
         ret = Ci.nsIContentPolicy.REJECT_REQUEST;
       }
