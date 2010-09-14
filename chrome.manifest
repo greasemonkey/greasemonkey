@@ -13,11 +13,10 @@ skin       greasemonkey classic/1.0 skin/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
 
 # Firefox <=3.5.* Add-Ons window integration.
-overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul
-style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/addons-mac.css os=Darwin
+overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul appversion<4.0
+style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/addons-mac.css os=Darwin appversion<4.0
 
 # Firefox >=4.0 Add-Ons Manager integration.
-# Todo: ensure this resource line does not reveal Greasemonkey's presence to web content.
 resource   greasemonkey content/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
 overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul appversion>=4.0b1

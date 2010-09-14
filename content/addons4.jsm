@@ -79,11 +79,8 @@ function ScriptAddon(aScript) {
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.name = this._script.name;
   this.version = this._script.version;
-  //this.creator = this._script.author;
   this.description = this._script.description;
   this.size = this._script.size;
-
-  // TODO: Calculate size.
 }
 
 // Required attributes.
