@@ -159,8 +159,9 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   process.run(false, args, args.length);
 }
 
-function GM_parseScriptName(sourceUri) {
-  var name = sourceUri.spec;
+function GM_parseScriptName(sourceUrl) {
+  if (!sourceUrl) return '';
+  var name = sourceUrl;
   name = name.substring(0, name.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;

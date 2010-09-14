@@ -230,11 +230,8 @@ Config.prototype = {
 
     // if no meta info, default to reasonable values
     if (!script._name) {
-      if (uri) {
-        script._name = GM_parseScriptName(uri);
-      } else if (updateScript) {
-        script._name = updateScript.filename;
-      }
+      script._name = GM_parseScriptName((uri && uri.spec)
+          || (updateScript && updateScript.filename));
     }
     if (!script._namespace && uri) script._namespace = uri.host;
     if (!script._description) script._description = "";
