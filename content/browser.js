@@ -185,18 +185,17 @@ GM_BrowserUI.showInstallBanner = function(browser) {
 /**
  * Called from greasemonkey service when we should load a user script.
  */
-GM_BrowserUI.startInstallScript = function(uri, win, timer) {
+GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
   if (!timer) {
     // docs for nsicontentpolicy say we're not supposed to block, so short
     // timer.
     window.setTimeout(
-      function() { GM_BrowserUI.startInstallScript(uri, win, true); }, 0);
-
+      GM_BrowserUI.startInstallScript, 0, uri, contentWin, true);
     return;
   }
 
   this.scriptDownloader_ =
-    new GM_ScriptDownloader(window, uri, this.bundle, win);
+    new GM_ScriptDownloader(window, uri, GM_BrowserUI.bundle, contentWin);
   this.scriptDownloader_.startInstall();
 };
 
@@ -609,9 +608,7 @@ GM_BrowserUI.showHorrayMessage = function(scriptName) {
 };
 
 GM_BrowserUI.installMenuItemClicked = function() {
-  GM_BrowserUI.startInstallScript(
-    gBrowser.currentURI
-  );
+  GM_BrowserUI.startInstallScript(gBrowser.currentURI);
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {

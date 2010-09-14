@@ -3,13 +3,13 @@
 var GM_ScriptDownloader;
 (function() {
 
-GM_ScriptDownloader = function(win, uri, bundle, ctxWin) {
+GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.win_ = win;
   this.uri_ = uri;
   this.bundle_ = bundle;
 
   // The window in which the script has been opened. Defaults to current tab.
-  this.contextWindow_ = ctxWin || content;
+  this.contentWindow_ = contentWin || content;
 
   this.req_ = null;
   this.script = null;
@@ -57,7 +57,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
     this.hideFetchMsg();
 
     GM_getService().ignoreNextScript();
-    this.contextWindow_.location.href = this.uri_.spec;
+    this.contentWindow_.location.href = this.uri_.spec;
     return;
  }
 };
