@@ -41,6 +41,7 @@ Script.prototype = {
     GM_getConfig()._changed(this, event, data);
   },
 
+  get modifiedDate() { return new Date(parseInt(this._modified))  ; },
   get name() { return this._name; },
   get namespace() { return this._namespace; },
   get id() {

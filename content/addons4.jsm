@@ -81,6 +81,7 @@ function ScriptAddon(aScript) {
   this.version = this._script.version;
   this.description = this._script.description;
   this.size = this._script.size;
+  this.updateDate = this._script.modifiedDate;
 }
 
 // Required attributes.
