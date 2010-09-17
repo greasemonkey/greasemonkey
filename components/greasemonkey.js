@@ -9,8 +9,15 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
-                 .getService(Ci.nsIAppShellService);
+// XPCOMUtils.defineLazyServiceGetter() introduced in FF 3.6
+if (XPCOMUtils.defineLazyServiceGetter) {
+  XPCOMUtils.defineLazyServiceGetter(
+      this, "appSvc", "@mozilla.org/appshell/appShellService;1",
+      "nsIAppShellService");
+} else {
+  appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
+      .getService(Ci.nsIAppShellService);
+}
 
 const gmSvcFilename = Components.stack.filename;
 
