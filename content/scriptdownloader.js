@@ -43,22 +43,24 @@ GM_ScriptDownloader.prototype.startDownload = function() {
 
 _htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
 GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
-  if (2 != this.req_.readyState) return;
-  if (!_htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))) return;
-  if (!this.contentWindow_) return;
-
-  // If there is a 'Content-Type' header and it contains 'text/html',
-  // then do not install the file, display it instead.
-  this.req_.abort();
-  GM_getService().ignoreNextScript();
-  this.contentWindow_.location.assign(this.uri_.spec);
+  if (2 == this.req_.readyState) {
+    if (_htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type")) &&
+        this.contentWindow_) {
+      // If there is a 'Content-Type' header and it contains 'text/html',
+      // then do not install the file, display it instead.
+      this.req_.abort();
+      GM_getService().ignoreNextScript();
+      this.contentWindow_.location.assign(this.uri_.spec);
+    } else {
+      var tools = {};
+      Cu.import("resource://greasemonkey/utils/GM_notification.js", tools);
+      // TODO: localize
+      tools.GM_notification("Fetching user script");
+    }
+  }
 };
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
-  var tools = {};
-  Cu.import("resource://greasemonkey/utils/GM_notification.js", tools);
-  tools.GM_notification("Fetching user script");
-
   try {
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
