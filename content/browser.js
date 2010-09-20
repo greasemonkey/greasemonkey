@@ -47,7 +47,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // Store other DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
   this.statusImage = document.getElementById("gm-status-image");
-  this.statusLabel = document.getElementById("gm-status-label");
   this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
   this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.bundle = document.getElementById("gm-browser-bundle");
