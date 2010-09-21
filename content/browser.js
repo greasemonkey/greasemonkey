@@ -345,7 +345,7 @@ GM_BrowserUI.toolsMenuShowing = function() {
   var hidden = true;
 
   if (window._content && window._content.location &&
-      window.content.location.href.match(/\.user\.js(\?|$)/i)) {
+      window.content.location.href.match(/\.user(?:-\d+)\.js(\?|$)/i)) {
     hidden = false;
   }
 
