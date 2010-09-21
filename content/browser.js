@@ -60,7 +60,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   appContent.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   sidebar.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   contextMenu.addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
-  toolsMenu.addEventListener("popupshowing", GM_hitch(this, "toolsMenuShowing"), false);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
@@ -340,21 +339,6 @@ GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
   return uri;
 };
 
-GM_BrowserUI.toolsMenuShowing = function() {
-  var installItem = document.getElementById("userscript-tools-install");
-  var hidden = true;
-
-  if (window._content && window._content.location &&
-      window.content.location.href.match(/\.user\.js(\?|$)/i)) {
-    hidden = false;
-  }
-
-  // Better to use hidden than collapsed because collapsed still allows you to
-  // select the item using keyboard navigation, but hidden doesn't.
-  installItem.setAttribute("hidden", hidden.toString());
-};
-
-
 /**
  * Helper method which gets the menuCommander corresponding to a given
  * document
@@ -605,10 +589,6 @@ GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.showHorrayMessage = function(scriptName) {
   this.showStatus("'" + scriptName + "' " + this.bundle.getString("statusbar.installed"), true);
-};
-
-GM_BrowserUI.installMenuItemClicked = function() {
-  GM_BrowserUI.startInstallScript(gBrowser.currentURI);
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {

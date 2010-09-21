@@ -46,11 +46,6 @@
         type="checkbox"
         oncommand="GM_setEnabled(!GM_getEnabled());" />
       <menuseparator />
-      <menuitem id="userscript-tools-install"
-        accesskey="&menu.install.accesskey;"
-        label="&menu.install;"
-        hidden="true"
-        oncommand="GM_BrowserUI.installMenuItemClicked(event);" />
       <menuitem
         accesskey="&menu.manage.accesskey;"
         label="&menu.manage;"
