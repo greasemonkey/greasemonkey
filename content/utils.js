@@ -410,13 +410,9 @@ function GM_memoize(func, limit) {
 }
 
 function GM_newUserScript() {
-  var windowWatcher = Components
-    .classes["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Components.interfaces.nsIWindowWatcher);
-  windowWatcher.openWindow(
-    window, "chrome://greasemonkey/content/newscript.xul", null,
-    "chrome,dependent,centerscreen,resizable,dialog", null
-  );
+  window.openDialog(
+      "chrome://greasemonkey/content/newscript.xul", null,
+      "chrome,dependent,centerscreen,resizable,dialog");
 }
 
 // Open the add-ons manager and show the installed user scripts.
