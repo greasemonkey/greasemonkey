@@ -222,7 +222,11 @@ var WindowObserver = {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+var _addonsStartupHasRun = false;
 function addonsStartup(aParams) {
+  if (_addonsStartupHasRun) return;
+  _addonsStartupHasRun = true;
+
   Services.obs.addObserver(WindowObserver, 'chrome-document-global-created', false);
   AddonManagerPrivate.registerProvider(AddonProvider);
   WindowObserver.addToAddonsManagers();
