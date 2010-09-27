@@ -2,16 +2,39 @@
 
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons4.css" type="text/css"?>
 
-<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+<!DOCTYPE overlay [
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%greasemonkeyDTD;
+<!ENTITY % greasemonkeyAddonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+%greasemonkeyAddonsDTD;
+]>
 
 <overlay id="greasemonkey-browser-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 >
+
+<script type="application/x-javascript" src="chrome://greasemonkey/content/addons4-overlay.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 
 <richlistbox id="categories">
   <richlistitem id="category-scripts" class="category"
       value="addons://list/user-script" name="&userscripts;"
   />
 </richlistbox>
+
+<commandset id="viewCommandSet">
+  <command id="cmd_userscript_edit" />
+  <command id="cmd_userscript_show" />
+</commandset>
+
+<menupopup id="addonitem-popup">
+  <menuitem id="menuitem_userscript_edit" command="cmd_userscript_edit"
+    label="&Edit;" accesskey="&Edit.accesskey;" type="user-script"
+  />
+  <menuitem id="menuitem_userscript_show" command="cmd_userscript_show"
+    label="&Show;" accesskey="&Show.accesskey;" type="user-script"
+  />
+</menupopup>
 
 </overlay>
