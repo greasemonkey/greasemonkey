@@ -304,6 +304,8 @@ GM_GreasemonkeyService.prototype = {
                                                 unsafeContentWin);
 
       sandbox.__proto__ = wrappedContentWin;
+      Components.utils.evalInSandbox(
+          "var document = window.document;", sandbox);
 
       var contents = script.textContent;
 
