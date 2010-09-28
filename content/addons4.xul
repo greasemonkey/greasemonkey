@@ -6,7 +6,6 @@
 <script type="application/x-javascript"><![CDATA[
 window.addEventListener('load', function() {
 Components.utils.import("resource://greasemonkey/addons4.jsm");
-addonsStartup();
 }, true);
 
 // Open the addons manager in Firefox >= 4.0
