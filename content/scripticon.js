@@ -1,56 +1,33 @@
 function ScriptIcon(script) {
-  this._script = script;
-
-  this._downloadURL = null; // Only for scripts not installed
-  this._tempFile = null; // Only for scripts not installed
-  this._filename = null;
-  this._dataURI = null;
-  this._mimetype = null;
-  this.type = "icon";
-  this.updateScript = false;
+  ScriptResource.call(this, script);
+  this._type = "icon";
 }
 
-ScriptIcon.prototype = {
-  get _file() {
-    var file = this._script._basedirFile;
-    file.append(this._filename);
-    return file;
-  },
+// Inherit from ScriptResource
+ScriptIcon.prototype = new ScriptResource();
+ScriptIcon.prototype.constructor = ScriptIcon;
 
-  hasDownloadURL: function() {
-    if (this._downloadURL) return true;
+ScriptIcon.prototype.__defineGetter__("hasDownloadURL", function() {
+  if (this._downloadURL) return true;
+  else return false;
+}); 
 
-    return false;
-  },
+ScriptIcon.prototype.__defineGetter__("filename", function() {
+  return (this._filename || this._dataURI);
+});
 
-  get filename() {
-    return (this._filename || this._dataURI);
-  },
+ScriptIcon.prototype.__defineGetter__("fileURL", function() {
+  if (this._dataURI) return this._dataURI;
+  else if (this._filename) return GM_getUriFromFile(this._file).spec;
+  else return "chrome://greasemonkey/skin/userscript.png";
+});
 
-  get fileURL() {
-    if (this._dataURI) return this._dataURI;
-
-    if (this._filename) return GM_getUriFromFile(this._file).spec;
-
-    return "chrome://greasemonkey/skin/userscript.png";
-  },
-  set fileURL(icon) {
-    if (/^data:/i.test(icon)) {
-      // icon is a data scheme
-      this._dataURI = icon;
-    } else if (icon) {
-      // icon is a file
-      this._filename = icon;
-    }
-  },
-
-  _initFile: ScriptRequire.prototype._initFile,
-
-  get urlToDownload() { return this._downloadURL; },
-  setDownloadedFile: function(tempFile, mimetype) {
-    this._tempFile = tempFile;
-    this._mimetype = mimetype;
-    if (this.updateScript)
-      this._initFile();
+ScriptIcon.prototype.__defineSetter__("fileURL", function(icon) {
+  if (/^data:/i.test(icon)) {
+    // icon is a data scheme
+    this._dataURI = icon;
+  } else if (icon) {
+    // icon is a file
+    this._filename = icon;
   }
-};
+});
