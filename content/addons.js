@@ -57,8 +57,7 @@ var observer = {
     }
 
     // find the script's node
-    var oldScriptID = (event == "modified") ? (data || script.id) : script.id;
-    var node = document.getElementById('urn:greasemonkey:item:' + oldScriptID);
+    var node = document.getElementById('urn:greasemonkey:item:'+script.id);
     if (!node) return;
 
     switch (event) {

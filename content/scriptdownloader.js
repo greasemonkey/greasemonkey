@@ -122,7 +122,7 @@ GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
 
-  // if this.script.icon._filename exists then the icon is a data scheme
+  // if this.script.icon has a url, then we need to download the image
   if (this.script.icon.hasDownloadURL()) {
     deps.push(this.script.icon);
   }
@@ -193,7 +193,7 @@ function(dep, file, channel) {
         dep.updateScript = true;
       }
 
-      // if the dependency type is icon, then check it's mime type
+      // if the dependency type is icon, then check its mime type
       if (dep.type == "icon" &&
           !/^image\//i.test(channel.contentType)) {
         this.errorInstallDependency(this.script, dep,

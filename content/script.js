@@ -237,7 +237,6 @@ Script.prototype = {
     scriptNode.setAttribute("namespace", this._namespace);
     scriptNode.setAttribute("description", this._description);
     scriptNode.setAttribute("version", this._version);
-    scriptNode.setAttribute("icon", this.icon.filename);
     scriptNode.setAttribute("enabled", this._enabled);
     scriptNode.setAttribute("basedir", this._basedir);
     scriptNode.setAttribute("modified", this._modified);
@@ -245,6 +244,10 @@ Script.prototype = {
 
     if (this._downloadURL) {
       scriptNode.setAttribute("installurl", this._downloadURL);
+    }
+
+    if (this.icon.filename) {
+      scriptNode.setAttribute("icon", this.icon.filename);
     }
 
     return scriptNode;

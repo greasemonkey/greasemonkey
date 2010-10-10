@@ -6,7 +6,7 @@ function ScriptResource(script) {
   this._filename = null;
   this._mimetype = null;
   this._charset = null;
-  this._type = "resource";
+  this.type = "resource";
   this.updateScript = false;
 
   this._name = null;
@@ -14,8 +14,6 @@ function ScriptResource(script) {
 
 ScriptResource.prototype = {
   get name() { return this._name; },
-
-  get type() { return this._type; },
 
   get file() {
     var file = this._script._basedirFile;
