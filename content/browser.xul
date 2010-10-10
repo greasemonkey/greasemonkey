@@ -54,7 +54,7 @@
       <menuitem
         accesskey="&menu.manage.accesskey;"
         label="&menu.manage;"
-        oncommand="BrowserOpenAddonsMgr('userscripts');" />
+        oncommand="GM_OpenScriptsMgr();" />
       <menuitem id="userscript-tools-new"
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
@@ -86,9 +86,9 @@
         height="16"
         mousethrough="never"
         onclick="if (!event.button) GM_setEnabled(!GM_getEnabled());
-                    else if (event.button == 1) BrowserOpenAddonsMgr('userscripts');"
+                    else if (event.button == 1) GM_OpenScriptsMgr();"
         context="gm-status-popup" />
-      <popup id="gm-status-popup"
+      <menupopup id="gm-status-popup"
         position="before_end"
         onpopupshowing="GM_showPopup(event); event.stopPropagation();"
         onclick="GM_popupClicked(event); event.stopPropagation();"
@@ -111,14 +111,14 @@
           oncommand="GM_newUserScript();" />
         <menuitem accesskey="&menu.manage.accesskey;"
           label="&menu.manage;"
-          oncommand="BrowserOpenAddonsMgr('userscripts');" />
+          oncommand="GM_OpenScriptsMgr();" />
         <menuseparator />
         <menuitem id="gm-status-enabled-item"
           accesskey="&statusbar.enabled.accesskey;"
           label="&statusbar.enabled;"
           type="checkbox"
           oncommand="GM_setEnabled(!GM_getEnabled());" />
-      </popup>
+      </menupopup>
     </statusbarpanel>
   </statusbar>
 

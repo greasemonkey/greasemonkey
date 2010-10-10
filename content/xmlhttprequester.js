@@ -61,7 +61,9 @@ function(safeUrl, details, req) {
   this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
                          details);
 
-  req.open(details.method, safeUrl);
+  req.mozBackgroundRequest = !!details.mozBackgroundRequest;
+
+  req.open(details.method, safeUrl, true, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
@@ -79,21 +81,13 @@ function(safeUrl, details, req) {
 
   var body = details.data ? details.data : null;
   if (details.binary) {
-    // xhr supports binary?
-    if (!req.sendAsBinary) {
-      var err = new Error("Unavailable feature: " +
-              "This version of Firefox does not support sending binary data " +
-              "(you should consider upgrading to version 3 or newer.)");
-      GM_logError(err);
-      throw err;
-    }
     req.sendAsBinary(body);
   } else {
     req.send(body);
   }
 
   GM_log("< GM_xmlhttpRequest.chromeStartRequest");
-}
+};
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content
@@ -131,7 +125,7 @@ function(unsafeContentWin, req, event, details) {
         .setTimeout(function(){details[event](responseState);}, 0);
 
       GM_log("< GM_xmlhttpRequester -- callback for " + event);
-    }
+    };
   }
 
   GM_log("< GM_xmlhttpRequester.setupRequestEvent");

@@ -1,5 +1,5 @@
 function GM_MenuCommander() {
-  GM_log("> GM_MenuCommander")
+  GM_log("> GM_MenuCommander");
 
   this.menu = document.getElementById("userscript-commands-sb");
   this.keyset = document.getElementById("mainKeyset");
@@ -13,7 +13,7 @@ function GM_MenuCommander() {
   this.menuPopup2 = this.menu2.firstChild;
   this.menuItems2 = [];
 
-  GM_log("< GM_MenuCommander")
+  GM_log("< GM_MenuCommander");
 }
 
 GM_MenuCommander.prototype.registerMenuCommand =
@@ -54,7 +54,7 @@ GM_MenuCommander.prototype.registerMenuCommand =
       this.setDisabled(false);
     }
 
-    GM_log("< GM_MenuCommmander.registerMenuCommand")
+    GM_log("< GM_MenuCommmander.registerMenuCommand");
   };
 
 GM_MenuCommander.prototype.attach = function() {

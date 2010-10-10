@@ -1,13 +1,28 @@
-content    greasemonkey    content/
-skin       greasemonkey    classic/1.0 skin/
+interfaces components/gmIBrowserWindow.xpt
+interfaces components/gmIGreasemonkeyService.xpt
+interfaces components/gmIMenuCommand.xpt
 
-overlay    chrome://browser/content/browser.xul    chrome://greasemonkey/content/browser.xul
-overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul
+component  {77bf3650-1cd6-11da-8cd6-0800200c9a66} components/greasemonkey.js
+contract   @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8cd6-0800200c9a66}
+category   profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+category   content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
+
+content    greasemonkey content/
+skin       greasemonkey classic/1.0 skin/
+
+overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
+
+# Firefox <=3.5.* Add-Ons window integration.
+overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul appversion<4.0
+style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/addons-mac.css os=Darwin appversion<4.0
+
+# Firefox >=4.0 Add-Ons Manager integration.
+resource   greasemonkey content/
+overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
+overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul appversion>=4.0b1
 
 overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
 
-style      chrome://greasemonkey/content/addons.xul    chrome://greasemonkey/skin/addons-mac.css os=Darwin
-
-locale     greasemonkey  en-US  locale/en-US/
+locale     greasemonkey en-US locale/en-US/

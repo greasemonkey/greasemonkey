@@ -16,9 +16,13 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+<script src="chrome://global/content/nsDragAndDrop.js" />
+<script src="chrome://global/content/nsTransferable.js" />
+
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
 
 <radiogroup id="viewGroup">
@@ -31,26 +35,31 @@
 <notificationbox id="addonsMsg">
   <vbox id="userscriptsBox" insertafter="extensionsBox" flex="1">
     <hbox flex="1">
-      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"/>
+      <richlistbox id="userscriptsView" flex="1" context="userscriptContextMenu"
+        ondragover="nsDragAndDrop.dragOver(event, greasemonkeyDragObserver)"
+        ondragdrop="nsDragAndDrop.drop(event, greasemonkeyDragObserver)"
+      />
     </hbox>
   </vbox>
 </notificationbox>
 
 <hbox id="commandBarBottom">
+  <button id="findUpdatesUserscripts"
+    insertafter="checkUpdatesAllButton"
+    label="&cmd.checkUpdatesAll.label;"
+    accesskey="&cmd.checkUpdatesAll.accesskey;"
+    disabled="true"
+  />
+
   <label id="getMoreUserscripts" class="text-link"
     insertafter="getMore"
     onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
     value="Get User Scripts"
     getMoreURL="http://userscripts.org/"
   />
-  <button id="findUpdatesUserscripts"
-    insertafter="getMore"
-    oncommand="alert('Remove me, or implement me, before 0.9 release.')"
-    label="&cmd.checkUpdatesAll.label;"
-    accesskey="&cmd.checkUpdatesAll.accesskey;"
-  />
 
   <button id="newUserscript"
+    insertafter="installFileButton"
     label="&NewScript;"
     accesskey="&NewScript.accesskey;"
     oncommand="GM_newUserScript()"

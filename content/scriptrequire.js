@@ -9,18 +9,18 @@ function ScriptRequire(script) {
 }
 
 ScriptRequire.prototype = {
-  get _file() {
+  get file() {
     var file = this._script._basedirFile;
     file.append(this._filename);
     return file;
   },
 
-  get fileURL() { return GM_getUriFromFile(this._file).spec; },
-  get textContent() { return GM_getContents(this._file); },
+  get fileURL() { return GM_getUriFromFile(this.file).spec; },
+  get textContent() { return GM_getContents(this.file); },
 
   _initFile: function() {
     var name = this._downloadURL.substr(this._downloadURL.lastIndexOf("/") + 1);
-    if (name.indexOf("?") > 0) {
+    if(name.indexOf("?") > 0) {
       name = name.substr(0, name.indexOf("?"));
     }
     name = this._script._initFileName(name, true);

@@ -3,10 +3,14 @@
 var GM_ScriptDownloader;
 (function() {
 
-GM_ScriptDownloader = function(win, uri, bundle) {
+GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.win_ = win;
   this.uri_ = uri;
   this.bundle_ = bundle;
+
+  // The window in which the script has been opened. Defaults to current tab.
+  this.contentWindow_ = contentWin || null;
+
   this.req_ = null;
   this.script = null;
   this.depQueue_ = [];
@@ -14,7 +18,7 @@ GM_ScriptDownloader = function(win, uri, bundle) {
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
   this.updateScript = false;
-}
+};
 
 GM_ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
@@ -27,26 +31,40 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  this.win_.GM_BrowserUI.statusImage.src = "chrome://global/skin/throbber/Throbber-small.gif";
+  this.win_.GM_BrowserUI.statusImage.src =
+      "chrome://greasemonkey/content/third-party/throbber.gif";
   this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
-  this.win_.GM_BrowserUI.statusImage.tooltipText = this.bundle_.getString("tooltip.loading");
+  this.win_.GM_BrowserUI.statusImage.tooltipText =
+      this.bundle_.getString("tooltip.loading");
 
   this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
 
-  Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-    .getService().wrappedJSObject
-    .ignoreNextScript();
+  GM_getService().ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
+  this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
   this.req_.send(null);
 };
 
+_htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
+GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
+  if (2 != this.req_.readyState) return;
+  if (!_htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))) return;
+  if (!this.contentWindow_) return;
+
+  // If there is a 'Content-Type' header and it contains 'text/html',
+  // then do not install the file, display it instead.
+  this.req_.abort();
+  this.hideFetchMsg();
+  GM_getService().ignoreNextScript();
+  this.contentWindow_.location.assign(this.uri_.spec);
+};
+
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
-  this.win_.GM_BrowserUI.refreshStatus();
-  this.win_.GM_BrowserUI.hideStatusImmediately();
+  this.hideFetchMsg();
 
   try {
     // If loading from file, status might be zero on success
@@ -60,7 +78,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.script = GM_getConfig().parse(source, this.uri_.spec);
+    this.script = GM_getConfig().parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
                          .getService(Components.interfaces.nsIProperties)
@@ -88,9 +106,9 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
-    if (this.installing_){
+    if(this.installing_){
       this.showInstallDialog();
-    } else {
+    }else{
       this.showScriptView();
     }
   } catch (e) {
@@ -99,7 +117,6 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     throw e;
   }
 };
-
 
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
@@ -148,7 +165,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
         "handleDependencyDownloadComplete", dep, file, sourceChannel);
       persist.progressListener = progressListener;
 
-      persist.saveChannel(sourceChannel, file);
+      persist.saveChannel(sourceChannel,  file);
     } catch(e) {
       GM_log("Download exception " + e);
       this.errorInstallDependency(this.script, dep, e);
@@ -205,25 +222,30 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
     case "http":
     case "https":
     case "ftp":
-      return true;
+        return true;
     case "file":
-      var scriptScheme = ioService.extractScheme(this.uri_.spec);
-      return (scriptScheme == "file")
+        var scriptScheme = ioService.extractScheme(this.uri_.spec);
+        return (scriptScheme == "file");
     default:
       return false;
   }
 };
 
-GM_ScriptDownloader.prototype.finishInstall = function(){
+GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
-    // Inject the script now that we have the new dependencies
-    this.script._config.injectScript(this.script);
-    this.delayInjection = false;
-
-    this.script._changed("modified", null);
+    // Inject the script in all windows that have been waiting
+    var pendingExec;
+    while (pendingExec = this.script.pendingExec.shift()) {
+      if (pendingExec.safeWin.closed) continue;
+      var url = pendingExec.safeWin.location.href;
+      if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
+        GM_getService().injectScripts(
+            [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
+      }
+    }
 
     // Save new values to config.xml
-    this.script._config._save();
+    GM_getConfig()._save();
   } else if (this.installOnCompletion_) {
     this.installScript();
   }
@@ -241,8 +263,8 @@ GM_ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg
 GM_ScriptDownloader.prototype.installScript = function(){
   if (this.dependencyError) {
     alert(this.dependencyError);
-  } else if (this.dependenciesLoaded_) {
-    this.win_.GM_BrowserUI.installScript(this.script)
+  } else if(this.dependenciesLoaded_) {
+    this.win_.GM_BrowserUI.installScript(this.script);
   } else {
     this.installOnCompletion_ = true;
   }
@@ -263,6 +285,11 @@ GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
                        "chrome,centerscreen,modal,dialog,titlebar,resizable",
                        this);
+};
+
+GM_ScriptDownloader.prototype.hideFetchMsg = function() {
+  this.win_.GM_BrowserUI.refreshStatus();
+  this.win_.GM_BrowserUI.hideStatusImmediately();
 };
 
 GM_ScriptDownloader.prototype.showScriptView = function() {

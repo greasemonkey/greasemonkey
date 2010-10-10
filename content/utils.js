@@ -8,15 +8,15 @@ var GM_stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
-function GM_isDef(thing) {
-  return typeof(thing) != "undefined";
-}
-
-function GM_getConfig() {
+function GM_getService() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService(Components.interfaces.gmIGreasemonkeyService)
-    .wrappedJSObject.config;
+    .wrappedJSObject;
+}
+
+function GM_getConfig() {
+  return GM_getService().config;
 }
 
 function GM_hitch(obj, meth) {
@@ -38,16 +38,6 @@ function GM_hitch(obj, meth) {
     // list of static and dynamic arguments.
     return obj[meth].apply(obj, args);
   };
-}
-
-function GM_listen(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "addEventListener")(
-    event, listener, opt_capture);
-}
-
-function GM_unlisten(source, event, listener, opt_capture) {
-  Components.utils.lookupMethod(source, "removeEventListener")(
-    event, listener, opt_capture);
 }
 
 /**
@@ -80,7 +70,6 @@ function GM_log(message, force) {
 // the UI and Config rely on it. Needs rethinking.
 
 function GM_openInEditor(script) {
-  var file = script.editFile;
   var editor = GM_getEditor();
   if (!editor) {
     // The user did not choose an editor.
@@ -88,7 +77,7 @@ function GM_openInEditor(script) {
   }
 
   try {
-    GM_launchApplicationWithDoc(editor, file);
+    GM_launchApplicationWithDoc(editor, script.file);
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
@@ -156,7 +145,7 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
                              .getService(Components.interfaces.nsIXULRuntime);
   if ("Darwin"==xulRuntime.OS) {
-    args=["-a", appFile.path, docFile.path]
+    args = ["-a", appFile.path, docFile.path];
 
     appFile = Components.classes["@mozilla.org/file/local;1"]
                         .createInstance(Components.interfaces.nsILocalFile);
@@ -170,8 +159,9 @@ function GM_launchApplicationWithDoc(appFile, docFile) {
   process.run(false, args, args.length);
 }
 
-function GM_parseScriptName(sourceUri) {
-  var name = sourceUri.spec;
+function GM_parseScriptName(sourceUrl) {
+  if (!sourceUrl) return '';
+  var name = sourceUrl;
   name = name.substring(0, name.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;
@@ -208,9 +198,8 @@ function GM_getBinaryContents(file) {
 }
 
 function GM_getContents(file, charset) {
-  if (!charset) {
-    charset = "UTF-8"
-  }
+  if (!charset) charset = "UTF-8";
+
   var ioService=Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
   var scriptableStream=Components
@@ -361,6 +350,36 @@ function GM_sha1(unicode) {
 }
 GM_sha1 = GM_memoize(GM_sha1);
 
+GM_scriptDirCache = null;
+function GM_scriptDir() {
+  if (!GM_scriptDirCache) {
+    GM_scriptDirCache = Components
+        .classes["@mozilla.org/file/directory_service;1"]
+        .getService(Components.interfaces.nsIProperties)
+        .get("ProfD", Components.interfaces.nsILocalFile);
+    GM_scriptDirCache.append("gm_scripts");
+  }
+  return GM_scriptDirCache.clone();
+}
+
+function GM_installUri(uri, contentWin) {
+  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+    .getService(Components.interfaces.nsIWindowMediator)
+    .getMostRecentWindow("navigator:browser");
+  if (win && win.GM_BrowserUI) {
+    win.GM_BrowserUI.startInstallScript(uri, contentWin);
+    return true;
+  }
+  return false;
+}
+
+function GM_scriptMatchesUrlAndRuns(script, url) {
+  return !script.pendingExec.length
+      && script.enabled
+      && !script.needsUninstall
+      && script.matchesURL(url);
+}
+
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
@@ -391,11 +410,12 @@ function GM_memoize(func, limit) {
 }
 
 function GM_newUserScript() {
-  var windowWatcher = Components
-    .classes["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Components.interfaces.nsIWindowWatcher);
-  windowWatcher.openWindow(
-    window, "chrome://greasemonkey/content/newscript.xul", null,
-    "chrome,dependent,centerscreen,resizable,dialog", null
-  );
+  window.openDialog(
+      "chrome://greasemonkey/content/newscript.xul", null,
+      "chrome,dependent,centerscreen,resizable,dialog");
+}
+
+// Open the add-ons manager and show the installed user scripts.
+if (typeof GM_OpenScriptsMgr == "undefined") {
+  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
