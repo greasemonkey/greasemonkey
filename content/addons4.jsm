@@ -82,6 +82,10 @@ function ScriptAddon(aScript) {
   this.description = this._script.description;
   this.size = this._script.size;
   this.updateDate = this._script.modifiedDate;
+
+  // Custom attribute.
+  // TODO: This without private access.
+  this.executionIndex = GM_getConfig()._scripts.indexOf(aScript);
 }
 
 // Required attributes.
@@ -101,8 +105,9 @@ ScriptAddon.prototype.pendingOperations = 0;
 ScriptAddon.prototype.description = null;
 ScriptAddon.prototype.size = null;
 
-// Private, custom, attributes.
+// Private and custom attributes.
 ScriptAddon.prototype._script = null;
+ScriptAddon.prototype.executionIndex = null;
 
 ScriptAddon.prototype.__defineGetter__('isActive',
 function ScriptAddon_prototype_getter_isActive() {
