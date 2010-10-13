@@ -181,13 +181,6 @@ GM_GreasemonkeyService.prototype = {
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
     var ret = Ci.nsIContentPolicy.ACCEPT;
 
-    // block content detection of greasemonkey by denying GM
-    // chrome content, unless loaded from chrome
-    if (org && org.scheme != "chrome" && cl.scheme == "chrome" &&
-        cl.host == "greasemonkey") {
-      return Ci.nsIContentPolicy.REJECT_SERVER;
-    }
-
     // don't intercept anything when GM is not enabled
     if (!GM_getEnabled()) {
       return ret;
