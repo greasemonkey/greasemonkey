@@ -271,8 +271,6 @@ GM_GreasemonkeyService.prototype = {
                                                  url);
       resources = new GM_Resources(script);
 
-      sandbox.window = wrappedContentWin;
-      sandbox.document = sandbox.window.document;
       sandbox.unsafeWindow = unsafeContentWin;
 
       // hack XPathResult since that is so commonly used
@@ -299,6 +297,8 @@ GM_GreasemonkeyService.prototype = {
                                                 unsafeContentWin);
 
       sandbox.__proto__ = wrappedContentWin;
+      Components.utils.evalInSandbox(
+          "var document = window.document;", sandbox);
 
       var contents = script.textContent;
 
