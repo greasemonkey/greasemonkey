@@ -421,7 +421,7 @@ GM_GreasemonkeyService.prototype = {
 
     for (var i = 0; i < script.offsets.length; i++) {
       end = script.offsets[i];
-      if (lineNumber < end) {
+      if (lineNumber <= end) {
         return {
           uri: script.requires[i].fileURL,
           lineNumber: (lineNumber - start)
