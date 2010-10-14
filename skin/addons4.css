@@ -30,3 +30,7 @@ page.greasemonkey #user-script-list-empty {
 .greasemonkey #addon-list button[command=cmd_restartApp] {
   display: none;
 }
+
+.addon.addon-view[type="user-script"] .details.button-link { 
+  display: none !important; 
+}
