@@ -17,7 +17,7 @@ overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemon
 style      chrome://greasemonkey/content/addons.xul chrome://greasemonkey/skin/addons-mac.css os=Darwin appversion<4.0
 
 # Firefox >=4.0 Add-Ons Manager integration.
-resource   greasemonkey content/
+resource   greasemonkey modules/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul appversion>=4.0b1
 overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul appversion>=4.0b1
 

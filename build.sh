@@ -16,7 +16,7 @@ rm -rf build
 mkdir build
 cp -r \
 	chrome.manifest components content defaults install.rdf locale skin \
-	    CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl \
+	    modules CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl \
 	build/
 cd build
 
@@ -41,7 +41,6 @@ sed \
     -e "s/^content  *\([^ ]*\)  *\([^ ]*\)/content \1 jar:chrome\/greasemonkey.jar!\/\2/" \
     -e "s/^skin  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/skin \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
     -e "s/^locale  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/locale \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
-    -e "s/^resource  *\([^ ]*\)  *\([^ ]*\)/resource \1 jar:chrome\/greasemonkey.jar!\/\2/" \
     chrome.manifest > tmp
 cat tmp > chrome.manifest
 rm tmp
