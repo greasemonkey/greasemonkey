@@ -177,14 +177,8 @@ Config.prototype = {
             break;
           case "icon":
             script._rawMeta += header + '\0' + value + '\0';
-            // accept data uri schemes for image MIME types
-            if (/^data:image\//i.test(value)){
-              script.icon._dataURI = value;
-              break;
-            }
             try {
-              var resUri = GM_uriFromUrl(value, uri);
-              script.icon._downloadURL = resUri.spec;
+              script.icon.metaVal = value;
             } catch (e) {
               if (updateScript) {
                 script._dependFail = true;
@@ -274,7 +268,7 @@ Config.prototype = {
     script._initFile(script._tempFile);
     script._tempFile = null;
 
-    // if icon had a file to download, then move the file
+    // if icon had to be downloaded, then move the file
     if (script.icon.hasDownloadURL()) {
       script.icon._initFile();
     }

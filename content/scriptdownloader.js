@@ -194,8 +194,7 @@ function(dep, file, channel) {
       }
 
       // if the dependency type is icon, then check its mime type
-      if (dep.type == "icon" &&
-          !/^image\//i.test(channel.contentType)) {
+      if (dep.type == "icon" && !this.script.icon.isImage(channel.contentType)) {
         this.errorInstallDependency(this.script, dep,
           "Error! @icon is not a image MIME type");
       }

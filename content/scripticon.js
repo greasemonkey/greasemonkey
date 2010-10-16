@@ -8,8 +8,22 @@ function ScriptIcon(script) {
 ScriptIcon.prototype = new ScriptResource();
 ScriptIcon.prototype.constructor = ScriptIcon;
 
+ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
+  // accept data uri schemes for image mime types
+  if (/^data:image\//i.test(value)) {
+    this._dataURI = value;
+  } else {
+    var resUri = GM_uriFromUrl(this._script._downloadURL);
+    this._downloadURL = GM_uriFromUrl(value, resUri).spec;
+  }
+});
+
 ScriptIcon.prototype.hasDownloadURL = function() {
   return !!this._downloadURL;
+};
+
+ScriptIcon.prototype.isImage = function(contentType) {
+  return /^image\//i.test(contentType);
 };
 
 ScriptIcon.prototype.__defineGetter__("filename", function() {
@@ -26,12 +40,12 @@ ScriptIcon.prototype.__defineGetter__("fileURL", function() {
   }
 });
 
-ScriptIcon.prototype.__defineSetter__("fileURL", function(icon) {
-  if (/^data:/i.test(icon)) {
+ScriptIcon.prototype.__defineSetter__("fileURL", function(iconURL) {
+  if (/^data:/i.test(iconURL)) {
     // icon is a data scheme
-    this._dataURI = icon;
-  } else if (icon) {
+    this._dataURI = iconURL;
+  } else if (iconURL) {
     // icon is a file
-    this._filename = icon;
+    this._filename = iconURL;
   }
 });
