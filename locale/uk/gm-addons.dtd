@@ -1,0 +1,23 @@
+<!ENTITY Edit "Редагувати">
+<!ENTITY Edit.accesskey "Р">
+<!ENTITY Edit.tooltip "Редагувати ций скрипт">
+<!ENTITY MoveDown "Нижче">
+<!ENTITY MoveDown.accesskey "Н">
+<!ENTITY MoveToBottom "Донизу">
+<!ENTITY MoveToBottom.accesskey "Д">
+<!ENTITY MoveToTop "Нагору">
+<!ENTITY MoveToTop.accesskey "г">
+<!ENTITY MoveUp "Вище">
+<!ENTITY MoveUp.accesskey "В">
+<!ENTITY NewScript "Створити новий скрипт">
+<!ENTITY NewScript.accesskey "т">
+<!ENTITY Show "Відкрити теку, що містить файл">
+<!ENTITY Show.accesskey "м">
+<!ENTITY SortScripts "Сортувати скрипти">
+<!ENTITY SortScripts.accesskey "С">
+<!ENTITY UninstallCancel "Скасувати встановлення">
+<!ENTITY UninstallCancel.accesskey "в">
+<!ENTITY UninstallCancel.tooltip "Скасувати встановлення цього скрипта">
+<!ENTITY UninstallCancelDescription "Цей скрипт буде вилучено коли закриється цей діалог. (Або клацніть правою клавішею щоб «Вилучити зараз».)">
+<!ENTITY UninstallNow "Вилучити зараз">
+<!ENTITY UninstallNow.accesskey "з">
