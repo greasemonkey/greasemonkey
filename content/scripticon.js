@@ -2,6 +2,7 @@ function ScriptIcon(script) {
   ScriptResource.call(this, script);
   this.type = "icon";
   this._dataURI = null;
+  this.dataUriError = false;
 }
 
 // Inherit from ScriptResource
@@ -12,6 +13,9 @@ ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
   // accept data uri schemes for image mime types
   if (/^data:image\//i.test(value)) {
     this._dataURI = value;
+  } else if (/^data:/i.test(value)) {
+    this.dataUriError = true;
+    throw new Error('@icon data: uri must be an image type');
   } else {
     var resUri = GM_uriFromUrl(this._script._downloadURL);
     this._downloadURL = GM_uriFromUrl(value, resUri).spec;

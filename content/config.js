@@ -182,6 +182,8 @@ Config.prototype = {
             } catch (e) {
               if (updateScript) {
                 script._dependFail = true;
+              } else if (script.icon.dataUriError) {
+                throw new Error(e.message);
               } else {
                 throw new Error('Failed to get @icon '+ value);
               }
