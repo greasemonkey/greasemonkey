@@ -3,7 +3,7 @@
 // all the main injection logic, though that should probably be a proper XPCOM
 // service and wouldn't need to be initialized in that case.
 
-var GM_BrowserUI = new Object();
+var GM_BrowserUI = {};
 
 /**
  * nsISupports.QueryInterface
@@ -619,3 +619,19 @@ GM_BrowserUI.viewContextItemClicked = function() {
 };
 
 GM_BrowserUI.init();
+
+GM_BrowserUI.statusClicked = function(aEvent) {
+  switch (aEvent.button) {
+  case 0:
+    GM_setEnabled(!GM_getEnabled());
+    break;
+  case 1:
+    GM_OpenScriptsMgr();
+    break;
+  case 2:
+    document.getElementById('gm-status-popup').openPopup(
+        document.getElementById('gm-status'),
+        'before_end', 0, 0, false, false);
+    break;
+  }
+}
