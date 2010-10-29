@@ -34,7 +34,7 @@ Contributor(s):
 function GM_openFolder(aFile) {
   try {
     // Show the directory containing the file and select the file.
-    aFile.reveal();
+    aFile.QueryInterface(Components.interfaces.nsILocalFile).reveal();
   } catch (e) {
     // Either the file doesn't exist or reveal is not implemented
     var fParent = aFile.parent;
