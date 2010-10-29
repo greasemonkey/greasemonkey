@@ -634,4 +634,5 @@ GM_BrowserUI.statusClicked = function(aEvent) {
         'before_end', 0, 0, false, false);
     break;
   }
+  return false;
 }

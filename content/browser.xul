@@ -76,7 +76,7 @@
 
     <statusbarpanel id="gm-status"
       insertafter="livemark-button"
-      onclick="GM_BrowserUI.statusClicked(event)"
+      onclick="return GM_BrowserUI.statusClicked(event)"
     >
       <label id="gm-status-label"
         collapsed="true"
