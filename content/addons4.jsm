@@ -82,10 +82,6 @@ function ScriptAddon(aScript) {
   this.description = this._script.description;
   this.size = this._script.size;
   this.updateDate = this._script.modifiedDate;
-
-  // Custom attribute.
-  // TODO: This without private access.
-  this.executionIndex = GM_getConfig()._scripts.indexOf(aScript);
 }
 
 // Required attributes.
@@ -107,8 +103,16 @@ ScriptAddon.prototype.size = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
-ScriptAddon.prototype.executionIndex = null;
 
+ScriptAddon.prototype.__defineGetter__('executionIndex',
+function ScriptAddon_prototype_getter_executionIndex() {
+  dump('running executionIndex getter, for addon '+this.name+'\n');
+  var val = GM_getConfig()._scripts.indexOf(this._script);
+  dump('got val '+val+'\n');
+  return val;
+});
+
+// Getters/setters/functions for API attributes.
 ScriptAddon.prototype.__defineGetter__('isActive',
 function ScriptAddon_prototype_getter_isActive() {
 	return this._script.enabled;

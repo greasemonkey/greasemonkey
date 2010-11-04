@@ -2,8 +2,27 @@
 // for those sorts of functionality we want that the API does not handle.  (As
 // opposed to addons4.jsm which is responsible for what the API does handle.)
 (function() {
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+Components.utils.import("resource://greasemonkey/addons4.jsm");
+
+var sortersContainer;
 var sortExecuteOrderButton;
 window.addEventListener('load', init, false);
+
+// Patch the default createItem() to add our custom property.
+_createItemOrig = createItem;
+createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
+  var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
+  if ('user-script' == aObj.type) {
+   // Save a reference to this richlistitem on the Addon object, so we can
+   // fix the 'executionIndex' attribute if/when it changes.
+   aObj.richlistitem = item;
+   setRichlistitemExecutionIndex(aObj);
+  }
+  return item;
+}
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function addonIsInstalledScript(aAddon) {
   if (!aAddon) return false;
@@ -22,8 +41,27 @@ function init() {
       doCommand: function(aAddon) { GM_openFolder(aAddon._script.file); }
     };
 
+  gViewController.commands.cmd_userscript_execute_first = {
+      isEnabled: function() { return true; },
+      doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
+    };
+  gViewController.commands.cmd_userscript_execute_sooner = {
+      isEnabled: function() { return true; },
+      doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
+    };
+  gViewController.commands.cmd_userscript_execute_later = {
+      isEnabled: function() { return true; },
+      doCommand: function(aAddon) { reorderScriptExecution(aAddon, 1); }
+    };
+  gViewController.commands.cmd_userscript_execute_last = {
+      isEnabled: function() { return true; },
+      doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
+    };
+
   document.getElementById('addonitem-popup').addEventListener(
       'popupshowing', onContextPopupShowing, false);
+
+  window.addEventListener('ViewChanged', onViewChanged, false);
 
   // Inject this content into an XBL binding (where it can't be overlayed).
   sortExecuteOrderButton = document.createElement('button');
@@ -31,7 +69,8 @@ function init() {
   sortExecuteOrderButton.setAttribute('class', 'sorter');
   sortExecuteOrderButton.setAttribute('label', 'Execution Order');
   sortExecuteOrderButton.setAttribute('tooltiptext', 'Sort by execution order');
-  var sortersContainer = document.getElementById('list-sorters');
+  sortExecuteOrderButton.collapsed = true;
+  sortersContainer = document.getElementById('list-sorters');
   sortersContainer.appendChild(sortExecuteOrderButton);
   sortersContainer.addEventListener('click', onSortersClicked, true);
 }
@@ -46,6 +85,18 @@ function onContextPopupShowing(aEvent) {
   }
 }
 
+function onExecuteSortCommand(aEvent) {
+  // Uncheck all sorters.
+  var sorters = document.getAnonymousNodes(sortersContainer);
+  for (var i=0, el=null; el=sorters[i]; i++) {
+    el.setAttribute('checkState', '0');
+  }
+  // Check our sorter.
+  aEvent.target.setAttribute('checkState', 1);
+  // Actually sort the elements.
+  sortScriptsByExecution();
+}
+
 function onSortersClicked(aEvent) {
   if (aEvent.target == sortExecuteOrderButton) {
     onExecuteSortCommand(aEvent);
@@ -55,30 +106,52 @@ function onSortersClicked(aEvent) {
   }
 }
 
-function onExecuteSortCommand(aEvent) {
-  // Uncheck the stock sorters.
-  var stockSorters = document.getAnonymousNodes(aEvent.target.parentNode);
-  for (var i=0, el=null; el=stockSorters[i]; i++) {
-    el.setAttribute('checkState', '0');
+function onViewChanged(aEvent) {
+  // If we _were_ visible (execute sorter is not collapsed) ...
+  if (!sortExecuteOrderButton.collapsed
+    // And execute sorter is selected ...
+    && (1 == sortExecuteOrderButton.getAttribute('checkState'))
+  ) {
+    // Deselect us.
+    sortExecuteOrderButton.setAttribute('checkState', 0);
+    // Select name.
+    var sorters = document.getAnonymousNodes(sortersContainer);
+    sorters[0].setAttribute('checkState', 1);
+    // Sort by name.
+    gViewController.currentViewObj.onSortChanged('name', true);
   }
-  // Check our sorter.
-  aEvent.target.setAttribute('checkState', '1');
-  // Actually sort the elements.
+  // Hide the execute order sorter, when the view is not ours.
+  sortExecuteOrderButton.collapsed =
+      'addons://list/user-script' != gViewController.currentViewId;
+};
+
+function sortScriptsByExecution() {
+  if (1 != sortExecuteOrderButton.getAttribute('checkState')) {
+    return;
+  }
   var sortService = Cc["@mozilla.org/xul/xul-sort-service;1"].
-      getService(Ci.nsIXULSortService);
+    getService(Ci.nsIXULSortService);
   sortService.sort(gListView._listBox, 'executionIndex', 'ascending');
 }
 
-// Patch the default createItem() to add our custom property.
-_createItemOrig = createItem;
-createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
-  var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
-  if ('user-script' == aObj.type) {
-    item.setAttribute('executionIndex',
-        // String format with leading zeros, so it will sort properly.
-        ('0000' + aObj.executionIndex).substr(-5));
-  }
-  return item;
+function reorderScriptExecution(aAddon, moveBy) {
+  GM_getConfig().move(aAddon._script, moveBy);
+  AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
+      // Fix all the 'executionOrder' attributes.
+      for (var i=0, addon=null; addon=aAddons[i]; i++) {
+        setRichlistitemExecutionIndex(addon);
+      }
+      // Re-sort the list, with these fixed attributes.
+      sortScriptsByExecution();
+      // Ensure the selected element is still visible.
+      var richlistbox = document.getElementById('addon-list');
+      richlistbox.ensureElementIsVisible(richlistbox.currentItem);
+    });
 }
 
+function setRichlistitemExecutionIndex(aAddon) {
+  aAddon.richlistitem.setAttribute('executionIndex',
+      // String format with leading zeros, so it will sort properly.
+      ('0000' + aAddon.executionIndex).substr(-5));
+}
 })();
