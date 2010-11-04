@@ -6,7 +6,8 @@ if [ "official" = "$1" ]; then
 	GMVER=`sed -ne '/em:version/{ s/.*>\(.*\)<.*/\1/; p}' install.rdf`
 else
     # For beta builds, generate a version number.
-    GMVER=`date +"%Y.%m.%d.beta"`
+    BUILDTYPE="${1:-beta}"
+    GMVER=`date +"%Y.%m.%d.$BUILDTYPE"`
 fi
 GMXPI="greasemonkey-$GMVER.xpi"
 
