@@ -1,6 +1,10 @@
 <!ENTITY Edit "Edit">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "Edit this User Script">
+<!ENTITY ExecuteFirst "Execute first">
+<!ENTITY ExecuteLast "Execute last">
+<!ENTITY ExecuteLater "Execute later">
+<!ENTITY ExecuteSooner "Execute sooner">
 <!ENTITY MoveDown "Move Down">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Move To Bottom">

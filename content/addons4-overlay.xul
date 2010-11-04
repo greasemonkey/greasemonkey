@@ -27,6 +27,10 @@
 <commandset id="viewCommandSet">
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />
+  <command id="cmd_userscript_execute_first" />
+  <command id="cmd_userscript_execute_sooner" />
+  <command id="cmd_userscript_execute_later" />
+  <command id="cmd_userscript_execute_last" />
 </commandset>
 
 <menupopup id="addonitem-popup">
@@ -35,6 +39,23 @@
   />
   <menuitem id="menuitem_userscript_show" command="cmd_userscript_show"
     label="&Show;" accesskey="&Show.accesskey;" type="user-script"
+  />
+  <menuseparator type="user-script"/>
+  <menuitem id="menuitem_userscript_execute_first"
+    command="cmd_userscript_execute_first"
+    label="&ExecuteFirst;" type="user-script"
+  />
+  <menuitem id="menuitem_userscript_execute_sooner"
+    command="cmd_userscript_execute_sooner"
+    label="&ExecuteSooner;" type="user-script"
+  />
+  <menuitem id="menuitem_userscript_execute_later"
+    command="cmd_userscript_execute_later"
+    label="&ExecuteLater;" type="user-script"
+  />
+  <menuitem id="menuitem_userscript_execute_last"
+    command="cmd_userscript_execute_last"
+    label="&ExecuteLast;" type="user-script"
   />
 </menupopup>
 
