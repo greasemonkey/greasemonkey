@@ -80,6 +80,7 @@ function ScriptAddon(aScript) {
   this.name = this._script.name;
   this.version = this._script.version;
   this.description = this._script.description;
+  this.iconURL = this._script.icon.fileURL;
   this.size = this._script.size;
   this.updateDate = this._script.modifiedDate;
 }

@@ -172,6 +172,7 @@ GM_GreasemonkeyService.prototype = {
     loader.loadSubScript("chrome://greasemonkey/content/script.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptresource.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scripticon.js");
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");

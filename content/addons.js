@@ -199,6 +199,7 @@ var greasemonkeyAddons = {
     item.setAttribute('name', script.name);
     item.setAttribute('description', script.description);
     item.setAttribute('version', script.version);
+    item.setAttribute('iconURL', script.icon.fileURL);
     item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
     if (script.id in GM_uninstallQueue) {

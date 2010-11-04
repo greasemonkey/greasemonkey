@@ -1,11 +1,12 @@
 function ScriptResource(script) {
-  this._script = script;
+  this._script = script || null;
 
   this._downloadURL = null; // Only for scripts not installed
   this._tempFile = null; // Only for scripts not installed
   this._filename = null;
   this._mimetype = null;
   this._charset = null;
+  this.type = "resource";
   this.updateScript = false;
 
   this._name = null;

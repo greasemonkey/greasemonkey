@@ -4,6 +4,7 @@ function ScriptRequire(script) {
   this._downloadURL = null; // Only for scripts not installed
   this._tempFile = null; // Only for scripts not installed
   this._filename = null;
+  this.type = "require";
   this.updateScript = false;
 }
 

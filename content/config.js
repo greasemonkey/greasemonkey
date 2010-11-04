@@ -175,6 +175,20 @@ Config.prototype = {
           case "exclude":
             script._excludes.push(value);
             break;
+          case "icon":
+            script._rawMeta += header + '\0' + value + '\0';
+            try {
+              script.icon.metaVal = value;
+            } catch (e) {
+              if (updateScript) {
+                script._dependFail = true;
+              } else if (script.icon.dataUriError) {
+                throw new Error(e.message);
+              } else {
+                throw new Error('Failed to get @icon '+ value);
+              }
+            }
+            break;
           case "require":
             try {
               var reqUri = GM_uriFromUrl(value, uri);
@@ -255,6 +269,11 @@ Config.prototype = {
 
     script._initFile(script._tempFile);
     script._tempFile = null;
+
+    // if icon had to be downloaded, then move the file
+    if (script.icon.hasDownloadURL()) {
+      script.icon._initFile();
+    }
 
     for (var i = 0; i < script._requires.length; i++) {
       script._requires[i]._initFile();

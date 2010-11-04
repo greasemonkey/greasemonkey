@@ -14,6 +14,7 @@ function Script(configNode) {
   this._prefroot = null;
   this._description = null;
   this._version = null;
+  this._icon = new ScriptIcon(this);
   this._enabled = true;
   this.needsUninstall = false;
   this._includes = [];
@@ -54,6 +55,7 @@ Script.prototype = {
   },
   get description() { return this._description; },
   get version() { return this._version; },
+  get icon() { return this._icon; },
   get enabled() { return this._enabled; },
   set enabled(enabled) { this._enabled = enabled; this._changed("edit-enabled", enabled); },
 
@@ -177,6 +179,7 @@ Script.prototype = {
     this._name = node.getAttribute("name");
     this._namespace = node.getAttribute("namespace");
     this._description = node.getAttribute("description");
+    this.icon.fileURL = node.getAttribute("icon");
     this._enabled = node.getAttribute("enabled") == true.toString();
   },
 
@@ -241,6 +244,10 @@ Script.prototype = {
 
     if (this._downloadURL) {
       scriptNode.setAttribute("installurl", this._downloadURL);
+    }
+
+    if (this.icon.filename) {
+      scriptNode.setAttribute("icon", this.icon.filename);
     }
 
     return scriptNode;
@@ -323,6 +330,8 @@ Script.prototype = {
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
       this._dependhash = dependhash;
+      this._icon = newScript._icon
+      this._icon._script = this;
       this._requires = newScript._requires;
       this._resources = newScript._resources;
 
