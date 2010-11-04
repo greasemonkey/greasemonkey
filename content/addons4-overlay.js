@@ -102,7 +102,8 @@ function onExecuteSortCommand(aEvent) {
     el.setAttribute('checkState', '0');
   }
   // Check our sorter.
-  aEvent.target.setAttribute('checkState', 1);
+  var curState = aEvent.target.getAttribute("checkState");
+  aEvent.target.setAttribute("checkState", (curState == "1") ? "2" : "1");
   // Actually sort the elements.
   sortScriptsByExecution();
 }
@@ -136,12 +137,12 @@ function onViewChanged(aEvent) {
 };
 
 function sortScriptsByExecution() {
-  if (1 != sortExecuteOrderButton.getAttribute('checkState')) {
-    return;
-  }
-  var sortService = Cc["@mozilla.org/xul/xul-sort-service;1"].
-    getService(Ci.nsIXULSortService);
-  sortService.sort(gListView._listBox, 'executionIndex', 'ascending');
+  var chkState = sortExecuteOrderButton.getAttribute("checkState");
+  if ("1" != chkState && "2" != chkState) return;
+  Cc["@mozilla.org/xul/xul-sort-service;1"]
+      .getService(Ci.nsIXULSortService).sort(
+          gListView._listBox, 'executionIndex',
+          (chkState == "1") ? "ascending" : "descending");
 }
 
 function reorderScriptExecution(aAddon, moveBy) {
