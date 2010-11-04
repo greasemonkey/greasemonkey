@@ -3,7 +3,7 @@
 // opposed to addons4.jsm which is responsible for what the API does handle.)
 (function() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
-Components.utils.import("resource://greasemonkey/addons4.jsm");
+Components.utils.import("resource://greasemonkey/addons4.js");
 
 var sortersContainer;
 var sortExecuteOrderButton;
