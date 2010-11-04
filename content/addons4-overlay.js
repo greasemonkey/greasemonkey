@@ -7,6 +7,8 @@ Components.utils.import("resource://greasemonkey/addons4.jsm");
 
 var sortersContainer;
 var sortExecuteOrderButton;
+var stringBundle;
+
 window.addEventListener('load', init, false);
 
 // Patch the default createItem() to add our custom property.
@@ -63,12 +65,20 @@ function init() {
 
   window.addEventListener('ViewChanged', onViewChanged, false);
 
+  var stringBundleService = Components
+      .classes['@mozilla.org/intl/stringbundle;1']
+      .getService(Ci.nsIStringBundleService);
+  var stringBundle = stringBundleService
+      .createBundle('chrome://greasemonkey/locale/gm-addons.properties');
+
   // Inject this content into an XBL binding (where it can't be overlayed).
   sortExecuteOrderButton = document.createElement('button');
   sortExecuteOrderButton.setAttribute('checkState', '0');
   sortExecuteOrderButton.setAttribute('class', 'sorter');
-  sortExecuteOrderButton.setAttribute('label', 'Execution Order');
-  sortExecuteOrderButton.setAttribute('tooltiptext', 'Sort by execution order');
+  sortExecuteOrderButton.setAttribute(
+      'label', stringBundle.GetStringFromName('executionorder'));
+  sortExecuteOrderButton.setAttribute(
+      'tooltiptext', stringBundle.GetStringFromName('executionorder.tooltip'));
   sortExecuteOrderButton.collapsed = true;
   sortersContainer = document.getElementById('list-sorters');
   sortersContainer.appendChild(sortExecuteOrderButton);
