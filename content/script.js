@@ -280,6 +280,24 @@ Script.prototype = {
                      .newFileURI(this._tempFile).spec;
   },
 
+  useDelayedInjectors: function() {
+    // Inject the script in all windows that have been waiting
+    var pendingExec;
+    var pendingExecAry = this.pendingExec;
+    this.pendingExec = [];
+    while (pendingExec = pendingExecAry.shift()) {
+      if (pendingExec.safeWin.closed) continue;
+      var url = pendingExec.safeWin.location.href;
+      if (GM_scriptMatchesUrlAndRuns(this, url)) {
+        GM_getService().injectScripts(
+            [this], url, pendingExec.safeWin, pendingExec.chromeWin);
+      }
+    }
+
+    // Save new values to config.xml
+    GM_getConfig()._save();
+  },
+
   isModified: function() {
     if (!this.fileExists(this.file)) return false;
     if (this._modified != this.file.lastModifiedTime) {

@@ -232,19 +232,7 @@ GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
 
 GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
-    // Inject the script in all windows that have been waiting
-    var pendingExec;
-    while (pendingExec = this.script.pendingExec.shift()) {
-      if (pendingExec.safeWin.closed) continue;
-      var url = pendingExec.safeWin.location.href;
-      if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
-        GM_getService().injectScripts(
-            [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
-      }
-    }
-
-    // Save new values to config.xml
-    GM_getConfig()._save();
+    this.script.useDelayedInjectors();
   } else if (this.installOnCompletion_) {
     this.installScript();
   }
