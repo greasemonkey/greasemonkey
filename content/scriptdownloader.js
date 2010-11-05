@@ -234,7 +234,9 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script in all windows that have been waiting
     var pendingExec;
-    while (pendingExec = this.script.pendingExec.shift()) {
+    var pendingExecAry = this.script.pendingExec;
+    this.script.pendingExec = [];
+    while (pendingExec = pendingExecAry.shift()) {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
       if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
