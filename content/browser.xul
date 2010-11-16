@@ -13,7 +13,6 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/accelimation.js" />
 
   <popup id="contentAreaContextMenu">
     <menuitem id="view-userscript"
@@ -73,10 +72,6 @@
       insertafter="livemark-button"
       onclick="return GM_BrowserUI.statusClicked(event)"
     >
-      <label id="gm-status-label"
-        collapsed="true"
-        crop="end"
-        style="width:0px; margin:0" />
       <image id="gm-status-image" width="16" height="16" />
     </statusbarpanel>
     <menupopup id="gm-status-popup"

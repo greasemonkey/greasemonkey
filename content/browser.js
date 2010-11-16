@@ -47,7 +47,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // Store other DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
   this.statusImage = document.getElementById("gm-status-image");
-  this.statusLabel = document.getElementById("gm-status-label");
   this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
   this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.bundle = document.getElementById("gm-browser-bundle");
@@ -502,84 +501,6 @@ GM_BrowserUI.refreshStatus = function() {
   this.statusImage.style.opacity = "1.0";
 };
 
-GM_BrowserUI.showStatus = function(message, autoHide) {
-  if (this.statusLabel.collapsed) {
-    this.statusLabel.collapsed = false;
-  }
-
-  message += " ";
-
-  var box = document.createElement("vbox");
-  var label = document.createElement("label");
-  box.style.position = "fixed";
-  box.style.left = "-10000px";
-  box.style.top = "-10000px";
-  box.style.border = "5px solid red";
-  box.appendChild(label);
-  document.documentElement.appendChild(box);
-  label.setAttribute("value", message);
-
-  var current = parseInt(this.statusLabel.style.width);
-  this.statusLabel.value = message;
-  var max = label.boxObject.width;
-
-  this.showAnimation = new Accelimation(this.statusLabel.style,
-                                          "width", max, 300, 2, "px");
-  this.showAnimation.onend = GM_hitch(this, "showStatusAnimationEnd", autoHide);
-  this.showAnimation.start();
-};
-
-GM_BrowserUI.showStatusAnimationEnd = function(autoHide) {
-  this.showAnimation = null;
-
-  if (autoHide) {
-    this.setAutoHideTimer();
-  }
-};
-
-GM_BrowserUI.setAutoHideTimer = function() {
-  if (this.autoHideTimer) {
-    window.clearTimeout(this.autoHideTimer);
-  }
-
-  this.autoHideTimer = window.setTimeout(GM_hitch(this, "hideStatus"), 3000);
-};
-
-GM_BrowserUI.hideStatusImmediately = function() {
-  if (this.showAnimation) {
-    this.showAnimation.stop();
-    this.showAnimation = null;
-  }
-
-  if (this.hideAnimation) {
-    this.hideAnimation.stop();
-    this.hideAnimation = null;
-  }
-
-  if (this.autoHideTimer) {
-    window.clearTimeout(this.autoHideTimer);
-    this.autoHideTimer = null;
-  }
-
-  this.statusLabel.style.width = "0";
-  this.statusLabel.collapsed = true;
-};
-
-GM_BrowserUI.hideStatus = function() {
-  if (!this.hideAnimation) {
-    this.autoHideTimer = null;
-    this.hideAnimation = new Accelimation(this.statusLabel.style,
-                                            "width", 0, 300, 2, "px");
-    this.hideAnimation.onend = GM_hitch(this, "hideStatusAnimationEnd");
-    this.hideAnimation.start();
-  }
-};
-
-GM_BrowserUI.hideStatusAnimationEnd = function() {
-  this.hideAnimation = null;
-  this.statusLabel.collapsed = true;
-};
-
 // necessary for webProgressListener implementation
 GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){};
 GM_BrowserUI.onStateChange = function(a,b,c,d){};
@@ -588,7 +509,11 @@ GM_BrowserUI.onSecurityChange = function(a,b,c){};
 GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.showHorrayMessage = function(scriptName) {
-  this.showStatus("'" + scriptName + "' " + this.bundle.getString("statusbar.installed"), true);
+  var tools = {};
+  Components.utils.import(
+    "resource://greasemonkey/utils/GM_notification.js", tools);
+  tools.GM_notification(
+      "'" + scriptName + "' " + this.bundle.getString("statusbar.installed"));
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {

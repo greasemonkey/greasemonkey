@@ -1,3 +1,0 @@
-The throbber.gif file reused under MPL license, originally from:
-
-http://mxr.mozilla.org/mozilla1.9.2/source/toolkit/themes/winstripe/global/throbber/Throbber-small.gif
