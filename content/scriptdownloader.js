@@ -53,7 +53,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
       this.contentWindow_.location.assign(this.uri_.spec);
     } else {
       var tools = {};
-      Cu.import("resource://greasemonkey/utils/GM_notification.js", tools);
+      Cu.import("resource://greasemonkey/GM_notification.js", tools);
       // TODO: localize
       tools.GM_notification("Fetching user script");
     }

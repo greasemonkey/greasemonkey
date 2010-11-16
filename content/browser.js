@@ -510,8 +510,7 @@ GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.showHorrayMessage = function(scriptName) {
   var tools = {};
-  Components.utils.import(
-    "resource://greasemonkey/utils/GM_notification.js", tools);
+  Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
   tools.GM_notification(
       "'" + scriptName + "' " + this.bundle.getString("statusbar.installed"));
 };
