@@ -10,6 +10,7 @@ var sortExecuteOrderButton;
 var stringBundle;
 
 window.addEventListener('load', init, false);
+window.addEventListener('unload', unload, false);
 
 // Patch the default createItem() to add our custom property.
 _createItemOrig = createItem;
@@ -22,7 +23,7 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
    setRichlistitemExecutionIndex(aObj);
   }
   return item;
-}
+};
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -31,7 +32,7 @@ function addonIsInstalledScript(aAddon) {
   if ('user-script' != aAddon.type) return false;
   if (aAddon._script.needsUninstall) return false;
   return true;
-}
+};
 
 function init() {
   gViewController.commands.cmd_userscript_edit = {
@@ -83,7 +84,7 @@ function init() {
   sortersContainer = document.getElementById('list-sorters');
   sortersContainer.appendChild(sortExecuteOrderButton);
   sortersContainer.addEventListener('click', onSortersClicked, true);
-}
+};
 
 function onContextPopupShowing(aEvent) {
   var popup = aEvent.target;
@@ -93,7 +94,7 @@ function onContextPopupShowing(aEvent) {
     var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
     menuitem.collapsed = viewIsUserScripts != menuitemIsUserScript;
   }
-}
+};
 
 function onExecuteSortCommand(aEvent) {
   // Uncheck all sorters.
@@ -105,7 +106,7 @@ function onExecuteSortCommand(aEvent) {
   aEvent.target.setAttribute('checkState', 1);
   // Actually sort the elements.
   sortScriptsByExecution();
-}
+};
 
 function onSortersClicked(aEvent) {
   if (aEvent.target == sortExecuteOrderButton) {
@@ -114,7 +115,7 @@ function onSortersClicked(aEvent) {
     // When a sorter other than ours is clicked, uncheck ours.
     sortExecuteOrderButton.setAttribute('checkState', 0);
   }
-}
+};
 
 function onViewChanged(aEvent) {
   // If we _were_ visible (execute sorter is not collapsed) ...
@@ -142,13 +143,13 @@ function sortScriptsByExecution() {
   var sortService = Cc["@mozilla.org/xul/xul-sort-service;1"].
     getService(Ci.nsIXULSortService);
   sortService.sort(gListView._listBox, 'executionIndex', 'ascending');
-}
+};
 
 function reorderScriptExecution(aAddon, moveBy) {
   GM_getConfig().move(aAddon._script, moveBy);
   AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
       // Fix all the 'executionOrder' attributes.
-      for (var i=0, addon=null; addon=aAddons[i]; i++) {
+      for (var i = 0, addon = null; addon = aAddons[i]; i++) {
         setRichlistitemExecutionIndex(addon);
       }
       // Re-sort the list, with these fixed attributes.
@@ -157,11 +158,30 @@ function reorderScriptExecution(aAddon, moveBy) {
       var richlistbox = document.getElementById('addon-list');
       richlistbox.ensureElementIsVisible(richlistbox.currentItem);
     });
-}
+};
 
 function setRichlistitemExecutionIndex(aAddon) {
   aAddon.richlistitem.setAttribute('executionIndex',
       // String format with leading zeros, so it will sort properly.
       ('0000' + aAddon.executionIndex).substr(-5));
-}
+};
+
+function unload() {
+  var GM_config = GM_getConfig();
+  // Since .getAddonsByTypes() is asynchronous, AddonManager gets destroyed
+  // by the time the callback runs.  Cache this value we need from it.
+  var pending_uninstall = AddonManager.PENDING_UNINSTALL;
+
+  AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
+      for (var i = 0, addon = null; addon = aAddons[i]; i++) {
+        if (addon.pendingOperations & pending_uninstall) {
+          // Todo: This without dipping into private members.
+          GM_config.uninstall(addon._script);
+        }
+      }
+      // Guarantee that the config.xml is saved to disk.
+      // Todo: This without dipping into private members.
+      GM_config._save(true);
+    });
+};
 })();
