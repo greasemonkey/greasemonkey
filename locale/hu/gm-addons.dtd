@@ -1,0 +1,27 @@
+<!ENTITY Edit "Szerkesztés">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Parancsfájl szerkesztése">
+<!ENTITY ExecuteFirst "Végrehajtás elsőként">
+<!ENTITY ExecuteLast "Végrehajtás utolsóként">
+<!ENTITY ExecuteLater "Végrehajtás később">
+<!ENTITY ExecuteSooner "Végrehajtás előbb">
+<!ENTITY MoveDown "Mozgatás lefele">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Mozgatás legalulra">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Mozgatás legfelülre">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Mozgatás felfelé">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Új parancsfájl létrehozása">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Tartalmazó mappa megnyitása">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "Parancsfájlok sorba rendezése">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Eltávolítás visszavonása">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Parancsfájl eltávolításának visszavonása">
+<!ENTITY UninstallCancelDescription "A parancsfájl el lesz távolítva az ablak bezárása után (vagy kattints jobb gombra az azonnali eltávolításhoz)">
+<!ENTITY UninstallNow "Eltávolítás most">
+<!ENTITY UninstallNow.accesskey "N">

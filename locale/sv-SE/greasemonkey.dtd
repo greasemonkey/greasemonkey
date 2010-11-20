@@ -1,27 +1,30 @@
-<!ENTITY menu.install "Installera användarskript...">
+<!ENTITY menu.install "Install User Script...">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "Visa användarskripts källkod">
+<!ENTITY menu.show "View User Script Source">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Användarskript-kommandon...">
-<!ENTITY menu.commands.accesskey "K">
-<!ENTITY menu.new "Nytt användarskript...">
+<!ENTITY menu.commands "User Script Commands...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "New User Script...">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Hantera användarskript...">
-<!ENTITY menu.manage.accesskey "H">
-<!ENTITY statusbar.noscripts "Inga skript installerade!">
-<!ENTITY statusbar.enabled "Aktiverad">
-<!ENTITY statusbar.enabled.accesskey "A">
-<!ENTITY install.title "Greasemonkey-installering">
-<!ENTITY install.runson "kör på:">
-<!ENTITY install.butnoton "kör inte på:">
-<!ENTITY install.warning1 "Skadliga skript kan kränka din integritet och agera som dig utan din vetskap.">
-<!ENTITY install.warning2 "Du bör bara installera skript från källor som du litar på.">
-<!ENTITY install.showscriptsource "Visa skriptkällkod">
-<!ENTITY install.installbutton "Installera">
-<!ENTITY newscript.name "Namn">
-<!ENTITY newscript.namespace "Namnrymd">
-<!ENTITY newscript.description "Beskrivning">
-<!ENTITY newscript.includes "Inkluderar (En per rad)">
-<!ENTITY newscript.excludes "Exkluderar (En per rad)">
-<!ENTITY Uninstall "Avinstallera">
-<!ENTITY AlsoUninstallPrefs "Avinstallera även tillhörande inställningar">
+<!ENTITY menu.manage "Manage User Scripts...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "No scripts installed!">
+<!ENTITY statusbar.enabled "Enabled">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Greasemonkey Installation">
+<!ENTITY install.runson "runs on:">
+<!ENTITY install.butnoton "does not run on:">
+<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
+<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
+<!ENTITY install.showscriptsource "Show Script Source">
+<!ENTITY install.installbutton "Install">
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Uninstall">
+<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">

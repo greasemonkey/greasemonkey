@@ -1,0 +1,27 @@
+<!ENTITY Edit "Ändere">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Ändere diesen Benutzerskript">
+<!ENTITY ExecuteFirst "Führe zuerst aus">
+<!ENTITY ExecuteLast "Führe zuletzt aus">
+<!ENTITY ExecuteLater "Führe später aus">
+<!ENTITY ExecuteSooner "Führe früher aus">
+<!ENTITY MoveDown "Verschiebe nach unten">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Nach ganz unten bewegen">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Nach ganz oben bewegen">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Nach oben verschieben">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Erstelle ein neues Skript">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Zeige beinhaltenden Ordner">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "Sortiere die Skripts">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Breche das Deinstallieren ab">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Breche das Deinstallieren dieses Benutzerskript ab">
+<!ENTITY UninstallCancelDescription "Dieser Benutzerskript wird deinstalliert, wenn dieser Dialog geschlossen wird ( Oder Rechtsklick für &quot;Deinstallation Now&quot;.)">
+<!ENTITY UninstallNow "Deinstalliere jetzt">
+<!ENTITY UninstallNow.accesskey "N">

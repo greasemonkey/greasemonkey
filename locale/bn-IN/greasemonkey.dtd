@@ -23,5 +23,8 @@
 <!ENTITY newscript.description "Description">
 <!ENTITY newscript.includes "Includes (One per line)">
 <!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">

@@ -1,27 +1,30 @@
-<!ENTITY menu.install "Namesti uporabniški skript ...">
-<!ENTITY menu.install.accesskey "N">
-<!ENTITY menu.show "Pokaži izvorno kodo uporabniškega skripta">
-<!ENTITY menu.show.accesskey "P">
-<!ENTITY menu.commands "Ukazi uporabniškega skripta ...">
-<!ENTITY menu.commands.accesskey "U">
-<!ENTITY menu.new "Nov uporabniški skript ...">
-<!ENTITY menu.new.accesskey "O">
-<!ENTITY menu.manage "Upravljaj z uporabniškimi skripti ...">
-<!ENTITY menu.manage.accesskey "P">
-<!ENTITY statusbar.noscripts "Ni nameščenih skriptov!">
-<!ENTITY statusbar.enabled "Omogočeno">
-<!ENTITY statusbar.enabled.accesskey "M">
-<!ENTITY install.title "Namestitev Mehanika">
-<!ENTITY install.runson "teče na:">
-<!ENTITY install.butnoton "ne teče na:">
-<!ENTITY install.warning1 "Škodljivi skripti lahko kršijo vašo zasebnost in delujejo v vašem imenu brez vaše vednosti.">
-<!ENTITY install.warning2 "Nameščajte le skripte iz virov, ki jim zaupate.">
-<!ENTITY install.showscriptsource "Pokaži izvorni skript">
-<!ENTITY install.installbutton "Namesti">
-<!ENTITY newscript.name "Ime">
-<!ENTITY newscript.namespace "Imenski prostor">
-<!ENTITY newscript.description "Opis">
-<!ENTITY newscript.includes "Vključuje (eno na vrstico)">
-<!ENTITY newscript.excludes "Izključuje (eno na vrstico)">
-<!ENTITY Uninstall "Odstrani">
-<!ENTITY AlsoUninstallPrefs "Odstrani tudi povezane nastavitve">
+<!ENTITY menu.install "Install User Script...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "View User Script Source">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "User Script Commands...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "New User Script...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Manage User Scripts...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "No scripts installed!">
+<!ENTITY statusbar.enabled "Enabled">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Greasemonkey Installation">
+<!ENTITY install.runson "runs on:">
+<!ENTITY install.butnoton "does not run on:">
+<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
+<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
+<!ENTITY install.showscriptsource "Show Script Source">
+<!ENTITY install.installbutton "Install">
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Uninstall">
+<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">

@@ -1,0 +1,30 @@
+<!ENTITY menu.install "Parancsfájl telepítése">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Parancsfájl forrásának megtekintése">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Parancsfájl beállításai...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Új parancsfájl...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Parancsfájlok kezelése...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.noscripts "Nincs parancsfájl telepítve!">
+<!ENTITY statusbar.enabled "Engedélyezve">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Greasemonkey telepítés">
+<!ENTITY install.runson "fut a következőn:">
+<!ENTITY install.butnoton "nem fut a következőn:">
+<!ENTITY install.warning1 "Kártékony parancsfájlok hozzáférhetnek a személyes adataidhoz és működhetnek a tudtod nélkül.">
+<!ENTITY install.warning2 "Csak megbízható forrásból telepíts parancsfájlt!">
+<!ENTITY install.showscriptsource "Parancsfájl forrásának megtekintése">
+<!ENTITY install.installbutton "Telepítés">
+<!ENTITY newscript.name "Név">
+<!ENTITY newscript.namespace "Névtér">
+<!ENTITY newscript.description "Leírás">
+<!ENTITY newscript.includes "Engedélyezett oldalak (soronként egy)">
+<!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
+<!ENTITY options.editor "Szerkesztő">
+<!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
+<!ENTITY userscripts "Parancsfájlok">
+<!ENTITY Uninstall "Eltávolítás">
+<!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">

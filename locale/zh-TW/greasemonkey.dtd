@@ -1,27 +1,30 @@
-<!ENTITY menu.install "安裝腳本">
+<!ENTITY menu.install "安裝使用者腳本…">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "檢視腳本原始碼">
+<!ENTITY menu.show "檢視使用者腳本原始碼">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "正在使用中的腳本">
+<!ENTITY menu.commands "使用者腳本指令…">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "新增腳本...">
+<!ENTITY menu.new "新使用者腳本…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "管理腳本...">
+<!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "沒有安裝腳本！">
-<!ENTITY statusbar.enabled "啟用">
+<!ENTITY statusbar.noscripts "未安裝腳本！">
+<!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
-<!ENTITY install.title "Greasemonkey 使用者腳本安裝">
-<!ENTITY install.runson "腳本將套用到下列網頁：">
-<!ENTITY install.butnoton "下列網頁例外：">
-<!ENTITY install.warning1 "惡意的腳本可能會侵犯您的隱私並在您不知情之下執行。">
-<!ENTITY install.warning2 "您應該只從可信任的來源安裝腳本。">
-<!ENTITY install.showscriptsource "檢視腳本原始碼">
+<!ENTITY install.title "Greasemonkey 安裝">
+<!ENTITY install.runson "執行於:">
+<!ENTITY install.butnoton "不執行於:">
+<!ENTITY install.warning1 "惡意的腳本可能會危害您的隱私，並在您不知情的情況下以您的名義執行。">
+<!ENTITY install.warning2 "您應該只安裝來自可信任來源的使用者腳本。">
+<!ENTITY install.showscriptsource "顯示腳本來源">
 <!ENTITY install.installbutton "安裝">
 <!ENTITY newscript.name "名稱">
 <!ENTITY newscript.namespace "命名空間">
-<!ENTITY newscript.description "描述">
-<!ENTITY newscript.includes "腳本將套用到下列網頁 (每行一個網址)">
-<!ENTITY newscript.excludes "例外網頁 (每行一個網址)">
-<!ENTITY Uninstall "移除腳本">
-<!ENTITY AlsoUninstallPrefs "同時清除腳本的相關設定">
+<!ENTITY newscript.description "說明">
+<!ENTITY newscript.includes "包含（每行一項）">
+<!ENTITY newscript.excludes "不包含（每行一項）">
+<!ENTITY options.editor "腳本編輯器">
+<!ENTITY options.changeEditor "設定腳本編輯器">
+<!ENTITY userscripts "使用者腳本">
+<!ENTITY Uninstall "腳本移除設定">
+<!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
