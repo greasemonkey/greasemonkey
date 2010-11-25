@@ -1,27 +1,27 @@
-<!ENTITY Edit "Edit">
-<!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Edit this User Script">
-<!ENTITY ExecuteFirst "Execute first">
-<!ENTITY ExecuteLast "Execute last">
-<!ENTITY ExecuteLater "Execute later">
-<!ENTITY ExecuteSooner "Execute sooner">
-<!ENTITY MoveDown "Move Down">
-<!ENTITY MoveDown.accesskey "D">
-<!ENTITY MoveToBottom "Move To Bottom">
-<!ENTITY MoveToBottom.accesskey "B">
-<!ENTITY MoveToTop "Move To Top">
-<!ENTITY MoveToTop.accesskey "T">
-<!ENTITY MoveUp "Move Up">
-<!ENTITY MoveUp.accesskey "U">
-<!ENTITY NewScript "Create New Script">
-<!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "Show Containing Folder">
-<!ENTITY Show.accesskey "S">
-<!ENTITY SortScripts "Sort Scripts">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Cancel Uninstall">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
-<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
-<!ENTITY UninstallNow "Uninstall Now">
-<!ENTITY UninstallNow.accesskey "N">
+<!ENTITY Edit "Изменить">
+<!ENTITY Edit.accesskey "з">
+<!ENTITY Edit.tooltip "Редактировать этот скрипт">
+<!ENTITY ExecuteFirst "Выполнять первым">
+<!ENTITY ExecuteLast "Выполнять последним">
+<!ENTITY ExecuteLater "Выполнять позднее">
+<!ENTITY ExecuteSooner "Выполнять ранее">
+<!ENTITY MoveDown "Переместить ниже">
+<!ENTITY MoveDown.accesskey "и">
+<!ENTITY MoveToBottom "Переместить в конец">
+<!ENTITY MoveToBottom.accesskey "ц">
+<!ENTITY MoveToTop "Переместить в начало">
+<!ENTITY MoveToTop.accesskey "о">
+<!ENTITY MoveUp "Переместить выше">
+<!ENTITY MoveUp.accesskey "ы">
+<!ENTITY NewScript "Создать новый скрипт">
+<!ENTITY NewScript.accesskey "ь">
+<!ENTITY Show "Показать содержащую папку">
+<!ENTITY Show.accesskey "ж">
+<!ENTITY SortScripts "Сортировать скрипты">
+<!ENTITY SortScripts.accesskey "т">
+<!ENTITY UninstallCancel "Отменить удаление">
+<!ENTITY UninstallCancel.accesskey "н">
+<!ENTITY UninstallCancel.tooltip "Отменить удаление пользовательского скрипта">
+<!ENTITY UninstallCancelDescription "Пользовательский скрипт будет удалён, когда закроется диалог (Или нажмите правой кнопкой чтобы &quot;Удалить немедленно&quot;.)">
+<!ENTITY UninstallNow "Удалить немедленно">
+<!ENTITY UninstallNow.accesskey "о">
