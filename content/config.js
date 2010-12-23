@@ -264,7 +264,7 @@ Config.prototype = {
       script._enabled = this._scripts[existingIndex].enabled;
 
       // unintall the old script
-      this.uninstall(this._scripts[existingIndex]);
+      this.uninstall(this._scripts[existingIndex], true);
     }
 
     script._initFile(script._tempFile);
@@ -292,10 +292,12 @@ Config.prototype = {
     GM_log("< Config.install");
   },
 
-  uninstall: function(script) {
+  uninstall: function(script, forUpdate) {
+    if ('undefined' == typeof(forUpdate)) forUpdate = false;
+
     var idx = this._find(script);
     this._scripts.splice(idx, 1);
-    script.uninstall();
+    script.uninstall(forUpdate);
   },
 
   /**

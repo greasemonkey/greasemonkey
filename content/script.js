@@ -381,7 +381,9 @@ Script.prototype = {
     return this.allFiles().every(this.fileExists);
   },
 
-  uninstall: function() {
+  uninstall: function(forUpdate) {
+    if ('undefined' == typeof(forUpdate)) forUpdate = false;
+
     if (this._basedirFile.equals(GM_scriptDir())) {
       // if script is in the root, just remove the file
       try {
@@ -398,7 +400,7 @@ Script.prototype = {
       }
     }
 
-    if (GM_prefRoot.getValue("uninstallPreferences")) {
+    if (!forUpdate && GM_prefRoot.getValue("uninstallPreferences")) {
       // Remove saved preferences
       GM_prefRoot.remove(this.prefroot);
     }
