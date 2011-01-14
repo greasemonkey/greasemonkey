@@ -4,6 +4,12 @@ var EXPORTED_SYMBOLS = ["GM_notification"];
 const alertsServ = Components.classes["@mozilla.org/alerts-service;1"]
     .getService(Components.interfaces.nsIAlertsService);
 
+function alert(msg) {
+  Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+      .getService(Components.interfaces.nsIPromptService)
+      .alert(null, "Greasemonkey alert", msg);
+}
+
 function GM_notification(aMsg, aTitle) {
   var title = aTitle ? "" + aTitle : "Greasemonkey";
   var message = aMsg ? "" + aMsg : "";
