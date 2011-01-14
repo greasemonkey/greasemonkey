@@ -2,7 +2,7 @@
 <!ENTITY Edit.accesskey "B">
 <!ENTITY Edit.tooltip "Dieses Benutzerskript bearbeiten">
 <!ENTITY ExecuteFirst "Zuerst ausführen">
-<!ENTITY ExecuteLast "Als letztes ausführen">
+<!ENTITY ExecuteLast "Zuletzt ausführen">
 <!ENTITY ExecuteLater "Später ausführen">
 <!ENTITY ExecuteSooner "Früher ausführen">
 <!ENTITY MoveDown "Nach unten verschieben">
@@ -21,7 +21,7 @@
 <!ENTITY SortScripts.accesskey "s">
 <!ENTITY UninstallCancel "Deinstallation abbrechen">
 <!ENTITY UninstallCancel.accesskey "a">
-<!ENTITY UninstallCancel.tooltip "Deinstallation diese Benutzerskripts abbrechen">
-<!ENTITY UninstallCancelDescription "Dieses Benutzerskript wird deinstalliert, wenn der Dialog geschlossen ist. (Oder Rechtsklick für &quot;Jetzt Deinstallieren&quot;.)">
+<!ENTITY UninstallCancel.tooltip "Deinstallation dieses Benutzerskripts abbrechen">
+<!ENTITY UninstallCancelDescription "Dieses Benutzerskript wird deinstalliert, wenn der Dialog geschlossen wird. (Oder Rechtsklick für &quot;Jetzt Deinstallieren&quot;.)">
 <!ENTITY UninstallNow "Jetzt Deinstallieren">
 <!ENTITY UninstallNow.accesskey "J">

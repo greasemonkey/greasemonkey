@@ -1,27 +1,27 @@
-<!ENTITY Edit "Edit">
-<!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Edit this User Script">
-<!ENTITY ExecuteFirst "Execute first">
-<!ENTITY ExecuteLast "Execute last">
-<!ENTITY ExecuteLater "Execute later">
-<!ENTITY ExecuteSooner "Execute sooner">
-<!ENTITY MoveDown "Move Down">
-<!ENTITY MoveDown.accesskey "D">
-<!ENTITY MoveToBottom "Move To Bottom">
-<!ENTITY MoveToBottom.accesskey "B">
-<!ENTITY MoveToTop "Move To Top">
-<!ENTITY MoveToTop.accesskey "T">
-<!ENTITY MoveUp "Move Up">
-<!ENTITY MoveUp.accesskey "U">
-<!ENTITY NewScript "Create New Script">
-<!ENTITY NewScript.accesskey "C">
+<!ENTITY Edit "ویرایش">
+<!ENTITY Edit.accesskey ",">
+<!ENTITY Edit.tooltip "ویرایش این نویسه کاربری">
+<!ENTITY ExecuteFirst "اجرای اولین">
+<!ENTITY ExecuteLast "اجرای آخرین">
+<!ENTITY ExecuteLater "دیرتر اجرا شود">
+<!ENTITY ExecuteSooner "زود تر اجرا شود">
+<!ENTITY MoveDown "حرکت به پایین">
+<!ENTITY MoveDown.accesskey "ح">
+<!ENTITY MoveToBottom "حرکت به انتها">
+<!ENTITY MoveToBottom.accesskey "ت">
+<!ENTITY MoveToTop "حرکت به ابتدا">
+<!ENTITY MoveToTop.accesskey "ب">
+<!ENTITY MoveUp "حرکت به بالا">
+<!ENTITY MoveUp.accesskey "ب">
+<!ENTITY NewScript "ساخت نویسه کاربری جدید">
+<!ENTITY NewScript.accesskey "س">
 <!ENTITY Show "Show Containing Folder">
 <!ENTITY Show.accesskey "S">
-<!ENTITY SortScripts "Sort Scripts">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Cancel Uninstall">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
-<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
-<!ENTITY UninstallNow "Uninstall Now">
-<!ENTITY UninstallNow.accesskey "N">
+<!ENTITY SortScripts "مرتب سازی نویسه ها">
+<!ENTITY SortScripts.accesskey "م">
+<!ENTITY UninstallCancel "لغو عزل">
+<!ENTITY UninstallCancel.accesskey "ل">
+<!ENTITY UninstallCancel.tooltip "لغو فرآیند عزل نویسه کاربری">
+<!ENTITY UninstallCancelDescription "وقتی که پنجره محاوره ای بسته شود این نویسه پاک خواهد شد. (یا برای &quot;عزل هم اکنون&quot; راست کلیک کنید.)">
+<!ENTITY UninstallNow "عزل هم اکنون">
+<!ENTITY UninstallNow.accesskey "ه">

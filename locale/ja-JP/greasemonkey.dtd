@@ -1,6 +1,6 @@
 <!ENTITY menu.install "ユーザスクリプトをインストール...">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "ユーザスクリプトの閲覧">
+<!ENTITY menu.show "スクリプトのソースを表示">
 <!ENTITY menu.show.accesskey "V">
 <!ENTITY menu.commands "ユーザスクリプトコマンド...">
 <!ENTITY menu.commands.accesskey "C">
@@ -14,8 +14,8 @@
 <!ENTITY install.title "Greasemonkey インストール">
 <!ENTITY install.runson "実行するページ:">
 <!ENTITY install.butnoton "実行しないページ:">
-<!ENTITY install.warning1 "悪意のあるスクリプトはあなたのプライバシーを侵害し、あなたの知らないところであなたになり代わって活動します。">
-<!ENTITY install.warning2 "信頼できるソースからのみ、スクリプトをインストールすべきです。">
+<!ENTITY install.warning1 "悪意のあるスクリプトはあなたのプライバシーを侵害し、あなたになり代わって活動します。">
+<!ENTITY install.warning2 "信頼できるソースからのみスクリプトをインストールすべきです。">
 <!ENTITY install.showscriptsource "スクリプトのソースを表示">
 <!ENTITY install.installbutton "インストール">
 <!ENTITY newscript.name "名前">
