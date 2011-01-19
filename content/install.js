@@ -96,7 +96,7 @@ var GMInstall = {
 
   onOK: function() {
     this.scriptDownloader_.installScript();
-    window.setTimeout("window.close()", 0);
+    window.setTimeout(window.close, 0);
   },
 
   onCancel: function(){
@@ -106,7 +106,7 @@ var GMInstall = {
 
   onShowSource: function() {
     this.scriptDownloader_.showScriptView();
-    window.setTimeout("window.close()", 0);
+    window.setTimeout(window.close, 0);
   }
 };
 
