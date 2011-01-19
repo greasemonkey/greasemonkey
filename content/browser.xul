@@ -36,9 +36,7 @@
     accesskey="G"
     label="Greasemonkey"
   >
-    <menupopup
-      onpopupshowing="GM_showGeneralPopup(event); event.stopPropagation();"
-    >
+    <menupopup onpopupshowing="GM_showGeneralPopup(event);">
       <menuitem id="gm-general-menu-enabled-item"
         accesskey="&statusbar.enabled.accesskey;"
         label="&statusbar.enabled;"
@@ -69,14 +67,14 @@
     <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 
     <statusbarpanel id="gm-status"
-      insertafter="livemark-button"
-      onclick="return GM_BrowserUI.statusClicked(event)"
+      context=""
+      onclick="GM_BrowserUI.statusClicked(event);"
     >
       <image id="gm-status-image" width="16" height="16" />
     </statusbarpanel>
     <menupopup id="gm-status-popup"
-      onpopupshowing="GM_showPopup(event); event.stopPropagation();"
-      onclick="GM_popupClicked(event); event.stopPropagation();"
+      onpopupshowing="GM_showPopup(event);"
+      onclick="GM_popupClicked(event);"
     >
       <menuitem id="gm-status-no-scripts"
         label="&statusbar.noscripts;"
@@ -86,7 +84,6 @@
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         disabled="false"
-        onpopupshowing="event.stopPropagation();"
       >
         <menupopup />
       </menu>
