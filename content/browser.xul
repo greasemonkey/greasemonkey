@@ -7,7 +7,6 @@
 
   <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/convert2RegExp.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />

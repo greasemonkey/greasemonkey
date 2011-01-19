@@ -6,7 +6,7 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['addonsStartup'];
+var EXPORTED_SYMBOLS = ['GM_addonsStartup'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -230,7 +230,7 @@ var WindowObserver = {
 ////////////////////////////////////////////////////////////////////////////////
 
 var _addonsStartupHasRun = false;
-function addonsStartup(aParams) {
+function GM_addonsStartup(aParams) {
   if (_addonsStartupHasRun) return;
   _addonsStartupHasRun = true;
 

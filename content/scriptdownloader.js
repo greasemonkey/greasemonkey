@@ -41,11 +41,12 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_.send(null);
 };
 
-_htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
+GM_ScriptDownloader.prototype._htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
 GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
   if (2 != this.req_.readyState) return;
 
-  if (_htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))
+  dump('>>> GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload()\n');
+  if (this._htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))
       && this.contentWindow_
   ) {
     // If there is a 'Content-Type' header and it contains 'text/html',
