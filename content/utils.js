@@ -350,7 +350,7 @@ function GM_sha1(unicode) {
 }
 GM_sha1 = GM_memoize(GM_sha1);
 
-GM_scriptDirCache = null;
+var GM_scriptDirCache = null;
 function GM_scriptDir() {
   if (!GM_scriptDirCache) {
     GM_scriptDirCache = Components
