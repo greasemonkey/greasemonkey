@@ -260,6 +260,7 @@ Script.prototype = {
     var file = GM_scriptDir();
     file.append(name);
     file.createUnique(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+    this._basedir = file.leafName;
 
     file.append(name + ".user.js");
     file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
