@@ -297,7 +297,11 @@ GM_GreasemonkeyService.prototype = {
                                                 "registerMenuCommand",
                                                 unsafeContentWin);
 
-      sandbox.__proto__ = wrappedContentWin;
+      // Re-wrap the window before assigning it to the sandbox.__proto__
+      // This is a workaround for a bug in which the Security Manager 
+      // vetoes the use of eval.
+      sandbox.__proto__ = new XPCNativeWrapper(unsafeContentWin);
+
       Components.utils.evalInSandbox(
           "var document = window.document;", sandbox);
 
