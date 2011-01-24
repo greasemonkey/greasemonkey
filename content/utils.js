@@ -315,11 +315,16 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
-function GM_uriFromUrl(url, baseUrl) {
+function GM_uriFromUrl(url, base) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
                                      .getService(Components.interfaces.nsIIOService);
   var baseUri = null;
-  if (baseUrl) baseUri = GM_uriFromUrl(baseUrl);
+  if (typeof base === "string") {
+    baseUri = GM_uriFromUrl(base);
+  } else if (base) {
+    baseUri = base;
+  }
+
   try {
     return ioService.newURI(url, null, baseUri);
   } catch (e) {
