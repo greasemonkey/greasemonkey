@@ -35,13 +35,24 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "https":
     case "ftp":
         var req = new this.chromeWindow.XMLHttpRequest();
-        return GM_hitch(this, "chromeStartRequest", url, details, req)();
+        GM_hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
   GM_log("< GM_xmlhttpRequest.contentStartRequest");
+
+  return {
+    get responseText()    req.responseText,
+    get responseHeaders() req.getAllResponseHeaders(),
+    get readyState()      req.readyState,
+    get status()          req.status,
+    get statusText()      req.statusText,
+    get finalUrl()        req.channel.URI.spec,
+
+    abort: function () req.abort()
+  };
 };
 
 // this function is intended to be called in chrome's security context, so
