@@ -35,19 +35,13 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "https":
     case "ftp":
         var req = new this.chromeWindow.XMLHttpRequest();
-        GM_hitch(this, "chromeStartRequest", url, details, req)();
+        return GM_hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
   GM_log("< GM_xmlhttpRequest.contentStartRequest");
-
-  return {
-    abort: function() {
-      req.abort();
-    }
-  };
 };
 
 // this function is intended to be called in chrome's security context, so
@@ -63,7 +57,7 @@ function(safeUrl, details, req) {
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
-  req.open(details.method, safeUrl, true, details.user || "", details.password || "");
+  req.open(details.method, safeUrl, !details.synchronous, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
@@ -87,6 +81,8 @@ function(safeUrl, details, req) {
   }
 
   GM_log("< GM_xmlhttpRequest.chromeStartRequest");
+
+  return req;
 };
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
