@@ -50,7 +50,8 @@ showView = function(aView) {
 var observer = {
   notifyEvent: function(script, event, data) {
     if (event == "install") {
-      var item = greasemonkeyAddons.addScriptToList(script);
+      var beforeNode = data > -1 ? gUserscriptsView.childNodes[data] : null;
+      var item = greasemonkeyAddons.addScriptToList(script, beforeNode);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
       item.setAttribute('newAddon', 'true');
       return;
