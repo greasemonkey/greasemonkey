@@ -1,0 +1,27 @@
+<!ENTITY Edit "Editar">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Editar">
+<!ENTITY ExecuteFirst "Ejecutar primero">
+<!ENTITY ExecuteLast "Ejecutar al final">
+<!ENTITY ExecuteLater "Ejecutar después">
+<!ENTITY ExecuteSooner "Ejecutar pronto">
+<!ENTITY MoveDown "Mover hacia abajo">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Mover al final">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Mover al principio">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Mover arriba">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Crear nuevo Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Mostrar contenido de la Carpeta">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "Tipos de Scripts">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Cancelar desinstalación">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Cancelar desinstalación del Script">
+<!ENTITY UninstallCancelDescription "El Script será desinstalado cuando el cuadro de diálogo sea cerrado. (o Click para &quot;Desinstalar ahora&quot;.)">
+<!ENTITY UninstallNow "Desinstalar ahora">
+<!ENTITY UninstallNow.accesskey "N">

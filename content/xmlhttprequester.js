@@ -61,6 +61,8 @@ function(safeUrl, details, req) {
   this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
                          details);
 
+  req.mozBackgroundRequest = !!details.mozBackgroundRequest;
+
   req.open(details.method, safeUrl, true, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
@@ -79,14 +81,6 @@ function(safeUrl, details, req) {
 
   var body = details.data ? details.data : null;
   if (details.binary) {
-    // xhr supports binary?
-    if (!req.sendAsBinary) {
-      var err = new Error("Unavailable feature: " +
-              "This version of Firefox does not support sending binary data " +
-              "(you should consider upgrading to version 3 or newer.)");
-      GM_logError(err);
-      throw err;
-    }
     req.sendAsBinary(body);
   } else {
     req.send(body);

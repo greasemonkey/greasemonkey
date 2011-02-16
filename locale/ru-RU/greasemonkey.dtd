@@ -23,5 +23,8 @@
 <!ENTITY newscript.description "Описание">
 <!ENTITY newscript.includes "Включения (одно на строку)">
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
-<!ENTITY Uninstall "Удалить скрипт">
-<!ENTITY AlsoUninstallPrefs "Удалять ассоциированные настройки">
+<!ENTITY options.editor "Редактор">
+<!ENTITY options.changeEditor "Изменить редактор">
+<!ENTITY userscripts "Пользовательские скрипты">
+<!ENTITY Uninstall "Удалить">
+<!ENTITY AlsoUninstallPrefs "Также удалить все связанные настройки">

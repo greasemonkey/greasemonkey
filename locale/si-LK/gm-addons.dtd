@@ -1,0 +1,27 @@
+<!ENTITY Edit "සංස්කරණය">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "මෙම පරිශීලක ස්ක්‍රිප්ටය සංස්කරණය කරන්න">
+<!ENTITY ExecuteFirst "පලමුව ක්‍රියාකරවන්න">
+<!ENTITY ExecuteLast "අවසානයට ක්‍රියාකරවන්න">
+<!ENTITY ExecuteLater "පසුව ක්‍රියාත්මක කරන්න">
+<!ENTITY ExecuteSooner "ඉක්මනින් ක්‍රියාත්මක කරන්න">
+<!ENTITY MoveDown "පහලට යවන්න">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "අවසානයට යවන්න">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "ඉහලටම යවන්න">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "ඉහලට යවන්න">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "නව පරිශීලක ස්ක්‍රිප්ටයක් නිර්මානය කරන්න">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "අඩංගු ගොනුව පෙන්වන්න">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "ස්ක්‍රිප්ට් වර්ග කරන්න">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "ඉවත්කිරීම අවලංගු කරන">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "පරිශීලක ස්ක්‍රිප්ටය ඉවත් කිරිමේ විධානය අහෝසි කරන්න">
+<!ENTITY UninstallCancelDescription "මෙම ඩයලොග් බොක්ස් එක වසා දැමූ විට මෙම් පරිශීලක ස්ක්‍රිප්ටය පරිගනකයෙන් ඉවත් වේ">
+<!ENTITY UninstallNow "දැන්ම ඉවත් කරන්න">
+<!ENTITY UninstallNow.accesskey "N">

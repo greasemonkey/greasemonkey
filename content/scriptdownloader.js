@@ -3,10 +3,14 @@
 var GM_ScriptDownloader;
 (function() {
 
-GM_ScriptDownloader = function(win, uri, bundle) {
+GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.win_ = win;
   this.uri_ = uri;
   this.bundle_ = bundle;
+
+  // The window in which the script has been opened. Defaults to current tab.
+  this.contentWindow_ = contentWin || null;
+
   this.req_ = null;
   this.script = null;
   this.depQueue_ = [];
@@ -28,33 +32,39 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  if (this.win_) {
-  this.win_.GM_BrowserUI.statusImage.src =
-      "chrome://greasemonkey/content/third-party/throbber.gif";
-  this.win_.GM_BrowserUI.statusImage.style.opacity = "0.5";
-  this.win_.GM_BrowserUI.statusImage.tooltipText =
-      this.bundle_.getString("tooltip.loading");
-
-    this.win_.GM_BrowserUI.showStatus("Fetching user script", false);
-  }
-
-  Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-    .getService().wrappedJSObject
-    .ignoreNextScript();
+  GM_getService().ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
+  this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
   this.req_.send(null);
 };
 
-GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
-  if (this.win_) {
-    this.win_.GM_BrowserUI.refreshStatus();
-    this.win_.GM_BrowserUI.hideStatusImmediately();
-  }
+GM_ScriptDownloader.prototype._htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
+GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
+  if (2 != this.req_.readyState) return;
 
+  dump('>>> GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload()\n');
+  if (this._htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))
+      && this.contentWindow_
+  ) {
+    // If there is a 'Content-Type' header and it contains 'text/html',
+    // then do not install the file, display it instead.
+    this.req_.abort();
+    GM_getService().ignoreNextScript();
+    this.contentWindow_.location.assign(this.uri_.spec);
+  } else {
+    // Otherwise, let the user know that the install is happening.
+    var tools = {};
+    Cu.import("resource://greasemonkey/GM_notification.js", tools);
+    // TODO: localize
+    tools.GM_notification("Fetching user script");
+  }
+};
+
+GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   try {
     // If loading from file, status might be zero on success
     if (this.req_.status != 200 && this.req_.status != 0) {
@@ -112,6 +122,12 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
   GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
+
+  // if this.script.icon has a url, then we need to download the image
+  if (this.script.icon.hasDownloadURL()) {
+    deps.push(this.script.icon);
+  }
+
   for (var i = 0; i < deps.length; i++) {
     var dep = deps[i];
     if (this.checkDependencyURL(dep.urlToDownload)) {
@@ -177,6 +193,13 @@ function(dep, file, channel) {
         dep._script = this.script;
         dep.updateScript = true;
       }
+
+      // if the dependency type is icon, then check its mime type
+      if (dep.type == "icon" && !dep.isImage(channel.contentType)) {
+        this.errorInstallDependency(this.script, dep,
+          "Error! @icon is not a image MIME type");
+      }
+
       dep.setDownloadedFile(file, channel.contentType, channel.contentCharset ? channel.contentCharset : null);
       this.downloadNextDependency();
     } else {
@@ -212,7 +235,9 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
   if (this.updateScript) {
     // Inject the script in all windows that have been waiting
     var pendingExec;
-    while (pendingExec = this.script.pendingExec.shift()) {
+    var pendingExecAry = this.script.pendingExec;
+    this.script.pendingExec = [];
+    while (pendingExec = pendingExecAry.shift()) {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
       if (GM_scriptMatchesUrlAndRuns(this.script, url)) {

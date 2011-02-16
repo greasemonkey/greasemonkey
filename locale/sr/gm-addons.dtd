@@ -1,0 +1,27 @@
+<!ENTITY Edit "Уреди">
+<!ENTITY Edit.accesskey "У">
+<!ENTITY Edit.tooltip "Уреди ову корисничку скрипту">
+<!ENTITY ExecuteFirst "Изврши прву">
+<!ENTITY ExecuteLast "Изврши последњу">
+<!ENTITY ExecuteLater "Изврши касније">
+<!ENTITY ExecuteSooner "Изврши раније">
+<!ENTITY MoveDown "Помери надоле">
+<!ENTITY MoveDown.accesskey "Д">
+<!ENTITY MoveToBottom "Помери на крај">
+<!ENTITY MoveToBottom.accesskey "К">
+<!ENTITY MoveToTop "Помери на врх">
+<!ENTITY MoveToTop.accesskey "В">
+<!ENTITY MoveUp "Помери нагоре">
+<!ENTITY MoveUp.accesskey "Г">
+<!ENTITY NewScript "Направи нову скрипту">
+<!ENTITY NewScript.accesskey "Н">
+<!ENTITY Show "Прикажи фасциклу у којој се налази">
+<!ENTITY Show.accesskey "Ф">
+<!ENTITY SortScripts "Поређај скрипте">
+<!ENTITY SortScripts.accesskey "П">
+<!ENTITY UninstallCancel "Откажи деинсталирање">
+<!ENTITY UninstallCancel.accesskey "О">
+<!ENTITY UninstallCancel.tooltip "Откажи деинсталирање ове корисничке скрипте">
+<!ENTITY UninstallCancelDescription "Ова корисничка скрипта ће бити деинсталирана након затварања прозора. Можете и да притиснете десни клик &gt; Деинсталирај">
+<!ENTITY UninstallNow "Деинсталирај">
+<!ENTITY UninstallNow.accesskey "Д">

@@ -1,0 +1,27 @@
+<!ENTITY Edit "Изменить">
+<!ENTITY Edit.accesskey "з">
+<!ENTITY Edit.tooltip "Редактировать этот скрипт">
+<!ENTITY ExecuteFirst "Выполнять первым">
+<!ENTITY ExecuteLast "Выполнять последним">
+<!ENTITY ExecuteLater "Выполнять позднее">
+<!ENTITY ExecuteSooner "Выполнять ранее">
+<!ENTITY MoveDown "Переместить ниже">
+<!ENTITY MoveDown.accesskey "и">
+<!ENTITY MoveToBottom "Переместить в конец">
+<!ENTITY MoveToBottom.accesskey "ц">
+<!ENTITY MoveToTop "Переместить в начало">
+<!ENTITY MoveToTop.accesskey "о">
+<!ENTITY MoveUp "Переместить выше">
+<!ENTITY MoveUp.accesskey "ы">
+<!ENTITY NewScript "Создать новый скрипт">
+<!ENTITY NewScript.accesskey "ь">
+<!ENTITY Show "Показать содержащую папку">
+<!ENTITY Show.accesskey "ж">
+<!ENTITY SortScripts "Сортировать скрипты">
+<!ENTITY SortScripts.accesskey "т">
+<!ENTITY UninstallCancel "Отменить удаление">
+<!ENTITY UninstallCancel.accesskey "н">
+<!ENTITY UninstallCancel.tooltip "Отменить удаление пользовательского скрипта">
+<!ENTITY UninstallCancelDescription "Пользовательский скрипт будет удалён, когда закроется диалог (Или нажмите правой кнопкой чтобы &quot;Удалить немедленно&quot;.)">
+<!ENTITY UninstallNow "Удалить немедленно">
+<!ENTITY UninstallNow.accesskey "о">

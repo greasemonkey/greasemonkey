@@ -23,16 +23,10 @@ var GMInstall = {
     this.startTimer();
 
     this.bundle = document.getElementById("gm-browser-bundle");
-    this.greetz = new Array();
-    for(var i = 0; i < 6; i++){
-      this.greetz.push(this.bundle.getString("greetz." + i));
-    }
 
-    var pick = Math.round(Math.random() * (this.greetz.length - 1));
     var heading = document.getElementById("heading");
-    heading.appendChild(document.createElementNS(this.htmlNs_, "strong"));
-    heading.firstChild.appendChild(document.createTextNode(this.greetz[pick]));
-    heading.appendChild(document.createTextNode(" " + this.bundle.getString("greeting.msg")));
+    heading.appendChild(document.createTextNode(
+        this.bundle.getString("greeting.msg")));
 
     var desc = document.getElementById("scriptDescription");
     desc.appendChild(document.createElementNS(this.htmlNs_, "strong"));
@@ -102,7 +96,7 @@ var GMInstall = {
 
   onOK: function() {
     this.scriptDownloader_.installScript();
-    window.setTimeout("window.close()", 0);
+    window.setTimeout(window.close, 0);
   },
 
   onCancel: function(){
@@ -112,7 +106,7 @@ var GMInstall = {
 
   onShowSource: function() {
     this.scriptDownloader_.showScriptView();
-    window.setTimeout("window.close()", 0);
+    window.setTimeout(window.close, 0);
   }
 };
 

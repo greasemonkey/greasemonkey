@@ -1,0 +1,27 @@
+<!ENTITY Edit "편집">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "이 유저 스크립트 편집">
+<!ENTITY ExecuteFirst "처음에 실행">
+<!ENTITY ExecuteLast "마지막에 실행">
+<!ENTITY ExecuteLater "나중에 실행">
+<!ENTITY ExecuteSooner "일찍 실행">
+<!ENTITY MoveDown "아래로 이동">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "맨 아래로 이동">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "맨 위로 이동">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "위로 이동">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "새 스크립트 생성">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "저장된 폴더 열기">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "스크립트 정렬">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "삭제 취소">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "이 유저 스크립트 삭제를 취소">
+<!ENTITY UninstallCancelDescription "이 유저 스크립트는 대화 상자가 닫힐 때 삭제됩니다.  (아니면 &quot;지금 삭제&quot;를 오른쪽 마우스 버튼으로 클릭하세요.)">
+<!ENTITY UninstallNow "지금 삭제">
+<!ENTITY UninstallNow.accesskey "N">

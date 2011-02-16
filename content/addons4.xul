@@ -3,15 +3,15 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 >
 <!-- Just injects the Firefox 4+ specific addons integration code. -->
-<script type="application/x-javascript">
-(function() {
-Components.utils.import("resource://greasemonkey/addons4.jsm");  
-addonsStartup();
-})();
+<script type="application/x-javascript"><![CDATA[
+window.addEventListener('load', function() {
+Components.utils.import("resource://greasemonkey/addons4.js");
+GM_addonsStartup();
+}, true);
 
 // Open the addons manager in Firefox >= 4.0
 function GM_OpenScriptsMgr() {
     BrowserOpenAddonsMgr('addons://list/user-script');
 }
-</script>
+]]></script>
 </overlay>

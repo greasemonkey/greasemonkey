@@ -44,12 +44,14 @@
 </notificationbox>
 
 <hbox id="commandBarBottom">
+  <!--
   <button id="findUpdatesUserscripts"
     insertafter="checkUpdatesAllButton"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
     disabled="true"
   />
+  -->
 
   <label id="getMoreUserscripts" class="text-link"
     insertafter="getMore"

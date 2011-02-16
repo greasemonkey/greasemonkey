@@ -3,7 +3,7 @@
 // all the main injection logic, though that should probably be a proper XPCOM
 // service and wouldn't need to be initialized in that case.
 
-var GM_BrowserUI = new Object();
+var GM_BrowserUI = {};
 
 /**
  * nsISupports.QueryInterface
@@ -47,7 +47,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // Store other DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
   this.statusImage = document.getElementById("gm-status-image");
-  this.statusLabel = document.getElementById("gm-status-label");
   this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
   this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.bundle = document.getElementById("gm-browser-bundle");
@@ -60,7 +59,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   appContent.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   sidebar.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
   contextMenu.addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
-  toolsMenu.addEventListener("popupshowing", GM_hitch(this, "toolsMenuShowing"), false);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
@@ -141,7 +139,9 @@ GM_BrowserUI.contentLoad = function(e) {
   // Show the greasemonkey install banner if we are navigating to a .user.js
   // file in a top-level tab.  If the file was previously cached it might have
   // been given a number after .user, like gmScript.user-12.js
-  if (href.match(/\.user(?:-\d+)?\.js$/) && safeWin == safeWin.top) {
+  if (safeWin == safeWin.top &&
+      href.match(/\.user(?:-\d+)?\.js$/) &&
+      !/text\/html/i.test(safeWin.document.contentType)) {
     var browser = this.tabBrowser.getBrowserForDocument(safeWin.document);
     this.showInstallBanner(browser);
   }
@@ -183,17 +183,17 @@ GM_BrowserUI.showInstallBanner = function(browser) {
 /**
  * Called from greasemonkey service when we should load a user script.
  */
-GM_BrowserUI.startInstallScript = function(uri, timer) {
+GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
   if (!timer) {
     // docs for nsicontentpolicy say we're not supposed to block, so short
     // timer.
     window.setTimeout(
-      function() { GM_BrowserUI.startInstallScript(uri, true); }, 0);
-
+      GM_BrowserUI.startInstallScript, 0, uri, contentWin, true);
     return;
   }
 
-  this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
+  this.scriptDownloader_ =
+    new GM_ScriptDownloader(window, uri, GM_BrowserUI.bundle, contentWin);
   this.scriptDownloader_.startInstall();
 };
 
@@ -337,21 +337,6 @@ GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
 
   return uri;
 };
-
-GM_BrowserUI.toolsMenuShowing = function() {
-  var installItem = document.getElementById("userscript-tools-install");
-  var hidden = true;
-
-  if (window._content && window._content.location &&
-      window.content.location.href.match(/\.user\.js(\?|$)/i)) {
-    hidden = false;
-  }
-
-  // Better to use hidden than collapsed because collapsed still allows you to
-  // select the item using keyboard navigation, but hidden doesn't.
-  installItem.setAttribute("hidden", hidden.toString());
-};
-
 
 /**
  * Helper method which gets the menuCommander corresponding to a given
@@ -516,84 +501,6 @@ GM_BrowserUI.refreshStatus = function() {
   this.statusImage.style.opacity = "1.0";
 };
 
-GM_BrowserUI.showStatus = function(message, autoHide) {
-  if (this.statusLabel.collapsed) {
-    this.statusLabel.collapsed = false;
-  }
-
-  message += " ";
-
-  var box = document.createElement("vbox");
-  var label = document.createElement("label");
-  box.style.position = "fixed";
-  box.style.left = "-10000px";
-  box.style.top = "-10000px";
-  box.style.border = "5px solid red";
-  box.appendChild(label);
-  document.documentElement.appendChild(box);
-  label.setAttribute("value", message);
-
-  var current = parseInt(this.statusLabel.style.width);
-  this.statusLabel.value = message;
-  var max = label.boxObject.width;
-
-  this.showAnimation = new Accelimation(this.statusLabel.style,
-                                          "width", max, 300, 2, "px");
-  this.showAnimation.onend = GM_hitch(this, "showStatusAnimationEnd", autoHide);
-  this.showAnimation.start();
-};
-
-GM_BrowserUI.showStatusAnimationEnd = function(autoHide) {
-  this.showAnimation = null;
-
-  if (autoHide) {
-    this.setAutoHideTimer();
-  }
-};
-
-GM_BrowserUI.setAutoHideTimer = function() {
-  if (this.autoHideTimer) {
-    window.clearTimeout(this.autoHideTimer);
-  }
-
-  this.autoHideTimer = window.setTimeout(GM_hitch(this, "hideStatus"), 3000);
-};
-
-GM_BrowserUI.hideStatusImmediately = function() {
-  if (this.showAnimation) {
-    this.showAnimation.stop();
-    this.showAnimation = null;
-  }
-
-  if (this.hideAnimation) {
-    this.hideAnimation.stop();
-    this.hideAnimation = null;
-  }
-
-  if (this.autoHideTimer) {
-    window.clearTimeout(this.autoHideTimer);
-    this.autoHideTimer = null;
-  }
-
-  this.statusLabel.style.width = "0";
-  this.statusLabel.collapsed = true;
-};
-
-GM_BrowserUI.hideStatus = function() {
-  if (!this.hideAnimation) {
-    this.autoHideTimer = null;
-    this.hideAnimation = new Accelimation(this.statusLabel.style,
-                                            "width", 0, 300, 2, "px");
-    this.hideAnimation.onend = GM_hitch(this, "hideStatusAnimationEnd");
-    this.hideAnimation.start();
-  }
-};
-
-GM_BrowserUI.hideStatusAnimationEnd = function() {
-  this.hideAnimation = null;
-  this.statusLabel.collapsed = true;
-};
-
 // necessary for webProgressListener implementation
 GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){};
 GM_BrowserUI.onStateChange = function(a,b,c,d){};
@@ -602,13 +509,10 @@ GM_BrowserUI.onSecurityChange = function(a,b,c){};
 GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.showHorrayMessage = function(scriptName) {
-  this.showStatus("'" + scriptName + "' " + this.bundle.getString("statusbar.installed"), true);
-};
-
-GM_BrowserUI.installMenuItemClicked = function() {
-  GM_BrowserUI.startInstallScript(
-    gBrowser.currentURI
-  );
+  var tools = {};
+  Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
+  tools.GM_notification(
+      "'" + scriptName + "' " + this.bundle.getString("statusbar.installed"));
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
@@ -619,3 +523,20 @@ GM_BrowserUI.viewContextItemClicked = function() {
 };
 
 GM_BrowserUI.init();
+
+GM_BrowserUI.statusClicked = function(aEvent) {
+  switch (aEvent.button) {
+  case 0:
+    GM_setEnabled(!GM_getEnabled());
+    break;
+  case 1:
+    GM_OpenScriptsMgr();
+    break;
+  case 2:
+    document.getElementById('gm-status-popup').openPopup(
+        document.getElementById('gm-status'),
+        'before_end', 0, 0, false, false);
+    break;
+  }
+  return false;
+}

@@ -6,7 +6,8 @@ if [ "official" = "$1" ]; then
 	GMVER=`sed -ne '/em:version/{ s/.*>\(.*\)<.*/\1/; p}' install.rdf`
 else
     # For beta builds, generate a version number.
-    GMVER=`date +"%Y.%m.%d.beta"`
+    BUILDTYPE="${1:-beta}"
+    GMVER=`date +"%Y.%m.%d.$BUILDTYPE"`
 fi
 GMXPI="greasemonkey-$GMVER.xpi"
 
@@ -16,7 +17,7 @@ rm -rf build
 mkdir build
 cp -r \
 	chrome.manifest components content defaults install.rdf locale skin \
-	    CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl \
+	    modules CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl \
 	build/
 cd build
 

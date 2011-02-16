@@ -9,8 +9,15 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-const appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
-                 .getService(Ci.nsIAppShellService);
+// XPCOMUtils.defineLazyServiceGetter() introduced in FF 3.6
+if (XPCOMUtils.defineLazyServiceGetter) {
+  XPCOMUtils.defineLazyServiceGetter(
+      this, "appSvc", "@mozilla.org/appshell/appShellService;1",
+      "nsIAppShellService");
+} else {
+  appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
+      .getService(Ci.nsIAppShellService);
+}
 
 const gmSvcFilename = Components.stack.filename;
 
@@ -168,6 +175,7 @@ GM_GreasemonkeyService.prototype = {
     loader.loadSubScript("chrome://greasemonkey/content/script.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptresource.js");
+    loader.loadSubScript("chrome://greasemonkey/content/scripticon.js");
     loader.loadSubScript("chrome://greasemonkey/content/convert2RegExp.js");
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
@@ -176,13 +184,6 @@ GM_GreasemonkeyService.prototype = {
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
     var ret = Ci.nsIContentPolicy.ACCEPT;
-
-    // block content detection of greasemonkey by denying GM
-    // chrome content, unless loaded from chrome
-    if (org && org.scheme != "chrome" && cl.scheme == "chrome" &&
-        cl.host == "greasemonkey") {
-      return Ci.nsIContentPolicy.REJECT_SERVER;
-    }
 
     // don't intercept anything when GM is not enabled
     if (!GM_getEnabled()) {
@@ -203,7 +204,7 @@ GM_GreasemonkeyService.prototype = {
 
       if (!this.ignoreNextScript_
         && !this.isTempScript(cl)
-        && GM_installUri(cl)
+        && GM_installUri(cl, ctx.contentWindow)
       ) {
         ret = Ci.nsIContentPolicy.REJECT_REQUEST;
       }
@@ -283,8 +284,6 @@ GM_GreasemonkeyService.prototype = {
                                                  url);
       resources = new GM_Resources(script);
 
-      sandbox.window = wrappedContentWin;
-      sandbox.document = sandbox.window.document;
       sandbox.unsafeWindow = unsafeContentWin;
 
       // hack XPathResult since that is so commonly used
@@ -314,7 +313,13 @@ GM_GreasemonkeyService.prototype = {
       // of GM has an updater.
       sandbox.GM_updatingEnabled = true;
 
-      sandbox.__proto__ = wrappedContentWin;
+      // Re-wrap the window before assigning it to the sandbox.__proto__
+      // This is a workaround for a bug in which the Security Manager 
+      // vetoes the use of eval.
+      sandbox.__proto__ = new XPCNativeWrapper(unsafeContentWin);
+
+      Components.utils.evalInSandbox(
+          "var document = window.document;", sandbox);
 
       var contents = script.textContent;
 
@@ -338,9 +343,9 @@ GM_GreasemonkeyService.prototype = {
                          "\n";
       if (!script.unwrap)
         scriptSrc = "(function(){"+ scriptSrc +"})()";
-      if (!this.evalInSandbox(scriptSrc, url, sandbox, script) && script.unwrap)
+      if (!this.evalInSandbox(scriptSrc, sandbox, script) && script.unwrap)
         this.evalInSandbox("(function(){"+ scriptSrc +"})()",
-                           url, sandbox, script); // wrap anyway on early return
+            sandbox, script); // wrap anyway on early return
     }
   },
 
@@ -379,7 +384,7 @@ GM_GreasemonkeyService.prototype = {
     return newWindow;
   },
 
-  evalInSandbox: function(code, codebase, sandbox, script) {
+  evalInSandbox: function(code, sandbox, script) {
     if (!(Components.utils && Components.utils.Sandbox)) {
       var e = new Error("Could not create sandbox.");
       GM_logError(e, 0, e.fileName, e.lineNumber);
@@ -437,7 +442,7 @@ GM_GreasemonkeyService.prototype = {
 
     for (var i = 0; i < script.offsets.length; i++) {
       end = script.offsets[i];
-      if (lineNumber < end) {
+      if (lineNumber <= end) {
         return {
           uri: script.requires[i].fileURL,
           lineNumber: (lineNumber - start)

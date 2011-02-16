@@ -1,0 +1,27 @@
+<!ENTITY Edit "Muuda">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Muuda seda Kasutajaskripti">
+<!ENTITY ExecuteFirst "Execute first">
+<!ENTITY ExecuteLast "Execute last">
+<!ENTITY ExecuteLater "Execute later">
+<!ENTITY ExecuteSooner "Execute sooner">
+<!ENTITY MoveDown "Liiguta Allapoole">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Liiguta Viimaseks">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Liiguta Esimeseks">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Liiguta Ülespoole">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Loo Uus Skript">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Show Containing Folder">
+<!ENTITY Show.accesskey "S">
+<!ENTITY SortScripts "Sorteeri Skripte">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Tühista Eemaldamine">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
+<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
+<!ENTITY UninstallNow "Eemalda">
+<!ENTITY UninstallNow.accesskey "N">

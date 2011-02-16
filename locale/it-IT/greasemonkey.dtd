@@ -12,9 +12,9 @@
 <!ENTITY statusbar.enabled "Attivo">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installazione di Greasemonkey">
-<!ENTITY install.runson "Si attiva su:">
-<!ENTITY install.butnoton "Non si attiva su:">
-<!ENTITY install.warning1 "Script malevoli possono violare la privacy e agire all'insaputa dell'utilizzatore.">
+<!ENTITY install.runson "Viene eseguito in:">
+<!ENTITY install.butnoton "Non viene eseguito in:">
+<!ENTITY install.warning1 "Script malevoli possono violare la privacy e agire all'insaputa dell'utente.">
 <!ENTITY install.warning2 "Installare solo script provenienti da fonti sicure.">
 <!ENTITY install.showscriptsource "Mostra sorgente script utente">
 <!ENTITY install.installbutton "Installa">
@@ -23,5 +23,8 @@
 <!ENTITY newscript.description "Descrizione">
 <!ENTITY newscript.includes "Pagine incluse (una per riga)">
 <!ENTITY newscript.excludes "Pagine escluse (una per riga)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Disinstalla">
 <!ENTITY AlsoUninstallPrefs "Disinstalla anche le preferenze associate">

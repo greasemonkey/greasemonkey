@@ -9,19 +9,22 @@
 <!ENTITY menu.manage "유저 스크립트 관리...">
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY statusbar.noscripts "설치된 스크립트가 없음!">
-<!ENTITY statusbar.enabled "사용">
+<!ENTITY statusbar.enabled "활성화">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "그리스몽키 설치">
-<!ENTITY install.runson "다음에서 동작:">
+<!ENTITY install.runson "다음에서 동작함:">
 <!ENTITY install.butnoton "다음에서 동작하지 않음:">
-<!ENTITY install.warning1 "악성 스크립트는 당신의 개인정보를 침해할 수 있으며, 당신이 모르는 사이에 당신을 대신하여 동작할 수 있습니다.">
-<!ENTITY install.warning2 "신뢰할 수 있는 스크립트만 설치하여야 합니다.">
+<!ENTITY install.warning1 "악의적인 스크립트는 당신의 사생활을 침해할 수 있으며, 당신이 모르는 사이에 당신인 것처럼 행세할 수 있습니다.">
+<!ENTITY install.warning2 "믿을 수 있는 출처에서 나온 스크립트만 설치하셔야 합니다.">
 <!ENTITY install.showscriptsource "스크립트 소스 보기">
 <!ENTITY install.installbutton "설치">
 <!ENTITY newscript.name "이름">
-<!ENTITY newscript.namespace "네임 스페이스">
+<!ENTITY newscript.namespace "네임스페이스">
 <!ENTITY newscript.description "설명">
-<!ENTITY newscript.includes "동작할 페이지 (한 줄당 하나)">
-<!ENTITY newscript.excludes "동작하지 않을 페이지 (한 줄당 하나)">
+<!ENTITY newscript.includes "포함함 (한 줄에 하나씩)">
+<!ENTITY newscript.excludes "제외함 (한 줄에 하나씩)">
+<!ENTITY options.editor "편집기">
+<!ENTITY options.changeEditor "편집기 변경">
+<!ENTITY userscripts "유저 스크립트">
 <!ENTITY Uninstall "삭제">
-<!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 함께 삭제">
+<!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 삭제">
