@@ -158,8 +158,9 @@ GM_GreasemonkeyService.prototype = {
 
     this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
 
-    if (GM_prefRoot.getValue("enableUpdateChecking"))
+    if (GM_prefRoot.getValue("enableUpdateChecking")) {
       this.checkScriptsForRemoteUpdates(chromeWin, scripts);
+    }
   },
 
   startup: function() {

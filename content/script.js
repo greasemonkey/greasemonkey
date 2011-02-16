@@ -2,7 +2,6 @@ function Script(configNode) {
   this._observers = [];
 
   this._downloadURL = null;
-  this._updateURL = null;
   this._tempFile = null;
   this._basedir = null;
   this._filename = null;
@@ -78,12 +77,17 @@ Script.prototype = {
     if (!this._downloadURL) return null;
 
     // check if the url is from userscripts.org
-    var usoURL = this._downloadURL.match(/^(http:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
+    var usoURL = this._downloadURL.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL)
       return usoURL[1].replace(/^http/, "https").replace(/\.user\.js$/,".meta.js");
     else
       return this._downloadURL;
-  }
+  },
+  get _updateIsSecure() {
+    if (!this._downloadURL) return null;
+
+    return /^https/.test(this._downloadURL);
+  },
 
   get filename() { return this._filename; },
   get file() {
@@ -420,7 +424,8 @@ Script.prototype = {
         this._updateVersion = remoteVersion;
         this._changed("update-found", {
           version: remoteVersion,
-          url: this.updateURL
+          url: this._downloadURL,
+          secure: this._updateIsSecure
         });
         this._config._save();
       }

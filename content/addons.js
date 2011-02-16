@@ -42,6 +42,8 @@ showView = function(aView) {
     if ('userscripts' == gView) gView = null;
 
     _origShowView(aView);
+
+    if ('updates' == aView) greasemonkeyAddons.showScriptUpdates();
   }
 };
 
@@ -49,7 +51,7 @@ showView = function(aView) {
 // with their actual state.
 var observer = {
   notifyEvent: function(script, event, data) {
-    if (event == "install" && !config.showUpdates) {
+    if (event == "install") {
       var item = greasemonkeyAddons.addScriptToList(script);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
       item.setAttribute('newAddon', 'true');
@@ -68,6 +70,8 @@ var observer = {
         node.setAttribute('updateable', "true");
         node.setAttribute('availableUpdateVersion', data.version);
         node.setAttribute('availableUpdateURL', data.url);
+        node.setAttribute("providesUpdatesSecurely", data.secure.toString());
+        item.setAttribute("updateAvailableMsg", "Version " + data.version +" is available.");
         break;
       case "uninstall":
         gUserscriptsView.removeChild(node);
@@ -112,6 +116,10 @@ window.addEventListener('load', function() {
         },
         false);
   }
+
+  var scripts = GM_config.getMatchingScripts(
+          function (script) { return script.updateAvailable; });
+  if (scripts.length > 0) document.getElementById("updates-view").hidden = false;
 }, false);
 
 window.addEventListener('unload', function() {
@@ -152,6 +160,18 @@ var greasemonkeyAddons = {
     if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
   },
 
+  showScriptUpdates: function() {
+    var scripts = GM_config.getMatchingScripts(
+      function (script) { return script.updateAvailable; });
+
+    // Add a list item for each script.
+    for (var i = 0, script = null; script = scripts[i]; i++) {
+      var item = greasemonkeyAddons.listitemForScript(script);
+      item.setAttribute("typeName", "update");
+      gExtensionsView.insertBefore(item, null);
+    }
+  },
+
   updateLastSelected: function() {
     if (!gUserscriptsView.selectedItem) return;
     var userscriptsRadio = document.getElementById('userscripts-view');
@@ -161,29 +181,14 @@ var greasemonkeyAddons = {
     }
   },
 
-  fillList: function(showUpdates) {
+  fillList: function() {
     // Remove any pre-existing contents.
     while (gUserscriptsView.firstChild) {
       gUserscriptsView.removeChild(gUserscriptsView.firstChild);
     }
 
-    // Show scripts with updates
-    if (showUpdates || GM_config.showUpdates) {
-
-      if (GM_config.showUpdates) {
-        window.addEventListener("unload", function() {
-            GM_config.showUpdates = false;
-        }, false);
-      }
-        
-      var scripts = GM_config.getMatchingScripts(
-          function (script) { return script.updateAvailable; });
-    } else {
-      var scripts = GM_config.scripts;
-    }
-
     // Add a list item for each script.
-    for (var i = 0, script = null; script = scripts[i]; i++) {
+    for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {
       greasemonkeyAddons.addScriptToList(script);
     }
 
@@ -227,6 +232,9 @@ var greasemonkeyAddons = {
       item.setAttribute('updateable', 'true');
       item.setAttribute('availableUpdateVersion', script._updateVersion);
       item.setAttribute('availableUpdateURL', script._downloadURL);
+      item.setAttribute("satisfiesDependencies", "true");
+      item.setAttribute("updateAvailableMsg", "Version " + script._updateVersion +" is available.");
+      item.setAttribute("providesUpdatesSecurely", script._updateIsSecure.toString());
     }
 
     if (script.id in GM_uninstallQueue) {

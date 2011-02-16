@@ -6,14 +6,12 @@ function Config() {
   this._initScriptDir();
 
   this._observers = [];
-  this.showUpdates = false;
 }
 
 Config.prototype = {
   initialize: function() {
     this._updateVersion();
     this._load();
-    this._notifyUpdates();
   },
 
   addObserver: function(observer, script) {
@@ -310,8 +308,8 @@ Config.prototype = {
     newScript._tempFile = null;
 
     // if icon had to be downloaded, then move the file
-    if (script.icon.hasDownloadURL()) {
-      script.icon._initFile();
+    if (newScript.icon.hasDownloadURL()) {
+      newScript.icon._initFile();
     }
 
     for (var i = 0; i < newScript._requires.length; i++) {
@@ -322,7 +320,7 @@ Config.prototype = {
       newScript._resources[i]._initFile();
     }
 
-    newScript._modified = newScript._file.lastModifiedTime;
+    newScript._modified = newScript.file.lastModifiedTime;
     newScript._dependhash = GM_sha1(newScript._rawMeta);
     newScript.updateAvailable = false;
     newScript._lastUpdateCheck = newScript._modified;
@@ -411,18 +409,6 @@ Config.prototype = {
     }
 
     this._save();
-  },
-
-  _notifyUpdates: function() {
-    var scripts = this.getMatchingScripts(
-        function (script) { return script.updateAvailable; });
-    if (0 == scripts.length) return;
-    
-    this.showUpdates = true;
-    var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
-        .getService(Ci.nsIWindowMediator)
-        .getMostRecentWindow("navigator:browser");
-    win.GM_OpenScriptsMgr();
   },
 
   /**
