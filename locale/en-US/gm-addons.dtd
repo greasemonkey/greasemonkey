@@ -25,3 +25,4 @@
 <!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
 <!ENTITY UninstallNow "Uninstall Now">
 <!ENTITY UninstallNow.accesskey "N">
+<!ENTITY CheckForUpdate "Check For Update">

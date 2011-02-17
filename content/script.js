@@ -2,6 +2,7 @@ function Script(configNode) {
   this._observers = [];
 
   this._downloadURL = null;
+  this._updateURL = null;
   this._tempFile = null;
   this._basedir = null;
   this._filename = null;
@@ -73,7 +74,8 @@ Script.prototype = {
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
 
-  set _updateURL(url) {
+  get updateURL() { return this._updateURL; },
+  set updateURL(url) {
     if (!url && !this._downloadURL) return null;
 
     if (!url) var url = this._downloadURL;
@@ -81,9 +83,9 @@ Script.prototype = {
     // US.o gets special treatment for being so large
     var usoURL = url.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL) {
-      return usoURL[1].replace(/\.user\.js$/,".meta.js");
+      this._updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
     } else {
-      return url;
+      this._updateURL = url;
     }
   },
   get _updateIsSecure() {
@@ -149,7 +151,7 @@ Script.prototype = {
     this._filename = node.getAttribute("filename");
     this._basedir = node.getAttribute("basedir") || ".";
     this._downloadURL = node.getAttribute("installurl") || null;
-    this._updateURL = node.getAttribute("updateurl") || null;
+    this.updateURL = node.getAttribute("updateurl") || null;
 
     if (!this.fileExists(this._basedirFile)) return;
     if (!this.fileExists(this.file)) return;
@@ -289,7 +291,7 @@ Script.prototype = {
     }
 
     if (this._updateURL) {
-      scriptNode.setAttribute("updateurl", this._downloadURL);
+      scriptNode.setAttribute("updateurl", this._updateURL);
     }
 
     if (this.icon.filename) {
@@ -401,18 +403,18 @@ Script.prototype = {
     }
   },
 
-  checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval) {
-    var updateURL = this._updateURL;
+  checkForRemoteUpdate: function(chromeWin, currentTime, updateCheckingInterval, forced) {
     if (this.updateAvailable ||
-        !updateURL ||
-        currentTime <= parseInt(this._lastUpdateCheck) + updateCheckingInterval) {
+        !this.updateURL ||
+        (!forced ? currentTime <= parseInt(this._lastUpdateCheck) + updateCheckingInterval :
+         false)) {
       return;
     }
 
     this._lastUpdateCheck = currentTime;
 
     var req = new chromeWin.XMLHttpRequest();
-    req.open("GET", updateURL, true);
+    req.open("GET", this.updateURL, true);
     req.onload = GM_hitch(this, "checkRemoteVersion", req);
     req.send(null);
   },

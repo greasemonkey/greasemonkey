@@ -159,7 +159,7 @@ GM_GreasemonkeyService.prototype = {
     this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
 
     if (GM_prefRoot.getValue("enableUpdateChecking")) {
-      this.checkScriptsForRemoteUpdates(chromeWin, scripts);
+      this.config.checkScriptsForRemoteUpdates(chromeWin, scripts);
     }
   },
 
@@ -248,18 +248,6 @@ GM_GreasemonkeyService.prototype = {
     return this.config.getMatchingScripts(function(script) {
           return GM_scriptMatchesUrlAndRuns(script, url)
         });
-  },
-
-  checkScriptsForRemoteUpdates: function(chromeWin, scripts) {
-    var currentTime = new Date().getTime();
-    var minInterval = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
-
-    if (isNaN(minInterval) || minInterval < 1) minInterval = 1;
-    var updateCheckingInterval = 86400000 * minInterval;
-
-    scripts.forEach(function(script) {
-      script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval);
-    });
   },
 
   injectScripts: function(scripts, url, wrappedContentWin, chromeWin) {

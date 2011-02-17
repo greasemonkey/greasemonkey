@@ -275,8 +275,8 @@ Config.prototype = {
       }
     }
 
-    if (!script._updateURL && script._downloadURL) {
-      script._updateURL = script._downloadURL;
+    if (!script.updateURL && script._downloadURL) {
+      script.updateURL = script._downloadURL;
     }
 
     // if no meta info, default to reasonable values
@@ -427,6 +427,28 @@ Config.prototype = {
         .getService(Ci.nsIWindowMediator)
         .getMostRecentWindow("navigator:browser");
     win.BrowserOpenAddonsMgr('updates');
+  },
+
+  checkScriptsForRemoteUpdates: function(chromeWin, scripts) {
+    var currentTime = new Date().getTime();
+    var minInterval = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
+
+    if (isNaN(minInterval) || minInterval < 1) minInterval = 1;
+    var updateCheckingInterval = 86400000 * minInterval;
+    var forced = false;
+
+    if (typeof scripts == "undefined") {
+      forced = true;
+      var scripts = this.getMatchingScripts(
+        function (script) { return !script.updateAvailable &&
+          script.updateURL &&
+          script.enabled;
+        });
+    }
+
+    scripts.forEach(function(script) {
+        script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval, forced);
+    });
   },
 
   getScriptById: function(scriptId) {

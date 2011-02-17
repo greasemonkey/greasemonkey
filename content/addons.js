@@ -387,6 +387,12 @@ var greasemonkeyAddons = {
       var chromeWin = wm.getMostRecentWindow("navigator:browser");
       script.installUpdate(chromeWin);
       break;
+    case 'cmd_userscript_checkForUpdate':
+      var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+      var chromeWin = wm.getMostRecentWindow("navigator:browser");
+      script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
+      break;
     }
   },
 
@@ -426,8 +432,10 @@ var greasemonkeyAddons = {
 
     if (!script.updateAvailable) {
       $('userscript_context_installUpdate').style.display = 'none';
+      $('userscript_context_checkForUpdate').style.display = 'block';
     } else {
       $('userscript_context_installUpdate').style.display = 'block';
+      $('userscript_context_checkForUpdate').style.display = 'none';
     }
 
     var selectedItem = gUserscriptsView.selectedItem;

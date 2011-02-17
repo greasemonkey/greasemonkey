@@ -62,7 +62,7 @@
 
   <button id="findUpdatesUserscripts"
     insertafter="getMore"
-    oncommand="showView('updates');"
+    oncommand="GM_config.checkScriptsForRemoteUpdates(window);"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
   />
@@ -79,6 +79,7 @@
   <commandset id="userscripts-commands"
       oncommand="greasemonkeyAddons.doCommand(event.target.id);">
     <command id="cmd_userscript_installUpdate"/>
+    <command id="cmd_userscript_checkForUpdate"/>
     <command id="cmd_userscript_edit"/>
     <command id="cmd_userscript_show"/>
     <command id="cmd_userscript_enable"/>
@@ -100,6 +101,9 @@
   >
     <menuitem id="userscript_context_installUpdate" command="cmd_userscript_installUpdate"
       label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"
+    />
+    <menuitem id="userscript_context_checkForUpdate" command="cmd_userscript_checkForUpdate"
+      label="&CheckForUpdate;"
     />
     <menuitem id="userscript_context_move_up" command="cmd_userscript_move_up"
       label="&MoveUp;" accesskey="&MoveUp.accesskey;"
