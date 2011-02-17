@@ -105,6 +105,9 @@
     <menuitem id="userscript_context_checkForUpdate" command="cmd_userscript_checkForUpdate"
       label="&CheckForUpdate;"
     />
+
+    <menuseparator id="userscript_context_move_separator"/>
+
     <menuitem id="userscript_context_move_up" command="cmd_userscript_move_up"
       label="&MoveUp;" accesskey="&MoveUp.accesskey;"
     />

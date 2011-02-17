@@ -43,10 +43,20 @@
       oncommand="GM_setUpdatePrefs(this)" />
     <label 
       value="&UpdateInterval;"
-      control="txt-updateInterval" />
-    <textbox type="textbox.number"
-      id="txt-updateInterval"
-      oninput="GM_setMinUpdateInterval(this)" />
+      control="slide-updateInterval" />
+    <popupset>
+      <menupopup noautohide="true"
+        id="tip-updateInterval">
+        <menuitem id="txt-updateInterval" />
+      </menupopup>
+    </popupset>
+    <scale 
+      id="slide-updateInterval" 
+      orient="horizontal"
+      popup="tip-updateInterval"
+      min="1" 
+      max="30"
+      onchange="GM_setMinUpdateInterval(this)"/>
   </groupbox>
 </vbox>
 

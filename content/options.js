@@ -1,3 +1,4 @@
+var GM_setOptionsYet = false;
 function GM_onloadOptions() {
   document.getElementById("check-uninstall")
       .checked = GM_prefRoot.getValue("uninstallPreferences");
@@ -5,8 +6,12 @@ function GM_onloadOptions() {
   document.getElementById("check-update")
       .checked = GM_prefRoot.getValue("enableUpdateChecking");
 
-  document.getElementById("txt-updateInterval")
+  document.getElementById("slide-updateInterval")
       .value = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
+
+  document.getElementById("txt-updateInterval")
+      .setAttribute("label", GM_prefRoot.getValue("minIntervalBetweenUpdateChecks"));
+  GM_setOptionsYet = true;
 }
 
 function GM_setUninstallPrefs(checkbox) {
@@ -20,8 +25,10 @@ function GM_setUpdatePrefs(checkbox) {
 }
 
 function GM_setMinUpdateInterval(input) {
-  var days = parseFloat(document.getElementById("txt-updateInterval").value);
-  if (isNaN(days) || days < 1) return;
+  if (!GM_setOptionsYet) return;
+  var days = parseInt(document.getElementById("slide-updateInterval").value);
 
+  document.getElementById("txt-updateInterval")
+    .setAttribute("label", days);
   GM_prefRoot.setValue("minIntervalBetweenUpdateChecks", days);
 }
