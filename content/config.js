@@ -411,6 +411,14 @@ Config.prototype = {
     this._save();
   },
 
+  getScriptById: function(scriptId) {
+    for (var i = 0, script = null; script = this.scripts[i]; i++) {
+      if (scriptId == script.id) {
+        return script;
+      }
+    }
+  },
+
   /**
    * Checks whether the version has changed since the last run and performs
    * any necessary upgrades.

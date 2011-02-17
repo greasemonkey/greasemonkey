@@ -431,7 +431,14 @@ Script.prototype = {
       }
     }
   },
-  
+
+  installUpdate: function(chromeWin) {
+    var scriptDownloader = new GM_ScriptDownloader(chromeWin, GM_uriFromUrl(this._downloadURL), null);
+    scriptDownloader.replacedScript = this;
+    scriptDownloader.installOnCompletion_ = true;
+    scriptDownloader.startInstall();
+  },
+
   allFiles: function() {
     var files = [];
     if (!this._basedirFile.equals(GM_scriptDir())) {

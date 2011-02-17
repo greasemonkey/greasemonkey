@@ -34,7 +34,7 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 GM_ScriptDownloader.prototype.startDownload = function() {
   GM_getService().ignoreNextScript();
 
-  this.req_ = new XMLHttpRequest();
+  this.req_ = new this.win_.XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
   this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
@@ -103,7 +103,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     this.script.setDownloadedFile(file);
 
-    window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
+    this.win_.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
     if (!this.replacedScript) {
       if(this.installing_){

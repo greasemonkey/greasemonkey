@@ -45,21 +45,66 @@ showView = function(aView) {
 
     if ('updates' == aView) greasemonkeyAddons.showScriptUpdates();
   }
+
+var _origInstallUpdates = installUpdatesAll;
+installUpdatesAll = function() {
+  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+  .getService(Components.interfaces.nsIWindowMediator);
+  var chromeWin = wm.getMostRecentWindow("navigator:browser");
+
+  var children = gExtensionsView.children;
+  for (var i = 0; i < children.length; ++i) {
+    var child = children[i];
+    if (/^urn:greasemonkey:update:item:/.test(child.id)) {
+      var checkbox = document.getAnonymousElementByAttribute(child, "anonid", "includeUpdate");
+      if (checkbox) {
+        checkbox.setAttribute("anonid", "includeScriptUpdate");
+        if (checkbox.checked) {
+          var script = GM_config.getScriptById(child.getAttribute('addonId'));
+          script.installUpdate(chromeWin);
+        }
+      }
+    }
+  }
+
+  _origInstallUpdates();
+}
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
-  notifyEvent: function(script, event, data) {
-    if (event == "install") {
-      var item = greasemonkeyAddons.addScriptToList(script);
-      if (gView == "userscripts") gUserscriptsView.selectedItem = item;
+  notifyEvent: function(script, event, data, aView) {
+    if (typeof aView == "undefined") var aView = gView;
+
+    var currentViewNode;
+    if (aView == "updates") {
+      currentViewNode = gExtensionsView;
+      this.notifyEvent(script, event, data, 'userscripts');
+    } else if (aView == "userscripts") {
+      currentViewNode = gUserscriptsView;
+    }
+
+    if (aView == "userscripts" && event == "install") {
+      var item = greasemonkeyAddons.listitemForScript(script);
       item.setAttribute('newAddon', 'true');
+      currentViewNode.insertBefore(item, null);
+      currentViewNode.selectedItem = item;
       return;
+    } else if (aView == "updates" && event == "install") {
+      var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
+        + 'item:'+script.id);
+      if (node) currentViewNode.removeChild(node);
+      return;
+    } else if (aView == "updates" && event == "update-found") {
+      node = greasemonkeyAddons.listitemForScript(script, true);
+      node.setAttribute("typeName", "update");
+      currentViewNode.insertBefore(item, null);
     }
 
     // find the script's node
-    var node = document.getElementById('urn:greasemonkey:item:'+script.id);
+    var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
+      + 'item:'+script.id);
     if (!node) return;
 
     switch (event) {
@@ -70,20 +115,20 @@ var observer = {
         node.setAttribute('updateable', "true");
         node.setAttribute('availableUpdateVersion', data.version);
         node.setAttribute('availableUpdateURL', data.url);
-        node.setAttribute("providesUpdatesSecurely", data.secure.toString());
-        item.setAttribute("updateAvailableMsg", "Version " + data.version +" is available.");
+        node.setAttribute('providesUpdatesSecurely', data.secure.toString());
+        node.setAttribute('updateAvailableMsg', 'Version ' + data.version + ' is available.');
         break;
       case "uninstall":
-        gUserscriptsView.removeChild(node);
+        currentViewNode.removeChild(node);
         break;
       case "move":
-        gUserscriptsView.removeChild(node);
-        gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
-        greasemonkeyAddons.reselectLastSelected();
+        currentViewNode.removeChild(node);
+        currentViewNode.insertBefore(node, gUserscriptsView.childNodes[data]);
+        currentViewNode.reselectLastSelected();
         break;
       case "modified":
-        var item = greasemonkeyAddons.listitemForScript(script);
-        gUserscriptsView.replaceChild(item, node);
+        var item = greasemonkeyAddons.listitemForScript(script, aView == 'updates');
+        currentViewNode.replaceChild(item, node);
         break;
     }
   }
@@ -166,7 +211,7 @@ var greasemonkeyAddons = {
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = scripts[i]; i++) {
-      var item = greasemonkeyAddons.listitemForScript(script);
+      var item = greasemonkeyAddons.listitemForScript(script, true);
       item.setAttribute("typeName", "update");
       gExtensionsView.insertBefore(item, null);
     }
@@ -215,7 +260,7 @@ var greasemonkeyAddons = {
         }, 0);
   },
 
-  listitemForScript: function(script) {
+  listitemForScript: function(script, updateView) {
     var item = document.createElement('richlistitem');
 
     // Setting these attributes inherits the values into the same place they
@@ -225,7 +270,7 @@ var greasemonkeyAddons = {
     item.setAttribute('description', script.description);
     item.setAttribute('version', script.version);
     item.setAttribute('iconURL', script.icon.fileURL);
-    item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
+    item.setAttribute('id', 'urn:greasemonkey:' + (updateView ? 'update:' : '') + 'item:'+script.id);
     item.setAttribute('isDisabled', !script.enabled);
 
     if (script.updateAvailable) {
@@ -252,14 +297,8 @@ var greasemonkeyAddons = {
 
   findSelectedScript: function() {
     if (!gUserscriptsView.selectedItem) return null;
-    var scripts = GM_config.scripts;
     var selectedScriptId = gUserscriptsView.selectedItem.getAttribute('addonId');
-    for (var i = 0, script = null; script = scripts[i]; i++) {
-      if (selectedScriptId == script.id) {
-        return script;
-      }
-    }
-    return null;
+    return GM_config.getScriptById(selectedScriptId) || null
   },
 
   doCommand: function(command) {
@@ -319,10 +358,10 @@ var greasemonkeyAddons = {
       GM_config.uninstall(script);
       break;
     case 'cmd_userscript_installUpdate':
-      var scriptDownloader = new GM_ScriptDownloader(null, GM_uriFromUrl(script._downloadURL), null);
-      scriptDownloader.replacedScript = script;
-      scriptDownloader.installOnCompletion_ = true;
-      scriptDownloader.startInstall();
+      var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+        .getService(Components.interfaces.nsIWindowMediator);
+      var chromeWin = wm.getMostRecentWindow("navigator:browser");
+      script.installUpdate(chromeWin);
       break;
     }
   },
