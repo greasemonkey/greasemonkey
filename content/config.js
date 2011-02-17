@@ -12,6 +12,7 @@ Config.prototype = {
   initialize: function() {
     this._updateVersion();
     this._load();
+    this._notifyUpdates();
   },
 
   addObserver: function(observer, script) {
@@ -409,6 +410,17 @@ Config.prototype = {
     }
 
     this._save();
+  },
+
+  _notifyUpdates: function() {
+    var scripts = this.getMatchingScripts(
+        function (script) { return script.updateAvailable; });
+    if (0 == scripts.length) return;
+
+    var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
+        .getService(Ci.nsIWindowMediator)
+        .getMostRecentWindow("navigator:browser");
+    win.BrowserOpenAddonsMgr('updates');
   },
 
   getScriptById: function(scriptId) {

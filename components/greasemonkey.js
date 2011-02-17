@@ -252,7 +252,10 @@ GM_GreasemonkeyService.prototype = {
 
   checkScriptsForRemoteUpdates: function(chromeWin, scripts) {
     var currentTime = new Date().getTime();
-    var updateCheckingInterval = 86400000 * GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
+    var minInterval = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
+
+    if (isNaN(minInterval) || minInterval < 1) minInterval = 1;
+    var updateCheckingInterval = 86400000 * minInterval;
 
     scripts.forEach(function(script) {
       script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval);

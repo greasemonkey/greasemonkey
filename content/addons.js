@@ -129,6 +129,7 @@ var observer = {
         node.setAttribute('availableUpdateURL', data.url);
         node.setAttribute('providesUpdatesSecurely', data.secure.toString());
         node.setAttribute('updateAvailableMsg', 'Version ' + data.version + ' is available.');
+        document.getElementById("updates-view").hidden = false;
         break;
       case "uninstall":
         currentViewNode.removeChild(node);
@@ -424,7 +425,9 @@ var greasemonkeyAddons = {
     setItemsHidden(true);
 
     if (!script.updateAvailable) {
-      setItemsHidden(false, ['installUpdate']);
+      $('userscript_context_installUpdate').style.display = 'none';
+    } else {
+      $('userscript_context_installUpdate').style.display = 'block';
     }
 
     var selectedItem = gUserscriptsView.selectedItem;

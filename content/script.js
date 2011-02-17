@@ -79,7 +79,7 @@ Script.prototype = {
     // check if the url is from userscripts.org
     var usoURL = this._downloadURL.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
     if (usoURL)
-      return usoURL[1].replace(/^http/, "https").replace(/\.user\.js$/,".meta.js");
+      return usoURL[1].replace(/\.user\.js$/,".meta.js");
     else
       return this._downloadURL;
   },
@@ -397,7 +397,7 @@ Script.prototype = {
     var updateURL = this._updateURL;
     if (this.updateAvailable ||
         !updateURL ||
-        currentTime <= this._lastUpdateCheck + updateCheckingInterval) {
+        currentTime <= parseInt(this._lastUpdateCheck) + updateCheckingInterval) {
       return;
     }
 
@@ -413,8 +413,7 @@ Script.prototype = {
     if (req.status != 200 && req.status != 0) return;
 
     var source = req.responseText;
-    var remoteVersion = this._config.parseVersion(source);
-
+    var remoteVersion = GM_getConfig().parseVersion(source);
     if (remoteVersion) {
       var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
                              .getService(Components.interfaces.nsIVersionComparator);
