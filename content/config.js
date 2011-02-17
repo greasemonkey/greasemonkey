@@ -200,6 +200,8 @@ Config.prototype = {
           case "updateURL":
             script["_" + header] = value;
             break;
+          case "installURL":
+            script._downloadURL = value;
           case "include":
             script._includes.push(value);
             break;
@@ -271,6 +273,10 @@ Config.prototype = {
             break;
         }
       }
+    }
+
+    if (!script._updateURL && script._downloadURL) {
+      script._updateURL = script._downloadURL;
     }
 
     // if no meta info, default to reasonable values

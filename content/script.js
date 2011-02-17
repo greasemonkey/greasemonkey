@@ -73,15 +73,18 @@ Script.prototype = {
   get resources() { return this._resources.concat(); },
   get unwrap() { return this._unwrap; },
 
-  get _updateURL() {
-    if (!this._downloadURL) return null;
+  set _updateURL(url) {
+    if (!url && !this._downloadURL) return null;
 
-    // check if the url is from userscripts.org
-    var usoURL = this._downloadURL.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
-    if (usoURL)
+    if (!url) var url = this._downloadURL;
+
+    // US.o gets special treatment for being so large
+    var usoURL = url.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
+    if (usoURL) {
       return usoURL[1].replace(/\.user\.js$/,".meta.js");
-    else
-      return this._downloadURL;
+    } else {
+      return url;
+    }
   },
   get _updateIsSecure() {
     if (!this._downloadURL) return null;
@@ -146,6 +149,7 @@ Script.prototype = {
     this._filename = node.getAttribute("filename");
     this._basedir = node.getAttribute("basedir") || ".";
     this._downloadURL = node.getAttribute("installurl") || null;
+    this._updateURL = node.getAttribute("updateurl") || null;
 
     if (!this.fileExists(this._basedirFile)) return;
     if (!this.fileExists(this.file)) return;
@@ -282,6 +286,10 @@ Script.prototype = {
 
     if (this._downloadURL) {
       scriptNode.setAttribute("installurl", this._downloadURL);
+    }
+
+    if (this._updateURL) {
+      scriptNode.setAttribute("updateurl", this._downloadURL);
     }
 
     if (this.icon.filename) {
