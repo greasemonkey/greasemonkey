@@ -436,7 +436,7 @@ Script.prototype = {
           url: this._downloadURL,
           secure: this._updateIsSecure
         });
-        this._config._save();
+        GM_getConfig()._save();
       }
     }
   },
