@@ -69,6 +69,19 @@ installUpdatesAll = function() {
 
   _origInstallUpdates();
 }
+
+var _origContextMenuBuilder = buildContextMenu;
+buildContextMenu = function(event) {
+  _origContextMenuBuilder(event);
+
+  var selectedItem = gExtensionsView.selectedItem;
+  if (/^urn:greasemonkey:update:item:/.test(selectedItem.id)) {
+    document.getElementById('menuitem_homepage_clone').setAttribute('hidden', true);
+    document.getElementById('menuitem_about_clone').setAttribute('hidden', true);
+    document.getElementById('menuseparator_1_clone').setAttribute('hidden', true);
+    document.getElementById('menuitem_installUpdate_clone').setAttribute('command', 'cmd_userscript_installUpdate');
+  }
+}
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
@@ -89,11 +102,10 @@ var observer = {
       var item = greasemonkeyAddons.listitemForScript(script);
       item.setAttribute('newAddon', 'true');
       currentViewNode.insertBefore(item, null);
-      currentViewNode.selectedItem = item;
       return;
     } else if (aView == "updates" && event == "install") {
       var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
-        + 'item:'+script.id);
+        + 'item:' + script.id);
       if (node) currentViewNode.removeChild(node);
       return;
     } else if (aView == "updates" && event == "update-found") {
@@ -104,7 +116,7 @@ var observer = {
 
     // find the script's node
     var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
-      + 'item:'+script.id);
+      + 'item:' + script.id);
     if (!node) return;
 
     switch (event) {
@@ -270,16 +282,16 @@ var greasemonkeyAddons = {
     item.setAttribute('description', script.description);
     item.setAttribute('version', script.version);
     item.setAttribute('iconURL', script.icon.fileURL);
-    item.setAttribute('id', 'urn:greasemonkey:' + (updateView ? 'update:' : '') + 'item:'+script.id);
+    item.setAttribute('id', 'urn:greasemonkey:' + (updateView ? 'update:' : '') + 'item:' + script.id);
     item.setAttribute('isDisabled', !script.enabled);
 
     if (script.updateAvailable) {
       item.setAttribute('updateable', 'true');
       item.setAttribute('availableUpdateVersion', script._updateVersion);
       item.setAttribute('availableUpdateURL', script._downloadURL);
-      item.setAttribute("satisfiesDependencies", "true");
-      item.setAttribute("updateAvailableMsg", "Version " + script._updateVersion +" is available.");
-      item.setAttribute("providesUpdatesSecurely", script._updateIsSecure.toString());
+      item.setAttribute('satisfiesDependencies', 'true');
+      item.setAttribute('updateAvailableMsg', 'Version ' + script._updateVersion + ' is available.');
+      item.setAttribute('providesUpdatesSecurely', script._updateIsSecure.toString());
     }
 
     if (script.id in GM_uninstallQueue) {
@@ -296,8 +308,13 @@ var greasemonkeyAddons = {
   },
 
   findSelectedScript: function() {
-    if (!gUserscriptsView.selectedItem) return null;
-    var selectedScriptId = gUserscriptsView.selectedItem.getAttribute('addonId');
+    if (gView == "updates") {
+      currentViewNode = gExtensionsView;
+    } else if (gView == "userscripts") {
+      currentViewNode = gUserscriptsView;
+    }
+    if (!currentViewNode.selectedItem) return null;
+    var selectedScriptId = currentViewNode.selectedItem.getAttribute('addonId');
     return GM_config.getScriptById(selectedScriptId) || null
   },
 
@@ -308,7 +325,13 @@ var greasemonkeyAddons = {
       return;
     }
 
-    var selectedListitem = gUserscriptsView.selectedItem;
+    if (gView == "updates") {
+      currentViewNode = gExtensionsView;
+    } else if (gView == "userscripts") {
+      currentViewNode = gUserscriptsView;
+    }
+
+    var selectedListitem = currentViewNode.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
       GM_openInEditor(script);

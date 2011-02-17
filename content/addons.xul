@@ -62,7 +62,7 @@
 
   <button id="findUpdatesUserscripts"
     insertafter="getMore"
-    oncommand="greasemonkeyAddons.fillList(true);"
+    oncommand="showView('updates');"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
   />
