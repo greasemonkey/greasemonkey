@@ -103,7 +103,7 @@
       label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"
     />
     <menuitem id="userscript_context_checkForUpdate" command="cmd_userscript_checkForUpdate"
-      label="&CheckForUpdate;"
+      label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"
     />
 
     <menuseparator id="userscript_context_move_separator"/>

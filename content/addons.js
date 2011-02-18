@@ -107,6 +107,10 @@ var observer = {
       var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
         + 'item:' + script.id);
       if (node) currentViewNode.removeChild(node);
+      if (currentViewNode.children.length == 0) {
+        showView('userscripts');
+        document.getElementById("updates-view").hidden = true;
+      }
       return;
     } else if (aView == "updates" && event == "update-found") {
       node = greasemonkeyAddons.listitemForScript(script, true);
@@ -117,7 +121,7 @@ var observer = {
     // find the script's node
     var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
       + 'item:' + script.id);
-    if (!node) return;
+    if (!node || !currentViewNode) return;
 
     switch (event) {
       case "edit-enabled":
@@ -130,6 +134,7 @@ var observer = {
         node.setAttribute('providesUpdatesSecurely', data.secure.toString());
         node.setAttribute('updateAvailableMsg', 'Version ' + data.version + ' is available.');
         document.getElementById("updates-view").hidden = false;
+        showView('updates');
         break;
       case "uninstall":
         currentViewNode.removeChild(node);
