@@ -26,6 +26,7 @@
 
 <commandset id="viewCommandSet">
   <command id="cmd_userscript_checkForUpdate" />
+  <command id="cmd_userscript_installUpdate" />
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />
   <command id="cmd_userscript_execute_first" />
@@ -36,7 +37,10 @@
 
 <menupopup id="addonitem-popup">
   <menuitem id="menuitem_userscript_checkForUpdate" command="cmd_userscript_checkForUpdate"
-    label="&FindUpdates;" type="user-script"
+    label="&FindUpdate;" type="user-script"
+  />
+  <menuitem id="menuitem_userscript_installUpdate" command="cmd_userscript_installUpdate"
+    label="&InstallUpdate;" type="user-script"
   />
   <menuseparator type="user-script"/>
   <menuitem id="menuitem_userscript_edit" command="cmd_userscript_edit"

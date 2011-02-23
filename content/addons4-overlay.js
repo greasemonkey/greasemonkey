@@ -27,12 +27,22 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
 
 var observer = {
  notifyEvent: function(script, event, data) {
-    if (event != "update-found") return;
+    if (gViewController.currentViewId != 'addons://list/user-script') return;
+    var aAddon = ScriptAddonFactoryByScript(script);
 
-    var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
-    scriptInstall.version = data.version;
-    scriptInstall.sourceURI = GM_uriFromUrl(data.url);
-    AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+    switch (event) {
+      case 'update-found':
+        var scriptInstall = new ScriptInstall(aAddon);
+        scriptInstall.version = data.version;
+        scriptInstall.sourceURI = GM_uriFromUrl(data.url);
+        AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+        break;
+      case 'install':
+      case 'modified':
+        ScriptAddonReplaceScript(script);
+        gViewController.loadViewInternal('addons://list/user-script', null);
+        break;
+    }
   }
 };
 
@@ -46,32 +56,29 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function init() {
-  var GM_config = GM_getConfig()
-  GM_config.addObserver(observer);
-
-  var scripts = GM_config.getMatchingScripts(
-    function (script) { return script.updateAvailable; });
-  scripts.forEach(function (script) {
-      var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
-      scriptInstall.version = script._updateVersion;
-      scriptInstall.sourceURI = GM_uriFromUrl(script._downloadURL);
-
-      // This actually takes some time to load before it works
-      setTimeout(function() {
-          AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-      }, 1000);
-  });
+  GM_getConfig().addObserver(observer);
 
   gViewController.commands.cmd_userscript_checkForUpdate = {
-      isEnabled: addonIsInstalledScript,
+      isEnabled: function(aAddon) { 
+        return addonIsInstalledScript(aAddon) && 
+          !aAddon._script.updateAvailable;
+      },
       doCommand: function(aAddon) {
-        if (aAddon._script.updateAvailable) return;
-
-        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-          .getService(Components.interfaces.nsIWindowMediator);
-        var chromeWin = wm.getMostRecentWindow("navigator:browser");
-
-        aAddon._script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
+        if (!aAddon._script.updateAvailable) {
+          aAddon._script.checkForRemoteUpdate(window, new Date().getTime(), 0, true);
+        }
+    }
+  };
+  gViewController.commands.cmd_userscript_installUpdate = {
+      isEnabled: function(aAddon) { 
+        return addonIsInstalledScript(aAddon) && 
+          aAddon._script.updateAvailable;
+      },
+      doCommand: function(aAddon) {
+        if (aAddon._script.updateAvailable) {
+          AddonManagerPrivate.callAddonListeners("onInstallStarted", aAddon._installer);
+          aAddon._script.installUpdate(window);
+        }
     }
   };
   gViewController.commands.cmd_userscript_edit = {
@@ -174,6 +181,18 @@ function onViewChanged(aEvent) {
   // Hide the execute order sorter, when the view is not ours.
   sortExecuteOrderButton.collapsed =
       'addons://list/user-script' != gViewController.currentViewId;
+
+  // Show which scripts have available updates
+  if (gViewController.currentViewId == 'addons://list/user-script') {
+    var scripts = GM_getConfig().getMatchingScripts(
+    function (script) { return script.updateAvailable; });
+    scripts.forEach(function (script) {
+      var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
+      scriptInstall.version = script._updateVersion;
+      scriptInstall.sourceURI = GM_uriFromUrl(script._downloadURL);
+      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+    });
+  }
 };
 
 function sortScriptsByExecution() {

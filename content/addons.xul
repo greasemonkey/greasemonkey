@@ -100,7 +100,7 @@
     onpopupshowing="greasemonkeyAddons.buildContextMenu(event);"
   >
     <menuitem id="userscript_context_installUpdate" command="cmd_userscript_installUpdate"
-      label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"
+      label="&InstallUpdate;"
     />
     <menuitem id="userscript_context_checkForUpdate" command="cmd_userscript_checkForUpdate"
       label="&FindUpdate;"

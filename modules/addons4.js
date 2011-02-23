@@ -6,7 +6,10 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup', 'ScriptInstall', 'ScriptAddonFactoryByScript'];
+var EXPORTED_SYMBOLS = ['GM_addonsStartup', 
+                        'ScriptInstall', 
+                        'ScriptAddonFactoryByScript', 
+                        'ScriptAddonReplaceScript'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -20,6 +23,9 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const NS_XHTML = 'http://www.w3.org/1999/xhtml';
 const SCRIPT_ID_SUFFIX = '@greasespot.net';
+
+var winMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
+  .getService(Ci.nsIWindowMediator);
 
 // Pull this helper method into this module scope; it's not module-ized yet.
 var GM_getConfig;
@@ -70,6 +76,10 @@ function ScriptAddonFactoryById(aId) {
   // TODO: throw an error instead?
   return null;
 }
+function ScriptAddonReplaceScript(aScript) {
+  var id = aScript.id + SCRIPT_ID_SUFFIX;
+  ScriptAddonCache[id] = new ScriptAddon(aScript);
+}
 
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
@@ -106,6 +116,7 @@ ScriptAddon.prototype.size = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
+ScriptAddon.prototype._installer = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
 function ScriptAddon_prototype_getter_executionIndex() {
@@ -153,10 +164,7 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
   if (this._script.updateAvailable) return;
 
-  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-    .getService(Components.interfaces.nsIWindowMediator);
-  var chromeWin = wm.getMostRecentWindow("navigator:browser");
-
+  var chromeWin = winMediator.getMostRecentWindow("navigator:browser");
   this._script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
 };
 
@@ -175,6 +183,7 @@ ScriptAddon.prototype.cancelUninstall = function() {
 // http://developer.mozilla.org/en/Addons/Add-on_Manager/AddonInstall
 function ScriptInstall(aAddon) {
   this._script = aAddon._script;
+  aAddon._installer = this;
 
   this.name = this._script.name;
   this.version = this._script.version;
@@ -202,9 +211,8 @@ ScriptAddon.prototype.addon = null;
 ScriptAddon.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
-  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
-    .getService(Components.interfaces.nsIWindowMediator);
-  var chromeWin = wm.getMostRecentWindow("navigator:browser");
+  AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
+  var chromeWin = winMediator.getMostRecentWindow("navigator:browser");
   this._script.installUpdate(chromeWin);
 };
 

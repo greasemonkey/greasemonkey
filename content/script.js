@@ -375,6 +375,8 @@ Script.prototype = {
     this._description = newScript._description;
     this._unwrap = newScript._unwrap;
     this._version = newScript._version;
+    if (newScript._downloadURL) this._downloadURL = newScript._downloadURL;
+    if (newScript.updateURL) this.updateURL = newScript.updateURL;
 
     var dependhash = GM_sha1(newScript._rawMeta);
     if (dependhash != this._dependhash && !newScript._dependFail) {
@@ -410,6 +412,7 @@ Script.prototype = {
          false)) {
       return;
     }
+
     var lastCheck = this._lastUpdateCheck;
     this._lastUpdateCheck = currentTime;
 
@@ -443,6 +446,7 @@ Script.prototype = {
   },
 
   checkRemoteVersionErr: function(lastCheck) {
+    // Set the time back
     this._lastUpdateCheck = lastCheck;
     GM_getConfig()._save();
   },
