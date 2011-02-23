@@ -25,6 +25,17 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
+var observer = {
+ notifyEvent: function(script, event, data) {
+    if (event != "update-found") return;
+
+    var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
+    scriptInstall.version = data.version;
+    scriptInstall.sourceURI = GM_uriFromUrl(data.url);
+    AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+  }
+};
+
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function addonIsInstalledScript(aAddon) {
@@ -35,6 +46,34 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function init() {
+  var GM_config = GM_getConfig()
+  GM_config.addObserver(observer);
+
+  var scripts = GM_config.getMatchingScripts(
+    function (script) { return script.updateAvailable; });
+  scripts.forEach(function (script) {
+      var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
+      scriptInstall.version = script._updateVersion;
+      scriptInstall.sourceURI = GM_uriFromUrl(script._downloadURL);
+
+      // This actually takes some time to load before it works
+      setTimeout(function() {
+          AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+      }, 1000);
+  });
+
+  gViewController.commands.cmd_userscript_checkForUpdate = {
+      isEnabled: addonIsInstalledScript,
+      doCommand: function(aAddon) {
+        if (aAddon._script.updateAvailable) return;
+
+        var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+          .getService(Components.interfaces.nsIWindowMediator);
+        var chromeWin = wm.getMostRecentWindow("navigator:browser");
+
+        aAddon._script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
+    }
+  };
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_openInEditor(aAddon._script); }
@@ -186,5 +225,7 @@ function unload() {
       // Todo: This without dipping into private members.
       GM_config._save(true);
     });
+
+  GM_config.removeObserver(observer);
 };
 })();

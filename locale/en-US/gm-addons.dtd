@@ -5,6 +5,7 @@
 <!ENTITY ExecuteLast "Execute last">
 <!ENTITY ExecuteLater "Execute later">
 <!ENTITY ExecuteSooner "Execute sooner">
+<!ENTITY FindUpdates "Find Updates">
 <!ENTITY MoveDown "Move Down">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Move To Bottom">

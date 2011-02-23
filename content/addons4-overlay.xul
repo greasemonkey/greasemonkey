@@ -25,6 +25,7 @@
 </richlistbox>
 
 <commandset id="viewCommandSet">
+  <command id="cmd_userscript_checkForUpdate" />
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />
   <command id="cmd_userscript_execute_first" />
@@ -34,6 +35,10 @@
 </commandset>
 
 <menupopup id="addonitem-popup">
+  <menuitem id="menuitem_userscript_checkForUpdate" command="cmd_userscript_checkForUpdate"
+    label="&FindUpdates;" type="user-script"
+  />
+  <menuseparator type="user-script"/>
   <menuitem id="menuitem_userscript_edit" command="cmd_userscript_edit"
     label="&Edit;" accesskey="&Edit.accesskey;" type="user-script"
   />

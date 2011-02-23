@@ -410,12 +410,13 @@ Script.prototype = {
          false)) {
       return;
     }
-
+    var lastCheck = this._lastUpdateCheck;
     this._lastUpdateCheck = currentTime;
 
     var req = new chromeWin.XMLHttpRequest();
     req.open("GET", this.updateURL, true);
     req.onload = GM_hitch(this, "checkRemoteVersion", req);
+    req.onerror = GM_hitch(this, "checkRemoteVersionErr", lastCheck);
     req.send(null);
   },
 
@@ -439,6 +440,11 @@ Script.prototype = {
         GM_getConfig()._save();
       }
     }
+  },
+
+  checkRemoteVersionErr: function(lastCheck) {
+    this._lastUpdateCheck = lastCheck;
+    GM_getConfig()._save();
   },
 
   installUpdate: function(chromeWin) {

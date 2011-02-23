@@ -6,7 +6,7 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup'];
+var EXPORTED_SYMBOLS = ['GM_addonsStartup', 'ScriptInstall', 'ScriptAddonFactoryByScript'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -97,6 +97,8 @@ ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
 ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
+ScriptAddon.prototype.applyBackgroundUpdates = AddonManager.AUTOUPDATE_DISABLE;
+ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART_NONE;
 
 // Optional attributes
 ScriptAddon.prototype.description = null;
@@ -140,6 +142,7 @@ function ScriptAddon_prototype_getter_permissions() {
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
+  if (this._script.updateURL) perms |= AddonManager.PERM_CAN_UPGRADE;
   return perms;
 });
 
@@ -147,16 +150,14 @@ ScriptAddon.prototype.isCompatibleWith = function() {
   return true;
 };
 
-ScriptAddon.prototype.findUpdates = function(aListener) {
-  if ('onNoCompatibilityUpdateAvailable' in aListener) {
-    aListener.onNoCompatibilityUpdateAvailable(this);
-  }
-  if ('onNoUpdateAvailable' in aListener) {
-    aListener.onNoUpdateAvailable(this);
-  }
-  if ('onUpdateFinished' in aListener) {
-    aListener.onUpdateFinished(this);
-  }
+ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
+  if (this._script.updateAvailable) return;
+
+  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+    .getService(Components.interfaces.nsIWindowMediator);
+  var chromeWin = wm.getMostRecentWindow("navigator:browser");
+
+  this._script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
 };
 
 ScriptAddon.prototype.uninstall = function() {
@@ -169,6 +170,42 @@ ScriptAddon.prototype.uninstall = function() {
 ScriptAddon.prototype.cancelUninstall = function() {
   this.pendingOperations ^= AddonManager.PENDING_UNINSTALL;
   AddonManagerPrivate.callAddonListeners("onOperationCancelled", this);
+};
+
+// http://developer.mozilla.org/en/Addons/Add-on_Manager/AddonInstall
+function ScriptInstall(aAddon) {
+  this._script = aAddon._script;
+
+  this.name = this._script.name;
+  this.version = this._script.version;
+  this.iconURL = this._script.icon.fileURL;
+  this.existingAddon = aAddon;
+}
+
+// Required attributes.
+ScriptAddon.prototype.name = null;
+ScriptAddon.prototype.version = null;
+ScriptAddon.prototype.iconURL = null;
+ScriptAddon.prototype.releaseNotesURI = null;
+ScriptAddon.prototype.type = 'user-script';
+ScriptAddon.prototype.state = AddonManager.STATE_AVAILABLE;
+ScriptAddon.prototype.error = null;
+ScriptAddon.prototype.sourceURI = null;
+ScriptAddon.prototype.file = null;
+ScriptAddon.prototype.progress = -1;
+ScriptAddon.prototype.maxProgress = -1;
+ScriptAddon.prototype.pendingOperations = 0;
+ScriptAddon.prototype.existingAddon = null;
+ScriptAddon.prototype.addon = null;
+
+// Private and custom attributes.
+ScriptAddon.prototype._script = null;
+
+ScriptInstall.prototype.install = function() {
+  var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+    .getService(Components.interfaces.nsIWindowMediator);
+  var chromeWin = wm.getMostRecentWindow("navigator:browser");
+  this._script.installUpdate(chromeWin);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
