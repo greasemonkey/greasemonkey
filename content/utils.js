@@ -424,3 +424,8 @@ function GM_newUserScript() {
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
+
+// Open the add-ons manager and show scripts with updates.
+if (typeof GM_OpenUpdatesMgr == "undefined") {
+  function GM_OpenUpdatesMgr() { BrowserOpenAddonsMgr('updates'); }
+}

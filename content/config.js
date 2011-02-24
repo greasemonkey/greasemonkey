@@ -426,7 +426,7 @@ Config.prototype = {
     var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
         .getService(Ci.nsIWindowMediator)
         .getMostRecentWindow("navigator:browser");
-    win.BrowserOpenAddonsMgr('updates');
+    win.GM_OpenUpdatesMgr();
   },
 
   checkScriptsForRemoteUpdates: function(chromeWin, scripts) {

@@ -56,6 +56,23 @@ var AddonProvider = {
       });
       aCallback(scriptAddons);
     }
+  },
+
+  getInstallsByTypes: function(aTypes, aCallback) {
+    var scriptInstalls = [];
+    var scripts = GM_getConfig().scripts.forEach(function(script) {
+      if (!script.updateAvailable) return;
+
+      var aAddon = ScriptAddonFactoryByScript(script);
+      if (!aAddon._installer) {
+        var scriptInstall = new ScriptInstall(aAddon);
+      } else {
+        var scriptInstall = aAddon._installer;
+      }
+
+      scriptInstalls.push(scriptInstall);
+    });
+    aCallback(scriptInstalls);
   }
 };
 
@@ -215,6 +232,9 @@ ScriptInstall.prototype.install = function() {
   var chromeWin = winMediator.getMostRecentWindow("navigator:browser");
   this._script.installUpdate(chromeWin);
 };
+ScriptInstall.prototype.cancel = function() {};
+ScriptInstall.prototype.addListener = function() {};
+ScriptInstall.prototype.removeListener = function() {};
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -25,17 +25,31 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
+ScriptInstallsCache = {};
+function getScriptInstall(script) {
+  var scriptId = script.id;
+  if (!(scriptId in ScriptInstallsCache)) {
+    var aAddon = ScriptAddonFactoryByScript(script);
+    if (aAddon._installer) {
+      var scriptInstall = aAddon._installer;
+    } else {
+      var scriptInstall = new ScriptInstall(aAddon);
+    }
+    ScriptInstallsCache[scriptId] = scriptInstall;
+  }
+   
+  return ScriptInstallsCache[scriptId];
+}
+
 var observer = {
  notifyEvent: function(script, event, data) {
-    if (gViewController.currentViewId != 'addons://list/user-script') return;
-    var aAddon = ScriptAddonFactoryByScript(script);
+    if (!isScriptView()) return;
 
     switch (event) {
       case 'update-found':
-        var scriptInstall = new ScriptInstall(aAddon);
-        scriptInstall.version = data.version;
-        scriptInstall.sourceURI = GM_uriFromUrl(data.url);
+        var scriptInstall = getScriptInstall(script);
         AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+        document.getElementById("updates-manualUpdatesFound-btn").hidden = false
         break;
       case 'install':
       case 'modified':
@@ -54,6 +68,10 @@ function addonIsInstalledScript(aAddon) {
   if (aAddon._script.needsUninstall) return false;
   return true;
 };
+
+function isScriptView() {
+  return 'addons://list/user-script' == gViewController.currentViewId;
+}
 
 function init() {
   GM_getConfig().addObserver(observer);
@@ -91,19 +109,19 @@ function init() {
     };
 
   gViewController.commands.cmd_userscript_execute_first = {
-      isEnabled: function() { return true; },
+      isEnabled: isScriptView,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
     };
   gViewController.commands.cmd_userscript_execute_sooner = {
-      isEnabled: function() { return true; },
+      isEnabled: isScriptView,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
     };
   gViewController.commands.cmd_userscript_execute_later = {
-      isEnabled: function() { return true; },
+      isEnabled: isScriptView,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 1); }
     };
   gViewController.commands.cmd_userscript_execute_last = {
-      isEnabled: function() { return true; },
+      isEnabled: isScriptView,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
 
@@ -135,7 +153,8 @@ function init() {
 function onContextPopupShowing(aEvent) {
   var popup = aEvent.target;
   var viewIsUserScripts = (
-      'addons://list/user-script' == gViewController.currentViewId);
+      'addons://list/user-script' == gViewController.currentViewId ||
+      'addons://updates/available' == gViewController.currentViewId);
   for (var i = 0, menuitem = null; menuitem = popup.children[i]; i++) {
     var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
     menuitem.collapsed = viewIsUserScripts != menuitemIsUserScript;
@@ -185,13 +204,12 @@ function onViewChanged(aEvent) {
   // Show which scripts have available updates
   if (gViewController.currentViewId == 'addons://list/user-script') {
     var scripts = GM_getConfig().getMatchingScripts(
-    function (script) { return script.updateAvailable; });
+      function (script) { return script.updateAvailable; });
     scripts.forEach(function (script) {
-      var scriptInstall = new ScriptInstall(ScriptAddonFactoryByScript(script));
-      scriptInstall.version = script._updateVersion;
-      scriptInstall.sourceURI = GM_uriFromUrl(script._downloadURL);
-      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+        var scriptInstall = getScriptInstall(script);
+        AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
     });
+    if (scripts.length > 0) document.getElementById("updates-manualUpdatesFound-btn").hidden = false;
   }
 };
 
