@@ -5,6 +5,14 @@
   list-style-image: url(chrome://greasemonkey/skin/icon_medium.png);
 }
 
-.addon.addon-view[type="user-script"] .details.button-link { 
-  display: none !important; 
+.addon.addon-view[type="user-script"] .details.button-link {
+  display: none !important;
+}
+
+#greasemonkey-sort-bar {
+  display: none;
+}
+
+page.greasemonkey #greasemonkey-sort-bar {
+  display: -moz-box;
 }
