@@ -46,14 +46,8 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Store other DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
-  this.statusImage = document.getElementById("gm-status-image");
-  this.statusEnabledItem = document.getElementById("gm-status-enabled-item");
   this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.bundle = document.getElementById("gm-browser-bundle");
-
-  // update visual status when enabled state changes
-  this.enabledWatcher = GM_hitch(this, "refreshStatus");
-  GM_prefRoot.watch("enabled", this.enabledWatcher);
 
   // hook various events
   appContent.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
@@ -73,9 +67,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.tabBrowser.addProgressListener(this,
     Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 
-  // update enabled icon
-  this.refreshStatus();
-
   // register for notifications from greasemonkey-service about ui type things
   this.gmSvc = Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
                          .getService(Components.interfaces.gmIGreasemonkeyService);
@@ -87,18 +78,15 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.gmSvc.registerBrowser(this);
 };
 
-/**
- * gmIBrowserWindow.registerMenuCommand
- */
 GM_BrowserUI.registerMenuCommand = function(menuCommand) {
   if (this.isMyWindow(menuCommand.window)) {
-    var commander = this.getCommander(menuCommand.window);
+    var commanders = this.getCommanders(menuCommand.window);
 
-    commander.registerMenuCommand(menuCommand.name,
-                                  menuCommand.doCommand,
-                                  menuCommand.accelKey,
-                                  menuCommand.accelModifiers,
-                                  menuCommand.accessKey);
+    for (var i = 0, commander = null; commander = commanders[i]; i++) {
+      commander.registerMenuCommand(
+          menuCommand.name, menuCommand.doCommand, menuCommand.accelKey,
+          menuCommand.accelModifiers, menuCommand.accessKey);
+    }
   }
 };
 
@@ -234,7 +222,11 @@ GM_BrowserUI.installCurrentScript = function() {
 
 GM_BrowserUI.installScript = function(script){
   GM_getConfig().install(script);
-  this.showHorrayMessage(script.name);
+
+  var tools = {};
+  Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
+  tools.GM_notification(
+      "'" + script.name + "' " + this.bundle.getString("statusbar.installed"));
 };
 
 /**
@@ -350,7 +342,8 @@ GM_BrowserUI.getCommander = function(unsafeWin) {
   }
 
   // no commander found. create one and add it.
-  var commander = new GM_MenuCommander(document);
+  var commander = new GM_MenuCommander(
+      document, document.getElementById("userscript-commands-tb"));
   this.menuCommanders.push({win:unsafeWin, commander:commander});
 
   return commander;
@@ -377,143 +370,12 @@ function GM_showGeneralPopup(aEvent) {
   GM_BrowserUI.generalMenuEnabledItem.setAttribute("checked", GM_getEnabled());
 }
 
-function GM_showPopup(aEvent) {
-  function urlsOfAllFrames(contentWindow) {
-    function collect(contentWindow) {
-      urls = urls.concat(urlsOfAllFrames(contentWindow));
-    }
-    var urls = [contentWindow.location.href];
-    Array.prototype.slice.call(contentWindow.frames).forEach(collect);
-    return urls;
-  }
-
-  function uniq(a) {
-    var seen = {}, list = [], item;
-    for (var i = 0; i < a.length; i++) {
-      item = a[i];
-      if (!seen.hasOwnProperty(item))
-        seen[item] = list.push(item);
-    }
-    return list;
-  }
-
-  function scriptsMatching(urls) {
-
-    function testMatchURLs(script) {
-
-      function testMatchURL(url) {
-        return script.matchesURL(url);
-      }
-
-      return urls.some(testMatchURL);
-    }
-
-    return GM_getConfig().getMatchingScripts(testMatchURLs);
-  }
-
-  function appendScriptToPopup(script) {
-    if (script.needsUninstall) return;
-    var mi = document.createElement("menuitem");
-    mi.setAttribute("label", script.name);
-    mi.script = script;
-    mi.setAttribute("type", "checkbox");
-    mi.setAttribute("checked", script.enabled.toString());
-    popup.insertBefore(mi, tail);
-  }
-
-  var popup = aEvent.target;
-  var tail = document.getElementById("gm-status-no-scripts-sep");
-
-  // set the enabled/disabled state
-  GM_BrowserUI.statusEnabledItem.setAttribute("checked", GM_getEnabled());
-
-  // remove all the scripts from the list
-  for (var i = popup.childNodes.length - 1; i >= 0; i--) {
-    var node = popup.childNodes[i];
-    if (node.script || node.getAttribute("value") == "hack") {
-      popup.removeChild(node);
-    }
-  }
-
-  var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
-  var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
-  var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
-
-  // drop all runsFramed scripts already present in runsOnTop
-  for (var i = 0; i < runsOnTop.length; i++) {
-    var j = 0, item = runsOnTop[i];
-    while (j < runsFramed.length) {
-      if (item === runsFramed[j]) {
-        runsFramed.splice(j, 1);
-      } else {
-        j++;
-      }
-    }
-  }
-
-  // build the new list of scripts
-  if (runsFramed.length) {
-    runsFramed.forEach(appendScriptToPopup);
-    if (runsOnTop.length) { // only add the separator if there is stuff below
-      var separator = document.createElement("menuseparator");
-      separator.setAttribute("value", "hack"); // remove it in the loop above
-      popup.insertBefore(separator, tail);
-    }
-  }
-  runsOnTop.forEach(appendScriptToPopup);
-
-  var foundInjectedScript = !!(runsFramed.length + runsOnTop.length);
-  document.getElementById("gm-status-no-scripts").collapsed = foundInjectedScript;
-}
-
-/**
- * Handle clicking one of the items in the popup. Left-click toggles the enabled
- * state, rihgt-click opens in an editor.
- */
-function GM_popupClicked(aEvent) {
-  if (aEvent.button == 0 || aEvent.button == 2) {
-    var script = aEvent.target.script;
-    if (!script) return;
-
-    if (aEvent.button == 0) // left-click: toggle enabled state
-      script.enabled =! script.enabled;
-    else // right-click: open in editor
-      GM_openInEditor(script);
-
-    closeMenus(aEvent.target);
-  }
-}
-
-/**
- * Greasemonkey's enabled state has changed, either as a result of clicking
- * the icon in this window, clicking it in another window, or even changing
- * the mozilla preference that backs it directly.
- */
-GM_BrowserUI.refreshStatus = function() {
-  if (GM_getEnabled()) {
-    this.statusImage.src = "chrome://greasemonkey/skin/icon_small.png";
-    this.statusImage.tooltipText = this.bundle.getString("tooltip.enabled");
-  } else {
-    this.statusImage.src = "chrome://greasemonkey/skin/icon_small_disabled.png";
-    this.statusImage.tooltipText = this.bundle.getString("tooltip.disabled");
-  }
-
-  this.statusImage.style.opacity = "1.0";
-};
-
 // necessary for webProgressListener implementation
 GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){};
 GM_BrowserUI.onStateChange = function(a,b,c,d){};
 GM_BrowserUI.onStatusChange = function(a,b,c,d){};
 GM_BrowserUI.onSecurityChange = function(a,b,c){};
 GM_BrowserUI.onLinkIconAvailable = function(a){};
-
-GM_BrowserUI.showHorrayMessage = function(scriptName) {
-  var tools = {};
-  Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
-  tools.GM_notification(
-      "'" + scriptName + "' " + this.bundle.getString("statusbar.installed"));
-};
 
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
@@ -523,20 +385,3 @@ GM_BrowserUI.viewContextItemClicked = function() {
 };
 
 GM_BrowserUI.init();
-
-GM_BrowserUI.statusClicked = function(aEvent) {
-  switch (aEvent.button) {
-  case 0:
-    GM_setEnabled(!GM_getEnabled());
-    break;
-  case 1:
-    GM_OpenScriptsMgr();
-    break;
-  case 2:
-    document.getElementById('gm-status-popup').openPopup(
-        document.getElementById('gm-status'),
-        'before_end', 0, 0, false, false);
-    break;
-  }
-  return false;
-};

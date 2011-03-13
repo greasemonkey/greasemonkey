@@ -9,7 +9,7 @@ function GM_MenuCommander() {
   this.keys = [];
   this.attached = false;
 
-  this.menu2 = document.getElementById("userscript-commands-sb2");
+  this.menu2 = document.getElementById("userscript-commands-tb");
   this.menuPopup2 = this.menu2.firstChild;
   this.menuItems2 = [];
 

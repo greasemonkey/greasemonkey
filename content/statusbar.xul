@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+
+<overlay id="greasemonkey-browser-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://greasemonkey/content/statusbar.js" />
+
+  <statusbar id="status-bar">
+    <statusbarpanel id="gm-status"
+      context=""
+      onclick="GM_statusClicked(event);"
+    >
+      <image id="gm-status-image" width="16" height="16" />
+    </statusbarpanel>
+    <menupopup id="gm-status-popup"
+      onpopupshowing="GM_showPopup(event);"
+      onclick="GM_popupClicked(event);"
+    >
+      <menuitem id="gm-status-no-scripts"
+        label="&statusbar.noscripts;"
+        style="color:grey" />
+      <menuseparator id="gm-status-no-scripts-sep" />
+      <menu id="userscript-commands-sb"
+        accesskey="&menu.commands.accesskey;"
+        label="&menu.commands;"
+        disabled="false"
+        onpopupshowing="event.stopPropagation();"
+      >
+        <menupopup />
+      </menu>
+      <menuseparator />
+      <menuitem accesskey="&menu.new.accesskey;"
+        label="&menu.new;"
+        oncommand="GM_newUserScript();" />
+      <menuitem accesskey="&menu.manage.accesskey;"
+        label="&menu.manage;"
+        oncommand="GM_OpenScriptsMgr();" />
+      <menuseparator />
+      <menuitem id="gm-status-enabled-item"
+        accesskey="&statusbar.enabled.accesskey;"
+        label="&statusbar.enabled;"
+        type="checkbox"
+        oncommand="GM_setEnabled(!GM_getEnabled());" />
+    </menupopup>
+  </statusbar>
+
+</overlay>

@@ -11,6 +11,7 @@ content    greasemonkey content/
 skin       greasemonkey classic/1.0 skin/
 
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
+overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/statusbar.xul appversion<4.0
 
 # Firefox <=3.5.* Add-Ons window integration.
 overlay    chrome://mozapps/content/extensions/extensions.xul chrome://greasemonkey/content/addons.xul appversion<4.0
