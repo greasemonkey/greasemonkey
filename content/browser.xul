@@ -83,6 +83,7 @@
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         disabled="false"
+        onpopupshowing="event.stopPropagation();"
       >
         <menupopup />
       </menu>
