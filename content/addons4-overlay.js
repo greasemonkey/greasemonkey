@@ -96,11 +96,15 @@ function init() {
 
 function onContextPopupShowing(aEvent) {
   var popup = aEvent.target;
-  var viewIsUserScripts = (
-      'addons://list/user-script' == gViewController.currentViewId);
+  var selectedItem = gListView._listBox.selectedItem || 
+    gSearchView._listBox.selectedItem;
+  var selectedIsUserScript = (selectedItem &&
+      'user-script' == selectedItem.getAttribute('type')
+      );
+
   for (var i = 0, menuitem = null; menuitem = popup.children[i]; i++) {
     var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
-    menuitem.collapsed = viewIsUserScripts != menuitemIsUserScript;
+    menuitem.collapsed = selectedIsUserScript != menuitemIsUserScript;
   }
 };
 
