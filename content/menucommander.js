@@ -20,9 +20,6 @@ GM_MenuCommander.createMenuItem = function(command) {
 };
 
 GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
-  dump('>>> GM_MenuCommander.onPopupShowing() ...\'n');
-  dump(aMenuPopup+'\n');
-
   var allCommands = GM_BrowserUI.gmSvc.menuCommands;
 
   // Clean out the popup.
