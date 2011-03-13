@@ -10,6 +10,7 @@ var GM_BrowserUI = {};
  */
 GM_BrowserUI.QueryInterface = function(aIID) {
   if (!aIID.equals(Components.interfaces.nsISupports) &&
+      !aIID.equals(Components.interfaces.nsIObserver) &&
       !aIID.equals(Components.interfaces.gmIBrowserWindow) &&
       !aIID.equals(Components.interfaces.nsISupportsWeakReference))
     throw Components.results.NS_ERROR_NO_INTERFACE;
