@@ -358,6 +358,7 @@ GM_GreasemonkeyService.prototype = {
 
     var newTab = chromeWin.openNewTabWith(
       url, safeContentWin.document, null, null, null, null);
+    if (!newTab) return;  // See: #1275
     // Source:
     // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
     var newWindow = chromeWin.gBrowser
