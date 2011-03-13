@@ -16,9 +16,6 @@ window.addEventListener('load', function() {
       // update visual status when enabled state changes
       GM_prefRoot.watch("enabled", refreshStatus);
       refreshStatus();
-
-      var commander = new GM_MenuCommander(
-          document.getElementById("userscript-commands-sb"));
   }, false);
 
 

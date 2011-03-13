@@ -1,14 +1,6 @@
-function GM_MenuCommander(menu) {
-  this.menu = menu;
-  this.keyset = document.getElementById("mainKeyset");
-  this.menuPopup = this.menu.firstChild;
+var GM_MenuCommander = {};
 
-  menu.addEventListener(
-      'popupshowing', GM_hitch(this, 'onPopupShowing'), false);
-}
-
-GM_MenuCommander.prototype.createMenuItem =
-function(command) {
+GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
   menuItem._commandFunc = command.commandFunc;
   menuItem.setAttribute("label", command.name);
@@ -27,13 +19,15 @@ function(command) {
   return menuItem;
 };
 
-GM_MenuCommander.prototype.onPopupShowing =
-function(aEvent) {
+GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
+  dump('>>> GM_MenuCommander.onPopupShowing() ...\'n');
+  dump(aMenuPopup+'\n');
+
   var allCommands = GM_BrowserUI.gmSvc.menuCommands;
 
   // Clean out the popup.
-  while (this.menuPopup.firstChild) {
-    this.menuPopup.removeChild(this.menuPopup.firstChild);
+  while (aMenuPopup.firstChild) {
+    aMenuPopup.removeChild(aMenuPopup.firstChild);
   }
 
   // Add menu items for commands for the active window.
@@ -41,7 +35,7 @@ function(aEvent) {
   for (var i = 0, command = null; command = allCommands[i]; i++) {
     // Firefox 4 must unwrap this document to compare equal.
     if (command.window.document == content.document.wrappedJSObject) {
-      this.menuPopup.appendChild(this.createMenuItem(command));
+      aMenuPopup.appendChild(GM_MenuCommander.createMenuItem(command));
       flag = true;
     }
   }
@@ -50,6 +44,6 @@ function(aEvent) {
     warning.setAttribute(
         "label", GM_BrowserUI.bundle.getString('menuitem.nocommands'));
     warning.setAttribute("disabled", "true");
-    this.menuPopup.appendChild(warning);
+    aMenuPopup.appendChild(warning);
   }
 };

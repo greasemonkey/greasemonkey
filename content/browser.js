@@ -72,9 +72,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
   GM_BrowserUI.gmSvc.config;
-
-  var commander = new GM_MenuCommander(
-      document.getElementById("userscript-commands-tbm"));
 };
 
 /**

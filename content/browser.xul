@@ -68,7 +68,7 @@
         label="&menu.commands;"
         onpopupshowing="event.stopPropagation();"
       >
-        <menupopup />
+        <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
       </menu>
     </menupopup>
   </menu>
