@@ -34,22 +34,27 @@ GM_BrowserUI.init = function() {
  * listeners and wrapper objects.
  */
 GM_BrowserUI.chromeLoad = function(e) {
-  // Grab some DOM element references.
-  var appContent = document.getElementById("appcontent");
-  var sidebar = document.getElementById("sidebar");
-  var contextMenu = document.getElementById("contentAreaContextMenu");
-  var toolsMenu = document.getElementById("menu_ToolsPopup") ||
-      document.getElementById("taskPopup"); // seamonkey compat
-
-  // Store other DOM element references in this object, also for use elsewhere.
+  // Store DOM element references in this object, also for use elsewhere.
   this.tabBrowser = document.getElementById("content");
-  this.generalMenuEnabledItem = document.getElementById("gm-general-menu-enabled-item");
   this.bundle = document.getElementById("gm-browser-bundle");
+  this.toolbarButton = document.getElementById("greasemonkey-tbb");
+
+  // Duplicate the tools menu popup inside the toolbar button.
+  var menupopup = document.getElementById('gm_general_menu').firstChild;
+  this.toolbarButton.appendChild(menupopup.cloneNode(true));
+
+  // Update visual status when enabled state changes.
+  this.enabledWatcher = GM_hitch(this, "refreshStatus");
+  GM_prefRoot.watch("enabled", this.enabledWatcher);
+  this.refreshStatus();
 
   // hook various events
-  appContent.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
-  sidebar.addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
-  contextMenu.addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
+  document.getElementById("appcontent")
+    .addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+  document.getElementById("sidebar")
+    .addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+  document.getElementById("contentAreaContextMenu")
+    .addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
@@ -265,10 +270,19 @@ GM_BrowserUI.isMyWindow = function(domWindow) {
   return false;
 };
 
-function GM_showGeneralPopup(aEvent) {
-  // set the enabled/disabled state
-  GM_BrowserUI.generalMenuEnabledItem.setAttribute("checked", GM_getEnabled());
+function GM_handleMenuPopupshowing(aMenupopup) {
+  var enabledMenuitem = aMenupopup.getElementsByClassName('gm-enabled-item')[0];
+  enabledMenuitem.setAttribute("checked", GM_getEnabled());
 }
+
+GM_BrowserUI.refreshStatus = function() {
+  if (!this.toolbarButton) return;
+  this.toolbarButton.setAttribute('disabled', GM_getEnabled() ? 'no' : 'yes');
+};
+
+GM_BrowserUI.toggleStatus = function() {
+  GM_setEnabled(!GM_getEnabled());
+};
 
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();

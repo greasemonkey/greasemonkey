@@ -1,0 +1,13 @@
+#greasemonkey-tbb {
+  list-style-image: url("chrome://greasemonkey/skin/icon_medium.png");
+}
+toolbar[iconsize="small"] #greasemonkey-tbb {
+  list-style-image: url("chrome://greasemonkey/skin/icon_small.png");
+}
+
+#greasemonkey-tbb[disabled="yes"] {
+  opacity: 0.8;
+}
+#greasemonkey-tbb[disabled="yes"] .toolbarbutton-icon {
+  opacity: 0.5;
+}
