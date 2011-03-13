@@ -15,7 +15,7 @@ GM_BrowserUI.QueryInterface = function(aIID) {
       !aIID.equals(Components.interfaces.nsISupportsWeakReference))
     throw Components.results.NS_ERROR_NO_INTERFACE;
 
-  return this;
+  return GM_BrowserUI;
 };
 
 
@@ -25,8 +25,13 @@ GM_BrowserUI.QueryInterface = function(aIID) {
  * changes.
  */
 GM_BrowserUI.init = function() {
-  window.addEventListener("load", GM_hitch(this, "chromeLoad"), false);
-  window.addEventListener("unload", GM_hitch(this, "chromeUnload"), false);
+  window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
+  window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
+
+  window.addEventListener('DOMNodeInserted', GM_BrowserUI.nodeInserted, false);
+  window.addEventListener('DOMNodeRemoved', GM_BrowserUI.nodeRemoved, false);
+
+  GM_BrowserUI.toolbarButton = null;
 };
 
 /**
@@ -35,44 +40,38 @@ GM_BrowserUI.init = function() {
  */
 GM_BrowserUI.chromeLoad = function(e) {
   // Store DOM element references in this object, also for use elsewhere.
-  this.tabBrowser = document.getElementById("content");
-  this.bundle = document.getElementById("gm-browser-bundle");
-  this.toolbarButton = document.getElementById("greasemonkey-tbb");
-
-  // Duplicate the tools menu popup inside the toolbar button.
-  var menupopup = document.getElementById('gm_general_menu').firstChild;
-  this.toolbarButton.appendChild(menupopup.cloneNode(true));
+  GM_BrowserUI.tabBrowser = document.getElementById("content");
+  GM_BrowserUI.bundle = document.getElementById("gm-browser-bundle");
 
   // Update visual status when enabled state changes.
-  this.enabledWatcher = GM_hitch(this, "refreshStatus");
-  GM_prefRoot.watch("enabled", this.enabledWatcher);
-  this.refreshStatus();
+  GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
 
   // hook various events
   document.getElementById("appcontent")
-    .addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   document.getElementById("sidebar")
-    .addEventListener("DOMContentLoaded", GM_hitch(this, "contentLoad"), true);
+    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   document.getElementById("contentAreaContextMenu")
-    .addEventListener("popupshowing", GM_hitch(this, "contextMenuShowing"), false);
+    .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
   // listen for clicks on the install bar
   Components.classes["@mozilla.org/observer-service;1"]
             .getService(Components.interfaces.nsIObserverService)
-            .addObserver(this, "install-userscript", true);
+            .addObserver(GM_BrowserUI, "install-userscript", true);
 
   // we use this to determine if we are the active window sometimes
-  this.winWat = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
-                          .getService(Components.interfaces.nsIWindowWatcher);
+  GM_BrowserUI.winWat = Components
+      .classes["@mozilla.org/embedcomp/window-watcher;1"]
+      .getService(Components.interfaces.nsIWindowWatcher);
 
   // register for notifications from greasemonkey-service about ui type things
-  this.gmSvc = Components
+  GM_BrowserUI.gmSvc = Components
       .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
       .getService(Components.interfaces.gmIGreasemonkeyService)
       .wrappedJSObject;
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
-  this.gmSvc.config;
+  GM_BrowserUI.gmSvc.config;
 
   var commander = new GM_MenuCommander(
       document.getElementById("userscript-commands-tbm"));
@@ -82,8 +81,8 @@ GM_BrowserUI.chromeLoad = function(e) {
  * gmIBrowserWindow.openInTab
  */
 GM_BrowserUI.openInTab = function(domWindow, url) {
-  if (this.isMyWindow(domWindow)) {
-    this.tabBrowser.addTab(url);
+  if (GM_BrowserUI.isMyWindow(domWindow)) {
+    GM_BrowserUI.tabBrowser.addTab(url);
   }
 };
 
@@ -100,7 +99,7 @@ GM_BrowserUI.contentLoad = function(e) {
   var href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    this.gmSvc.domContentLoaded(safeWin, window);
+    GM_BrowserUI.gmSvc.domContentLoaded(safeWin, window);
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
@@ -109,8 +108,8 @@ GM_BrowserUI.contentLoad = function(e) {
   if (safeWin == safeWin.top &&
       href.match(/\.user(?:-\d+)?\.js$/) &&
       !/text\/html/i.test(safeWin.document.contentType)) {
-    var browser = this.tabBrowser.getBrowserForDocument(safeWin.document);
-    this.showInstallBanner(browser);
+    var browser = GM_BrowserUI.tabBrowser.getBrowserForDocument(safeWin.document);
+    GM_BrowserUI.showInstallBanner(browser);
   }
 };
 
@@ -120,9 +119,9 @@ GM_BrowserUI.contentLoad = function(e) {
  * a user selects "show script source" in the install dialog.
  */
 GM_BrowserUI.showInstallBanner = function(browser) {
-  var greeting = this.bundle.getString("greeting.msg");
+  var greeting = GM_BrowserUI.bundle.getString("greeting.msg");
 
-  var notificationBox = this.tabBrowser.getNotificationBox(browser);
+  var notificationBox = GM_BrowserUI.tabBrowser.getNotificationBox(browser);
 
   // Remove existing notifications. Notifications get removed
   // automatically onclick and on page navigation, but we need to remove
@@ -139,10 +138,10 @@ GM_BrowserUI.showInstallBanner = function(browser) {
     "chrome://greasemonkey/skin/icon_small.png",
     notificationBox.PRIORITY_WARNING_MEDIUM,
     [{
-      label: this.bundle.getString("greeting.btn"),
-      accessKey: this.bundle.getString("greeting.btnAccess"),
+      label: GM_BrowserUI.bundle.getString("greeting.btn"),
+      accessKey: GM_BrowserUI.bundle.getString("greeting.btnAccess"),
       popup: null,
-      callback: GM_hitch(this, "installCurrentScript")
+      callback: GM_BrowserUI.installCurrentScript
     }]
   );
 };
@@ -159,9 +158,9 @@ GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
     return;
   }
 
-  this.scriptDownloader_ =
+  GM_BrowserUI.scriptDownloader_ =
     new GM_ScriptDownloader(window, uri, GM_BrowserUI.bundle, contentWin);
-  this.scriptDownloader_.startInstall();
+  GM_BrowserUI.scriptDownloader_.startInstall();
 };
 
 
@@ -170,12 +169,12 @@ GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
  * the user install it.
  */
 GM_BrowserUI.showScriptView = function(scriptDownloader) {
-  this.scriptDownloader_ = scriptDownloader;
+  GM_BrowserUI.scriptDownloader_ = scriptDownloader;
 
-  var tab = this.tabBrowser.addTab(scriptDownloader.script.previewURL);
-  var browser = this.tabBrowser.getBrowserForTab(tab);
+  var tab = GM_BrowserUI.tabBrowser.addTab(scriptDownloader.script.previewURL);
+  var browser = GM_BrowserUI.tabBrowser.getBrowserForTab(tab);
 
-  this.tabBrowser.selectedTab = tab;
+  GM_BrowserUI.tabBrowser.selectedTab = tab;
 };
 
 /**
@@ -184,8 +183,8 @@ GM_BrowserUI.showScriptView = function(scriptDownloader) {
  */
 GM_BrowserUI.observe = function(subject, topic, data) {
   if (topic == "install-userscript") {
-    if (window == this.winWat.activeWindow) {
-      this.installCurrentScript();
+    if (window == GM_BrowserUI.winWat.activeWindow) {
+      GM_BrowserUI.installCurrentScript();
     }
   } else {
     throw new Error("Unexpected topic received: {" + topic + "}");
@@ -196,7 +195,7 @@ GM_BrowserUI.observe = function(subject, topic, data) {
  * Handles the install button getting clicked.
  */
 GM_BrowserUI.installCurrentScript = function() {
-  this.scriptDownloader_.installScript();
+  GM_BrowserUI.scriptDownloader_.installScript();
 };
 
 GM_BrowserUI.installScript = function(script){
@@ -205,14 +204,15 @@ GM_BrowserUI.installScript = function(script){
   var tools = {};
   Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
   tools.GM_notification(
-      "'" + script.name + "' " + this.bundle.getString("statusbar.installed"));
+      "'" + script.name + "' "
+      + GM_BrowserUI.bundle.getString("statusbar.installed"));
 };
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.
  */
 GM_BrowserUI.chromeUnload = function() {
-  GM_prefRoot.unwatch("enabled", this.enabledWatcher);
+  GM_prefRoot.unwatch("enabled", GM_BrowserUI.refreshStatus);
 };
 
 /**
@@ -231,7 +231,7 @@ GM_BrowserUI.contextMenuShowing = function() {
 
   contextItem.hidden =
     contextSep.hidden =
-    !this.getUserScriptLinkUnderPointer();
+    !GM_BrowserUI.getUserScriptLinkUnderPointer();
 };
 
 
@@ -276,8 +276,9 @@ function GM_handleMenuPopupshowing(aMenupopup) {
 }
 
 GM_BrowserUI.refreshStatus = function() {
-  if (!this.toolbarButton) return;
-  this.toolbarButton.setAttribute('disabled', GM_getEnabled() ? 'no' : 'yes');
+  if (!GM_BrowserUI.toolbarButton) return;
+  GM_BrowserUI.toolbarButton.setAttribute(
+      'disabled', GM_getEnabled() ? 'no' : 'yes');
 };
 
 GM_BrowserUI.toggleStatus = function() {
@@ -287,8 +288,27 @@ GM_BrowserUI.toggleStatus = function() {
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
 
-  this.scriptDownloader_ = new GM_ScriptDownloader(window, uri, this.bundle);
-  this.scriptDownloader_.startViewScript();
+  GM_BrowserUI.scriptDownloader_ = new GM_ScriptDownloader(
+      window, uri, GM_BrowserUI.bundle);
+  GM_BrowserUI.scriptDownloader_.startViewScript();
+};
+
+GM_BrowserUI.nodeInserted = function(aEvent) {
+  if ('greasemonkey-tbb' == aEvent.target.id) {
+    GM_BrowserUI.toolbarButton = aEvent.target;
+
+    // Set the icon properly.
+    GM_BrowserUI.refreshStatus();
+    // Duplicate the tools menu popup inside the toolbar button.
+    var menupopup = document.getElementById('gm_general_menu').firstChild;
+    GM_BrowserUI.toolbarButton.appendChild(menupopup.cloneNode(true));
+  }
+};
+
+GM_BrowserUI.nodeRemoved = function(aEvent) {
+  if ('greasemonkey-tbb' == aEvent.target.id) {
+    GM_BrowserUI.toolbarButton = null;
+  }
 };
 
 GM_BrowserUI.init();
