@@ -11,8 +11,7 @@ var GM_BrowserUI = {};
 GM_BrowserUI.QueryInterface = function(aIID) {
   if (!aIID.equals(Components.interfaces.nsISupports) &&
       !aIID.equals(Components.interfaces.gmIBrowserWindow) &&
-      !aIID.equals(Components.interfaces.nsISupportsWeakReference) &&
-      !aIID.equals(Components.interfaces.nsIWebProgressListener))
+      !aIID.equals(Components.interfaces.nsISupportsWeakReference))
     throw Components.results.NS_ERROR_NO_INTERFACE;
 
   return this;
@@ -25,9 +24,6 @@ GM_BrowserUI.QueryInterface = function(aIID) {
  * changes.
  */
 GM_BrowserUI.init = function() {
-  this.menuCommanders = [];
-  this.currentMenuCommander = null;
-
   window.addEventListener("load", GM_hitch(this, "chromeLoad"), false);
   window.addEventListener("unload", GM_hitch(this, "chromeUnload"), false);
 };
@@ -63,31 +59,17 @@ GM_BrowserUI.chromeLoad = function(e) {
   this.winWat = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
                           .getService(Components.interfaces.nsIWindowWatcher);
 
-  // this gives us onLocationChange
-  this.tabBrowser.addProgressListener(this,
-    Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
-
   // register for notifications from greasemonkey-service about ui type things
-  this.gmSvc = Components.classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-                         .getService(Components.interfaces.gmIGreasemonkeyService);
-
+  this.gmSvc = Components
+      .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
+      .getService(Components.interfaces.gmIGreasemonkeyService)
+      .wrappedJSObject;
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
-  this.gmSvc.wrappedJSObject.config;
+  this.gmSvc.config;
 
-  this.gmSvc.registerBrowser(this);
-};
-
-GM_BrowserUI.registerMenuCommand = function(menuCommand) {
-  if (this.isMyWindow(menuCommand.window)) {
-    var commanders = this.getCommanders(menuCommand.window);
-
-    for (var i = 0, commander = null; commander = commanders[i]; i++) {
-      commander.registerMenuCommand(
-          menuCommand.name, menuCommand.doCommand, menuCommand.accelKey,
-          menuCommand.accelModifiers, menuCommand.accessKey);
-    }
-  }
+  var commander = new GM_MenuCommander(
+      document.getElementById("userscript-commands-tbm"));
 };
 
 /**
@@ -112,16 +94,7 @@ GM_BrowserUI.contentLoad = function(e) {
   var href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
-    // if this content load is in the focused tab, attach the menuCommaander
-    if (unsafeWin == this.tabBrowser.selectedBrowser.contentWindow) {
-      var commander = this.getCommander(safeWin);
-      this.currentMenuCommander = commander;
-      this.currentMenuCommander.attach();
-    }
-
     this.gmSvc.domContentLoaded(safeWin, window);
-
-    safeWin.addEventListener("pagehide", GM_hitch(this, "contentUnload"), false);
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
@@ -230,65 +203,10 @@ GM_BrowserUI.installScript = function(script){
 };
 
 /**
- * The browser's location has changed. Usually, we don't care. But in the case
- * of tab switching we need to change the list of commands displayed in the
- * User Script Commands submenu.
- */
-GM_BrowserUI.onLocationChange = function(a,b,c) {
-  if (this.currentMenuCommander != null) {
-    this.currentMenuCommander.detach();
-    this.currentMenuCommander = null;
-  }
-
-  var menuCommander = this.getCommander(this.tabBrowser.selectedBrowser.
-                                        contentWindow);
-
-  if (menuCommander) {
-    this.currentMenuCommander = menuCommander;
-    this.currentMenuCommander.attach();
-  }
-};
-
-/**
- * A content document has unloaded. We need to remove it's menuCommander to
- * avoid leaking it's memory.
- */
-GM_BrowserUI.contentUnload = function(e) {
-  if (e.persisted || !this.menuCommanders || 0 == this.menuCommanders.length) {
-    return;
-  }
-
-  var unsafeWin = e.target.defaultView;
-
-  // looping over commanders rather than using getCommander because we need
-  // the index into commanders.splice.
-  for (var i = 0, item; item = this.menuCommanders[i]; i++) {
-    if (item.win != unsafeWin) {
-      continue;
-    }
-
-    if (item.commander == this.currentMenuCommander) {
-      this.currentMenuCommander.detach();
-      this.currentMenuCommander = null;
-    }
-
-    this.menuCommanders.splice(i, 1);
-
-    break;
-  }
-};
-
-/**
- * The browser XUL has unloaded. We need to let go of the pref watcher so
- * that a non-existant window is not informed when greasemonkey enabled state
- * changes. And we need to let go of the progress listener so that we don't
- * leak it's memory.
+ * The browser XUL has unloaded. Destroy references/watchers/listeners.
  */
 GM_BrowserUI.chromeUnload = function() {
   GM_prefRoot.unwatch("enabled", this.enabledWatcher);
-  this.tabBrowser.removeProgressListener(this);
-  this.gmSvc.unregisterBrowser(this);
-  delete this.menuCommanders;
 };
 
 /**
@@ -331,25 +249,6 @@ GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
 };
 
 /**
- * Helper method which gets the menuCommander corresponding to a given
- * document
- */
-GM_BrowserUI.getCommander = function(unsafeWin) {
-  for (var i = 0; i < this.menuCommanders.length; i++) {
-    if (this.menuCommanders[i].win == unsafeWin) {
-      return this.menuCommanders[i].commander;
-    }
-  }
-
-  // no commander found. create one and add it.
-  var commander = new GM_MenuCommander(
-      document, document.getElementById("userscript-commands-tb"));
-  this.menuCommanders.push({win:unsafeWin, commander:commander});
-
-  return commander;
-};
-
-/**
  * Helper to determine if a given dom window is in this tabbrowser
  */
 GM_BrowserUI.isMyWindow = function(domWindow) {
@@ -369,13 +268,6 @@ function GM_showGeneralPopup(aEvent) {
   // set the enabled/disabled state
   GM_BrowserUI.generalMenuEnabledItem.setAttribute("checked", GM_getEnabled());
 }
-
-// necessary for webProgressListener implementation
-GM_BrowserUI.onProgressChange = function(webProgress,b,c,d,e,f){};
-GM_BrowserUI.onStateChange = function(a,b,c,d){};
-GM_BrowserUI.onStatusChange = function(a,b,c,d){};
-GM_BrowserUI.onSecurityChange = function(a,b,c){};
-GM_BrowserUI.onLinkIconAvailable = function(a){};
 
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();

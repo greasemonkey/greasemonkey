@@ -87,6 +87,7 @@ GM_GreasemonkeyService.prototype = {
                        entry: CONTRACTID,
                        value: CONTRACTID,
                        service: true}],
+  menuCommands: [],
 
   // nsISupports
   QueryInterface: XPCOMUtils.generateQI([
@@ -110,7 +111,6 @@ GM_GreasemonkeyService.prototype = {
     }
     return this._config;
   },
-  browserWindows: [],
 
   // nsIObserver
   observe: function(aSubject, aTopic, aData) {
@@ -124,38 +124,19 @@ GM_GreasemonkeyService.prototype = {
 
 
   // gmIGreasemonkeyService
-  registerBrowser: function(browserWin) {
-    var existing;
-
-    for (var i = 0; existing = this.browserWindows[i]; i++) {
-      if (existing == browserWin) {
-        // NOTE: Unlocalised strings
-        throw new Error("Browser window has already been registered.");
-      }
-    }
-
-    this.browserWindows.push(browserWin);
-  },
-
-  unregisterBrowser: function(browserWin) {
-   var existing;
-
-    for (var i = 0; existing = this.browserWindows[i]; i++) {
-      if (existing == browserWin) {
-        this.browserWindows.splice(i, 1);
-        return;
-      }
-    }
-
-    throw new Error("Browser window is not registered.");
-  },
-
   domContentLoaded: function(wrappedContentWin, chromeWin) {
     var url = wrappedContentWin.document.location.href;
     var scripts = this.initScripts(url, wrappedContentWin, chromeWin);
 
     if (scripts.length > 0) {
       this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
+    }
+
+    // Clean out obsolete commands.
+    // TODO: This doesn't remove commands until the content window is gone.
+    // If the script is edited, old commands hang around.
+    for (var i = 0, command = null; command = this.menuCommands[i]; i++) {
+      if (command.window.closed) delete this.menuCommands[i--];
     }
   },
 
@@ -298,7 +279,7 @@ GM_GreasemonkeyService.prototype = {
                                                 unsafeContentWin);
 
       // Re-wrap the window before assigning it to the sandbox.__proto__
-      // This is a workaround for a bug in which the Security Manager 
+      // This is a workaround for a bug in which the Security Manager
       // vetoes the use of eval.
       sandbox.__proto__ = new XPCNativeWrapper(unsafeContentWin);
 
@@ -338,17 +319,13 @@ GM_GreasemonkeyService.prototype = {
     if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
       return;
     }
-
     var command = {name: commandName,
                    accelKey: accelKey,
                    accelModifiers: accelModifiers,
                    accessKey: accessKey,
-                   doCommand: commandFunc,
-                   window: unsafeContentWin };
-
-    for (var i = 0; i < this.browserWindows.length; i++) {
-      this.browserWindows[i].registerMenuCommand(command);
-    }
+                   commandFunc: commandFunc,
+                   window: unsafeContentWin};
+    this.menuCommands.push(command);
   },
 
   openInTab: function(safeContentWin, chromeWin, url) {

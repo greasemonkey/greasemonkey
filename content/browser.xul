@@ -50,10 +50,9 @@
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
         oncommand="GM_newUserScript();" />
-      <menu id="userscript-commands-sb2"
+      <menu id="userscript-commands-tbm"
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
-        disabled="false"
         onpopupshowing="event.stopPropagation();"
       >
         <menupopup />
