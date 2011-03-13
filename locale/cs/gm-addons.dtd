@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "n">
 <!ENTITY Show "Zobrazit zahrnuté složky">
 <!ENTITY Show.accesskey "Z">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">
 <!ENTITY SortScripts "Seřadit skripty">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "Zrušit odinstalaci">

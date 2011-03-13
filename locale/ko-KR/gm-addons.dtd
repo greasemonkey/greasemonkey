@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "저장된 폴더 열기">
 <!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">
 <!ENTITY SortScripts "스크립트 정렬">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "삭제 취소">
