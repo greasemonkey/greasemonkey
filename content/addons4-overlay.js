@@ -25,6 +25,26 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
+// Set up an "observer" on the config, to keep the displayed items up to date
+// with their actual state.
+var observer = {
+ notifyEvent: function(script, event, data) {
+    if ('addons://list/user-script' != gViewController.currentViewId) return;
+
+    switch (event) {
+      case 'install':
+      case 'modified':
+        ScriptAddonReplaceScript(script);
+        break;
+      case "edit-enabled":
+        ScriptAddonFactoryByScript(script).userDisabled = !data;
+        break;
+    }
+
+    gViewController.loadViewInternal('addons://list/user-script', null);
+  }
+};
+
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function addonIsInstalledScript(aAddon) {
@@ -35,6 +55,8 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function init() {
+  GM_getConfig().addObserver(observer);
+
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_openInEditor(aAddon._script); }
@@ -170,5 +192,7 @@ function unload() {
       // Todo: This without dipping into private members.
       GM_config._save(true);
     });
+
+  GM_config.removeObserver(observer);
 };
 })();
