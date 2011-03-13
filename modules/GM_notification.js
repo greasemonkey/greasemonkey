@@ -25,6 +25,6 @@ function GM_notification(aMsg, aTitle) {
   var title = aTitle ? "" + aTitle : "Greasemonkey";
   var message = aMsg ? "" + aMsg : "";
   notify(
-      "chrome://greasemonkey/skin/icon_medium.png",
+      "chrome://greasemonkey/skin/icon32.png",
       title, message, false, "", null);
 };

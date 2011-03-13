@@ -11,7 +11,9 @@ content    greasemonkey content/
 skin       greasemonkey classic/1.0 skin/
 
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
-style      chrome://global/content/customizeToolbar.xul    chrome://greasemonkey/skin/browser.css
+style      chrome://browser/content/browser.xul chrome://greasemonkey/skin/browser-mac3.css os=Darwin appversion<4.0
+style      chrome://browser/content/browser.xul chrome://greasemonkey/skin/browser-mac.css os=Darwin appversion>=4.0b1
+style      chrome://global/content/customizeToolbar.xul chrome://greasemonkey/skin/browser.css
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/statusbar.xul appversion<4.0
 
 # Firefox <=3.5.* Add-Ons window integration.

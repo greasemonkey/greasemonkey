@@ -2,7 +2,7 @@
 .addon[type=user-script] .icon,
 #detail-view[type=user-script] #detail-icon
 {
-  list-style-image: url(chrome://greasemonkey/skin/icon_medium.png);
+  list-style-image: url(chrome://greasemonkey/skin/icon32.png);
 }
 
 .addon.addon-view[type="user-script"] .details.button-link {

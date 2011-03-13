@@ -153,10 +153,10 @@ window.GM_statusClicked = GM_statusClicked;
  */
 function refreshStatus() {
   if (GM_getEnabled()) {
-    statusImageEl.src = "chrome://greasemonkey/skin/icon_small.png";
+    statusImageEl.src = "chrome://greasemonkey/skin/icon16.png";
     statusImageEl.tooltipText = stringBundle.getString("tooltip.enabled");
   } else {
-    statusImageEl.src = "chrome://greasemonkey/skin/icon_small_disabled.png";
+    statusImageEl.src = "chrome://greasemonkey/skin/icon16disabled.png";
     statusImageEl.tooltipText = stringBundle.getString("tooltip.disabled");
   }
 };

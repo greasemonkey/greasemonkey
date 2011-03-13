@@ -132,7 +132,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
   var notification = notificationBox.appendNotification(
     greeting,
     "install-userscript",
-    "chrome://greasemonkey/skin/icon_small.png",
+    "chrome://greasemonkey/skin/icon16.png",
     notificationBox.PRIORITY_WARNING_MEDIUM,
     [{
       label: GM_BrowserUI.bundle.getString("greeting.btn"),

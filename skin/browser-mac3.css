@@ -1,0 +1,18 @@
+toolbar #greasemonkey-tbb {
+  list-style-image: url("chrome://greasemonkey/content/third-party/toolbar-mac.png") !important;
+}
+
+#greasemonkey-tbb {
+  -moz-image-region: rect(0px, 36px, 22px, 0px);
+  opacity: 1.0 !important;
+}
+#greasemonkey-tbb[disabled="yes"] {
+  -moz-image-region: rect(23px, 36px, 45px, 0px);
+}
+#greasemonkey-tbb:hover:active {
+  -moz-image-region: rect(46px, 36px, 68px, 0px);
+}
+
+#greasemonkey-tbb .toolbarbutton-icon {
+  opacity: 1.0 !important;
+}
