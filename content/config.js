@@ -263,7 +263,7 @@ Config.prototype = {
       // save the old script's state
       script._enabled = this._scripts[existingIndex].enabled;
 
-      // unintall the old script
+      // uninstall the old script
       this.uninstall(this._scripts[existingIndex], true);
     }
 
@@ -287,7 +287,12 @@ Config.prototype = {
     script._dependhash = GM_sha1(script._rawMeta);
 
     this._scripts.push(script);
-    this._changed(script, "install", null);
+
+    if (existingIndex > -1) {
+      this.move(script, existingIndex - this._scripts.length + 1);
+    }
+
+    this._changed(script, "install", existingIndex);
 
     GM_log("< Config.install");
   },

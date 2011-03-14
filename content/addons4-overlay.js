@@ -25,6 +25,26 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
+// Set up an "observer" on the config, to keep the displayed items up to date
+// with their actual state.
+var observer = {
+ notifyEvent: function(script, event, data) {
+    if ('addons://list/user-script' != gViewController.currentViewId) return;
+
+    switch (event) {
+      case 'install':
+      case 'modified':
+        ScriptAddonReplaceScript(script);
+        break;
+      case "edit-enabled":
+        ScriptAddonFactoryByScript(script).userDisabled = !data;
+        break;
+    }
+
+    gViewController.loadViewInternal('addons://list/user-script', null);
+  }
+};
+
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function addonIsInstalledScript(aAddon) {
@@ -35,6 +55,8 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function init() {
+  GM_getConfig().addObserver(observer);
+
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_openInEditor(aAddon._script); }
@@ -65,25 +87,11 @@ function init() {
       'popupshowing', onContextPopupShowing, false);
 
   window.addEventListener('ViewChanged', onViewChanged, false);
+  onViewChanged(); // initialize on load as well as when it changes later
 
-  var stringBundleService = Components
-      .classes['@mozilla.org/intl/stringbundle;1']
-      .getService(Ci.nsIStringBundleService);
-  var stringBundle = stringBundleService
-      .createBundle('chrome://greasemonkey/locale/gm-addons.properties');
-
-  // Inject this content into an XBL binding (where it can't be overlayed).
-  sortExecuteOrderButton = document.createElement('button');
-  sortExecuteOrderButton.setAttribute('checkState', '0');
-  sortExecuteOrderButton.setAttribute('class', 'sorter');
-  sortExecuteOrderButton.setAttribute(
-      'label', stringBundle.GetStringFromName('executionorder'));
-  sortExecuteOrderButton.setAttribute(
-      'tooltiptext', stringBundle.GetStringFromName('executionorder.tooltip'));
-  sortExecuteOrderButton.collapsed = true;
-  sortersContainer = document.getElementById('list-sorters');
-  sortersContainer.appendChild(sortExecuteOrderButton);
-  sortersContainer.addEventListener('click', onSortersClicked, true);
+  document.getElementById('greasemonkey-sort-bar').addEventListener(
+      'click', onSortersClicked, false);
+  applySort();
 };
 
 function onContextPopupShowing(aEvent) {
@@ -96,56 +104,54 @@ function onContextPopupShowing(aEvent) {
   }
 };
 
-function onExecuteSortCommand(aEvent) {
-  // Uncheck all sorters.
-  var sorters = document.getAnonymousNodes(sortersContainer);
-  for (var i=0, el=null; el=sorters[i]; i++) {
-    el.setAttribute('checkState', '0');
+function onSortersClicked(aEvent) {
+  if ('button' != aEvent.target.tagName) return;
+  var button = aEvent.target;
+
+  var checkState = button.getAttribute('checkState');
+
+  // Remove checkState from all buttons.
+  var buttons = document.getElementById('greasemonkey-sort-bar')
+      .getElementsByTagName('button');
+  for (var i = 0, el = null; el = buttons[i]; i++) {
+    el.removeAttribute('checkState');
   }
-  // Check our sorter.
-  var curState = aEvent.target.getAttribute('checkState');
-  aEvent.target.setAttribute('checkState', (curState == '1') ? '2' : '1');
-  // Actually sort the elements.
-  sortScriptsByExecution();
+
+  // Toggle state of this button.
+  if ('2' == checkState) {
+    button.setAttribute('checkState', '1');
+  } else {
+    button.setAttribute('checkState', '2');
+  }
+
+  applySort();
 };
 
-function onSortersClicked(aEvent) {
-  if (aEvent.target == sortExecuteOrderButton) {
-    onExecuteSortCommand(aEvent);
-  } else {
-    // When a sorter other than ours is clicked, uncheck ours.
-    sortExecuteOrderButton.setAttribute('checkState', 0);
+function applySort() {
+  // Find checked button.
+  var buttons = document.getElementById('greasemonkey-sort-bar')
+    .getElementsByTagName('button');
+  for (var i = 0, button = null; button = buttons[i]; i++) {
+    if (button.hasAttribute('checkState')) break;
   }
+
+  var ascending = '1' != button.getAttribute('checkState');
+  var sortBy=button.getAttribute('sortBy').split(',');
+
+  var list = document.getElementById('addon-list');
+  var elements = Array.slice(list.childNodes, 0);
+  sortElements(elements, sortBy, ascending);
+  while (list.listChild) list.removeChild(list.lastChild);
+  elements.forEach(function(el) { list.appendChild(el); });
 };
 
 function onViewChanged(aEvent) {
-  // If we _were_ visible (execute sorter is not collapsed) ...
-  if (!sortExecuteOrderButton.collapsed
-    // And execute sorter is selected ...
-    && (1 == sortExecuteOrderButton.getAttribute('checkState'))
-  ) {
-    // Deselect us.
-    sortExecuteOrderButton.setAttribute('checkState', 0);
-    // Select name.
-    var sorters = document.getAnonymousNodes(sortersContainer);
-    sorters[0].setAttribute('checkState', 1);
-    // Sort by name.
-    gViewController.currentViewObj.onSortChanged('name', true);
+  if ('addons://list/user-script' == gViewController.currentViewId) {
+    document.documentElement.className += ' greasemonkey';
+  } else {
+    document.documentElement.className = document.documentElement.className
+        .replace(/ greasemonkey/g, '');
   }
-  // Hide the execute order sorter, when the view is not ours.
-  sortExecuteOrderButton.collapsed =
-      'addons://list/user-script' != gViewController.currentViewId;
-};
-
-function sortScriptsByExecution() {
-  var sortService = Cc["@mozilla.org/xul/xul-sort-service;1"].
-    getService(Ci.nsIXULSortService);
-
-  var chkState = sortExecuteOrderButton.getAttribute('checkState');
-  if ("1" != chkState && "2" != chkState) return;
-
-  sortService.sort(gListView._listBox, 'executionIndex',
-      ("1" == chkState) ? "ascending" : "descending");
 };
 
 function reorderScriptExecution(aAddon, moveBy) {
@@ -156,7 +162,7 @@ function reorderScriptExecution(aAddon, moveBy) {
         setRichlistitemExecutionIndex(addon);
       }
       // Re-sort the list, with these fixed attributes.
-      sortScriptsByExecution();
+      applySort();
       // Ensure the selected element is still visible.
       var richlistbox = document.getElementById('addon-list');
       richlistbox.ensureElementIsVisible(richlistbox.currentItem);
@@ -186,5 +192,7 @@ function unload() {
       // Todo: This without dipping into private members.
       GM_config._save(true);
     });
+
+  GM_config.removeObserver(observer);
 };
 })();

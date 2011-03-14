@@ -29,10 +29,8 @@ GM_os = xulRuntime.OS;
 })();
 
 (function() {
-// Override some built-in functions, with a closure reference to the original
-// function, to either handle or delegate the call.
-var _origShowView = showView;
-showView = function(aView) {
+var _origShowView;
+function ourShowView(aView) {
   if ('userscripts' == aView) {
     greasemonkeyAddons.showView();
   } else {
@@ -44,13 +42,21 @@ showView = function(aView) {
     _origShowView(aView);
   }
 };
+window.GM_overrideShowView = function() {
+  if (showView != ourShowView) {
+    _origShowView = showView;
+    showView = ourShowView;
+  }
+};
+GM_overrideShowView();
 
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
   notifyEvent: function(script, event, data) {
     if (event == "install") {
-      var item = greasemonkeyAddons.addScriptToList(script);
+      var beforeNode = data > -1 ? gUserscriptsView.childNodes[data] : null;
+      var item = greasemonkeyAddons.addScriptToList(script, beforeNode);
       if (gView == "userscripts") gUserscriptsView.selectedItem = item;
       item.setAttribute('newAddon', 'true');
       return;
@@ -106,6 +112,23 @@ window.addEventListener('load', function() {
           gView = 'userstyles';
         },
         false);
+  }
+
+  // Work-around for Personas Plus compatibility.  They're super dirty with
+  // the showView() method, and they break us.  Guarantee our version is used
+  // (because we're responsible enough to still call them).
+  if ('undefined' != typeof DEFAULT_PERSONA_ID) {
+    GM_overrideShowView();
+    if ('userscripts' == gView) {
+      GM_logError(new Error(
+          'Warning: the Personas Plus extension is incompatible with'
+          +' Greasemonkey.\nIt is not required to use personas; you are advised'
+          +' to uninstall it.'));
+      // Since we (probably?) loaded with Persona's broken-for-us showView(),
+      // switch away and back so user scripts will show up.
+      showView('extensions');
+      setTimeout(showView, 0, 'userscripts');
+    }
   }
 }, false);
 

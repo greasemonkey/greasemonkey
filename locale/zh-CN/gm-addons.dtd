@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "显示脚本所在目录">
 <!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">
 <!ENTITY SortScripts "排列脚本">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "取消卸载">

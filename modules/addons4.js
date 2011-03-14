@@ -6,7 +6,7 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup'];
+var EXPORTED_SYMBOLS = ['GM_addonsStartup', 'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -70,7 +70,10 @@ function ScriptAddonFactoryById(aId) {
   // TODO: throw an error instead?
   return null;
 }
-
+function ScriptAddonReplaceScript(aScript) {
+  var id = aScript.id + SCRIPT_ID_SUFFIX;
+  ScriptAddonCache[id] = new ScriptAddon(aScript);
+}
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
 function ScriptAddon(aScript) {

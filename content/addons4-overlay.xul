@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons4.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/content/third-party/addons4.css" type="text/css"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
@@ -58,5 +59,19 @@
     label="&ExecuteLast;" type="user-script"
   />
 </menupopup>
+
+<vbox id="list-view">
+  <hbox id="greasemonkey-sort-bar" class="view-header"
+      pack="end" insertbefore="addon-list"
+  >
+    <button label="&Sort.Status;" tooltiptext="&Sort.ByStatus;"
+        class="sorter" sortBy="uiState,name"
+        checkState="2"/>
+    <button label="&Sort.Name;" tooltiptext="&Sort.ByName;"
+        class="sorter" sortBy="name"/>
+    <button label="&Sort.Execution;" tooltiptext="&Sort.ByExecution;"
+        class="sorter" sortBy="executionIndex"/>
+  </hbox>
+</vbox>
 
 </overlay>

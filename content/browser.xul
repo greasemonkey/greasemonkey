@@ -2,6 +2,8 @@
 
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
 
+<?xml-stylesheet href='chrome://greasemonkey/skin/browser.css' type='text/css'?>
+
 <overlay id="greasemonkey-browser-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -12,6 +14,15 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
+
+  <toolbarpalette id='BrowserToolbarPalette'>
+    <toolbarbutton id='greasemonkey-tbb' type='menu-button'
+      class='toolbarbutton-1 chromeclass-toolbar-additional'
+      oncommand='GM_BrowserUI.toggleStatus();'
+      label='Greasemonkey' tooltiptext='Greasemonkey'
+    >
+    </toolbarbutton>
+  </toolbarpalette>
 
   <popup id="contentAreaContextMenu">
     <menuitem id="view-userscript"
@@ -35,71 +46,35 @@
     accesskey="G"
     label="Greasemonkey"
   >
-    <menupopup onpopupshowing="GM_showGeneralPopup(event);">
-      <menuitem id="gm-general-menu-enabled-item"
+    <menupopup onpopupshowing="GM_handleMenuPopupshowing(this);"
+      oncommand="event.stopPropagation();"
+    >
+      <menuitem class='gm-enabled-item'
         accesskey="&statusbar.enabled.accesskey;"
         label="&statusbar.enabled;"
         type="checkbox"
-        oncommand="GM_setEnabled(!GM_getEnabled());" />
+        oncommand="GM_BrowserUI.toggleStatus();" />
       <menuseparator />
       <menuitem
         accesskey="&menu.manage.accesskey;"
         label="&menu.manage;"
         oncommand="GM_OpenScriptsMgr();" />
-      <menuitem id="userscript-tools-new"
+      <menuitem
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
         oncommand="GM_newUserScript();" />
-      <menu id="userscript-commands-sb2"
+      <menu id="userscript-commands-tbm"
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
-        disabled="false"
         onpopupshowing="event.stopPropagation();"
       >
-        <menupopup />
+        <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
       </menu>
     </menupopup>
   </menu>
 
-  <statusbar id="status-bar">
-    <!-- NOTE: Local to statusbar tag scope -->
-    <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
-
-    <statusbarpanel id="gm-status"
-      context=""
-      onclick="GM_BrowserUI.statusClicked(event);"
-    >
-      <image id="gm-status-image" width="16" height="16" />
-    </statusbarpanel>
-    <menupopup id="gm-status-popup"
-      onpopupshowing="GM_showPopup(event);"
-      onclick="GM_popupClicked(event);"
-    >
-      <menuitem id="gm-status-no-scripts"
-        label="&statusbar.noscripts;"
-        style="color:grey" />
-      <menuseparator id="gm-status-no-scripts-sep" />
-      <menu id="userscript-commands-sb"
-        accesskey="&menu.commands.accesskey;"
-        label="&menu.commands;"
-        disabled="false"
-      >
-        <menupopup />
-      </menu>
-      <menuseparator />
-      <menuitem accesskey="&menu.new.accesskey;"
-        label="&menu.new;"
-        oncommand="GM_newUserScript();" />
-      <menuitem accesskey="&menu.manage.accesskey;"
-        label="&menu.manage;"
-        oncommand="GM_OpenScriptsMgr();" />
-      <menuseparator />
-      <menuitem id="gm-status-enabled-item"
-        accesskey="&statusbar.enabled.accesskey;"
-        label="&statusbar.enabled;"
-        type="checkbox"
-        oncommand="GM_setEnabled(!GM_getEnabled());" />
-    </menupopup>
-  </statusbar>
+  <stringbundleset id="stringbundleset">
+  <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
+  </stringbundleset>
 
 </overlay>

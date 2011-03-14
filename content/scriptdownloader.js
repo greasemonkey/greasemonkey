@@ -45,7 +45,6 @@ GM_ScriptDownloader.prototype._htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i')
 GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
   if (2 != this.req_.readyState) return;
 
-  dump('>>> GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload()\n');
   if (this._htmlTypeRegex.test(this.req_.getResponseHeader("Content-Type"))
       && this.contentWindow_
   ) {
