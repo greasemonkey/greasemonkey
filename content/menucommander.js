@@ -12,7 +12,8 @@ GM_MenuCommander.createMenuItem = function(command) {
     ) {
       menuItem.setAttribute("accesskey", command.accessKey);
     } else {
-      throw "accessKey must be a single character";
+      GM_logError(new Error('Error with menu command "'
+          + command.name + '": accessKey must be a single character'));
     }
   }
 
