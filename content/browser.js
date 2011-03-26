@@ -115,6 +115,8 @@ GM_BrowserUI.contentLoad = function(e) {
 
 GM_BrowserUI.contentUnload = function(e) {
   var safeWin = e.target.defaultView;
+  if (event.persisted) return;  // http://goo.gl/qeY5W
+
   var unsafeWin = safeWin.wrappedJSObject;
   var href = safeWin.location.href;
 
