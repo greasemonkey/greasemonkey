@@ -122,7 +122,6 @@ GM_GreasemonkeyService.prototype = {
     }
   },
 
-
   // gmIGreasemonkeyService
   domContentLoaded: function(wrappedContentWin, chromeWin) {
     var url = wrappedContentWin.document.location.href;
@@ -131,12 +130,15 @@ GM_GreasemonkeyService.prototype = {
     if (scripts.length > 0) {
       this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
     }
+  },
 
-    // Clean out obsolete commands.
-    // TODO: This doesn't remove commands until the content window is gone.
-    // If the script is edited, old commands hang around.
-    for (var i = 0, command = null; command = this.menuCommands[i]; i++) {
-      if (command.window.closed) delete this.menuCommands[i--];
+  contentUnloaded: function(wrappedContentWin, chromeWin) {
+    var unsafeWin = wrappedContentWin.wrappedJSObject;
+    var l = this.menuCommands.length - 1;
+    for (var i = l, command = null; command = this.menuCommands[i]; i--) {
+      if (command.window == unsafeWin) {
+        this.menuCommands.splice(i, 1);
+      }
     }
   },
 

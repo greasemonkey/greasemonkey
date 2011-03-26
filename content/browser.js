@@ -47,11 +47,13 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  // hook various events
-  document.getElementById("appcontent")
-    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  document.getElementById("sidebar")
-    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  gBrowser.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+
+  var sidebar = document.getElementById("sidebar");
+  sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  sidebar.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
@@ -111,6 +113,15 @@ GM_BrowserUI.contentLoad = function(e) {
   }
 };
 
+GM_BrowserUI.contentUnload = function(e) {
+  var safeWin = e.target.defaultView;
+  var unsafeWin = safeWin.wrappedJSObject;
+  var href = safeWin.location.href;
+
+  if (GM_isGreasemonkeyable(href)) {
+    GM_BrowserUI.gmSvc.contentUnloaded(safeWin, window);
+  }
+};
 
 /**
  * Shows the install banner across the top of the tab that is displayed when
