@@ -87,6 +87,7 @@ GM_GreasemonkeyService.prototype = {
                        entry: CONTRACTID,
                        value: CONTRACTID,
                        service: true}],
+  menuCommandId: 0,
   menuCommands: [],
 
   // nsISupports
@@ -122,7 +123,6 @@ GM_GreasemonkeyService.prototype = {
     }
   },
 
-
   // gmIGreasemonkeyService
   domContentLoaded: function(wrappedContentWin, chromeWin) {
     var url = wrappedContentWin.document.location.href;
@@ -131,12 +131,21 @@ GM_GreasemonkeyService.prototype = {
     if (scripts.length > 0) {
       this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
     }
+  },
 
-    // Clean out obsolete commands.
-    // TODO: This doesn't remove commands until the content window is gone.
-    // If the script is edited, old commands hang around.
-    for (var i = 0, command = null; command = this.menuCommands[i]; i++) {
-      if (command.window.closed) delete this.menuCommands[i--];
+  contentUnloaded: function(wrappedContentWin, chromeWin) {
+    var l = this.menuCommands.length - 1;
+    for (var i = l, command = null; command = this.menuCommands[i]; i--) {
+      var closed = false;
+      try {
+        closed = command.contentWindow.closed;
+      } catch (e) { }
+
+      if (closed ||
+          (command.contentWindow == wrappedContentWin)
+      ) {
+        this.menuCommands.splice(i, 1);
+      }
     }
   },
 
@@ -176,10 +185,6 @@ GM_GreasemonkeyService.prototype = {
 
     if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT &&
         cl.spec.match(/\.user\.js$/)) {
-
-      dump("shouldload: " + cl.spec + "\n");
-      dump("ignorescript: " + this.ignoreNextScript_ + "\n");
-
       if (!this.ignoreNextScript_
         && !this.isTempScript(cl)
         && GM_installUri(cl, ctx.contentWindow)
@@ -197,7 +202,6 @@ GM_GreasemonkeyService.prototype = {
   },
 
   ignoreNextScript: function() {
-    dump("ignoring next script...\n");
     this.ignoreNextScript_ = true;
   },
 
@@ -274,9 +278,8 @@ GM_GreasemonkeyService.prototype = {
           this, "openInTab", wrappedContentWin, chromeWin);
       sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
                                            "contentStartRequest");
-      sandbox.GM_registerMenuCommand = GM_hitch(this,
-                                                "registerMenuCommand",
-                                                unsafeContentWin);
+      sandbox.GM_registerMenuCommand = GM_hitch(
+          this, "registerMenuCommand", wrappedContentWin, chromeWin, script);
 
       // Re-wrap the window before assigning it to the sandbox.__proto__
       // This is a workaround for a bug in which the Security Manager
@@ -314,17 +317,25 @@ GM_GreasemonkeyService.prototype = {
     }
   },
 
-  registerMenuCommand: function(unsafeContentWin, commandName, commandFunc,
-                                accelKey, accelModifiers, accessKey) {
+  registerMenuCommand: function(
+      wrappedContentWin, chromeWin, script,
+      commandName, commandFunc, accelKey, accelModifiers, accessKey) {
     if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
       return;
     }
-    var command = {name: commandName,
+    var command = {id: "userscript-command-" + this.menuCommandId++,
+                   script: script,
+                   name: commandName,
                    accelKey: accelKey,
                    accelModifiers: accelModifiers,
                    accessKey: accessKey,
                    commandFunc: commandFunc,
-                   window: unsafeContentWin};
+                   contentWindow: wrappedContentWin.top,
+                   chromeWindow: chromeWin,
+                   key: null};
+    if (accelKey) {
+      command.key = chromeWin.GM_MenuCommander.createKey(command);
+    }
     this.menuCommands.push(command);
   },
 
@@ -363,8 +374,8 @@ GM_GreasemonkeyService.prototype = {
 
         // try to find the line of the actual error line
         var line = e && e.lineNumber;
-        if (4294967295 == line) {
-          // Line number is reported as max int in edge cases.  Sometimes
+        if (line > 0xFFFFFF00) {
+          // Line number is reported as a huge int in edge cases.  Sometimes
           // the right one is in the "location", instead.  Look there.
           if (e.location && e.location.lineNumber) {
             line = e.location.lineNumber;
@@ -381,7 +392,7 @@ GM_GreasemonkeyService.prototype = {
             e, // error obj
             0, // 0 = error (1 = warning)
             err.uri,
-            err.lineNumber
+            line
           );
         } else {
           GM_logError(

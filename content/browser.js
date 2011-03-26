@@ -45,12 +45,15 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Update visual status when enabled state changes.
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
+  GM_BrowserUI.refreshStatus();
 
-  // hook various events
-  document.getElementById("appcontent")
-    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  document.getElementById("sidebar")
-    .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  gBrowser.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+
+  var sidebar = document.getElementById("sidebar");
+  sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  sidebar.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
@@ -88,15 +91,15 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
  * If that document is in in the top-level window of the focused tab, find
  * it's menu items and activate them.
  */
-GM_BrowserUI.contentLoad = function(e) {
+GM_BrowserUI.contentLoad = function(event) {
   if (!GM_getEnabled()) return;
 
-  var safeWin = e.target.defaultView;
-  var unsafeWin = safeWin.wrappedJSObject;
+  var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
     GM_BrowserUI.gmSvc.domContentLoaded(safeWin, window);
+    GM_MenuCommander.attachKeys();
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
@@ -110,6 +113,16 @@ GM_BrowserUI.contentLoad = function(e) {
   }
 };
 
+GM_BrowserUI.contentUnload = function(event) {
+  if (event.persisted) return;  // http://goo.gl/qeY5W
+
+  var safeWin = event.target.defaultView;
+
+  if (GM_isGreasemonkeyable(safeWin.location.href)) {
+    GM_BrowserUI.gmSvc.contentUnloaded(safeWin, window);
+    GM_MenuCommander.detachKeys();
+  }
+};
 
 /**
  * Shows the install banner across the top of the tab that is displayed when
@@ -267,19 +280,17 @@ GM_BrowserUI.isMyWindow = function(domWindow) {
   return false;
 };
 
-function GM_handleMenuPopupshowing(aMenupopup) {
-  var enabledMenuitem = aMenupopup.getElementsByClassName('gm-enabled-item')[0];
-  enabledMenuitem.setAttribute("checked", GM_getEnabled());
-}
-
 GM_BrowserUI.refreshStatus = function() {
-  if (!GM_BrowserUI.toolbarButton) return;
-  GM_BrowserUI.toolbarButton.setAttribute(
-      'disabled', GM_getEnabled() ? 'no' : 'yes');
-};
+  var enabledEl = document.getElementById("gm_toggle_enabled");
+  var checkedEl = document.getElementById("gm_toggle_checked");
 
-GM_BrowserUI.toggleStatus = function() {
-  GM_setEnabled(!GM_getEnabled());
+  if (GM_getEnabled()) {
+    checkedEl.setAttribute('checked', true);
+    enabledEl.removeAttribute('disabled');
+  } else {
+    checkedEl.removeAttribute('checked');
+    enabledEl.setAttribute('disabled', 'yes');
+  }
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
@@ -292,13 +303,13 @@ GM_BrowserUI.viewContextItemClicked = function() {
 
 GM_BrowserUI.nodeInserted = function(aEvent) {
   if ('greasemonkey-tbb' == aEvent.target.id) {
-    GM_BrowserUI.toolbarButton = aEvent.target;
+    var toolbarButton = aEvent.target;
 
-    // Set the icon properly.
-    GM_BrowserUI.refreshStatus();
     // Duplicate the tools menu popup inside the toolbar button.
-    var menupopup = document.getElementById('gm_general_menu').firstChild;
-    GM_BrowserUI.toolbarButton.appendChild(menupopup.cloneNode(true));
+    if (!toolbarButton.firstChild) {
+      var menupopup = document.getElementById('gm_general_menu').firstChild;
+      toolbarButton.appendChild(menupopup.cloneNode(true));
+    }
   }
 };
 
