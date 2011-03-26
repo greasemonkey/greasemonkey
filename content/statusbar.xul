@@ -41,7 +41,7 @@
         accesskey="&statusbar.enabled.accesskey;"
         label="&statusbar.enabled;"
         type="checkbox"
-        oncommand="GM_setEnabled(!GM_getEnabled());" />
+        command="gm_toggle_checked" />
     </menupopup>
   </statusbar>
 

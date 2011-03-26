@@ -15,13 +15,19 @@
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
 
+  <commandset>
+    <!-- sync the 'disabled' attribute for toolbar button -->
+    <command id="gm_toggle_enabled" oncommand="GM_setEnabled(!GM_getEnabled());"/>
+    <!-- sync the 'checked' attribute for menu items -->
+    <command id="gm_toggle_checked" oncommand="GM_setEnabled(!GM_getEnabled());"/>
+  </commandset>
+
   <toolbarpalette id='BrowserToolbarPalette'>
     <toolbarbutton id='greasemonkey-tbb' type='menu-button'
       class='toolbarbutton-1 chromeclass-toolbar-additional'
-      oncommand='GM_BrowserUI.toggleStatus();'
+      command="gm_toggle_enabled"
       label='Greasemonkey' tooltiptext='Greasemonkey'
-    >
-    </toolbarbutton>
+    />
   </toolbarpalette>
 
   <popup id="contentAreaContextMenu">
@@ -46,14 +52,12 @@
     accesskey="G"
     label="Greasemonkey"
   >
-    <menupopup onpopupshowing="GM_handleMenuPopupshowing(this);"
-      oncommand="event.stopPropagation();"
-    >
+    <menupopup oncommand="event.stopPropagation();">
       <menuitem class='gm-enabled-item'
         accesskey="&statusbar.enabled.accesskey;"
         label="&statusbar.enabled;"
         type="checkbox"
-        oncommand="GM_BrowserUI.toggleStatus();" />
+        command="gm_toggle_checked"/>
       <menuseparator />
       <menuitem
         accesskey="&menu.manage.accesskey;"

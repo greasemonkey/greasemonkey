@@ -45,6 +45,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Update visual status when enabled state changes.
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
+  GM_BrowserUI.refreshStatus();
 
   // hook various events
   document.getElementById("appcontent")
@@ -267,19 +268,17 @@ GM_BrowserUI.isMyWindow = function(domWindow) {
   return false;
 };
 
-function GM_handleMenuPopupshowing(aMenupopup) {
-  var enabledMenuitem = aMenupopup.getElementsByClassName('gm-enabled-item')[0];
-  enabledMenuitem.setAttribute("checked", GM_getEnabled());
-}
-
 GM_BrowserUI.refreshStatus = function() {
-  if (!GM_BrowserUI.toolbarButton) return;
-  GM_BrowserUI.toolbarButton.setAttribute(
-      'disabled', GM_getEnabled() ? 'no' : 'yes');
-};
+  var enabledEl = document.getElementById("gm_toggle_enabled");
+  var checkedEl = document.getElementById("gm_toggle_checked");
 
-GM_BrowserUI.toggleStatus = function() {
-  GM_setEnabled(!GM_getEnabled());
+  if (GM_getEnabled()) {
+    checkedEl.setAttribute('checked', true);
+    enabledEl.removeAttribute('disabled');
+  } else {
+    checkedEl.removeAttribute('checked');
+    enabledEl.setAttribute('disabled', 'yes');
+  }
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
@@ -292,15 +291,12 @@ GM_BrowserUI.viewContextItemClicked = function() {
 
 GM_BrowserUI.nodeInserted = function(aEvent) {
   if ('greasemonkey-tbb' == aEvent.target.id) {
-    GM_BrowserUI.toolbarButton = aEvent.target;
-
-    // Set the icon properly.
-    GM_BrowserUI.refreshStatus();
+    var toolbarButton = aEvent.target;
 
     // Duplicate the tools menu popup inside the toolbar button.
-    if (!GM_BrowserUI.toolbarButton.firstChild) {
+    if (!toolbarButton.firstChild) {
       var menupopup = document.getElementById('gm_general_menu').firstChild;
-      GM_BrowserUI.toolbarButton.appendChild(menupopup.cloneNode(true));
+      toolbarButton.appendChild(menupopup.cloneNode(true));
     }
   }
 };
