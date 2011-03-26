@@ -91,15 +91,15 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
  * If that document is in in the top-level window of the focused tab, find
  * it's menu items and activate them.
  */
-GM_BrowserUI.contentLoad = function(e) {
+GM_BrowserUI.contentLoad = function(event) {
   if (!GM_getEnabled()) return;
 
-  var safeWin = e.target.defaultView;
-  var unsafeWin = safeWin.wrappedJSObject;
+  var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
 
   if (GM_isGreasemonkeyable(href)) {
     GM_BrowserUI.gmSvc.domContentLoaded(safeWin, window);
+    GM_MenuCommander.attachKeys();
   }
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
@@ -113,15 +113,14 @@ GM_BrowserUI.contentLoad = function(e) {
   }
 };
 
-GM_BrowserUI.contentUnload = function(e) {
-  var safeWin = e.target.defaultView;
+GM_BrowserUI.contentUnload = function(event) {
   if (event.persisted) return;  // http://goo.gl/qeY5W
 
-  var unsafeWin = safeWin.wrappedJSObject;
-  var href = safeWin.location.href;
+  var safeWin = event.target.defaultView;
 
-  if (GM_isGreasemonkeyable(href)) {
+  if (GM_isGreasemonkeyable(safeWin.location.href)) {
     GM_BrowserUI.gmSvc.contentUnloaded(safeWin, window);
+    GM_MenuCommander.detachKeys();
   }
 };
 

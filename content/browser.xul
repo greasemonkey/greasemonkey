@@ -22,6 +22,10 @@
     <command id="gm_toggle_checked" oncommand="GM_setEnabled(!GM_getEnabled());"/>
   </commandset>
 
+  <window id="main-window">
+    <keyset id="userscript-command-keys" insertafter="mainKeyset"></keyset>
+  </window>
+
   <toolbarpalette id='BrowserToolbarPalette'>
     <toolbarbutton id='greasemonkey-tbb' type='menu-button'
       class='toolbarbutton-1 chromeclass-toolbar-additional'
