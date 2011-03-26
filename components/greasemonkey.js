@@ -365,8 +365,8 @@ GM_GreasemonkeyService.prototype = {
 
         // try to find the line of the actual error line
         var line = e && e.lineNumber;
-        if (4294967295 == line) {
-          // Line number is reported as max int in edge cases.  Sometimes
+        if (line > 0xFFFFFF00) {
+          // Line number is reported as a huge int in edge cases.  Sometimes
           // the right one is in the "location", instead.  Look there.
           if (e.location && e.location.lineNumber) {
             line = e.location.lineNumber;
@@ -383,7 +383,7 @@ GM_GreasemonkeyService.prototype = {
             e, // error obj
             0, // 0 = error (1 = warning)
             err.uri,
-            err.lineNumber
+            line
           );
         } else {
           GM_logError(
