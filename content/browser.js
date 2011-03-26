@@ -296,9 +296,12 @@ GM_BrowserUI.nodeInserted = function(aEvent) {
 
     // Set the icon properly.
     GM_BrowserUI.refreshStatus();
+
     // Duplicate the tools menu popup inside the toolbar button.
-    var menupopup = document.getElementById('gm_general_menu').firstChild;
-    GM_BrowserUI.toolbarButton.appendChild(menupopup.cloneNode(true));
+    if (!GM_BrowserUI.toolbarButton.firstChild) {
+      var menupopup = document.getElementById('gm_general_menu').firstChild;
+      GM_BrowserUI.toolbarButton.appendChild(menupopup.cloneNode(true));
+    }
   }
 };
 
