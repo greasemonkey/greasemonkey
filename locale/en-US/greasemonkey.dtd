@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Manage User Scripts...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "No scripts installed!">
 <!ENTITY statusbar.enabled "Enabled">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Installation">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

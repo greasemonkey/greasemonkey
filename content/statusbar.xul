@@ -21,7 +21,7 @@
       <vbox class='scripts-frame'></vbox>
       <menuseparator class="scripts-sep" />
       <vbox class='scripts-top'></vbox>
-      <menuitem class="no-scripts" label="&statusbar.noscripts;" disabled="true" />
+      <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
       <menuseparator />
 
       <menu id="userscript-commands-sb"

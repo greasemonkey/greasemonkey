@@ -87,7 +87,7 @@
       <vbox class='scripts-top'></vbox>
       <menuseparator class="scripts-sep" />
       <vbox class='scripts-frame'></vbox>
-      <menuitem class="no-scripts" label="&statusbar.noscripts;" disabled="true" />
+      <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
     </menupopup>
   </menu>
 
