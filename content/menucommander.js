@@ -50,10 +50,7 @@ GM_MenuCommander.createKey = function(command) {
 GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   var allCommands = GM_BrowserUI.gmSvc.menuCommands;
 
-  // Clean out the popup.
-  while (aMenuPopup.firstChild) {
-    aMenuPopup.removeChild(aMenuPopup.firstChild);
-  }
+  GM_emptyEl(aMenuPopup);
 
   // Add menu items for commands for the active window.
   var flag = false;
@@ -86,6 +83,5 @@ GM_MenuCommander.attachKeys = function() {
 };
 
 GM_MenuCommander.detachKeys = function() {
-  var keyset = document.getElementById("userscript-command-keys");
-  while (keyset.firstChild) keyset.removeChild(keyset.firstChild);
+  GM_emptyEl(document.getElementById("userscript-command-keys"));
 };
