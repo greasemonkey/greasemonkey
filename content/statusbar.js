@@ -72,29 +72,24 @@ function GM_showPopup(aEvent) {
     return GM_getConfig().getMatchingScripts(testMatchURLs);
   }
 
-  function appendScriptToPopup(script) {
+  function appendScriptTo(script, container) {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.name);
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
-    popup.insertBefore(mi, tail);
+    container.appendChild(mi);
   }
 
   var popup = aEvent.target;
-  var tail = document.getElementById("gm-status-no-scripts-sep");
+  var scriptsFramedEl = popup.getElementsByClassName("scripts-frame")[0];
+  var scriptsTopEl = popup.getElementsByClassName("scripts-top")[0];
+  var scriptsSepEl = popup.getElementsByClassName("scripts-sep")[0];
+  var noScriptsEl = popup.getElementsByClassName("no-scripts")[0];
 
-  // set the enabled/disabled state
-  statusEnabledItemEl.setAttribute("checked", GM_getEnabled());
-
-  // remove all the scripts from the list
-  for (var i = popup.childNodes.length - 1; i >= 0; i--) {
-    var node = popup.childNodes[i];
-    if (node.script || node.getAttribute("value") == "hack") {
-      popup.removeChild(node);
-    }
-  }
+  GM_emptyEl(scriptsFramedEl);
+  GM_emptyEl(scriptsTopEl);
 
   var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
@@ -112,19 +107,16 @@ function GM_showPopup(aEvent) {
     }
   }
 
-  // build the new list of scripts
-  if (runsFramed.length) {
-    runsFramed.forEach(appendScriptToPopup);
-    if (runsOnTop.length) { // only add the separator if there is stuff below
-      var separator = document.createElement("menuseparator");
-      separator.setAttribute("value", "hack"); // remove it in the loop above
-      popup.insertBefore(separator, tail);
-    }
-  }
-  runsOnTop.forEach(appendScriptToPopup);
+  scriptsFramedEl.collapsed = !runsFramed.length;
+  scriptsSepEl.collapsed = !runsFramed.length;
+  noScriptsEl.collapsed = !!(runsOnTop.length || runsFramed.length);
 
-  var foundInjectedScript = !!(runsFramed.length + runsOnTop.length);
-  document.getElementById("gm-status-no-scripts").collapsed = foundInjectedScript;
+  if (runsFramed.length) {
+    runsFramed.forEach(
+        function(script) { appendScriptTo(script, scriptsFramedEl); });
+  }
+  runsOnTop.forEach(
+      function(script) { appendScriptTo(script, scriptsTopEl); });
 }
 window.GM_showPopup = GM_showPopup;
 

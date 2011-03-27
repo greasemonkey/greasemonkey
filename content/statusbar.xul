@@ -18,10 +18,12 @@
       onpopupshowing="GM_showPopup(event);"
       onclick="GM_popupClicked(event);"
     >
-      <menuitem id="gm-status-no-scripts"
-        label="&statusbar.noscripts;"
-        style="color:grey" />
-      <menuseparator id="gm-status-no-scripts-sep" />
+      <vbox class='scripts-frame'></vbox>
+      <menuseparator class="scripts-sep" />
+      <vbox class='scripts-top'></vbox>
+      <menuitem class="no-scripts" label="&statusbar.noscripts;" disabled="true" />
+      <menuseparator />
+
       <menu id="userscript-commands-sb"
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
