@@ -392,7 +392,7 @@ GM_GreasemonkeyService.prototype = {
             e, // error obj
             0, // 0 = error (1 = warning)
             err.uri,
-            line
+            err.lineNumber
           );
         } else {
           GM_logError(
@@ -409,7 +409,7 @@ GM_GreasemonkeyService.prototype = {
     return true; // did not need a (function() {...})() enclosure.
   },
 
-  findError: function(script, lineNumber){
+  findError: function(script, lineNumber) {
     var start = 0;
     var end = 1;
 
