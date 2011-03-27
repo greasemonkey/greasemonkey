@@ -35,7 +35,9 @@ Script.prototype = {
       return convert2RegExp(page).test(url);
     }
 
-    return this._includes.some(test) && !this._excludes.some(test);
+    return GM_isGreasemonkeyable(url)
+        && this._includes.some(test)
+        && !this._excludes.some(test);
   },
 
   _changed: function(event, data) {
