@@ -56,7 +56,11 @@
     accesskey="G"
     label="Greasemonkey"
   >
-    <menupopup oncommand="event.stopPropagation();">
+    <menupopup
+      onpopupshowing="GM_showPopup(event);"
+      onclick="GM_popupClicked(event);"
+      oncommand="event.stopPropagation();"
+    >
       <menuitem class='gm-enabled-item'
         accesskey="&statusbar.enabled.accesskey;"
         label="&statusbar.enabled;"
@@ -78,6 +82,12 @@
       >
         <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
       </menu>
+
+      <menuseparator />
+      <vbox class='scripts-top'></vbox>
+      <menuseparator class="scripts-sep" />
+      <vbox class='scripts-frame'></vbox>
+      <menuitem class="no-scripts" label="&statusbar.noscripts;" disabled="true" />
     </menupopup>
   </menu>
 
