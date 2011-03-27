@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "ج">
 <!ENTITY menu.manage "مدیریت نویسه های کاربری...">
 <!ENTITY menu.manage.accesskey "م">
-<!ENTITY statusbar.noscripts "هیچ نویسه ای نصب نشده!">
 <!ENTITY statusbar.enabled "فعال">
 <!ENTITY statusbar.enabled.accesskey "ع">
 <!ENTITY install.title "فرآیند نصب گریسمانکی">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "نویسه های کاربری">
 <!ENTITY Uninstall "عزل">
 <!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
 <!ENTITY menu.manage.accesskey "S">
-<!ENTITY statusbar.noscripts "Žádné skripty nejsou nainstalovány!">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Instalace Greasemonkey">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "Uživatelské skripty">
 <!ENTITY Uninstall "Odinstalovat">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

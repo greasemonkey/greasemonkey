@@ -1,4 +1,4 @@
-<!ENTITY menu.install "Benutzerskript installieren...">
+<!ENTITY menu.install "Benutzerskript installieren…">
 <!ENTITY menu.install.accesskey "s">
 <!ENTITY menu.show "Benutzerskript-Quelle anzeigen">
 <!ENTITY menu.show.accesskey "Q">
@@ -6,9 +6,8 @@
 <!ENTITY menu.commands.accesskey "B">
 <!ENTITY menu.new "Neues Benutzerskript">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Benutzerskripte verwalten...">
+<!ENTITY menu.manage "Benutzerskripte verwalten…">
 <!ENTITY menu.manage.accesskey "v">
-<!ENTITY statusbar.noscripts "Es sind keine Skripte installiert!">
 <!ENTITY statusbar.enabled "Greasemonkey aktivieren">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Greasemonkey-Installation">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "Benutzerskripte">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
+<!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">

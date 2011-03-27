@@ -1,14 +1,13 @@
-<!ENTITY menu.install "Installera användarskript...">
+<!ENTITY menu.install "Installera användarskript…">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Visa användarskriptkällkod">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Användarskriptkommandon...">
+<!ENTITY menu.commands "Användarskriptkommandon…">
 <!ENTITY menu.commands.accesskey "k">
-<!ENTITY menu.new "Nytt användarskript...">
+<!ENTITY menu.new "Nytt användarskript…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Hantera användarskript...">
+<!ENTITY menu.manage "Hantera användarskript…">
 <!ENTITY menu.manage.accesskey "H">
-<!ENTITY statusbar.noscripts "Inga skript har installerats!">
 <!ENTITY statusbar.enabled "Aktiverat">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installation av Greasemonkey">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "Användarskript">
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AlsoUninstallPrefs "Avinstallera även associerade inställningar">
+<!ENTITY greasemonkey.noscriptshere "Inga installerade skript körs på denna sida.">

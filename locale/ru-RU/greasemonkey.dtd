@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "в">
 <!ENTITY menu.manage "Управление скриптами...">
 <!ENTITY menu.manage.accesskey "п">
-<!ENTITY statusbar.noscripts "Нет установленных скриптов!">
 <!ENTITY statusbar.enabled "Включить Greasemonkey">
 <!ENTITY statusbar.enabled.accesskey "к">
 <!ENTITY install.title "Установка скриптов Greasemonkey">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "Пользовательские скрипты">
 <!ENTITY Uninstall "Удалить">
 <!ENTITY AlsoUninstallPrefs "Также удалить все связанные настройки">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

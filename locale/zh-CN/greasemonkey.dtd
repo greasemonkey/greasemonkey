@@ -8,8 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理用户脚本...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "当前未安装任何脚本！">
-<!ENTITY statusbar.enabled "已启用">
+<!ENTITY statusbar.enabled "启用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安装过程">
 <!ENTITY install.runson "脚本应用到下列网页：">
@@ -18,7 +17,7 @@
 <!ENTITY install.warning2 "您应该只安装从可信任来源获得的脚本。">
 <!ENTITY install.showscriptsource "显示脚本源代码">
 <!ENTITY install.installbutton "安装">
-<!ENTITY newscript.name "名字">
+<!ENTITY newscript.name "名称">
 <!ENTITY newscript.namespace "名字空间">
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "脚本应用到下列网页（每行一条网页地址）">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "用户脚本">
 <!ENTITY Uninstall "卸载">
 <!ENTITY AlsoUninstallPrefs "同时清除相关的首选项设置">
+<!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
