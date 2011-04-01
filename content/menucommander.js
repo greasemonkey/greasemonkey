@@ -2,9 +2,8 @@ var GM_MenuCommander = {};
 
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
-  menuItem._commandFunc = command.commandFunc;
   menuItem.setAttribute("label", command.name);
-  menuItem.setAttribute("oncommand", "this._commandFunc()");
+  menuItem.addEventListener("command", command.commandFunc, true);
 
   if (command.accessKey) {
     if (typeof(command.accessKey) == "string"
