@@ -18,9 +18,10 @@
       onpopupshowing="GM_showPopup(event);"
       onclick="GM_popupClicked(event);"
     >
-      <vbox class='scripts-frame'></vbox>
+      <menuseparator class="scripts-framed-point" collapsed="true" />
       <menuseparator class="scripts-sep" />
-      <vbox class='scripts-top'></vbox>
+      <menuseparator class="scripts-top-point" collapsed="true" />
+      <menuseparator collapsed="true" />
       <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
       <menuseparator />
 

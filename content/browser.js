@@ -375,24 +375,33 @@ function GM_showPopup(aEvent) {
     return GM_getConfig().getMatchingScripts(testMatchURLs);
   }
 
-  function appendScriptTo(script, container) {
+  function appendScriptAfter(script, point) {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.name);
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
-    container.appendChild(mi);
+    point.parentNode.insertBefore(mi, point.nextSibling);
+    return mi;
   }
 
   var popup = aEvent.target;
-  var scriptsFramedEl = popup.getElementsByClassName("scripts-frame")[0];
-  var scriptsTopEl = popup.getElementsByClassName("scripts-top")[0];
+  var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
+  var scriptsTopEl = popup.getElementsByClassName("scripts-top-point")[0];
   var scriptsSepEl = popup.getElementsByClassName("scripts-sep")[0];
   var noScriptsEl = popup.getElementsByClassName("no-scripts")[0];
 
-  GM_emptyEl(scriptsFramedEl);
-  GM_emptyEl(scriptsTopEl);
+  // Remove existing menu items, between separators.
+  function removeMenuitemsAfter(el) {
+    while (true) {
+      var sibling = el.nextSibling;
+      if (!sibling || 'menuseparator' == sibling.tagName) break;
+      sibling.parentNode.removeChild(sibling);
+    }
+  }
+  removeMenuitemsAfter(scriptsFramedEl);
+  removeMenuitemsAfter(scriptsTopEl);
 
   var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
@@ -410,14 +419,15 @@ function GM_showPopup(aEvent) {
     }
   }
 
-  scriptsFramedEl.collapsed = !runsFramed.length;
-  scriptsSepEl.collapsed = !runsFramed.length;
+  scriptsSepEl.collapsed = !(runsOnTop.length && runsFramed.length);
   noScriptsEl.collapsed = !!(runsOnTop.length || runsFramed.length);
 
   if (runsFramed.length) {
+    var point = scriptsFramedEl;
     runsFramed.forEach(
-        function(script) { appendScriptTo(script, scriptsFramedEl); });
+        function(script) { point = appendScriptAfter(script, point); });
   }
+  var point = scriptsTopEl;
   runsOnTop.forEach(
-      function(script) { appendScriptTo(script, scriptsTopEl); });
+      function(script) { point = appendScriptAfter(script, point); });
 }
