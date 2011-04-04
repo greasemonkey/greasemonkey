@@ -429,3 +429,21 @@ function GM_newUserScript() {
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
+
+function GM_windowId(win) {
+  try {
+    var domWindowUtils = win
+        .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+        .getInterface(Components.interfaces.nsIDOMWindowUtils);
+    return domWindowUtils.currentInnerWindowID;
+  } catch (e) {
+    // Above fails in Firefox <4.0, so just use the raw window for now.
+    return win;
+  }
+}
+
+function GM_windowIdForEvent(aEvent) {
+  var safeWin = aEvent.target.defaultView;
+  if (!GM_isGreasemonkeyable(safeWin.location.href)) return null;
+  return GM_windowId(safeWin);
+}

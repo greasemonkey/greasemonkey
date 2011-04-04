@@ -48,19 +48,22 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.refreshStatus();
 
   gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  gBrowser.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+  gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
+  gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   var sidebar = document.getElementById("sidebar");
   sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  sidebar.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+  sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
+  sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
-  // listen for clicks on the install bar
-  Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService)
-            .addObserver(GM_BrowserUI, "install-userscript", true);
+  var observerService = Components.classes["@mozilla.org/observer-service;1"]
+     .getService(Components.interfaces.nsIObserverService);
+  observerService.addObserver(GM_BrowserUI, "dom-window-destroyed", true);
+  observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
+  observerService.addObserver(GM_BrowserUI, "install-userscript", true);
 
   // we use this to determine if we are the active window sometimes
   GM_BrowserUI.winWat = Components
@@ -86,11 +89,6 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
   }
 };
 
-/**
- * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
- * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them.
- */
 GM_BrowserUI.contentLoad = function(event) {
   if (!GM_getEnabled()) return;
 
@@ -112,14 +110,22 @@ GM_BrowserUI.contentLoad = function(event) {
   }
 };
 
-GM_BrowserUI.contentUnload = function(event) {
-  if (event.persisted) return;  // http://goo.gl/qeY5W
+GM_BrowserUI.pagehide = function(aEvent) {
+  var windowId = GM_windowIdForEvent(aEvent);
+  if (!windowId) return;
 
-  var safeWin = event.target.defaultView;
-
-  if (GM_isGreasemonkeyable(safeWin.location.href)) {
-    GM_BrowserUI.gmSvc.contentUnloaded(safeWin, window);
+  if (aEvent.persisted) {
+    GM_BrowserUI.gmSvc.contentFrozen(windowId);
+  } else {
+    GM_BrowserUI.gmSvc.contentDestroyed(windowId);
   }
+};
+
+GM_BrowserUI.pageshow = function(aEvent) {
+  var windowId = GM_windowIdForEvent(aEvent);
+  if (!windowId) return;
+
+  GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
 /**
@@ -194,6 +200,11 @@ GM_BrowserUI.observe = function(subject, topic, data) {
     if (window == GM_BrowserUI.winWat.activeWindow) {
       GM_BrowserUI.installCurrentScript();
     }
+  } else if (topic == "dom-window-destroyed") {
+    GM_BrowserUI.gmSvc.contentDestroyed(GM_windowId(subject));
+  } else if (topic == "inner-window-destroyed") {
+    GM_BrowserUI.gmSvc.contentDestroyed(
+        subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);
   } else {
     throw new Error("Unexpected topic received: {" + topic + "}");
   }
