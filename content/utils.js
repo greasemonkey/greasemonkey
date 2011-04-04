@@ -432,18 +432,46 @@ if (typeof GM_OpenScriptsMgr == "undefined") {
 
 function GM_windowId(win) {
   try {
-    var domWindowUtils = win
-        .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-        .getInterface(Components.interfaces.nsIDOMWindowUtils);
-    return domWindowUtils.currentInnerWindowID;
+    // Do not operate on chrome windows.
+    win.QueryInterface(Components.interfaces.nsIDOMChromeWindow);
+    return null;
   } catch (e) {
-    // Above fails in Firefox <4.0, so just use the raw window for now.
-    return win;
+    // We want this to fail.  Catch is no-op.
   }
+
+  try {
+    // Dunno why this is necessary, but sometimes we get non-chrome windows
+    // whose locations we cannot access.
+    var href = win.location.href;
+    if (!GM_isGreasemonkeyable(href)) return null;
+  } catch (e) {
+    return null;
+  }
+
+  var domWindowUtils = win
+      .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+      .getInterface(Components.interfaces.nsIDOMWindowUtils);
+  var windowId;
+  try {
+    windowId = domWindowUtils.currentInnerWindowID;
+  } catch (e) { }
+  if ('undefined' == typeof windowId) {
+    // Firefox <4.0 does not provide this, use the document instead.
+    // (Document is a property of the window, and should let us dig into the
+    // "inner window" rather than always getting the same "outer window", due
+    // to bfcache.  https://developer.mozilla.org/en/Inner_and_outer_windows )
+    return win.document;
+  }
+  return windowId;
 }
 
 function GM_windowIdForEvent(aEvent) {
-  var safeWin = aEvent.target.defaultView;
-  if (!GM_isGreasemonkeyable(safeWin.location.href)) return null;
-  return GM_windowId(safeWin);
+  var doc = aEvent.originalTarget;
+  try {
+    doc.QueryInterface(Components.interfaces.nsIDOMHTMLDocument);
+  } catch (e) {
+    return null;
+  }
+
+  return GM_windowId(doc.defaultView);
 }
