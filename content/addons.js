@@ -180,10 +180,7 @@ var greasemonkeyAddons = {
   },
 
   fillList: function() {
-    // Remove any pre-existing contents.
-    while (gUserscriptsView.firstChild) {
-      gUserscriptsView.removeChild(gUserscriptsView.firstChild);
-    }
+    GM_emptyEl(gUserscriptsView);
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {

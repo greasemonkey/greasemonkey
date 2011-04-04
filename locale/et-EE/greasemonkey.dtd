@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Halda Kasutajaskripte...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "No scripts installed!">
 <!ENTITY statusbar.enabled "Lubatud">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Paigaldamine">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "Kasutajaskriptid">
 <!ENTITY Uninstall "Eemalda">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

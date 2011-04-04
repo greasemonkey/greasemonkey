@@ -282,6 +282,11 @@ function GM_compareVersions(aV1, aV2) {
   return 0;
 }
 
+// Remove all children from an element.
+function GM_emptyEl(el) {
+  while (el.firstChild) el.removeChild(el.firstChild);
+}
+
 function GM_isGreasemonkeyable(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
                .getService(Components.interfaces.nsIIOService)

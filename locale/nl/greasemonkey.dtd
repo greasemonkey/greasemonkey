@@ -1,6 +1,6 @@
 <!ENTITY menu.install "Gebruikersscript installeren…">
 <!ENTITY menu.install.accesskey "S">
-<!ENTITY menu.show "Broncode gebruikersscript bekijken">
+<!ENTITY menu.show "Broncode van gebruikersscript bekijken">
 <!ENTITY menu.show.accesskey "k">
 <!ENTITY menu.commands "Gebruikersscriptopdrachten…">
 <!ENTITY menu.commands.accesskey "r">
@@ -8,23 +8,23 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Gebruikersscripts beheren…">
 <!ENTITY menu.manage.accesskey "U">
-<!ENTITY statusbar.noscripts "Er zijn geen scripts geïnstalleerd!">
 <!ENTITY statusbar.enabled "Ingeschakeld">
 <!ENTITY statusbar.enabled.accesskey "I">
 <!ENTITY install.title "Greasemonkey-installatie">
-<!ENTITY install.runson "draait op:">
-<!ENTITY install.butnoton "draait niet op:">
-<!ENTITY install.warning1 "Kwaadaardige scripts kunnen uw privacy aantasten en namens u dingen uitvoeren zonder dat u het weet.">
-<!ENTITY install.warning2 "U dient alleen scripts uit vertrouwde bronnen te installeren.">
+<!ENTITY install.runson "beïnvloed:">
+<!ENTITY install.butnoton "sluit uit:">
+<!ENTITY install.warning1 "Kwaadaardige programmatuur kan uw privacy schenden of namens u handelen zonder uw medeweten.">
+<!ENTITY install.warning2 "Installeer alleen scripts van auteurs die u vertrouwt.">
 <!ENTITY install.showscriptsource "Scriptbron weergeven">
 <!ENTITY install.installbutton "Installeren">
 <!ENTITY newscript.name "Naam">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Beschrijving">
-<!ENTITY newscript.includes "Inclusief (één per regel)">
-<!ENTITY newscript.excludes "Exclusief (één per regel)">
-<!ENTITY options.editor "Bewerker">
-<!ENTITY options.changeEditor "Bewerker wijzigen">
+<!ENTITY newscript.includes "Beïnvloedt (één per regel)">
+<!ENTITY newscript.excludes "Sluit uit (één per regel)">
+<!ENTITY options.editor "Tekstverwerker">
+<!ENTITY options.changeEditor "Tekstverwerker kiezen">
 <!ENTITY userscripts "Gebruikersscripts">
 <!ENTITY Uninstall "Deïnstalleren">
-<!ENTITY AlsoUninstallPrefs "De bijbehorende instellingen ook verwijderen">
+<!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
+<!ENTITY greasemonkey.noscriptshere "Op deze pagina draaien geen geïnstalleerde scripts.">

@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "පරිශීලක ස්ක්‍රිප්ට් කලමනාකරනය කරන්න">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "කිසිම ස්ක්‍රිප්ටයක් ස්ථාපනය කර නොමැත">
 <!ENTITY statusbar.enabled "ක්‍රියාත්මකයි">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey ස්ථාපනය">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "පරිශීලක ස්ක්‍රිප්ට්">
 <!ENTITY Uninstall "ඉවත් කරන්න">
 <!ENTITY AlsoUninstallPrefs "එසේම ආශ්‍රිත අභිමතද ඉවත් කරන්න">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

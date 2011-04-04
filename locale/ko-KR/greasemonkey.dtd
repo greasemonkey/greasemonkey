@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "유저 스크립트 관리...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "설치된 스크립트가 없음!">
 <!ENTITY statusbar.enabled "활성화">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "그리스몽키 설치">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "유저 스크립트">
 <!ENTITY Uninstall "삭제">
 <!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 삭제">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

@@ -1,6 +1,6 @@
 <!ENTITY Edit "Редагувати">
 <!ENTITY Edit.accesskey "Р">
-<!ENTITY Edit.tooltip "Редагувати ций скрипт">
+<!ENTITY Edit.tooltip "Редагувати цей скрипт">
 <!ENTITY ExecuteFirst "Виконувати першим">
 <!ENTITY ExecuteLast "Виконувати останнім">
 <!ENTITY ExecuteLater "Виконувати пізніше">
@@ -9,25 +9,25 @@
 <!ENTITY MoveDown.accesskey "Н">
 <!ENTITY MoveToBottom "Донизу">
 <!ENTITY MoveToBottom.accesskey "Д">
-<!ENTITY MoveToTop "Нагору">
-<!ENTITY MoveToTop.accesskey "г">
+<!ENTITY MoveToTop "Догори">
+<!ENTITY MoveToTop.accesskey "о">
 <!ENTITY MoveUp "Вище">
-<!ENTITY MoveUp.accesskey "В">
+<!ENTITY MoveUp.accesskey "щ">
 <!ENTITY NewScript "Створити новий скрипт">
 <!ENTITY NewScript.accesskey "т">
-<!ENTITY Show "Відкрити теку, що містить файл">
-<!ENTITY Show.accesskey "м">
-<!ENTITY Sort.ByStatus "Sort by status">
-<!ENTITY Sort.Status "Status">
-<!ENTITY Sort.ByName "Sort by name">
-<!ENTITY Sort.Name "Name">
-<!ENTITY Sort.ByExecution "Sort by execution order">
-<!ENTITY Sort.Execution "Execution Order">
+<!ENTITY Show "Показати теку, що містить скрипт">
+<!ENTITY Show.accesskey "к">
+<!ENTITY Sort.ByStatus "Сортувати за станом">
+<!ENTITY Sort.Status "Стан">
+<!ENTITY Sort.ByName "Сортувати за назвою">
+<!ENTITY Sort.Name "Назва">
+<!ENTITY Sort.ByExecution "Сортувати за порядком виконання">
+<!ENTITY Sort.Execution "Порядок виконання">
 <!ENTITY SortScripts "Сортувати скрипти">
-<!ENTITY SortScripts.accesskey "С">
-<!ENTITY UninstallCancel "Скасувати встановлення">
-<!ENTITY UninstallCancel.accesskey "в">
-<!ENTITY UninstallCancel.tooltip "Скасувати встановлення цього скрипта">
-<!ENTITY UninstallCancelDescription "Цей скрипт буде вилучено коли закриється цей діалог. (Або клацніть правою клавішею щоб «Вилучити зараз».)">
-<!ENTITY UninstallNow "Вилучити зараз">
-<!ENTITY UninstallNow.accesskey "з">
+<!ENTITY SortScripts.accesskey "у">
+<!ENTITY UninstallCancel "Скасувати вилучення">
+<!ENTITY UninstallCancel.accesskey "л">
+<!ENTITY UninstallCancel.tooltip "Скасувати вилучення цього скрипту">
+<!ENTITY UninstallCancelDescription "Цей скрипт буде вилучено після закриття цього повідомлення (клацання правою кнопкою миші, щоб &quot;вилучити негайно&quot;).">
+<!ENTITY UninstallNow "Вилучити негайно">
+<!ENTITY UninstallNow.accesskey "ч">

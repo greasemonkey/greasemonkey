@@ -8,7 +8,6 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "未安裝腳本！">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安裝">
@@ -28,3 +27,4 @@
 <!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
+<!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">

@@ -319,23 +319,23 @@ GM_GreasemonkeyService.prototype = {
 
   registerMenuCommand: function(
       wrappedContentWin, chromeWin, script,
-      commandName, commandFunc, accelKey, accelModifiers, accessKey) {
+      commandName, commandFunc, accessKey, unused, accessKey2) {
     if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
       return;
     }
+    // Legacy support: if all five parameters were specified, (from when two
+    // were for accelerators) use the last one as the access key.
+    if ('undefined' != typeof accessKey2) {
+      accessKey = accessKey2;
+    }
+
     var command = {id: "userscript-command-" + this.menuCommandId++,
                    script: script,
                    name: commandName,
-                   accelKey: accelKey,
-                   accelModifiers: accelModifiers,
                    accessKey: accessKey,
                    commandFunc: commandFunc,
                    contentWindow: wrappedContentWin.top,
-                   chromeWindow: chromeWin,
-                   key: null};
-    if (accelKey) {
-      command.key = chromeWin.GM_MenuCommander.createKey(command);
-    }
+                   chromeWindow: chromeWin};
     this.menuCommands.push(command);
   },
 
@@ -392,7 +392,7 @@ GM_GreasemonkeyService.prototype = {
             e, // error obj
             0, // 0 = error (1 = warning)
             err.uri,
-            line
+            err.lineNumber
           );
         } else {
           GM_logError(
@@ -409,7 +409,7 @@ GM_GreasemonkeyService.prototype = {
     return true; // did not need a (function() {...})() enclosure.
   },
 
-  findError: function(script, lineNumber){
+  findError: function(script, lineNumber) {
     var start = 0;
     var end = 1;
 
