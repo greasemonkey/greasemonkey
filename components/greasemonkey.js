@@ -352,7 +352,9 @@ GM_GreasemonkeyService.prototype = {
       accessKey = accessKey2;
     }
 
-    if (("string" != typeof(accessKey)) || (accessKey.length != 1)) {
+    if (accessKey
+        && (("string" != typeof accessKey) || (accessKey.length != 1))
+    ) {
       throw new Error('Error with menu command "'
           + commandName + '": accessKey must be a single character');
     }
