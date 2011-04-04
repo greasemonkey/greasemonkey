@@ -143,6 +143,7 @@ GM_GreasemonkeyService.prototype = {
   },
 
   contentDestroyed: function(contentWindowId) {
+    if (!contentWindowId) return;
     this.withAllMenuCommandsForWindowId(null, function(index, command) {
       var closed = false;
       try { closed = command.contentWindow.closed; } catch (e) { }
@@ -154,11 +155,13 @@ GM_GreasemonkeyService.prototype = {
   },
 
   contentFrozen: function(contentWindowId) {
+    if (!contentWindowId) return;
     this.withAllMenuCommandsForWindowId(contentWindowId,
         function(index, command) { command.frozen = true; });
   },
 
   contentThawed: function(contentWindowId) {
+    if (!contentWindowId) return;
     this.withAllMenuCommandsForWindowId(contentWindowId,
         function(index, command) { command.frozen = false; });
   },

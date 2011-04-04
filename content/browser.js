@@ -112,8 +112,6 @@ GM_BrowserUI.contentLoad = function(event) {
 
 GM_BrowserUI.pagehide = function(aEvent) {
   var windowId = GM_windowIdForEvent(aEvent);
-  if (!windowId) return;
-
   if (aEvent.persisted) {
     GM_BrowserUI.gmSvc.contentFrozen(windowId);
   } else {
@@ -123,8 +121,6 @@ GM_BrowserUI.pagehide = function(aEvent) {
 
 GM_BrowserUI.pageshow = function(aEvent) {
   var windowId = GM_windowIdForEvent(aEvent);
-  if (!windowId) return;
-
   GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
