@@ -29,9 +29,6 @@ GM_BrowserUI.init = function() {
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
 
   window.addEventListener('DOMNodeInserted', GM_BrowserUI.nodeInserted, false);
-  window.addEventListener('DOMNodeRemoved', GM_BrowserUI.nodeRemoved, false);
-
-  GM_BrowserUI.toolbarButton = null;
 };
 
 /**
@@ -327,12 +324,6 @@ GM_BrowserUI.nodeInserted = function(aEvent) {
       var menupopup = document.getElementById('gm_general_menu').firstChild;
       toolbarButton.appendChild(menupopup.cloneNode(true));
     }
-  }
-};
-
-GM_BrowserUI.nodeRemoved = function(aEvent) {
-  if ('greasemonkey-tbb' == aEvent.target.id) {
-    GM_BrowserUI.toolbarButton = null;
   }
 };
 
