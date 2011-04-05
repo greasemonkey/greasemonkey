@@ -87,6 +87,8 @@ GM_BrowserUI.chromeLoad = function(e) {
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
   GM_BrowserUI.gmSvc.config;
+
+  GM_BrowserUI.showToolbarButton();
 };
 
 /**
@@ -324,6 +326,19 @@ GM_BrowserUI.nodeInserted = function(aEvent) {
       var menupopup = document.getElementById('gm_general_menu').firstChild;
       toolbarButton.appendChild(menupopup.cloneNode(true));
     }
+  }
+};
+
+GM_BrowserUI.showToolbarButton = function() {
+  // Once, enforce that the toolbar button is present.  For discoverability.
+  if (!GM_prefRoot.getValue('haveInsertedToolbarbutton')) {
+    GM_prefRoot.setValue('haveInsertedToolbarbutton', true);
+
+    var navbar = document.getElementById("nav-bar");
+    var newset = navbar.currentSet + ",greasemonkey-tbb";
+    navbar.currentSet = newset;
+    navbar.setAttribute("currentset", newset);
+    document.persist("nav-bar", "currentset");
   }
 };
 
