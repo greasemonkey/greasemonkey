@@ -37,6 +37,7 @@ const maxJSVersion = (function getMaxJSVersion() {
 })();
 
 var gStartupHasRun = false;
+var gMenuCommands = [];
 
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
@@ -87,8 +88,6 @@ GM_GreasemonkeyService.prototype = {
                        entry: CONTRACTID,
                        value: CONTRACTID,
                        service: true}],
-  menuCommandId: 0,
-  menuCommands: [],
 
   // nsISupports
   QueryInterface: XPCOMUtils.generateQI([
@@ -123,7 +122,6 @@ GM_GreasemonkeyService.prototype = {
     }
   },
 
-  // gmIGreasemonkeyService
   domContentLoaded: function(wrappedContentWin, chromeWin) {
     var url = wrappedContentWin.document.location.href;
     var scripts = this.initScripts(url, wrappedContentWin, chromeWin);
@@ -133,20 +131,39 @@ GM_GreasemonkeyService.prototype = {
     }
   },
 
-  contentUnloaded: function(wrappedContentWin, chromeWin) {
-    var l = this.menuCommands.length - 1;
-    for (var i = l, command = null; command = this.menuCommands[i]; i--) {
-      var closed = false;
-      try {
-        closed = command.contentWindow.closed;
-      } catch (e) { }
-
-      if (closed ||
-          (command.contentWindow == wrappedContentWin)
+  withAllMenuCommandsForWindowId: function(contentWindowId, callback) {
+    var l = gMenuCommands.length - 1;
+    for (var i = l, command = null; command = gMenuCommands[i]; i--) {
+      if (!contentWindowId
+          || (command.contentWindowId == contentWindowId)
       ) {
-        this.menuCommands.splice(i, 1);
+        callback(i, command);
       }
     }
+  },
+
+  contentDestroyed: function(contentWindowId) {
+    if (!contentWindowId) return;
+    this.withAllMenuCommandsForWindowId(null, function(index, command) {
+      var closed = false;
+      try { closed = command.contentWindow.closed; } catch (e) { }
+
+      if (closed || (command.contentWindowId == contentWindowId)) {
+        gMenuCommands.splice(index, 1);
+      }
+    });
+  },
+
+  contentFrozen: function(contentWindowId) {
+    if (!contentWindowId) return;
+    this.withAllMenuCommandsForWindowId(contentWindowId,
+        function(index, command) { command.frozen = true; });
+  },
+
+  contentThawed: function(contentWindowId) {
+    if (!contentWindowId) return;
+    this.withAllMenuCommandsForWindowId(contentWindowId,
+        function(index, command) { command.frozen = false; });
   },
 
   startup: function() {
@@ -323,20 +340,33 @@ GM_GreasemonkeyService.prototype = {
     if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
       return;
     }
+
+    if (wrappedContentWin.top != wrappedContentWin) {
+      // Only register menu commands for the top level window.
+      return;
+    }
+
     // Legacy support: if all five parameters were specified, (from when two
     // were for accelerators) use the last one as the access key.
     if ('undefined' != typeof accessKey2) {
       accessKey = accessKey2;
     }
 
-    var command = {id: "userscript-command-" + this.menuCommandId++,
-                   script: script,
-                   name: commandName,
-                   accessKey: accessKey,
-                   commandFunc: commandFunc,
-                   contentWindow: wrappedContentWin.top,
-                   chromeWindow: chromeWin};
-    this.menuCommands.push(command);
+    if (accessKey
+        && (("string" != typeof accessKey) || (accessKey.length != 1))
+    ) {
+      throw new Error('Error with menu command "'
+          + commandName + '": accessKey must be a single character');
+    }
+
+    var command = {
+        name: commandName,
+        accessKey: accessKey,
+        commandFunc: commandFunc,
+        contentWindow: wrappedContentWin,
+        contentWindowId: GM_windowId(wrappedContentWin),
+        frozen: false};
+    gMenuCommands.push(command);
   },
 
   openInTab: function(safeContentWin, chromeWin, url) {
