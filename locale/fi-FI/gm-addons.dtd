@@ -1,0 +1,33 @@
+<!ENTITY Edit "Muokkaa">
+<!ENTITY Edit.accesskey "M">
+<!ENTITY Edit.tooltip "Muokkaa tätä skriptiä">
+<!ENTITY ExecuteFirst "Suorita ensimmäisenä">
+<!ENTITY ExecuteLast "Suorita viimeisenä">
+<!ENTITY ExecuteLater "Suorita myöhemmin">
+<!ENTITY ExecuteSooner "Suorita aiemmin">
+<!ENTITY MoveDown "Siirrä alaspäin">
+<!ENTITY MoveDown.accesskey "A">
+<!ENTITY MoveToBottom "Siirrä loppuun">
+<!ENTITY MoveToBottom.accesskey "L">
+<!ENTITY MoveToTop "Siirrä alkuun">
+<!ENTITY MoveToTop.accesskey "N">
+<!ENTITY MoveUp "Siirrä ylöspäin">
+<!ENTITY MoveUp.accesskey "Y">
+<!ENTITY NewScript "Tee uusi skripti">
+<!ENTITY NewScript.accesskey "U">
+<!ENTITY Show "Näytä tallennuskansio">
+<!ENTITY Show.accesskey "T">
+<!ENTITY Sort.ByStatus "Järjestä tilan mukaan">
+<!ENTITY Sort.Status "Tila">
+<!ENTITY Sort.ByName "Järjestä nimen mukaan">
+<!ENTITY Sort.Name "Nimi">
+<!ENTITY Sort.ByExecution "Järjestä suoritusjärjestyksen mukaan">
+<!ENTITY Sort.Execution "Suoritusjärjestys">
+<!ENTITY SortScripts "Järjestä skriptit">
+<!ENTITY SortScripts.accesskey "J">
+<!ENTITY UninstallCancel "Peru poisto">
+<!ENTITY UninstallCancel.accesskey "P">
+<!ENTITY UninstallCancel.tooltip "Peru tämän skriptin poisto">
+<!ENTITY UninstallCancelDescription "Tämä skripti poistetaan kun ikkuna suljetaan. (Tai voit poistaa sen heti oikean näppäimen painalluksella.)">
+<!ENTITY UninstallNow "Poista heti">
+<!ENTITY UninstallNow.accesskey "H">
