@@ -75,18 +75,19 @@
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
         oncommand="GM_newUserScript();" />
-      <menu id="userscript-commands-tbm"
+      <menu
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         onpopupshowing="event.stopPropagation();"
       >
-        <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
+        <menupopup/>
       </menu>
 
       <menuseparator />
-      <vbox class='scripts-top'></vbox>
+      <menuseparator class="scripts-top-point" collapsed="true" />
       <menuseparator class="scripts-sep" />
-      <vbox class='scripts-frame'></vbox>
+      <menuseparator class="scripts-framed-point" collapsed="true" />
+      <menuseparator collapsed="true" />
       <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
     </menupopup>
   </menu>

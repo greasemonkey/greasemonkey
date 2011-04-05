@@ -1,0 +1,30 @@
+<!ENTITY menu.install "Installer un Script Utilisateur…">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Voir la Source du Script Utilisateur">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Commandes de Script Utilisateur…">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Nouveau Script Utilisateur…">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Gérer les Scripts Utilisateur">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.enabled "Activé">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Installation de Greasemonkey">
+<!ENTITY install.runson "s'exécute sur:">
+<!ENTITY install.butnoton "ne s'exécute pas sur:">
+<!ENTITY install.warning1 "Des scripts malveillants peuvent violer votre vie privée et agir en votre nom à votre insu.">
+<!ENTITY install.warning2 "N'installez que des scripts à partir de sources dont vous avez confiance.">
+<!ENTITY install.showscriptsource "Afficher la Source du Script">
+<!ENTITY install.installbutton "Installer">
+<!ENTITY newscript.name "Nom">
+<!ENTITY newscript.namespace "Espace de nom">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Inclus (Un par ligne)">
+<!ENTITY newscript.excludes "Exclus (Un par ligne)">
+<!ENTITY options.editor "Éditeur">
+<!ENTITY options.changeEditor "Changer d'Éditeur">
+<!ENTITY userscripts "Scripts Utilisateur">
+<!ENTITY Uninstall "Désinstaller">
+<!ENTITY AlsoUninstallPrefs "Désinstalle également les préférences associées">
+<!ENTITY greasemonkey.noscriptshere "Aucun script installé n'est exécuté sur cette page.">

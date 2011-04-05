@@ -29,9 +29,6 @@ GM_BrowserUI.init = function() {
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
 
   window.addEventListener('DOMNodeInserted', GM_BrowserUI.nodeInserted, false);
-  window.addEventListener('DOMNodeRemoved', GM_BrowserUI.nodeRemoved, false);
-
-  GM_BrowserUI.toolbarButton = null;
 };
 
 /**
@@ -48,19 +45,34 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.refreshStatus();
 
   gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  gBrowser.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+  gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
+  gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   var sidebar = document.getElementById("sidebar");
   sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
-  sidebar.addEventListener("pagehide", GM_BrowserUI.contentUnload, true);
+  sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
+  sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
-  // listen for clicks on the install bar
-  Components.classes["@mozilla.org/observer-service;1"]
-            .getService(Components.interfaces.nsIObserverService)
-            .addObserver(GM_BrowserUI, "install-userscript", true);
+  var observerService = Components.classes["@mozilla.org/observer-service;1"]
+     .getService(Components.interfaces.nsIObserverService);
+  observerService.addObserver(GM_BrowserUI, "install-userscript", true);
+
+  // Since Firefox 3 does not give us inner-window-destroyed, which is exactly
+  // what we want, instead we listen for dom-window-destroyed, which comes
+  // pretty close (at least it doesn't leak memory).  But: listening for dom-
+  // in Firefox 4 causes breakage, so we just do either-or.
+  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
+      .getService(Ci.nsIXULAppInfo);
+  var versionChecker = Cc["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Ci.nsIVersionComparator);
+  if (versionChecker.compare(appInfo.version, "4.0") >= 0) {
+    observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
+  } else {
+    observerService.addObserver(GM_BrowserUI, "dom-window-destroyed", true);
+  }
 
   // we use this to determine if we are the active window sometimes
   GM_BrowserUI.winWat = Components
@@ -75,6 +87,8 @@ GM_BrowserUI.chromeLoad = function(e) {
   // reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what
   GM_BrowserUI.gmSvc.config;
+
+  GM_BrowserUI.showToolbarButton();
 };
 
 /**
@@ -86,11 +100,6 @@ GM_BrowserUI.openInTab = function(domWindow, url) {
   }
 };
 
-/**
- * Gets called when a DOMContentLoaded event occurs somewhere in the browser.
- * If that document is in in the top-level window of the focused tab, find
- * it's menu items and activate them.
- */
 GM_BrowserUI.contentLoad = function(event) {
   if (!GM_getEnabled()) return;
 
@@ -112,14 +121,18 @@ GM_BrowserUI.contentLoad = function(event) {
   }
 };
 
-GM_BrowserUI.contentUnload = function(event) {
-  if (event.persisted) return;  // http://goo.gl/qeY5W
-
-  var safeWin = event.target.defaultView;
-
-  if (GM_isGreasemonkeyable(safeWin.location.href)) {
-    GM_BrowserUI.gmSvc.contentUnloaded(safeWin, window);
+GM_BrowserUI.pagehide = function(aEvent) {
+  var windowId = GM_windowIdForEvent(aEvent);
+  if (aEvent.persisted) {
+    GM_BrowserUI.gmSvc.contentFrozen(windowId);
+  } else {
+    GM_BrowserUI.gmSvc.contentDestroyed(windowId);
   }
+};
+
+GM_BrowserUI.pageshow = function(aEvent) {
+  var windowId = GM_windowIdForEvent(aEvent);
+  GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
 /**
@@ -194,6 +207,11 @@ GM_BrowserUI.observe = function(subject, topic, data) {
     if (window == GM_BrowserUI.winWat.activeWindow) {
       GM_BrowserUI.installCurrentScript();
     }
+  } else if (topic == "dom-window-destroyed") {
+    GM_BrowserUI.gmSvc.contentDestroyed(GM_windowId(subject));
+  } else if (topic == "inner-window-destroyed") {
+    GM_BrowserUI.gmSvc.contentDestroyed(
+        subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);
   } else {
     throw new Error("Unexpected topic received: {" + topic + "}");
   }
@@ -311,9 +329,16 @@ GM_BrowserUI.nodeInserted = function(aEvent) {
   }
 };
 
-GM_BrowserUI.nodeRemoved = function(aEvent) {
-  if ('greasemonkey-tbb' == aEvent.target.id) {
-    GM_BrowserUI.toolbarButton = null;
+GM_BrowserUI.showToolbarButton = function() {
+  // Once, enforce that the toolbar button is present.  For discoverability.
+  if (!GM_prefRoot.getValue('haveInsertedToolbarbutton')) {
+    GM_prefRoot.setValue('haveInsertedToolbarbutton', true);
+
+    var navbar = document.getElementById("nav-bar");
+    var newset = navbar.currentSet + ",greasemonkey-tbb";
+    navbar.currentSet = newset;
+    navbar.setAttribute("currentset", newset);
+    document.persist("nav-bar", "currentset");
   }
 };
 
@@ -375,24 +400,33 @@ function GM_showPopup(aEvent) {
     return GM_getConfig().getMatchingScripts(testMatchURLs);
   }
 
-  function appendScriptTo(script, container) {
+  function appendScriptAfter(script, point) {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.name);
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
-    container.appendChild(mi);
+    point.parentNode.insertBefore(mi, point.nextSibling);
+    return mi;
   }
 
   var popup = aEvent.target;
-  var scriptsFramedEl = popup.getElementsByClassName("scripts-frame")[0];
-  var scriptsTopEl = popup.getElementsByClassName("scripts-top")[0];
+  var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
+  var scriptsTopEl = popup.getElementsByClassName("scripts-top-point")[0];
   var scriptsSepEl = popup.getElementsByClassName("scripts-sep")[0];
   var noScriptsEl = popup.getElementsByClassName("no-scripts")[0];
 
-  GM_emptyEl(scriptsFramedEl);
-  GM_emptyEl(scriptsTopEl);
+  // Remove existing menu items, between separators.
+  function removeMenuitemsAfter(el) {
+    while (true) {
+      var sibling = el.nextSibling;
+      if (!sibling || 'menuseparator' == sibling.tagName) break;
+      sibling.parentNode.removeChild(sibling);
+    }
+  }
+  removeMenuitemsAfter(scriptsFramedEl);
+  removeMenuitemsAfter(scriptsTopEl);
 
   var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
@@ -410,14 +444,19 @@ function GM_showPopup(aEvent) {
     }
   }
 
-  scriptsFramedEl.collapsed = !runsFramed.length;
-  scriptsSepEl.collapsed = !runsFramed.length;
+  scriptsSepEl.collapsed = !(runsOnTop.length && runsFramed.length);
   noScriptsEl.collapsed = !!(runsOnTop.length || runsFramed.length);
 
   if (runsFramed.length) {
+    var point = scriptsFramedEl;
     runsFramed.forEach(
-        function(script) { appendScriptTo(script, scriptsFramedEl); });
+        function(script) { point = appendScriptAfter(script, point); });
   }
+  var point = scriptsTopEl;
   runsOnTop.forEach(
-      function(script) { appendScriptTo(script, scriptsTopEl); });
+      function(script) { point = appendScriptAfter(script, point); });
+
+  // Delegate menu commands call.
+  var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
+  GM_MenuCommander.onPopupShowing(menuCommandPopup);
 }
