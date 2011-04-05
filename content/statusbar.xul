@@ -25,12 +25,12 @@
       <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
       <menuseparator />
 
-      <menu id="userscript-commands-sb"
+      <menu
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         onpopupshowing="event.stopPropagation();"
       >
-        <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
+        <menupopup/>
       </menu>
       <menuseparator />
       <menuitem accesskey="&menu.new.accesskey;"

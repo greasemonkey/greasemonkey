@@ -75,12 +75,12 @@
         accesskey="&menu.new.accesskey;"
         label="&menu.new;"
         oncommand="GM_newUserScript();" />
-      <menu id="userscript-commands-tbm"
+      <menu
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         onpopupshowing="event.stopPropagation();"
       >
-        <menupopup onpopupshowing="GM_MenuCommander.onPopupShowing(this);"/>
+        <menupopup/>
       </menu>
 
       <menuseparator />
