@@ -78,8 +78,8 @@
   >
     <spacer class="alert-spacer-before"/>
     <vbox class="alert">
-      <label value="You don't have any user scripts installed"/>
-      <button label="Get user scripts" class="addon-control"
+      <label value="&greasemonkey.youhavenoscripts;"/>
+      <button label="&greasemonkey.getuserscripts;" class="addon-control"
           oncommand="GM_openUserscriptsOrg()"/>
     </vbox><spacer class="alert-spacer-after"/>
   </vbox>
