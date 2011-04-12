@@ -62,7 +62,7 @@
 
 <vbox id="list-view">
   <hbox id="greasemonkey-sort-bar" class="view-header"
-      pack="end" insertbefore="addon-list"
+      pack="end" insertbefore="addon-list-empty"
   >
     <button label="&Sort.Status;" tooltiptext="&Sort.ByStatus;"
         class="sorter" sortBy="uiState,name"
@@ -72,6 +72,17 @@
     <button label="&Sort.Execution;" tooltiptext="&Sort.ByExecution;"
         class="sorter" sortBy="executionIndex"/>
   </hbox>
+
+  <vbox id="user-script-list-empty"  insertbefore="addon-list-empty"
+      class="alert-container" flex="1"
+  >
+    <spacer class="alert-spacer-before"/>
+    <vbox class="alert">
+      <label value="You don't have any user scripts installed"/>
+      <button label="Get user scripts" class="addon-control"
+          oncommand="GM_openUserscriptsOrg()"/>
+    </vbox><spacer class="alert-spacer-after"/>
+  </vbox>
 </vbox>
 
 </overlay>

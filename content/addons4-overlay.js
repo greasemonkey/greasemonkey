@@ -96,7 +96,7 @@ function init() {
 
 function onContextPopupShowing(aEvent) {
   var popup = aEvent.target;
-  var selectedItem = gListView._listBox.selectedItem || 
+  var selectedItem = gListView._listBox.selectedItem ||
     gSearchView._listBox.selectedItem;
   var selectedIsUserScript = (selectedItem &&
       'user-script' == selectedItem.getAttribute('type')
@@ -150,8 +150,10 @@ function applySort() {
 };
 
 function onViewChanged(aEvent) {
+  var emptyWarning = document.getElementById('user-script-list-empty');
   if ('addons://list/user-script' == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
+    emptyWarning.collapsed = !!GM_getConfig().scripts.length;
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
@@ -200,3 +202,9 @@ function unload() {
   GM_config.removeObserver(observer);
 };
 })();
+
+function GM_openUserscriptsOrg(){
+  var chromeWin = GM_getBrowserWindow();
+  chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
+      'http://userscripts.org');
+}

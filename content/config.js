@@ -390,11 +390,7 @@ Config.prototype = {
     if ("0.0" == initialized) {
       // this is the first launch.  show the welcome screen.
 
-      // find an open window.
-      var windowManager = Components
-           .classes['@mozilla.org/appshell/window-mediator;1']
-           .getService(Components.interfaces.nsIWindowMediator);
-      var chromeWin = windowManager.getMostRecentWindow("navigator:browser");
+      var chromeWin = GM_getBrowserWindow();
       // if we found it, use it to open a welcome tab
       if (chromeWin.gBrowser) {
         // the setTimeout makes sure we do not execute too early -- sometimes

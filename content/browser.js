@@ -91,15 +91,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.showToolbarButton();
 };
 
-/**
- * gmIBrowserWindow.openInTab
- */
-GM_BrowserUI.openInTab = function(domWindow, url) {
-  if (GM_BrowserUI.isMyWindow(domWindow)) {
-    GM_BrowserUI.tabBrowser.addTab(url);
-  }
-};
-
 GM_BrowserUI.contentLoad = function(event) {
   if (!GM_getEnabled()) return;
 

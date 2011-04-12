@@ -16,3 +16,12 @@
 page.greasemonkey #greasemonkey-sort-bar {
   display: -moz-box;
 }
+
+page.greasemonkey #addon-list-empty,
+#user-scripts-list-empty
+{
+  display: none;
+}
+page.greasemonkey #user-script-list-empty {
+  display: -moz-box;
+}
