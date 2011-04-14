@@ -41,6 +41,17 @@ var observer = {
         break;
     }
 
+    // Apply the correct sort when the view has reloaded
+    function scriptViewUpdated() {
+      gViewController.currentViewObj.node
+        .removeEventListener('ViewChanged', scriptViewUpdated, false);
+
+      applySort();
+    }
+
+    // Reload the view and add a listener to notify when the load is complete
+    gViewController.currentViewObj.node
+      .addEventListener('ViewChanged', scriptViewUpdated, false);
     gViewController.loadViewInternal('addons://list/user-script', null);
   }
 };
