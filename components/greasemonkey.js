@@ -200,8 +200,10 @@ GM_GreasemonkeyService.prototype = {
       return ret;
     }
 
-    if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT &&
-        cl.spec.match(/\.user\.js$/)) {
+    if ((ct == Ci.nsIContentPolicy.TYPE_DOCUMENT
+         || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
+        && cl.spec.match(/\.user\.js$/)
+    ) {
       if (!this.ignoreNextScript_
         && !this.isTempScript(cl)
         && GM_installUri(cl, ctx.contentWindow)
