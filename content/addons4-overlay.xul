@@ -42,6 +42,9 @@
     label="&Show;" accesskey="&Show.accesskey;" type="user-script"
   />
   <menuseparator type="user-script"/>
+  <menuitem id="menuitem_userscript_context_execution_position"
+    label="Position: "
+  />
   <menuitem id="menuitem_userscript_execute_first"
     command="cmd_userscript_execute_first"
     label="&ExecuteFirst;" type="user-script"

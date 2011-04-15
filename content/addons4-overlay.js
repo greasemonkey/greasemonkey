@@ -106,11 +106,15 @@ function onContextPopupShowing(aEvent) {
     var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
     menuitem.collapsed = selectedIsUserScript != menuitemIsUserScript;
   }
-  
-  document.getElementById('menuitem_userscript_execute_first').style.display  = (0 === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
-  document.getElementById('menuitem_userscript_execute_sooner').style.display = (0 === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
-  document.getElementById('menuitem_userscript_execute_later').style.display  = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
-  document.getElementById('menuitem_userscript_execute_last').style.display   = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
+
+
+  document.getElementById('menuitem_userscript_context_execution_position').label = "Position: " +
+      ((selectedItem.getAttribute('executionIndex') * 1) + 1) + " / " + (document.getElementById('addon-list').children.length);
+  document.getElementById('menuitem_userscript_context_execution_position').collapsed = "";
+  document.getElementById('menuitem_userscript_execute_first').collapsed  = (0 === (selectedItem.getAttribute('executionIndex') * 1));
+  document.getElementById('menuitem_userscript_execute_sooner').collapsed = (0 === (selectedItem.getAttribute('executionIndex') * 1));
+  document.getElementById('menuitem_userscript_execute_later').collapsed  = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1));
+  document.getElementById('menuitem_userscript_execute_last').collapsed   = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1));
 };
 
 function onSortersClicked(aEvent) {

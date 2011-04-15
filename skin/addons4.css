@@ -25,3 +25,7 @@ page.greasemonkey #addon-list-empty,
 page.greasemonkey #user-script-list-empty {
   display: -moz-box;
 }
+#menuitem_userscript_context_execution_position {
+  opacity: 0.6;
+  font-style: italic;
+}
