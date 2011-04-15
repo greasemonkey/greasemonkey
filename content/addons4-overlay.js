@@ -106,6 +106,11 @@ function onContextPopupShowing(aEvent) {
     var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
     menuitem.collapsed = selectedIsUserScript != menuitemIsUserScript;
   }
+  
+  document.getElementById('menuitem_userscript_execute_first').style.display  = (0 === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
+  document.getElementById('menuitem_userscript_execute_sooner').style.display = (0 === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
+  document.getElementById('menuitem_userscript_execute_later').style.display  = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
+  document.getElementById('menuitem_userscript_execute_last').style.display   = ((document.getElementById('addon-list').children.length - 1) === (selectedItem.getAttribute('executionIndex') * 1)) ? "none" : "";
 };
 
 function onSortersClicked(aEvent) {
