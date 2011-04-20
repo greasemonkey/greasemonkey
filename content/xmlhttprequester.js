@@ -17,8 +17,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     return;
   }
 
-  GM_log("> GM_xmlhttpRequest.contentStartRequest");
-
   try {
     // Validate and parse the (possibly relative) given URL.
     var uri = GM_uriFromUrl(details.url, this.originUrl);
@@ -41,8 +39,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
-  GM_log("< GM_xmlhttpRequest.contentStartRequest");
-
   return {
     abort: function() {
       req.abort();
@@ -54,8 +50,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 // that it can access other domains without security warning
 GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
-  GM_log("> GM_xmlhttpRequest.chromeStartRequest");
-
   this.setupReferer(details, req);
 
   this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
@@ -87,8 +81,6 @@ function(safeUrl, details, req) {
   } else {
     req.send(body);
   }
-
-  GM_log("< GM_xmlhttpRequest.chromeStartRequest");
 };
 
 // sets the "Referer" HTTP header for this GM_XHR request.
@@ -97,8 +89,6 @@ function(safeUrl, details, req) {
 // http-on-modify-request observer.
 GM_xmlhttpRequester.prototype.setupReferer =
 function(details, req) {
-  GM_log("> GM_xmlhttpRequester.setupReferer");
-
   if (!details.headers || !details.headers.Referer) return;
 
   var observerService = Components.classes["@mozilla.org/observer-service;1"]
@@ -116,8 +106,6 @@ function(details, req) {
     }
   };
   observerService.addObserver(requestObserver, "http-on-modify-request", false);
-
-  GM_log("< GM_xmlhttpRequester.setupReferer");
 }
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
@@ -125,12 +113,8 @@ function(details, req) {
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(unsafeContentWin, req, event, details) {
-  GM_log("> GM_xmlhttpRequester.setupRequestEvent");
-
   if (details[event]) {
     req[event] = function() {
-      GM_log("> GM_xmlhttpRequester -- callback for " + event);
-
       var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
@@ -154,10 +138,6 @@ function(unsafeContentWin, req, event, details) {
       // can be abused to get increased priveledges.
       new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
         .setTimeout(function(){details[event](responseState);}, 0);
-
-      GM_log("< GM_xmlhttpRequester -- callback for " + event);
     };
   }
-
-  GM_log("< GM_xmlhttpRequester.setupRequestEvent");
 };

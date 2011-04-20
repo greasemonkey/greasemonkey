@@ -256,8 +256,6 @@ Config.prototype = {
   },
 
   install: function(script) {
-    GM_log("> Config.install");
-
     var existingIndex = this._find(script);
     if (existingIndex > -1) {
       // save the old script's state
@@ -293,8 +291,6 @@ Config.prototype = {
     }
 
     this._changed(script, "install", existingIndex);
-
-    GM_log("< Config.install");
   },
 
   uninstall: function(script, forUpdate) {
@@ -382,8 +378,6 @@ Config.prototype = {
    * any necessary upgrades.
    */
   _updateVersion: function() {
-    GM_log("> GM_updateVersion");
-
     // this is the last version which has been run at least once
     var initialized = GM_prefRoot.getValue("version", "0.0");
 
@@ -418,8 +412,6 @@ Config.prototype = {
          GM_prefRoot.setValue("version", addon.version);
       });
     }
-
-    GM_log("< GM_updateVersion");
   },
 
   /**
