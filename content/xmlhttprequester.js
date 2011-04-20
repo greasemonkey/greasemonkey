@@ -99,21 +99,23 @@ GM_xmlhttpRequester.prototype.setupReferer =
 function(details, req) {
   GM_log("> GM_xmlhttpRequester.setupReferer");
 
-  if (details.headers && details.headers.Referer) {
-    var observerService = Components.classes["@mozilla.org/observer-service;1"]
-                                    .getService(Components.interfaces.nsIObserverService);
-    var requestObserver = {
-      observe: function(subject, topic, data) {
-        var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
-        var httpChannel = subject.QueryInterface(Components.interfaces.nsIHttpChannel);
-        if (channel == req.channel) {
-          httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
-        }
-        observerService.removeObserver(requestObserver, "http-on-modify-request");
-      },
-    };
-    observerService.addObserver(requestObserver, "http-on-modify-request", false);
-  }
+  if (!details.headers || !details.headers.Referer) return;
+
+  var observerService = Components.classes["@mozilla.org/observer-service;1"]
+      .getService(Components.interfaces.nsIObserverService);
+  var requestObserver = {
+    observe: function(subject, topic, data) {
+      observerService.removeObserver(requestObserver, "http-on-modify-request");
+
+      var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
+      if (channel == req.channel) {
+        var httpChannel = subject.QueryInterface(
+            Components.interfaces.nsIHttpChannel);
+        httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
+      }
+    }
+  };
+  observerService.addObserver(requestObserver, "http-on-modify-request", false);
 
   GM_log("< GM_xmlhttpRequester.setupReferer");
 }
