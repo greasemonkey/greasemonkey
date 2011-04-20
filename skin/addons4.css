@@ -25,3 +25,8 @@ page.greasemonkey #addon-list-empty,
 page.greasemonkey #user-script-list-empty {
   display: -moz-box;
 }
+
+/* Hide the 'restart now' link for user scripts. */
+.greasemonkey #addon-list button[command=cmd_restartApp] {
+  display: none;
+}
