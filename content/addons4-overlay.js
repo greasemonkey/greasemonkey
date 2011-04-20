@@ -5,6 +5,7 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 
+var needSortOrderFixed = false;
 var sortersContainer;
 var sortExecuteOrderButton;
 var stringBundle;
@@ -41,17 +42,7 @@ var observer = {
         break;
     }
 
-    // Apply the correct sort when the view has reloaded
-    function scriptViewUpdated() {
-      gViewController.currentViewObj.node
-        .removeEventListener('ViewChanged', scriptViewUpdated, false);
-
-      applySort();
-    }
-
-    // Reload the view and add a listener to notify when the load is complete
-    gViewController.currentViewObj.node
-      .addEventListener('ViewChanged', scriptViewUpdated, false);
+    needSortOrderFixed = true;
     gViewController.loadViewInternal('addons://list/user-script', null);
   }
 };
@@ -165,6 +156,10 @@ function onViewChanged(aEvent) {
   if ('addons://list/user-script' == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
     emptyWarning.collapsed = !!GM_getConfig().scripts.length;
+    if (needSortOrderFixed) {
+      applySort();
+      needSortOrderFixed = true;
+    }
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
