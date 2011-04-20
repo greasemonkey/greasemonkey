@@ -44,7 +44,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  // Use the appcontent element specifically, see #1344.
+  document.getElementById("appcontent")
+      .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
