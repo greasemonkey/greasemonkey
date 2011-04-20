@@ -29,7 +29,7 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
- notifyEvent: function(script, event, data) {
+  notifyEvent: function(script, event, data) {
     if ('addons://list/user-script' != gViewController.currentViewId) return;
 
     switch (event) {
