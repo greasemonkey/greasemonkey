@@ -51,13 +51,13 @@ sed \
 cat tmp > chrome.manifest
 rm tmp
 find content skin locale | sort | \
-  zip -r -0 -@ "greasemonkey.jar" > /dev/null
+  zip -qr0D@ "greasemonkey.jar"
 rm -fr content/ skin/ locale/
 mkdir chrome
 mv greasemonkey.jar chrome/
 
 echo "Creating $GMXPI ..."
-zip -qr9X "../$GMXPI" *
+zip -qr9DX "../$GMXPI" *
 
 echo "Cleaning up temporary files ..."
 cd ..
