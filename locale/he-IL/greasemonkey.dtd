@@ -28,3 +28,5 @@
 <!ENTITY Uninstall "הסר">
 <!ENTITY AlsoUninstallPrefs "הסר גם את העדפות המשויכות לסקריפט משתמש זה">
 <!ENTITY greasemonkey.noscriptshere "לא קיימים סקריפטים מותקנים פעילים בדף זה.">
+<!ENTITY greasemonkey.youhavenoscripts "לא מותקנים אצלך סקריפטים של משתמש">
+<!ENTITY greasemonkey.getuserscripts "השג סקריפטים של משתמש">

@@ -28,3 +28,5 @@
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
 <!ENTITY greasemonkey.noscriptshere "Op deze pagina draaien geen geïnstalleerde scripts.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
