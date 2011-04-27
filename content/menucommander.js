@@ -21,7 +21,9 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
       GM_windowId(gBrowser.contentWindow),
       function(index, command) {
         if (command.frozen) return;
-        aMenuPopup.appendChild(GM_MenuCommander.createMenuItem(command));
+        aMenuPopup.insertBefore(
+            GM_MenuCommander.createMenuItem(command),
+            aMenuPopup.firstChild);
         haveCommands = true;
       });
   aMenuPopup.parentNode.disabled = !haveCommands;
