@@ -92,7 +92,7 @@ function init() {
   onViewChanged(); // initialize on load as well as when it changes later
 
   document.getElementById('greasemonkey-sort-bar').addEventListener(
-      'click', onSortersClicked, false);
+      'command', onSortersClicked, false);
   applySort();
 };
 
