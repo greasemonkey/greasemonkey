@@ -5,7 +5,6 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 
-var needSortOrderFixed = false;
 var sortersContainer;
 var sortExecuteOrderButton;
 var stringBundle;
@@ -32,18 +31,25 @@ var observer = {
   notifyEvent: function(script, event, data) {
     if ('addons://list/user-script' != gViewController.currentViewId) return;
 
+    var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
       case 'install':
-      case 'modified':
-        ScriptAddonReplaceScript(script);
+        gListView.addItem(addon);
         break;
       case "edit-enabled":
-        ScriptAddonFactoryByScript(script).userDisabled = !data;
+        addon.userDisabled = !data;
+        var item = gListView.getListItemForID(addon.id);
+        item.setAttribute('active', data);
+        break;
+      case 'modified':
+        ScriptAddonReplaceScript(script);
+
+        var oldAddon = ScriptAddonFactoryByScript({'id': data});
+        var item = createItem(addon);
+        var oldItem = gListView.getListItemForID(oldAddon.id);
+        oldItem.parentNode.replaceChild(item, oldItem);
         break;
     }
-
-    needSortOrderFixed = true;
-    gViewController.loadViewInternal('addons://list/user-script', null);
   }
 };
 
@@ -156,10 +162,6 @@ function onViewChanged(aEvent) {
   if ('addons://list/user-script' == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
     emptyWarning.collapsed = !!GM_getConfig().scripts.length;
-    if (needSortOrderFixed) {
-      applySort();
-      needSortOrderFixed = true;
-    }
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');

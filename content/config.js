@@ -359,10 +359,11 @@ Config.prototype = {
 
     for (var i = 0, script; script = scripts[i]; i++) {
       if (0 == script.pendingExec.length) {
+        var oldScriptId = new String(script.id);
         var parsedScript = this.parse(
             script.textContent, GM_uriFromUrl(script._downloadURL), !!script);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
-        this._changed(script, "modified", null, true);
+        this._changed(script, "modified", oldScriptId, true);
       } else {
         // We are already downloading dependencies for this script
         // so add its window to the list

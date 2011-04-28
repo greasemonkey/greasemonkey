@@ -73,6 +73,7 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddonReplaceScript(aScript) {
   var id = aScript.id + SCRIPT_ID_SUFFIX;
   ScriptAddonCache[id] = new ScriptAddon(aScript);
+  return ScriptAddonCache[id];
 }
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
