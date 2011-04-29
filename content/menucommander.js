@@ -3,7 +3,7 @@ var GM_MenuCommander = {};
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
   menuItem.setAttribute("label", command.name);
-  if ('function' == typeof commandFunc) {
+  if ('function' == typeof command.commandFunc) {
     menuItem.addEventListener("command", command.commandFunc, true);
   }
 
