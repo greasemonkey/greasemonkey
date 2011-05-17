@@ -40,7 +40,7 @@ function GM_openFolder(aFile) {
     var fParent = aFile.parent;
 
     try {
-      // Lauch the parent directory if the file doesn't exist.
+      // Launch the parent directory if the file doesn't exist.
       if (fParent.exists()) fParent.launch();
     } catch (e) {
       // If launch also fails let the OS handler try to open the parent.
