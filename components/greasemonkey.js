@@ -184,6 +184,7 @@ GM_GreasemonkeyService.prototype = {
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
+    loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
@@ -379,14 +380,9 @@ GM_GreasemonkeyService.prototype = {
     var newTab = chromeWin.openNewTabWith(
       url, safeContentWin.document, null, null, null, null);
     if (!newTab) return;  // See: #1275
-    // Source:
-    // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
-    var newWindow = chromeWin.gBrowser
-      .getBrowserForTab(newTab)
-      .docShell
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIDOMWindow);
-    return newWindow;
+    var newWin = GM_windowForTab(newTab, browser);
+
+    return newWin;
   },
 
   evalInSandbox: function(code, sandbox, script) {
