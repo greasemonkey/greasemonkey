@@ -7,6 +7,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 // XPCOMUtils.defineLazyServiceGetter() introduced in FF 3.6
@@ -372,15 +373,19 @@ GM_GreasemonkeyService.prototype = {
     gMenuCommands.push(command);
   },
 
-  openInTab: function(safeContentWin, chromeWin, url) {
+  openInTab: function(safeContentWin, chromeWin, url, aLoadInBackground) {
     if (!GM_apiLeakCheck("GM_openInTab")) {
       return undefined;
     }
+    if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
-    var newTab = chromeWin.openNewTabWith(
-      url, safeContentWin.document, null, null, null, null);
-    if (!newTab) return;  // See: #1275
+    var browser = chromeWin.gBrowser;
+    var currentTab = browser.tabs[
+        browser.getBrowserIndexForDocument(safeContentWin.document)];
+    var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
     var newWin = GM_windowForTab(newTab, browser);
+
+    browser.moveTabTo(newTab, currentTab._tPos + 1);
 
     return newWin;
   },
