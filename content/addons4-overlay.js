@@ -8,6 +8,7 @@ Components.utils.import("resource://greasemonkey/addons4.js");
 var sortersContainer;
 var sortExecuteOrderButton;
 var stringBundle;
+var userScriptViewId = 'addons://list/user-script';
 
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
@@ -25,11 +26,22 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
+// Patch the default loadView() to suppress the detail view for user scripts.
+_loadViewOrig = gViewController.loadView.bind(gViewController);
+gViewController.loadView = function(aViewId) {
+  if (userScriptViewId == gViewController.currentViewId
+      && 0 === aViewId.indexOf('addons://detail/')
+  ) {
+    return false;
+  }
+  _loadViewOrig(aViewId);
+}
+
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
   notifyEvent: function(script, event, data) {
-    if ('addons://list/user-script' != gViewController.currentViewId) return;
+    if (userScriptViewId != gViewController.currentViewId) return;
 
     var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
@@ -165,7 +177,7 @@ function applySort() {
 
 function onViewChanged(aEvent) {
   var emptyWarning = document.getElementById('user-script-list-empty');
-  if ('addons://list/user-script' == gViewController.currentViewId) {
+  if (userScriptViewId == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
     emptyWarning.collapsed = !!GM_getConfig().scripts.length;
   } else {
