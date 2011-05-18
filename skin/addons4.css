@@ -44,3 +44,8 @@ page.greasemonkey #user-script-list-empty {
 {
   display: none !important;
 }
+
+/* Do show all items (even disabled ones!) when view is user scripts. */
+#addonitem-popup[addontype="user-script"] *[type="user-script"] {
+  display: -moz-box !important;
+}

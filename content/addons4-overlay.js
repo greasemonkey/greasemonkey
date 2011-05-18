@@ -74,6 +74,14 @@ function addonIsInstalledScript(aAddon) {
   return true;
 };
 
+function addonExecutesNonFirst(aAddon) {
+  return 0 != aAddon.executionIndex;
+}
+
+function addonExecutesNonLast(aAddon) {
+  return GM_getConfig().scripts.length - 1 != aAddon.executionIndex;
+}
+
 function sortedByExecOrder() {
   return document.getElementById('greasemonkey-sort-bar')
     .getElementsByAttribute('sortBy', 'executionIndex')[0]
@@ -93,19 +101,19 @@ function init() {
     };
 
   gViewController.commands.cmd_userscript_execute_first = {
-      isEnabled: function() { return true; },
+      isEnabled: addonExecutesNonFirst,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
     };
   gViewController.commands.cmd_userscript_execute_sooner = {
-      isEnabled: function() { return true; },
+      isEnabled: addonExecutesNonFirst,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
     };
   gViewController.commands.cmd_userscript_execute_later = {
-      isEnabled: function() { return true; },
+      isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 1); }
     };
   gViewController.commands.cmd_userscript_execute_last = {
-      isEnabled: function() { return true; },
+      isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
 
