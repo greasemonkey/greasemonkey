@@ -31,8 +31,8 @@ page.greasemonkey #user-script-list-empty {
   display: none;
 }
 
-.addon.addon-view[type="user-script"] .details.button-link { 
-  display: none !important; 
+.addon.addon-view[type="user-script"] .details.button-link {
+  display: none !important;
 }
 
 /* Do not show native items when view is user scripts. */
