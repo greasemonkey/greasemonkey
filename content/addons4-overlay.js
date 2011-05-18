@@ -109,28 +109,12 @@ function init() {
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
 
-  document.getElementById('addonitem-popup').addEventListener(
-      'popupshowing', onContextPopupShowing, false);
-
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later
 
   document.getElementById('greasemonkey-sort-bar').addEventListener(
       'command', onSortersClicked, false);
   applySort();
-};
-
-function onContextPopupShowing(aEvent) {
-  var popup = aEvent.target;
-  var selectedItem = gListView._listBox.selectedItem ||
-      gSearchView._listBox.selectedItem;
-  var selectedIsUserScript = selectedItem &&
-      'user-script' == selectedItem.getAttribute('type');
-
-  for (var i = 0, menuitem = null; menuitem = popup.children[i]; i++) {
-    var menuitemIsUserScript = ('user-script' == menuitem.getAttribute('type'));
-    menuitem.collapsed = selectedIsUserScript != menuitemIsUserScript;
-  }
 };
 
 function onSortersClicked(aEvent) {
