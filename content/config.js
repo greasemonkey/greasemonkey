@@ -256,8 +256,6 @@ Config.prototype = {
   },
 
   install: function(script) {
-    GM_log("> Config.install");
-
     var existingIndex = this._find(script);
     if (existingIndex > -1) {
       // save the old script's state
@@ -293,8 +291,6 @@ Config.prototype = {
     }
 
     this._changed(script, "install", existingIndex);
-
-    GM_log("< Config.install");
   },
 
   uninstall: function(script, forUpdate) {
@@ -363,10 +359,11 @@ Config.prototype = {
 
     for (var i = 0, script; script = scripts[i]; i++) {
       if (0 == script.pendingExec.length) {
+        var oldScriptId = new String(script.id);
         var parsedScript = this.parse(
             script.textContent, GM_uriFromUrl(script._downloadURL), !!script);
         script.updateFromNewScript(parsedScript, safeWin, chromeWin);
-        this._changed(script, "modified", null, true);
+        this._changed(script, "modified", oldScriptId, true);
       } else {
         // We are already downloading dependencies for this script
         // so add its window to the list
@@ -382,19 +379,13 @@ Config.prototype = {
    * any necessary upgrades.
    */
   _updateVersion: function() {
-    GM_log("> GM_updateVersion");
-
     // this is the last version which has been run at least once
     var initialized = GM_prefRoot.getValue("version", "0.0");
 
     if ("0.0" == initialized) {
       // this is the first launch.  show the welcome screen.
 
-      // find an open window.
-      var windowManager = Components
-           .classes['@mozilla.org/appshell/window-mediator;1']
-           .getService(Components.interfaces.nsIWindowMediator);
-      var chromeWin = windowManager.getMostRecentWindow("navigator:browser");
+      var chromeWin = GM_getBrowserWindow();
       // if we found it, use it to open a welcome tab
       if (chromeWin.gBrowser) {
         // the setTimeout makes sure we do not execute too early -- sometimes
@@ -422,8 +413,6 @@ Config.prototype = {
          GM_prefRoot.setValue("version", addon.version);
       });
     }
-
-    GM_log("< GM_updateVersion");
   },
 
   /**

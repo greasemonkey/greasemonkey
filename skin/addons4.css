@@ -16,3 +16,21 @@
 page.greasemonkey #greasemonkey-sort-bar {
   display: -moz-box;
 }
+
+page.greasemonkey #addon-list-empty,
+#user-script-list-empty
+{
+  display: none;
+}
+page.greasemonkey #user-script-list-empty {
+  display: -moz-box;
+}
+
+/* Hide the 'restart now' link for user scripts. */
+.greasemonkey #addon-list button[command=cmd_restartApp] {
+  display: none;
+}
+
+.addon.addon-view[type="user-script"] .details.button-link { 
+  display: none !important; 
+}

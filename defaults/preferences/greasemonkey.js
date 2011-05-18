@@ -5,3 +5,4 @@ pref("greasemonkey.unmhtIsGreaseable", false);
 pref("greasemonkey.enableScriptRefreshing", true);
 pref("greasemonkey.uninstallPreferences", true);
 pref("greasemonkey.haveInsertedToolbarbutton", false);
+pref("greasemonkey.logChrome", false);

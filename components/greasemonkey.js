@@ -7,6 +7,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 // XPCOMUtils.defineLazyServiceGetter() introduced in FF 3.6
@@ -184,6 +185,7 @@ GM_GreasemonkeyService.prototype = {
     loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
     loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
     loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
+    loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
   },
 
   shouldLoad: function(ct, cl, org, ctx, mt, ext) {
@@ -200,8 +202,10 @@ GM_GreasemonkeyService.prototype = {
       return ret;
     }
 
-    if (ct == Ci.nsIContentPolicy.TYPE_DOCUMENT &&
-        cl.spec.match(/\.user\.js$/)) {
+    if ((ct == Ci.nsIContentPolicy.TYPE_DOCUMENT
+         || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
+        && cl.spec.match(/\.user\.js$/)
+    ) {
       if (!this.ignoreNextScript_
         && !this.isTempScript(cl)
         && GM_installUri(cl, ctx.contentWindow)
@@ -369,22 +373,21 @@ GM_GreasemonkeyService.prototype = {
     gMenuCommands.push(command);
   },
 
-  openInTab: function(safeContentWin, chromeWin, url) {
+  openInTab: function(safeContentWin, chromeWin, url, aLoadInBackground) {
     if (!GM_apiLeakCheck("GM_openInTab")) {
       return undefined;
     }
+    if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
-    var newTab = chromeWin.openNewTabWith(
-      url, safeContentWin.document, null, null, null, null);
-    if (!newTab) return;  // See: #1275
-    // Source:
-    // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
-    var newWindow = chromeWin.gBrowser
-      .getBrowserForTab(newTab)
-      .docShell
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIDOMWindow);
-    return newWindow;
+    var browser = chromeWin.gBrowser;
+    var currentTab = browser.tabs[
+        browser.getBrowserIndexForDocument(safeContentWin.document)];
+    var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
+    var newWin = GM_windowForTab(newTab, browser);
+
+    browser.moveTabTo(newTab, currentTab._tPos + 1);
+
+    return newWin;
   },
 
   evalInSandbox: function(code, sandbox, script) {

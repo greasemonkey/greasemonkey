@@ -28,20 +28,28 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
- notifyEvent: function(script, event, data) {
+  notifyEvent: function(script, event, data) {
     if ('addons://list/user-script' != gViewController.currentViewId) return;
 
+    var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
       case 'install':
-      case 'modified':
-        ScriptAddonReplaceScript(script);
+        gListView.addItem(addon);
         break;
       case "edit-enabled":
-        ScriptAddonFactoryByScript(script).userDisabled = !data;
+        addon.userDisabled = !data;
+        var item = gListView.getListItemForID(addon.id);
+        item.setAttribute('active', data);
+        break;
+      case 'modified':
+        ScriptAddonReplaceScript(script);
+
+        var oldAddon = ScriptAddonFactoryByScript({'id': data});
+        var item = createItem(addon);
+        var oldItem = gListView.getListItemForID(oldAddon.id);
+        oldItem.parentNode.replaceChild(item, oldItem);
         break;
     }
-
-    gViewController.loadViewInternal('addons://list/user-script', null);
   }
 };
 
@@ -52,6 +60,12 @@ function addonIsInstalledScript(aAddon) {
   if ('user-script' != aAddon.type) return false;
   if (aAddon._script.needsUninstall) return false;
   return true;
+};
+
+function sortedByExecOrder() {
+  return document.getElementById('greasemonkey-sort-bar')
+    .getElementsByAttribute('sortBy', 'executionIndex')[0]
+    .hasAttribute('checkState');
 };
 
 function init() {
@@ -90,13 +104,13 @@ function init() {
   onViewChanged(); // initialize on load as well as when it changes later
 
   document.getElementById('greasemonkey-sort-bar').addEventListener(
-      'click', onSortersClicked, false);
+      'command', onSortersClicked, false);
   applySort();
 };
 
 function onContextPopupShowing(aEvent) {
   var popup = aEvent.target;
-  var selectedItem = gListView._listBox.selectedItem || 
+  var selectedItem = gListView._listBox.selectedItem ||
     gSearchView._listBox.selectedItem;
   var selectedIsUserScript = (selectedItem &&
       'user-script' == selectedItem.getAttribute('type')
@@ -150,15 +164,27 @@ function applySort() {
 };
 
 function onViewChanged(aEvent) {
+  var emptyWarning = document.getElementById('user-script-list-empty');
   if ('addons://list/user-script' == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
+    emptyWarning.collapsed = !!GM_getConfig().scripts.length;
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
   }
 };
 
+function selectScriptExecOrder() {
+  if (sortedByExecOrder()) return;
+
+  var button = document.getElementById('greasemonkey-sort-bar')
+    .getElementsByAttribute('sortBy', 'executionIndex')[0];
+  // Sort the script list by execution order
+  onSortersClicked({'target': button});
+};
+
 function reorderScriptExecution(aAddon, moveBy) {
+  selectScriptExecOrder();
   GM_getConfig().move(aAddon._script, moveBy);
   AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
       // Fix all the 'executionOrder' attributes.
@@ -200,3 +226,9 @@ function unload() {
   GM_config.removeObserver(observer);
 };
 })();
+
+function GM_openUserscriptsOrg(){
+  var chromeWin = GM_getBrowserWindow();
+  chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
+      'http://userscripts.org');
+}

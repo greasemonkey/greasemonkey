@@ -44,7 +44,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  gBrowser.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  // Use the appcontent element specifically, see #1344.
+  document.getElementById("appcontent")
+      .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
@@ -89,15 +91,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
-};
-
-/**
- * gmIBrowserWindow.openInTab
- */
-GM_BrowserUI.openInTab = function(domWindow, url) {
-  if (GM_BrowserUI.isMyWindow(domWindow)) {
-    GM_BrowserUI.tabBrowser.addTab(url);
-  }
 };
 
 GM_BrowserUI.contentLoad = function(event) {

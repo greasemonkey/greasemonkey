@@ -28,3 +28,5 @@
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
 <!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">

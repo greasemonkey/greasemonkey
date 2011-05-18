@@ -28,3 +28,5 @@
 <!ENTITY Uninstall "削除">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">
+<!ENTITY greasemonkey.youhavenoscripts "スクリプトが何もインストールされていません">
+<!ENTITY greasemonkey.getuserscripts "スクリプトを入手">

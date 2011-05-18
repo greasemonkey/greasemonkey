@@ -373,9 +373,7 @@ function GM_scriptDir() {
 }
 
 function GM_installUri(uri, contentWin) {
-  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
-    .getService(Components.interfaces.nsIWindowMediator)
-    .getMostRecentWindow("navigator:browser");
+  var win = GM_getBrowserWindow();
   if (win && win.GM_BrowserUI) {
     win.GM_BrowserUI.startInstallScript(uri, contentWin);
     return true;
@@ -474,4 +472,11 @@ function GM_windowIdForEvent(aEvent) {
   }
 
   return GM_windowId(doc.defaultView);
+}
+
+function GM_getBrowserWindow() {
+  return Components
+     .classes['@mozilla.org/appshell/window-mediator;1']
+     .getService(Components.interfaces.nsIWindowMediator)
+     .getMostRecentWindow("navigator:browser");
 }

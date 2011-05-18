@@ -31,8 +31,15 @@ function Script(configNode) {
 
 Script.prototype = {
   matchesURL: function(url) {
-    function test(page) {
-      return convert2RegExp(page).test(url);
+    function test(glob) {
+      // Do not run in about:blank unless _specifically_ requested.  See #1298
+      if (-1 !== url.indexOf('about:blank')
+          && -1 == glob.indexOf('about:blank')
+      ) {
+        return false;
+      }
+
+      return convert2RegExp(glob).test(url);
     }
 
     return GM_isGreasemonkeyable(url)

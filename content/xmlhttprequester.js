@@ -17,8 +17,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     return;
   }
 
-  GM_log("> GM_xmlhttpRequest.contentStartRequest");
-
   try {
     // Validate and parse the (possibly relative) given URL.
     var uri = GM_uriFromUrl(details.url, this.originUrl);
@@ -41,8 +39,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
-  GM_log("< GM_xmlhttpRequest.contentStartRequest");
-
   return {
     get responseText()    req.responseText,
     get responseHeaders() req.getAllResponseHeaders(),
@@ -59,7 +55,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 // that it can access other domains without security warning
 GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
-  GM_log("> GM_xmlhttpRequest.chromeStartRequest");
+  this.setupReferer(details, req);
 
   this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
   this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
@@ -96,17 +92,38 @@ function(safeUrl, details, req) {
   return req;
 };
 
+// sets the "Referer" HTTP header for this GM_XHR request.
+// Firefox does not let chrome JS set the "Referer" HTTP heade via XHR
+// directly. However, we can still set it indirectly via an
+// http-on-modify-request observer.
+GM_xmlhttpRequester.prototype.setupReferer =
+function(details, req) {
+  if (!details.headers || !details.headers.Referer) return;
+
+  var observerService = Components.classes["@mozilla.org/observer-service;1"]
+      .getService(Components.interfaces.nsIObserverService);
+  var requestObserver = {
+    observe: function(subject, topic, data) {
+      observerService.removeObserver(requestObserver, "http-on-modify-request");
+
+      var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
+      if (channel == req.channel) {
+        var httpChannel = subject.QueryInterface(
+            Components.interfaces.nsIHttpChannel);
+        httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
+      }
+    }
+  };
+  observerService.addObserver(requestObserver, "http-on-modify-request", false);
+}
+
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(unsafeContentWin, req, event, details) {
-  GM_log("> GM_xmlhttpRequester.setupRequestEvent");
-
   if (details[event]) {
     req[event] = function() {
-      GM_log("> GM_xmlhttpRequester -- callback for " + event);
-
       var responseState = {
         // can't support responseXML because security won't
         // let the browser call properties on it
@@ -130,10 +147,6 @@ function(unsafeContentWin, req, event, details) {
       // can be abused to get increased priveledges.
       new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
         .setTimeout(function(){details[event](responseState);}, 0);
-
-      GM_log("< GM_xmlhttpRequester -- callback for " + event);
     };
   }
-
-  GM_log("< GM_xmlhttpRequester.setupRequestEvent");
 };
