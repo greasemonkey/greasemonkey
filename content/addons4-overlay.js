@@ -1,7 +1,7 @@
 // This file is concerned with altering the Firefox 4+ Add-ons Manager window,
 // for those sorts of functionality we want that the API does not handle.  (As
 // opposed to addons4.jsm which is responsible for what the API does handle.)
-(function() {
+(function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 
