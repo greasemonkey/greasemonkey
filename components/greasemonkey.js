@@ -310,8 +310,6 @@ GM_GreasemonkeyService.prototype = {
       Components.utils.evalInSandbox(
           "var document = window.document;", sandbox);
 
-      var contents = script.textContent;
-
       var requires = [];
       var offsets = [];
       var offset = 0;
@@ -328,7 +326,7 @@ GM_GreasemonkeyService.prototype = {
       var scriptSrc = "\n" + // error line-number calculations depend on these
                          requires.join("\n") +
                          "\n" +
-                         contents +
+                         script.textContent +
                          "\n";
       if (!script.unwrap)
         scriptSrc = "(function(){"+ scriptSrc +"})()";
