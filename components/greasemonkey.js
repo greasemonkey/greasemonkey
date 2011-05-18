@@ -310,6 +310,9 @@ GM_GreasemonkeyService.prototype = {
       Components.utils.evalInSandbox(
           "var document = window.document;", sandbox);
 
+      // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
+      sandbox.alert = alert;
+
       var requires = [];
       var offsets = [];
       var offset = 0;
