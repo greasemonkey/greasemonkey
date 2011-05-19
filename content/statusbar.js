@@ -1,4 +1,4 @@
-(function() {
+(function private_scope() {
 
 var statusEl;
 var statusEnabledItemEl;
@@ -6,7 +6,7 @@ var statusImageEl;
 var statusPopupEl;
 var stringBundle;
 
-window.addEventListener('load', function() {
+window.addEventListener('load', function window_load() {
       statusEl = document.getElementById('gm-status');
       statusEnabledItemEl = document.getElementById("gm-status-enabled-item");
       statusImageEl = document.getElementById("gm-status-image");

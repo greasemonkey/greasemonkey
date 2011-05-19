@@ -3,7 +3,7 @@
 // all the main injection logic, though that should probably be a proper XPCOM
 // service and wouldn't need to be initialized in that case.
 
-var GM_BrowserUI = {};
+function GM_BrowserUI() {};
 
 /**
  * nsISupports.QueryInterface

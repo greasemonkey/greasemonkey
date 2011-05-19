@@ -1,7 +1,7 @@
 /////////////////////////////// global variables ///////////////////////////////
 
 var bundle = null;
-window.addEventListener("load", function() {
+window.addEventListener("load", function window_load() {
   // init the global string bundle
   bundle = document.getElementById("gm-browser-bundle");
 
