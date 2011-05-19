@@ -1,6 +1,7 @@
 var EXPORTED_SYMBOLS = ["GM_notification"];
 
-const {classes: Cc, interfaces: Ci} = Components;
+var Cc = Components.classes;
+var Ci = Components.interfaces;
 
 // The first time this runs, we check if nsIAlertsService is installed and
 // works. If it fails, we re-define notify to use nsIPromptService always.
