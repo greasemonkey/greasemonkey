@@ -1,7 +1,7 @@
 // This file is concerned with altering the Firefox 4+ Add-ons Manager window,
 // for those sorts of functionality we want that the API does not handle.  (As
 // opposed to addons4.jsm which is responsible for what the API does handle.)
-(function() {
+(function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 
@@ -40,7 +40,7 @@ gViewController.loadView = function(aViewId) {
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
-  notifyEvent: function(script, event, data) {
+  notifyEvent: function observer_notifyEvent(script, event, data) {
     if (userScriptViewId != gViewController.currentViewId) return;
 
     var addon = ScriptAddonFactoryByScript(script);
@@ -230,7 +230,7 @@ function unload() {
 };
 })();
 
-function GM_openUserscriptsOrg(){
+function GM_openUserscriptsOrg() {
   var chromeWin = GM_getBrowserWindow();
   chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
       'http://userscripts.org');

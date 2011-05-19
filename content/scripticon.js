@@ -30,21 +30,24 @@ ScriptIcon.prototype.isImage = function(contentType) {
   return /^image\//i.test(contentType);
 };
 
-ScriptIcon.prototype.__defineGetter__("filename", function() {
+ScriptIcon.prototype.__defineGetter__("filename",
+function ScriptIcon_getFilename() {
   return (this._filename || this._dataURI);
 });
 
-ScriptIcon.prototype.__defineGetter__("fileURL", function() {
+ScriptIcon.prototype.__defineGetter__("fileURL",
+function ScriptIcon_getFileURL() {
   if (this._dataURI) {
     return this._dataURI;
-  } else if (this._filename) { 
+  } else if (this._filename) {
     return GM_getUriFromFile(this.file).spec;
   } else {
     return "chrome://greasemonkey/skin/userscript.png";
   }
 });
 
-ScriptIcon.prototype.__defineSetter__("fileURL", function(iconURL) {
+ScriptIcon.prototype.__defineSetter__("fileURL",
+function ScriptIcon_setFileURL(iconURL) {
   if (/^data:/i.test(iconURL)) {
     // icon is a data scheme
     this._dataURI = iconURL;

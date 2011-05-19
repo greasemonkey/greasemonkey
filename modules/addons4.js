@@ -36,11 +36,11 @@ GM_getConfig = scope.GM_getConfig;
 ////////////////////////////////////////////////////////////////////////////////
 
 var AddonProvider = {
-  getAddonByID: function(aId, aCallback) {
+  getAddonByID: function AddonProvider_getAddonByID(aId, aCallback) {
     aCallback(ScriptAddonFactoryById(aId));
   },
 
-  getAddonsByTypes: function(aTypes, aCallback) {
+  getAddonsByTypes: function AddonProvider_getAddonsByTypes(aTypes, aCallback) {
     if (aTypes && aTypes.indexOf('user-script') < 0) {
       aCallback([]);
     } else {
@@ -110,18 +110,18 @@ ScriptAddon.prototype.size = null;
 ScriptAddon.prototype._script = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
-function ScriptAddon_prototype_getter_executionIndex() {
+function ScriptAddon_getExecutionIndex() {
   return GM_getConfig()._scripts.indexOf(this._script);
 });
 
 // Getters/setters/functions for API attributes.
 ScriptAddon.prototype.__defineGetter__('isActive',
-function ScriptAddon_prototype_getter_isActive() {
+function ScriptAddon_getIsActive() {
   return this._script.enabled;
 });
 
 ScriptAddon.prototype.__defineGetter__('userDisabled',
-function ScriptAddon_prototype_getter_userDisabled() {
+function ScriptAddon_getUserDisabled() {
   return !this._script.enabled;
 });
 
@@ -139,7 +139,7 @@ function ScriptAddon_prototype_setter_userDisabled(val) {
 });
 
 ScriptAddon.prototype.__defineGetter__('permissions',
-function ScriptAddon_prototype_getter_permissions() {
+function ScriptAddon_getPermissions() {
   var perms = AddonManager.PERM_CAN_UNINSTALL;
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
@@ -179,14 +179,14 @@ ScriptAddon.prototype.cancelUninstall = function() {
 
 var WindowObserver = {
   // Inject the 'User Scripts' choice into the list of add-on types.
-  addToAddonsManager: function(aWindow) {
+  addToAddonsManager: function WindowObserver_addToAddonsManager(aWindow) {
     // This function used to handle tasks that are now done in a XUL overlay.
     // Leaving the function here in case the routing to make it run at the
     // right time proves useful.
     // TODO: Remove once Firefox 4 is final, if it is still unused.
   },
 
-  findAllAddonsManagers: function() {
+  findAllAddonsManagers: function WindowObserver_findAllAddonsManagers() {
     var managers = [];
     var windows = Services.wm.getEnumerator('navigator:browser');
     while (windows.hasMoreElements()) {
@@ -199,7 +199,7 @@ var WindowObserver = {
     return managers;
   },
 
-  addToAddonsManagers: function() {
+  addToAddonsManagers: function WindowObserver_addToAddonsManagers() {
     var managers = this.findAllAddonsManagers();
     managers.forEach(function(aWindow) {
       this.addToAddonsManager(aWindow);
@@ -207,7 +207,7 @@ var WindowObserver = {
   },
 
   /* TODO: restore when we are restartless for FF4.
-  removeFromAddonsManagers: function() {
+  removeFromAddonsManagers: function WindowObserver_removeFromAddonsManagers() {
     var managers = this.findAllAddonsManagers();
     managers.forEach(function(aWindow) {
       var window = aWindow.wrappedJSObject;
@@ -220,7 +220,7 @@ var WindowObserver = {
   },
   */
 
-  observe: function(aSubject, aTopic, aData) {
+  observe: function WindowObserver_observe(aSubject, aTopic, aData) {
     var win = aSubject;
     var uri = win.document.documentURIObject;
     if (uri.spec != 'about:addons') return;

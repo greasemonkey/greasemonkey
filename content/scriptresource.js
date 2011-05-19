@@ -12,41 +12,45 @@ function ScriptResource(script) {
   this._name = null;
 }
 
-ScriptResource.prototype = {
-  get name() { return this._name; },
+ScriptResource.prototype.__defineGetter__('name',
+function ScriptResource_getName() { return this._name; });
 
-  get file() {
-    var file = this._script._basedirFile;
-    file.append(this._filename);
-    return file;
-  },
+ScriptResource.prototype.__defineGetter__('file',
+function ScriptResource_getFile() {
+  var file = this._script._basedirFile;
+  file.append(this._filename);
+  return file;
+});
 
-  get textContent() { return GM_getContents(this.file); },
+ScriptResource.prototype.__defineGetter__('textContent',
+function ScriptResource_getTextContent() { return GM_getContents(this.file); });
 
-  get dataContent() {
-    var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
-                           .getService(Components.interfaces.nsIAppShellService);
+ScriptResource.prototype.__defineGetter__('dataContent',
+function ScriptResource_getDataContent() {
+  var appSvc = Components.classes["@mozilla.org/appshell/appShellService;1"]
+      .getService(Components.interfaces.nsIAppShellService);
 
-    var window = appSvc.hiddenDOMWindow;
-    var binaryContents = GM_getBinaryContents(this.file);
+  var window = appSvc.hiddenDOMWindow;
+  var binaryContents = GM_getBinaryContents(this.file);
 
-    var mimetype = this._mimetype;
-    if (this._charset && this._charset.length > 0) {
-      mimetype += ";charset=" + this._charset;
-    }
-
-    return "data:" + mimetype + ";base64," +
-      window.encodeURIComponent(window.btoa(binaryContents));
-  },
-
-  _initFile: ScriptRequire.prototype._initFile,
-
-  get urlToDownload() { return this._downloadURL; },
-  setDownloadedFile: function(tempFile, mimetype, charset) {
-    this._tempFile = tempFile;
-    this._mimetype = mimetype;
-    this._charset = charset;
-    if (this.updateScript)
-      this._initFile();
+  var mimetype = this._mimetype;
+  if (this._charset && this._charset.length > 0) {
+    mimetype += ";charset=" + this._charset;
   }
+
+  return "data:" + mimetype
+      + ";base64," + window.encodeURIComponent(window.btoa(binaryContents));
+});
+
+ScriptResource.prototype._initFile = ScriptRequire.prototype._initFile;
+
+ScriptResource.prototype.__defineGetter__('urlToDownload',
+function ScriptResource_getUrlToDownload() { return this._downloadURL; });
+
+ScriptResource.prototype.setDownloadedFile =
+function(tempFile, mimetype, charset) {
+  this._tempFile = tempFile;
+  this._mimetype = mimetype;
+  this._charset = charset;
+  if (this.updateScript) this._initFile();
 };
