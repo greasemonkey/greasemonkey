@@ -227,7 +227,7 @@ function unload() {
 };
 })();
 
-function GM_openUserscriptsOrg(){
+function GM_openUserscriptsOrg() {
   var chromeWin = GM_getBrowserWindow();
   chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
       'http://userscripts.org');
