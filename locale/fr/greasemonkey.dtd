@@ -28,5 +28,5 @@
 <!ENTITY Uninstall "Désinstaller">
 <!ENTITY AlsoUninstallPrefs "Désinstalle également les préférences associées">
 <!ENTITY greasemonkey.noscriptshere "Aucun script installé n'est exécuté sur cette page.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY greasemonkey.youhavenoscripts "Vous avez aucun scripts d'installé">
+<!ENTITY greasemonkey.getuserscripts "Obtenir des scripts utilisateur">
