@@ -1,5 +1,5 @@
-function GM_xmlhttpRequester(unsafeContentWin, chromeWindow, originUrl) {
-  this.unsafeContentWin = unsafeContentWin;
+function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
+  this.wrappedContentWin = wrappedContentWin;
   this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
 }
@@ -52,9 +52,9 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
-  this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
+  this.setupRequestEvent(this.wrappedContentWin, req, "onload", details);
+  this.setupRequestEvent(this.wrappedContentWin, req, "onerror", details);
+  this.setupRequestEvent(this.wrappedContentWin, req, "onreadystatechange",
                          details);
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
@@ -112,7 +112,7 @@ function(details, req) {
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
-function(unsafeContentWin, req, event, details) {
+function(wrappedContentWin, req, event, details) {
   if (!details[event]) return;
   req[event] = function() {
     var responseState = {
@@ -136,7 +136,7 @@ function(unsafeContentWin, req, event, details) {
     // Have to use nested function here instead of GM_hitch because
     // otherwise details[event].apply can point to window.setTimeout, which
     // can be abused to get increased privileges.
-    new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
+    new XPCNativeWrapper(wrappedContentWin, "setTimeout()")
       .setTimeout(function(){details[event](responseState);}, 0);
   };
 };

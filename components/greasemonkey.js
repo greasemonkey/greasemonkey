@@ -452,7 +452,7 @@ service.prototype.injectScripts = function(
 
     storage = new GM_ScriptStorage(script);
     xmlhttpRequester = new GM_xmlhttpRequester(
-        unsafeContentWin, chromeWin, url);
+        wrappedContentWin, chromeWin, url);
     resources = new GM_Resources(script);
 
     sandbox.unsafeWindow = unsafeContentWin;
