@@ -37,7 +37,8 @@ ScriptRequire.prototype._initFile = function() {
 
   var file = this._script._basedirFile;
   file.append(name);
-  file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
+  file.createUnique(
+      Components.interfaces.nsIFile.NORMAL_FILE_TYPE, GM_fileMask);
   this._filename = file.leafName;
 
   GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);

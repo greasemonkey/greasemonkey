@@ -318,13 +318,14 @@ Script.prototype._initFile = function(tempFile) {
   var name = this._initFileName(this._name, false);
   this._basedir = name;
 
+  var nsIFile = Components.interfaces.nsIFile;
   var file = GM_scriptDir();
   file.append(name);
-  file.createUnique(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_directoryMask);
   this._basedir = file.leafName;
 
   file.append(name + ".user.js");
-  file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0644);
+  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_fileMask);
   this._filename = file.leafName;
 
   GM_log("Moving script file from " + tempFile.path + " to " + file.path);

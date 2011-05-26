@@ -336,7 +336,7 @@ Config.prototype.move = function(script, destination) {
 Config.prototype._initScriptDir = function() {
   var dir = GM_scriptDir();
   if (!dir.exists()) {
-    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, 0755);
+    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_directoryMask);
 
     var configStream = GM_getWriteStream(this._configFile);
     var xml = "<UserScriptConfig/>";

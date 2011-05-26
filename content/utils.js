@@ -8,6 +8,9 @@ var GM_stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
+var GM_directoryMask = parseInt('750', 8);
+var GM_fileMask = parseInt('640', 8);
+
 function GM_getService() {
   return Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
@@ -174,9 +177,7 @@ function GM_getTempFile() {
 
   file.append("gm-temp");
   file.createUnique(
-    Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE,
-    0640
-  );
+      Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
 
   return file;
 }

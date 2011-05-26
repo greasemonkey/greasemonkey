@@ -84,9 +84,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
     file.createUnique(
-      Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE,
-      0640
-    );
+        Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
     this.tempFiles_.push(file);
 
     var converter =
