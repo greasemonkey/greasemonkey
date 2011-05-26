@@ -86,7 +86,7 @@ Script.prototype.__defineGetter__('enabled',
 function Script_getEnabled() { return this._enabled; });
 
 Script.prototype.__defineSetter__('enabled',
-function Script_setEnabled() {
+function Script_setEnabled(enabled) {
   this._enabled = enabled;
   this._changed("edit-enabled", enabled);
 });
