@@ -175,6 +175,11 @@ ScriptAddon.prototype.cancelUninstall = function() {
   AddonManagerPrivate.callAddonListeners("onOperationCancelled", this);
 };
 
+ScriptAddon.prototype.performUninstall = function() {
+  GM_getConfig().uninstall(this._script);
+  delete ScriptAddonCache[this.id];
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 
 var WindowObserver = {

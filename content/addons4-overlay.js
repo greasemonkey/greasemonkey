@@ -215,15 +215,16 @@ function unload() {
   var pending_uninstall = AddonManager.PENDING_UNINSTALL;
 
   AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
+      var didUninstall = false;
       for (var i = 0, addon = null; addon = aAddons[i]; i++) {
         if (addon.pendingOperations & pending_uninstall) {
-          // Todo: This without dipping into private members.
-          GM_config.uninstall(addon._script);
+          addon.performUninstall();
+          didUninstall = true;
         }
       }
       // Guarantee that the config.xml is saved to disk.
       // Todo: This without dipping into private members.
-      GM_config._save(true);
+      if (didUninstall) GM_config._save(true);
     });
 
   GM_config.removeObserver(observer);
