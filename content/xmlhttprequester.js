@@ -113,31 +113,30 @@ function(details, req) {
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(unsafeContentWin, req, event, details) {
-  if (details[event]) {
-    req[event] = function() {
-      var responseState = {
-        // can't support responseXML because security won't
-        // let the browser call properties on it
-        responseText: req.responseText,
-        readyState: req.readyState,
-        responseHeaders: null,
-        status: null,
-        statusText: null,
-        finalUrl: null
-      };
-      if (4 == req.readyState && 'onerror' != event) {
-        responseState.responseHeaders = req.getAllResponseHeaders();
-        responseState.status = req.status;
-        responseState.statusText = req.statusText;
-        responseState.finalUrl = req.channel.URI.spec;
-      }
-
-      // Pop back onto browser thread and call event handler.
-      // Have to use nested function here instead of GM_hitch because
-      // otherwise details[event].apply can point to window.setTimeout, which
-      // can be abused to get increased priveledges.
-      new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
-        .setTimeout(function(){details[event](responseState);}, 0);
+  if (!details[event]) return;
+  req[event] = function() {
+    var responseState = {
+      // can't support responseXML because security won't
+      // let the browser call properties on it
+      responseText: req.responseText,
+      readyState: req.readyState,
+      responseHeaders: null,
+      status: null,
+      statusText: null,
+      finalUrl: null
     };
-  }
+    if (4 == req.readyState && 'onerror' != event) {
+      responseState.responseHeaders = req.getAllResponseHeaders();
+      responseState.status = req.status;
+      responseState.statusText = req.statusText;
+      responseState.finalUrl = req.channel.URI.spec;
+    }
+
+    // Pop back onto browser thread and call event handler.
+    // Have to use nested function here instead of GM_hitch because
+    // otherwise details[event].apply can point to window.setTimeout, which
+    // can be abused to get increased privileges.
+    new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
+      .setTimeout(function(){details[event](responseState);}, 0);
+  };
 };
