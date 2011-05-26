@@ -31,6 +31,9 @@ var GMInstall = {
     var desc = document.getElementById("scriptDescription");
     desc.appendChild(document.createElementNS(this.htmlNs_, "strong"));
     desc.firstChild.appendChild(document.createTextNode(this.script_.name));
+    if (this.script_.version) {
+      desc.appendChild(document.createTextNode(' ' + this.script_.version));
+    }
     desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
     desc.appendChild(document.createTextNode(this.script_.description));
   },
