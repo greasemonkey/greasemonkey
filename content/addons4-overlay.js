@@ -47,6 +47,7 @@ var observer = {
     switch (event) {
       case 'install':
         gListView.addItem(addon);
+        setEmptyWarningVisible();
         break;
       case "edit-enabled":
         addon.userDisabled = !data;
@@ -167,15 +168,19 @@ function applySort() {
 };
 
 function onViewChanged(aEvent) {
-  var emptyWarning = document.getElementById('user-script-list-empty');
   if (userScriptViewId == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
-    emptyWarning.collapsed = !!GM_getConfig().scripts.length;
+    setEmptyWarningVisible();
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
   }
 };
+
+function setEmptyWarningVisible() {
+  var emptyWarning = document.getElementById('user-script-list-empty');
+  emptyWarning.collapsed = !!GM_getConfig().scripts.length;
+}
 
 function selectScriptExecOrder() {
   if (sortedByExecOrder()) return;
