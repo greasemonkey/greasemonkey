@@ -16,10 +16,10 @@ Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const NS_XHTML = 'http://www.w3.org/1999/xhtml';
-const SCRIPT_ID_SUFFIX = '@greasespot.net';
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var NS_XHTML = 'http://www.w3.org/1999/xhtml';
+var SCRIPT_ID_SUFFIX = '@greasespot.net';
 
 // Pull this helper method into this module scope; it's not module-ized yet.
 var GM_getConfig;
