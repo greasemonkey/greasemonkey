@@ -10,16 +10,6 @@ var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-// XPCOMUtils.defineLazyServiceGetter() introduced in FF 3.6
-if (XPCOMUtils.defineLazyServiceGetter) {
-  XPCOMUtils.defineLazyServiceGetter(
-      this, "appSvc", "@mozilla.org/appshell/appShellService;1",
-      "nsIAppShellService");
-} else {
-  appSvc = Cc["@mozilla.org/appshell/appShellService;1"]
-      .getService(Ci.nsIAppShellService);
-}
-
 var maxJSVersion = (function() {
   var appInfo = Cc["@mozilla.org/xre/app-info;1"]
       .getService(Ci.nsIXULAppInfo);
@@ -462,7 +452,7 @@ service.prototype.injectScripts = function(
 
     storage = new GM_ScriptStorage(script);
     xmlhttpRequester = new GM_xmlhttpRequester(
-        unsafeContentWin, appSvc.hiddenDOMWindow, url);
+        unsafeContentWin, chromeWin, url);
     resources = new GM_Resources(script);
 
     sandbox.unsafeWindow = unsafeContentWin;
