@@ -76,10 +76,14 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function addonExecutesNonFirst(aAddon) {
+  if (!aAddon) return false;
+  if ('user-script' != aAddon.type) return false;
   return 0 != aAddon.executionIndex;
 }
 
 function addonExecutesNonLast(aAddon) {
+  if (!aAddon) return false;
+  if ('user-script' != aAddon.type) return false;
   return GM_getConfig().scripts.length - 1 != aAddon.executionIndex;
 }
 
