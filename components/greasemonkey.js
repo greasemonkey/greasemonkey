@@ -283,7 +283,8 @@ service.prototype._openInTab = function(
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
   var browser = chromeWin.gBrowser;
-  var currentTab = browser.tabs[
+  var tabs = browser.mTabs /* Firefox <=3.6 */ || browser.tabs /* >=4.0 */;
+  var currentTab = tabs[
       browser.getBrowserIndexForDocument(safeContentWin.document)];
   var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
   var newWin = GM_windowForTab(newTab, browser);
