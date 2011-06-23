@@ -270,7 +270,7 @@ service.prototype._getScriptsForUrl = function(
   }
 
   return this.config.getMatchingScripts(function(script) {
-        return GM_scriptMatchesUrlAndRuns(script, url)
+        return GM_scriptMatchesUrlAndRuns(script, url);
       });
 };
 
@@ -291,7 +291,7 @@ service.prototype._openInTab = function(
   browser.moveTabTo(newTab, currentTab._tPos + 1);
 
   return newWin;
-}
+};
 
 service.prototype._registerMenuCommand = function(
     wrappedContentWin, chromeWin, script,

@@ -22,7 +22,7 @@ function Script(configNode) {
   this._requires = [];
   this._resources = [];
   this._unwrap = false;
-  this._dependFail = false
+  this._dependFail = false;
   this._rawMeta = null;
   this.pendingExec = [];
 
@@ -121,7 +121,7 @@ Script.prototype.__defineGetter__('resources',
 function Script_getResources() { return this._resources.concat(); });
 
 Script.prototype.__defineGetter__('unwrap',
-function Script_getUnwrap() { return this._unwrap; })
+function Script_getUnwrap() { return this._unwrap; });
 
 Script.prototype.__defineGetter__('filename',
 function Script_getFilename() { return this._filename; });
@@ -150,7 +150,7 @@ Script.prototype.__defineGetter__('fileURL',
 function Script_getFileURL() { return GM_getUriFromFile(this.file).spec; });
 
 Script.prototype.__defineGetter__('textContent',
-function Script_getTextContent() { return GM_getContents(this.file); })
+function Script_getTextContent() { return GM_getContents(this.file); });
 
 Script.prototype.__defineGetter__('size',
 function Script_getSize() {
@@ -397,7 +397,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   var dependhash = GM_sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
     this._dependhash = dependhash;
-    this._icon = newScript._icon
+    this._icon = newScript._icon;
     this._icon._script = this;
     this._requires = newScript._requires;
     this._resources = newScript._resources;

@@ -54,7 +54,7 @@ var GMInstall = {
       window.clearInterval(this.timer_);
     }
 
-    this.timer_ = window.setInterval(function() { GMInstall.onInterval() }, 500);
+    this.timer_ = window.setInterval(function() { GMInstall.onInterval(); }, 500);
   },
 
   onInterval: function() {

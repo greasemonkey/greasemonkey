@@ -35,7 +35,7 @@ gViewController.loadView = function(aViewId) {
     return false;
   }
   _loadViewOrig(aViewId);
-}
+};
 
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.

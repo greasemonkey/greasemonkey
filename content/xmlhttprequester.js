@@ -106,7 +106,7 @@ function(details, req) {
     }
   };
   observerService.addObserver(requestObserver, "http-on-modify-request", false);
-}
+};
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content

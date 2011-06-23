@@ -30,7 +30,7 @@ GM_PrefManager.prototype.exists = function(prefName) {
  */
 GM_PrefManager.prototype.listValues = function() {
   return this.pref.getChildList("", {});
-}
+};
 
 /**
  * returns the named preference, or defaultValue if it does not exist
