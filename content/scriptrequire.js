@@ -8,8 +8,6 @@ function ScriptRequire(script) {
   this.updateScript = false;
 }
 
-ScriptRequire.prototype
-
 ScriptRequire.prototype.__defineGetter__('file',
 function ScriptRequire_getFile() {
   var file = this._script._basedirFile;

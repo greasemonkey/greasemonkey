@@ -29,8 +29,6 @@ function Script(configNode) {
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
-Script.prototype
-
 Script.prototype.matchesURL = function(url) {
   function test(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
