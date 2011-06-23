@@ -28,5 +28,5 @@
 <!ENTITY Uninstall "Poisto">
 <!ENTITY AlsoUninstallPrefs "Poista myös skriptin asetukset">
 <!ENTITY greasemonkey.noscriptshere "Mitään skripteistä ei ajeta tällä sivulla.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY greasemonkey.youhavenoscripts "Sinulla ei ole yhtään skriptiä asennettuna">
+<!ENTITY greasemonkey.getuserscripts "Hanki skriptejä">

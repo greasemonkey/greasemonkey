@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "Н">
 <!ENTITY menu.manage "Управљање корисничким скриптама…">
 <!ENTITY menu.manage.accesskey "У">
-<!ENTITY statusbar.enabled "оногућен">
+<!ENTITY statusbar.enabled "Омогућен">
 <!ENTITY statusbar.enabled.accesskey "о">
 <!ENTITY install.title "Greasemonkey - инсталација">
 <!ENTITY install.runson "покреће се на:">
@@ -27,6 +27,6 @@
 <!ENTITY userscripts "Корисничке скрипте">
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
-<!ENTITY greasemonkey.noscriptshere "Ни једна скрипта се не покреће на овој станици.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY greasemonkey.noscriptshere "Ни једна скрипта се не покреће на овој станици">
+<!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">
+<!ENTITY greasemonkey.getuserscripts "Набави коприсничке скрипте">
