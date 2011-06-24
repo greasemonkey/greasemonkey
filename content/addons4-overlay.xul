@@ -64,6 +64,13 @@
   <hbox id="greasemonkey-sort-bar" class="view-header"
       pack="end" insertbefore="addon-list-empty"
   >
+    <vbox>
+      <spacer flex="1"/>
+      <label value="&greasemonkey.getuserscripts;" class="text-link"
+          onclick="GM_openUserscriptsOrg()"/>
+      <spacer flex="1"/>
+    </vbox>
+    <spacer flex="1" />
     <button label="&Sort.Status;" tooltiptext="&Sort.ByStatus;"
         class="sorter" sortBy="uiState,name"
         checkState="2"/>
