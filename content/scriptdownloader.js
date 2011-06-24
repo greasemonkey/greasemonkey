@@ -38,6 +38,14 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_.open("GET", this.uri_.spec, true);
   this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
+
+  // Fixes #1359.  See: http://goo.gl/EJ3FN
+  try {
+    this.req_.channel.QueryInterface(
+        Components.interfaces.nsIHttpChannelInternal
+        ).forceAllowThirdPartyCookie = true;
+  } catch (e) { /* user is using Firefox <= 3.5 */ }
+
   this.req_.send(null);
 };
 
