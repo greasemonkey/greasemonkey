@@ -10,20 +10,7 @@ var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var maxJSVersion = (function() {
-  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
-      .getService(Ci.nsIXULAppInfo);
-  var versionChecker = Cc["@mozilla.org/xpcom/version-comparator;1"]
-      .getService(Ci.nsIVersionComparator);
-
-  // Firefox 3.5 and higher supports 1.8.
-  if (versionChecker.compare(appInfo.version, "3.5") >= 0) {
-    return "1.8";
-  }
-
-  // Everything else supports 1.6.
-  return "1.6";
-})();
+var maxJSVersion = "1.6";
 
 var gmSvcFilename = Components.stack.filename;
 var gStartupHasRun = false;
@@ -227,6 +214,11 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
   loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
+
+  // Firefox 3.5 and higher supports 1.8.
+  if (GM_compareFirefoxVersion("3.5") >= 0) {
+    return "1.8";
+  }
 }
 
 /////////////////////////////////// Service ////////////////////////////////////

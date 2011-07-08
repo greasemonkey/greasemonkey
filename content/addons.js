@@ -6,20 +6,14 @@ var gUserscriptsView = null;
 var GM_firefoxVersion;
 var GM_os;
 (function() {
-var appInfo = Components
-    .classes["@mozilla.org/xre/app-info;1"]
-    .getService(Components.interfaces.nsIXULAppInfo);
-var versionChecker = Components
-    .classes["@mozilla.org/xpcom/version-comparator;1"]
-    .getService(Components.interfaces.nsIVersionComparator);
 var xulRuntime = Components
     .classes["@mozilla.org/xre/app-info;1"]
     .getService(Components.interfaces.nsIXULRuntime);
 
 // Detect fixed possible compatible Firefox versions.
-if (versionChecker.compare(appInfo.version, '3.5') < 0) {
+if (GM_compareFirefoxVersion('3.5') < 0) {
   GM_firefoxVersion = '3.0';
-} else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
+} else  if (GM_compareFirefoxVersion('3.6') < 0) {
   GM_firefoxVersion = '3.5';
 } else {
   GM_firefoxVersion = '3.6';

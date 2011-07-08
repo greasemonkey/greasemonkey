@@ -283,6 +283,16 @@ function GM_compareVersions(aV1, aV2) {
   return 0;
 }
 
+/** Runs nsIVersionComparator.compare() on the Firefox version. */
+function GM_compareFirefoxVersion(aTarget) {
+  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
+      .getService(Ci.nsIXULAppInfo);
+  var versionChecker = Cc["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Ci.nsIVersionComparator);
+
+  return versionChecker.compare(appInfo.version, aTarget);
+}
+
 // Remove all children from an element.
 function GM_emptyEl(el) {
   while (el.firstChild) el.removeChild(el.firstChild);
