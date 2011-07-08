@@ -5,9 +5,6 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 
-var sortersContainer;
-var sortExecuteOrderButton;
-var stringBundle;
 var userScriptViewId = 'addons://list/user-script';
 
 window.addEventListener('load', init, false);
