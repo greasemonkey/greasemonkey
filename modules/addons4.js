@@ -247,7 +247,8 @@ function GM_addonsStartup(aParams) {
   _addonsStartupHasRun = true;
 
   Services.obs.addObserver(WindowObserver, 'chrome-document-global-created', false);
-  AddonManagerPrivate.registerProvider(AddonProvider);
+  AddonManagerPrivate.registerProvider(AddonProvider,
+      [{'id': 'user-script'}]);
   WindowObserver.addToAddonsManagers();
 }
 
