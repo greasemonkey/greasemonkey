@@ -14,7 +14,7 @@ window.addEventListener('unload', unload, false);
 _createItemOrig = createItem;
 createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
-  if ('user-script' == aObj.type) {
+  if (SCRIPT_ADDON_TYPE == aObj.type) {
    // Save a reference to this richlistitem on the Addon object, so we can
    // fix the 'executionIndex' attribute if/when it changes.
    aObj.richlistitem = item;
@@ -67,20 +67,20 @@ var observer = {
 
 function addonIsInstalledScript(aAddon) {
   if (!aAddon) return false;
-  if ('user-script' != aAddon.type) return false;
+  if (SCRIPT_ADDON_TYPE != aAddon.type) return false;
   if (aAddon._script.needsUninstall) return false;
   return true;
 };
 
 function addonExecutesNonFirst(aAddon) {
   if (!aAddon) return false;
-  if ('user-script' != aAddon.type) return false;
+  if (SCRIPT_ADDON_TYPE != aAddon.type) return false;
   return 0 != aAddon.executionIndex;
 }
 
 function addonExecutesNonLast(aAddon) {
   if (!aAddon) return false;
-  if ('user-script' != aAddon.type) return false;
+  if (SCRIPT_ADDON_TYPE != aAddon.type) return false;
   return GM_getConfig().scripts.length - 1 != aAddon.executionIndex;
 }
 
@@ -195,7 +195,7 @@ function selectScriptExecOrder() {
 function reorderScriptExecution(aAddon, moveBy) {
   selectScriptExecOrder();
   GM_getConfig().move(aAddon._script, moveBy);
-  AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
+  AddonManager.getAddonsByTypes([SCRIPT_ADDON_TYPE], function(aAddons) {
       // Fix all the 'executionOrder' attributes.
       for (var i = 0, addon = null; addon = aAddons[i]; i++) {
         setRichlistitemExecutionIndex(addon);
@@ -220,7 +220,7 @@ function unload() {
   // by the time the callback runs.  Cache this value we need from it.
   var pending_uninstall = AddonManager.PENDING_UNINSTALL;
 
-  AddonManager.getAddonsByTypes(['user-script'], function(aAddons) {
+  AddonManager.getAddonsByTypes([SCRIPT_ADDON_TYPE], function(aAddons) {
       var didUninstall = false;
       for (var i = 0, addon = null; addon = aAddons[i]; i++) {
         if (addon.pendingOperations & pending_uninstall) {

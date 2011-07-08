@@ -6,7 +6,9 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup', 'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
+var EXPORTED_SYMBOLS = [
+    'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
+    'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -20,6 +22,7 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 var SCRIPT_ID_SUFFIX = '@greasespot.net';
+var SCRIPT_ADDON_TYPE = 'user-script';
 
 // Pull this helper method into this module scope; it's not module-ized yet.
 var GM_getConfig;
@@ -41,7 +44,7 @@ var AddonProvider = {
   },
 
   getAddonsByTypes: function AddonProvider_getAddonsByTypes(aTypes, aCallback) {
-    if (aTypes && aTypes.indexOf('user-script') < 0) {
+    if (aTypes && aTypes.indexOf(SCRIPT_ADDON_TYPE) < 0) {
       aCallback([]);
     } else {
       var scriptAddons = [];
@@ -92,7 +95,7 @@ function ScriptAddon(aScript) {
 // Required attributes.
 ScriptAddon.prototype.id = null;
 ScriptAddon.prototype.version = null;
-ScriptAddon.prototype.type = 'user-script';
+ScriptAddon.prototype.type = SCRIPT_ADDON_TYPE;
 ScriptAddon.prototype.isCompatible = true;
 ScriptAddon.prototype.providesUpdatesSecurely = true;
 ScriptAddon.prototype.blocklistState = 0;
