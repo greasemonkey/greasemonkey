@@ -182,37 +182,47 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
 GM_ScriptDownloader.prototype.handleDependencyDownloadComplete =
 function(dep, file, channel) {
   GM_log("Dependency Download complete " + dep.urlToDownload);
+  var httpChannel = null;
+  var contentType = null;
+  var charSet = null;
+  var error = null;
+
   try {
-    var httpChannel =
+     httpChannel =
       channel.QueryInterface(Components.interfaces.nsIHttpChannel);
   } catch(e) {
-    var httpChannel = false;
+    httpChannel = false;
   }
 
-  if (httpChannel) {
-    if (httpChannel.requestSucceeded) {
-      if (this.updateScript) {
-        dep._script = this.script;
-        dep.updateScript = true;
-      }
-
-      // if the dependency type is icon, then check its mime type
-      if (dep.type == "icon" && !dep.isImage(channel.contentType)) {
-        this.errorInstallDependency(this.script, dep,
-          "Error! @icon is not a image MIME type");
-      }
-
-      dep.setDownloadedFile(file, channel.contentType, channel.contentCharset ? channel.contentCharset : null);
-      this.downloadNextDependency();
-    } else {
-      this.errorInstallDependency(this.script, dep,
-        "Error! Server Returned : " + httpChannel.responseStatus + ": " +
-        httpChannel.responseStatusText);
+  if (httpChannel && httpChannel.requestSucceeded) {
+    if (this.updateScript) {
+      dep._script = this.script;
+      dep.updateScript = true;
     }
+
+    if (dep.type == "icon" && !dep.isImage(channel.contentType)) {
+      error = "Error! @icon is not a image MIME type";
+    }
+
+    contentType = channel.contentType;
+    charSet = channel.contentCharset || null;
   } else {
-    dep.setDownloadedFile(file);
-    this.downloadNextDependency();
+    error = "Error! Server Returned : "
+        + httpChannel.responseStatus
+        + ": " + httpChannel.responseStatusText;
   }
+
+  if (error && 'icon' == dep.type) {
+    // For icon failures, just don't use the icon, reset it to empty.  #1214
+    this.script._icon._downloadURL = null;
+  } else if (error) {
+    // Everything else (resource/require) is a real failure.
+    this.errorInstallDependency(this.script, dep, error);
+  } else {
+    dep.setDownloadedFile(file, contentType, charSet);
+  }
+
+  this.downloadNextDependency();
 };
 
 GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
