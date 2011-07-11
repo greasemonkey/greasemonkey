@@ -15,12 +15,21 @@ GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.dependenciesLoaded_ = false;
   this.installOnCompletion_ = false;
   this.tempFiles_ = [];
+
+  this._oldScriptId = null;
   this.updateScript = false;
 };
 
 GM_ScriptDownloader.prototype.startInstall = function() {
   this.installing_ = true;
   this.startDownload();
+};
+
+GM_ScriptDownloader.prototype.startUpdateScript = function(script) {
+  this.script = script;
+  this._oldScriptId = script.id;
+  this.updateScript = true;
+  this.fetchDependencies();
 };
 
 GM_ScriptDownloader.prototype.startViewScript = function(uri) {
@@ -256,7 +265,7 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     }
 
     // Save new values to config.xml
-    GM_getConfig()._save();
+    GM_getConfig()._changed(this.script, "modified", this._oldScriptId, true);
   } else if (this.installOnCompletion_) {
     this.installScript();
   }

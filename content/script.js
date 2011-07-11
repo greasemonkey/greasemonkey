@@ -413,9 +413,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
     // Redownload dependencies.
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    scriptDownloader.script = this;
-    scriptDownloader.updateScript = true;
-    scriptDownloader.fetchDependencies();
+    scriptDownloader.startUpdateScript(this);
   }
 };
 
