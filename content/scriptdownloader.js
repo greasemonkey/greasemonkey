@@ -161,11 +161,8 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
       var file = GM_getTempFile();
       this.tempFiles_.push(file);
 
-      var progressListener = new PersistProgressListener(persist);
-      progressListener.onFinish = GM_hitch(this,
-          "handleDependencyDownloadComplete", dep, file, sourceChannel);
-      persist.progressListener = progressListener;
-
+      persist.progressListener = new PersistProgressListener(
+          dep, file, persist, this);
       persist.saveChannel(sourceChannel,  file);
     } catch(e) {
       GM_log("Download exception " + e);
@@ -325,10 +322,11 @@ NotificationCallbacks.prototype.getInterface = function(aIID) {
 };
 
 
-function PersistProgressListener(persist) {
-  this.persist = persist;
-  this.onFinish = function(){};
-  this.persiststate = "";
+function PersistProgressListener(aDep, aFile, aPersist, aScriptDownload) {
+  this._dep = aDep;
+  this._file = aFile;
+  this._persist = aPersist;
+  this._scriptDownload = aScriptDownload;
 }
 
 PersistProgressListener.prototype.QueryInterface = function(aIID) {
@@ -346,10 +344,12 @@ PersistProgressListener.prototype.onSecurityChange = function(){};
 
 PersistProgressListener.prototype.onStateChange =
   function(aWebProgress, aRequest, aStateFlags, aStatus) {
-    if (this.persist.currentState == this.persist.PERSIST_STATE_FINISHED) {
-      GM_log("Persister: Download complete " + aRequest.status);
-      this.onFinish();
+    if (this._persist.currentState != this._persist.PERSIST_STATE_FINISHED) {
+      return;
     }
+    var channel = aRequest.QueryInterface(Components.interfaces.nsIChannel);
+    this._scriptDownload.handleDependencyDownloadComplete(
+        this._dep, this._file, channel);
   };
 
 })();
