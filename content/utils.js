@@ -285,10 +285,11 @@ function GM_compareVersions(aV1, aV2) {
 
 /** Runs nsIVersionComparator.compare() on the Firefox version. */
 function GM_compareFirefoxVersion(aTarget) {
-  var appInfo = Cc["@mozilla.org/xre/app-info;1"]
-      .getService(Ci.nsIXULAppInfo);
-  var versionChecker = Cc["@mozilla.org/xpcom/version-comparator;1"]
-      .getService(Ci.nsIVersionComparator);
+  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
+      .getService(Components.interfaces.nsIXULAppInfo);
+  var versionChecker = Components
+      .classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
 
   return versionChecker.compare(appInfo.version, aTarget);
 }
