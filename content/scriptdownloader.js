@@ -192,7 +192,9 @@ function(dep, file, channel) {
     httpChannel = false;
   }
 
-  if (httpChannel && httpChannel.requestSucceeded) {
+  if (httpChannel
+      && httpChannel.responseStatus >= 200 && httpChannel.responseStatus < 400
+  ) {
     if (this.updateScript) {
       dep._script = this.script;
       dep.updateScript = true;
