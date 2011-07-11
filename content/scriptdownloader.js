@@ -1,7 +1,5 @@
-// This anonymous function exists to isolate generic names inside it to its
-// private scope.
 var GM_ScriptDownloader;
-(function() {
+(function private_scope() {
 
 GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this.win_ = win;
@@ -86,8 +84,8 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     this.script = GM_getConfig().parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
-                         .getService(Components.interfaces.nsIProperties)
-                         .get("TmpD", Components.interfaces.nsILocalFile);
+        .getService(Components.interfaces.nsIProperties)
+        .get("TmpD", Components.interfaces.nsILocalFile);
 
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
@@ -95,8 +93,8 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
         Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
     this.tempFiles_.push(file);
 
-    var converter =
-      Components.classes["@mozilla.org/intl/scriptableunicodeconverter"]
+    var converter = Components
+        .classes["@mozilla.org/intl/scriptableunicodeconverter"]
         .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
     converter.charset = "UTF-8";
     source = converter.ConvertFromUnicode(source);
@@ -109,9 +107,9 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
-    if(this.installing_){
+    if (this.installing_) {
       this.showInstallDialog();
-    }else{
+    } else {
       this.showScriptView();
     }
   } catch (e) {
@@ -136,7 +134,7 @@ GM_ScriptDownloader.prototype.fetchDependencies = function(){
       this.depQueue_.push(dep);
     } else {
       this.errorInstallDependency(this.script, dep,
-        "SecurityException: Request to local and chrome url's is forbidden");
+          "SecurityException: Request to local and chrome url's is forbidden");
       return;
     }
   }
@@ -148,14 +146,14 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
     var dep = this.depQueue_.pop();
     try {
       var persist = Components.classes[
-        "@mozilla.org/embedding/browser/nsWebBrowserPersist;1"]
-        .createInstance(Components.interfaces.nsIWebBrowserPersist);
+          "@mozilla.org/embedding/browser/nsWebBrowserPersist;1"]
+          .createInstance(Components.interfaces.nsIWebBrowserPersist);
       persist.persistFlags =
-        persist.PERSIST_FLAGS_BYPASS_CACHE |
-        persist.PERSIST_FLAGS_REPLACE_EXISTING_FILES; //doesn't work?
+          persist.PERSIST_FLAGS_BYPASS_CACHE |
+          persist.PERSIST_FLAGS_REPLACE_EXISTING_FILES; //doesn't work?
       var ioservice =
-        Components.classes["@mozilla.org/network/io-service;1"]
-        .getService(Components.interfaces.nsIIOService);
+          Components.classes["@mozilla.org/network/io-service;1"]
+          .getService(Components.interfaces.nsIIOService);
       var sourceUri = GM_uriFromUrl(dep.urlToDownload);
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
@@ -165,7 +163,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
 
       var progressListener = new PersistProgressListener(persist);
       progressListener.onFinish = GM_hitch(this,
-        "handleDependencyDownloadComplete", dep, file, sourceChannel);
+          "handleDependencyDownloadComplete", dep, file, sourceChannel);
       persist.progressListener = progressListener;
 
       persist.saveChannel(sourceChannel,  file);
@@ -189,7 +187,7 @@ function(dep, file, channel) {
 
   try {
      httpChannel =
-      channel.QueryInterface(Components.interfaces.nsIHttpChannel);
+         channel.QueryInterface(Components.interfaces.nsIHttpChannel);
   } catch(e) {
     httpChannel = false;
   }
@@ -227,17 +225,17 @@ function(dep, file, channel) {
 
 GM_ScriptDownloader.prototype.checkDependencyURL = function(url) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
+      .getService(Components.interfaces.nsIIOService);
   var scheme = ioService.extractScheme(url);
 
   switch (scheme) {
     case "http":
     case "https":
     case "ftp":
-        return true;
+      return true;
     case "file":
-        var scriptScheme = ioService.extractScheme(this.uri_.spec);
-        return (scriptScheme == "file");
+      var scriptScheme = ioService.extractScheme(this.uri_.spec);
+      return (scriptScheme == "file");
     default:
       return false;
   }
@@ -265,12 +263,14 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
   }
 };
 
-GM_ScriptDownloader.prototype.errorInstallDependency = function(script, dep, msg){
+GM_ScriptDownloader.prototype.errorInstallDependency =
+function(script, dep, msg) {
   GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   if (this.installOnCompletion_) {
     alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {
-    this.dependencyError = "Error loading dependency " + dep.urlToDownload + "\n" + msg;
+    this.dependencyError = "Error loading dependency "
+        + dep.urlToDownload + "\n" + msg;
   }
 };
 
@@ -297,8 +297,7 @@ GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
     return;
   }
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",
-                       "chrome,centerscreen,modal,dialog,titlebar,resizable",
-                       this);
+      "chrome,centerscreen,modal,dialog,titlebar,resizable", this);
 };
 
 GM_ScriptDownloader.prototype.showScriptView = function() {
@@ -317,7 +316,7 @@ NotificationCallbacks.prototype.QueryInterface = function(aIID) {
 NotificationCallbacks.prototype.getInterface = function(aIID) {
   if (aIID.equals(Components.interfaces.nsIAuthPrompt )) {
      var winWat = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
-                            .getService(Components.interfaces.nsIWindowWatcher);
+         .getService(Components.interfaces.nsIWindowWatcher);
      return winWat.getNewAuthPrompter(winWat.activeWindow);
   }
   return undefined;
@@ -339,9 +338,9 @@ PersistProgressListener.prototype.QueryInterface = function(aIID) {
 
 // nsIWebProgressListener
 PersistProgressListener.prototype.onProgressChange =
-  PersistProgressListener.prototype.onLocationChange =
-    PersistProgressListener.prototype.onStatusChange =
-      PersistProgressListener.prototype.onSecurityChange = function(){};
+PersistProgressListener.prototype.onLocationChange =
+PersistProgressListener.prototype.onStatusChange =
+PersistProgressListener.prototype.onSecurityChange = function(){};
 
 PersistProgressListener.prototype.onStateChange =
   function(aWebProgress, aRequest, aStateFlags, aStatus) {
