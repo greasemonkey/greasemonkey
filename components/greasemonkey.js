@@ -281,7 +281,13 @@ service.prototype._openInTab = function(
   var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
   var newWin = GM_windowForTab(newTab, browser);
 
-  browser.moveTabTo(newTab, currentTab._tPos + 1);
+  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
+      .getService(Ci.nsIPrefService)
+      .getBranch("browser.tabs.")
+      .getBoolPref("insertRelatedAfterCurrent");
+  if (afterCurrent) {
+    browser.moveTabTo(newTab, currentTab._tPos + 1);
+  }
 
   return newWin;
 };
