@@ -217,7 +217,7 @@ function startup() {
 
   // Firefox 3.5 and higher supports 1.8.
   if (GM_compareFirefoxVersion("3.5") >= 0) {
-    return "1.8";
+    maxJSVersion = "1.8";
   }
 }
 
