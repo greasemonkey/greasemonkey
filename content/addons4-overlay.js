@@ -11,7 +11,7 @@ window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
 
 // Patch the default createItem() to add our custom property.
-_createItemOrig = createItem;
+var _createItemOrig = createItem;
 createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
   if (SCRIPT_ADDON_TYPE == aObj.type) {
@@ -24,7 +24,7 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
 };
 
 // Patch the default loadView() to suppress the detail view for user scripts.
-_loadViewOrig = gViewController.loadView.bind(gViewController);
+var _loadViewOrig = gViewController.loadView.bind(gViewController);
 gViewController.loadView = function(aViewId) {
   if (userScriptViewId == gViewController.currentViewId
       && 0 === aViewId.indexOf('addons://detail/')
