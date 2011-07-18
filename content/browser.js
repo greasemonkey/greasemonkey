@@ -26,7 +26,7 @@ GM_BrowserUI.init = function() {
 };
 
 GM_BrowserUI.progressListener = {
-  onLocationChange:function(aProgress, aRequest, aURI) {
+  onLocationChange:function(aBrowser, aProgress, aRequest, aURI) {
     GM_BrowserUI.gmSvc.runScripts(
         'document-start', aProgress.DOMWindow, window);
   },
@@ -94,8 +94,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   GM_BrowserUI.showToolbarButton();
 
-  gBrowser.addProgressListener(GM_BrowserUI.progressListener,
-      Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
+  gBrowser.addTabsProgressListener(GM_BrowserUI.progressListener);
 };
 
 GM_BrowserUI.contentLoad = function(event) {
