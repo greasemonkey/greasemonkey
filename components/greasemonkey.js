@@ -254,18 +254,6 @@ service.prototype.QueryInterface = XPCOMUtils.generateQI([
 
 /////////////////////////////////// Privates ///////////////////////////////////
 
-service.prototype._getScriptsForUrl = function(
-    url, wrappedContentWin, chromeWin
-) {
-  if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-    this.config.updateModifiedScripts(wrappedContentWin, chromeWin);
-  }
-
-  return this.config.getMatchingScripts(function(script) {
-        return GM_scriptMatchesUrlAndRuns(script, url);
-      });
-};
-
 service.prototype._openInTab = function(
     safeContentWin, chromeWin, url, aLoadInBackground
 ) {
@@ -414,12 +402,21 @@ service.prototype.contentThawed = function(contentWindowId) {
       function(index, command) { command.frozen = false; });
 };
 
-service.prototype.domContentLoaded = function(wrappedContentWin, chromeWin) {
-  var url = wrappedContentWin.document.location.href;
-  var scripts = this._getScriptsForUrl(url, wrappedContentWin, chromeWin);
+service.prototype.runScripts = function(
+    aRunWhen, aWrappedContentWin, aChromeWin
+) {
+  var url = aWrappedContentWin.document.location.href;
+  if (!GM_getEnabled() || !GM_isGreasemonkeyable(url)) return;
 
+  if (GM_prefRoot.getValue('enableScriptRefreshing')) {
+    this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
+  }
+
+  var scripts = this.config.getMatchingScripts(function(script) {
+        return GM_scriptMatchesUrlAndRuns(script, url, aRunWhen);
+    });
   if (scripts.length > 0) {
-    this.injectScripts(scripts, url, wrappedContentWin, chromeWin);
+    this.injectScripts(scripts, url, aWrappedContentWin, aChromeWin);
   }
 };
 

@@ -237,6 +237,9 @@ Config.prototype.parse = function(source, uri, updateScript) {
             }
           }
           break;
+        case "run-at":
+          script._runAt = value;
+          break;
       }
     }
   }

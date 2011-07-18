@@ -18,16 +18,23 @@ GM_BrowserUI.QueryInterface = function(aIID) {
 };
 
 
-/**
- * Called when this file is parsed, by the last line. Set up initial objects,
- * do version checking, and set up listeners for browser xul load and location
- * changes.
- */
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
 
   window.addEventListener('DOMNodeInserted', GM_BrowserUI.nodeInserted, false);
+};
+
+GM_BrowserUI.progressListener = {
+  onLocationChange:function(aProgress, aRequest, aURI) {
+    GM_BrowserUI.gmSvc.runScripts(
+        'document-start', aProgress.DOMWindow, window);
+  },
+  onStateChange:function() { },
+  onProgressChange:function() { },
+  onStatusChange:function() { },
+  onSecurityChange:function() { },
+  onLinkIconAvailable:function() { }
 };
 
 /**
@@ -86,6 +93,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
+
+  gBrowser.addProgressListener(GM_BrowserUI.progressListener,
+      Components.interfaces.nsIWebProgress.NOTIFY_LOCATION);
 };
 
 GM_BrowserUI.contentLoad = function(event) {
@@ -94,9 +104,7 @@ GM_BrowserUI.contentLoad = function(event) {
   var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
 
-  if (GM_isGreasemonkeyable(href)) {
-    GM_BrowserUI.gmSvc.domContentLoaded(safeWin, window);
-  }
+  GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
   // file in a top-level tab.  If the file was previously cached it might have

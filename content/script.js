@@ -23,6 +23,7 @@ function Script(configNode) {
   this._resources = [];
   this._unwrap = false;
   this._dependFail = false;
+  this._runAt = null;
   this._rawMeta = null;
   this.pendingExec = [];
 
@@ -117,6 +118,9 @@ function Script_getRequires() { return this._requires.concat(); });
 
 Script.prototype.__defineGetter__('resources',
 function Script_getResources() { return this._resources.concat(); });
+
+Script.prototype.__defineGetter__('runAt',
+function Script_getRunAt() { return this._runAt; });
 
 Script.prototype.__defineGetter__('unwrap',
 function Script_getUnwrap() { return this._unwrap; });
@@ -238,6 +242,7 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._name = node.getAttribute("name");
   this._namespace = node.getAttribute("namespace");
   this._description = node.getAttribute("description");
+  this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
   this.icon.fileURL = node.getAttribute("icon");
   this._enabled = node.getAttribute("enabled") == true.toString();
 };
@@ -297,6 +302,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("description", this._description);
   scriptNode.setAttribute("version", this._version);
   scriptNode.setAttribute("enabled", this._enabled);
+  scriptNode.setAttribute("runAt", this._runAt);
   scriptNode.setAttribute("basedir", this._basedir);
   scriptNode.setAttribute("modified", this._modified);
   scriptNode.setAttribute("dependhash", this._dependhash);
@@ -389,6 +395,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._includes = newScript._includes;
   this._excludes = newScript._excludes;
   this._description = newScript._description;
+  this._runAt = newScript._runAt;
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
 

@@ -393,10 +393,11 @@ function GM_installUri(uri, contentWin) {
   return false;
 }
 
-function GM_scriptMatchesUrlAndRuns(script, url) {
+function GM_scriptMatchesUrlAndRuns(script, url, when) {
   return !script.pendingExec.length
       && script.enabled
       && !script.needsUninstall
+      && (script.runAt == when || 'any' == when)
       && script.matchesURL(url);
 }
 
