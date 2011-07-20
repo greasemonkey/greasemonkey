@@ -149,7 +149,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
       if (match === null) continue;
 
       var header = match[1];
-      var value = match[2];
+      var value = match[2].replace(/\s+$/, '');
 
       if (!value) {
         switch (header) {
