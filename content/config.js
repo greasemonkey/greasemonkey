@@ -252,7 +252,9 @@ Config.prototype.parse = function(source, uri, updateScript) {
   if (!script._namespace && uri) script._namespace = uri.host;
   if (!script._description) script._description = "";
   if (!script._version) script._version = "";
-  if (!script._runAt) script._runAt = "document-end";
+  if ("document-start" != script._runAt && "document-end" != script._runAt) {
+    script._runAt = "document-end";
+  }
   if (script._includes.length == 0) script._includes.push("*");
 
   return script;
