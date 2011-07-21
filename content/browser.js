@@ -27,9 +27,7 @@ GM_BrowserUI.init = function() {
 
 GM_BrowserUI.progressListener = {
   onLocationChange:function(aBrowser, aProgress, aRequest, aURI) {
-    if (aProgress.loadType & aProgress.LOAD_CMD_NORMAL
-        || aProgress.loadType & aProgress.LOAD_CMD_RELOAD
-    ) {
+    if (aProgress.isLoadingDocument) {
       GM_BrowserUI.gmSvc.runScripts(
           'document-start', aProgress.DOMWindow, window);
     }
