@@ -1,3 +1,5 @@
+Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
@@ -176,6 +178,14 @@ Config.prototype.parse = function(source, uri, updateScript) {
         case "exclude":
           script._excludes.push(value);
           break;
+        case "match":
+          try {
+            var match = new MatchPattern(value);
+            script._matches.push(match);
+          } catch (e) {
+            GM_logError("Ignoring @match pattern " + value + " because:\n" + e);
+          }
+          break;
         case "icon":
           script._rawMeta += header + '\0' + value + '\0';
           try {
@@ -251,7 +261,9 @@ Config.prototype.parse = function(source, uri, updateScript) {
   if (!script._namespace && uri) script._namespace = uri.host;
   if (!script._description) script._description = "";
   if (!script._version) script._version = "";
-  if (script._includes.length == 0) script._includes.push("*");
+  if (script._includes.length == 0 && script._matches.length == 0) {
+    script._includes.push("*");
+  }
 
   return script;
 };

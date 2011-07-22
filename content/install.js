@@ -7,6 +7,11 @@ var GMInstall = {
 
     this.setupIncludes("includes", "includes-desc", this.script_.includes);
     this.setupIncludes("excludes", "excludes-desc", this.script_.excludes);
+    var matches = [];
+    for (var i = 0, match = null; match = this.script_.matches[i]; i++) {
+      matches.push(match.pattern);
+    }
+    this.setupIncludes("matches", "matches-desc", matches);
 
     this.dialog_ = document.documentElement;
     this.extraButton_ = this.dialog_.getButton("extra1");

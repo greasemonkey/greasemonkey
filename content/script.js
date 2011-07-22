@@ -1,4 +1,5 @@
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
+Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
 
 function Script(configNode) {
   this._observers = [];
@@ -21,6 +22,7 @@ function Script(configNode) {
   this.needsUninstall = false;
   this._includes = [];
   this._excludes = [];
+  this._matches = [];
   this._requires = [];
   this._resources = [];
   this._unwrap = false;
@@ -32,7 +34,7 @@ function Script(configNode) {
 }
 
 Script.prototype.matchesURL = function(url) {
-  function test(glob) {
+  function testClude(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
     if (-1 !== url.indexOf('about:blank')
         && -1 == glob.indexOf('about:blank')
@@ -42,10 +44,13 @@ Script.prototype.matchesURL = function(url) {
 
     return GM_convert2RegExp(glob).test(url);
   }
+  function testMatch(matchPattern) {
+    return matchPattern.doMatch(url);
+  }
 
   return GM_isGreasemonkeyable(url)
-      && this._includes.some(test)
-      && !this._excludes.some(test);
+      && (this._includes.some(testClude) || this._matches.some(testMatch))
+      && !this._excludes.some(testClude);
 };
 
 Script.prototype._changed = function(event, data) {
@@ -96,6 +101,9 @@ function Script_getIncludes() { return this._includes.concat(); });
 
 Script.prototype.__defineGetter__('excludes',
 function Script_getExcludes() { return this._excludes.concat(); });
+
+Script.prototype.__defineGetter__('matches',
+function Script_getMatches() { return this._matches.concat(); });
 
 Script.prototype.addInclude = function(url) {
   this._includes.push(url);
@@ -218,6 +226,9 @@ Script.prototype._loadFromConfigNode = function(node) {
     case "Exclude":
       this._excludes.push(childNode.textContent);
       break;
+    case "Match":
+      this._matches.push(new MatchPattern(childNode.textContent));
+      break;
     case "Require":
       var scriptRequire = new ScriptRequire(this);
       scriptRequire._filename = childNode.getAttribute("filename");
@@ -247,18 +258,21 @@ Script.prototype._loadFromConfigNode = function(node) {
 Script.prototype.toConfigNode = function(doc) {
   var scriptNode = doc.createElement("Script");
 
-  for (var j = 0; j < this._includes.length; j++) {
-    var includeNode = doc.createElement("Include");
-    includeNode.appendChild(doc.createTextNode(this._includes[j]));
+  function addNode(name, content) {
+    var node = doc.createElement(name);
+    node.appendChild(doc.createTextNode(content));
     scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-    scriptNode.appendChild(includeNode);
+    scriptNode.appendChild(node);
   }
 
+  for (var j = 0; j < this._includes.length; j++) {
+    addNode('Include', this._includes[j]);
+  }
   for (var j = 0; j < this._excludes.length; j++) {
-    var excludeNode = doc.createElement("Exclude");
-    excludeNode.appendChild(doc.createTextNode(this._excludes[j]));
-    scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-    scriptNode.appendChild(excludeNode);
+    addNode('Exclude', this._excludes[j]);
+  }
+  for (var j = 0; j < this._matches.length; j++) {
+    addNode('Match', this._matches[j].pattern);
   }
 
   for (var j = 0; j < this._requires.length; j++) {
@@ -390,6 +404,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   // Copy new values.
   this._includes = newScript._includes;
   this._excludes = newScript._excludes;
+  this._matches = newScript._matches;
   this._description = newScript._description;
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;

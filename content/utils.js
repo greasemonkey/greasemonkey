@@ -57,6 +57,7 @@ function GM_logError(e, opt_warn, fileName, lineNumber) {
 
   var flags = opt_warn ? 1 : 0;
 
+  if ("string" == typeof e) e = new Error(e);
   // third parameter "sourceLine" is supposed to be the line, of the source,
   // on which the error happened.  we don't know it. (directly...)
   consoleError.init(e.message, fileName, null, lineNumber,
