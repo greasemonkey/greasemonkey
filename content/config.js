@@ -8,6 +8,8 @@ function Config() {
   this._observers = [];
 }
 
+Config.prototype.GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+
 Config.prototype.initialize = function() {
   this._updateVersion();
   this._load();
@@ -407,12 +409,12 @@ Config.prototype._updateVersion = function() {
     // Firefox <= 3.6.*
     var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
         .getService(Components.interfaces.nsIExtensionManager);
-    var item = extMan.getItemForID(GM_GUID);
+    var item = extMan.getItemForID(this.GM_GUID);
     GM_prefRoot.setValue("version", item.version);
   } else {
     // Firefox 3.7+
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    AddonManager.getAddonByID(GM_GUID, function(addon) {
+    AddonManager.getAddonByID(this.GM_GUID, function(addon) {
        GM_prefRoot.setValue("version", addon.version);
     });
   }

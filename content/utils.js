@@ -1,4 +1,3 @@
-const GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
