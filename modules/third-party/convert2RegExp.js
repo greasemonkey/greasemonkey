@@ -1,6 +1,37 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is AdBlock for Mozilla.
+ *
+ * The Initial Developer of the Original Code is
+ * Henrik Aasted Sorensen.
+ * Portions created by the Initial Developer are Copyright (C) 2002
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ * Henrik Aasted Sorensen <henrik@aasted.org>
+ * Stefan Kinitz <mcmurmel.blah@gmx.de>
+ * Rue <quill@ethereal.net>
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+var EXPORTED_SYMBOLS = ['GM_convert2RegExp'];
+
+Components.utils.import("resource://greasemonkey/utils.js");
+
+
 // Converts a pattern in this programs simple notation to a regular expression.
-// thanks AdBlock! http://www.mozdev.org/source/browse/adblock/adblock/
-function convert2RegExp( pattern ) {
+function GM_convert2RegExp( pattern ) {
   var s = new String(pattern);
   var res = new String("^");
 
@@ -47,4 +78,4 @@ function convert2RegExp( pattern ) {
   }
   return new RegExp(res + "$", "i");
 }
-convert2RegExp = GM_memoize(convert2RegExp);
+GM_convert2RegExp = GM_memoize(GM_convert2RegExp);

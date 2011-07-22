@@ -1,3 +1,5 @@
+Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
+
 function Script(configNode) {
   this._observers = [];
 
@@ -38,7 +40,7 @@ Script.prototype.matchesURL = function(url) {
       return false;
     }
 
-    return convert2RegExp(glob).test(url);
+    return GM_convert2RegExp(glob).test(url);
   }
 
   return GM_isGreasemonkeyable(url)
