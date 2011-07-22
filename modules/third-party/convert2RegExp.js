@@ -33,6 +33,12 @@ Components.utils.import("resource://greasemonkey/utils.js");
 // Converts a pattern in this programs simple notation to a regular expression.
 function GM_convert2RegExp( pattern ) {
   var s = new String(pattern);
+
+  if ('/' == s.substr(0, 1) && '/' == s.substr(-1, 1)) {
+    // Leading and trailing slash means raw regex.
+    return new RegExp(s.substring(1, s.length - 1), i);
+  }
+
   var res = new String("^");
 
   for (var i = 0 ; i < s.length ; i++) {
