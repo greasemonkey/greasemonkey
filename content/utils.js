@@ -71,9 +71,6 @@ function GM_log(message, force) {
   }
 }
 
-// TODO: this stuff was copied wholesale and not refactored at all. Lots of
-// the UI and Config rely on it. Needs rethinking.
-
 function GM_openInEditor(script) {
   var editor = GM_getEditor();
   if (!editor) {
