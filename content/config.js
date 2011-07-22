@@ -1,3 +1,5 @@
+Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
@@ -7,6 +9,8 @@ function Config() {
 
   this._observers = [];
 }
+
+Config.prototype.GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
 Config.prototype.initialize = function() {
   this._updateVersion();
@@ -174,6 +178,14 @@ Config.prototype.parse = function(source, uri, updateScript) {
         case "exclude":
           script._excludes.push(value);
           break;
+        case "match":
+          try {
+            var match = new MatchPattern(value);
+            script._matches.push(match);
+          } catch (e) {
+            GM_logError("Ignoring @match pattern " + value + " because:\n" + e);
+          }
+          break;
         case "icon":
           script._rawMeta += header + '\0' + value + '\0';
           try {
@@ -255,7 +267,9 @@ Config.prototype.parse = function(source, uri, updateScript) {
   if ("document-start" != script._runAt && "document-end" != script._runAt) {
     script._runAt = "document-end";
   }
-  if (script._includes.length == 0) script._includes.push("*");
+  if (script._includes.length == 0 && script._matches.length == 0) {
+    script._includes.push("*");
+  }
 
   return script;
 };
@@ -413,12 +427,12 @@ Config.prototype._updateVersion = function() {
     // Firefox <= 3.6.*
     var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
         .getService(Components.interfaces.nsIExtensionManager);
-    var item = extMan.getItemForID(GM_GUID);
+    var item = extMan.getItemForID(this.GM_GUID);
     GM_prefRoot.setValue("version", item.version);
   } else {
     // Firefox 3.7+
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    AddonManager.getAddonByID(GM_GUID, function(addon) {
+    AddonManager.getAddonByID(this.GM_GUID, function(addon) {
        GM_prefRoot.setValue("version", addon.version);
     });
   }

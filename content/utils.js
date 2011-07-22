@@ -1,5 +1,7 @@
-const GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+// Load module-ized methods here for legacy access.
+Components.utils.import("resource://greasemonkey/utils.js");
 
+// Define legacy methods.
 var GM_consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                         .getService(Components.interfaces.nsIConsoleService);
 
@@ -55,6 +57,7 @@ function GM_logError(e, opt_warn, fileName, lineNumber) {
 
   var flags = opt_warn ? 1 : 0;
 
+  if ("string" == typeof e) e = new Error(e);
   // third parameter "sourceLine" is supposed to be the line, of the source,
   // on which the error happened.  we don't know it. (directly...)
   consoleError.init(e.message, fileName, null, lineNumber,
@@ -68,9 +71,6 @@ function GM_log(message, force) {
     GM_consoleService.logStringMessage(message);
   }
 }
-
-// TODO: this stuff was copied wholesale and not refactored at all. Lots of
-// the UI and Config rely on it. Needs rethinking.
 
 function GM_openInEditor(script) {
   var editor = GM_getEditor();
@@ -332,24 +332,6 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
-function GM_uriFromUrl(url, base) {
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                                     .getService(Components.interfaces.nsIIOService);
-  var baseUri = null;
-  if (typeof base === "string") {
-    baseUri = GM_uriFromUrl(base);
-  } else if (base) {
-    baseUri = base;
-  }
-
-  try {
-    return ioService.newURI(url, null, baseUri);
-  } catch (e) {
-    return null;
-  }
-}
-GM_uriFromUrl = GM_memoize(GM_uriFromUrl);
-
 // UTF-8 encodes input, SHA-1 hashes it and returns the 40-char hex version.
 function GM_sha1(unicode) {
   var unicodeConverter = Components
@@ -399,35 +381,6 @@ function GM_scriptMatchesUrlAndRuns(script, url, when) {
       && !script.needsUninstall
       && (script.runAt == when || 'any' == when)
       && script.matchesURL(url);
-}
-
-// Decorate a function with a memoization wrapper, with a limited-size cache
-// to reduce peak memory utilization.  Simple usage:
-//
-// function foo(arg1, arg2) { /* complex operation */ }
-// foo = GM_memoize(foo);
-//
-// The memoized function may have any number of arguments, but they must be
-// be serializable, and uniquely.  It's safest to use this only on functions
-// that accept primitives.
-function GM_memoize(func, limit) {
-  limit = limit || 3000;
-  var cache = {__proto__: null};
-  var keylist = [];
-
-  return function(a) {
-    var args = Array.prototype.slice.call(arguments);
-    var key = uneval(args);
-    if (key in cache) return cache[key];
-
-    var result = func.apply(null, args);
-
-    cache[key] = result;
-
-    if (keylist.push(key) > limit) delete cache[keylist.shift()];
-
-    return result;
-  }
 }
 
 function GM_newUserScript() {
