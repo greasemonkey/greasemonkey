@@ -1,8 +1,5 @@
 var GMInstall = {
   init: function() {
-    var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
-
     this.htmlNs_ = "http://www.w3.org/1999/xhtml";
 
     this.scriptDownloader_ = window.arguments[0];
