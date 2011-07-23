@@ -36,7 +36,7 @@ function GM_convert2RegExp( pattern ) {
 
   if ('/' == s.substr(0, 1) && '/' == s.substr(-1, 1)) {
     // Leading and trailing slash means raw regex.
-    return new RegExp(s.substring(1, s.length - 1), i);
+    return new RegExp(s.substring(1, s.length - 1), 'i');
   }
 
   var res = new String("^");
