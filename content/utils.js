@@ -301,8 +301,8 @@ function GM_emptyEl(el) {
 
 function GM_isGreasemonkeyable(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
-               .getService(Components.interfaces.nsIIOService)
-               .extractScheme(url);
+      .getService(Components.interfaces.nsIIOService)
+      .extractScheme(url);
 
   switch (scheme) {
     case "http":
@@ -313,8 +313,8 @@ function GM_isGreasemonkeyable(url) {
     case "about":
       // Always allow "about:blank".
       if (/^about:blank/.test(url)) return true;
-      // Conditionally allow the rest of "about:".
-      return GM_prefRoot.getValue('aboutIsGreaseable');
+      // Never allow the rest of "about:".  See #1375.
+      return false;
     case "file":
       return GM_prefRoot.getValue('fileIsGreaseable');
     case "unmht":
