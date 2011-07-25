@@ -50,8 +50,9 @@ Script.prototype.matchesURL = function(url) {
   }
 
   return GM_isGreasemonkeyable(url)
-      && (this._includes.some(testClude) || this._matches.some(testMatch))
-      && !this._excludes.some(testClude);
+      && !GM_getConfig()._globalExcludes.some(testClude)
+      && !this._excludes.some(testClude)
+      && (this._includes.some(testClude) || this._matches.some(testMatch));
 };
 
 Script.prototype._changed = function(event, data) {

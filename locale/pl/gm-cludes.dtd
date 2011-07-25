@@ -1,0 +1,5 @@
+<!ENTITY button.add "Dodaj">
+<!ENTITY button.edit "Edytuj">
+<!ENTITY button.remove "Usuń">
+<!ENTITY label.grpIncluded "Witryny, na których skrypt jest uruchamiany">
+<!ENTITY label.grpExcluded "Witryny, na których skrypt nie jest uruchamiany">

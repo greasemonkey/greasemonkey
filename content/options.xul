@@ -8,6 +8,8 @@
 ]>
 
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/options.css" type="text/css"?>
 <dialog
   title="Greasemonkey - &prefWindow.titleWin;"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -15,7 +17,8 @@
 
   id="greasemonkey-options-dialog"
   persist="screenX screenY"
-  onload="GM_onloadOptions()"
+  onload="GM_loadOptions()"
+  ondialogaccept="GM_saveOptions()"
 >
 <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
@@ -26,14 +29,17 @@
 <vbox>
   <groupbox>
     <caption label="&options.editor;" />
-    <button oncommand="GM_getEditor(true)"><label>&options.changeEditor;</label></button>
+    <button oncommand="GM_getEditor(true)" label="&options.changeEditor;" />
   </groupbox>
 
   <groupbox>
     <caption label="&Uninstall;" />
-    <checkbox id="check-uninstall"
-      label="&AlsoUninstallPrefs;" 
-      oncommand="GM_setUninstallPrefs(this)" />
+    <checkbox id="check-uninstall" label="&AlsoUninstallPrefs;" />
+  </groupbox>
+
+  <groupbox>
+    <caption label="&options.globalExcludes;" />
+    <cludes id="globalExcludes" />
   </groupbox>
 </vbox>
 

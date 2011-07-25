@@ -25,6 +25,7 @@
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">

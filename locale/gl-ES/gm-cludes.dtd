@@ -1,0 +1,10 @@
+<!ENTITY promptForNewPage.msg "Introduza unha nova URL embaixo. Podes indicar múltiplas páxinas empregando o asterisco (*).">
+<!ENTITY promptForNewPage.title "Engadir Páxina">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Modificar a URL da páxina embaixo. Podes indicar múltiplas páxinas empregando o asterisco (*).">
+<!ENTITY promptForEdit.title "Editar Páxina">
+<!ENTITY button.add "Engadir...">
+<!ENTITY button.edit "Editar...">
+<!ENTITY button.remove "Eliminar">
+<!ENTITY label.grpIncluded "Páxinas Incluídas">
+<!ENTITY label.grpExcluded "Páxinas Excluídas">

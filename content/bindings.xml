@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/gm-cludes.dtd">
+<bindings xmlns="http://www.mozilla.org/xbl"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <binding id="clude-editor">
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox>
+          <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage()" />
+          <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage()"
+            disabled="true" />
+          <xul:button id="btnDel" label="&button.remove;" oncommand="_onRemovePage()"
+            disabled="true" />
+          <xul:spacer flex="1" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+    <implementation>
+      <constructor>
+        this._box = document.getAnonymousElementByAttribute(
+            this, 'id', 'listbox');
+        this._btnAdd = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnAdd');
+        this._btnEdit = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnEdit');
+        this._btnDel = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnDel');
+
+        this._pages = [];
+        this._fillListbox();
+      </constructor>
+
+      <property name="pages">
+        <getter>
+          return this._pages.concat();
+        </getter>
+        <setter>
+          this._pages = val.concat();
+          this._fillListbox();
+          return null;
+        </setter>
+      </property>
+
+      <method name="_fillListbox">
+        <parameter name="pages" />
+        <body>
+          pages = pages || this._pages;
+          while (this._box.getRowCount()) this._box.removeItemAt(0);
+          for (var i = 0, page = null; page = pages[i]; i++) {
+            this._box.insertItemAt(this._box.getRowCount(), page);
+          }
+        </body>
+      </method>
+
+      <method name="_onAddPage">
+        <body>
+          var page = prompt(
+              "&promptForNewPage.msg;",
+              "&promptForNewPage.defVal;",
+              "&promptForNewPage.title;");
+          if (page) this._pages.push(page);
+          this._fillListbox();
+        </body>
+      </method>
+
+      <method name="_onEditPage">
+        <body>
+          var page = prompt(
+              "&promptForEdit.msg;",
+              this._pages[this._box.currentIndex],
+              "&promptForEdit.title;");
+          if (page) this._pages[this._box.currentIndex] = page;
+          this._fillListbox();
+        </body>
+      </method>
+
+      <method name="_onRemovePage">
+        <body>
+          this._pages.splice(this._box.currentIndex, 1);
+          this._fillListbox();
+        </body>
+      </method>
+
+      <method name="_onSelect">
+        <body>
+          var noSelection = this._box.currentIndex == -1;
+          this._btnEdit.disabled = noSelection;
+          this._btnDel.disabled = noSelection;
+        </body>
+      </method>
+    </implementation>
+    <handlers>
+      <handler event="select" action="this._onSelect();"/>
+    </handlers>
+  </binding>
+</bindings>

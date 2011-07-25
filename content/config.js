@@ -7,6 +7,8 @@ function Config() {
   this._configFile.append("config.xml");
   this._initScriptDir();
 
+  this._globalExcludes = JSON.parse(GM_prefRoot.getValue("globalExcludes"));
+
   this._observers = [];
 }
 
@@ -365,9 +367,20 @@ Config.prototype._initScriptDir = function() {
   }
 };
 
+Config.prototype.__defineGetter__('globalExcludes',
+function Config_getGlobalExcludes() { return this._globalExcludes.concat(); }
+);
+
+Config.prototype.__defineSetter__('globalExcludes',
+function Config_setGlobalExcludes(val) {
+  this._globalExcludes = val.concat();
+  GM_prefRoot.setValue("globalExcludes", JSON.stringify(this._globalExcludes));
+});
+
 Config.prototype.__defineGetter__('scripts',
 function Config_getScripts() { return this._scripts.concat(); }
 );
+
 Config.prototype.getMatchingScripts = function(testFunc) {
   return this._scripts.filter(testFunc);
 };

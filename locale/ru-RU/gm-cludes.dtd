@@ -1,0 +1,10 @@
+<!ENTITY promptForNewPage.msg "Введите адрес нового URL-адреса ниже. Вы можете установить своё множество страниц, используя символ звёздочки (*).">
+<!ENTITY promptForNewPage.title "Добавить адрес страницы">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Измените URL страницы ниже. Вы можете установить своё множество страниц, используя символ звёздочки (*).">
+<!ENTITY promptForEdit.title "Редактирование адреса страницы">
+<!ENTITY button.add "Добавить...">
+<!ENTITY button.edit "Изменить...">
+<!ENTITY button.remove "Удалить">
+<!ENTITY label.grpIncluded "Охватываемые адреса">
+<!ENTITY label.grpExcluded "Исключаемые адреса">

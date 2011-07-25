@@ -1,0 +1,10 @@
+<!ENTITY promptForNewPage.msg "Digite uma nova URL abaixo. Você pode abranger várias, usando o caractere (*) coringa.">
+<!ENTITY promptForNewPage.title "Adicionar Página">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Altere a URL da página abaixo. Você pode abranger várias, usando o caractere (*) coringa.">
+<!ENTITY promptForEdit.title "Editar Página">
+<!ENTITY button.add "Adicionar...">
+<!ENTITY button.edit "Editar...">
+<!ENTITY button.remove "Remover">
+<!ENTITY label.grpIncluded "Páginas Incluídas">
+<!ENTITY label.grpExcluded "Páginas Excluídas">
