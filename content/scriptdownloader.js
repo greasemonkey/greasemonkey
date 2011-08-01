@@ -191,16 +191,24 @@ function(dep, file, channel) {
   var charSet = null;
   var error = null;
 
-  try {
-     httpChannel =
-         channel.QueryInterface(Components.interfaces.nsIHttpChannel);
-  } catch(e) {
-    httpChannel = false;
+  var loadOk = false;
+
+  // If this is a file:// channel, it would fail earlier (in the
+  // downloadNextDependency step), so getting here implies success.
+  if ("file" == channel.URI.scheme) {
+    loadOk = true;
+  } else {
+    try {
+       httpChannel =
+           channel.QueryInterface(Components.interfaces.nsIHttpChannel);
+       loadOk = (httpChannel.responseStatus >= 200
+           && httpChannel.responseStatus < 400);
+    } catch (e) {
+      httpChannel = false;
+    }
   }
 
-  if (httpChannel
-      && httpChannel.responseStatus >= 200 && httpChannel.responseStatus < 400
-  ) {
+  if (loadOk) {
     if (this.updateScript) {
       dep._script = this.script;
       dep.updateScript = true;
@@ -213,9 +221,12 @@ function(dep, file, channel) {
     contentType = channel.contentType;
     charSet = channel.contentCharset || null;
   } else {
-    error = "Error! Server Returned : "
-        + httpChannel.responseStatus
-        + ": " + httpChannel.responseStatusText;
+    if (httpChannel) {
+      error = "Server Returned: "
+          + httpChannel.responseStatus + ": " + httpChannel.responseStatusText;
+    } else {
+      error = "Failure during load.";
+    }
   }
 
   if (error && 'icon' == dep.type) {
