@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "о">
 <!ENTITY install.title "Greasemonkey - инсталација">
 <!ENTITY install.runson "покреће се на:">
+<!ENTITY install.matches "тражи:">
 <!ENTITY install.butnoton "не покреће се на:">
 <!ENTITY install.warning1 "Сумњиве скрипте могу нарушити вашу приватност или деловати мимо вашег знања.">
 <!ENTITY install.warning2 "Скрипте требате инсталирати само са проверених извора.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Изузми (једно по линији)">
 <!ENTITY options.editor "Уређивач">
 <!ENTITY options.changeEditor "Промени уређивач">
+<!ENTITY options.globalExcludes "Општа изузимања">
 <!ENTITY userscripts "Корисничке скрипте">
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">

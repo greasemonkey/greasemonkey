@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Instalace Greasemonkey">
 <!ENTITY install.runson "spouští se na:">
+<!ENTITY install.matches "odpovídá:">
 <!ENTITY install.butnoton "nespouští se na:">
 <!ENTITY install.warning1 "Zákeřné skripty mohou poškodit vaše soukromí a jednat vaším jménem bez vašeho vědomí.">
 <!ENTITY install.warning2 "Měli byste instalovat skripty pouze ze zdrojů, kterým věříte.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Vylučuje (jedna na řádek)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Změnit editor">
+<!ENTITY options.globalExcludes "Zahrnout globálně">
 <!ENTITY userscripts "Uživatelské skripty">
 <!ENTITY Uninstall "Odinstalovat">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">

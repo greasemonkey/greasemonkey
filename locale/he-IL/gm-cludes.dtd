@@ -1,7 +1,11 @@
-<!ENTITY promptForNewPage.msg "הכנס כתובת אינטרנט חדשה. ניתן לציין דפים מרובים ע"י שימוש בתו *.">
+<!ENTITY promptForNewPage.msg "הכנס כתובת אינטרנט חדשה. ניתן לציין דפים מרובים ע&quot;י שימוש בתו *.&quot;&gt;
+
+">
 <!ENTITY promptForNewPage.title "הוסף דף">
 <!ENTITY promptForNewPage.defVal "http://example.com/*">
-<!ENTITY promptForEdit.msg "שנה את כתובת הדף. ניתן לציין דפים מרובים ע"י שימוש בתו *.">
+<!ENTITY promptForEdit.msg "שנה את כתובת הדף. ניתן לציין דפים מרובים ע&quot;י שימוש בתו *.&quot;&gt;
+
+">
 <!ENTITY promptForEdit.title "ערוך דף">
 <!ENTITY button.add "הוסף...">
 <!ENTITY button.edit "ערוך...">

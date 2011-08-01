@@ -1,32 +1,34 @@
-<!ENTITY menu.install "Install User Script...">
+<!ENTITY menu.install "Instalar Script de Usuário…">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "View User Script Source">
+<!ENTITY menu.show "Ver Código-Fonte do Script de Usuário">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "User Script Commands...">
+<!ENTITY menu.commands "Comandos do Script de Usuário…">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "New User Script...">
+<!ENTITY menu.new "Novo Script de Usuário…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Manage User Scripts...">
-<!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.enabled "Enabled">
-<!ENTITY statusbar.enabled.accesskey "E">
-<!ENTITY install.title "Greasemonkey Installation">
-<!ENTITY install.runson "runs on:">
-<!ENTITY install.butnoton "does not run on:">
-<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
-<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
-<!ENTITY install.showscriptsource "Show Script Source">
-<!ENTITY install.installbutton "Install">
-<!ENTITY newscript.name "Name">
+<!ENTITY menu.manage "Gerenciar Scripts de Usuário…">
+<!ENTITY menu.manage.accesskey "G">
+<!ENTITY statusbar.enabled "Habilitado">
+<!ENTITY statusbar.enabled.accesskey "H">
+<!ENTITY install.title "Instalação do Greasemonkey">
+<!ENTITY install.runson "executado em:">
+<!ENTITY install.matches "correspondências:">
+<!ENTITY install.butnoton "não é executado em:">
+<!ENTITY install.warning1 "Scripts maliciosos podem violar sua privacidade e agir em seu nome sem o seu conhecimento.">
+<!ENTITY install.warning2 "Você deve instalar somente scripts de fontes confiáveis.">
+<!ENTITY install.showscriptsource "Mostrar Código-Fonte do Script">
+<!ENTITY install.installbutton "Instalar">
+<!ENTITY newscript.name "Nome">
 <!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (One per line)">
-<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY newscript.description "Descrição">
+<!ENTITY newscript.includes "Inclui (Um por linha)">
+<!ENTITY newscript.excludes "Exclui (Um por linha)">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.changeEditor "Change Editor">
-<!ENTITY userscripts "User Scripts">
-<!ENTITY Uninstall "Uninstall">
-<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
+<!ENTITY options.changeEditor "Mudar Editor">
+<!ENTITY options.globalExcludes "Exclusões Globais">
+<!ENTITY userscripts "Scripts de Usuário">
+<!ENTITY Uninstall "Desinstalar">
+<!ENTITY AlsoUninstallPrefs "Desinstalar também configurações associadas">
 <!ENTITY greasemonkey.noscriptshere "Nenhum script instalado será executado nessa página.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY greasemonkey.youhavenoscripts "Você não possui nenhum script de usuário instalado">
+<!ENTITY greasemonkey.getuserscripts "Obter scripts de usuário">

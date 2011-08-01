@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "K">
 <!ENTITY install.title "Greasemonkey-asennus">
 <!ENTITY install.runson "ajetaan sivuilla:">
+<!ENTITY install.matches "täsmää:">
 <!ENTITY install.butnoton "pois lukien sivut:">
 <!ENTITY install.warning1 "Haitalliset skriptit voivat vaarantaa yksityisyytesi ja toimia tietämättäsi.">
 <!ENTITY install.warning2 "Asenna skriptejä vain luetetuista lähteistä.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
 <!ENTITY options.editor "Tekstieditori">
 <!ENTITY options.changeEditor "Vaihda tekstieditoria">
+<!ENTITY options.globalExcludes "Yleisesti poisluettavat">
 <!ENTITY userscripts "Skriptit">
 <!ENTITY Uninstall "Poisto">
 <!ENTITY AlsoUninstallPrefs "Poista myös skriptin asetukset">

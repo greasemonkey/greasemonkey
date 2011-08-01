@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Instalación de Greasemonkey">
 <!ENTITY install.runson "Ejecutándose:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "Detenido:">
 <!ENTITY install.warning1 "Script maliciosos pueden violar tu privacidad y actuar en tu nombre sin tu consentimiento.">
 <!ENTITY install.warning2 "Sólo debes instalar Scripts de fuentes confiables.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Excluidas(Uno por línea)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Cambiar Editor">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Scripts">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AlsoUninstallPrefs "También desinstalar preferencias asociadas">

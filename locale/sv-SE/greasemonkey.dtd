@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installation av Greasemonkey">
 <!ENTITY install.runson "kör på:">
+<!ENTITY install.matches "matchar:">
 <!ENTITY install.butnoton "kör inte på:">
 <!ENTITY install.warning1 "Skadliga skript kan inkräkta på ditt privatliv och agera för din räkning utan din vetskap.">
 <!ENTITY install.warning2 "Du bör endast installera skript från källor som du litar på.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Undantar (ett per rad)">
 <!ENTITY options.editor "Redigeringsprogram">
 <!ENTITY options.changeEditor "Byt redigeringsprogram">
+<!ENTITY options.globalExcludes "Globala undantag">
 <!ENTITY userscripts "Användarskript">
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AlsoUninstallPrefs "Avinstallera även associerade inställningar">

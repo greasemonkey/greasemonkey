@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "к">
 <!ENTITY install.title "Установка скриптов Greasemonkey">
 <!ENTITY install.runson "Охватываемые адреса:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "Исключаемые адреса:">
 <!ENTITY install.warning1 "Вредоносные скрипты могут собирать конфиденциальную информацию и действовать от вашего имени.">
 <!ENTITY install.warning2 "Устанавливайте скрипты только из доверенных источников.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
 <!ENTITY options.editor "Редактор">
 <!ENTITY options.changeEditor "Изменить редактор">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Пользовательские скрипты">
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AlsoUninstallPrefs "Также удалять настройки скриптов">

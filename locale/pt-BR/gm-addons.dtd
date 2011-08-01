@@ -1,33 +1,33 @@
-<!ENTITY Edit "Edit">
+<!ENTITY Edit "Editar">
 <!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Edit this User Script">
-<!ENTITY ExecuteFirst "Execute first">
-<!ENTITY ExecuteLast "Execute last">
-<!ENTITY ExecuteLater "Execute later">
-<!ENTITY ExecuteSooner "Execute sooner">
-<!ENTITY MoveDown "Move Down">
-<!ENTITY MoveDown.accesskey "D">
-<!ENTITY MoveToBottom "Move To Bottom">
-<!ENTITY MoveToBottom.accesskey "B">
-<!ENTITY MoveToTop "Move To Top">
+<!ENTITY Edit.tooltip "Editar este Script de Usuário">
+<!ENTITY ExecuteFirst "Executar primeiro">
+<!ENTITY ExecuteLast "Executar por último">
+<!ENTITY ExecuteLater "Executar depois">
+<!ENTITY ExecuteSooner "Executar antes">
+<!ENTITY MoveDown "Mover Para Baixo">
+<!ENTITY MoveDown.accesskey "B">
+<!ENTITY MoveToBottom "Mover Para o Fim">
+<!ENTITY MoveToBottom.accesskey "F">
+<!ENTITY MoveToTop "Mover Para o Topo">
 <!ENTITY MoveToTop.accesskey "T">
-<!ENTITY MoveUp "Move Up">
-<!ENTITY MoveUp.accesskey "U">
-<!ENTITY NewScript "Create New Script">
+<!ENTITY MoveUp "Mover Para Cima">
+<!ENTITY MoveUp.accesskey "C">
+<!ENTITY NewScript "Criar Novo Script">
 <!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "Show Containing Folder">
-<!ENTITY Show.accesskey "S">
-<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Show "Mostrar Pasta Hospedeira">
+<!ENTITY Show.accesskey "M">
+<!ENTITY Sort.ByStatus "Organizar por status">
 <!ENTITY Sort.Status "Status">
-<!ENTITY Sort.ByName "Sort by name">
-<!ENTITY Sort.Name "Name">
-<!ENTITY Sort.ByExecution "Sort by execution order">
-<!ENTITY Sort.Execution "Execution Order">
-<!ENTITY SortScripts "Sort Scripts">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Cancel Uninstall">
+<!ENTITY Sort.ByName "Organizar por nome">
+<!ENTITY Sort.Name "Nome">
+<!ENTITY Sort.ByExecution "Organizar por ordem de execução">
+<!ENTITY Sort.Execution "Ordem de Execução">
+<!ENTITY SortScripts "Organizar Scripts">
+<!ENTITY SortScripts.accesskey "O">
+<!ENTITY UninstallCancel "Cancelar Desinstalação">
 <!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
-<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
-<!ENTITY UninstallNow "Uninstall Now">
-<!ENTITY UninstallNow.accesskey "N">
+<!ENTITY UninstallCancel.tooltip "Cancelar desinstalação deste Script de Usuário">
+<!ENTITY UninstallCancelDescription "Este Script de Usuário será desinstalado quando a janela for fechada. (Ou clique em &quot;Desinstalar Agora&quot;.)">
+<!ENTITY UninstallNow "Desinstalar Agora">
+<!ENTITY UninstallNow.accesskey "A">

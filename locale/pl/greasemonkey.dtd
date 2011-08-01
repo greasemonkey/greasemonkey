@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "W">
 <!ENTITY install.title "Instalacja skryptu">
 <!ENTITY install.runson "Uruchom na:">
+<!ENTITY install.matches "Odpowiada:">
 <!ENTITY install.butnoton "Nie uruchamiaj na:">
 <!ENTITY install.warning1 "Złośliwe skrypty mogą naruszać prywatność i bez wiedzy użytkownika działać w jego imieniu.">
 <!ENTITY install.warning2 "Należy instalować tylko skrypty pochodzące z zaufanych źródeł.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
 <!ENTITY options.editor "Edytor">
 <!ENTITY options.changeEditor "Zmień edytor">
+<!ENTITY options.globalExcludes "Wykluczenia globalne">
 <!ENTITY userscripts "Skrypty">
 <!ENTITY Uninstall "Odinstaluj">
 <!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">

@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "פ">
 <!ENTITY install.title "התקנת גריזמונקי">
 <!ENTITY install.runson "עובד ב:">
+<!ENTITY install.matches "התאמות:">
 <!ENTITY install.butnoton "לא עובד ב:">
 <!ENTITY install.warning1 "סקריפטים זדוניים עלולים להפר את הפרטיות שלך ולפעול בשמך ללא ידיעתך.">
 <!ENTITY install.warning2 "עליך להתקין סקריפטים רק ממקורות שאתה נותן בהם אמון.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "לא כולל (אחד בכל שורה)">
 <!ENTITY options.editor "עורך">
 <!ENTITY options.changeEditor "שינוי עורך">
+<!ENTITY options.globalExcludes "הכללה כללית">
 <!ENTITY userscripts "סקריפטים של משתמש">
 <!ENTITY Uninstall "הסר">
 <!ENTITY AlsoUninstallPrefs "הסר גם את העדפות המשויכות לסקריפט משתמש זה">

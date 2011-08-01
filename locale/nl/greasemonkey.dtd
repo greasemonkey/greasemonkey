@@ -12,8 +12,9 @@
 <!ENTITY statusbar.enabled.accesskey "I">
 <!ENTITY install.title "Greasemonkey-installatie">
 <!ENTITY install.runson "beïnvloed:">
+<!ENTITY install.matches "overeenkomsten:">
 <!ENTITY install.butnoton "sluit uit:">
-<!ENTITY install.warning1 "Kwaadaardige programmatuur kan uw privacy schenden of namens u handelen zonder uw medeweten.">
+<!ENTITY install.warning1 "Kwaadaardige programmatuur kan uw privacy schenden en namens u handelen zonder uw medeweten.">
 <!ENTITY install.warning2 "Installeer alleen scripts van auteurs die u vertrouwt.">
 <!ENTITY install.showscriptsource "Scriptbron weergeven">
 <!ENTITY install.installbutton "Installeren">
@@ -24,9 +25,10 @@
 <!ENTITY newscript.excludes "Sluit uit (één per regel)">
 <!ENTITY options.editor "Tekstverwerker">
 <!ENTITY options.changeEditor "Tekstverwerker kiezen">
+<!ENTITY options.globalExcludes "Sluit globaal uit">
 <!ENTITY userscripts "Gebruikersscripts">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
 <!ENTITY greasemonkey.noscriptshere "Op deze pagina draaien geen geïnstalleerde scripts.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY greasemonkey.youhavenoscripts "Er zijn geen gebruikersscripts geïnstalleerd">
+<!ENTITY greasemonkey.getuserscripts "Verkrijg gebruikersscripts">

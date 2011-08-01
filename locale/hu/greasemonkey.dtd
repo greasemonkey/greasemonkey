@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey telepítés">
 <!ENTITY install.runson "fut a következőn:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "nem fut a következőn:">
 <!ENTITY install.warning1 "Kártékony parancsfájlok hozzáférhetnek az Ön személyes adataihoz és működhetnek az Ön tudta nélkül.">
 <!ENTITY install.warning2 "Csak megbízható forrásból telepítsen parancsfájlt!">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
 <!ENTITY options.editor "Szerkesztő">
 <!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Parancsfájlok">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">

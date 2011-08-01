@@ -1,33 +1,33 @@
-<!ENTITY Edit "Edit">
+<!ENTITY Edit "Editar">
 <!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Edit this User Script">
-<!ENTITY ExecuteFirst "Execute first">
-<!ENTITY ExecuteLast "Execute last">
-<!ENTITY ExecuteLater "Execute later">
-<!ENTITY ExecuteSooner "Execute sooner">
-<!ENTITY MoveDown "Move Down">
+<!ENTITY Edit.tooltip "Editar este script">
+<!ENTITY ExecuteFirst "Executar primeiro">
+<!ENTITY ExecuteLast "Executar último">
+<!ENTITY ExecuteLater "Executar máis tarde">
+<!ENTITY ExecuteSooner "Executar antes">
+<!ENTITY MoveDown "Mover abaixo">
 <!ENTITY MoveDown.accesskey "D">
-<!ENTITY MoveToBottom "Move To Bottom">
+<!ENTITY MoveToBottom "Mover ao fondo">
 <!ENTITY MoveToBottom.accesskey "B">
-<!ENTITY MoveToTop "Move To Top">
+<!ENTITY MoveToTop "Mover á cima">
 <!ENTITY MoveToTop.accesskey "T">
-<!ENTITY MoveUp "Move Up">
+<!ENTITY MoveUp "Mover arriba">
 <!ENTITY MoveUp.accesskey "U">
-<!ENTITY NewScript "Create New Script">
+<!ENTITY NewScript "Crear un novo script">
 <!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "Show Containing Folder">
+<!ENTITY Show "Mostrar o cartafol">
 <!ENTITY Show.accesskey "S">
-<!ENTITY Sort.ByStatus "Sort by status">
-<!ENTITY Sort.Status "Status">
-<!ENTITY Sort.ByName "Sort by name">
-<!ENTITY Sort.Name "Name">
-<!ENTITY Sort.ByExecution "Sort by execution order">
-<!ENTITY Sort.Execution "Execution Order">
-<!ENTITY SortScripts "Sort Scripts">
+<!ENTITY Sort.ByStatus "Ordenar polo estado">
+<!ENTITY Sort.Status "Estado">
+<!ENTITY Sort.ByName "Ordenar polo nome">
+<!ENTITY Sort.Name "Nome">
+<!ENTITY Sort.ByExecution "Ordenar pola orde de execución">
+<!ENTITY Sort.Execution "Orde de execución">
+<!ENTITY SortScripts "Ordenar scripts">
 <!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Cancel Uninstall">
+<!ENTITY UninstallCancel "Cancelar a desinstalación">
 <!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
-<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
-<!ENTITY UninstallNow "Uninstall Now">
+<!ENTITY UninstallCancel.tooltip "Cancelar a desinstalación do script">
+<!ENTITY UninstallCancelDescription "Este script desinstalarase cando peche o diálogo (ou botón dereito para &quot;Desinstalar agora&quot;.)">
+<!ENTITY UninstallNow "Desinstalar agora">
 <!ENTITY UninstallNow.accesskey "N">

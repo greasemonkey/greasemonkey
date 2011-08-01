@@ -1,3 +1,8 @@
+<!ENTITY promptForNewPage.msg "Podaj nowy URL. Możesz określić wiele stron, używając wieloznacznika (*).">
+<!ENTITY promptForNewPage.title "Dodaj stronę">
+<!ENTITY promptForNewPage.defVal "http://przyklad.pl/*">
+<!ENTITY promptForEdit.msg "Modyfikuj URL strony. Możesz określić wiele stron, używając wieloznacznika (*).">
+<!ENTITY promptForEdit.title "Edytuj stronę">
 <!ENTITY button.add "Dodaj">
 <!ENTITY button.edit "Edytuj">
 <!ENTITY button.remove "Usuń">

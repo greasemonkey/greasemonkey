@@ -12,6 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "ع">
 <!ENTITY install.title "فرآیند نصب گریسمانکی">
 <!ENTITY install.runson "اجرا در:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "عدم اجرا در:">
 <!ENTITY install.warning1 "نویسه های بد اندیش می توانند به حریم شما تجاوز کنند و بدون آگاهی شما، روی حقوق شما تاثری بگذارند.">
 <!ENTITY install.warning2 "شما می بایست فقط نویسه هایی را نصب کنید که از منابع آنها مطمئن هستید.">
@@ -24,6 +25,7 @@
 <!ENTITY newscript.excludes "مستثنا کردن (یکی در هر خط)">
 <!ENTITY options.editor "ویراستار">
 <!ENTITY options.changeEditor "تغییر ویراستار">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "نویسه های کاربری">
 <!ENTITY Uninstall "عزل">
 <!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">
