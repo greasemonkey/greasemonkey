@@ -40,9 +40,14 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   }
 
   return {
-    abort: function() {
-      req.abort();
-    }
+    get responseText()    req.responseText,
+    get responseHeaders() req.getAllResponseHeaders(),
+    get readyState()      req.readyState,
+    get status()          req.status,
+    get statusText()      req.statusText,
+    get finalUrl()        req.channel.URI.spec,
+
+    abort: function () req.abort()
   };
 };
 
@@ -59,7 +64,7 @@ function(safeUrl, details, req) {
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
-  req.open(details.method, safeUrl, true, details.user || "", details.password || "");
+  req.open(details.method, safeUrl, !details.synchronous, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
@@ -81,6 +86,10 @@ function(safeUrl, details, req) {
   } else {
     req.send(body);
   }
+
+  GM_log("< GM_xmlhttpRequest.chromeStartRequest");
+
+  return req;
 };
 
 // sets the "Referer" HTTP header for this GM_XHR request.
