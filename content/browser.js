@@ -105,7 +105,9 @@ GM_BrowserUI.contentLoad = function(event) {
   var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
 
-  GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
+  // Make sure we are still on the page that fired this event, see issue #1083
+  if (href == event.target.documentURI)
+    GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
 
   // Show the greasemonkey install banner if we are navigating to a .user.js
   // file in a top-level tab.  If the file was previously cached it might have
