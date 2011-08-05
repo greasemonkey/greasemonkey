@@ -52,10 +52,19 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
-  this.setupRequestEvent(this.wrappedContentWin, req, "onload", details);
-  this.setupRequestEvent(this.wrappedContentWin, req, "onerror", details);
-  this.setupRequestEvent(this.wrappedContentWin, req, "onreadystatechange",
-                         details);
+  var setupRequestEvent = GM_hitch(this, 'setupRequestEvent', this.wrappedContentWin);
+
+  setupRequestEvent(req, "abort", details);
+  setupRequestEvent(req, "error", details);
+  setupRequestEvent(req, "load", details);
+  setupRequestEvent(req, "progress", details);
+  setupRequestEvent(req, "readystatechange", details);
+  if (details.upload) {
+    setupRequestEvent(req.upload, "abort", details.upload);
+    setupRequestEvent(req.upload, "error", details.upload);
+    setupRequestEvent(req.upload, "load", details.upload);
+    setupRequestEvent(req.upload, "progress", details.upload);
+  }
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
@@ -113,11 +122,12 @@ function(details, req) {
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(wrappedContentWin, req, event, details) {
-  if (!details[event]) return;
-  req[event] = function() {
+  if (!details["on" + event]) return;
+
+  req.addEventListener(event, function(evt) {
     var responseState = {
-      // can't support responseXML because security won't
-      // let the browser call properties on it
+      // Can't support responseXML because security won't
+      // let the browser call properties on it.
       responseText: req.responseText,
       readyState: req.readyState,
       responseHeaders: null,
@@ -125,11 +135,22 @@ function(wrappedContentWin, req, event, details) {
       statusText: null,
       finalUrl: null
     };
-    if (4 == req.readyState && 'onerror' != event) {
-      responseState.responseHeaders = req.getAllResponseHeaders();
-      responseState.status = req.status;
-      responseState.statusText = req.statusText;
-      responseState.finalUrl = req.channel.URI.spec;
+
+    switch (event) {
+      case "progress":
+        responseState.lengthComputable = evt.lengthComputable;
+        responseState.loaded = evt.loaded;
+        responseState.total = evt.total;
+        break;
+      case "error":
+        break;
+      default:
+        if (4 != req.readyState) break;
+        responseState.responseHeaders = req.getAllResponseHeaders();
+        responseState.status = req.status;
+        responseState.statusText = req.statusText;
+        responseState.finalUrl = req.channel.URI.spec;
+        break;
     }
 
     // Pop back onto browser thread and call event handler.
@@ -137,6 +158,6 @@ function(wrappedContentWin, req, event, details) {
     // otherwise details[event].apply can point to window.setTimeout, which
     // can be abused to get increased privileges.
     new XPCNativeWrapper(wrappedContentWin, "setTimeout()")
-      .setTimeout(function(){details[event](responseState);}, 0);
-  };
+      .setTimeout(function(){ details["on" + event](responseState); }, 0);
+  }, false);
 };
