@@ -39,11 +39,14 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
-  return {
-    abort: function() {
-      req.abort();
-    }
-  };
+  var rv = { abort: function () { return req.abort(); } };
+  rv.__defineGetter__('finalUrl', function() { return req.finalUrl; });
+  rv.__defineGetter__('readyState', function() { return req.readyState; });
+  rv.__defineGetter__('responseHeaders', function() { return req.getAllResponseHeaders(); });
+  rv.__defineGetter__('responseText', function() { return req.responseText; });
+  rv.__defineGetter__('status', function() { return req.status; });
+  rv.__defineGetter__('statusText', function() { return req.statusText; });
+  return rv;
 };
 
 // this function is intended to be called in chrome's security context, so
@@ -68,7 +71,8 @@ function(safeUrl, details, req) {
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
-  req.open(details.method, safeUrl, true, details.user || "", details.password || "");
+  req.open(details.method, safeUrl,
+      !details.synchronous, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
