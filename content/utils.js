@@ -1,3 +1,6 @@
+Components.utils.import("resource://gre/modules/NetUtil.jsm");
+Components.utils.import("resource://gre/modules/FileUtils.jsm");
+
 // Load module-ized methods here for legacy access.
 Components.utils.import("resource://greasemonkey/utils.js");
 
@@ -445,4 +448,34 @@ function GM_getBrowserWindow() {
      .classes['@mozilla.org/appshell/window-mediator;1']
      .getService(Components.interfaces.nsIWindowMediator)
      .getMostRecentWindow("navigator:browser");
+}
+
+
+/** Given string data and an nsIFile, write it safely to that file. */
+function GM_writeToFile(aData, aFile) {
+  //                 PR_WRONLY PR_CREATE_FILE PR_TRUNCATE
+  var _streamFlags = 0x02      | 0x08         | 0x20;
+
+  // Assume aData is a string; convert it to a UTF-8 stream.
+  var converter = Components
+      .classes["@mozilla.org/intl/scriptableunicodeconverter"]
+      .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+  converter.charset = "UTF-8";
+  var istream = converter.convertToInputStream(aData);
+
+  // Create a temporary file (stream) to hold the data.
+  var tmpFile = aFile.clone();
+  tmpFile.createUnique(
+      Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
+  var ostream = Components
+      .classes["@mozilla.org/network/safe-file-output-stream;1"]
+      .createInstance(Components.interfaces.nsIFileOutputStream);
+  ostream.init(tmpFile, _streamFlags, GM_fileMask, 0);
+
+  NetUtil.asyncCopy(istream, ostream, function(status) {
+    if (Components.isSuccessCode(status)) {
+      // On successful write, move it to the real location.
+      tmpFile.moveTo(aFile.parent, aFile.leafName);
+    }
+  });
 }
