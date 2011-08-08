@@ -96,8 +96,9 @@ function GM_addStyle(doc, css) {
     style.textContent = css;
     style.type = "text/css";
     head.appendChild(style);
+    return style;
   }
-  return style;
+  return null;
 }
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //

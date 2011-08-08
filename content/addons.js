@@ -297,13 +297,14 @@ var greasemonkeyAddons = {
 
     function $(id) { return document.getElementById(id); }
     function setItemsHidden(hidden, idList) {
+      var items;
       if (idList) {
-        var items = idList.map(function(id) {
+        items = idList.map(function(id) {
           return $('userscript_context_' + id);
         });
       } else {
-        var items = $('userscriptContextMenu').childNodes;
-        items = Array.prototype.slice.call(items);
+        items = Array.prototype.slice.call(
+            $('userscriptContextMenu').childNodes);
       }
       items.forEach(function(item) {
         item.setAttribute('hidden', hidden);
@@ -380,7 +381,7 @@ var greasemonkeyDragObserver = {
     // no-op
   },
   onDrop: function(event, dropData, session) {
-    var url;
+    var url = null;
     if ('text/uri-list' == dropData.flavour.contentType) {
       url = dropData.data;
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
@@ -388,7 +389,7 @@ var greasemonkeyDragObserver = {
     }
     dump("Dropped url: ["+url+"]\n");
     if (url && url.match(/\.user\.js$/)) {
-      // TODO: Make this UI appear in the addons win, rather than the browser?
+      // TODO: Make this UI appear in the add-ons win, rather than the browser?
       GM_installUri(GM_uriFromUrl(url));
     }
   },

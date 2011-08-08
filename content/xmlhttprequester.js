@@ -106,8 +106,8 @@ function(details, req) {
 
   var observerService = Components.classes["@mozilla.org/observer-service;1"]
       .getService(Components.interfaces.nsIObserverService);
-  var requestObserver = {
-    observe: function(subject, topic, data) {
+  var requestObserver = {};
+  requestObserver.observe = function(subject, topic, data) {
       observerService.removeObserver(requestObserver, "http-on-modify-request");
 
       var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
@@ -116,8 +116,7 @@ function(details, req) {
             Components.interfaces.nsIHttpChannel);
         httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
       }
-    }
-  };
+    };
   observerService.addObserver(requestObserver, "http-on-modify-request", false);
 };
 

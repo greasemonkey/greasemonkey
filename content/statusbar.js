@@ -1,14 +1,12 @@
 (function private_scope() {
 
-var statusEl;
-var statusEnabledItemEl;
-var statusImageEl;
-var statusPopupEl;
-var stringBundle;
+var statusEl = null;
+var statusImageEl = null;
+var statusPopupEl = null;
+var stringBundle = null;
 
 window.addEventListener('load', function window_load() {
       statusEl = document.getElementById('gm-status');
-      statusEnabledItemEl = document.getElementById("gm-status-enabled-item");
       statusImageEl = document.getElementById("gm-status-image");
       statusPopupEl = document.getElementById('gm-status-popup');
       stringBundle = document.getElementById("gm-browser-bundle");

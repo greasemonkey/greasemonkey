@@ -153,7 +153,7 @@ GM_BrowserUI.showInstallBanner = function(browser) {
     }
   }
 
-  var notification = notificationBox.appendNotification(
+  notificationBox.appendNotification(
     greeting,
     "install-userscript",
     "chrome://greasemonkey/skin/icon16.png",
@@ -193,8 +193,6 @@ GM_BrowserUI.showScriptView = function(scriptDownloader) {
   GM_BrowserUI.scriptDownloader_ = scriptDownloader;
 
   var tab = GM_BrowserUI.tabBrowser.addTab(scriptDownloader.script.previewURL);
-  var browser = GM_BrowserUI.tabBrowser.getBrowserForTab(tab);
-
   GM_BrowserUI.tabBrowser.selectedTab = tab;
 };
 
@@ -280,22 +278,6 @@ GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
   return uri;
 };
 
-/**
- * Helper to determine if a given dom window is in this tabbrowser
- */
-GM_BrowserUI.isMyWindow = function(domWindow) {
-  var tabbrowser = getBrowser();
-  var browser;
-
-  for (var i = 0; browser = tabbrowser.browsers[i]; i++) {
-    if (browser.contentWindow == domWindow) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
 GM_BrowserUI.refreshStatus = function() {
   var enabledEl = document.getElementById("gm_toggle_enabled");
   var checkedEl = document.getElementById("gm_toggle_checked");
@@ -372,10 +354,10 @@ function GM_popupClicked(aEvent) {
  */
 function GM_showPopup(aEvent) {
   function urlsOfAllFrames(contentWindow) {
+    var urls = [contentWindow.location.href];
     function collect(contentWindow) {
       urls = urls.concat(urlsOfAllFrames(contentWindow));
     }
-    var urls = [contentWindow.location.href];
     Array.prototype.slice.call(contentWindow.frames).forEach(collect);
     return urls;
   }
