@@ -3,21 +3,11 @@ var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 
-var GM_firefoxVersion;
 var GM_os;
 (function() {
 var xulRuntime = Components
     .classes["@mozilla.org/xre/app-info;1"]
     .getService(Components.interfaces.nsIXULRuntime);
-
-// Detect fixed possible compatible Firefox versions.
-if (GM_compareFirefoxVersion('3.5') < 0) {
-  GM_firefoxVersion = '3.0';
-} else  if (GM_compareFirefoxVersion('3.6') < 0) {
-  GM_firefoxVersion = '3.5';
-} else {
-  GM_firefoxVersion = '3.6';
-}
 
 GM_os = xulRuntime.OS;
 })();
@@ -88,10 +78,8 @@ window.addEventListener('load', function() {
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
-  if ('3.6' == GM_firefoxVersion) {
-    gUserscriptsView.addEventListener(
-        'keypress', greasemonkeyAddons.onKeypress, false);
-  }
+  gUserscriptsView.addEventListener(
+      'keypress', greasemonkeyAddons.onKeypress, false);
 
   GM_config.addObserver(observer);
 
@@ -154,14 +142,14 @@ var greasemonkeyAddons = {
     document.documentElement.className += ' userscripts';
 
     GM_config.updateModifiedScripts();
-    if ('3.6' == GM_firefoxVersion) gUserscriptsView.focus();
+    gUserscriptsView.focus();
   },
 
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/g, '');
-    if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
+    gExtensionsView.focus();
   },
 
   updateLastSelected: function() {
@@ -379,22 +367,7 @@ var greasemonkeyAddons = {
   fixButtonOrder: function() {
     function $(id) { return document.getElementById(id); }
 
-    if ('3.0' == GM_firefoxVersion) {
-      // All platforms, Firefox 3.0
-      $('commandBarBottom').appendChild($('newUserscript'));
-    } else if ('WINNT' == GM_os) {
-      if ('3.5' == GM_firefoxVersion) {
-        // Windows, Firefox 3.5
-        $('commandBarBottom').insertBefore(
-            $('getMoreUserscripts'), $('newUserscript').nextSibling);
-      }
-    } else {
-      if ('3.5' == GM_firefoxVersion) {
-        // Mac/Linux, Firefox 3.5
-        $('commandBarBottom').insertBefore(
-            $('getMoreUserscripts'), $('skipDialogButton'));
-      }
-      // Mac/Linux, Firefox 3.5 and 3.6
+    if ('WINNT' != GM_os) {
       $('commandBarBottom').insertBefore(
           $('newUserscript'), $('skipDialogButton'));
     }

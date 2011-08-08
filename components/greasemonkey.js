@@ -214,8 +214,8 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  // Firefox 3.5 and higher supports 1.8.
-  if (GM_compareFirefoxVersion("3.5") >= 0) {
+  // Firefox 3.6 and higher supports 1.8.
+  if (GM_compareFirefoxVersion("3.6") >= 0) {
     maxJSVersion = "1.8";
   }
 }
