@@ -235,15 +235,6 @@ function GM_getContents(file, charset) {
   }
 }
 
-function GM_getWriteStream(file) {
-  var stream = Components.classes["@mozilla.org/network/file-output-stream;1"]
-                         .createInstance(Components.interfaces.nsIFileOutputStream);
-
-  stream.init(file, 0x02 | 0x08 | 0x20, 420, -1);
-
-  return stream;
-}
-
 function GM_getUriFromFile(file) {
   return Components.classes["@mozilla.org/network/io-service;1"]
                    .getService(Components.interfaces.nsIIOService)
@@ -452,7 +443,7 @@ function GM_getBrowserWindow() {
 
 
 /** Given string data and an nsIFile, write it safely to that file. */
-function GM_writeToFile(aData, aFile) {
+function GM_writeToFile(aData, aFile, aCallback) {
   //                 PR_WRONLY PR_CREATE_FILE PR_TRUNCATE
   var _streamFlags = 0x02      | 0x08         | 0x20;
 
@@ -476,6 +467,8 @@ function GM_writeToFile(aData, aFile) {
     if (Components.isSuccessCode(status)) {
       // On successful write, move it to the real location.
       tmpFile.moveTo(aFile.parent, aFile.leafName);
+
+      if (aCallback) aCallback();
     }
   });
 }

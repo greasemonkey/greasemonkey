@@ -22,13 +22,6 @@ window.addEventListener("load", function window_load() {
 function doInstall() {
   var script = createScriptSource();
   if (!script) return false;
-
-  // put this created script into a file -- only way to install it
-  var tempFile = GM_getTempFile();
-  var foStream = GM_getWriteStream(tempFile);
-  foStream.write(script, script.length);
-  foStream.close();
-
   var config = GM_getConfig();
 
   // create a script object with parsed metadata,
@@ -41,16 +34,18 @@ function doInstall() {
   }
 
   // finish making the script object ready to install
-  script.setDownloadedFile(tempFile);
+  // (put this created script into a file -- only way to install it)
+  var tempFile = GM_getTempFile();
+  GM_writeToFile(script, tempFile, function() {
+    script.setDownloadedFile(tempFile);
 
-  // install this script
-  config.install(script);
-
-  // and fire up the editor!
-  GM_openInEditor(script);
-
-  // persist namespace value
-  GM_prefRoot.setValue("newscript_namespace", script.namespace);
+    // install this script
+    config.install(script);
+    // and fire up the editor!
+    GM_openInEditor(script);
+    // persist namespace value
+    GM_prefRoot.setValue("newscript_namespace", script.namespace);
+  });
 
   return true;
 }

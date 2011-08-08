@@ -115,11 +115,10 @@ Config.prototype._save = function(saveNow) {
 
   doc.firstChild.appendChild(doc.createTextNode("\n"));
 
-  var configStream = GM_getWriteStream(this._configFile);
-  Components.classes["@mozilla.org/xmlextras/xmlserializer;1"]
-    .createInstance(Components.interfaces.nsIDOMSerializer)
-    .serializeToStream(doc, configStream, "utf-8");
-  configStream.close();
+  var domSerializer = Components
+      .classes["@mozilla.org/xmlextras/xmlserializer;1"]
+      .createInstance(Components.interfaces.nsIDOMSerializer);
+  GM_writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
 Config.prototype.parse = function(source, uri, updateScript) {
@@ -359,11 +358,7 @@ Config.prototype._initScriptDir = function() {
   var dir = GM_scriptDir();
   if (!dir.exists()) {
     dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_directoryMask);
-
-    var configStream = GM_getWriteStream(this._configFile);
-    var xml = "<UserScriptConfig/>";
-    configStream.write(xml, xml.length);
-    configStream.close();
+    GM_writeToFile("<UserScriptConfig/>", this._configFile);
   }
 };
 

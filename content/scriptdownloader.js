@@ -102,25 +102,17 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
         Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
     this.tempFiles_.push(file);
 
-    var converter = Components
-        .classes["@mozilla.org/intl/scriptableunicodeconverter"]
-        .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-    converter.charset = "UTF-8";
-    source = converter.ConvertFromUnicode(source);
+    GM_writeToFile(source, file, function() {
+      this.script.setDownloadedFile(file);
 
-    var ws = GM_getWriteStream(file);
-    ws.write(source, source.length);
-    ws.close();
+      window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
 
-    this.script.setDownloadedFile(file);
-
-    window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
-
-    if (this.installing_) {
-      this.showInstallDialog();
-    } else {
-      this.showScriptView();
-    }
+      if (this.installing_) {
+        this.showInstallDialog();
+      } else {
+        this.showScriptView();
+      }
+    });
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
