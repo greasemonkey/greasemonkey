@@ -427,9 +427,6 @@ Config.prototype._updateVersion = function() {
     }
   }
 
-  if (GM_compareVersions(initialized, "0.8") == -1)
-    this._pointEightBackup();
-
   // update the currently initialized version so we don't do this work again.
   if ("@mozilla.org/extensions/manager;1" in Components.classes) {
     // Firefox <= 3.6.*
@@ -444,17 +441,4 @@ Config.prototype._updateVersion = function() {
        GM_prefRoot.setValue("version", addon.version);
     });
   }
-};
-
-/**
- * In Greasemonkey 0.8 there was a format change to the gm_scripts folder and
- * testing found several bugs where the entire folder would get nuked. So we
- * are paranoid and backup the folder the first time 0.8 runs.
- */
-Config.prototype._pointEightBackup = function() {
-  var scriptDir = GM_scriptDir();
-  var scriptDirBackup = scriptDir.clone();
-  scriptDirBackup.leafName += "_08bak";
-  if (scriptDir.exists() && !scriptDirBackup.exists())
-    scriptDir.copyTo(scriptDirBackup.parent, scriptDirBackup.leafName);
 };
