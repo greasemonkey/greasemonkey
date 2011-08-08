@@ -2,30 +2,16 @@
 <!DOCTYPE overlay SYSTEM "chrome://greasemonkey/locale/gm-cludes.dtd">
 <bindings xmlns="http://www.mozilla.org/xbl"
   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <binding id="clude-editor">
+  <binding id="clude-editor-base">
     <content>
       <xul:hbox flex="1">
         <xul:listbox flex="1" id="listbox" />
-        <xul:vbox>
-          <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage()" />
-          <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage()"
-            disabled="true" />
-          <xul:button id="btnDel" label="&button.remove;" oncommand="_onRemovePage()"
-            disabled="true" />
-          <xul:spacer flex="1" />
-        </xul:vbox>
       </xul:hbox>
     </content>
     <implementation>
       <constructor>
         this._box = document.getAnonymousElementByAttribute(
             this, 'id', 'listbox');
-        this._btnAdd = document.getAnonymousElementByAttribute(
-            this, 'id', 'btnAdd');
-        this._btnEdit = document.getAnonymousElementByAttribute(
-            this, 'id', 'btnEdit');
-        this._btnDel = document.getAnonymousElementByAttribute(
-            this, 'id', 'btnDel');
 
         this._pages = [];
         this._fillListbox();
@@ -81,6 +67,36 @@
           this._fillListbox();
         </body>
       </method>
+    </implementation>
+    <handlers>
+      <handler event="select" action="this._onSelect();"/>
+    </handlers>
+  </binding>
+  <binding id="clude-editor-editable"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-base"
+  >
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox>
+          <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage()" />
+          <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage()"
+            disabled="true" />
+          <xul:button id="btnDel" label="&button.remove;" oncommand="_onRemovePage()"
+            disabled="true" />
+          <xul:spacer flex="1" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+    <implementation>
+      <constructor>
+        this._btnAdd = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnAdd');
+        this._btnEdit = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnEdit');
+        this._btnDel = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnDel');
+      </constructor>
 
       <method name="_onSelect">
         <body>
@@ -90,8 +106,57 @@
         </body>
       </method>
     </implementation>
-    <handlers>
-      <handler event="select" action="this._onSelect();"/>
-    </handlers>
+  </binding>
+  <binding id="clude-editor-readonly"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-base"
+  >
+    <implementation>
+      <constructor>
+        this._btnUserClude = document.getAnonymousElementByAttribute(
+            this, 'id', 'btnUserClude');
+      </constructor>
+
+      <method name="_onSelect">
+        <body>
+          var noSelection = this._box.currentIndex == -1;
+          this._btnUserClude.disabled = noSelection;
+        </body>
+      </method>
+
+      <method name="_addUserClude">
+        <parameter name="section" />
+        <body>
+          var methodName = "onAddUser" + section;
+          this[methodName] &amp;&amp; this[methodName](
+            this._pages[this._box.currentIndex]);
+        </body>
+      </method>
+    </implementation>
+  </binding>
+  <binding id="clude-editor-readonly-in"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
+  >
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox>
+          <xul:button id="btnUserClude" label="&button.addUserExclude;"
+              oncommand="_addUserClude('Exclude')" disabled="true" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+  </binding>
+  <binding id="clude-editor-readonly-ex"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
+  >
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox>
+          <xul:button id="btnUserClude" label="&button.addUserInclude;"
+              oncommand="_addUserClude('Include')" disabled="true" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
   </binding>
 </bindings>

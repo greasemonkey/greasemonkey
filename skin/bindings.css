@@ -1,3 +1,9 @@
 cludes {
-  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor')
+  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor-editable')
+}
+.in cludes.readonly {
+  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor-readonly-in')
+}
+.ex cludes.readonly {
+  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor-readonly-ex')
 }

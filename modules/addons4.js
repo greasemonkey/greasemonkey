@@ -123,6 +123,11 @@ function ScriptAddon_getIsActive() {
   return this._script.enabled;
 });
 
+ScriptAddon.prototype.__defineGetter__('optionsURL',
+function ScriptAddon_getIsActive() {
+  return 'chrome://greasemonkey/content/scriptprefs.xul#' + this._script.id;
+});
+
 ScriptAddon.prototype.__defineGetter__('userDisabled',
 function ScriptAddon_getUserDisabled() {
   return !this._script.enabled;
