@@ -100,7 +100,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
         Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
     this.tempFiles_.push(file);
 
-    GM_writeToFile(source, file, function() {
+    GM_writeToFile(source, file, (function() {
       this.script.setDownloadedFile(file);
 
       window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
@@ -110,7 +110,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
       } else {
         this.showScriptView();
       }
-    });
+    }).apply(this));
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
