@@ -3,14 +3,19 @@ var gScript = GM_getConfig().getMatchingScripts(function(script) {
   return script.id == gScriptId;
 })[0];
 
-var gUserIncludesEl;
-var gUserExcludesEl;
-var gScriptIncludesEl;
 var gScriptExcludesEl;
+var gScriptIncludesEl;
+var gTabboxEl;
+var gUserExcludesEl;
+var gUserIncludesEl;
+var gUserTabEl;
 
 window.addEventListener('load', function() {
   // I wanted "%s" but % is reserved in a DTD and I don't know the literal.
   document.title = document.title.replace('!!', gScript.name);
+
+  var gTabboxEl = document.getElementsByTagName('tabbox')[0];
+  gUserTabEl = gTabboxEl.tabs.getItemAtIndex(0);
 
   gUserIncludesEl = document.getElementById('user-includes');
   gUserExcludesEl = document.getElementById('user-excludes');
@@ -19,10 +24,12 @@ window.addEventListener('load', function() {
 
   gScriptIncludesEl.pages = gScript.includes;
   gScriptIncludesEl.onAddUserExclude = function(url) {
-    alert('Add user exclude for:\n'+url);
+    gUserExcludesEl.addPage(url);
+    gTabboxEl.selectedTab = gUserTabEl;
   };
   gScriptExcludesEl.pages = gScript.excludes;
   gScriptExcludesEl.onAddUserInclude = function(url) {
-    alert('Add user include for:\n'+url);
+    gUserIncludesEl.addPage(url);
+    gTabboxEl.selectedTab = gUserTabEl;
   };
 }, false);

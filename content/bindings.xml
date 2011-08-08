@@ -6,6 +6,7 @@
     <content>
       <xul:hbox flex="1">
         <xul:listbox flex="1" id="listbox" />
+        <!-- TODO: Be more DRY about these bindings' content. -->
       </xul:hbox>
     </content>
     <implementation>
@@ -45,6 +46,13 @@
               "&promptForNewPage.msg;",
               "&promptForNewPage.defVal;",
               "&promptForNewPage.title;");
+          this.addPage(page);
+        </body>
+      </method>
+
+      <method name="addPage">
+        <parameter name="page" />
+        <body>
           if (page) this._pages.push(page);
           this._fillListbox();
         </body>
