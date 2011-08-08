@@ -110,7 +110,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
       } else {
         this.showScriptView();
       }
-    }).apply(this));
+    }).bind(this));
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
