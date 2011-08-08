@@ -47,9 +47,17 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
 
   // Fixes #1359.  See: http://goo.gl/EJ3FN
-  this.req_.channel.QueryInterface(
-      Components.interfaces.nsIHttpChannelInternal
-      ).forceAllowThirdPartyCookie = true;
+  var httpChannel = null;
+  try {
+    httpChannel = this.req_.channel.QueryInterface(
+      Components.interfaces.nsIHttpChannelInternal);
+  } catch (e) {
+    // No-op.
+  }
+  if (httpChannel) {
+    // Not e.g. a file:/// install.
+    httpChannel.forceAllowThirdPartyCookie = true;
+  }
 
   this.req_.send(null);
 };
