@@ -21,7 +21,9 @@ function Script(configNode) {
   this._enabled = true;
   this.needsUninstall = false;
   this._includes = [];
+  this._userIncludes = [];
   this._excludes = [];
+  this._userExcludes = [];
   this._matches = [];
   this._requires = [];
   this._resources = [];
@@ -49,10 +51,17 @@ Script.prototype.matchesURL = function(url) {
     return matchPattern.doMatch(url);
   }
 
-  return GM_isGreasemonkeyable(url)
-      && !GM_getConfig()._globalExcludes.some(testClude)
-      && !this._excludes.some(testClude)
-      && (this._includes.some(testClude) || this._matches.some(testMatch));
+  // Flat deny if URL is not greaseable, or matches global excludes.
+  if (!GM_isGreasemonkeyable(url)) return false;
+  if (GM_getConfig()._globalExcludes.some(testClude)) return false;
+
+  // Allow based on user cludes.
+  if (this._userExcludes.some(testClude)) return false;
+  if (this._userIncludes.some(testClude)) return true;
+
+  // Finally allow based on script cludes and matches.
+  if (this.excludes.some(testClude)) return false;
+  return (this._includes.some(testClude) || this._matches.some(testMatch));
 };
 
 Script.prototype._changed = function(event, data) {
@@ -100,29 +109,26 @@ function Script_setEnabled(enabled) {
 
 Script.prototype.__defineGetter__('includes',
 function Script_getIncludes() { return this._includes.concat(); });
+Script.prototype.__defineSetter__('includes',
+function Script_setIncludes(includes) { this._includes = includes.concat(); });
+
+Script.prototype.__defineGetter__('userIncludes',
+function Script_getUserIncludes() { return this._userIncludes.concat(); });
+Script.prototype.__defineSetter__('userIncludes',
+function Script_setUserIncludes(includes) { this._userIncludes = includes.concat(); });
 
 Script.prototype.__defineGetter__('excludes',
 function Script_getExcludes() { return this._excludes.concat(); });
+Script.prototype.__defineSetter__('excludes',
+function Script_SetExcludes(excludes) { this._excludes = excludes.concat(); });
+
+Script.prototype.__defineGetter__('userExcludes',
+function Script_getUserExcludes() { return this._userExcludes.concat(); });
+Script.prototype.__defineSetter__('userExcludes',
+function Script_setUserExcludes(excludes) { this._userExcludes = excludes.concat(); });
 
 Script.prototype.__defineGetter__('matches',
 function Script_getMatches() { return this._matches.concat(); });
-
-Script.prototype.addInclude = function(url) {
-  this._includes.push(url);
-  this._changed("edit-include-add", url);
-};
-Script.prototype.removeIncludeAt = function(index) {
-  this._includes.splice(index, 1);
-  this._changed("edit-include-remove", index);
-};
-Script.prototype.addExclude = function(url) {
-  this._excludes.push(url);
-  this._changed("edit-exclude-add", url);
-};
-Script.prototype.removeExcludeAt = function(index) {
-  this._excludes.splice(index, 1);
-  this._changed("edit-exclude-remove", index);
-};
 
 Script.prototype.__defineGetter__('requires',
 function Script_getRequires() { return this._requires.concat(); });
@@ -231,6 +237,12 @@ Script.prototype._loadFromConfigNode = function(node) {
     case "Exclude":
       this._excludes.push(childNode.textContent);
       break;
+    case "UserInclude":
+      this._userIncludes.push(childNode.textContent);
+      break;
+    case "UserExclude":
+      this._userExcludes.push(childNode.textContent);
+      break;
     case "Match":
       this._matches.push(new MatchPattern(childNode.textContent));
       break;
@@ -271,12 +283,17 @@ Script.prototype.toConfigNode = function(doc) {
     scriptNode.appendChild(node);
   }
 
-  for (var j = 0; j < this._includes.length; j++) {
-    addNode('Include', this._includes[j]);
+  function addArrayNodes(aName, aArray) {
+    for (var i = 0, val = null; val = aArray[i]; i++) {
+      addNode(aName, val);
+    }
   }
-  for (var j = 0; j < this._excludes.length; j++) {
-    addNode('Exclude', this._excludes[j]);
-  }
+
+  addArrayNodes('Include', this._includes);
+  addArrayNodes('UserInclude', this._userIncludes);
+  addArrayNodes('Exclude', this._excludes);
+  addArrayNodes('UserExclude', this._userExcludes);
+
   for (var j = 0; j < this._matches.length; j++) {
     addNode('Match', this._matches[j].pattern);
   }
@@ -409,6 +426,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   }
 
   // Copy new values.
+  //  NOTE: User 'cludes are _not_ copied!  They should remain as-is.
   this._includes = newScript._includes;
   this._excludes = newScript._excludes;
   this._matches = newScript._matches;

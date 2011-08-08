@@ -14,10 +14,8 @@
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept,cancel"
   title="&scriptprefs.title;"
+  ondialogaccept="return onDialogAccept();"
 >
-<!--
-  ondialogaccept="return doInstall();"
--->
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />

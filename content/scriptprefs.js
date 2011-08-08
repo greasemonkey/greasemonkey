@@ -27,9 +27,20 @@ window.addEventListener('load', function() {
     gUserExcludesEl.addPage(url);
     gTabboxEl.selectedTab = gUserTabEl;
   };
+  gUserIncludesEl.pages = gScript.userIncludes;
+
   gScriptExcludesEl.pages = gScript.excludes;
   gScriptExcludesEl.onAddUserInclude = function(url) {
     gUserIncludesEl.addPage(url);
     gTabboxEl.selectedTab = gUserTabEl;
   };
+  gUserExcludesEl.pages = gScript.userExcludes;
 }, false);
+
+function onDialogAccept() {
+  gScript.includes = gScriptIncludesEl.pages;
+  gScript.userIncludes = gUserIncludesEl.pages;
+  gScript.excludes = gScriptExcludesEl.pages;
+  gScript.userExcludes = gUserExcludesEl.pages;
+  GM_getConfig()._changed(gScript, "cludes");
+}

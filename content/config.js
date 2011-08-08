@@ -176,8 +176,14 @@ Config.prototype.parse = function(source, uri, updateScript) {
         case "include":
           script._includes.push(value);
           break;
+        case "userInclude":
+          script._userIncludes.push(value);
+          break;
         case "exclude":
           script._excludes.push(value);
+          break;
+        case "userExclude":
+          script._userExcludes.push(value);
           break;
         case "match":
           try {
@@ -278,10 +284,13 @@ Config.prototype.parse = function(source, uri, updateScript) {
 Config.prototype.install = function(script) {
   var existingIndex = this._find(script);
   if (existingIndex > -1) {
-    // save the old script's state
-    script._enabled = this._scripts[existingIndex].enabled;
+    // Save the old script's state.
+    var oldScript = this._scripts[existingIndex];
+    script._enabled = oldScript.enabled;
+    script.userExcludes = oldScript.userExcludes;
+    script.userIncludes = oldScript.userIncludes;
 
-    // uninstall the old script
+    // Uninstall the old script.
     this.uninstall(this._scripts[existingIndex], true);
   }
 
