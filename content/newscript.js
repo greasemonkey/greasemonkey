@@ -20,14 +20,13 @@ window.addEventListener("load", function window_load() {
 ////////////////////////////////// functions ///////////////////////////////////
 
 function doInstall() {
-  var script = createScriptSource();
-  if (!script) return false;
+  var scriptSrc = createScriptSource();
+  if (!scriptSrc) return false;
   var config = GM_getConfig();
 
-  // create a script object with parsed metadata,
-  script = config.parse(script);
-
-  // make sure entered details will not ruin an existing file
+  // Create a script object with parsed metadata, and ...
+  var script = config.parse(scriptSrc);
+  // ... make sure entered details will not ruin an existing file.
   if (config.installIsUpdate(script)) {
     var overwrite = confirm(bundle.getString("newscript.exists"));
     if (!overwrite) return false;
@@ -36,7 +35,7 @@ function doInstall() {
   // finish making the script object ready to install
   // (put this created script into a file -- only way to install it)
   var tempFile = GM_getTempFile();
-  GM_writeToFile(script, tempFile, function() {
+  GM_writeToFile(scriptSrc, tempFile, function() {
     script.setDownloadedFile(tempFile);
 
     // install this script
@@ -45,9 +44,12 @@ function doInstall() {
     GM_openInEditor(script);
     // persist namespace value
     GM_prefRoot.setValue("newscript_namespace", script.namespace);
+
+    // Now that async write is complete, close the window.
+    close();
   });
 
-  return true;
+  return false;
 }
 
 // assemble the XUL fields into a script template
