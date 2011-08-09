@@ -108,21 +108,27 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
         Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
     this.tempFiles_.push(file);
 
-    GM_writeToFile(source, file, (function() {
-      this.script.setDownloadedFile(file);
+    function handleWriteComplete() {
+    }
 
-      window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
-
-      if (this.installing_) {
-        this.showInstallDialog();
-      } else {
-        this.showScriptView();
-      }
-    }).bind(this));
+    GM_writeToFile(source, file,
+        GM_hitch(this, 'handleScriptDownloadWriteComplete', file));
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
     throw e;
+  }
+};
+
+GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file) {
+  this.script.setDownloadedFile(file);
+
+  window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
+
+  if (this.installing_) {
+    this.showInstallDialog();
+  } else {
+    this.showScriptView();
   }
 };
 
