@@ -410,35 +410,37 @@ Config.prototype.updateModifiedScripts = function(safeWin, chromeWin) {
  * any necessary upgrades.
  */
 Config.prototype._updateVersion = function() {
-  // this is the last version which has been run at least once
   var initialized = GM_prefRoot.getValue("version", "0.0");
 
-  if ("0.0" == initialized) {
-    // this is the first launch.  show the welcome screen.
-
-    var chromeWin = GM_getBrowserWindow();
-    // if we found it, use it to open a welcome tab
-    if (chromeWin.gBrowser) {
-      Components.utils.import("resource://gre/modules/AddonManager.jsm");
-      AddonManager.getAddonByID(this.GM_GUID, function(addon) {
-        chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
-            'http://www.greasespot.net/p/welcome.html?' + addon.version);
-      });
-    }
-  }
-
-  // update the currently initialized version so we don't do this work again.
+  // Find the new version, and call the continuation when ready.  (Firefox 4+
+  // gives us only an async API, requiring this cumbersome setup.)
   if ("@mozilla.org/extensions/manager;1" in Components.classes) {
     // Firefox <= 3.6.*
     var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
         .getService(Components.interfaces.nsIExtensionManager);
     var item = extMan.getItemForID(this.GM_GUID);
-    GM_prefRoot.setValue("version", item.version);
+    continuation(item.version);
   } else {
     // Firefox 3.7+
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
     AddonManager.getAddonByID(this.GM_GUID, function(addon) {
-       GM_prefRoot.setValue("version", addon.version);
+      continuation(addon.version);
     });
+  }
+
+  function continuation(newVersion) {
+    // Update the currently initialized version so we don't do this work again.
+    GM_prefRoot.setValue("version", newVersion);
+
+    if ("0.0" == initialized) {
+      // This is the first launch.  Show the welcome screen.
+      var chromeWin = GM_getBrowserWindow();
+      // If we found it, use it to open a welcome tab.
+      if (chromeWin && chromeWin.gBrowser) {
+        var tab = chromeWin.gBrowser.addTab(
+            'http://www.greasespot.net/p/welcome.html?' + newVersion);
+        chromeWin.gBrowser.selectedTab = tab;
+      }
+    }
   }
 };
