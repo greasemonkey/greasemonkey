@@ -5,10 +5,12 @@
 <?xml-stylesheet href="chrome://greasemonkey/skin/scriptprefs.css" type="text/css"?>
 
 <!DOCTYPE prefwindow [
-<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+<!ENTITY % addonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
 <!ENTITY % cludesDTD SYSTEM "chrome://greasemonkey/locale/gm-cludes.dtd">
-%greasemonkeyDTD;
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%addonsDTD;
 %cludesDTD;
+%greasemonkeyDTD;
 ]>
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -18,6 +20,7 @@
 >
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
+<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
 
 <tabbox>
@@ -48,5 +51,8 @@
     </tabpanel>
   </tabpanels>
 </tabbox>
+
+<spacer height="5" />
+<button label="&Edit.tooltip;" oncommand="GM_openInEditor(gScript);" />
 
 </dialog>
