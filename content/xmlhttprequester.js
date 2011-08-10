@@ -40,12 +40,14 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   }
 
   var rv = { abort: function () { return req.abort(); } };
-  rv.__defineGetter__('finalUrl', function() { return req.finalUrl; });
-  rv.__defineGetter__('readyState', function() { return req.readyState; });
-  rv.__defineGetter__('responseHeaders', function() { return req.getAllResponseHeaders(); });
-  rv.__defineGetter__('responseText', function() { return req.responseText; });
-  rv.__defineGetter__('status', function() { return req.status; });
-  rv.__defineGetter__('statusText', function() { return req.statusText; });
+  if (!!details.synchronous) {
+    rv.finalUrl = req.finalUrl;
+    rv.readyState = req.readyState;
+    rv.responseHeaders = req.getAllResponseHeaders();
+    rv.responseText = req.responseText;
+    rv.status = req.status;
+    rv.statusText = req.statusText;
+  }
   return rv;
 };
 
