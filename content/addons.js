@@ -241,6 +241,9 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_edit':
       GM_openInEditor(script);
       break;
+    case 'cmd_userscript_options':
+      openDialog('chrome://greasemonkey/content/scriptprefs.xul#' + script.id);
+      break;
     case 'cmd_userscript_show':
       GM_openFolder(script.file);
       break;

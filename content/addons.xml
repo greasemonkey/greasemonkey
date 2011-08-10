@@ -38,11 +38,10 @@
         </xul:vbox>
 
         <xul:hbox anonid="selectedButtons" flex="1" class="selectedButtons">
-          <xul:button class="uninstallHide editButton"
-            label="&Edit;" accesskey="&Edit.accesskey;"
-            tooltiptext="&Edit.tooltip;"
-            command="cmd_userscript_edit"
-          />
+          <xul:button class="uninstallHide optionsButton"
+            label="&cmd.options.label;" accesskey="&cmd.options.accesskey;"
+            tooltiptext="&cmd.options.tooltip;"
+            command="cmd_userscript_options"/>
 
           <xul:spacer flex="1"/>
 
@@ -51,7 +50,7 @@
             tooltiptext="&cmd.enable.tooltip;"
             command="cmd_userscript_enable"
           />
-          <xul:button class="enableShow disableHide uninstallHide disableButton" 
+          <xul:button class="enableShow disableHide uninstallHide disableButton"
             label="&cmd.disable.label;" accesskey="&cmd.disable.accesskey;"
             tooltiptext="&cmd.disable.tooltip;"
             command="cmd_userscript_disable"
@@ -67,7 +66,7 @@
             tooltiptext="&cmd.cancelUninstall.tooltip;"
             command="cmd_userscript_uninstall_cancel"
           />
-          
+
           <!--
           Todo: Make install/upgrade buttons like extensions if/when added.
           <xul:button class="installShow cancelInstallButton" label="&cancelInstall.label;"

@@ -72,6 +72,7 @@
   <commandset id="userscripts-commands"
       oncommand="greasemonkeyAddons.doCommand(event.target.id);">
     <command id="cmd_userscript_edit"/>
+    <command id="cmd_userscript_options"/>
     <command id="cmd_userscript_show"/>
     <command id="cmd_userscript_enable"/>
     <command id="cmd_userscript_disable"/>
