@@ -446,9 +446,11 @@ Config.prototype._updateVersion = function() {
       var chromeWin = GM_getBrowserWindow();
       // If we found it, use it to open a welcome tab.
       if (chromeWin && chromeWin.gBrowser) {
-        var tab = chromeWin.gBrowser.addTab(
-            'http://www.greasespot.net/p/welcome.html?' + newVersion);
-        chromeWin.gBrowser.selectedTab = tab;
+        var url = 'http://www.greasespot.net/p/welcome.html?' + newVersion;
+        // the setTimeout makes sure we do not execute too early -- sometimes
+        // the window isn't quite ready to add a tab yet
+        chromeWin.setTimeout(
+            "gBrowser.selectedTab = gBrowser.addTab('" + url + "')", 0);
       }
     }
   }
