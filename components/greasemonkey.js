@@ -10,11 +10,12 @@ var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var maxJSVersion = "1.6";
-
+var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
 var gmSvcFilename = Components.stack.filename;
-var gStartupHasRun = false;
+
+var gMaxJSVersion = "1.6";
 var gMenuCommands = [];
+var gStartupHasRun = false;
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -36,6 +37,7 @@ function GM_apiLeakCheck(apiName) {
       // services. This didn't happen in FF 2.0.0.11; I'm not sure when it
       // changed.
       if (stack.filename != null &&
+          stack.filename != gmRunScriptFilename &&
           stack.filename != gmSvcFilename &&
           stack.filename.substr(0, 6) != "chrome") {
         GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +
@@ -48,58 +50,6 @@ function GM_apiLeakCheck(apiName) {
   } while (stack);
 
   return true;
-}
-
-function runScriptInSandbox(code, sandbox, script) {
-  if (!(Components.utils && Components.utils.Sandbox)) {
-    var e = new Error("Could not create sandbox.");
-    GM_logError(e, 0, e.fileName, e.lineNumber);
-    return true;
-  }
-  try {
-    // workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=307984
-    var lineFinder = new Error();
-    Components.utils.evalInSandbox(code, sandbox, maxJSVersion);
-  } catch (e) { // catches errors while running the script code
-    try {
-      if (e && "return not in function" == e.message)
-        return false; // means this script depends on the function enclosure
-
-      // try to find the line of the actual error line
-      var line = e && e.lineNumber;
-      if (line > 0xFFFFFF00) {
-        // Line number is reported as a huge int in edge cases.  Sometimes
-        // the right one is in the "location", instead.  Look there.
-        if (e.location && e.location.lineNumber) {
-          line = e.location.lineNumber;
-        } else {
-          // Reporting maxint is useless, if we couldn't find it in location
-          // either, forget it.  A value of 0 isn't shown in the console.
-          line = 0;
-        }
-      }
-
-      if (line) {
-        var err = findError(script, line - lineFinder.lineNumber - 1);
-        GM_logError(
-          e, // error obj
-          0, // 0 = error (1 = warning)
-          err.uri,
-          err.lineNumber
-        );
-      } else {
-        GM_logError(
-          e, // error obj
-          0, // 0 = error (1 = warning)
-          script.fileURL,
-          0
-        );
-      }
-    } catch (e) { // catches errors we cause trying to inform the user
-      // Do nothing. More importantly: don't stop script incovation sequence.
-    }
-  }
-  return true; // did not need a (function() {...})() enclosure.
 }
 
 function findError(script, lineNumber) {
@@ -195,9 +145,45 @@ function isTempScript(uri) {
   return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
 }
 
+function runScriptInSandbox(code, sandbox, script) {
+  try {
+    GM_runScript(code, sandbox, gMaxJSVersion);
+  } catch (e) { // catches errors while running the script code
+    try {
+      if (e && "return not in function" == e.message) {
+        // Means this script depends on the function enclosure.
+        return false;
+      }
+
+      // Most errors seem to have a ".fileName", but rarely they're in
+      // ".filename" instead.
+      var fileName = e.fileName || e.filename;
+
+      // TODO: Climb the stack to find the script-source line?
+      if (fileName == gmRunScriptFilename) {
+        // Now that we know where the error is, find it (inside @requires if
+        // necessary) in the script and log it.
+        var err = findError(script, e.lineNumber);
+        GM_logError(
+             e, // error obj
+             0, // 0 = error (1 = warning)
+             err.uri, err.lineNumber);
+      } else {
+        GM_logError(e);
+      }
+    } catch (e) {
+      // Do not raise (this would stop all scripts), log.
+      GM_logError(e);
+    }
+  }
+  return true; // did not need a (function() {...})() enclosure.
+}
+
 function startup() {
   if (gStartupHasRun) return;
   gStartupHasRun = true;
+
+  Cu.import(gmRunScriptFilename);
 
   var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
@@ -216,7 +202,13 @@ function startup() {
 
   // Firefox 3.6 and higher supports 1.8.
   if (GM_compareFirefoxVersion("3.6") >= 0) {
-    maxJSVersion = "1.8";
+    gMaxJSVersion = "1.8";
+  }
+
+  // Firefox <4 reports a different stack.fileName for the module.
+  if (GM_compareFirefoxVersion("4.0") < 0) {
+    // Pull the name out of the variable the module exports.
+    gmRunScriptFilename = GM_runScript_filename;
   }
 }
 
@@ -498,9 +490,10 @@ service.prototype.injectScripts = function(
     });
     script.offsets = offsets;
 
-    var scriptSrc = "\n" // error line-number calculations depend on these
-        + requires.join("\n") + "\n"
-        + script.textContent + "\n";
+    // These newlines are critical for error line calculation.  The last handles
+    // a script whose final line is a line comment, to not break the wrapper
+    // function.
+    var scriptSrc = requires.join("\n") + "\n" + script.textContent + "\n";
     if (!script.unwrap) {
       scriptSrc = "(function(){"+ scriptSrc +"})()";
     }
