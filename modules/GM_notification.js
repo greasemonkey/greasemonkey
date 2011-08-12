@@ -4,20 +4,22 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 
 // The first time this runs, we check if nsIAlertsService is installed and
-// works. If it fails, we re-define notify to use nsIPromptService always.
+// works. If it fails, we re-define notify to use a chrome window.
 // We check to see if nsIAlertsService works because of the case where Growl
-// is installed. See also https://bugzilla.mozilla.org/show_bug.cgi?id=597165
+// is not installed. See also https://bugzilla.mozilla.org/show_bug.cgi?id=597165
 function notify() {
   try {
     Cc["@mozilla.org/alerts-service;1"]
         .getService(Ci.nsIAlertsService)
         .showAlertNotification.apply(null, arguments);
   } catch (e) {
-    notify = function() {
-      Cc["@mozilla.org/embedcomp/prompt-service;1"]
-          .getService(Ci.nsIPromptService)
-          .alert(null, "Greasemonkey alert", arguments[2]);
-    };
+	notify = function() {
+	  Cc['@mozilla.org/embedcomp/window-watcher;1']
+          .getService(Ci.nsIWindowWatcher)
+          .openWindow(null, 'chrome://global/content/alerts/alert.xul',
+              '_blank', 'chrome,titlebar=no,popup=yes', null)
+	  .arguments = Array.prototype.slice.call(arguments);
+	};
     notify.apply(null, arguments);
   }
 }
