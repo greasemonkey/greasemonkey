@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Modifiez l'URL de la page ci-dessous. Il est possible de préciser un ensemble de pages en utilisant l'astérisque (*) comme joker.">
 <!ENTITY promptForEdit.title "Éditer la page">
 <!ENTITY button.add "Ajouter…">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Éditer…">
 <!ENTITY button.remove "Supprimer">
 <!ENTITY label.grpIncluded "Pages autorisées">

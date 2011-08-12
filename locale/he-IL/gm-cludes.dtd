@@ -1,13 +1,21 @@
 <!ENTITY promptForNewPage.msg "הכנס כתובת אינטרנט חדשה. ניתן לציין דפים מרובים ע&quot;י שימוש בתו *.&quot;&gt;
 
+
+
+
 ">
 <!ENTITY promptForNewPage.title "הוסף דף">
 <!ENTITY promptForNewPage.defVal "http://example.com/*">
 <!ENTITY promptForEdit.msg "שנה את כתובת הדף. ניתן לציין דפים מרובים ע&quot;י שימוש בתו *.&quot;&gt;
 
+
+
+
 ">
 <!ENTITY promptForEdit.title "ערוך דף">
 <!ENTITY button.add "הוסף...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "ערוך...">
 <!ENTITY button.remove "הסר">
 <!ENTITY label.grpIncluded "כלול דפים">

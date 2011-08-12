@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Modifiera adressen av sidan nedan. Du kan specifiera flera sidor med jokertecknet (*).">
 <!ENTITY promptForEdit.title "Redigera sida">
 <!ENTITY button.add "Lägg till...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Redigera...">
 <!ENTITY button.remove "Ta bort">
 <!ENTITY label.grpIncluded "Inkluderade sidor">

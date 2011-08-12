@@ -32,3 +32,6 @@
 <!ENTITY greasemonkey.noscriptshere "Inga installerade skript körs på denna sida.">
 <!ENTITY greasemonkey.youhavenoscripts "Du har inga installerade användarskript">
 <!ENTITY greasemonkey.getuserscripts "Hämta användarskript">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

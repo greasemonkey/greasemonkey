@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Измените URL страницы ниже. Вы можете установить своё множество страниц, используя символ звёздочки (*).">
 <!ENTITY promptForEdit.title "Редактирование адреса страницы">
 <!ENTITY button.add "Добавить...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Изменить...">
 <!ENTITY button.remove "Удалить">
 <!ENTITY label.grpIncluded "Охватываемые адреса">

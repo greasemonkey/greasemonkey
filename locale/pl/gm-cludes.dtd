@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Modyfikuj URL strony. Możesz określić wiele stron, używając wieloznacznika (*).">
 <!ENTITY promptForEdit.title "Edytuj stronę">
 <!ENTITY button.add "Dodaj">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Edytuj">
 <!ENTITY button.remove "Usuń">
 <!ENTITY label.grpIncluded "Witryny, na których skrypt jest uruchamiany">

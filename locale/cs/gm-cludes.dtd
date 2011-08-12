@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Zde upravte stávající adresu. Můžete blíže určit několik adres pomocí divokých znaků (*).">
 <!ENTITY promptForEdit.title "Upravit stránku">
 <!ENTITY button.add "Přidat...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Upravit...">
 <!ENTITY button.remove "Odstranit">
 <!ENTITY label.grpIncluded "Zahrnout stránky">

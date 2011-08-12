@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Modificar a URL da páxina embaixo. Pode indicar múltiples páxinas empregando o comodín (*).">
 <!ENTITY promptForEdit.title "Editar páxina">
 <!ENTITY button.add "Engadir...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Editar...">
 <!ENTITY button.remove "Eliminar">
 <!ENTITY label.grpIncluded "Páxinas incluídas">

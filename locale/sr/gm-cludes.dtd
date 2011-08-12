@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "Измените URL на страници испод. Можете да одредите неколико странице коришћењем џокер знака (*)">
 <!ENTITY promptForEdit.title "Уреди страницу">
 <!ENTITY button.add "Додај...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Уреди...">
 <!ENTITY button.remove "Уклони">
 <!ENTITY label.grpIncluded "Укључене странице">

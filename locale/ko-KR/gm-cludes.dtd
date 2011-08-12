@@ -4,6 +4,8 @@
 <!ENTITY promptForEdit.msg "아래의 URL을 수정하세요. 와일드카드(*)를 사용하여 여러 페이지를 지정할 수도 있습니다.">
 <!ENTITY promptForEdit.title "페이지 수정">
 <!ENTITY button.add "추가...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "수정...">
 <!ENTITY button.remove "삭제">
 <!ENTITY label.grpIncluded "동작할 페이지">
