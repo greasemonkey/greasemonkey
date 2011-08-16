@@ -13,13 +13,13 @@ function notify() {
         .getService(Ci.nsIAlertsService)
         .showAlertNotification.apply(null, arguments);
   } catch (e) {
-	notify = function() {
-	  Cc['@mozilla.org/embedcomp/window-watcher;1']
+    notify = function() {
+      Cc['@mozilla.org/embedcomp/window-watcher;1']
           .getService(Ci.nsIWindowWatcher)
           .openWindow(null, 'chrome://global/content/alerts/alert.xul',
               '_blank', 'chrome,titlebar=no,popup=yes', null)
-	  .arguments = Array.prototype.slice.call(arguments);
-	};
+          .arguments = Array.prototype.slice.call(arguments);
+    };
     notify.apply(null, arguments);
   }
 }
