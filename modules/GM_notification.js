@@ -18,7 +18,7 @@ function notify() {
           .getService(Ci.nsIWindowWatcher)
           .openWindow(null, 'chrome://global/content/alerts/alert.xul',
               '_blank', 'chrome,titlebar=no,popup=yes', null)
-          .arguments = Array.prototype.slice.call(arguments);
+          .arguments = arguments;
     };
     notify.apply(null, arguments);
   }
