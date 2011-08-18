@@ -175,6 +175,7 @@ function onViewChanged(aEvent) {
   if (userScriptViewId == gViewController.currentViewId) {
     document.documentElement.className += ' greasemonkey';
     setEmptyWarningVisible();
+    applySort();
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
