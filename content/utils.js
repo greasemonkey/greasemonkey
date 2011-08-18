@@ -99,13 +99,18 @@ function GM_getEditor(change) {
   if (!change && editorPath) {
     GM_log("Found saved editor preference: " + editorPath);
 
-    var editor = Components.classes["@mozilla.org/file/local;1"]
-                 .createInstance(Components.interfaces.nsILocalFile);
-    editor.followLinks = true;
-    editor.initWithPath(editorPath);
+    var editor;
+    try {
+      editor = Components.classes["@mozilla.org/file/local;1"]
+                   .createInstance(Components.interfaces.nsILocalFile);
+      editor.followLinks = true;
+      editor.initWithPath(editorPath);
+    } catch (e) {
+      editor = null;
+    }
 
     // make sure the editor preference is still valid
-    if (editor.exists() && editor.isExecutable()) {
+    if (editor && editor.exists() && editor.isExecutable()) {
       return editor;
     } else {
       GM_log("Editor preference either does not exist or is not executable");
