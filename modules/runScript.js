@@ -9,11 +9,19 @@ function GM_runScript(code, sandbox, maxJSVersion) { Components.utils.evalInSand
 // Users: If you see an error coming from this file, that's because we haven't
 // yet found a way to work around the bug completely.  If you have asynchronous
 // code (setTimeout, any kind of event listener or GM_xmlhttpRequest callback),
-// any errors within it will be reported as coming from this file, as their
-// eval source (line 1) + the line within your script (and any prepended
-// @required scripts).
+// any errors within it will be reported as coming from this file at one line
+// number higher than the real the line within your script (and any prepended
+// @require files).
 //
-// The rest of the module follows.
+// For example, this script:
+//   https://gist.github.com/1154205
+// Generated an line in the error console like:
+//   Error: undefined is not a function
+//   Source File: resource://greasemonkey/runScript.js
+//   Line: 27
+// This error is actually from line 26 of the script which indeed is
+// "undefined();" and guaranteed to cause an error.  Because it was called
+// inside a setTimeout(), we were unable to catch and fix the error.
 //
 
 var EXPORTED_SYMBOLS = ["GM_runScript", "GM_runScript_filename"];
