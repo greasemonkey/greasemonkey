@@ -73,62 +73,13 @@ function findError(script, lineNumber) {
   };
 }
 
-function getFirebugConsole(unsafeContentWin, chromeWin) {
-  // If we can't find this object, there's no chance the rest of this
-  // function will work.
-  if ('undefined'==typeof chromeWin.Firebug) return null;
-
+function getFirebugConsole(wrappedContentWin, chromeWin) {
   try {
-    chromeWin = chromeWin.top;
-    var fbVersion = parseFloat(chromeWin.Firebug.version, 10);
-    var fbConsole = chromeWin.Firebug.Console;
-    var fbContext = chromeWin.TabWatcher &&
-      chromeWin.TabWatcher.getContextByWindow(unsafeContentWin);
-
-    // Firebug 1.4 will give no context, when disabled for the current site.
-    // We can't run that way.
-    if ('undefined'==typeof fbContext) {
-      return null;
-    }
-
-    function findActiveContext() {
-      for (var i=0; i<fbContext.activeConsoleHandlers.length; i++) {
-        if (fbContext.activeConsoleHandlers[i].window == unsafeContentWin) {
-          return fbContext.activeConsoleHandlers[i];
-        }
-      }
-      return null;
-    }
-
-    if (!fbConsole.isEnabled(fbContext)) return null;
-
-    if (1.2 == fbVersion) {
-      var safeWin = new XPCNativeWrapper(unsafeContentWin);
-
-      if (fbContext.consoleHandler) {
-        for (var i = 0; i < fbContext.consoleHandler.length; i++) {
-          if (fbContext.consoleHandler[i].window == safeWin) {
-            return fbContext.consoleHandler[i].handler;
-          }
-        }
-      }
-
-      var dummyElm = safeWin.document.createElement("div");
-      dummyElm.setAttribute("id", "_firebugConsole");
-      safeWin.document.documentElement.appendChild(dummyElm);
-      chromeWin.Firebug.Console.injector.addConsoleListener(fbContext, safeWin);
-      dummyElm.parentNode.removeChild(dummyElm);
-
-      return fbContext.consoleHandler.pop().handler;
-    } else if (fbVersion >= 1.3) {
-      fbConsole.injector.attachIfNeeded(fbContext, unsafeContentWin);
-      return findActiveContext();
-    }
+    return chromeWin.Firebug.getConsoleByGlobal(wrappedContentWin) || null;
   } catch (e) {
-    dump('Greasemonkey getFirebugConsole() error:\n'+uneval(e)+'\n');
+    dump('Greasemonkey: Failure Firebug console:\n' + uneval(e) + '\n');
+    return null;
   }
-
-  return null;
 }
 
 function isTempScript(uri) {
@@ -426,9 +377,7 @@ service.prototype.injectScripts = function(
   var xmlhttpRequester;
   var resources;
   var unsafeContentWin = wrappedContentWin.wrappedJSObject;
-
-  // detect and grab reference to firebug console and context, if it exists
-  var firebugConsole = getFirebugConsole(unsafeContentWin, chromeWin);
+  var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
   for (var i = 0; script = scripts[i]; i++) {
     sandbox = new Components.utils.Sandbox(wrappedContentWin);
