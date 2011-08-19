@@ -215,6 +215,10 @@ GM_BrowserUI.observe = function(subject, topic, data) {
   }
 };
 
+GM_BrowserUI.openTab = function(url) {
+  gBrowser.selectedTab = gBrowser.addTab(url);
+}
+
 /**
  * Handles the install button getting clicked.
  */

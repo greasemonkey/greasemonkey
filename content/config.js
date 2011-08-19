@@ -449,8 +449,7 @@ Config.prototype._updateVersion = function() {
         var url = 'http://www.greasespot.net/p/welcome.html?' + newVersion;
         // the setTimeout makes sure we do not execute too early -- sometimes
         // the window isn't quite ready to add a tab yet
-        chromeWin.setTimeout(
-            "gBrowser.selectedTab = gBrowser.addTab('" + url + "')", 0);
+        chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 0, url);
       }
     }
   }
