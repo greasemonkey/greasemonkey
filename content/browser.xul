@@ -31,7 +31,9 @@
       class='toolbarbutton-1 chromeclass-toolbar-additional'
       command="gm_toggle_enabled"
       label='Greasemonkey' tooltiptext='Greasemonkey'
-    />
+    >
+      <menupopup id="blank" />
+    </toolbarbutton>
   </toolbarpalette>
 
   <popup id="contentAreaContextMenu">

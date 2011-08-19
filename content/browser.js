@@ -21,8 +21,6 @@ GM_BrowserUI.QueryInterface = function(aIID) {
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
-
-  window.addEventListener('DOMNodeInserted', GM_BrowserUI.nodeInserted, false);
 };
 
 GM_BrowserUI.progressListener = {
@@ -301,18 +299,6 @@ GM_BrowserUI.viewContextItemClicked = function() {
   GM_BrowserUI.scriptDownloader_ = new GM_ScriptDownloader(
       window, uri, GM_BrowserUI.bundle);
   GM_BrowserUI.scriptDownloader_.startViewScript();
-};
-
-GM_BrowserUI.nodeInserted = function(aEvent) {
-  if ('greasemonkey-tbb' == aEvent.target.id) {
-    var toolbarButton = aEvent.target;
-
-    // Duplicate the tools menu popup inside the toolbar button.
-    if (!toolbarButton.firstChild) {
-      var menupopup = document.getElementById('gm_general_menu').firstChild;
-      toolbarButton.appendChild(menupopup.cloneNode(true));
-    }
-  }
 };
 
 GM_BrowserUI.showToolbarButton = function() {

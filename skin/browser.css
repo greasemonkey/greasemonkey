@@ -11,3 +11,8 @@ toolbar[iconsize="small"] #greasemonkey-tbb {
 #greasemonkey-tbb[disabled="yes"] .toolbarbutton-icon {
   opacity: 0.5;
 }
+
+/* The "blank" ID prevents loops; it's not on the replacement. */
+#greasemonkey-tbb menupopup#blank {
+  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#greasemonkey-tbb')/**/
+}

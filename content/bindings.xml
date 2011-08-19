@@ -167,4 +167,17 @@
       </xul:hbox>
     </content>
   </binding>
+  <binding id="greasemonkey-tbb">
+    <implementation>
+      <constructor><![CDATA[
+        var button = this.parentNode;
+        // Remove this stub popup ...
+        button.removeChild(this);
+
+        // ... and replace it with a duplicate of the general menu.
+        var menupopup = document.getElementById('gm_general_menu').firstChild;
+        button.appendChild(menupopup.cloneNode(true));
+      ]]></constructor>
+    </implementation>
+  </binding>
 </bindings>
