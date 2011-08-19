@@ -22,10 +22,6 @@
     <command id="gm_toggle_checked" oncommand="GM_setEnabled(!GM_getEnabled());"/>
   </commandset>
 
-  <window id="main-window">
-    <keyset id="userscript-command-keys" insertafter="mainKeyset"></keyset>
-  </window>
-
   <toolbarpalette id='BrowserToolbarPalette'>
     <toolbarbutton id='greasemonkey-tbb' type='menu-button'
       class='toolbarbutton-1 chromeclass-toolbar-additional'
@@ -37,12 +33,12 @@
   </toolbarpalette>
 
   <popup id="contentAreaContextMenu">
-    <menuitem id="view-userscript"
+    <menuitem id="greasemonkey-view-userscript"
       accesskey="&menu.show.accesskey;"
       label="&menu.show;"
       insertbefore="context-openlink"
       oncommand="GM_BrowserUI.viewContextItemClicked(event);" />
-    <menuseparator id="install-userscript-sep"
+    <menuseparator id="greasemonkey-install-sep"
       insertbefore="context-openlink" />
   </popup>
 

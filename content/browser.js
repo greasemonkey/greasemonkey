@@ -246,8 +246,8 @@ GM_BrowserUI.chromeUnload = function() {
  * to show our context items.
  */
 GM_BrowserUI.contextMenuShowing = function() {
-  var contextItem = document.getElementById("view-userscript");
-  var contextSep = document.getElementById("install-userscript-sep");
+  var contextItem = document.getElementById("greasemonkey-view-userscript");
+  var contextSep = document.getElementById("greasemonkey-install-sep");
 
   var culprit = document.popupNode;
 
