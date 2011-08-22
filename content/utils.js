@@ -108,15 +108,6 @@ function GM_scriptDir() {
   return GM_scriptDirCache.clone();
 }
 
-function GM_installUri(uri, contentWin) {
-  var win = GM_util.getBrowserWindow();
-  if (win && win.GM_BrowserUI) {
-    win.GM_BrowserUI.startInstallScript(uri, contentWin);
-    return true;
-  }
-  return false;
-}
-
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }

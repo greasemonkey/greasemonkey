@@ -395,7 +395,7 @@ var greasemonkeyDragObserver = {
     dump("Dropped url: ["+url+"]\n");
     if (url && url.match(/\.user\.js$/)) {
       // TODO: Make this UI appear in the add-ons win, rather than the browser?
-      GM_installUri(GM_uriFromUrl(url));
+      GM_util.installUri(GM_uriFromUrl(url));
     }
   },
   getSupportedFlavours: function() {

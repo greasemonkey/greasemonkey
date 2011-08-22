@@ -295,7 +295,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
   ) {
     if (!this.ignoreNextScript_
         && !isTempScript(cl)
-        && GM_installUri(cl, ctx.contentWindow)
+        && GM_util.installUri(cl, ctx.contentWindow)
     ) {
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
     }
