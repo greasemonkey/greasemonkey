@@ -56,7 +56,7 @@ Script.prototype.matchesURL = function(url) {
 
   // Flat deny if URL is not greaseable, or matches global excludes.
   if (!GM_util.isGreasemonkeyable(url)) return false;
-  if (GM_getConfig()._globalExcludes.some(testClude)) return false;
+  if (GM_util.getService().config._globalExcludes.some(testClude)) return false;
 
   // Allow based on user cludes.
   if (this._userExcludes.some(testClude)) return false;
@@ -68,7 +68,7 @@ Script.prototype.matchesURL = function(url) {
 };
 
 Script.prototype._changed = function(event, data) {
-  GM_getConfig()._changed(this, event, data);
+  GM_util.getService().config._changed(this, event, data);
 };
 
 Script.prototype.__defineGetter__('modifiedDate',
@@ -218,14 +218,14 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.hasAttribute("dependhash")
       || !node.hasAttribute("version")
   ) {
-    var parsedScript = GM_getConfig().parse(
+    var parsedScript = GM_util.getService().config.parse(
         this.textContent, GM_uriFromUrl(this._downloadURL), !!this);
 
     this._modified = this.file.lastModifiedTime;
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);
     this._version = parsedScript._version;
 
-    GM_getConfig()._changed(this, "modified", null);
+    GM_util.getService().config._changed(this, "modified", null);
   } else {
     this._modified = node.getAttribute("modified");
     this._dependhash = node.getAttribute("dependhash");
@@ -399,7 +399,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   // if the @name and @namespace have changed
   // make sure they don't conflict with another installed script
   if (newScript.id != this.id) {
-    if (!GM_getConfig().installIsUpdate(newScript)) {
+    if (!GM_util.getService().config.installIsUpdate(newScript)) {
       // Migrate preferences.
       if (this.prefroot != newScript.prefroot) {
         var storageOld = new GM_ScriptStorage(this);
@@ -512,5 +512,5 @@ Script.prototype.uninstall = function(forUpdate) {
     GM_prefRoot.remove(this.prefroot);
   }
 
-  GM_getConfig()._changed(this, "uninstall", null);
+  GM_util.getService().config._changed(this, "uninstall", null);
 };

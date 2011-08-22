@@ -99,7 +99,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.script = GM_getConfig().parse(source, this.uri_);
+    this.script = GM_util.getService().config.parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
         .getService(Components.interfaces.nsIProperties)
@@ -280,7 +280,8 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     }
 
     // Save new values to config.xml
-    GM_getConfig()._changed(this.script, "modified", this._oldScriptId, true);
+    GM_util.getService().config._changed(
+        this.script, "modified", this._oldScriptId, true);
   } else if (this.installOnCompletion_) {
     this.installScript();
   }

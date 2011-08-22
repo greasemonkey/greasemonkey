@@ -85,7 +85,8 @@ function addonExecutesNonFirst(aAddon) {
 function addonExecutesNonLast(aAddon) {
   if (!aAddon) return false;
   if (SCRIPT_ADDON_TYPE != aAddon.type) return false;
-  return GM_getConfig().scripts.length - 1 != aAddon.executionIndex;
+  return (GM_util.getService().config.scripts.length - 1)
+      != aAddon.executionIndex;
 }
 
 function sortedByExecOrder() {
@@ -95,7 +96,7 @@ function sortedByExecOrder() {
 };
 
 function init() {
-  GM_getConfig().addObserver(observer);
+  GM_util.getService().config.addObserver(observer);
 
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
@@ -185,7 +186,7 @@ function onViewChanged(aEvent) {
 
 function setEmptyWarningVisible() {
   var emptyWarning = document.getElementById('user-script-list-empty');
-  emptyWarning.collapsed = !!GM_getConfig().scripts.length;
+  emptyWarning.collapsed = !!GM_util.getService().config.scripts.length;
 }
 
 function selectScriptExecOrder() {
@@ -199,7 +200,7 @@ function selectScriptExecOrder() {
 
 function reorderScriptExecution(aAddon, moveBy) {
   selectScriptExecOrder();
-  GM_getConfig().move(aAddon._script, moveBy);
+  GM_util.getService().config.move(aAddon._script, moveBy);
   AddonManager.getAddonsByTypes([SCRIPT_ADDON_TYPE], function(aAddons) {
       // Fix all the 'executionOrder' attributes.
       for (var i = 0, addon = null; addon = aAddons[i]; i++) {
@@ -220,7 +221,7 @@ function setRichlistitemExecutionIndex(aAddon) {
 };
 
 function unload() {
-  var GM_config = GM_getConfig();
+  var GM_config = GM_util.getService().config;
   // Since .getAddonsByTypes() is asynchronous, AddonManager gets destroyed
   // by the time the callback runs.  Cache this value we need from it.
   var pending_uninstall = AddonManager.PENDING_UNINSTALL;

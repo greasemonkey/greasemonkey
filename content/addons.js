@@ -1,7 +1,7 @@
 Components.utils.import('resource://greasemonkey/util.js');
 
 // Globals.
-var GM_config = GM_getConfig();
+var GM_config = GM_util.getService().config;
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 

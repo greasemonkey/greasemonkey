@@ -25,7 +25,7 @@ window.addEventListener("load", function window_load() {
 function doInstall() {
   var scriptSrc = createScriptSource();
   if (!scriptSrc) return false;
-  var config = GM_getConfig();
+  var config = GM_util.getService().config;
 
   // Create a script object with parsed metadata, and ...
   var script = config.parse(scriptSrc);

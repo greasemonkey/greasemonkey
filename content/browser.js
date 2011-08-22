@@ -224,7 +224,7 @@ GM_BrowserUI.installCurrentScript = function() {
 };
 
 GM_BrowserUI.installScript = function(script){
-  GM_getConfig().install(script);
+  GM_util.getService().config.install(script);
 
   var tools = {};
   Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
@@ -368,7 +368,7 @@ function GM_showPopup(aEvent) {
       }
       return urls.some(testMatchURL);
     }
-    return GM_getConfig().getMatchingScripts(testMatchURLs);
+    return GM_util.getService().config.getMatchingScripts(testMatchURLs);
   }
 
   function appendScriptAfter(script, point) {

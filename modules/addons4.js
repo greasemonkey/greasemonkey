@@ -25,13 +25,13 @@ var SCRIPT_ID_SUFFIX = '@greasespot.net';
 var SCRIPT_ADDON_TYPE = 'user-script';
 
 // Pull this helper method into this module scope; it's not module-ized yet.
-var GM_getConfig;
+var GM_util.getService().config;
 (function() {
 var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
     .getService(Components.interfaces.mozIJSSubScriptLoader);
 var scope = {};
 loader.loadSubScript('chrome://greasemonkey/content/utils.js', scope);
-GM_getConfig = scope.GM_getConfig;
+GM_util.getService().config = scope.GM_util.getService().config;
 })();
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ var AddonProvider = {
       aCallback([]);
     } else {
       var scriptAddons = [];
-      GM_getConfig().scripts.forEach(function(script) {
+      GM_util.getService().config.scripts.forEach(function(script) {
         scriptAddons.push(ScriptAddonFactoryByScript(script));
       });
       aCallback(scriptAddons);
@@ -65,7 +65,7 @@ function ScriptAddonFactoryByScript(aScript) {
   return ScriptAddonCache[id];
 }
 function ScriptAddonFactoryById(aId) {
-  var scripts = GM_getConfig().getMatchingScripts(
+  var scripts = GM_util.getService().config.getMatchingScripts(
       function(script) {
         return (script.id + SCRIPT_ID_SUFFIX) == aId;
       });
@@ -114,7 +114,7 @@ ScriptAddon.prototype._script = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
 function ScriptAddon_getExecutionIndex() {
-  return GM_getConfig()._scripts.indexOf(this._script);
+  return GM_util.getService().config._scripts.indexOf(this._script);
 });
 
 // Getters/setters/functions for API attributes.
@@ -184,7 +184,7 @@ ScriptAddon.prototype.cancelUninstall = function() {
 };
 
 ScriptAddon.prototype.performUninstall = function() {
-  GM_getConfig().uninstall(this._script);
+  GM_util.getService().config.uninstall(this._script);
   delete ScriptAddonCache[this.id];
 };
 
