@@ -92,31 +92,6 @@ function GM_getBinaryContents(file) {
     return bytes;
 }
 
-function GM_isGreasemonkeyable(url) {
-  var scheme = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService)
-      .extractScheme(url);
-
-  switch (scheme) {
-    case "http":
-    case "https":
-    case "ftp":
-    case "data":
-      return true;
-    case "about":
-      // Always allow "about:blank".
-      if (/^about:blank/.test(url)) return true;
-      // Never allow the rest of "about:".  See #1375.
-      return false;
-    case "file":
-      return GM_prefRoot.getValue('fileIsGreaseable');
-    case "unmht":
-      return GM_prefRoot.getValue('unmhtIsGreaseable');
-  }
-
-  return false;
-}
-
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
 }
@@ -200,7 +175,7 @@ function GM_windowId(win) {
     // Dunno why this is necessary, but sometimes we get non-chrome windows
     // whose locations we cannot access.
     var href = win.location.href;
-    if (!GM_isGreasemonkeyable(href)) return null;
+    if (!GM_util.isGreasemonkeyable(href)) return null;
   } catch (e) {
     return null;
   }

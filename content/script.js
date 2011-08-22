@@ -54,7 +54,7 @@ Script.prototype.matchesURL = function(url) {
   }
 
   // Flat deny if URL is not greaseable, or matches global excludes.
-  if (!GM_isGreasemonkeyable(url)) return false;
+  if (!GM_util.isGreasemonkeyable(url)) return false;
   if (GM_getConfig()._globalExcludes.some(testClude)) return false;
 
   // Allow based on user cludes.

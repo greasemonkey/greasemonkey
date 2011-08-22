@@ -363,7 +363,7 @@ service.prototype.runScripts = function(
     aRunWhen, aWrappedContentWin, aChromeWin
 ) {
   var url = aWrappedContentWin.document.location.href;
-  if (!GM_getEnabled() || !GM_isGreasemonkeyable(url)) return;
+  if (!GM_getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
     this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
