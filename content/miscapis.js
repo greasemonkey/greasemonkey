@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+
 function GM_ScriptStorage(script) {
   this.prefMan = new GM_PrefManager(script.prefroot);
 }

@@ -149,12 +149,12 @@ function startup() {
   gStartupHasRun = true;
 
   Cu.import(gmRunScriptFilename);
+  Cu.import("resource://greasemonkey/prefmanager.js");
   Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
   var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
   loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
-  loader.loadSubScript("chrome://greasemonkey/content/prefmanager.js");
   loader.loadSubScript("chrome://greasemonkey/content/utils.js");
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/script.js");

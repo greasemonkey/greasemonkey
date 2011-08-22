@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+
 function GM_loadOptions() {
   document.getElementById("check-uninstall")
       .checked = GM_prefRoot.getValue("uninstallPreferences");

@@ -20,7 +20,6 @@
 >
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
 
 <tabbox>

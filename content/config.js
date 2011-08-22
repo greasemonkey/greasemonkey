@@ -1,4 +1,5 @@
 Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import("resource://greasemonkey/util.js");
 
 function Config() {

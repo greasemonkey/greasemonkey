@@ -1,4 +1,5 @@
 (function private_scope() {
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 
 var statusEl = null;
 var statusImageEl = null;

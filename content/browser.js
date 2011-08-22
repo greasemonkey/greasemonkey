@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+
 // this file is the JavaScript backing for the UI wrangling which happens in
 // browser.xul. It also initializes the Greasemonkey singleton which contains
 // all the main injection logic, though that should probably be a proper XPCOM

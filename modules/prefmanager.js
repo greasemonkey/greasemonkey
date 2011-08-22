@@ -1,3 +1,5 @@
+const EXPORTED_SYMBOLS = ['GM_PrefManager', 'GM_prefRoot'];
+
 /**
  * Simple API on top of preferences for greasemonkey.
  * Construct an instance by passing the startPoint of a preferences subtree.

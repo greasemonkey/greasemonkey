@@ -1,3 +1,4 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
 Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
 
