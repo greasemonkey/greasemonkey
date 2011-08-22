@@ -32,6 +32,6 @@
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您没有安装任何用户脚本">
 <!ENTITY greasemonkey.getuserscripts "获取用户脚本">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "Greasemonkey 用户脚本首选项 - !!">
+<!ENTITY scriptprefs.usersettings "用户设置">
+<!ENTITY scriptprefs.scriptsettings "脚本设置">

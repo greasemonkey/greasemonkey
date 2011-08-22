@@ -4,8 +4,8 @@
 <!ENTITY promptForEdit.msg "Нижче змініть адресу сторінки. Ви можете вказувати множини адрес за допомогою символу зірочка (*).">
 <!ENTITY promptForEdit.title "Редагувати сторінку">
 <!ENTITY button.add "Додати…">
-<!ENTITY button.addUserExclude "Add as user exclude">
-<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.addUserExclude "Додати як користувацький виняток">
+<!ENTITY button.addUserInclude "Додати як користувацьке включення">
 <!ENTITY button.edit "Редагувати…">
 <!ENTITY button.remove "Вилучити">
 <!ENTITY label.grpIncluded "Охоплені сторінки">

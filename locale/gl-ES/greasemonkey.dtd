@@ -14,24 +14,24 @@
 <!ENTITY install.runson "execútase en:">
 <!ENTITY install.matches "coincidencias:">
 <!ENTITY install.butnoton "non se executa en:">
-<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
-<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
-<!ENTITY install.showscriptsource "Show Script Source">
-<!ENTITY install.installbutton "Install">
-<!ENTITY newscript.name "Name">
-<!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (One per line)">
-<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY install.warning1 "Os scripts maliciosos poden violar a súa privacidade e comprometelo sen o seu coñecemento.">
+<!ENTITY install.warning2 "Debería instalar scripts unicamente de fontes nas que confíe.">
+<!ENTITY install.showscriptsource "Mostrar o código fonte">
+<!ENTITY install.installbutton "Instalar">
+<!ENTITY newscript.name "Nome">
+<!ENTITY newscript.namespace "Espazo do nome">
+<!ENTITY newscript.description "Descrición">
+<!ENTITY newscript.includes "Incluír (un por liña)">
+<!ENTITY newscript.excludes "Excluír (un por liña)">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.changeEditor "Change Editor">
-<!ENTITY options.globalExcludes "Excluídos globais">
-<!ENTITY userscripts "User Scripts">
-<!ENTITY Uninstall "Uninstall">
-<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
-<!ENTITY greasemonkey.noscriptshere "Nesta páxina non se executa ningún script instalado.">
+<!ENTITY options.changeEditor "Cambiar o editor">
+<!ENTITY options.globalExcludes "Exclusións globais">
+<!ENTITY userscripts "Scripts">
+<!ENTITY Uninstall "Desinstalar">
+<!ENTITY AlsoUninstallPrefs "Tamén desinstalar as preferencias asociadas">
+<!ENTITY greasemonkey.noscriptshere "Ningún script instalado en execución.">
 <!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">
 <!ENTITY greasemonkey.getuserscripts "Obter scripts">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "Preferencias de script de Greasemonkey">
+<!ENTITY scriptprefs.usersettings "Axustes de usuario">
+<!ENTITY scriptprefs.scriptsettings "Axustes de script">

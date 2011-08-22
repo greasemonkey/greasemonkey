@@ -14,8 +14,8 @@
 ">
 <!ENTITY promptForEdit.title "ערוך דף">
 <!ENTITY button.add "הוסף...">
-<!ENTITY button.addUserExclude "Add as user exclude">
-<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.addUserExclude "הוסף סקריפט משתמש כלא כלול">
+<!ENTITY button.addUserInclude "הוסף סקריפט  משתמש ככלול">
 <!ENTITY button.edit "ערוך...">
 <!ENTITY button.remove "הסר">
 <!ENTITY label.grpIncluded "כלול דפים">

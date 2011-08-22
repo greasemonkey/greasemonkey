@@ -4,9 +4,9 @@
 <!ENTITY promptForEdit.msg "نشانی صفحه را در زیر تغییر دهید. شما می توانید صفحات متعددی را با استفاده از علامت عام (*) معین کنید.">
 <!ENTITY promptForEdit.title "ویرایش صفحه">
 <!ENTITY button.add "اضافه کردن...">
-<!ENTITY button.addUserExclude "Add as user exclude">
-<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.addUserExclude "افزودن مستثنا به عنوان کاربر">
+<!ENTITY button.addUserInclude "افزودن &quot;شامل&quot; به عنوان کاربر">
 <!ENTITY button.edit "ویرایش...">
 <!ENTITY button.remove "پاک کردن">
 <!ENTITY label.grpIncluded "صفحه های شامل شده">
-<!ENTITY label.grpExcluded "صفحه های مستثنى شده">
+<!ENTITY label.grpExcluded "صفحه های مستثنا شده">

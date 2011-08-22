@@ -1,0 +1,33 @@
+<!ENTITY Edit "Rediger">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Rediger dette User Script">
+<!ENTITY ExecuteFirst "Kør først">
+<!ENTITY ExecuteLast "Kør sidst">
+<!ENTITY ExecuteLater "Kør senere">
+<!ENTITY ExecuteSooner "Kør før">
+<!ENTITY MoveDown "Flyt op">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Flyt til bunden">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Flyt til toppen">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Flyt op">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Opret nyt User Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Vis indeholdende mappe">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sorter efter status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sorter efter navn">
+<!ENTITY Sort.Name "Navn">
+<!ENTITY Sort.ByExecution "Sorter efter kørselsrækkefølge">
+<!ENTITY Sort.Execution "Kørselsrækkefølge">
+<!ENTITY SortScripts "Sorter Scripts">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Anuller afinstallation">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Anuller afinstallation af dette User Script">
+<!ENTITY UninstallCancelDescription "Dette User Script vil blive fjernet, når dialogboksen lukkes. (Eller højreklik for &quot;Afinstaller nu;.)">
+<!ENTITY UninstallNow "Afinstaller nu">
+<!ENTITY UninstallNow.accesskey "N">

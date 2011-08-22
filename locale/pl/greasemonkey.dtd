@@ -32,6 +32,6 @@
 <!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
 <!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">
 <!ENTITY greasemonkey.getuserscripts "Pobierz skrypty">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "Ustawienia skryptów">
+<!ENTITY scriptprefs.usersettings "Ustawienia użytkownika">
+<!ENTITY scriptprefs.scriptsettings "Ustawienia skryptu">
