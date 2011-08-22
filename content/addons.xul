@@ -20,8 +20,6 @@
 <script src="chrome://global/content/nsTransferable.js" />
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
 
@@ -64,7 +62,7 @@
     insertafter="installFileButton"
     label="&NewScript;"
     accesskey="&NewScript.accesskey;"
-    oncommand="GM_newUserScript()"
+    oncommand="GM_util.newUserScript(window)"
   />
 </hbox>
 

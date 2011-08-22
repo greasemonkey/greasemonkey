@@ -1,3 +1,6 @@
+Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptRequire(script) {
   this._script = script;
 
@@ -17,11 +20,11 @@ function ScriptRequire_getFile() {
 
 ScriptRequire.prototype.__defineGetter__('fileURL',
 function ScriptRequire_getFileURL() {
-  return GM_getUriFromFile(this.file).spec;
+  return GM_util.getUriFromFile(this.file).spec;
 });
 
 ScriptRequire.prototype.__defineGetter__('textContent',
-function ScriptRequire_getTextContent() { return GM_getContents(this.file); });
+function ScriptRequire_getTextContent() { return GM_util.getContents(this.file); });
 
 ScriptRequire.prototype.__defineGetter__('urlToDownload',
 function ScriptRequire_getUrlToDownload() { return this._downloadURL; });
@@ -36,10 +39,8 @@ ScriptRequire.prototype._initFile = function() {
   var file = this._script._basedirFile;
   file.append(name);
   file.createUnique(
-      Components.interfaces.nsIFile.NORMAL_FILE_TYPE, GM_fileMask);
+      Components.interfaces.nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
   this._filename = file.leafName;
-
-  GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
 
   file.remove(true);
   this._tempFile.moveTo(file.parent, file.leafName);

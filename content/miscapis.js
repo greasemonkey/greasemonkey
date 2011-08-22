@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+
 function GM_ScriptStorage(script) {
   this.prefMan = new GM_PrefManager(script.prefroot);
 }
@@ -83,8 +85,12 @@ function GM_ScriptLogger(script) {
   this.prefix = [namespace, script.name, ": "].join("");
 }
 
+GM_ScriptLogger.prototype.consoleService = Components
+    .classes["@mozilla.org/consoleservice;1"]
+    .getService(Components.interfaces.nsIConsoleService);
+
 GM_ScriptLogger.prototype.log = function(message) {
-  GM_log(this.prefix + message, true);
+  this.consoleService.logStringMessage(this.prefix + '\n' + message);
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //

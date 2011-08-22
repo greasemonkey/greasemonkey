@@ -1,3 +1,6 @@
+Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 var GM_ScriptDownloader;
 (function private_scope() {
 
@@ -38,13 +41,13 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  GM_getService().ignoreNextScript();
+  GM_util.getService().ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
-  this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
-  this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
+  this.req_.onreadystatechange = GM_util.hitch(this, "checkContentTypeBeforeDownload");
+  this.req_.onload = GM_util.hitch(this, "handleScriptDownloadComplete");
 
   // Fixes #1359.  See: http://goo.gl/EJ3FN
   var httpChannel = null;
@@ -72,7 +75,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
     // If there is a 'Content-Type' header and it contains 'text/html',
     // then do not install the file, display it instead.
     this.req_.abort();
-    GM_getService().ignoreNextScript();
+    GM_util.getService().ignoreNextScript();
     this.contentWindow_.location.assign(this.uri_.spec);
   } else {
     // Otherwise, let the user know that the install is happening.
@@ -96,7 +99,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 
     var source = this.req_.responseText;
 
-    this.script = GM_getConfig().parse(source, this.uri_);
+    this.script = GM_util.getService().config.parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
         .getService(Components.interfaces.nsIProperties)
@@ -105,14 +108,14 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
     file.createUnique(
-        Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
+        Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
     this.tempFiles_.push(file);
 
     function handleWriteComplete() {
     }
 
-    GM_writeToFile(source, file,
-        GM_hitch(this, 'handleScriptDownloadWriteComplete', file));
+    GM_util.writeToFile(source, file,
+        GM_util.hitch(this, 'handleScriptDownloadWriteComplete', file));
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
@@ -123,7 +126,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file) {
   this.script.setDownloadedFile(file);
 
-  window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
+  window.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
 
   if (this.installing_) {
     this.showInstallDialog();
@@ -133,7 +136,6 @@ GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file)
 };
 
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
-  GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
 
   // if this.script.icon has a url, then we need to download the image
@@ -167,18 +169,17 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
       var ioservice =
           Components.classes["@mozilla.org/network/io-service;1"]
           .getService(Components.interfaces.nsIIOService);
-      var sourceUri = GM_uriFromUrl(dep.urlToDownload);
+      var sourceUri = GM_util.uriFromUrl(dep.urlToDownload);
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
-      var file = GM_getTempFile();
+      var file = GM_util.getTempFile();
       this.tempFiles_.push(file);
 
       persist.progressListener = new PersistProgressListener(
           dep, file, persist, this);
       persist.saveChannel(sourceChannel,  file);
     } catch(e) {
-      GM_log("Download exception " + e);
       this.errorInstallDependency(this.script, dep, e);
     }
   } else {
@@ -189,7 +190,6 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
 
 GM_ScriptDownloader.prototype.handleDependencyDownloadComplete =
 function(dep, file, channel) {
-  GM_log("Dependency Download complete " + dep.urlToDownload);
   var httpChannel = null;
   var contentType = null;
   var charSet = null;
@@ -273,14 +273,15 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     while (pendingExec = pendingExecAry.shift()) {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
-      if (GM_scriptMatchesUrlAndRuns(this.script, url)) {
-        GM_getService().injectScripts(
+      if (GM_util.scriptMatchesUrlAndRuns(this.script, url)) {
+        GM_util.getService().injectScripts(
             [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
       }
     }
 
     // Save new values to config.xml
-    GM_getConfig()._changed(this.script, "modified", this._oldScriptId, true);
+    GM_util.getService().config._changed(
+        this.script, "modified", this._oldScriptId, true);
   } else if (this.installOnCompletion_) {
     this.installScript();
   }
@@ -288,7 +289,6 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
 
 GM_ScriptDownloader.prototype.errorInstallDependency =
 function(script, dep, msg) {
-  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   if (this.installOnCompletion_) {
     alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {
@@ -316,7 +316,7 @@ GM_ScriptDownloader.prototype.cleanupTempFiles = function() {
 GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
   if (!timer) {
     // otherwise, the status bar stays in the loading state.
-    this.win_.setTimeout(GM_hitch(this, "showInstallDialog", true), 0);
+    this.win_.setTimeout(GM_util.hitch(this, "showInstallDialog", true), 0);
     return;
   }
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",

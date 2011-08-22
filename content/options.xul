@@ -20,8 +20,6 @@
   onload="GM_loadOptions()"
   ondialogaccept="GM_saveOptions()"
 >
-<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/options.js" />
 
 <dialogheader title="Greasemonkey" description="&prefWindow.titleWin;"/>
@@ -29,7 +27,7 @@
 <vbox>
   <groupbox>
     <caption label="&options.editor;" />
-    <button oncommand="GM_getEditor(true)" label="&options.changeEditor;" />
+    <button oncommand="GM_util.getEditor(true)" label="&options.changeEditor;" />
   </groupbox>
 
   <groupbox>

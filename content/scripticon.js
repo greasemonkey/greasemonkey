@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptIcon(script) {
   ScriptResource.call(this, script);
   this.type = "icon";
@@ -17,8 +19,8 @@ ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
     this.dataUriError = true;
     throw new Error('@icon data: uri must be an image type');
   } else {
-    var resUri = GM_uriFromUrl(this._script._downloadURL);
-    this._downloadURL = GM_uriFromUrl(value, resUri).spec;
+    var resUri = GM_util.uriFromUrl(this._script._downloadURL);
+    this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;
   }
 });
 
@@ -40,7 +42,7 @@ function ScriptIcon_getFileURL() {
   if (this._dataURI) {
     return this._dataURI;
   } else if (this._filename) {
-    return GM_getUriFromFile(this.file).spec;
+    return GM_util.getUriFromFile(this.file).spec;
   } else {
     return "chrome://greasemonkey/skin/userscript.png";
   }

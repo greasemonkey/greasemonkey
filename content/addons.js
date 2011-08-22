@@ -1,5 +1,7 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 // Globals.
-var GM_config = GM_getConfig();
+var GM_config = GM_util.getService().config;
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 
@@ -102,7 +104,7 @@ window.addEventListener('load', function() {
   if ('undefined' != typeof DEFAULT_PERSONA_ID) {
     GM_overrideShowView();
     if ('userscripts' == gView) {
-      GM_logError(new Error(
+      GM_util.logError(new Error(
           'Warning: the Personas Plus extension is incompatible with'
           +' Greasemonkey.\nIt is not required to use personas; you are advised'
           +' to uninstall it.'));
@@ -162,7 +164,7 @@ var greasemonkeyAddons = {
   },
 
   fillList: function() {
-    GM_emptyEl(gUserscriptsView);
+    GM_util.emptyEl(gUserscriptsView);
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {
@@ -239,7 +241,7 @@ var greasemonkeyAddons = {
     var selectedListitem = gUserscriptsView.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
-      GM_openInEditor(script);
+      GM_util.openInEditor(script);
       break;
     case 'cmd_userscript_options':
       openDialog('chrome://greasemonkey/content/scriptprefs.xul#' + script.id);
@@ -388,12 +390,12 @@ var greasemonkeyDragObserver = {
     if ('text/uri-list' == dropData.flavour.contentType) {
       url = dropData.data;
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
-      url = GM_getUriFromFile(dropData.data).spec;
+      url = GM_util.getUriFromFile(dropData.data).spec;
     }
     dump("Dropped url: ["+url+"]\n");
     if (url && url.match(/\.user\.js$/)) {
       // TODO: Make this UI appear in the add-ons win, rather than the browser?
-      GM_installUri(GM_uriFromUrl(url));
+      GM_util.installUri(GM_util.uriFromUrl(url));
     }
   },
   getSupportedFlavours: function() {

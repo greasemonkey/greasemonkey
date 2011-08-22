@@ -19,8 +19,6 @@
   ondialogaccept="return onDialogAccept();"
 >
 
-<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
 
 <tabbox>
@@ -53,6 +51,6 @@
 </tabbox>
 
 <spacer height="5" />
-<button label="&Edit.tooltip;" oncommand="GM_openInEditor(gScript);" />
+<button label="&Edit.tooltip;" oncommand="GM_util.openInEditor(gScript);" />
 
 </dialog>

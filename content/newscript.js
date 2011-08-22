@@ -1,3 +1,6 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 /////////////////////////////// global variables ///////////////////////////////
 
 var bundle = null;
@@ -22,7 +25,7 @@ window.addEventListener("load", function window_load() {
 function doInstall() {
   var scriptSrc = createScriptSource();
   if (!scriptSrc) return false;
-  var config = GM_getConfig();
+  var config = GM_util.getService().config;
 
   // Create a script object with parsed metadata, and ...
   var script = config.parse(scriptSrc);
@@ -34,14 +37,14 @@ function doInstall() {
 
   // finish making the script object ready to install
   // (put this created script into a file -- only way to install it)
-  var tempFile = GM_getTempFile();
-  GM_writeToFile(scriptSrc, tempFile, function() {
+  var tempFile = GM_util.getTempFile();
+  GM_util.writeToFile(scriptSrc, tempFile, function() {
     script.setDownloadedFile(tempFile);
 
     // install this script
     config.install(script);
     // and fire up the editor!
-    GM_openInEditor(script);
+    GM_util.openInEditor(script);
     // persist namespace value
     GM_prefRoot.setValue("newscript_namespace", script.namespace);
 

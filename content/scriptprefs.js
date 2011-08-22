@@ -1,5 +1,7 @@
+Components.utils.import('resource://greasemonkey/util.js'); // ref'd in XUL
+
 var gScriptId = location.hash.substring(1);
-var gScript = GM_getConfig().getMatchingScripts(function(script) {
+var gScript = GM_util.getService().config.getMatchingScripts(function(script) {
   return script.id == gScriptId;
 })[0];
 
@@ -42,5 +44,5 @@ function onDialogAccept() {
   gScript.userIncludes = gUserIncludesEl.pages;
   gScript.excludes = gScriptExcludesEl.pages;
   gScript.userExcludes = gUserExcludesEl.pages;
-  GM_getConfig()._changed(gScript, "cludes");
+  GM_util.getService().config._changed(gScript, "cludes");
 }

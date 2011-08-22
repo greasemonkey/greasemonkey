@@ -25,10 +25,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+Components.utils.import('resource://greasemonkey/util.js');
+
 var EXPORTED_SYMBOLS = ['GM_convert2RegExp'];
-
-Components.utils.import("resource://greasemonkey/utils.js");
-
 
 // Converts a pattern in this programs simple notation to a regular expression.
 function GM_convert2RegExp( pattern ) {
@@ -84,4 +83,4 @@ function GM_convert2RegExp( pattern ) {
   }
   return new RegExp(res + "$", "i");
 }
-GM_convert2RegExp = GM_memoize(GM_convert2RegExp);
+GM_convert2RegExp = GM_util.memoize(GM_convert2RegExp);

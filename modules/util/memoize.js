@@ -1,19 +1,15 @@
-var EXPORTED_SYMBOLS = [
-    'GM_memoize',
-    'GM_uriFromUrl',
-    ];
-
+const EXPORTED_SYMBOLS = ['memoize'];
 
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:
 //
 // function foo(arg1, arg2) { /* complex operation */ }
-// foo = GM_memoize(foo);
+// foo = GM_util.memoize(foo);
 //
 // The memoized function may have any number of arguments, but they must be
 // be serializable, and uniquely.  It's safest to use this only on functions
 // that accept primitives.
-function GM_memoize(func, limit) {
+function memoize(func, limit) {
   limit = limit || 3000;
   var cache = {__proto__: null};
   var keylist = [];
@@ -32,23 +28,3 @@ function GM_memoize(func, limit) {
     return result;
   }
 }
-
-
-function GM_uriFromUrl(url, base) {
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  var baseUri = null;
-
-  if (typeof base === "string") {
-    baseUri = GM_uriFromUrl(base);
-  } else if (base) {
-    baseUri = base;
-  }
-
-  try {
-    return ioService.newURI(url, null, baseUri);
-  } catch (e) {
-    return null;
-  }
-}
-GM_uriFromUrl = GM_memoize(GM_uriFromUrl);

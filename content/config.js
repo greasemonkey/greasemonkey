@@ -1,9 +1,12 @@
-Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
-  this._configFile = GM_scriptDir();
+  this._configFile = GM_util.scriptDir();
   this._configFile.append("config.xml");
   this._initScriptDir();
 
@@ -64,7 +67,7 @@ Config.prototype._load = function() {
   var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser);
 
-  var configContents = GM_getContents(this._configFile);
+  var configContents = GM_util.getContents(this._configFile);
   var doc = domParser.parseFromString(configContents, "text/xml");
   var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null,
       7 /* XPathResult.ORDERED_NODE_SNAPSHOT_TYPE */,
@@ -97,7 +100,7 @@ Config.prototype._save = function(saveNow) {
     this._saveTimer = Components.classes["@mozilla.org/timer;1"]
         .createInstance(Components.interfaces.nsITimer);
 
-    var _save = GM_hitch(this, "_save"); // dereference 'this' for the closure
+    var _save = GM_util.hitch(this, "_save"); // dereference 'this' for the closure
     this._saveTimer.initWithCallback(
         {'notify': function() { _save(true); }}, 250,
         Components.interfaces.nsITimer.TYPE_ONE_SHOT);
@@ -118,7 +121,7 @@ Config.prototype._save = function(saveNow) {
   var domSerializer = Components
       .classes["@mozilla.org/xmlextras/xmlserializer;1"]
       .createInstance(Components.interfaces.nsIDOMSerializer);
-  GM_writeToFile(domSerializer.serializeToString(doc), this._configFile);
+  GM_util.writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
 Config.prototype.parse = function(source, uri, updateScript) {
@@ -190,7 +193,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
             var match = new MatchPattern(value);
             script._matches.push(match);
           } catch (e) {
-            GM_logError("Ignoring @match pattern " + value + " because:\n" + e);
+            GM_util.logError("Ignoring @match pattern " + value + " because:\n" + e);
           }
           break;
         case "icon":
@@ -209,7 +212,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
           break;
         case "require":
           try {
-            var reqUri = GM_uriFromUrl(value, uri);
+            var reqUri = GM_util.uriFromUrl(value, uri);
             var scriptRequire = new ScriptRequire(script);
             scriptRequire._downloadURL = reqUri.spec;
             script._requires.push(scriptRequire);
@@ -241,7 +244,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
           }
 
           try {
-            var resUri = GM_uriFromUrl(res[2], uri);
+            var resUri = GM_util.uriFromUrl(res[2], uri);
             var scriptResource = new ScriptResource(script);
             scriptResource._name = resName;
             scriptResource._downloadURL = resUri.spec;
@@ -265,8 +268,14 @@ Config.prototype.parse = function(source, uri, updateScript) {
 
   // if no meta info, default to reasonable values
   if (!script._name) {
-    script._name = GM_parseScriptName((uri && uri.spec)
-        || (updateScript && updateScript.filename));
+    var name = (uri && uri.spec) || (updateScript && updateScript.filename);
+    if (name) {
+      name = name.substring(0, name.indexOf(".user.js"));
+      name = name.substring(name.lastIndexOf("/") + 1);
+      script._name = name;
+    } else {
+      script._name = 'user-script';
+    }
   }
   if (!script._namespace && uri) script._namespace = uri.host;
   if (!script._description) script._description = "";
@@ -311,7 +320,7 @@ Config.prototype.install = function(script) {
   }
 
   script._modified = script.file.lastModifiedTime;
-  script._dependhash = GM_sha1(script._rawMeta);
+  script._dependhash = GM_util.sha1(script._rawMeta);
 
   this._scripts.push(script);
 
@@ -364,10 +373,10 @@ Config.prototype.move = function(script, destination) {
  * Create an empty configuration if none exist.
  */
 Config.prototype._initScriptDir = function() {
-  var dir = GM_scriptDir();
+  var dir = GM_util.scriptDir();
   if (!dir.exists()) {
-    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_directoryMask);
-    GM_writeToFile("<UserScriptConfig/>", this._configFile);
+    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
+    GM_util.writeToFile("<UserScriptConfig/>", this._configFile);
   }
 };
 
@@ -401,7 +410,7 @@ Config.prototype.updateModifiedScripts = function(safeWin, chromeWin) {
     if (0 == script.pendingExec.length) {
       var oldScriptId = new String(script.id);
       var parsedScript = this.parse(
-          script.textContent, GM_uriFromUrl(script._downloadURL), !!script);
+          script.textContent, GM_util.uriFromUrl(script._downloadURL), !!script);
       script.updateFromNewScript(parsedScript, safeWin, chromeWin);
       this._changed(script, "modified", oldScriptId, true);
     } else {
@@ -443,7 +452,7 @@ Config.prototype._updateVersion = function() {
 
     if ("0.0" == initialized) {
       // This is the first launch.  Show the welcome screen.
-      var chromeWin = GM_getBrowserWindow();
+      var chromeWin = GM_util.getBrowserWindow();
       // If we found it, use it to open a welcome tab.
       if (chromeWin && chromeWin.gBrowser) {
         var url = 'http://www.greasespot.net/p/welcome.html?' + newVersion;

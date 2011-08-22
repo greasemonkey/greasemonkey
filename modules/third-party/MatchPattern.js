@@ -42,7 +42,6 @@ var EXPORTED_SYMBOLS = ['MatchPattern'];
 
 Components.utils.import("resource://gre/modules/NetUtil.jsm");
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
-Components.utils.import("resource://greasemonkey/utils.js");
 
 var validSchemes = ['http', 'https', 'ftp', 'file'];
 var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
@@ -73,7 +72,7 @@ function MatchPattern(pattern) {
     pattern = "http" + pattern.slice(1);
   }
 
-  var uri = GM_uriFromUrl(pattern);
+  var uri = GM_util.uriFromUrl(pattern);
   if (!uri) {
     throw new Error(getString("error.matchPattern.parse"));
   }
@@ -107,7 +106,7 @@ MatchPattern.prototype.__defineGetter__('pattern',
 function MatchPattern_getPattern() { return '' + this._pattern; });
 
 MatchPattern.prototype.doMatch = function(uriSpec) {
-  var matchURI = GM_uriFromUrl(uriSpec);
+  var matchURI = GM_util.uriFromUrl(uriSpec);
 
   if (validSchemes.indexOf(matchURI.scheme) == -1) {
     return false;

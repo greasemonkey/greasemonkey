@@ -11,7 +11,19 @@ var Cu = Components.utils;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
-var gmSvcFilename = Components.stack.filename;
+var gExtensionPath = (function() {
+  try {
+  // Turn the file:/// URL into an nsIFile ...
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var uri = ioService.newURI(Components.stack.filename, null, null);
+  var file = uri.QueryInterface(Components.interfaces.nsIFileURL).file
+  // ... to find the containing directory.
+  var dir = file.parent.parent;
+  // Then get the URL back for that path.
+  return ioService.newFileURI(dir).spec;
+  } catch (e) { dump(e+'\n'+uneval(e)+'\n\n'); return 'x'; }
+})();
 
 var gMaxJSVersion = "1.6";
 var gMenuCommands = [];
@@ -30,20 +42,20 @@ function GM_apiLeakCheck(apiName) {
   var stack = Components.stack;
 
   do {
-    // Valid stack frames for GM api calls are: native and js when coming from
-    // chrome:// URLs and the greasemonkey.js component's file:// URL.
-    if (2 == stack.language) {
-      // NOTE: In FF 2.0.0.0, I saw that stack.filename can be null for JS/XPCOM
-      // services. This didn't happen in FF 2.0.0.11; I'm not sure when it
-      // changed.
-      if (stack.filename != null &&
-          stack.filename != gmRunScriptFilename &&
-          stack.filename != gmSvcFilename &&
-          stack.filename.substr(0, 6) != "chrome") {
-        GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +
-                    "cannot call " + apiName + "."));
-        return false;
-      }
+    // Valid locations for GM API calls are:
+    //  * Greasemonkey modules.
+    //  * All of chrome.  (In the script update case, chrome will list values.)
+    //  * Greasemonkey extension by path. (FF 3 does this instead of the above.)
+    // Anything else on the stack and we will reject the API, to make sure that
+    // the content window (whose path would be e.g. http://...) has no access.
+    if (2 == stack.language
+        && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
+        && stack.filename.substr(0, 9) !== 'chrome://'
+        && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
+        ) {
+      GM_util.logError(new Error("Greasemonkey access violation: " +
+          "unsafeWindow cannot call " + apiName + "."));
+      return false;
     }
 
     stack = stack.caller;
@@ -117,16 +129,16 @@ function runScriptInSandbox(code, sandbox, script) {
         // Now that we know where the error is, find it (inside @requires if
         // necessary) in the script and log it.
         var err = findError(script, e.lineNumber);
-        GM_logError(
+        GM_util.logError(
              e, // error obj
              0, // 0 = error (1 = warning)
              err.uri, err.lineNumber);
       } else {
-        GM_logError(e);
+        GM_util.logError(e);
       }
     } catch (e) {
       // Do not raise (this would stop all scripts), log.
-      GM_logError(e);
+      GM_util.logError(e);
     }
   }
   return true; // did not need a (function() {...})() enclosure.
@@ -137,12 +149,12 @@ function startup() {
   gStartupHasRun = true;
 
   Cu.import(gmRunScriptFilename);
+  Cu.import("resource://greasemonkey/prefmanager.js");
+  Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
   var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
   loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
-  loader.loadSubScript("chrome://greasemonkey/content/prefmanager.js");
-  loader.loadSubScript("chrome://greasemonkey/content/utils.js");
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/script.js");
   loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
@@ -154,12 +166,12 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   // Firefox 3.6 and higher supports 1.8.
-  if (GM_compareFirefoxVersion("3.6") >= 0) {
+  if (GM_util.compareFirefoxVersion("3.6") >= 0) {
     gMaxJSVersion = "1.8";
   }
 
   // Firefox <4 reports a different stack.fileName for the module.
-  if (GM_compareFirefoxVersion("4.0") < 0) {
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
     // Pull the name out of the variable the module exports.
     gmRunScriptFilename = GM_runScript_filename;
   }
@@ -255,7 +267,7 @@ service.prototype._registerMenuCommand = function(
       accessKey: accessKey,
       commandFunc: commandFunc,
       contentWindow: wrappedContentWin,
-      contentWindowId: GM_windowId(wrappedContentWin),
+      contentWindowId: GM_util.windowId(wrappedContentWin),
       frozen: false};
   gMenuCommands.push(command);
 };
@@ -266,7 +278,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
   var ret = Ci.nsIContentPolicy.ACCEPT;
 
   // Don't intercept anything when GM is not enabled.
-  if (!GM_getEnabled()) {
+  if (!GM_util.getEnabled()) {
     return ret;
   }
 
@@ -282,7 +294,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
   ) {
     if (!this.ignoreNextScript_
         && !isTempScript(cl)
-        && GM_installUri(cl, ctx.contentWindow)
+        && GM_util.installUri(cl, ctx.contentWindow)
     ) {
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
     }
@@ -350,14 +362,14 @@ service.prototype.runScripts = function(
     aRunWhen, aWrappedContentWin, aChromeWin
 ) {
   var url = aWrappedContentWin.document.location.href;
-  if (!GM_getEnabled() || !GM_isGreasemonkeyable(url)) return;
+  if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
     this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
-        return GM_scriptMatchesUrlAndRuns(script, url, aRunWhen);
+        return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
     });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin, aChromeWin);
@@ -402,19 +414,19 @@ service.prototype.injectScripts = function(
     sandbox.GM_addStyle = function(css) {
           GM_addStyle(wrappedContentWin.document, css);
         };
-    sandbox.GM_log = GM_hitch(logger, "log");
+    sandbox.GM_log = GM_util.hitch(logger, "log");
     sandbox.console = console;
-    sandbox.GM_setValue = GM_hitch(storage, "setValue");
-    sandbox.GM_getValue = GM_hitch(storage, "getValue");
-    sandbox.GM_deleteValue = GM_hitch(storage, "deleteValue");
-    sandbox.GM_listValues = GM_hitch(storage, "listValues");
-    sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL");
-    sandbox.GM_getResourceText = GM_hitch(resources, "getResourceText");
-    sandbox.GM_openInTab = GM_hitch(
+    sandbox.GM_setValue = GM_util.hitch(storage, "setValue");
+    sandbox.GM_getValue = GM_util.hitch(storage, "getValue");
+    sandbox.GM_deleteValue = GM_util.hitch(storage, "deleteValue");
+    sandbox.GM_listValues = GM_util.hitch(storage, "listValues");
+    sandbox.GM_getResourceURL = GM_util.hitch(resources, "getResourceURL");
+    sandbox.GM_getResourceText = GM_util.hitch(resources, "getResourceText");
+    sandbox.GM_openInTab = GM_util.hitch(
         this, "_openInTab", wrappedContentWin, chromeWin);
-    sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
+    sandbox.GM_xmlhttpRequest = GM_util.hitch(xmlhttpRequester,
                                          "contentStartRequest");
-    sandbox.GM_registerMenuCommand = GM_hitch(
+    sandbox.GM_registerMenuCommand = GM_util.hitch(
         this, "_registerMenuCommand", wrappedContentWin, chromeWin, script);
 
     // Re-wrap the window before assigning it to the sandbox.__proto__

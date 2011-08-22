@@ -1,4 +1,5 @@
 (function private_scope() {
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 
 var statusEl = null;
 var statusImageEl = null;
@@ -20,7 +21,7 @@ window.addEventListener('load', function window_load() {
 function GM_statusClicked(aEvent) {
   switch (aEvent.button) {
   case 0:
-    GM_setEnabled(!GM_getEnabled());
+    GM_util.setEnabled(!GM_util.getEnabled());
     break;
   case 1:
     GM_OpenScriptsMgr();
@@ -40,7 +41,7 @@ window.GM_statusClicked = GM_statusClicked;
  * the mozilla preference that backs it directly.
  */
 function refreshStatus() {
-  if (GM_getEnabled()) {
+  if (GM_util.getEnabled()) {
     statusImageEl.src = "chrome://greasemonkey/skin/icon16.png";
     statusImageEl.tooltipText = stringBundle.getString("tooltip.enabled");
   } else {

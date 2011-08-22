@@ -1,5 +1,8 @@
-Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
-Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 function Script(configNode) {
   this._observers = [];
@@ -52,8 +55,8 @@ Script.prototype.matchesURL = function(url) {
   }
 
   // Flat deny if URL is not greaseable, or matches global excludes.
-  if (!GM_isGreasemonkeyable(url)) return false;
-  if (GM_getConfig()._globalExcludes.some(testClude)) return false;
+  if (!GM_util.isGreasemonkeyable(url)) return false;
+  if (GM_util.getService().config._globalExcludes.some(testClude)) return false;
 
   // Allow based on user cludes.
   if (this._userExcludes.some(testClude)) return false;
@@ -65,7 +68,7 @@ Script.prototype.matchesURL = function(url) {
 };
 
 Script.prototype._changed = function(event, data) {
-  GM_getConfig()._changed(this, event, data);
+  GM_util.getService().config._changed(this, event, data);
 };
 
 Script.prototype.__defineGetter__('modifiedDate',
@@ -154,7 +157,7 @@ function Script_getFile() {
 
 Script.prototype.__defineGetter__('_basedirFile',
 function Script_getBasedirFile() {
-  var file = GM_scriptDir();
+  var file = GM_util.scriptDir();
   file.append(this._basedir);
   try {
     // Can fail if this path does not exist.
@@ -166,10 +169,10 @@ function Script_getBasedirFile() {
 });
 
 Script.prototype.__defineGetter__('fileURL',
-function Script_getFileURL() { return GM_getUriFromFile(this.file).spec; });
+function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; });
 
 Script.prototype.__defineGetter__('textContent',
-function Script_getTextContent() { return GM_getContents(this.file); });
+function Script_getTextContent() { return GM_util.getContents(this.file); });
 
 Script.prototype.__defineGetter__('size',
 function Script_getSize() {
@@ -215,14 +218,14 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.hasAttribute("dependhash")
       || !node.hasAttribute("version")
   ) {
-    var parsedScript = GM_getConfig().parse(
-        this.textContent, GM_uriFromUrl(this._downloadURL), !!this);
+    var parsedScript = GM_util.getService().config.parse(
+        this.textContent, GM_util.uriFromUrl(this._downloadURL), !!this);
 
     this._modified = this.file.lastModifiedTime;
-    this._dependhash = GM_sha1(parsedScript._rawMeta);
+    this._dependhash = GM_util.sha1(parsedScript._rawMeta);
     this._version = parsedScript._version;
 
-    GM_getConfig()._changed(this, "modified", null);
+    GM_util.getService().config._changed(this, "modified", null);
   } else {
     this._modified = node.getAttribute("modified");
     this._dependhash = node.getAttribute("dependhash");
@@ -357,16 +360,14 @@ Script.prototype._initFile = function(tempFile) {
   this._basedir = name;
 
   var nsIFile = Components.interfaces.nsIFile;
-  var file = GM_scriptDir();
+  var file = GM_util.scriptDir();
   file.append(name);
-  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_directoryMask);
+  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
   this._basedir = file.leafName;
 
   file.append(name + ".user.js");
-  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_fileMask);
+  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
   this._filename = file.leafName;
-
-  GM_log("Moving script file from " + tempFile.path + " to " + file.path);
 
   file.remove(true);
   tempFile.moveTo(file.parent, file.leafName);
@@ -398,7 +399,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   // if the @name and @namespace have changed
   // make sure they don't conflict with another installed script
   if (newScript.id != this.id) {
-    if (!GM_getConfig().installIsUpdate(newScript)) {
+    if (!GM_util.getService().config.installIsUpdate(newScript)) {
       // Migrate preferences.
       if (this.prefroot != newScript.prefroot) {
         var storageOld = new GM_ScriptStorage(this);
@@ -435,7 +436,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
 
-  var dependhash = GM_sha1(newScript._rawMeta);
+  var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
     this._dependhash = dependhash;
     this._icon = newScript._icon;
@@ -462,7 +463,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
 Script.prototype.allFiles = function() {
   var files = [];
-  if (!this._basedirFile.equals(GM_scriptDir())) {
+  if (!this._basedirFile.equals(GM_util.scriptDir())) {
     files.push(this._basedirFile);
   }
   files.push(this.file);
@@ -490,7 +491,7 @@ Script.prototype.allFilesExist = function() {
 Script.prototype.uninstall = function(forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
-  if (this._basedirFile.equals(GM_scriptDir())) {
+  if (this._basedirFile.equals(GM_util.scriptDir())) {
     // if script is in the root, just remove the file
     try {
       this.file.remove(false);
@@ -511,5 +512,5 @@ Script.prototype.uninstall = function(forUpdate) {
     GM_prefRoot.remove(this.prefroot);
   }
 
-  GM_getConfig()._changed(this, "uninstall", null);
+  GM_util.getService().config._changed(this, "uninstall", null);
 };

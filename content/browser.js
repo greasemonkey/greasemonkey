@@ -1,3 +1,6 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 // this file is the JavaScript backing for the UI wrangling which happens in
 // browser.xul. It also initializes the Greasemonkey singleton which contains
 // all the main injection logic, though that should probably be a proper XPCOM
@@ -72,7 +75,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   // what we want, instead we listen for dom-window-destroyed, which comes
   // pretty close (at least it doesn't leak memory).  But: listening for dom-
   // in Firefox 4 causes breakage, so we just do either-or.
-  if (GM_compareFirefoxVersion("4.0") >= 0) {
+  if (GM_util.compareFirefoxVersion("4.0") >= 0) {
     observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
   } else {
     observerService.addObserver(GM_BrowserUI, "dom-window-destroyed", true);
@@ -83,13 +86,9 @@ GM_BrowserUI.chromeLoad = function(e) {
       .classes["@mozilla.org/embedcomp/window-watcher;1"]
       .getService(Components.interfaces.nsIWindowWatcher);
 
-  // register for notifications from greasemonkey-service about ui type things
-  GM_BrowserUI.gmSvc = Components
-      .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-      .getService(Components.interfaces.gmIGreasemonkeyService)
-      .wrappedJSObject;
-  // reference this once, so that the getter is called at least once, and the
-  // initialization routines will run, no matter what
+  GM_BrowserUI.gmSvc = GM_util.getService();
+  // Reference this once, so that the getter is called at least once, and the
+  // initialization routines will run, no matter what.
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
@@ -98,7 +97,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 };
 
 GM_BrowserUI.contentLoad = function(event) {
-  if (!GM_getEnabled()) return;
+  if (!GM_util.getEnabled()) return;
 
   var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
@@ -120,7 +119,7 @@ GM_BrowserUI.contentLoad = function(event) {
 };
 
 GM_BrowserUI.pagehide = function(aEvent) {
-  var windowId = GM_windowIdForEvent(aEvent);
+  var windowId = GM_util.windowIdForEvent(aEvent);
   if (aEvent.persisted) {
     GM_BrowserUI.gmSvc.contentFrozen(windowId);
   } else {
@@ -129,7 +128,7 @@ GM_BrowserUI.pagehide = function(aEvent) {
 };
 
 GM_BrowserUI.pageshow = function(aEvent) {
-  var windowId = GM_windowIdForEvent(aEvent);
+  var windowId = GM_util.windowIdForEvent(aEvent);
   GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
@@ -204,7 +203,7 @@ GM_BrowserUI.observe = function(subject, topic, data) {
       GM_BrowserUI.installCurrentScript();
     }
   } else if (topic == "dom-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(GM_windowId(subject));
+    GM_BrowserUI.gmSvc.contentDestroyed(GM_util.windowId(subject));
   } else if (topic == "inner-window-destroyed") {
     GM_BrowserUI.gmSvc.contentDestroyed(
         subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);
@@ -225,7 +224,7 @@ GM_BrowserUI.installCurrentScript = function() {
 };
 
 GM_BrowserUI.installScript = function(script){
-  GM_getConfig().install(script);
+  GM_util.getService().config.install(script);
 
   var tools = {};
   Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
@@ -284,7 +283,7 @@ GM_BrowserUI.refreshStatus = function() {
   var enabledEl = document.getElementById("gm_toggle_enabled");
   var checkedEl = document.getElementById("gm_toggle_checked");
 
-  if (GM_getEnabled()) {
+  if (GM_util.getEnabled()) {
     checkedEl.setAttribute('checked', true);
     enabledEl.removeAttribute('disabled');
   } else {
@@ -331,7 +330,7 @@ function GM_popupClicked(aEvent) {
       script.enabled =! script.enabled;
     } else {
       // right-click: open in editor
-      GM_openInEditor(script);
+      GM_util.openInEditor(script);
     }
 
     closeMenus(aEvent.target);
@@ -369,7 +368,7 @@ function GM_showPopup(aEvent) {
       }
       return urls.some(testMatchURL);
     }
-    return GM_getConfig().getMatchingScripts(testMatchURLs);
+    return GM_util.getService().config.getMatchingScripts(testMatchURLs);
   }
 
   function appendScriptAfter(script, point) {
@@ -431,4 +430,9 @@ function GM_showPopup(aEvent) {
   // Delegate menu commands call.
   var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
   GM_MenuCommander.onPopupShowing(menuCommandPopup);
+}
+
+// Firefox 3.6: addons4-overlay is not loaded, so this is not defined.
+if (typeof GM_OpenScriptsMgr == "undefined") {
+  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
