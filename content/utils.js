@@ -109,7 +109,7 @@ function GM_scriptDir() {
 }
 
 function GM_installUri(uri, contentWin) {
-  var win = GM_getBrowserWindow();
+  var win = GM_util.getBrowserWindow();
   if (win && win.GM_BrowserUI) {
     win.GM_BrowserUI.startInstallScript(uri, contentWin);
     return true;
@@ -134,11 +134,4 @@ function GM_newUserScript() {
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
-}
-
-function GM_getBrowserWindow() {
-  return Components
-     .classes['@mozilla.org/appshell/window-mediator;1']
-     .getService(Components.interfaces.nsIWindowMediator)
-     .getMostRecentWindow("navigator:browser");
 }

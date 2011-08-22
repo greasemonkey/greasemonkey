@@ -446,7 +446,7 @@ Config.prototype._updateVersion = function() {
 
     if ("0.0" == initialized) {
       // This is the first launch.  Show the welcome screen.
-      var chromeWin = GM_getBrowserWindow();
+      var chromeWin = GM_util.getBrowserWindow();
       // If we found it, use it to open a welcome tab.
       if (chromeWin && chromeWin.gBrowser) {
         var url = 'http://www.greasespot.net/p/welcome.html?' + newVersion;
