@@ -37,7 +37,7 @@ function doInstall() {
 
   // finish making the script object ready to install
   // (put this created script into a file -- only way to install it)
-  var tempFile = GM_getTempFile();
+  var tempFile = GM_util.getTempFile();
   GM_util.writeToFile(scriptSrc, tempFile, function() {
     script.setDownloadedFile(tempFile);
 

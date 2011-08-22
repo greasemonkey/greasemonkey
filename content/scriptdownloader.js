@@ -174,7 +174,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 
-      var file = GM_getTempFile();
+      var file = GM_util.getTempFile();
       this.tempFiles_.push(file);
 
       persist.progressListener = new PersistProgressListener(

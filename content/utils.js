@@ -60,18 +60,6 @@ function GM_parseScriptName(sourceUrl) {
   return name;
 }
 
-function GM_getTempFile() {
-  var file = Components.classes["@mozilla.org/file/directory_service;1"]
-        .getService(Components.interfaces.nsIProperties)
-        .get("TmpD", Components.interfaces.nsILocalFile);
-
-  file.append("gm-temp");
-  file.createUnique(
-      Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
-
-  return file;
-}
-
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
 }
