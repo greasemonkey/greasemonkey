@@ -117,15 +117,6 @@ function GM_installUri(uri, contentWin) {
   return false;
 }
 
-function GM_scriptMatchesUrlAndRuns(script, url, when) {
-  return !script.pendingExec.length
-      && script.enabled
-      && !script.needsUninstall
-      && (script.runAt == when || 'any' == when)
-      && script.matchesURL(url);
-}
-
-
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
