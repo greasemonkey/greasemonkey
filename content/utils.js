@@ -52,14 +52,6 @@ function GM_log(message, force) {
   }
 }
 
-function GM_parseScriptName(sourceUrl) {
-  if (!sourceUrl) return '';
-  var name = sourceUrl;
-  name = name.substring(0, name.indexOf(".user.js"));
-  name = name.substring(name.lastIndexOf("/") + 1);
-  return name;
-}
-
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
 }
