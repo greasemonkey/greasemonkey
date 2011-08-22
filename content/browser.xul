@@ -55,6 +55,7 @@
     <menupopup
       onpopupshowing="GM_showPopup(event);"
       onclick="GM_popupClicked(event);"
+      oncontextmenu="event.preventDefault();"
       oncommand="event.stopPropagation();"
     >
       <menuitem class='gm-enabled-item'
