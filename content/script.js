@@ -369,8 +369,6 @@ Script.prototype._initFile = function(tempFile) {
   file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
   this._filename = file.leafName;
 
-  GM_log("Moving script file from " + tempFile.path + " to " + file.path);
-
   file.remove(true);
   tempFile.moveTo(file.parent, file.leafName);
 };

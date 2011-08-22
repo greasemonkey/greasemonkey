@@ -136,7 +136,6 @@ GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file)
 };
 
 GM_ScriptDownloader.prototype.fetchDependencies = function(){
-  GM_log("Fetching Dependencies");
   var deps = this.script.requires.concat(this.script.resources);
 
   // if this.script.icon has a url, then we need to download the image
@@ -181,7 +180,6 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
           dep, file, persist, this);
       persist.saveChannel(sourceChannel,  file);
     } catch(e) {
-      GM_log("Download exception " + e);
       this.errorInstallDependency(this.script, dep, e);
     }
   } else {
@@ -192,7 +190,6 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
 
 GM_ScriptDownloader.prototype.handleDependencyDownloadComplete =
 function(dep, file, channel) {
-  GM_log("Dependency Download complete " + dep.urlToDownload);
   var httpChannel = null;
   var contentType = null;
   var charSet = null;
@@ -291,7 +288,6 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
 
 GM_ScriptDownloader.prototype.errorInstallDependency =
 function(script, dep, msg) {
-  GM_log("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   if (this.installOnCompletion_) {
     alert("Error loading dependency " + dep.urlToDownload + "\n" + msg);
   } else {

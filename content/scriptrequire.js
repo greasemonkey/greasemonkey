@@ -42,8 +42,6 @@ ScriptRequire.prototype._initFile = function() {
       Components.interfaces.nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
   this._filename = file.leafName;
 
-  GM_log("Moving dependency file from " + this._tempFile.path + " to " + file.path);
-
   file.remove(true);
   this._tempFile.moveTo(file.parent, file.leafName);
   this._tempFile = null;
