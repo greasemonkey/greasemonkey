@@ -132,17 +132,6 @@ function GM_getUriFromFile(file) {
                    .newFileURI(file);
 }
 
-/** Runs nsIVersionComparator.compare() on the Firefox version. */
-function GM_compareFirefoxVersion(aTarget) {
-  var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]
-      .getService(Components.interfaces.nsIXULAppInfo);
-  var versionChecker = Components
-      .classes["@mozilla.org/xpcom/version-comparator;1"]
-      .getService(Components.interfaces.nsIVersionComparator);
-
-  return versionChecker.compare(appInfo.version, aTarget);
-}
-
 // Remove all children from an element.
 function GM_emptyEl(el) {
   while (el.firstChild) el.removeChild(el.firstChild);

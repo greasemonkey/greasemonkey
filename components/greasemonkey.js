@@ -167,12 +167,12 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   // Firefox 3.6 and higher supports 1.8.
-  if (GM_compareFirefoxVersion("3.6") >= 0) {
+  if (GM_util.compareFirefoxVersion("3.6") >= 0) {
     gMaxJSVersion = "1.8";
   }
 
   // Firefox <4 reports a different stack.fileName for the module.
-  if (GM_compareFirefoxVersion("4.0") < 0) {
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
     // Pull the name out of the variable the module exports.
     gmRunScriptFilename = GM_runScript_filename;
   }
