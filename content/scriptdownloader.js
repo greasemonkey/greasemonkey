@@ -1,4 +1,5 @@
-Components.utils.import("resource://greasemonkey/util.js");
+Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 var GM_ScriptDownloader;
 (function private_scope() {
@@ -107,13 +108,13 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     var base = this.script.name.replace(/[^A-Z0-9_]/gi, "").toLowerCase();
     file.append(base + ".user.js");
     file.createUnique(
-        Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_fileMask);
+        Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
     this.tempFiles_.push(file);
 
     function handleWriteComplete() {
     }
 
-    GM_writeToFile(source, file,
+    GM_util.writeToFile(source, file,
         GM_util.hitch(this, 'handleScriptDownloadWriteComplete', file));
   } catch (e) {
     // NOTE: unlocalized string

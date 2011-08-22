@@ -1,6 +1,7 @@
-Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import("resource://greasemonkey/util.js");
+Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 function Config() {
   this._saveTimer = null;
@@ -120,7 +121,7 @@ Config.prototype._save = function(saveNow) {
   var domSerializer = Components
       .classes["@mozilla.org/xmlextras/xmlserializer;1"]
       .createInstance(Components.interfaces.nsIDOMSerializer);
-  GM_writeToFile(domSerializer.serializeToString(doc), this._configFile);
+  GM_util.writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
 Config.prototype.parse = function(source, uri, updateScript) {
@@ -368,8 +369,8 @@ Config.prototype.move = function(script, destination) {
 Config.prototype._initScriptDir = function() {
   var dir = GM_scriptDir();
   if (!dir.exists()) {
-    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_directoryMask);
-    GM_writeToFile("<UserScriptConfig/>", this._configFile);
+    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
+    GM_util.writeToFile("<UserScriptConfig/>", this._configFile);
   }
 };
 

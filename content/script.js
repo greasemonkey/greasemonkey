@@ -1,6 +1,7 @@
+Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
-Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 function Script(configNode) {
@@ -361,11 +362,11 @@ Script.prototype._initFile = function(tempFile) {
   var nsIFile = Components.interfaces.nsIFile;
   var file = GM_scriptDir();
   file.append(name);
-  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_directoryMask);
+  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
   this._basedir = file.leafName;
 
   file.append(name + ".user.js");
-  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_fileMask);
+  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
   this._filename = file.leafName;
 
   GM_log("Moving script file from " + tempFile.path + " to " + file.path);
