@@ -11,7 +11,19 @@ var Cu = Components.utils;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
-var gmSvcFilename = Components.stack.filename;
+var gExtensionPath = (function() {
+  try {
+  // Turn the file:/// URL into an nsIFile ...
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var uri = ioService.newURI(Components.stack.filename, null, null);
+  var file = uri.QueryInterface(Components.interfaces.nsIFileURL).file
+  // ... to find the containing directory.
+  var dir = file.parent.parent;
+  // Then get the URL back for that path.
+  return ioService.newFileURI(dir).spec;
+  } catch (e) { dump(e+'\n'+uneval(e)+'\n\n'); return 'x'; }
+})();
 
 var gMaxJSVersion = "1.6";
 var gMenuCommands = [];
@@ -30,20 +42,20 @@ function GM_apiLeakCheck(apiName) {
   var stack = Components.stack;
 
   do {
-    // Valid stack frames for GM api calls are: native and js when coming from
-    // chrome:// URLs and the greasemonkey.js component's file:// URL.
-    if (2 == stack.language) {
-      // NOTE: In FF 2.0.0.0, I saw that stack.filename can be null for JS/XPCOM
-      // services. This didn't happen in FF 2.0.0.11; I'm not sure when it
-      // changed.
-      if (stack.filename != null &&
-          stack.filename != gmRunScriptFilename &&
-          stack.filename != gmSvcFilename &&
-          stack.filename.substr(0, 6) != "chrome") {
-        GM_logError(new Error("Greasemonkey access violation: unsafeWindow " +
-                    "cannot call " + apiName + "."));
-        return false;
-      }
+    // Valid locations for GM API calls are:
+    //  * Greasemonkey modules.
+    //  * Greasemonkey chrome.
+    //  * Greasemonkey extension by path. (FF 3 does this instead of the above.)
+    // Anything else on the stack and we will reject the API, to make sure that
+    // the content window (whose path would be e.g. http://...) has no access.
+    if (2 == stack.language
+        && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
+        && stack.filename.substr(0, 22) !== 'chrome://greasemonkey/'
+        && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
+        ) {
+      GM_logError(new Error("Greasemonkey access violation: " +
+          "unsafeWindow cannot call " + apiName + "."));
+      return false;
     }
 
     stack = stack.caller;
@@ -137,6 +149,7 @@ function startup() {
   gStartupHasRun = true;
 
   Cu.import(gmRunScriptFilename);
+  Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
   var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
