@@ -86,13 +86,9 @@ GM_BrowserUI.chromeLoad = function(e) {
       .classes["@mozilla.org/embedcomp/window-watcher;1"]
       .getService(Components.interfaces.nsIWindowWatcher);
 
-  // register for notifications from greasemonkey-service about ui type things
-  GM_BrowserUI.gmSvc = Components
-      .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
-      .getService(Components.interfaces.gmIGreasemonkeyService)
-      .wrappedJSObject;
-  // reference this once, so that the getter is called at least once, and the
-  // initialization routines will run, no matter what
+  GM_BrowserUI.gmSvc = GM_util.getService();
+  // Reference this once, so that the getter is called at least once, and the
+  // initialization routines will run, no matter what.
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();

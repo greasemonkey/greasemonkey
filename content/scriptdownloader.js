@@ -41,7 +41,7 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 };
 
 GM_ScriptDownloader.prototype.startDownload = function() {
-  GM_getService().ignoreNextScript();
+  GM_util.getService().ignoreNextScript();
 
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
@@ -75,7 +75,7 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
     // If there is a 'Content-Type' header and it contains 'text/html',
     // then do not install the file, display it instead.
     this.req_.abort();
-    GM_getService().ignoreNextScript();
+    GM_util.getService().ignoreNextScript();
     this.contentWindow_.location.assign(this.uri_.spec);
   } else {
     // Otherwise, let the user know that the install is happening.
@@ -274,7 +274,7 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
       if (GM_util.scriptMatchesUrlAndRuns(this.script, url)) {
-        GM_getService().injectScripts(
+        GM_util.getService().injectScripts(
             [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
       }
     }
