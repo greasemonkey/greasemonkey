@@ -96,18 +96,6 @@ function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }
 
-var GM_scriptDirCache = null;
-function GM_scriptDir() {
-  if (!GM_scriptDirCache) {
-    GM_scriptDirCache = Components
-        .classes["@mozilla.org/file/directory_service;1"]
-        .getService(Components.interfaces.nsIProperties)
-        .get("ProfD", Components.interfaces.nsILocalFile);
-    GM_scriptDirCache.append("gm_scripts");
-  }
-  return GM_scriptDirCache.clone();
-}
-
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }

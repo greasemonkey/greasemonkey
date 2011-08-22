@@ -157,7 +157,7 @@ function Script_getFile() {
 
 Script.prototype.__defineGetter__('_basedirFile',
 function Script_getBasedirFile() {
-  var file = GM_scriptDir();
+  var file = GM_util.scriptDir();
   file.append(this._basedir);
   try {
     // Can fail if this path does not exist.
@@ -360,7 +360,7 @@ Script.prototype._initFile = function(tempFile) {
   this._basedir = name;
 
   var nsIFile = Components.interfaces.nsIFile;
-  var file = GM_scriptDir();
+  var file = GM_util.scriptDir();
   file.append(name);
   file.createUnique(nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
   this._basedir = file.leafName;
@@ -465,7 +465,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
 Script.prototype.allFiles = function() {
   var files = [];
-  if (!this._basedirFile.equals(GM_scriptDir())) {
+  if (!this._basedirFile.equals(GM_util.scriptDir())) {
     files.push(this._basedirFile);
   }
   files.push(this.file);
@@ -493,7 +493,7 @@ Script.prototype.allFilesExist = function() {
 Script.prototype.uninstall = function(forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
-  if (this._basedirFile.equals(GM_scriptDir())) {
+  if (this._basedirFile.equals(GM_util.scriptDir())) {
     // if script is in the root, just remove the file
     try {
       this.file.remove(false);

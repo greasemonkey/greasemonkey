@@ -6,7 +6,7 @@ Components.utils.import('resource://greasemonkey/util.js');
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
-  this._configFile = GM_scriptDir();
+  this._configFile = GM_util.scriptDir();
   this._configFile.append("config.xml");
   this._initScriptDir();
 
@@ -367,7 +367,7 @@ Config.prototype.move = function(script, destination) {
  * Create an empty configuration if none exist.
  */
 Config.prototype._initScriptDir = function() {
-  var dir = GM_scriptDir();
+  var dir = GM_util.scriptDir();
   if (!dir.exists()) {
     dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
     GM_util.writeToFile("<UserScriptConfig/>", this._configFile);
