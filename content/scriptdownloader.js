@@ -1,3 +1,5 @@
+Components.utils.import("resource://greasemonkey/util.js");
+
 var GM_ScriptDownloader;
 (function private_scope() {
 
@@ -43,8 +45,8 @@ GM_ScriptDownloader.prototype.startDownload = function() {
   this.req_ = new XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
-  this.req_.onreadystatechange = GM_hitch(this, "checkContentTypeBeforeDownload");
-  this.req_.onload = GM_hitch(this, "handleScriptDownloadComplete");
+  this.req_.onreadystatechange = GM_util.hitch(this, "checkContentTypeBeforeDownload");
+  this.req_.onload = GM_util.hitch(this, "handleScriptDownloadComplete");
 
   // Fixes #1359.  See: http://goo.gl/EJ3FN
   var httpChannel = null;
@@ -112,7 +114,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     }
 
     GM_writeToFile(source, file,
-        GM_hitch(this, 'handleScriptDownloadWriteComplete', file));
+        GM_util.hitch(this, 'handleScriptDownloadWriteComplete', file));
   } catch (e) {
     // NOTE: unlocalized string
     alert("Script could not be installed " + e);
@@ -123,7 +125,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file) {
   this.script.setDownloadedFile(file);
 
-  window.setTimeout(GM_hitch(this, "fetchDependencies"), 0);
+  window.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
 
   if (this.installing_) {
     this.showInstallDialog();
@@ -316,7 +318,7 @@ GM_ScriptDownloader.prototype.cleanupTempFiles = function() {
 GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
   if (!timer) {
     // otherwise, the status bar stays in the loading state.
-    this.win_.setTimeout(GM_hitch(this, "showInstallDialog", true), 0);
+    this.win_.setTimeout(GM_util.hitch(this, "showInstallDialog", true), 0);
     return;
   }
   this.win_.openDialog("chrome://greasemonkey/content/install.xul", "",

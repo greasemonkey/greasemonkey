@@ -1,4 +1,5 @@
 Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import("resource://greasemonkey/util.js");
 
 function Config() {
   this._saveTimer = null;
@@ -97,7 +98,7 @@ Config.prototype._save = function(saveNow) {
     this._saveTimer = Components.classes["@mozilla.org/timer;1"]
         .createInstance(Components.interfaces.nsITimer);
 
-    var _save = GM_hitch(this, "_save"); // dereference 'this' for the closure
+    var _save = GM_util.hitch(this, "_save"); // dereference 'this' for the closure
     this._saveTimer.initWithCallback(
         {'notify': function() { _save(true); }}, 250,
         Components.interfaces.nsITimer.TYPE_ONE_SHOT);

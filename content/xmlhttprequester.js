@@ -1,3 +1,5 @@
+Components.utils.import("resource://greasemonkey/util.js");
+
 function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
   this.wrappedContentWin = wrappedContentWin;
   this.chromeWindow = chromeWindow;
@@ -33,7 +35,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "https":
     case "ftp":
         var req = new this.chromeWindow.XMLHttpRequest();
-        GM_hitch(this, "chromeStartRequest", url, details, req)();
+        GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
       throw new Error("Disallowed scheme in URL: " + details.url);
@@ -57,7 +59,7 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
-  var setupRequestEvent = GM_hitch(this, 'setupRequestEvent', this.wrappedContentWin);
+  var setupRequestEvent = GM_util.hitch(this, 'setupRequestEvent', this.wrappedContentWin);
 
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
@@ -159,7 +161,7 @@ function(wrappedContentWin, req, event, details) {
     }
 
     // Pop back onto browser thread and call event handler.
-    // Have to use nested function here instead of GM_hitch because
+    // Have to use nested function here instead of GM_util.hitch because
     // otherwise details[event].apply can point to window.setTimeout, which
     // can be abused to get increased privileges.
     new XPCNativeWrapper(wrappedContentWin, "setTimeout()")

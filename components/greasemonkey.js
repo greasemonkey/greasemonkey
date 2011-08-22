@@ -402,19 +402,19 @@ service.prototype.injectScripts = function(
     sandbox.GM_addStyle = function(css) {
           GM_addStyle(wrappedContentWin.document, css);
         };
-    sandbox.GM_log = GM_hitch(logger, "log");
+    sandbox.GM_log = GM_util.hitch(logger, "log");
     sandbox.console = console;
-    sandbox.GM_setValue = GM_hitch(storage, "setValue");
-    sandbox.GM_getValue = GM_hitch(storage, "getValue");
-    sandbox.GM_deleteValue = GM_hitch(storage, "deleteValue");
-    sandbox.GM_listValues = GM_hitch(storage, "listValues");
-    sandbox.GM_getResourceURL = GM_hitch(resources, "getResourceURL");
-    sandbox.GM_getResourceText = GM_hitch(resources, "getResourceText");
-    sandbox.GM_openInTab = GM_hitch(
+    sandbox.GM_setValue = GM_util.hitch(storage, "setValue");
+    sandbox.GM_getValue = GM_util.hitch(storage, "getValue");
+    sandbox.GM_deleteValue = GM_util.hitch(storage, "deleteValue");
+    sandbox.GM_listValues = GM_util.hitch(storage, "listValues");
+    sandbox.GM_getResourceURL = GM_util.hitch(resources, "getResourceURL");
+    sandbox.GM_getResourceText = GM_util.hitch(resources, "getResourceText");
+    sandbox.GM_openInTab = GM_util.hitch(
         this, "_openInTab", wrappedContentWin, chromeWin);
-    sandbox.GM_xmlhttpRequest = GM_hitch(xmlhttpRequester,
+    sandbox.GM_xmlhttpRequest = GM_util.hitch(xmlhttpRequester,
                                          "contentStartRequest");
-    sandbox.GM_registerMenuCommand = GM_hitch(
+    sandbox.GM_registerMenuCommand = GM_util.hitch(
         this, "_registerMenuCommand", wrappedContentWin, chromeWin, script);
 
     // Re-wrap the window before assigning it to the sandbox.__proto__
