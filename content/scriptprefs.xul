@@ -52,6 +52,6 @@
 </tabbox>
 
 <spacer height="5" />
-<button label="&Edit.tooltip;" oncommand="GM_openInEditor(gScript);" />
+<button label="&Edit.tooltip;" oncommand="GM_util.openInEditor(gScript);" />
 
 </dialog>

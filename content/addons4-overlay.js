@@ -4,6 +4,7 @@
 (function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
+Components.utils.import('resource://greasemonkey/util.js');
 
 var userScriptViewId = 'addons://list/user-script';
 
@@ -98,7 +99,7 @@ function init() {
 
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
-      doCommand: function(aAddon) { GM_openInEditor(aAddon._script); }
+      doCommand: function(aAddon) { GM_util.openInEditor(aAddon._script); }
     };
   gViewController.commands.cmd_userscript_show = {
       isEnabled: addonIsInstalledScript,

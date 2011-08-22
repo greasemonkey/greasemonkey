@@ -28,7 +28,7 @@
 <vbox>
   <groupbox>
     <caption label="&options.editor;" />
-    <button oncommand="GM_getEditor(true)" label="&options.changeEditor;" />
+    <button oncommand="GM_util.getEditor(true)" label="&options.changeEditor;" />
   </groupbox>
 
   <groupbox>

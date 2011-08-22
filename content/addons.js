@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 // Globals.
 var GM_config = GM_getConfig();
 var GM_uninstallQueue = {};
@@ -239,7 +241,7 @@ var greasemonkeyAddons = {
     var selectedListitem = gUserscriptsView.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
-      GM_openInEditor(script);
+      GM_util.openInEditor(script);
       break;
     case 'cmd_userscript_options':
       openDialog('chrome://greasemonkey/content/scriptprefs.xul#' + script.id);

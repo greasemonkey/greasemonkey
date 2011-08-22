@@ -1,4 +1,5 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 /////////////////////////////// global variables ///////////////////////////////
 
@@ -43,7 +44,7 @@ function doInstall() {
     // install this script
     config.install(script);
     // and fire up the editor!
-    GM_openInEditor(script);
+    GM_util.openInEditor(script);
     // persist namespace value
     GM_prefRoot.setValue("newscript_namespace", script.namespace);
 

@@ -1,4 +1,5 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 // this file is the JavaScript backing for the UI wrangling which happens in
 // browser.xul. It also initializes the Greasemonkey singleton which contains
@@ -333,7 +334,7 @@ function GM_popupClicked(aEvent) {
       script.enabled =! script.enabled;
     } else {
       // right-click: open in editor
-      GM_openInEditor(script);
+      GM_util.openInEditor(script);
     }
 
     closeMenus(aEvent.target);

@@ -1,6 +1,8 @@
 Components.utils.import("resource://gre/modules/NetUtil.jsm");
 Components.utils.import("resource://gre/modules/FileUtils.jsm");
 
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 // Load module-ized methods here for legacy access.
 Components.utils.import("resource://greasemonkey/utils.js");
 
@@ -52,101 +54,6 @@ function GM_log(message, force) {
   if (force || GM_prefRoot.getValue("logChrome", false)) {
     GM_consoleService.logStringMessage(message);
   }
-}
-
-function GM_openInEditor(script) {
-  var editor = GM_getEditor();
-  if (!editor) {
-    // The user did not choose an editor.
-    return;
-  }
-
-  try {
-    GM_launchApplicationWithDoc(editor, script.file);
-  } catch (e) {
-    // Something may be wrong with the editor the user selected. Remove so that
-    // next time they can pick a different one.
-    alert(GM_stringBundle.GetStringFromName("editor.could_not_launch") + "\n" + e);
-    GM_prefRoot.remove("editor");
-    throw e;
-  }
-}
-
-function GM_getEditor(change) {
-  var editorPath = GM_prefRoot.getValue("editor");
-
-  if (!change && editorPath) {
-    GM_log("Found saved editor preference: " + editorPath);
-
-    var editor;
-    try {
-      editor = Components.classes["@mozilla.org/file/local;1"]
-                   .createInstance(Components.interfaces.nsILocalFile);
-      editor.followLinks = true;
-      editor.initWithPath(editorPath);
-    } catch (e) {
-      editor = null;
-    }
-
-    // make sure the editor preference is still valid
-    if (editor && editor.exists() && editor.isExecutable()) {
-      return editor;
-    } else {
-      GM_log("Editor preference either does not exist or is not executable");
-      GM_prefRoot.remove("editor");
-    }
-  }
-
-  // Ask the user to choose a new editor. Sometimes users get confused and
-  // pick a non-executable file, so we set this up in a loop so that if they do
-  // that we can give them an error and try again.
-  while (true) {
-    GM_log("Asking user to choose editor...");
-    var nsIFilePicker = Components.interfaces.nsIFilePicker;
-    var filePicker = Components.classes["@mozilla.org/filepicker;1"]
-                               .createInstance(nsIFilePicker);
-
-    filePicker.init(window, GM_stringBundle.GetStringFromName("editor.prompt"),
-                    nsIFilePicker.modeOpen);
-    filePicker.appendFilters(nsIFilePicker.filterApplication);
-    filePicker.appendFilters(nsIFilePicker.filterAll);
-
-    if (filePicker.show() != nsIFilePicker.returnOK) {
-      // The user canceled, return null.
-      GM_log("User canceled file picker dialog");
-      return null;
-    }
-
-    GM_log("User selected: " + filePicker.file.path);
-
-    if (filePicker.file.exists() && filePicker.file.isExecutable()) {
-      GM_prefRoot.setValue("editor", filePicker.file.path);
-      return filePicker.file;
-    } else {
-      alert(GM_stringBundle.GetStringFromName("editor.please_pick_executable"));
-    }
-  }
-}
-
-function GM_launchApplicationWithDoc(appFile, docFile) {
-  var args=[docFile.path];
-
-  // For the mac, wrap with a call to "open".
-  var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
-                             .getService(Components.interfaces.nsIXULRuntime);
-  if ("Darwin"==xulRuntime.OS) {
-    args = ["-a", appFile.path, docFile.path];
-
-    appFile = Components.classes["@mozilla.org/file/local;1"]
-                        .createInstance(Components.interfaces.nsILocalFile);
-    appFile.followLinks = true;
-    appFile.initWithPath("/usr/bin/open");
-  }
-
-  var process = Components.classes["@mozilla.org/process/util;1"]
-                          .createInstance(Components.interfaces.nsIProcess);
-  process.init(appFile);
-  process.run(false, args, args.length);
 }
 
 function GM_parseScriptName(sourceUrl) {

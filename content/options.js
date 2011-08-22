@@ -1,4 +1,5 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 function GM_loadOptions() {
   document.getElementById("check-uninstall")
