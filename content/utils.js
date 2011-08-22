@@ -15,10 +15,6 @@ function GM_getConfig() {
   return GM_getService().config;
 }
 
-function GM_getEnabled() {
-  return GM_prefRoot.getValue("enabled", true);
-}
-
 function GM_setEnabled(enabled) {
   GM_prefRoot.setValue("enabled", enabled);
 }

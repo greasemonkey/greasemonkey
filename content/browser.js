@@ -101,7 +101,7 @@ GM_BrowserUI.chromeLoad = function(e) {
 };
 
 GM_BrowserUI.contentLoad = function(event) {
-  if (!GM_getEnabled()) return;
+  if (!GM_util.getEnabled()) return;
 
   var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
@@ -287,7 +287,7 @@ GM_BrowserUI.refreshStatus = function() {
   var enabledEl = document.getElementById("gm_toggle_enabled");
   var checkedEl = document.getElementById("gm_toggle_checked");
 
-  if (GM_getEnabled()) {
+  if (GM_util.getEnabled()) {
     checkedEl.setAttribute('checked', true);
     enabledEl.removeAttribute('disabled');
   } else {

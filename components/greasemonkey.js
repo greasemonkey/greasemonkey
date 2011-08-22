@@ -279,7 +279,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
   var ret = Ci.nsIContentPolicy.ACCEPT;
 
   // Don't intercept anything when GM is not enabled.
-  if (!GM_getEnabled()) {
+  if (!GM_util.getEnabled()) {
     return ret;
   }
 
@@ -363,7 +363,7 @@ service.prototype.runScripts = function(
     aRunWhen, aWrappedContentWin, aChromeWin
 ) {
   var url = aWrappedContentWin.document.location.href;
-  if (!GM_getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
+  if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
     this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
