@@ -207,7 +207,7 @@ GM_BrowserUI.observe = function(subject, topic, data) {
       GM_BrowserUI.installCurrentScript();
     }
   } else if (topic == "dom-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(GM_windowId(subject));
+    GM_BrowserUI.gmSvc.contentDestroyed(GM_util.windowId(subject));
   } else if (topic == "inner-window-destroyed") {
     GM_BrowserUI.gmSvc.contentDestroyed(
         subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);

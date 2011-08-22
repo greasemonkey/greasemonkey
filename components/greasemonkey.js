@@ -268,7 +268,7 @@ service.prototype._registerMenuCommand = function(
       accessKey: accessKey,
       commandFunc: commandFunc,
       contentWindow: wrappedContentWin,
-      contentWindowId: GM_windowId(wrappedContentWin),
+      contentWindowId: GM_util.windowId(wrappedContentWin),
       frozen: false};
   gMenuCommands.push(command);
 };
