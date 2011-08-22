@@ -313,7 +313,7 @@ Config.prototype.install = function(script) {
   }
 
   script._modified = script.file.lastModifiedTime;
-  script._dependhash = GM_sha1(script._rawMeta);
+  script._dependhash = GM_util.sha1(script._rawMeta);
 
   this._scripts.push(script);
 

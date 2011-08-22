@@ -1,38 +1,6 @@
-var EXPORTED_SYMBOLS = [
-    'GM_memoize',
-    'GM_uriFromUrl',
-    ];
+Components.utils.import('resource://greasemonkey/util.js');
 
-
-// Decorate a function with a memoization wrapper, with a limited-size cache
-// to reduce peak memory utilization.  Simple usage:
-//
-// function foo(arg1, arg2) { /* complex operation */ }
-// foo = GM_memoize(foo);
-//
-// The memoized function may have any number of arguments, but they must be
-// be serializable, and uniquely.  It's safest to use this only on functions
-// that accept primitives.
-function GM_memoize(func, limit) {
-  limit = limit || 3000;
-  var cache = {__proto__: null};
-  var keylist = [];
-
-  return function(a) {
-    var args = Array.prototype.slice.call(arguments);
-    var key = uneval(args);
-    if (key in cache) return cache[key];
-
-    var result = func.apply(null, args);
-
-    cache[key] = result;
-
-    if (keylist.push(key) > limit) delete cache[keylist.shift()];
-
-    return result;
-  }
-}
-
+var EXPORTED_SYMBOLS = ['GM_uriFromUrl'];
 
 function GM_uriFromUrl(url, base) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
@@ -51,4 +19,4 @@ function GM_uriFromUrl(url, base) {
     return null;
   }
 }
-GM_uriFromUrl = GM_memoize(GM_uriFromUrl);
+GM_uriFromUrl = GM_util.memoize(GM_uriFromUrl);

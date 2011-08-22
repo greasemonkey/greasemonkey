@@ -221,7 +221,7 @@ Script.prototype._loadFromConfigNode = function(node) {
         this.textContent, GM_uriFromUrl(this._downloadURL), !!this);
 
     this._modified = this.file.lastModifiedTime;
-    this._dependhash = GM_sha1(parsedScript._rawMeta);
+    this._dependhash = GM_util.sha1(parsedScript._rawMeta);
     this._version = parsedScript._version;
 
     GM_getConfig()._changed(this, "modified", null);
@@ -437,7 +437,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
 
-  var dependhash = GM_sha1(newScript._rawMeta);
+  var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
     this._dependhash = dependhash;
     this._icon = newScript._icon;

@@ -44,13 +44,13 @@ function GM_apiLeakCheck(apiName) {
   do {
     // Valid locations for GM API calls are:
     //  * Greasemonkey modules.
-    //  * Greasemonkey chrome.
+    //  * All of chrome.  (In the script update case, chrome will list values.)
     //  * Greasemonkey extension by path. (FF 3 does this instead of the above.)
     // Anything else on the stack and we will reject the API, to make sure that
     // the content window (whose path would be e.g. http://...) has no access.
     if (2 == stack.language
         && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
-        && stack.filename.substr(0, 22) !== 'chrome://greasemonkey/'
+        && stack.filename.substr(0, 9) !== 'chrome://'
         && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
         ) {
       GM_logError(new Error("Greasemonkey access violation: " +
