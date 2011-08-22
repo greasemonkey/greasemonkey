@@ -125,11 +125,6 @@ function GM_scriptMatchesUrlAndRuns(script, url, when) {
       && script.matchesURL(url);
 }
 
-function GM_newUserScript() {
-  window.openDialog(
-      "chrome://greasemonkey/content/newscript.xul", null,
-      "chrome,dependent,centerscreen,resizable,dialog");
-}
 
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
