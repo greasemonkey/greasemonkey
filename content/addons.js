@@ -104,7 +104,7 @@ window.addEventListener('load', function() {
   if ('undefined' != typeof DEFAULT_PERSONA_ID) {
     GM_overrideShowView();
     if ('userscripts' == gView) {
-      GM_logError(new Error(
+      GM_util.logError(new Error(
           'Warning: the Personas Plus extension is incompatible with'
           +' Greasemonkey.\nIt is not required to use personas; you are advised'
           +' to uninstall it.'));

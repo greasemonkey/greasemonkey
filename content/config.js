@@ -193,7 +193,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
             var match = new MatchPattern(value);
             script._matches.push(match);
           } catch (e) {
-            GM_logError("Ignoring @match pattern " + value + " because:\n" + e);
+            GM_util.logError("Ignoring @match pattern " + value + " because:\n" + e);
           }
           break;
         case "icon":

@@ -53,7 +53,7 @@ function GM_apiLeakCheck(apiName) {
         && stack.filename.substr(0, 9) !== 'chrome://'
         && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
         ) {
-      GM_logError(new Error("Greasemonkey access violation: " +
+      GM_util.logError(new Error("Greasemonkey access violation: " +
           "unsafeWindow cannot call " + apiName + "."));
       return false;
     }
@@ -129,16 +129,16 @@ function runScriptInSandbox(code, sandbox, script) {
         // Now that we know where the error is, find it (inside @requires if
         // necessary) in the script and log it.
         var err = findError(script, e.lineNumber);
-        GM_logError(
+        GM_util.logError(
              e, // error obj
              0, // 0 = error (1 = warning)
              err.uri, err.lineNumber);
       } else {
-        GM_logError(e);
+        GM_util.logError(e);
       }
     } catch (e) {
       // Do not raise (this would stop all scripts), log.
-      GM_logError(e);
+      GM_util.logError(e);
     }
   }
   return true; // did not need a (function() {...})() enclosure.

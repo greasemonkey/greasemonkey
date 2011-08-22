@@ -19,7 +19,7 @@ function getContents(file, charset) {
   try {
     var input = channel.open();
   } catch (e) {
-    GM_logError(new Error("Could not open file: " + file.path));
+    GM_util.logError(new Error("Could not open file: " + file.path));
     return "";
   }
 
