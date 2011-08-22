@@ -164,7 +164,7 @@ var greasemonkeyAddons = {
   },
 
   fillList: function() {
-    GM_emptyEl(gUserscriptsView);
+    GM_util.emptyEl(gUserscriptsView);
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {

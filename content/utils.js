@@ -132,11 +132,6 @@ function GM_getUriFromFile(file) {
                    .newFileURI(file);
 }
 
-// Remove all children from an element.
-function GM_emptyEl(el) {
-  while (el.firstChild) el.removeChild(el.firstChild);
-}
-
 function GM_isGreasemonkeyable(url) {
   var scheme = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService)
