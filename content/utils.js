@@ -72,22 +72,6 @@ function GM_getTempFile() {
   return file;
 }
 
-function GM_getBinaryContents(file) {
-    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
-
-    var channel = ioService.newChannelFromURI(GM_util.getUriFromFile(file));
-    var input = channel.open();
-
-    var bstream = Components.classes["@mozilla.org/binaryinputstream;1"]
-                            .createInstance(Components.interfaces.nsIBinaryInputStream);
-    bstream.setInputStream(input);
-
-    var bytes = bstream.readBytes(bstream.available());
-
-    return bytes;
-}
-
 function GM_getEnabled() {
   return GM_prefRoot.getValue("enabled", true);
 }

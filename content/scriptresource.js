@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptResource(script) {
   this._script = script || null;
 
@@ -31,7 +33,7 @@ function ScriptResource_getDataContent() {
       .getService(Components.interfaces.nsIAppShellService);
 
   var window = appSvc.hiddenDOMWindow;
-  var binaryContents = GM_getBinaryContents(this.file);
+  var binaryContents = GM_util.getBinaryContents(this.file);
 
   var mimetype = this._mimetype;
   if (this._charset && this._charset.length > 0) {
