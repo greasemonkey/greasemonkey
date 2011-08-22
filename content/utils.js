@@ -15,10 +15,6 @@ function GM_getConfig() {
   return GM_getService().config;
 }
 
-function GM_setEnabled(enabled) {
-  GM_prefRoot.setValue("enabled", enabled);
-}
-
 // Open the add-ons manager and show the installed user scripts.
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }

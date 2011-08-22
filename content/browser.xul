@@ -16,9 +16,9 @@
 
   <commandset>
     <!-- sync the 'disabled' attribute for toolbar button -->
-    <command id="gm_toggle_enabled" oncommand="GM_setEnabled(!GM_util.getEnabled());"/>
+    <command id="gm_toggle_enabled" oncommand="GM_util.setEnabled(!GM_util.getEnabled());"/>
     <!-- sync the 'checked' attribute for menu items -->
-    <command id="gm_toggle_checked" oncommand="GM_setEnabled(!GM_util.getEnabled());"/>
+    <command id="gm_toggle_checked" oncommand="GM_util.setEnabled(!GM_util.getEnabled());"/>
   </commandset>
 
   <toolbarpalette id='BrowserToolbarPalette'>
