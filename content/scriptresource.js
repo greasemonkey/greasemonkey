@@ -23,7 +23,7 @@ function ScriptResource_getFile() {
 });
 
 ScriptResource.prototype.__defineGetter__('textContent',
-function ScriptResource_getTextContent() { return GM_getContents(this.file); });
+function ScriptResource_getTextContent() { return GM_util.getContents(this.file); });
 
 ScriptResource.prototype.__defineGetter__('dataContent',
 function ScriptResource_getDataContent() {

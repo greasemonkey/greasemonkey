@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptIcon(script) {
   ScriptResource.call(this, script);
   this.type = "icon";
@@ -40,7 +42,7 @@ function ScriptIcon_getFileURL() {
   if (this._dataURI) {
     return this._dataURI;
   } else if (this._filename) {
-    return GM_getUriFromFile(this.file).spec;
+    return GM_util.getUriFromFile(this.file).spec;
   } else {
     return "chrome://greasemonkey/skin/userscript.png";
   }

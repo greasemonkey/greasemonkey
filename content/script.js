@@ -1,6 +1,7 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
 Components.utils.import("resource://greasemonkey/third-party/MatchPattern.js");
+Components.utils.import('resource://greasemonkey/util.js');
 
 function Script(configNode) {
   this._observers = [];
@@ -167,10 +168,10 @@ function Script_getBasedirFile() {
 });
 
 Script.prototype.__defineGetter__('fileURL',
-function Script_getFileURL() { return GM_getUriFromFile(this.file).spec; });
+function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; });
 
 Script.prototype.__defineGetter__('textContent',
-function Script_getTextContent() { return GM_getContents(this.file); });
+function Script_getTextContent() { return GM_util.getContents(this.file); });
 
 Script.prototype.__defineGetter__('size',
 function Script_getSize() {

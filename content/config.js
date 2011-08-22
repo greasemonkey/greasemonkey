@@ -66,7 +66,7 @@ Config.prototype._load = function() {
   var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser);
 
-  var configContents = GM_getContents(this._configFile);
+  var configContents = GM_util.getContents(this._configFile);
   var doc = domParser.parseFromString(configContents, "text/xml");
   var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null,
       7 /* XPathResult.ORDERED_NODE_SNAPSHOT_TYPE */,

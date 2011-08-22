@@ -390,7 +390,7 @@ var greasemonkeyDragObserver = {
     if ('text/uri-list' == dropData.flavour.contentType) {
       url = dropData.data;
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
-      url = GM_getUriFromFile(dropData.data).spec;
+      url = GM_util.getUriFromFile(dropData.data).spec;
     }
     dump("Dropped url: ["+url+"]\n");
     if (url && url.match(/\.user\.js$/)) {

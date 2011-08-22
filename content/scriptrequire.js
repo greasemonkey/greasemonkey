@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptRequire(script) {
   this._script = script;
 
@@ -17,11 +19,11 @@ function ScriptRequire_getFile() {
 
 ScriptRequire.prototype.__defineGetter__('fileURL',
 function ScriptRequire_getFileURL() {
-  return GM_getUriFromFile(this.file).spec;
+  return GM_util.getUriFromFile(this.file).spec;
 });
 
 ScriptRequire.prototype.__defineGetter__('textContent',
-function ScriptRequire_getTextContent() { return GM_getContents(this.file); });
+function ScriptRequire_getTextContent() { return GM_util.getContents(this.file); });
 
 ScriptRequire.prototype.__defineGetter__('urlToDownload',
 function ScriptRequire_getUrlToDownload() { return this._downloadURL; });
