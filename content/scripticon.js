@@ -19,8 +19,8 @@ ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
     this.dataUriError = true;
     throw new Error('@icon data: uri must be an image type');
   } else {
-    var resUri = GM_uriFromUrl(this._script._downloadURL);
-    this._downloadURL = GM_uriFromUrl(value, resUri).spec;
+    var resUri = GM_util.uriFromUrl(this._script._downloadURL);
+    this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;
   }
 });
 

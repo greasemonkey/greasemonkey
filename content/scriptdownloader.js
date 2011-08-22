@@ -169,7 +169,7 @@ GM_ScriptDownloader.prototype.downloadNextDependency = function(){
       var ioservice =
           Components.classes["@mozilla.org/network/io-service;1"]
           .getService(Components.interfaces.nsIIOService);
-      var sourceUri = GM_uriFromUrl(dep.urlToDownload);
+      var sourceUri = GM_util.uriFromUrl(dep.urlToDownload);
       var sourceChannel = ioservice.newChannelFromURI(sourceUri);
       sourceChannel.notificationCallbacks = new NotificationCallbacks();
 

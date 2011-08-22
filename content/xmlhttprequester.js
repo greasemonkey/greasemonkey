@@ -21,7 +21,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 
   try {
     // Validate and parse the (possibly relative) given URL.
-    var uri = GM_uriFromUrl(details.url, this.originUrl);
+    var uri = GM_util.uriFromUrl(details.url, this.originUrl);
     var url = uri.spec;
   } catch (e) {
     // A malformed URL won't be parsed properly.

@@ -219,7 +219,7 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.hasAttribute("version")
   ) {
     var parsedScript = GM_util.getService().config.parse(
-        this.textContent, GM_uriFromUrl(this._downloadURL), !!this);
+        this.textContent, GM_util.uriFromUrl(this._downloadURL), !!this);
 
     this._modified = this.file.lastModifiedTime;
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);

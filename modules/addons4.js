@@ -24,16 +24,6 @@ var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 var SCRIPT_ID_SUFFIX = '@greasespot.net';
 var SCRIPT_ADDON_TYPE = 'user-script';
 
-// Pull this helper method into this module scope; it's not module-ized yet.
-var GM_util.getService().config;
-(function() {
-var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-    .getService(Components.interfaces.mozIJSSubScriptLoader);
-var scope = {};
-loader.loadSubScript('chrome://greasemonkey/content/utils.js', scope);
-GM_util.getService().config = scope.GM_util.getService().config;
-})();
-
 ////////////////////////////////////////////////////////////////////////////////
 // Addons API Integration
 ////////////////////////////////////////////////////////////////////////////////

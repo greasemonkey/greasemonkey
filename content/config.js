@@ -212,7 +212,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
           break;
         case "require":
           try {
-            var reqUri = GM_uriFromUrl(value, uri);
+            var reqUri = GM_util.uriFromUrl(value, uri);
             var scriptRequire = new ScriptRequire(script);
             scriptRequire._downloadURL = reqUri.spec;
             script._requires.push(scriptRequire);
@@ -244,7 +244,7 @@ Config.prototype.parse = function(source, uri, updateScript) {
           }
 
           try {
-            var resUri = GM_uriFromUrl(res[2], uri);
+            var resUri = GM_util.uriFromUrl(res[2], uri);
             var scriptResource = new ScriptResource(script);
             scriptResource._name = resName;
             scriptResource._downloadURL = resUri.spec;
@@ -410,7 +410,7 @@ Config.prototype.updateModifiedScripts = function(safeWin, chromeWin) {
     if (0 == script.pendingExec.length) {
       var oldScriptId = new String(script.id);
       var parsedScript = this.parse(
-          script.textContent, GM_uriFromUrl(script._downloadURL), !!script);
+          script.textContent, GM_util.uriFromUrl(script._downloadURL), !!script);
       script.updateFromNewScript(parsedScript, safeWin, chromeWin);
       this._changed(script, "modified", oldScriptId, true);
     } else {

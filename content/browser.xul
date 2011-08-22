@@ -7,7 +7,6 @@
 <overlay id="greasemonkey-browser-overlay"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />

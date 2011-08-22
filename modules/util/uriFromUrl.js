@@ -1,14 +1,14 @@
 Components.utils.import('resource://greasemonkey/util.js');
 
-var EXPORTED_SYMBOLS = ['GM_uriFromUrl'];
+var EXPORTED_SYMBOLS = ['uriFromUrl'];
 
-function GM_uriFromUrl(url, base) {
+function uriFromUrl(url, base) {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
   var baseUri = null;
 
   if (typeof base === "string") {
-    baseUri = GM_uriFromUrl(base);
+    baseUri = GM_util.uriFromUrl(base);
   } else if (base) {
     baseUri = base;
   }
@@ -19,4 +19,4 @@ function GM_uriFromUrl(url, base) {
     return null;
   }
 }
-GM_uriFromUrl = GM_util.memoize(GM_uriFromUrl);
+uriFromUrl = GM_util.memoize(uriFromUrl);
