@@ -140,17 +140,6 @@ if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
 
-function GM_windowIdForEvent(aEvent) {
-  var doc = aEvent.originalTarget;
-  try {
-    doc.QueryInterface(Components.interfaces.nsIDOMHTMLDocument);
-  } catch (e) {
-    return null;
-  }
-
-  return GM_util.windowId(doc.defaultView);
-}
-
 function GM_getBrowserWindow() {
   return Components
      .classes['@mozilla.org/appshell/window-mediator;1']

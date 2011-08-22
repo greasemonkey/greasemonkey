@@ -123,7 +123,7 @@ GM_BrowserUI.contentLoad = function(event) {
 };
 
 GM_BrowserUI.pagehide = function(aEvent) {
-  var windowId = GM_windowIdForEvent(aEvent);
+  var windowId = GM_util.windowIdForEvent(aEvent);
   if (aEvent.persisted) {
     GM_BrowserUI.gmSvc.contentFrozen(windowId);
   } else {
@@ -132,7 +132,7 @@ GM_BrowserUI.pagehide = function(aEvent) {
 };
 
 GM_BrowserUI.pageshow = function(aEvent) {
-  var windowId = GM_windowIdForEvent(aEvent);
+  var windowId = GM_util.windowIdForEvent(aEvent);
   GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
