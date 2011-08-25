@@ -26,7 +26,7 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Cambiar Editor">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "Script de Usuario(secuencia de comandos)">
+<!ENTITY userscripts "Script de Usuario">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AlsoUninstallPrefs "También desinstalar preferencias asociadas">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
