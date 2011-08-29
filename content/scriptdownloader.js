@@ -279,7 +279,9 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
       }
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
-      if (GM_util.scriptMatchesUrlAndRuns(this.script, url)) {
+      var shouldRun = GM_util.scriptMatchesUrlAndRuns(
+          this.script, url, this.script.runAt);
+      if (shouldRun) {
         GM_util.getService().injectScripts(
             [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
       }
