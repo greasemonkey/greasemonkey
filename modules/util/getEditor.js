@@ -1,6 +1,13 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
 const EXPORTED_SYMBOLS = ['getEditor'];
+var stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
+const EDITOR_PROMPT = stringBundle.GetStringFromName("editor.prompt");
+const PICK_EXE = stringBundle.GetStringFromName("editor.please_pick_executable");
 
 function getEditor(change) {
   var editorPath = GM_prefRoot.getValue("editor");
@@ -9,7 +16,7 @@ function getEditor(change) {
     var editor;
     try {
       editor = Components.classes["@mozilla.org/file/local;1"]
-                   .createInstance(Components.interfaces.nsILocalFile);
+          .createInstance(Components.interfaces.nsILocalFile);
       editor.followLinks = true;
       editor.initWithPath(editorPath);
     } catch (e) {
@@ -30,10 +37,10 @@ function getEditor(change) {
   while (true) {
     var nsIFilePicker = Components.interfaces.nsIFilePicker;
     var filePicker = Components.classes["@mozilla.org/filepicker;1"]
-                               .createInstance(nsIFilePicker);
+        .createInstance(nsIFilePicker);
 
-    filePicker.init(window, GM_stringBundle.GetStringFromName("editor.prompt"),
-                    nsIFilePicker.modeOpen);
+    filePicker.init(
+        GM_util.getBrowserWindow(), EDITOR_PROMPT, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApplication);
     filePicker.appendFilters(nsIFilePicker.filterAll);
 
@@ -46,7 +53,7 @@ function getEditor(change) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
       return filePicker.file;
     } else {
-      alert(GM_stringBundle.GetStringFromName("editor.please_pick_executable"));
+      alert(PICK_EXE);
     }
   }
 }
