@@ -70,8 +70,7 @@ function createSandbox(
   var unsafeWin = aContentWin.wrappedJSObject;
   var sandbox = new Components.utils.Sandbox(aContentWin);
 
-  // Re-wrap, fixes eval().  See #1258
-  sandbox.__proto__ = new XPCNativeWrapper(unsafeWin);
+  sandbox.__proto__ = aContentWin;
   sandbox.unsafeWindow = unsafeWin;
   sandbox.XPathResult = Ci.nsIDOMXPathResult;
 
