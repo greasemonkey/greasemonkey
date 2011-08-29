@@ -70,15 +70,15 @@ function createSandbox(
   var unsafeWin = aContentWin.wrappedJSObject;
   var sandbox = new Components.utils.Sandbox(aContentWin);
 
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
+    // Fixes .. something confusing.  Must be before __proto__ assignment.
+    //  See #1192
+    sandbox.document = aContentWin.document;
+  }
+
   sandbox.__proto__ = aContentWin;
   sandbox.unsafeWindow = unsafeWin;
   sandbox.XPathResult = Ci.nsIDOMXPathResult;
-
-  if (GM_util.compareFirefoxVersion("4.0") < 0) {
-    // Fixes .. something confusing.  See #1192
-    Components.utils.evalInSandbox(
-        "var document = window.document;", sandbox);
-  }
 
   // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
   sandbox.alert = alert;
