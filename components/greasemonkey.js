@@ -25,7 +25,9 @@ var gExtensionPath = (function() {
   } catch (e) { dump(e+'\n'+uneval(e)+'\n\n'); return 'x'; }
 })();
 
-var gMaxJSVersion = "1.6";
+// Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
+var gMaxJSVersion = "1.8";
+
 var gMenuCommands = [];
 var gStartupHasRun = false;
 
@@ -272,9 +274,8 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  // Firefox 3.6 and higher supports 1.8.
-  if (GM_util.compareFirefoxVersion("3.6") >= 0) {
-    gMaxJSVersion = "1.8";
+  if (GM_util.compareFirefoxVersion("4.0") >= 0) {
+    gMaxJSVersion = "ECMAv5";
   }
 
   // Firefox <4 reports a different stack.fileName for the module.
