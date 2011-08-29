@@ -452,8 +452,15 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       if (!nextFile.equals(this.file)) nextFile.remove(true);
     }
 
-    // Store window references for late injection
-    this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+    // Store window references for late injection.
+    if ('document-start' == this._runAt) {
+      GM_util.logError(
+          this.id + "\nNot running at document-start; waiting for update ...",
+          true);
+      this.pendingExec.push('document-start update');
+    } else {
+      this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+    }
 
     // Redownload dependencies.
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);

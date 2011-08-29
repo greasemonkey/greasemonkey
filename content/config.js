@@ -398,11 +398,12 @@ Config.prototype.getMatchingScripts = function(testFunc) {
   return this._scripts.filter(testFunc);
 };
 
-Config.prototype.updateModifiedScripts = function(safeWin, chromeWin) {
+Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
   // Find any updated scripts or scripts with delayed injection
   var scripts = this.getMatchingScripts(
       function (script) {
-        return script.isModified() || 0 != script.pendingExec.length;
+        return script.runAt == aWhen
+            && (script.isModified() || 0 != script.pendingExec.length);
       });
   if (0 == scripts.length) return;
 
@@ -411,12 +412,12 @@ Config.prototype.updateModifiedScripts = function(safeWin, chromeWin) {
       var oldScriptId = new String(script.id);
       var parsedScript = this.parse(
           script.textContent, GM_util.uriFromUrl(script._downloadURL), !!script);
-      script.updateFromNewScript(parsedScript, safeWin, chromeWin);
+      script.updateFromNewScript(parsedScript, aSafeWin, aChromeWin);
       this._changed(script, "modified", oldScriptId, true);
     } else {
       // We are already downloading dependencies for this script
       // so add its window to the list
-      script.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+      script.pendingExec.push({'safeWin': aSafeWin, 'chromeWin': aChromeWin});
     }
   }
 

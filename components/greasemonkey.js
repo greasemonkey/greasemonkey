@@ -409,7 +409,7 @@ service.prototype.runScripts = function(
   if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-    this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
+    this._config.updateModifiedScripts(aRunWhen, aWrappedContentWin, aChromeWin);
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
