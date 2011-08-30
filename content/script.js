@@ -462,9 +462,16 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
     }
 
-    // Redownload dependencies.
+    // Re-download dependencies.  The timer guarantees that it will
+    // reliably complete after the normal document-end time.  (See #1402; going
+    // from some -> no requires means this is a short-circuit call.)
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    scriptDownloader.startUpdateScript(this);
+    var timer = Components.classes["@mozilla.org/timer;1"]
+        .createInstance(Components.interfaces.nsITimer);
+    var that = this; // closure-passing safe "this" reference.
+    timer.initWithCallback(
+        {'notify': function() { scriptDownloader.startUpdateScript(that); }},
+        0, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
   }
 };
 
