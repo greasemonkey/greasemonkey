@@ -1,21 +1,21 @@
 <!ENTITY menu.install "Parancsfájl telepítése">
-<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.install.accesskey "t">
 <!ENTITY menu.show "Parancsfájl forrásának megtekintése">
-<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.show.accesskey "f">
 <!ENTITY menu.commands "Parancsfájl beállításai...">
-<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.commands.accesskey "b">
 <!ENTITY menu.new "Új parancsfájl...">
-<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.new.accesskey "p">
 <!ENTITY menu.manage "Parancsfájlok kezelése...">
-<!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "Nincs parancsfájl telepítve!">
+<!ENTITY menu.manage.accesskey "k">
 <!ENTITY statusbar.enabled "Engedélyezve">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey telepítés">
 <!ENTITY install.runson "fut a következőn:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "nem fut a következőn:">
-<!ENTITY install.warning1 "Kártékony parancsfájlok hozzáférhetnek a személyes adataidhoz és működhetnek a tudtod nélkül.">
-<!ENTITY install.warning2 "Csak megbízható forrásból telepíts parancsfájlt!">
+<!ENTITY install.warning1 "Kártékony parancsfájlok hozzáférhetnek az Ön személyes adataihoz és működhetnek az Ön tudta nélkül.">
+<!ENTITY install.warning2 "Csak megbízható forrásból telepítsen parancsfájlt!">
 <!ENTITY install.showscriptsource "Parancsfájl forrásának megtekintése">
 <!ENTITY install.installbutton "Telepítés">
 <!ENTITY newscript.name "Név">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
 <!ENTITY options.editor "Szerkesztő">
 <!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Parancsfájlok">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">
+<!ENTITY greasemonkey.noscriptshere "Ezen az oldalon nem futnak telepített parancsfájlok.">
+<!ENTITY greasemonkey.youhavenoscripts "Nincsenek parancsfájlok telepítve">
+<!ENTITY greasemonkey.getuserscripts "Töltsön le parancsfájlokat!">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

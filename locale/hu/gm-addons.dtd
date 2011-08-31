@@ -1,27 +1,33 @@
 <!ENTITY Edit "Szerkesztés">
-<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.accesskey "S">
 <!ENTITY Edit.tooltip "Parancsfájl szerkesztése">
 <!ENTITY ExecuteFirst "Végrehajtás elsőként">
 <!ENTITY ExecuteLast "Végrehajtás utolsóként">
 <!ENTITY ExecuteLater "Végrehajtás később">
 <!ENTITY ExecuteSooner "Végrehajtás előbb">
 <!ENTITY MoveDown "Mozgatás lefele">
-<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveDown.accesskey "l">
 <!ENTITY MoveToBottom "Mozgatás legalulra">
-<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToBottom.accesskey "a">
 <!ENTITY MoveToTop "Mozgatás legfelülre">
-<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveToTop.accesskey "f">
 <!ENTITY MoveUp "Mozgatás felfelé">
-<!ENTITY MoveUp.accesskey "U">
+<!ENTITY MoveUp.accesskey "f">
 <!ENTITY NewScript "Új parancsfájl létrehozása">
-<!ENTITY NewScript.accesskey "C">
+<!ENTITY NewScript.accesskey "p">
 <!ENTITY Show "Tartalmazó mappa megnyitása">
-<!ENTITY Show.accesskey "S">
+<!ENTITY Show.accesskey "m">
+<!ENTITY Sort.ByStatus "Rendezés állapot szerint">
+<!ENTITY Sort.Status "Állapot">
+<!ENTITY Sort.ByName "Rendezés név szerint">
+<!ENTITY Sort.Name "Név">
+<!ENTITY Sort.ByExecution "Rendezés végrehajtási sorrend szerint">
+<!ENTITY Sort.Execution "Végrehajtási sorrend">
 <!ENTITY SortScripts "Parancsfájlok sorba rendezése">
-<!ENTITY SortScripts.accesskey "S">
+<!ENTITY SortScripts.accesskey "r">
 <!ENTITY UninstallCancel "Eltávolítás visszavonása">
-<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.accesskey "v">
 <!ENTITY UninstallCancel.tooltip "Parancsfájl eltávolításának visszavonása">
-<!ENTITY UninstallCancelDescription "A parancsfájl el lesz távolítva az ablak bezárása után (vagy kattints jobb gombra az azonnali eltávolításhoz)">
+<!ENTITY UninstallCancelDescription "A parancsfájl el lesz távolítva az ablak bezárása után. (vagy kattintson jobb gombbal majd az &quot;Eltávolítás most&quot;-ra)">
 <!ENTITY UninstallNow "Eltávolítás most">
-<!ENTITY UninstallNow.accesskey "N">
+<!ENTITY UninstallNow.accesskey "t">

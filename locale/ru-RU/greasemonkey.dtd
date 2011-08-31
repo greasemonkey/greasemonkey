@@ -8,11 +8,11 @@
 <!ENTITY menu.new.accesskey "в">
 <!ENTITY menu.manage "Управление скриптами...">
 <!ENTITY menu.manage.accesskey "п">
-<!ENTITY statusbar.noscripts "Нет установленных скриптов!">
 <!ENTITY statusbar.enabled "Включить Greasemonkey">
 <!ENTITY statusbar.enabled.accesskey "к">
 <!ENTITY install.title "Установка скриптов Greasemonkey">
 <!ENTITY install.runson "Охватываемые адреса:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "Исключаемые адреса:">
 <!ENTITY install.warning1 "Злонамеренные скрипты могут нарушить конфиденциальность Вашей информации и использовать её в недобросовестных целях.">
 <!ENTITY install.warning2 "Устанавливайте скрипты только из тех источников, которым вы доверяете.">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
 <!ENTITY options.editor "Редактор">
 <!ENTITY options.changeEditor "Изменить редактор">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Пользовательские скрипты">
 <!ENTITY Uninstall "Удалить">
 <!ENTITY AlsoUninstallPrefs "Также удалить все связанные настройки">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

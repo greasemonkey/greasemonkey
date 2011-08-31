@@ -1,0 +1,33 @@
+<!ENTITY Edit "עריכה">
+<!ENTITY Edit.accesskey "ע">
+<!ENTITY Edit.tooltip "ערוך סקריפט זה">
+<!ENTITY ExecuteFirst "בצע תחילה">
+<!ENTITY ExecuteLast "בצע בסוף">
+<!ENTITY ExecuteLater "בצע מאוחר יותר">
+<!ENTITY ExecuteSooner "בצע מוקדם יותר">
+<!ENTITY MoveDown "הזז למטה">
+<!ENTITY MoveDown.accesskey "ט">
+<!ENTITY MoveToBottom "הזז לסוף הרשימה">
+<!ENTITY MoveToBottom.accesskey "ת">
+<!ENTITY MoveToTop "הזז לראש הרשימה">
+<!ENTITY MoveToTop.accesskey "ר">
+<!ENTITY MoveUp "הזז למעלה">
+<!ENTITY MoveUp.accesskey "ע">
+<!ENTITY NewScript "צור סקריפט חדש">
+<!ENTITY NewScript.accesskey "צ">
+<!ENTITY Show "הצג תיקייה מכילה">
+<!ENTITY Show.accesskey "ג">
+<!ENTITY Sort.ByStatus "מיין לפי מצב">
+<!ENTITY Sort.Status "מצב">
+<!ENTITY Sort.ByName "מיין לפי שם">
+<!ENTITY Sort.Name "שם">
+<!ENTITY Sort.ByExecution "מיין לפי סדר ביצוע">
+<!ENTITY Sort.Execution "סדר ביצוע">
+<!ENTITY SortScripts "מיין סקריפטים">
+<!ENTITY SortScripts.accesskey "ס">
+<!ENTITY UninstallCancel "ביטול הסר התקנה">
+<!ENTITY UninstallCancel.accesskey "ב">
+<!ENTITY UninstallCancel.tooltip "ביטול הסרת התקנה של סקריפט משתמש זה">
+<!ENTITY UninstallCancelDescription "סקריפט משתמש זה יוסר עם סגירת תיבת הדו-שיח. (או לחץ לחיצה ימנית על &quot;הסר עכשיו&quot;.)">
+<!ENTITY UninstallNow "הסר עכשיו">
+<!ENTITY UninstallNow.accesskey "ס">

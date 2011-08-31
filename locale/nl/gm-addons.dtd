@@ -1,27 +1,33 @@
 <!ENTITY Edit "Bewerken">
-<!ENTITY Edit.accesskey "w">
+<!ENTITY Edit.accesskey "W">
 <!ENTITY Edit.tooltip "Dit gebruikersscript bewerken">
 <!ENTITY ExecuteFirst "Als eerste uitvoeren">
 <!ENTITY ExecuteLast "Als laatste uitvoeren">
 <!ENTITY ExecuteLater "Later uitvoeren">
 <!ENTITY ExecuteSooner "Eerder uitvoeren">
 <!ENTITY MoveDown "Omlaag">
-<!ENTITY MoveDown.accesskey "l">
-<!ENTITY MoveToBottom "Naar onderzijde">
+<!ENTITY MoveDown.accesskey "L">
+<!ENTITY MoveToBottom "Onderaan plaatsen">
 <!ENTITY MoveToBottom.accesskey "O">
-<!ENTITY MoveToTop "Naar bovenzijde">
+<!ENTITY MoveToTop "Bovenaan plaatsen">
 <!ENTITY MoveToTop.accesskey "B">
 <!ENTITY MoveUp "Omhoog">
-<!ENTITY MoveUp.accesskey "h">
-<!ENTITY NewScript "Nieuw script maken">
+<!ENTITY MoveUp.accesskey "H">
+<!ENTITY NewScript "Nieuw script aanmaken">
 <!ENTITY NewScript.accesskey "M">
 <!ENTITY Show "Map weergeven">
 <!ENTITY Show.accesskey "g">
+<!ENTITY Sort.ByStatus "Op status sorteren">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Op naam sorteren">
+<!ENTITY Sort.Name "Naam">
+<!ENTITY Sort.ByExecution "Op uitvoervolgorde sorteren">
+<!ENTITY Sort.Execution "Uitvoervolgorde">
 <!ENTITY SortScripts "Scripts sorteren">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "Deïnstallatie annuleren">
 <!ENTITY UninstallCancel.accesskey "D">
 <!ENTITY UninstallCancel.tooltip "Deïnstallatie van dit gebruikersscript annuleren">
-<!ENTITY UninstallCancelDescription "Dit gebruikersscript wordt gedeïnstalleerd na sluiten van het venster. (Of gebruik rechtsklik voor ‘Nu deïnstalleren’.)">
+<!ENTITY UninstallCancelDescription "Dit gebruikersscript wordt gedeïnstalleerd na sluiten van het venster. (Of gebruik de rechter muisknop voor &quot;Nu deïnstalleren&quot;.)">
 <!ENTITY UninstallNow "Nu deïnstalleren">
 <!ENTITY UninstallNow.accesskey "N">

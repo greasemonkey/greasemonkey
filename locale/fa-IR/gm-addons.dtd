@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "س">
 <!ENTITY Show "Show Containing Folder">
 <!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "مرتب کردن بر اساس وضعیت">
+<!ENTITY Sort.Status "وضعیت">
+<!ENTITY Sort.ByName "مرتب کردن بر اساس نام">
+<!ENTITY Sort.Name "نام">
+<!ENTITY Sort.ByExecution "مرتب کردن بر اساس ترتیب اجرا">
+<!ENTITY Sort.Execution "ترتیب اجرا">
 <!ENTITY SortScripts "مرتب سازی نویسه ها">
 <!ENTITY SortScripts.accesskey "م">
 <!ENTITY UninstallCancel "لغو عزل">

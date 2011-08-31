@@ -1,0 +1,37 @@
+<!ENTITY menu.install "Установить скрипт…">
+<!ENTITY menu.install.accesskey "и">
+<!ENTITY menu.show "Показать код скрипта">
+<!ENTITY menu.show.accesskey "о">
+<!ENTITY menu.commands "Команды скриптов">
+<!ENTITY menu.commands.accesskey "м">
+<!ENTITY menu.new "Создать скрипт…">
+<!ENTITY menu.new.accesskey "с">
+<!ENTITY menu.manage "Управление скриптами...">
+<!ENTITY menu.manage.accesskey "п">
+<!ENTITY statusbar.enabled "Включить Greasemonkey">
+<!ENTITY statusbar.enabled.accesskey "к">
+<!ENTITY install.title "Установка скриптов Greasemonkey">
+<!ENTITY install.runson "Охватываемые адреса:">
+<!ENTITY install.matches "matches:">
+<!ENTITY install.butnoton "Исключаемые адреса:">
+<!ENTITY install.warning1 "Вредоносные скрипты могут собирать конфиденциальную информацию и действовать от вашего имени.">
+<!ENTITY install.warning2 "Устанавливайте скрипты только из доверенных источников.">
+<!ENTITY install.showscriptsource "Показать код скрипта">
+<!ENTITY install.installbutton "Начать установку">
+<!ENTITY newscript.name "Название">
+<!ENTITY newscript.namespace "Пространство имен">
+<!ENTITY newscript.description "Описание">
+<!ENTITY newscript.includes "Включения (одно на строку)">
+<!ENTITY newscript.excludes "Исключения (одно на строку)">
+<!ENTITY options.editor "Редактор">
+<!ENTITY options.changeEditor "Изменить редактор">
+<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY userscripts "Пользовательские скрипты">
+<!ENTITY Uninstall "Удаление">
+<!ENTITY AlsoUninstallPrefs "Также удалять настройки скриптов">
+<!ENTITY greasemonkey.noscriptshere "Для этой страницы нет скриптов">
+<!ENTITY greasemonkey.youhavenoscripts "У вас не установлено ни одного скрипта">
+<!ENTITY greasemonkey.getuserscripts "Скачать скрипты">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

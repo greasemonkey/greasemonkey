@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Введіть нову адресу. Ви можете вказувати множини адрес за допомогою символу зірочка (*).">
+<!ENTITY promptForNewPage.title "Додати адресу сторінки">
+<!ENTITY promptForNewPage.defVal "http://site.org.ua/*">
+<!ENTITY promptForEdit.msg "Змініть адресу сторінки. Ви можете вказувати множини адрес за допомогою символу зірочка (*).">
+<!ENTITY promptForEdit.title "Редагувати сторінку">
+<!ENTITY button.add "Додати...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "Редагувати...">
+<!ENTITY button.remove "Вилучити">
+<!ENTITY label.grpIncluded "Охоплені сторінки">
+<!ENTITY label.grpExcluded "Сторінки-винятки">

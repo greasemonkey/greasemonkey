@@ -8,11 +8,11 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "ユーザスクリプトの管理...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "スクリプトはインストールされていません!">
 <!ENTITY statusbar.enabled "有効">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey インストール">
 <!ENTITY install.runson "実行するページ:">
+<!ENTITY install.matches "一致:">
 <!ENTITY install.butnoton "実行しないページ:">
 <!ENTITY install.warning1 "悪意のあるスクリプトはあなたのプライバシーを侵害し、あなたになり代わって活動します。">
 <!ENTITY install.warning2 "信頼できるソースからのみスクリプトをインストールすべきです。">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
 <!ENTITY options.editor "エディタ">
 <!ENTITY options.changeEditor "エディタを変更">
+<!ENTITY options.globalExcludes "どれも実行しないページ">
 <!ENTITY userscripts "ユーザスクリプト">
 <!ENTITY Uninstall "削除">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
+<!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">
+<!ENTITY greasemonkey.youhavenoscripts "スクリプトが何もインストールされていません">
+<!ENTITY greasemonkey.getuserscripts "スクリプトを入手">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

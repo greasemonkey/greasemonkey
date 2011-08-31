@@ -6,7 +6,8 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup', 
+var EXPORTED_SYMBOLS = ['GM_addonsStartup',
+                        'SCRIPT_ADDON_TYPE',
                         'ScriptInstall', 
                         'ScriptAddonFactoryByScript', 
                         'ScriptAddonReplaceScript'];
@@ -18,40 +19,29 @@ var EXPORTED_SYMBOLS = ['GM_addonsStartup',
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
+Components.utils.import('resource://greasemonkey/util.js');
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const NS_XHTML = 'http://www.w3.org/1999/xhtml';
-const SCRIPT_ID_SUFFIX = '@greasespot.net';
-
-var winMediator = Cc["@mozilla.org/appshell/window-mediator;1"]
-  .getService(Ci.nsIWindowMediator);
-
-// Pull this helper method into this module scope; it's not module-ized yet.
-var GM_getConfig;
-(function() {
-var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-    .getService(Components.interfaces.mozIJSSubScriptLoader);
-var scope = {};
-loader.loadSubScript('chrome://greasemonkey/content/utils.js', scope);
-GM_getConfig = scope.GM_getConfig;
-})();
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var NS_XHTML = 'http://www.w3.org/1999/xhtml';
+var SCRIPT_ID_SUFFIX = '@greasespot.net';
+var SCRIPT_ADDON_TYPE = 'user-script';
 
 ////////////////////////////////////////////////////////////////////////////////
 // Addons API Integration
 ////////////////////////////////////////////////////////////////////////////////
 
 var AddonProvider = {
-  getAddonByID: function(aId, aCallback) {
+  getAddonByID: function AddonProvider_getAddonByID(aId, aCallback) {
     aCallback(ScriptAddonFactoryById(aId));
   },
 
-  getAddonsByTypes: function(aTypes, aCallback) {
-    if (aTypes && aTypes.indexOf('user-script') < 0) {
+  getAddonsByTypes: function AddonProvider_getAddonsByTypes(aTypes, aCallback) {
+    if (aTypes && aTypes.indexOf(SCRIPT_ADDON_TYPE) < 0) {
       aCallback([]);
     } else {
       var scriptAddons = [];
-      GM_getConfig().scripts.forEach(function(script) {
+      GM_util.getService().config.scripts.forEach(function(script) {
         scriptAddons.push(ScriptAddonFactoryByScript(script));
       });
       aCallback(scriptAddons);
@@ -85,7 +75,7 @@ function ScriptAddonFactoryByScript(aScript) {
   return ScriptAddonCache[id];
 }
 function ScriptAddonFactoryById(aId) {
-  var scripts = GM_getConfig().getMatchingScripts(
+  var scripts = GM_util.getService().config.getMatchingScripts(
       function(script) {
         return (script.id + SCRIPT_ID_SUFFIX) == aId;
       });
@@ -96,8 +86,8 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddonReplaceScript(aScript) {
   var id = aScript.id + SCRIPT_ID_SUFFIX;
   ScriptAddonCache[id] = new ScriptAddon(aScript);
+  return ScriptAddonCache[id];
 }
-
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon
 function ScriptAddon(aScript) {
@@ -115,7 +105,7 @@ function ScriptAddon(aScript) {
 // Required attributes.
 ScriptAddon.prototype.id = null;
 ScriptAddon.prototype.version = null;
-ScriptAddon.prototype.type = 'user-script';
+ScriptAddon.prototype.type = SCRIPT_ADDON_TYPE;
 ScriptAddon.prototype.isCompatible = true;
 ScriptAddon.prototype.providesUpdatesSecurely = true;
 ScriptAddon.prototype.blocklistState = 0;
@@ -136,18 +126,23 @@ ScriptAddon.prototype._script = null;
 ScriptAddon.prototype._installer = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
-function ScriptAddon_prototype_getter_executionIndex() {
-  return GM_getConfig()._scripts.indexOf(this._script);
+function ScriptAddon_getExecutionIndex() {
+  return GM_util.getService().config._scripts.indexOf(this._script);
 });
 
 // Getters/setters/functions for API attributes.
 ScriptAddon.prototype.__defineGetter__('isActive',
-function ScriptAddon_prototype_getter_isActive() {
+function ScriptAddon_getIsActive() {
   return this._script.enabled;
 });
 
+ScriptAddon.prototype.__defineGetter__('optionsURL',
+function ScriptAddon_getIsActive() {
+  return 'chrome://greasemonkey/content/scriptprefs.xul#' + this._script.id;
+});
+
 ScriptAddon.prototype.__defineGetter__('userDisabled',
-function ScriptAddon_prototype_getter_userDisabled() {
+function ScriptAddon_getUserDisabled() {
   return !this._script.enabled;
 });
 
@@ -165,7 +160,7 @@ function ScriptAddon_prototype_setter_userDisabled(val) {
 });
 
 ScriptAddon.prototype.__defineGetter__('permissions',
-function ScriptAddon_prototype_getter_permissions() {
+function ScriptAddon_getPermissions() {
   var perms = AddonManager.PERM_CAN_UNINSTALL;
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
@@ -195,6 +190,11 @@ ScriptAddon.prototype.uninstall = function() {
 ScriptAddon.prototype.cancelUninstall = function() {
   this.pendingOperations ^= AddonManager.PENDING_UNINSTALL;
   AddonManagerPrivate.callAddonListeners("onOperationCancelled", this);
+};
+
+ScriptAddon.prototype.performUninstall = function() {
+  GM_util.getService().config.uninstall(this._script);
+  delete ScriptAddonCache[this.id];
 };
 
 // http://developer.mozilla.org/en/Addons/Add-on_Manager/AddonInstall
@@ -240,14 +240,14 @@ ScriptInstall.prototype.removeListener = function() {};
 
 var WindowObserver = {
   // Inject the 'User Scripts' choice into the list of add-on types.
-  addToAddonsManager: function(aWindow) {
+  addToAddonsManager: function WindowObserver_addToAddonsManager(aWindow) {
     // This function used to handle tasks that are now done in a XUL overlay.
     // Leaving the function here in case the routing to make it run at the
     // right time proves useful.
     // TODO: Remove once Firefox 4 is final, if it is still unused.
   },
 
-  findAllAddonsManagers: function() {
+  findAllAddonsManagers: function WindowObserver_findAllAddonsManagers() {
     var managers = [];
     var windows = Services.wm.getEnumerator('navigator:browser');
     while (windows.hasMoreElements()) {
@@ -260,7 +260,7 @@ var WindowObserver = {
     return managers;
   },
 
-  addToAddonsManagers: function() {
+  addToAddonsManagers: function WindowObserver_addToAddonsManagers() {
     var managers = this.findAllAddonsManagers();
     managers.forEach(function(aWindow) {
       this.addToAddonsManager(aWindow);
@@ -268,7 +268,7 @@ var WindowObserver = {
   },
 
   /* TODO: restore when we are restartless for FF4.
-  removeFromAddonsManagers: function() {
+  removeFromAddonsManagers: function WindowObserver_removeFromAddonsManagers() {
     var managers = this.findAllAddonsManagers();
     managers.forEach(function(aWindow) {
       var window = aWindow.wrappedJSObject;
@@ -281,7 +281,7 @@ var WindowObserver = {
   },
   */
 
-  observe: function(aSubject, aTopic, aData) {
+  observe: function WindowObserver_observe(aSubject, aTopic, aData) {
     var win = aSubject;
     var uri = win.document.documentURIObject;
     if (uri.spec != 'about:addons') return;
@@ -300,7 +300,8 @@ function GM_addonsStartup(aParams) {
   _addonsStartupHasRun = true;
 
   Services.obs.addObserver(WindowObserver, 'chrome-document-global-created', false);
-  AddonManagerPrivate.registerProvider(AddonProvider);
+  AddonManagerPrivate.registerProvider(AddonProvider,
+      [{'id': 'user-script'}]);
   WindowObserver.addToAddonsManagers();
 }
 

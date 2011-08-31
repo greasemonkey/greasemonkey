@@ -1,0 +1,33 @@
+<!ENTITY Edit "Edytuj">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Edytuj ten skrypt">
+<!ENTITY ExecuteFirst "Wykonaj jako pierwszy">
+<!ENTITY ExecuteLast "Wykonaj jako ostatni">
+<!ENTITY ExecuteLater "Wykonaj później">
+<!ENTITY ExecuteSooner "Wykonaj wcześniej">
+<!ENTITY MoveDown "Przenieś w dół">
+<!ENTITY MoveDown.accesskey "P">
+<!ENTITY MoveToBottom "Przenieś na dół">
+<!ENTITY MoveToBottom.accesskey "D">
+<!ENTITY MoveToTop "Przenieś na górę">
+<!ENTITY MoveToTop.accesskey "G">
+<!ENTITY MoveUp "Przenieś w górę">
+<!ENTITY MoveUp.accesskey "R">
+<!ENTITY NewScript "Utwórz nowy skrypt">
+<!ENTITY NewScript.accesskey "U">
+<!ENTITY Show "Wyświetl folder skryptów">
+<!ENTITY Show.accesskey "W">
+<!ENTITY Sort.ByStatus "Porządkuj wg statusu">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Porządkuj wg nazwy">
+<!ENTITY Sort.Name "Nazwa">
+<!ENTITY Sort.ByExecution "Porządkuj wg kolejności wykonania">
+<!ENTITY Sort.Execution "Kolejność wykonania">
+<!ENTITY SortScripts "Porządkuj skrypty">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Anuluj dezinstalację">
+<!ENTITY UninstallCancel.accesskey "A">
+<!ENTITY UninstallCancel.tooltip "Anuluj dezinstalację tego skryptu">
+<!ENTITY UninstallCancelDescription "Skrypt zostanie odinstalowany po zamknięciu okna dialogowego lub kliknij prawym przyciskiem myszy „Odinstaluj teraz”.">
+<!ENTITY UninstallNow "Odinstaluj teraz">
+<!ENTITY UninstallNow.accesskey "O">

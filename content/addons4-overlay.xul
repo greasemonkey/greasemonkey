@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://greasemonkey/skin/addons4.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/content/third-party/addons4.css" type="text/css"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
@@ -14,8 +15,6 @@
 >
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons4-overlay.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
 
 <richlistbox id="categories">
@@ -67,5 +66,37 @@
     label="&ExecuteLast;" type="user-script"
   />
 </menupopup>
+
+<vbox id="list-view">
+  <hbox id="greasemonkey-sort-bar" class="view-header"
+      pack="end" insertbefore="addon-list-empty"
+  >
+    <vbox>
+      <spacer flex="1"/>
+      <label value="&greasemonkey.getuserscripts;" class="text-link"
+          onclick="GM_openUserscriptsOrg()"/>
+      <spacer flex="1"/>
+    </vbox>
+    <spacer flex="1" />
+    <button label="&Sort.Status;" tooltiptext="&Sort.ByStatus;"
+        class="sorter" sortBy="uiState,name"
+        checkState="2"/>
+    <button label="&Sort.Name;" tooltiptext="&Sort.ByName;"
+        class="sorter" sortBy="name"/>
+    <button label="&Sort.Execution;" tooltiptext="&Sort.ByExecution;"
+        class="sorter" sortBy="executionIndex"/>
+  </hbox>
+
+  <vbox id="user-script-list-empty"  insertbefore="addon-list-empty"
+      class="alert-container" flex="1"
+  >
+    <spacer class="alert-spacer-before"/>
+    <vbox class="alert">
+      <label value="&greasemonkey.youhavenoscripts;"/>
+      <button label="&greasemonkey.getuserscripts;" class="addon-control"
+          oncommand="GM_openUserscriptsOrg()"/>
+    </vbox><spacer class="alert-spacer-after"/>
+  </vbox>
+</vbox>
 
 </overlay>

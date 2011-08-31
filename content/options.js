@@ -1,7 +1,13 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 var GM_setOptionsYet = false;
-function GM_onloadOptions() {
+function GM_loadOptions() {
   document.getElementById("check-uninstall")
       .checked = GM_prefRoot.getValue("uninstallPreferences");
+
+  document.getElementById("globalExcludes")
+      .pages = GM_util.getService().config.globalExcludes;
 
   document.getElementById("check-update")
       .checked = GM_prefRoot.getValue("enableUpdateChecking");
@@ -14,9 +20,11 @@ function GM_onloadOptions() {
   GM_setOptionsYet = true;
 }
 
-function GM_setUninstallPrefs(checkbox) {
+function GM_saveOptions(checkbox) {
   GM_prefRoot.setValue("uninstallPreferences",
       !!document.getElementById("check-uninstall").checked);
+  GM_util.getService().config.globalExcludes =
+      document.getElementById("globalExcludes").pages;
 }
 
 function GM_setUpdatePrefs(checkbox) {

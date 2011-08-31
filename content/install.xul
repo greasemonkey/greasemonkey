@@ -24,9 +24,7 @@
 
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/install.js" />
 
   <vbox id="dialogContentBox"
@@ -50,6 +48,14 @@
         <label
           value="&install.runson;" />
         <description id="includes-desc"
+          style="font-style:italic" />
+      </vbox>
+      <vbox id="matches"
+        style="margin-bottom:1em; display:none"
+      >
+        <label
+          value="&install.matches;" />
+        <description id="matches-desc"
           style="font-style:italic" />
       </vbox>
       <vbox id="excludes"

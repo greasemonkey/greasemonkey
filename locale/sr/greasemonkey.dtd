@@ -1,30 +1,37 @@
 <!ENTITY menu.install "Инсталирај корисничку скрипту...">
 <!ENTITY menu.install.accesskey "И">
-<!ENTITY menu.show "Погледај изворни кôд странице">
+<!ENTITY menu.show "Погледај изворни кôд скрипте">
 <!ENTITY menu.show.accesskey "П">
 <!ENTITY menu.commands "Наредбе корисничких скрипти...">
-<!ENTITY menu.commands.accesskey "Ц">
+<!ENTITY menu.commands.accesskey "Н">
 <!ENTITY menu.new "Нова корисничка скрипта...">
 <!ENTITY menu.new.accesskey "Н">
-<!ENTITY menu.manage "Управљање корисничким скриптама...">
-<!ENTITY menu.manage.accesskey "М">
-<!ENTITY statusbar.noscripts "Нема инсталираних скрипти!">
-<!ENTITY statusbar.enabled "Укључено">
-<!ENTITY statusbar.enabled.accesskey "Е">
-<!ENTITY install.title "Greasemonkey инсталација">
+<!ENTITY menu.manage "Управљање корисничким скриптама…">
+<!ENTITY menu.manage.accesskey "У">
+<!ENTITY statusbar.enabled "Омогућен">
+<!ENTITY statusbar.enabled.accesskey "о">
+<!ENTITY install.title "Greasemonkey - инсталација">
 <!ENTITY install.runson "покреће се на:">
+<!ENTITY install.matches "тражи:">
 <!ENTITY install.butnoton "не покреће се на:">
 <!ENTITY install.warning1 "Сумњиве скрипте могу нарушити вашу приватност или деловати мимо вашег знања.">
 <!ENTITY install.warning2 "Скрипте требате инсталирати само са проверених извора.">
 <!ENTITY install.showscriptsource "Прикажи изворни кôд скрипте">
 <!ENTITY install.installbutton "Инсталирај">
 <!ENTITY newscript.name "Име">
-<!ENTITY newscript.namespace "Адреса">
+<!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Укључи (једно по линији)">
 <!ENTITY newscript.excludes "Изузми (једно по линији)">
 <!ENTITY options.editor "Уређивач">
 <!ENTITY options.changeEditor "Промени уређивач">
+<!ENTITY options.globalExcludes "Општа изузимања">
 <!ENTITY userscripts "Корисничке скрипте">
-<!ENTITY Uninstall "Деинсталирај">
-<!ENTITY AlsoUninstallPrefs "Деинсталирај и подешавања">
+<!ENTITY Uninstall "Уклони">
+<!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
+<!ENTITY greasemonkey.noscriptshere "Ни једна скрипта се не покреће на овој станици">
+<!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">
+<!ENTITY greasemonkey.getuserscripts "Набави коприсничке скрипте">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "请在下面输入新的 URL。您可以使用通配符(*)同时匹配多个页面。">
+<!ENTITY promptForNewPage.title "添加网页地址">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "请修改以下页面的 URL。您可以使用通配符(*)同时匹配多个页面。">
+<!ENTITY promptForEdit.title "编辑页面">
+<!ENTITY button.add "添加...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "编辑...">
+<!ENTITY button.remove "删除">
+<!ENTITY label.grpIncluded "脚本应用到下列网页">
+<!ENTITY label.grpExcluded "不包括下列网页">

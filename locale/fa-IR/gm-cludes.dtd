@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "یک نشانی جدید در زیر وارد کنید. شما می توانید صفحات متعددی را با استفاده از علامت عام (*) معین کنید.">
+<!ENTITY promptForNewPage.title "اضافه کردن صفحه">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "نشانی صفحه را در زیر تغییر دهید. شما می توانید صفحات متعددی را با استفاده از علامت عام (*) معین کنید.">
+<!ENTITY promptForEdit.title "ویرایش صفحه">
+<!ENTITY button.add "اضافه کردن...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "ویرایش...">
+<!ENTITY button.remove "پاک کردن">
+<!ENTITY label.grpIncluded "صفحه های شامل شده">
+<!ENTITY label.grpExcluded "صفحه های مستثنى شده">

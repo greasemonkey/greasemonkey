@@ -8,11 +8,11 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Gestor de Scripts">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "Sin Scripts instalados!">
 <!ENTITY statusbar.enabled "Activado">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Instalación de Greasemonkey">
 <!ENTITY install.runson "Ejecutándose:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "Detenido:">
 <!ENTITY install.warning1 "Script maliciosos pueden violar tu privacidad y actuar en tu nombre sin tu consentimiento.">
 <!ENTITY install.warning2 "Sólo debes instalar Scripts de fuentes confiables.">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "Excluidas(Uno por línea)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Cambiar Editor">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Scripts">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AlsoUninstallPrefs "También desinstalar preferencias asociadas">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "Mostrar contenido de carpeta">
 <!ENTITY Show.accesskey "M">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">
 <!ENTITY SortScripts "Ordenar Scripts">
 <!ENTITY SortScripts.accesskey "O">
 <!ENTITY UninstallCancel "Cancelar desinstalar">

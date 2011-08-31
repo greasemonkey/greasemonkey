@@ -1,0 +1,37 @@
+<!ENTITY menu.install "Instaluj skrypt…">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Zobacz kod źródłowy skryptu">
+<!ENTITY menu.show.accesskey "Z">
+<!ENTITY menu.commands "Polecenia skryptu…">
+<!ENTITY menu.commands.accesskey "P">
+<!ENTITY menu.new "Nowy skrypt…">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Zarządzaj skryptami…">
+<!ENTITY menu.manage.accesskey "R">
+<!ENTITY statusbar.enabled "Włącz">
+<!ENTITY statusbar.enabled.accesskey "W">
+<!ENTITY install.title "Instalacja skryptu">
+<!ENTITY install.runson "Uruchom na:">
+<!ENTITY install.matches "Odpowiada:">
+<!ENTITY install.butnoton "Nie uruchamiaj na:">
+<!ENTITY install.warning1 "Złośliwe skrypty mogą naruszać prywatność i bez wiedzy użytkownika działać w jego imieniu.">
+<!ENTITY install.warning2 "Należy instalować tylko skrypty pochodzące z zaufanych źródeł.">
+<!ENTITY install.showscriptsource "Pokaż kod źródłowy skryptu">
+<!ENTITY install.installbutton "Instaluj">
+<!ENTITY newscript.name "Nazwa">
+<!ENTITY newscript.namespace "Lokalizacja">
+<!ENTITY newscript.description "Opis">
+<!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
+<!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
+<!ENTITY options.editor "Edytor">
+<!ENTITY options.changeEditor "Zmień edytor">
+<!ENTITY options.globalExcludes "Wykluczenia globalne">
+<!ENTITY userscripts "Skrypty">
+<!ENTITY Uninstall "Odinstaluj">
+<!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">
+<!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
+<!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">
+<!ENTITY greasemonkey.getuserscripts "Pobierz skrypty">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

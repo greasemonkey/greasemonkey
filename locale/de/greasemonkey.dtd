@@ -1,4 +1,4 @@
-<!ENTITY menu.install "Benutzerskript installieren...">
+<!ENTITY menu.install "Benutzerskript installieren…">
 <!ENTITY menu.install.accesskey "s">
 <!ENTITY menu.show "Benutzerskript-Quelle anzeigen">
 <!ENTITY menu.show.accesskey "Q">
@@ -6,13 +6,13 @@
 <!ENTITY menu.commands.accesskey "B">
 <!ENTITY menu.new "Neues Benutzerskript">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Benutzerskripte verwalten...">
+<!ENTITY menu.manage "Benutzerskripte verwalten…">
 <!ENTITY menu.manage.accesskey "v">
-<!ENTITY statusbar.noscripts "Es sind keine Skripte installiert!">
 <!ENTITY statusbar.enabled "Greasemonkey aktivieren">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Greasemonkey-Installation">
 <!ENTITY install.runson "Wird angewendet auf:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "Wird nicht angewendet auf:">
 <!ENTITY install.warning1 "Bösartige Skripte können Ihre Privatsphäre verletzen und ohne Ihr Wissen eigenmächtige Aktionen ausführen.">
 <!ENTITY install.warning2 "Sie sollten nur Skripte von Quellen installieren, denen Sie vertrauen.">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Editor ändern">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Benutzerskripte">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
+<!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
+<!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">
+<!ENTITY greasemonkey.getuserscripts "Benutzerskripte hinzufügen…">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

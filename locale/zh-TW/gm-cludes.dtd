@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "請輸入一個新的網址，可以利用萬用字元(*)來一次指定多個頁面。">
+<!ENTITY promptForNewPage.title "新增網址">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "請修改下列網址，可以利用萬用字元(*)來一次指定多個頁面。">
+<!ENTITY promptForEdit.title "編輯網址">
+<!ENTITY button.add "新增...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "編輯...">
+<!ENTITY button.remove "移除">
+<!ENTITY label.grpIncluded "腳本將套用到的網址">
+<!ENTITY label.grpExcluded "例外網址">

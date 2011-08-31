@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Introduce abajo una nueva dirección. Puedes indicar varias páginas web usando el asterisco (*).">
+<!ENTITY promptForNewPage.title "Añadir página web.">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Modificar la dirección de la pagina de abajo. Puedes indicar varias páginas web usando el asterisco (*).">
+<!ENTITY promptForEdit.title "Editar página.">
+<!ENTITY button.add "Añadir...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "Editar...">
+<!ENTITY button.remove "Borrar">
+<!ENTITY label.grpIncluded "Páginas incluidas">
+<!ENTITY label.grpExcluded "Páginas excluidas">

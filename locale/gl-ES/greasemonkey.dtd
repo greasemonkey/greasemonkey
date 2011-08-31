@@ -1,0 +1,37 @@
+<!ENTITY menu.install "Instalar script...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Ver o código fonte do script">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Ordes dos scripts...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Novo script...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Xestionar os scripts...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY statusbar.enabled "Activado">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Instalación do Greasemonkey">
+<!ENTITY install.runson "execútase en:">
+<!ENTITY install.matches "coincidencias:">
+<!ENTITY install.butnoton "non se executa en:">
+<!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
+<!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
+<!ENTITY install.showscriptsource "Show Script Source">
+<!ENTITY install.installbutton "Install">
+<!ENTITY newscript.name "Name">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Description">
+<!ENTITY newscript.includes "Includes (One per line)">
+<!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY options.globalExcludes "Excluídos globais">
+<!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Uninstall">
+<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
+<!ENTITY greasemonkey.noscriptshere "Nesta páxina non se executa ningún script instalado.">
+<!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">
+<!ENTITY greasemonkey.getuserscripts "Obter scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

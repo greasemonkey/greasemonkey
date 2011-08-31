@@ -8,11 +8,11 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "未安裝腳本！">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安裝">
 <!ENTITY install.runson "執行於:">
+<!ENTITY install.matches "符合:">
 <!ENTITY install.butnoton "不執行於:">
 <!ENTITY install.warning1 "惡意的腳本可能會危害您的隱私，並在您不知情的情況下以您的名義執行。">
 <!ENTITY install.warning2 "您應該只安裝來自可信任來源的使用者腳本。">
@@ -25,6 +25,13 @@
 <!ENTITY newscript.excludes "不包含（每行一項）">
 <!ENTITY options.editor "腳本編輯器">
 <!ENTITY options.changeEditor "設定腳本編輯器">
+<!ENTITY options.globalExcludes "全域排除">
 <!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
+<!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
+<!ENTITY greasemonkey.youhavenoscripts "您尚未安裝任何腳本">
+<!ENTITY greasemonkey.getuserscripts "取得使用者腳本">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

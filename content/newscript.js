@@ -1,7 +1,10 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
+
 /////////////////////////////// global variables ///////////////////////////////
 
 var bundle = null;
-window.addEventListener("load", function() {
+window.addEventListener("load", function window_load() {
   // init the global string bundle
   bundle = document.getElementById("gm-browser-bundle");
 
@@ -20,39 +23,36 @@ window.addEventListener("load", function() {
 ////////////////////////////////// functions ///////////////////////////////////
 
 function doInstall() {
-  var script = createScriptSource();
-  if (!script) return false;
+  var scriptSrc = createScriptSource();
+  if (!scriptSrc) return false;
+  var config = GM_util.getService().config;
 
-  // put this created script into a file -- only way to install it
-  var tempFile = GM_getTempFile();
-  var foStream = GM_getWriteStream(tempFile);
-  foStream.write(script, script.length);
-  foStream.close();
-
-  var config = GM_getConfig();
-
-  // create a script object with parsed metadata,
-  script = config.parse(script);
-
-  // make sure entered details will not ruin an existing file
+  // Create a script object with parsed metadata, and ...
+  var script = config.parse(scriptSrc);
+  // ... make sure entered details will not ruin an existing file.
   if (config.installIsUpdate(script)) {
     var overwrite = confirm(bundle.getString("newscript.exists"));
     if (!overwrite) return false;
   }
 
   // finish making the script object ready to install
-  script.setDownloadedFile(tempFile);
+  // (put this created script into a file -- only way to install it)
+  var tempFile = GM_util.getTempFile();
+  GM_util.writeToFile(scriptSrc, tempFile, function() {
+    script.setDownloadedFile(tempFile);
 
-  // install this script
-  config.install(script);
+    // install this script
+    config.install(script);
+    // and fire up the editor!
+    GM_util.openInEditor(script);
+    // persist namespace value
+    GM_prefRoot.setValue("newscript_namespace", script.namespace);
 
-  // and fire up the editor!
-  GM_openInEditor(script);
+    // Now that async write is complete, close the window.
+    close();
+  });
 
-  // persist namespace value
-  GM_prefRoot.setValue("newscript_namespace", script.namespace);
-
-  return true;
+  return false;
 }
 
 // assemble the XUL fields into a script template

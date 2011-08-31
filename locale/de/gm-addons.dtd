@@ -17,6 +17,12 @@
 <!ENTITY NewScript.accesskey "N">
 <!ENTITY Show "Beinhaltenden Ordner anzeigen">
 <!ENTITY Show.accesskey "a">
+<!ENTITY Sort.ByStatus "Sortieren nach Status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sortieren nach Name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sortieren nach Ausführungsreihenfolge">
+<!ENTITY Sort.Execution "Ausführungsreihenfolge">
 <!ENTITY SortScripts "Skripte sortieren">
 <!ENTITY SortScripts.accesskey "s">
 <!ENTITY UninstallCancel "Deinstallation abbrechen">

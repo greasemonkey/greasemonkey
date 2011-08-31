@@ -1,0 +1,37 @@
+<!ENTITY menu.install "Installera användarskript…">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Visa användarskriptkällkod">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Användarskriptkommandon…">
+<!ENTITY menu.commands.accesskey "k">
+<!ENTITY menu.new "Nytt användarskript…">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Hantera användarskript…">
+<!ENTITY menu.manage.accesskey "H">
+<!ENTITY statusbar.enabled "Aktiverat">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Installation av Greasemonkey">
+<!ENTITY install.runson "kör på:">
+<!ENTITY install.matches "matchar:">
+<!ENTITY install.butnoton "kör inte på:">
+<!ENTITY install.warning1 "Skadliga skript kan inkräkta på ditt privatliv och agera för din räkning utan din vetskap.">
+<!ENTITY install.warning2 "Du bör endast installera skript från källor som du litar på.">
+<!ENTITY install.showscriptsource "Visa skriptkällkod">
+<!ENTITY install.installbutton "Installera">
+<!ENTITY newscript.name "Namn">
+<!ENTITY newscript.namespace "Namnrymd">
+<!ENTITY newscript.description "Beskrivning">
+<!ENTITY newscript.includes "Inkluderar (ett per rad)">
+<!ENTITY newscript.excludes "Undantar (ett per rad)">
+<!ENTITY options.editor "Redigeringsprogram">
+<!ENTITY options.changeEditor "Byt redigeringsprogram">
+<!ENTITY options.globalExcludes "Globala undantag">
+<!ENTITY userscripts "Användarskript">
+<!ENTITY Uninstall "Avinstallera">
+<!ENTITY AlsoUninstallPrefs "Avinstallera även associerade inställningar">
+<!ENTITY greasemonkey.noscriptshere "Inga installerade skript körs på denna sida.">
+<!ENTITY greasemonkey.youhavenoscripts "Du har inga installerade användarskript">
+<!ENTITY greasemonkey.getuserscripts "Hämta användarskript">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

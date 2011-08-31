@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/scriptprefs.css" type="text/css"?>
+
+<!DOCTYPE prefwindow [
+<!ENTITY % addonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+<!ENTITY % cludesDTD SYSTEM "chrome://greasemonkey/locale/gm-cludes.dtd">
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%addonsDTD;
+%cludesDTD;
+%greasemonkeyDTD;
+]>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  buttons="accept,cancel"
+  title="&scriptprefs.title;"
+  ondialogaccept="return onDialogAccept();"
+>
+
+<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
+
+<tabbox>
+  <tabs>
+    <tab label="&scriptprefs.usersettings;" />
+    <tab label="&scriptprefs.scriptsettings;" />
+  </tabs>
+  <tabpanels>
+    <tabpanel>
+      <vbox flex="1">
+        <label value="&label.grpIncluded;" />
+        <cludes id="user-includes"/>
+        <label value="&label.grpExcluded;" />
+        <cludes id="user-excludes" />
+      </vbox>
+    </tabpanel>
+    <tabpanel>
+      <vbox flex="1">
+        <vbox flex="1" class="in">
+          <label value="&label.grpIncluded;" />
+          <cludes id="script-includes" class="readonly" />
+        </vbox>
+        <vbox flex="1" class="ex">
+          <label value="&label.grpExcluded;" />
+          <cludes id="script-excludes" class="readonly" />
+        </vbox>
+      </vbox>
+    </tabpanel>
+  </tabpanels>
+</tabbox>
+
+<spacer height="5" />
+<button label="&Edit.tooltip;" oncommand="GM_util.openInEditor(gScript);" />
+
+</dialog>

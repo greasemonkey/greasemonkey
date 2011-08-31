@@ -17,7 +17,13 @@
 <!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "内包するフォルダを表示">
 <!ENTITY Show.accesskey "S">
-<!ENTITY SortScripts "スクリプトをソート">
+<!ENTITY Sort.ByStatus "状態で並び替え">
+<!ENTITY Sort.Status "状態">
+<!ENTITY Sort.ByName "名前で並び替え">
+<!ENTITY Sort.Name "名前">
+<!ENTITY Sort.ByExecution "実行する順序で並び替え">
+<!ENTITY Sort.Execution "実行する順序">
+<!ENTITY SortScripts "スクリプトを並び替え">
 <!ENTITY SortScripts.accesskey "S">
 <!ENTITY UninstallCancel "削除を中止">
 <!ENTITY UninstallCancel.accesskey "C">

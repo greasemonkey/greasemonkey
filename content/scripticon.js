@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 function ScriptIcon(script) {
   ScriptResource.call(this, script);
   this.type = "icon";
@@ -17,8 +19,8 @@ ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
     this.dataUriError = true;
     throw new Error('@icon data: uri must be an image type');
   } else {
-    var resUri = GM_uriFromUrl(this._script._downloadURL);
-    this._downloadURL = GM_uriFromUrl(value, resUri).spec;
+    var resUri = GM_util.uriFromUrl(this._script._downloadURL);
+    this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;
   }
 });
 
@@ -30,21 +32,24 @@ ScriptIcon.prototype.isImage = function(contentType) {
   return /^image\//i.test(contentType);
 };
 
-ScriptIcon.prototype.__defineGetter__("filename", function() {
+ScriptIcon.prototype.__defineGetter__("filename",
+function ScriptIcon_getFilename() {
   return (this._filename || this._dataURI);
 });
 
-ScriptIcon.prototype.__defineGetter__("fileURL", function() {
+ScriptIcon.prototype.__defineGetter__("fileURL",
+function ScriptIcon_getFileURL() {
   if (this._dataURI) {
     return this._dataURI;
-  } else if (this._filename) { 
-    return GM_getUriFromFile(this.file).spec;
+  } else if (this._filename) {
+    return GM_util.getUriFromFile(this.file).spec;
   } else {
     return "chrome://greasemonkey/skin/userscript.png";
   }
 });
 
-ScriptIcon.prototype.__defineSetter__("fileURL", function(iconURL) {
+ScriptIcon.prototype.__defineSetter__("fileURL",
+function ScriptIcon_setFileURL(iconURL) {
   if (/^data:/i.test(iconURL)) {
     // icon is a data scheme
     this._dataURI = iconURL;

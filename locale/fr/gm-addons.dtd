@@ -1,0 +1,33 @@
+<!ENTITY Edit "Modifier">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Modifier ce Script Utilisateur">
+<!ENTITY ExecuteFirst "Exécuter en premier">
+<!ENTITY ExecuteLast "Exécuter en dernier">
+<!ENTITY ExecuteLater "Exécuter plus tard">
+<!ENTITY ExecuteSooner "Exécuter plus tôt">
+<!ENTITY MoveDown "Descendre">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Descendre tout en bas">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Monter tout en haut">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Monter">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Créer un Nouveau Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Afficher le dossier correspondant">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Trier par statut">
+<!ENTITY Sort.Status "Statut">
+<!ENTITY Sort.ByName "Trier par nom">
+<!ENTITY Sort.Name "Nom">
+<!ENTITY Sort.ByExecution "Trier par ordre d'exécution">
+<!ENTITY Sort.Execution "Ordre d'exécution">
+<!ENTITY SortScripts "Trier les Scripts">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Annuler la Désinstallation">
+<!ENTITY UninstallCancel.accesskey "C">
+<!ENTITY UninstallCancel.tooltip "Annuler la désinstallation de ce Script Utilisateur">
+<!ENTITY UninstallCancelDescription "Ce Script Utilisateur sera désinstallé lorsque la boîte de dialogue se fermera. (Ou faites un clic droit pour le &quot;Désinstaller Maintenant&quot;.)">
+<!ENTITY UninstallNow "Désinstaller Maintenant">
+<!ENTITY UninstallNow.accesskey "N">

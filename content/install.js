@@ -1,8 +1,5 @@
 var GMInstall = {
   init: function() {
-    var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
-
     this.htmlNs_ = "http://www.w3.org/1999/xhtml";
 
     this.scriptDownloader_ = window.arguments[0];
@@ -10,6 +7,11 @@ var GMInstall = {
 
     this.setupIncludes("includes", "includes-desc", this.script_.includes);
     this.setupIncludes("excludes", "excludes-desc", this.script_.excludes);
+    var matches = [];
+    for (var i = 0, match = null; match = this.script_.matches[i]; i++) {
+      matches.push(match.pattern);
+    }
+    this.setupIncludes("matches", "matches-desc", matches);
 
     this.dialog_ = document.documentElement;
     this.extraButton_ = this.dialog_.getButton("extra1");
@@ -31,6 +33,9 @@ var GMInstall = {
     var desc = document.getElementById("scriptDescription");
     desc.appendChild(document.createElementNS(this.htmlNs_, "strong"));
     desc.firstChild.appendChild(document.createTextNode(this.script_.name));
+    if (this.script_.version) {
+      desc.appendChild(document.createTextNode(' ' + this.script_.version));
+    }
     desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
     desc.appendChild(document.createTextNode(this.script_.description));
   },
@@ -51,7 +56,7 @@ var GMInstall = {
       window.clearInterval(this.timer_);
     }
 
-    this.timer_ = window.setInterval(function() { GMInstall.onInterval() }, 500);
+    this.timer_ = window.setInterval(function() { GMInstall.onInterval(); }, 500);
   },
 
   onInterval: function() {

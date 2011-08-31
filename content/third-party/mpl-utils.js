@@ -40,7 +40,7 @@ function GM_openFolder(aFile) {
     var fParent = aFile.parent;
 
     try {
-      // Lauch the parent directory if the file doesn't exist.
+      // Launch the parent directory if the file doesn't exist.
       if (fParent.exists()) fParent.launch();
     } catch (e) {
       // If launch also fails let the OS handler try to open the parent.
@@ -54,4 +54,16 @@ function GM_openFolder(aFile) {
       protocolSvc.loadUrl(uri);
     }
   }
+}
+
+function GM_windowForTab(aTab, aBrowser) {
+  var browser = aBrowser || gBrowser;
+  // Source:
+  // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
+  return browser
+    .getBrowserForTab(aTab)
+    .docShell
+    .QueryInterface(Ci.nsIInterfaceRequestor)
+    .getInterface(Ci.nsIDOMWindow);
+
 }

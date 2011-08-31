@@ -1,38 +1,22 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 // Globals.
-var GM_config = GM_getConfig();
+var GM_config = GM_util.getService().config;
 var GM_uninstallQueue = {};
 var gUserscriptsView = null;
 
-var GM_firefoxVersion;
 var GM_os;
 (function() {
-var appInfo = Components
-    .classes["@mozilla.org/xre/app-info;1"]
-    .getService(Components.interfaces.nsIXULAppInfo);
-var versionChecker = Components
-    .classes["@mozilla.org/xpcom/version-comparator;1"]
-    .getService(Components.interfaces.nsIVersionComparator);
 var xulRuntime = Components
     .classes["@mozilla.org/xre/app-info;1"]
     .getService(Components.interfaces.nsIXULRuntime);
-
-// Detect fixed possible compatible Firefox versions.
-if (versionChecker.compare(appInfo.version, '3.5') < 0) {
-  GM_firefoxVersion = '3.0';
-} else if (versionChecker.compare(appInfo.version, '3.6') < 0) {
-  GM_firefoxVersion = '3.5';
-} else {
-  GM_firefoxVersion = '3.6';
-}
 
 GM_os = xulRuntime.OS;
 })();
 
 (function() {
-// Override some built-in functions, with a closure reference to the original
-// function, to either handle or delegate the call.
-var _origShowView = showView;
-showView = function(aView) {
+var _origShowView;
+function ourShowView(aView) {
   if ('userscripts' == aView) {
     greasemonkeyAddons.showView();
   } else {
@@ -83,6 +67,13 @@ buildContextMenu = function(event) {
   }
 }
 };
+window.GM_overrideShowView = function() {
+  if (showView != ourShowView) {
+    _origShowView = showView;
+    showView = ourShowView;
+  }
+};
+GM_overrideShowView();
 
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
@@ -99,9 +90,11 @@ var observer = {
     }
 
     if (aView == "userscripts" && event == "install") {
+      var beforeNode = data > -1 ? currentViewNode.childNodes[data] : null;
       var item = greasemonkeyAddons.listitemForScript(script);
       item.setAttribute('newAddon', 'true');
-      currentViewNode.insertBefore(item, null);
+      currentViewNode.insertBefore(item, beforeNode);
+      if (gView == "userscripts") gUserscriptsView.selectedItem = item;
       return;
     } else if (aView == "updates" && event == "install") {
       var node = document.getElementById('urn:greasemonkey:' + (aView == 'updates' ? 'update:' : '') 
@@ -160,10 +153,8 @@ window.addEventListener('load', function() {
 
   gUserscriptsView.addEventListener(
       'select', greasemonkeyAddons.updateLastSelected, false);
-  if ('3.6' == GM_firefoxVersion) {
-    gUserscriptsView.addEventListener(
-        'keypress', greasemonkeyAddons.onKeypress, false);
-  }
+  gUserscriptsView.addEventListener(
+      'keypress', greasemonkeyAddons.onKeypress, false);
 
   GM_config.addObserver(observer);
 
@@ -178,6 +169,23 @@ window.addEventListener('load', function() {
           gView = 'userstyles';
         },
         false);
+  }
+
+  // Work-around for Personas Plus compatibility.  They're super dirty with
+  // the showView() method, and they break us.  Guarantee our version is used
+  // (because we're responsible enough to still call them).
+  if ('undefined' != typeof DEFAULT_PERSONA_ID) {
+    GM_overrideShowView();
+    if ('userscripts' == gView) {
+      GM_util.logError(new Error(
+          'Warning: the Personas Plus extension is incompatible with'
+          +' Greasemonkey.\nIt is not required to use personas; you are advised'
+          +' to uninstall it.'));
+      // Since we (probably?) loaded with Persona's broken-for-us showView(),
+      // switch away and back so user scripts will show up.
+      showView('extensions');
+      setTimeout(showView, 0, 'userscripts');
+    }
   }
 
   var scripts = GM_config.getMatchingScripts(
@@ -213,14 +221,14 @@ var greasemonkeyAddons = {
     document.documentElement.className += ' userscripts';
 
     GM_config.updateModifiedScripts();
-    if ('3.6' == GM_firefoxVersion) gUserscriptsView.focus();
+    gUserscriptsView.focus();
   },
 
   hideView: function() {
     if ('userscripts' != gView) return;
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/g, '');
-    if ('3.6' == GM_firefoxVersion) gExtensionsView.focus();
+    gExtensionsView.focus();
   },
 
   showScriptUpdates: function() {
@@ -245,10 +253,7 @@ var greasemonkeyAddons = {
   },
 
   fillList: function() {
-    // Remove any pre-existing contents.
-    while (gUserscriptsView.firstChild) {
-      gUserscriptsView.removeChild(gUserscriptsView.firstChild);
-    }
+    GM_util.emptyEl(gUserscriptsView);
 
     // Add a list item for each script.
     for (var i = 0, script = null; script = GM_config.scripts[i]; i++) {
@@ -340,7 +345,10 @@ var greasemonkeyAddons = {
     var selectedListitem = currentViewNode.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
-      GM_openInEditor(script);
+      GM_util.openInEditor(script);
+      break;
+    case 'cmd_userscript_options':
+      openDialog('chrome://greasemonkey/content/scriptprefs.xul#' + script.id);
       break;
     case 'cmd_userscript_show':
       GM_openFolder(script.file);
@@ -410,13 +418,14 @@ var greasemonkeyAddons = {
 
     function $(id) { return document.getElementById(id); }
     function setItemsHidden(hidden, idList) {
+      var items;
       if (idList) {
-        var items = idList.map(function(id) {
+        items = idList.map(function(id) {
           return $('userscript_context_' + id);
         });
       } else {
-        var items = $('userscriptContextMenu').childNodes;
-        items = Array.prototype.slice.call(items);
+        items = Array.prototype.slice.call(
+            $('userscriptContextMenu').childNodes);
       }
       items.forEach(function(item) {
         item.setAttribute('hidden', hidden);
@@ -489,22 +498,7 @@ var greasemonkeyAddons = {
   fixButtonOrder: function() {
     function $(id) { return document.getElementById(id); }
 
-    if ('3.0' == GM_firefoxVersion) {
-      // All platforms, Firefox 3.0
-      $('commandBarBottom').appendChild($('newUserscript'));
-    } else if ('WINNT' == GM_os) {
-      if ('3.5' == GM_firefoxVersion) {
-        // Windows, Firefox 3.5
-        $('commandBarBottom').insertBefore(
-            $('getMoreUserscripts'), $('newUserscript').nextSibling);
-      }
-    } else {
-      if ('3.5' == GM_firefoxVersion) {
-        // Mac/Linux, Firefox 3.5
-        $('commandBarBottom').insertBefore(
-            $('getMoreUserscripts'), $('skipDialogButton'));
-      }
-      // Mac/Linux, Firefox 3.5 and 3.6
+    if ('WINNT' != GM_os) {
       $('commandBarBottom').insertBefore(
           $('newUserscript'), $('skipDialogButton'));
     }
@@ -517,16 +511,16 @@ var greasemonkeyDragObserver = {
     // no-op
   },
   onDrop: function(event, dropData, session) {
-    var url;
+    var url = null;
     if ('text/uri-list' == dropData.flavour.contentType) {
       url = dropData.data;
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
-      url = GM_getUriFromFile(dropData.data).spec;
+      url = GM_util.getUriFromFile(dropData.data).spec;
     }
     dump("Dropped url: ["+url+"]\n");
     if (url && url.match(/\.user\.js$/)) {
-      // TODO: Make this UI appear in the addons win, rather than the browser?
-      GM_installUri(GM_uriFromUrl(url));
+      // TODO: Make this UI appear in the add-ons win, rather than the browser?
+      GM_util.installUri(GM_util.uriFromUrl(url));
     }
   },
   getSupportedFlavours: function() {
