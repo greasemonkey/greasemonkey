@@ -436,3 +436,11 @@ function GM_showPopup(aEvent) {
 if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
+
+
+// Short-term workaround for #1406: Tab Mix Plus breaks opening links in
+// new tabs because it depends on this function, and incorrectly checks for
+// existance of GM_BrowserUI instead of it.
+function GM_getEnabled() {
+  return GM_util.getEnabled();
+}
