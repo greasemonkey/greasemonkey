@@ -40,7 +40,6 @@
 
 var EXPORTED_SYMBOLS = ['MatchPattern'];
 
-Components.utils.import("resource://gre/modules/NetUtil.jsm");
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
 Components.utils.import("resource://greasemonkey/utils.js");
 
