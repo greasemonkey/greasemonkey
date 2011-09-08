@@ -528,8 +528,8 @@ Script.prototype.checkForRemoteUpdate = function(
 
   var req = new chromeWin.XMLHttpRequest();
   req.open("GET", this.updateURL, true);
-  req.onload = GM_hitch(this, "checkRemoteVersion", req);
-  req.onerror = GM_hitch(this, "checkRemoteVersionErr", lastCheck);
+  req.onload = GM_util.hitch(this, "checkRemoteVersion", req);
+  req.onerror = GM_util.hitch(this, "checkRemoteVersionErr", lastCheck);
   req.send(null);
 };
 
@@ -563,7 +563,7 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck) {
 
 Script.prototype.installUpdate = function(chromeWin) {
   var scriptDownloader = new GM_ScriptDownloader(
-      chromeWin, GM_uriFromUrl(this._downloadURL), null);
+      chromeWin, GM_util.uriFromUrl(this._downloadURL), null);
   scriptDownloader.replacedScript = this;
   scriptDownloader.installOnCompletion_ = true;
   scriptDownloader.startInstall();

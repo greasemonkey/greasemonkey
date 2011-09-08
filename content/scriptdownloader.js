@@ -127,7 +127,7 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file) {
   this.script.setDownloadedFile(file);
 
-  window.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
+  this.win_.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
 
   if (this.installing_) {
     this.showInstallDialog();
