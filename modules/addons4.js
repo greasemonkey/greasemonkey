@@ -6,11 +6,9 @@
 //   http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager
 
 // Module exported symbols.
-var EXPORTED_SYMBOLS = ['GM_addonsStartup',
-                        'SCRIPT_ADDON_TYPE',
-                        'ScriptInstall', 
-                        'ScriptAddonFactoryByScript', 
-                        'ScriptAddonReplaceScript'];
+var EXPORTED_SYMBOLS = [
+    'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
+    'ScriptInstall', 'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -50,15 +48,11 @@ var AddonProvider = {
 
   getInstallsByTypes: function(aTypes, aCallback) {
     var scriptInstalls = [];
-    var scripts = GM_getConfig().scripts.forEach(function(script) {
+    GM_util.getService().config.scripts.forEach(function(script) {
       if (!script.updateAvailable) return;
 
       var aAddon = ScriptAddonFactoryByScript(script);
-      if (!aAddon._installer) {
-        var scriptInstall = new ScriptInstall(aAddon);
-      } else {
-        var scriptInstall = aAddon._installer;
-      }
+      var scriptInstall = aAddon._installer || new ScriptInstall(aAddon);
 
       scriptInstalls.push(scriptInstall);
     });
@@ -176,7 +170,7 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
   if (this._script.updateAvailable) return;
 
-  var chromeWin = winMediator.getMostRecentWindow("navigator:browser");
+  var chromeWin = GM_util.getBrowserWindow();
   this._script.checkForRemoteUpdate(chromeWin, new Date().getTime(), 0, true);
 };
 
@@ -209,27 +203,23 @@ function ScriptInstall(aAddon) {
 }
 
 // Required attributes.
-ScriptAddon.prototype.name = null;
-ScriptAddon.prototype.version = null;
-ScriptAddon.prototype.iconURL = null;
-ScriptAddon.prototype.releaseNotesURI = null;
-ScriptAddon.prototype.type = 'user-script';
-ScriptAddon.prototype.state = AddonManager.STATE_AVAILABLE;
-ScriptAddon.prototype.error = null;
-ScriptAddon.prototype.sourceURI = null;
-ScriptAddon.prototype.file = null;
-ScriptAddon.prototype.progress = -1;
-ScriptAddon.prototype.maxProgress = -1;
-ScriptAddon.prototype.pendingOperations = 0;
-ScriptAddon.prototype.existingAddon = null;
-ScriptAddon.prototype.addon = null;
+ScriptInstall.prototype.addon = null;
+ScriptInstall.prototype.error = null;
+ScriptInstall.prototype.file = null;
+ScriptInstall.prototype.maxProgress = -1;
+ScriptInstall.prototype.pendingOperations = 0;
+ScriptInstall.prototype.progress = -1;
+ScriptInstall.prototype.releaseNotesURI = null;
+ScriptInstall.prototype.sourceURI = null;
+ScriptInstall.prototype.state = AddonManager.STATE_AVAILABLE;
+ScriptInstall.prototype.type = 'user-script';
 
 // Private and custom attributes.
-ScriptAddon.prototype._script = null;
+ScriptInstall.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
   AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
-  var chromeWin = winMediator.getMostRecentWindow("navigator:browser");
+  var chromeWin = GM_util.getBrowserWindow();
   this._script.installUpdate(chromeWin);
 };
 ScriptInstall.prototype.cancel = function() {};

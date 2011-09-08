@@ -369,8 +369,8 @@ service.prototype.runScripts = function(
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
-        return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
-    });
+    return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+  });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin, aChromeWin);
 

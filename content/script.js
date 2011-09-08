@@ -161,11 +161,11 @@ function Script_getFile() {
 
 Script.prototype.__defineGetter__('updateURL',
 function Script_getUpdateURL() { return this._updateURL; });
-Script.prototype.__defineSetter__('updateURL'
+Script.prototype.__defineSetter__('updateURL',
 function Script_setUpdateURL(url) {
   if (!url && !this._downloadURL) return null;
 
-  if (!url) var url = this._downloadURL;
+  if (!url) url = this._downloadURL;
 
   // US.o gets special treatment for being so large
   var usoURL = url.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
@@ -175,11 +175,13 @@ function Script_setUpdateURL(url) {
     this._updateURL = url;
   }
 });
-  get _updateIsSecure() {
-    if (!this._downloadURL) return null;
 
-    return /^https/.test(this._downloadURL);
-  },
+Script.prototype.__defineGetter__('updateIsSecure',
+function Script_getUpdateIsSecure() {
+  if (!this._downloadURL) return null;
+
+  return /^https/.test(this._downloadURL);
+});
 
 Script.prototype.__defineGetter__('_basedirFile',
 function Script_getBasedirFile() {
@@ -259,15 +261,15 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._version = node.getAttribute("version");
   }
 
-  // Migration with default values
-  if (!node.getAttribute("updateAvailable") ||
-      !node.getAttribute("lastUpdateCheck")) {
+  if (!node.getAttribute("updateAvailable")
+      || !node.getAttribute("lastUpdateCheck")
+  ) {
     this.updateAvailable = false;
     this._lastUpdateCheck = this._modified;
-      
-    GM_getConfig()._changed(this, "modified", null);
+
+    GM_util.getService().config._changed(this, "modified", null);
   } else {
-    this.updateAvailable = node.getAttribute("updateAvailable") == true.toString();
+    this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
     this._updateVersion = node.getAttribute("updateVersion") || null;
     this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
   }
@@ -485,8 +487,8 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._runAt = newScript._runAt;
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
-  if (newScript._downloadURL) this._downloadURL = newScript._downloadURL;
-  if (newScript.updateURL) this.updateURL = newScript.updateURL;
+  this._downloadURL = newScript._downloadURL;
+  this._updateURL = newScript._updateURL;
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
@@ -513,13 +515,13 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(chromeWin, currentTime, updateCheckingInterval, forced) {
-  if (this.updateAvailable ||
-      !this.updateURL ||
-      (!forced ? currentTime <= parseInt(this._lastUpdateCheck) + updateCheckingInterval :
-       false)) {
-    return;
-  }
+Script.prototype.checkForRemoteUpdate = function(
+    chromeWin, currentTime, updateCheckingInterval, forced
+) {
+  if (this.updateAvailable) return;
+  if (!this._updateURL) return;
+  var nextUpdate = parseInt(this._lastUpdateCheck, 10) + updateCheckingInterval;
+  if (!forced && currentTime <= nextUpdate) return;
 
   var lastCheck = this._lastUpdateCheck;
   this._lastUpdateCheck = currentTime;
@@ -535,32 +537,33 @@ Script.prototype.checkRemoteVersion = function(req) {
   if (req.status != 200 && req.status != 0) return;
 
   var source = req.responseText;
-  var remoteVersion = GM_getConfig().parseVersion(source);
-  if (remoteVersion) {
-    var versionChecker = Components.classes["@mozilla.org/xpcom/version-comparator;1"]
-        .getService(Components.interfaces.nsIVersionComparator);
+  var remoteVersion = GM_util.getService().config.parseVersion(source);
+  if (!remoteVersion) return;
+  var versionChecker = Components
+      .classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
 
-    if (versionChecker.compare(this._version, remoteVersion) < 0) {
-      this.updateAvailable = true;
-      this._updateVersion = remoteVersion;
-      this._changed("update-found", {
-        version: remoteVersion,
-        url: this._downloadURL,
-        secure: this._updateIsSecure
-      });
-      GM_getConfig()._save();
-    }
-  }
+  if (versionChecker.compare(this._version, remoteVersion) >= 0) return;
+
+  this.updateAvailable = true;
+  this._updateVersion = remoteVersion;
+  this._changed("update-found", {
+    version: remoteVersion,
+    url: this._downloadURL,
+    secure: this.updateIsSecure
+  });
+  GM_util.getService().config._save();
 };
 
 Script.prototype.checkRemoteVersionErr = function(lastCheck) {
-  // Set the time back
+  // Set the time back.
   this._lastUpdateCheck = lastCheck;
-  GM_getConfig()._save();
+  GM_util.getService().config._save();
 };
 
 Script.prototype.installUpdate = function(chromeWin) {
-  var scriptDownloader = new GM_ScriptDownloader(chromeWin, GM_uriFromUrl(this._downloadURL), null);
+  var scriptDownloader = new GM_ScriptDownloader(
+      chromeWin, GM_uriFromUrl(this._downloadURL), null);
   scriptDownloader.replacedScript = this;
   scriptDownloader.installOnCompletion_ = true;
   scriptDownloader.startInstall();

@@ -327,10 +327,11 @@ Config.prototype.parse = function(source, uri, updateScript) {
 };
 
 Config.prototype.install = function(script, oldScript) {
-  if (!oldScript) var existingIndex = this._find(script);
+  var existingIndex = null;
+  if (!oldScript) existingIndex = this._find(script);
   if (oldScript || existingIndex > -1) {
     // Save the old script's state.
-    if (!oldScript) var oldScript = this._scripts[existingIndex];
+    if (!oldScript) oldScript = this._scripts[existingIndex];
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
     script.userIncludes = oldScript.userIncludes;
@@ -464,10 +465,7 @@ Config.prototype._notifyUpdates = function() {
       function (script) { return script.updateAvailable; });
   if (0 == scripts.length) return;
 
-  var win = Components.classes['@mozilla.org/appshell/window-mediator;1']
-    .getService(Ci.nsIWindowMediator)
-    .getMostRecentWindow("navigator:browser");
-  win.GM_OpenUpdatesMgr();
+  GM_util.getBrowserWindow().GM_OpenUpdatesMgr();
 };
 
 Config.prototype.checkScriptsForRemoteUpdates = function(chromeWin, scripts) {
@@ -478,17 +476,18 @@ Config.prototype.checkScriptsForRemoteUpdates = function(chromeWin, scripts) {
   var updateCheckingInterval = 86400000 * minInterval;
   var forced = false;
 
-  if (typeof scripts == "undefined") {
+  if ('undefined' == typeof scripts) {
     forced = true;
-    var scripts = this.getMatchingScripts(
-        function (script) { return !script.updateAvailable &&
-                                   script.updateURL &&
-                                   script.enabled;
+    var scripts = this.getMatchingScripts(function (script) {
+      return !script.updateAvailable &&
+          script.updateURL &&
+          script.enabled;
     });
   }
 
   scripts.forEach(function(script) {
-      script.checkForRemoteUpdate(chromeWin, currentTime, updateCheckingInterval, forced);
+    script.checkForRemoteUpdate(
+        chromeWin, currentTime, updateCheckingInterval, forced);
   });
 };
 

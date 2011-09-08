@@ -303,7 +303,7 @@ GM_ScriptDownloader.prototype.installScript = function(){
     alert(this.dependencyError);
   } else if(this.dependenciesLoaded_) {
     if (this.replacedScript) {
-      GM_getConfig().install(this.script, this.replacedScript);
+      GM_util.getService().config.install(this.script, this.replacedScript);
     } else {
       this.win_.GM_BrowserUI.installScript(this.script);
     }
