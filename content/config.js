@@ -124,35 +124,6 @@ Config.prototype._save = function(saveNow) {
   GM_util.writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
-Config.prototype.parseVersion = function(source) {
-  // read one line at a time looking for start meta delimiter or EOF
-  var lines = source.match(/.+/g);
-  var lnIdx = 0;
-  var result = {};
-  var foundMeta = false;
-
-  var start = "// ==UserScript==";
-  var end = "// ==/UserScript==";
-  var version = /\/\/ \@version\s+([^\n]+)/;
-
-  while ((result = lines[lnIdx++])) {
-    if (result.indexOf(start) != 0) continue;
-
-    foundMeta = true;
-    break;
-  }
-  if (!foundMeta) return;
-
-  while ((result = lines[lnIdx++])) {
-    if (result.indexOf(end) == 0) break;
-
-    var match = result.match(version);
-    if (match !== null) return match[1];
-  }
-
-  return null;
-};
-
 Config.prototype.parse = function(source, uri, updateScript) {
   var script = new Script();
 

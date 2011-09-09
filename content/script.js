@@ -537,8 +537,10 @@ Script.prototype.checkRemoteVersion = function(req) {
   if (req.status != 200 && req.status != 0) return;
 
   var source = req.responseText;
-  var remoteVersion = GM_util.getService().config.parseVersion(source);
+  var newScript = GM_util.getService().config.parse(source);
+  var remoteVersion = newScript.version;
   if (!remoteVersion) return;
+
   var versionChecker = Components
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
