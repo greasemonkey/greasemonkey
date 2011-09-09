@@ -327,17 +327,17 @@ Config.prototype.parse = function(source, uri, updateScript) {
 };
 
 Config.prototype.install = function(script, oldScript) {
-  var existingIndex = null;
-  if (!oldScript) existingIndex = this._find(script);
-  if (oldScript || existingIndex > -1) {
+  var existingIndex = this._find(oldScript || script);
+  if (!oldScript) oldScript = this.scripts[existingIndex];
+
+  if (oldScript) {
     // Save the old script's state.
-    if (!oldScript) oldScript = this._scripts[existingIndex];
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
     script.userIncludes = oldScript.userIncludes;
 
     // Uninstall the old script.
-    this.uninstall(this._scripts[existingIndex], true);
+    this.uninstall(oldScript, true);
   }
 
   script._initFile(script._tempFile);
