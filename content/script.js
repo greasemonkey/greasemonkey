@@ -174,14 +174,6 @@ function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; })
 Script.prototype.__defineGetter__('textContent',
 function Script_getTextContent() { return GM_util.getContents(this.file); });
 
-Script.prototype.__defineGetter__('size',
-function Script_getSize() {
-  var size = this.file.fileSize;
-  for each (var r in this._requires) size += r.file.fileSize;
-  for each (var r in this._resources) size += r.file.fileSize;
-  return size;
-});
-
 Script.prototype._initFileName = function(name, useExt) {
   var ext = "";
   name = name.toLowerCase();
