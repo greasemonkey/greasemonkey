@@ -32,6 +32,6 @@
 <!ENTITY greasemonkey.noscriptshere "Жоден зі встановлених скриптів не працює на цій сторінці.">
 <!ENTITY greasemonkey.youhavenoscripts "Жодних скриптів не встановлено">
 <!ENTITY greasemonkey.getuserscripts "Отримати користувацькі скрипти">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "Налаштування користувацьких скриптів Greasemonkey - !!">
+<!ENTITY scriptprefs.usersettings "Налаштування">
+<!ENTITY scriptprefs.scriptsettings "Налаштування скрипту">

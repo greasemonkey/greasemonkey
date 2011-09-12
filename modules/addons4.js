@@ -92,7 +92,6 @@ function ScriptAddon(aScript) {
   this.version = this._script.version;
   this.description = this._script.description;
   this.iconURL = this._script.icon.fileURL;
-  this.size = this._script.size;
   this.updateDate = this._script.modifiedDate;
 }
 
@@ -113,7 +112,6 @@ ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART
 
 // Optional attributes
 ScriptAddon.prototype.description = null;
-ScriptAddon.prototype.size = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;

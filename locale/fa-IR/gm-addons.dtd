@@ -1,6 +1,6 @@
 <!ENTITY Edit "ویرایش">
 <!ENTITY Edit.accesskey ",">
-<!ENTITY Edit.tooltip "ویرایش این نویسه کاربری">
+<!ENTITY Edit.tooltip "ویرایش این دستنویس کاربری">
 <!ENTITY ExecuteFirst "اجرای اولین">
 <!ENTITY ExecuteLast "اجرای آخرین">
 <!ENTITY ExecuteLater "دیرتر اجرا شود">
@@ -13,21 +13,21 @@
 <!ENTITY MoveToTop.accesskey "ب">
 <!ENTITY MoveUp "حرکت به بالا">
 <!ENTITY MoveUp.accesskey "ب">
-<!ENTITY NewScript "ساخت نویسه کاربری جدید">
+<!ENTITY NewScript "ساخت دستنویس کاربری جدید">
 <!ENTITY NewScript.accesskey "س">
-<!ENTITY Show "Show Containing Folder">
-<!ENTITY Show.accesskey "S">
+<!ENTITY Show "نمایش پوشه حاوی">
+<!ENTITY Show.accesskey "ح">
 <!ENTITY Sort.ByStatus "مرتب کردن بر اساس وضعیت">
 <!ENTITY Sort.Status "وضعیت">
 <!ENTITY Sort.ByName "مرتب کردن بر اساس نام">
 <!ENTITY Sort.Name "نام">
 <!ENTITY Sort.ByExecution "مرتب کردن بر اساس ترتیب اجرا">
 <!ENTITY Sort.Execution "ترتیب اجرا">
-<!ENTITY SortScripts "مرتب سازی نویسه ها">
+<!ENTITY SortScripts "مرتب سازی دستنویس ها">
 <!ENTITY SortScripts.accesskey "م">
 <!ENTITY UninstallCancel "لغو عزل">
 <!ENTITY UninstallCancel.accesskey "ل">
-<!ENTITY UninstallCancel.tooltip "لغو فرآیند عزل نویسه کاربری">
-<!ENTITY UninstallCancelDescription "وقتی که پنجره محاوره ای بسته شود این نویسه پاک خواهد شد. (یا برای &quot;عزل هم اکنون&quot; راست کلیک کنید.)">
+<!ENTITY UninstallCancel.tooltip "لغو فرآیند عزل دستنویس کاربری">
+<!ENTITY UninstallCancelDescription "وقتی که پنجره محاوره ای بسته شود این دستنویس پاک خواهد شد. (یا برای &quot;عزل هم اکنون&quot; راست کلیک کنید.)">
 <!ENTITY UninstallNow "عزل هم اکنون">
 <!ENTITY UninstallNow.accesskey "ه">

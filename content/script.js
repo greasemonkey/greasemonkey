@@ -202,14 +202,6 @@ function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; })
 Script.prototype.__defineGetter__('textContent',
 function Script_getTextContent() { return GM_util.getContents(this.file); });
 
-Script.prototype.__defineGetter__('size',
-function Script_getSize() {
-  var size = this.file.fileSize;
-  for each (var r in this._requires) size += r.file.fileSize;
-  for each (var r in this._resources) size += r.file.fileSize;
-  return size;
-});
-
 Script.prototype._initFileName = function(name, useExt) {
   var ext = "";
   name = name.toLowerCase();
@@ -506,12 +498,26 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       if (!nextFile.equals(this.file)) nextFile.remove(true);
     }
 
-    // Store window references for late injection
-    this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+    // Store window references for late injection.
+    if ('document-start' == this._runAt) {
+      GM_util.logError(
+          this.id + "\nNot running at document-start; waiting for update ...",
+          true);
+      this.pendingExec.push('document-start update');
+    } else {
+      this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+    }
 
-    // Redownload dependencies.
+    // Re-download dependencies.  The timer guarantees that it will
+    // reliably complete after the normal document-end time.  (See #1402; going
+    // from some -> no requires means this is a short-circuit call.)
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    scriptDownloader.startUpdateScript(this);
+    var timer = Components.classes["@mozilla.org/timer;1"]
+        .createInstance(Components.interfaces.nsITimer);
+    var that = this; // closure-passing safe "this" reference.
+    timer.initWithCallback(
+        {'notify': function() { scriptDownloader.startUpdateScript(that); }},
+        0, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
   }
 };
 

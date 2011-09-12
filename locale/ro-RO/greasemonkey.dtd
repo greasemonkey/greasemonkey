@@ -12,7 +12,7 @@
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Installation">
 <!ENTITY install.runson "runs on:">
-<!ENTITY install.matches "збіги:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "does not run on:">
 <!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
 <!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
@@ -25,13 +25,13 @@
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
-<!ENTITY options.globalExcludes "Глобальні винятки">
+<!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
-<!ENTITY greasemonkey.noscriptshere "Жоден зі встановлених скриптів не працює на цій сторінці.">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
 <!ENTITY greasemonkey.getuserscripts "Get user scripts">
-<!ENTITY scriptprefs.title "Налаштування користувацьких скриптів Greasemonkey - !!">
-<!ENTITY scriptprefs.usersettings "Налаштування">
-<!ENTITY scriptprefs.scriptsettings "Налаштування скрипту">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

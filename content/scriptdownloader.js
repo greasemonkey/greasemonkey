@@ -272,9 +272,17 @@ GM_ScriptDownloader.prototype.finishInstall = function() {
     var pendingExecAry = this.script.pendingExec;
     this.script.pendingExec = [];
     while (pendingExec = pendingExecAry.shift()) {
+      if ('document-start update' == pendingExec) {
+        GM_util.logError(
+            this.script.id + '\n... script update complete (will run next time).',
+            true);
+        continue;
+      }
       if (pendingExec.safeWin.closed) continue;
       var url = pendingExec.safeWin.location.href;
-      if (GM_util.scriptMatchesUrlAndRuns(this.script, url)) {
+      var shouldRun = GM_util.scriptMatchesUrlAndRuns(
+          this.script, url, this.script.runAt);
+      if (shouldRun) {
         GM_util.getService().injectScripts(
             [this.script], url, pendingExec.safeWin, pendingExec.chromeWin);
       }

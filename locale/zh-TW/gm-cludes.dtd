@@ -4,8 +4,8 @@
 <!ENTITY promptForEdit.msg "請修改下列網址，可以利用萬用字元(*)來一次指定多個頁面。">
 <!ENTITY promptForEdit.title "編輯網址">
 <!ENTITY button.add "新增...">
-<!ENTITY button.addUserExclude "Add as user exclude">
-<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.addUserExclude "新增為使用者例外">
+<!ENTITY button.addUserInclude "新增為使用者引入">
 <!ENTITY button.edit "編輯...">
 <!ENTITY button.remove "移除">
 <!ENTITY label.grpIncluded "腳本將套用到的網址">

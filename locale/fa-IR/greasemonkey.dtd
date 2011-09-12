@@ -1,22 +1,22 @@
-<!ENTITY menu.install "نصب نویسه کاربری...">
+<!ENTITY menu.install "نصب دستنویس کاربری...">
 <!ENTITY menu.install.accesskey "ن">
-<!ENTITY menu.show "نمایش متن نویسه کاربری">
+<!ENTITY menu.show "نمایش متن دستنویس کاربری">
 <!ENTITY menu.show.accesskey "ش">
-<!ENTITY menu.commands "فرامین نویسه کاربری...">
+<!ENTITY menu.commands "فرامین دستنویس کاربری...">
 <!ENTITY menu.commands.accesskey "ف">
-<!ENTITY menu.new "نویسه کاربری جدید...">
+<!ENTITY menu.new "دستنویس کاربری جدید...">
 <!ENTITY menu.new.accesskey "ج">
-<!ENTITY menu.manage "مدیریت نویسه های کاربری...">
+<!ENTITY menu.manage "مدیریت دستنویس های کاربری...">
 <!ENTITY menu.manage.accesskey "م">
 <!ENTITY statusbar.enabled "فعال">
 <!ENTITY statusbar.enabled.accesskey "ع">
 <!ENTITY install.title "فرآیند نصب گریسمانکی">
 <!ENTITY install.runson "اجرا در:">
-<!ENTITY install.matches "matches:">
+<!ENTITY install.matches "مطابقت ها:">
 <!ENTITY install.butnoton "عدم اجرا در:">
-<!ENTITY install.warning1 "نویسه های بد اندیش می توانند به حریم شما تجاوز کنند و بدون آگاهی شما، روی حقوق شما تاثری بگذارند.">
-<!ENTITY install.warning2 "شما می بایست فقط نویسه هایی را نصب کنید که از منابع آنها مطمئن هستید.">
-<!ENTITY install.showscriptsource "نمایش متن نویسه کاربری">
+<!ENTITY install.warning1 "دستنویس های بد اندیش می توانند به حریم شما تجاوز کنند و بدون آگاهی شما، روی حقوق شما تاثری بگذارند.">
+<!ENTITY install.warning2 "شما می بایست فقط دستنویس هایی را نصب کنید که از منابع آنها مطمئن هستید.">
+<!ENTITY install.showscriptsource "نمایش متن دستنویس کاربری">
 <!ENTITY install.installbutton "نصب">
 <!ENTITY newscript.name "نام">
 <!ENTITY newscript.namespace "فضای نام">
@@ -25,13 +25,13 @@
 <!ENTITY newscript.excludes "مستثنا کردن (یکی در هر خط)">
 <!ENTITY options.editor "ویراستار">
 <!ENTITY options.changeEditor "تغییر ویراستار">
-<!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "نویسه های کاربری">
+<!ENTITY options.globalExcludes "مستثنا های کلی">
+<!ENTITY userscripts "دستنویس های کاربری">
 <!ENTITY Uninstall "عزل">
 <!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">
-<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
-<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
-<!ENTITY greasemonkey.getuserscripts "Get user scripts">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY greasemonkey.noscriptshere "دستنویس ای که در این صفحه اجرا شود موجود نیست.">
+<!ENTITY greasemonkey.youhavenoscripts "شما هیچ دستنویس نسب شده ای ندارید">
+<!ENTITY greasemonkey.getuserscripts "دریافت دستنویس های کاربری">
+<!ENTITY scriptprefs.title "ترجیهات دستنویس کاربریگریزمانکی  - !!">
+<!ENTITY scriptprefs.usersettings "تنظیمات کاربر">
+<!ENTITY scriptprefs.scriptsettings "تنظیمات گریزمانکی">

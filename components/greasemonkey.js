@@ -25,7 +25,9 @@ var gExtensionPath = (function() {
   } catch (e) { dump(e+'\n'+uneval(e)+'\n\n'); return 'x'; }
 })();
 
-var gMaxJSVersion = "1.6";
+// Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
+var gMaxJSVersion = "1.8";
+
 var gMenuCommands = [];
 var gStartupHasRun = false;
 
@@ -62,6 +64,53 @@ function GM_apiLeakCheck(apiName) {
   } while (stack);
 
   return true;
+}
+
+function createSandbox(
+    aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
+) {
+  var unsafeWin = aContentWin.wrappedJSObject;
+  var sandbox = new Components.utils.Sandbox(aContentWin);
+
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
+    // Fixes .. something confusing.  Must be before __proto__ assignment.
+    //  See #1192
+    sandbox.document = aContentWin.document;
+  }
+
+  sandbox.__proto__ = aContentWin;
+  sandbox.unsafeWindow = unsafeWin;
+  sandbox.XPathResult = Ci.nsIDOMXPathResult;
+
+  // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
+  sandbox.alert = alert;
+
+  sandbox.console = aFirebugConsole ? aFirebugConsole : new GM_console(aScript);
+
+  var imp = sandbox.importFunction;
+  imp(function(css) { GM_addStyle(aContentWin.document, css); }, 'GM_addStyle');
+  imp(GM_util.hitch(new GM_ScriptLogger(aScript), 'log'), 'GM_log');
+  imp(GM_util.hitch(null, openInTab, aContentWin, aChromeWin), 'GM_openInTab');
+  imp(GM_util.hitch(null, registerMenuCommand, aContentWin, aChromeWin, aScript),
+      'GM_registerMenuCommand');
+
+  var scriptStorage = new GM_ScriptStorage(aScript);
+  imp(GM_util.hitch(scriptStorage, 'deleteValue'), 'GM_deleteValue');
+  imp(GM_util.hitch(scriptStorage, 'getValue'), 'GM_getValue');
+  imp(GM_util.hitch(scriptStorage, 'setValue'), 'GM_setValue');
+
+  var scriptResources = new GM_Resources(aScript);
+  imp(GM_util.hitch(scriptResources, 'getResourceURL'), 'GM_getResourceURL');
+  imp(GM_util.hitch(scriptResources, 'getResourceText'), 'GM_getResourceText');
+
+  // The .importMethod() is safe because it can't return object values (I
+  // think?) -- but sometimes we want to, so in that case do a straight assign.
+  sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
+  sandbox.GM_xmlhttpRequest = GM_util.hitch(
+      new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
+      'contentStartRequest');
+
+  return sandbox;
 }
 
 function findError(script, lineNumber) {
@@ -109,6 +158,66 @@ function isTempScript(uri) {
 
   return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
 }
+
+function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
+  if (!GM_apiLeakCheck("GM_openInTab")) {
+    return undefined;
+  }
+  if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
+
+  var browser = chromeWin.gBrowser;
+  var tabs = browser.mTabs /* Firefox <=3.6 */ || browser.tabs /* >=4.0 */;
+  var currentTab = tabs[
+      browser.getBrowserIndexForDocument(safeContentWin.document)];
+  var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
+  var newWin = GM_util.windowForTab(newTab, browser);
+
+  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
+      .getService(Ci.nsIPrefService)
+      .getBranch("browser.tabs.")
+      .getBoolPref("insertRelatedAfterCurrent");
+  if (afterCurrent) {
+    browser.moveTabTo(newTab, currentTab._tPos + 1);
+  }
+
+  return newWin;
+};
+
+function registerMenuCommand(
+    wrappedContentWin, chromeWin, script,
+    commandName, commandFunc, accessKey, unused, accessKey2
+) {
+  if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
+    return;
+  }
+
+  if (wrappedContentWin.top != wrappedContentWin) {
+    // Only register menu commands for the top level window.
+    return;
+  }
+
+  // Legacy support: if all five parameters were specified, (from when two
+  // were for accelerators) use the last one as the access key.
+  if ('undefined' != typeof accessKey2) {
+    accessKey = accessKey2;
+  }
+
+  if (accessKey
+      && (("string" != typeof accessKey) || (accessKey.length != 1))
+  ) {
+    throw new Error('Error with menu command "'
+        + commandName + '": accessKey must be a single character');
+  }
+
+  var command = {
+      name: commandName,
+      accessKey: accessKey,
+      commandFunc: commandFunc,
+      contentWindow: wrappedContentWin,
+      contentWindowId: GM_util.windowId(wrappedContentWin),
+      frozen: false};
+  gMenuCommands.push(command);
+};
 
 function runScriptInSandbox(code, sandbox, script) {
   try {
@@ -165,9 +274,8 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  // Firefox 3.6 and higher supports 1.8.
-  if (GM_util.compareFirefoxVersion("3.6") >= 0) {
-    gMaxJSVersion = "1.8";
+  if (GM_util.compareFirefoxVersion("4.0") >= 0) {
+    gMaxJSVersion = "ECMAv5";
   }
 
   // Firefox <4 reports a different stack.fileName for the module.
@@ -207,70 +315,6 @@ service.prototype.QueryInterface = XPCOMUtils.generateQI([
       Ci.nsIWindowMediatorListener,
       Ci.nsIContentPolicy
     ]);
-
-/////////////////////////////////// Privates ///////////////////////////////////
-
-service.prototype._openInTab = function(
-    safeContentWin, chromeWin, url, aLoadInBackground
-) {
-  if (!GM_apiLeakCheck("GM_openInTab")) {
-    return undefined;
-  }
-  if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
-
-  var browser = chromeWin.gBrowser;
-  var tabs = browser.mTabs /* Firefox <=3.6 */ || browser.tabs /* >=4.0 */;
-  var currentTab = tabs[
-      browser.getBrowserIndexForDocument(safeContentWin.document)];
-  var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
-  var newWin = GM_windowForTab(newTab, browser);
-
-  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
-      .getService(Ci.nsIPrefService)
-      .getBranch("browser.tabs.")
-      .getBoolPref("insertRelatedAfterCurrent");
-  if (afterCurrent) {
-    browser.moveTabTo(newTab, currentTab._tPos + 1);
-  }
-
-  return newWin;
-};
-
-service.prototype._registerMenuCommand = function(
-    wrappedContentWin, chromeWin, script,
-    commandName, commandFunc, accessKey, unused, accessKey2
-) {
-  if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
-    return;
-  }
-
-  if (wrappedContentWin.top != wrappedContentWin) {
-    // Only register menu commands for the top level window.
-    return;
-  }
-
-  // Legacy support: if all five parameters were specified, (from when two
-  // were for accelerators) use the last one as the access key.
-  if ('undefined' != typeof accessKey2) {
-    accessKey = accessKey2;
-  }
-
-  if (accessKey
-      && (("string" != typeof accessKey) || (accessKey.length != 1))
-  ) {
-    throw new Error('Error with menu command "'
-        + commandName + '": accessKey must be a single character');
-  }
-
-  var command = {
-      name: commandName,
-      accessKey: accessKey,
-      commandFunc: commandFunc,
-      contentWindow: wrappedContentWin,
-      contentWindowId: GM_util.windowId(wrappedContentWin),
-      frozen: false};
-  gMenuCommands.push(command);
-};
 
 /////////////////////////////// nsIContentPolicy ///////////////////////////////
 
@@ -365,7 +409,7 @@ service.prototype.runScripts = function(
   if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-    this._config.updateModifiedScripts(aWrappedContentWin, aChromeWin);
+    this._config.updateModifiedScripts(aRunWhen, aWrappedContentWin, aChromeWin);
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
@@ -387,66 +431,11 @@ service.prototype.ignoreNextScript = function() {
 service.prototype.injectScripts = function(
     scripts, url, wrappedContentWin, chromeWin
 ) {
-  var sandbox;
-  var script;
-  var logger;
-  var console;
-  var storage;
-  var xmlhttpRequester;
-  var resources;
-  var unsafeContentWin = wrappedContentWin.wrappedJSObject;
   var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
-  for (var i = 0; script = scripts[i]; i++) {
-    sandbox = new Components.utils.Sandbox(wrappedContentWin);
-
-    logger = new GM_ScriptLogger(script);
-
-    console = firebugConsole ? firebugConsole : new GM_console(script);
-
-    storage = new GM_ScriptStorage(script);
-    xmlhttpRequester = new GM_xmlhttpRequester(
-        wrappedContentWin, chromeWin, url);
-    resources = new GM_Resources(script);
-
-    sandbox.unsafeWindow = unsafeContentWin;
-
-    // hack XPathResult since that is so commonly used
-    sandbox.XPathResult = Ci.nsIDOMXPathResult;
-
-    // add our own APIs
-    sandbox.GM_addStyle = function(css) {
-          GM_addStyle(wrappedContentWin.document, css);
-        };
-    sandbox.GM_log = GM_util.hitch(logger, "log");
-    sandbox.console = console;
-    sandbox.GM_setValue = GM_util.hitch(storage, "setValue");
-    sandbox.GM_getValue = GM_util.hitch(storage, "getValue");
-    sandbox.GM_deleteValue = GM_util.hitch(storage, "deleteValue");
-    sandbox.GM_listValues = GM_util.hitch(storage, "listValues");
-    sandbox.GM_getResourceURL = GM_util.hitch(resources, "getResourceURL");
-    sandbox.GM_getResourceText = GM_util.hitch(resources, "getResourceText");
-    sandbox.GM_openInTab = GM_util.hitch(
-        this, "_openInTab", wrappedContentWin, chromeWin);
-    sandbox.GM_xmlhttpRequest = GM_util.hitch(xmlhttpRequester,
-                                         "contentStartRequest");
-    sandbox.GM_registerMenuCommand = GM_util.hitch(
-        this, "_registerMenuCommand", wrappedContentWin, chromeWin, script);
-
-    // Let updaters out there already know that this version
-    // of GM has an updater.
-    sandbox.GM_updatingEnabled = true;
-
-    // Re-wrap the window before assigning it to the sandbox.__proto__
-    // This is a workaround for a bug in which the Security Manager
-    // vetoes the use of eval.
-    sandbox.__proto__ = new XPCNativeWrapper(unsafeContentWin);
-
-    Components.utils.evalInSandbox(
-        "var document = window.document;", sandbox);
-
-    // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
-    sandbox.alert = alert;
+  for (var i = 0, script = null; script = scripts[i]; i++) {
+    var sandbox = createSandbox(
+        script, wrappedContentWin, chromeWin, firebugConsole, url);
 
     var requires = [];
     var offsets = [];

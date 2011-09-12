@@ -1,11 +1,11 @@
-<!ENTITY promptForNewPage.msg "Voer hieronder een nieuwe URL in. U kunt meerdere pagina’s specificeren m.b.v. een ‘wildcard’ (*).">
+<!ENTITY promptForNewPage.msg "Voer hieronder een nieuwe URL in. U kunt meerdere pagina’s opgeven m.b.v. het wildcard (*)-teken.">
 <!ENTITY promptForNewPage.title "Pagina toevoegen">
-<!ENTITY promptForNewPage.defVal "http://www.URL.nl/*">
-<!ENTITY promptForEdit.msg "Verander de URL van onderstaande pagina. U kunt meerderr pagina’s specificeren m.b.v. een ‘wildcard’ (*).">
+<!ENTITY promptForNewPage.defVal "http://voorbeeld.nl/*">
+<!ENTITY promptForEdit.msg "Verander de URL van onderstaande pagina. U kunt meerdere pagina’s opgeven m.b.v. het wildcard (*)-teken.">
 <!ENTITY promptForEdit.title "Pagina bewerken">
 <!ENTITY button.add "Toevoegen…">
-<!ENTITY button.addUserExclude "Add as user exclude">
-<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.addUserExclude "Handmatig uitsluiten">
+<!ENTITY button.addUserInclude "Handmatig beïnvloeden">
 <!ENTITY button.edit "Bewerken…">
 <!ENTITY button.remove "Verwijderen">
 <!ENTITY label.grpIncluded "Inclusief deze pagina’s">

@@ -28,6 +28,6 @@
 <!ENTITY UninstallCancel "Deïnstallatie annuleren">
 <!ENTITY UninstallCancel.accesskey "D">
 <!ENTITY UninstallCancel.tooltip "Deïnstallatie van dit gebruikersscript annuleren">
-<!ENTITY UninstallCancelDescription "Dit gebruikersscript wordt gedeïnstalleerd na sluiten van het venster. (Of gebruik de rechter muisknop voor &quot;Nu deïnstalleren&quot;.)">
+<!ENTITY UninstallCancelDescription "Dit gebruikersscript wordt gedeïnstalleerd na sluiten van het venster. (Of gebruik de rechter muisknop voor “Nu deïnstalleren”.)">
 <!ENTITY UninstallNow "Nu deïnstalleren">
 <!ENTITY UninstallNow.accesskey "N">

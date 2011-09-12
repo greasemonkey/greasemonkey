@@ -32,6 +32,6 @@
 <!ENTITY greasemonkey.noscriptshere "לא קיימים סקריפטים מותקנים פעילים בדף זה.">
 <!ENTITY greasemonkey.youhavenoscripts "לא מותקנים אצלך סקריפטים של משתמש">
 <!ENTITY greasemonkey.getuserscripts "השג סקריפטים של משתמש">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "מאפייני משתמש סקריפט של גריזמונקי - !!">
+<!ENTITY scriptprefs.usersettings "הגדרות משתמש">
+<!ENTITY scriptprefs.scriptsettings "הגדרות סקריפט">

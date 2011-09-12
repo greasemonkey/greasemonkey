@@ -1,8 +1,15 @@
 const EXPORTED_SYMBOLS = ['hitch'];
 
-function hitch(obj, meth) {
-  if (!obj[meth]) {
-    throw "method '" + meth + "' does not exist on object '" + obj + "'";
+function hitch(obj, method) {
+  if (obj && method && ('string' == typeof method)) {
+    if (!obj[method]) {
+      throw "method '" + method + "' does not exist on object '" + obj + "'";
+    }
+    method = obj[method];
+  } else if (!obj && ('function' == typeof method)) {
+    obj = {};
+  } else {
+    throw "Invalid arguments to GM_util.hitch().";
   }
 
   var staticArgs = Array.prototype.splice.call(arguments, 2, arguments.length);
@@ -17,6 +24,6 @@ function hitch(obj, meth) {
 
     // invoke the original function with the correct this obj and the combined
     // list of static and dynamic arguments.
-    return obj[meth].apply(obj, args);
+    return method.apply(obj, args);
   };
 }
