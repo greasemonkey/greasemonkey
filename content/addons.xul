@@ -42,27 +42,18 @@
 </notificationbox>
 
 <hbox id="commandBarBottom">
-  <!--
   <button id="findUpdatesUserscripts"
     insertafter="checkUpdatesAllButton"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
-    disabled="true"
+    oncommand="GM_config.checkScriptsForRemoteUpdates(window);"
   />
-  -->
 
   <label id="getMoreUserscripts" class="text-link"
     insertafter="getMore"
     onclick="if (event.button == 0) { openURL(this.getAttribute('getMoreURL')); }"
     value="Get User Scripts"
     getMoreURL="http://userscripts.org/"
-  />
-
-  <button id="findUpdatesUserscripts"
-    insertafter="getMore"
-    oncommand="GM_config.checkScriptsForRemoteUpdates(window);"
-    label="&cmd.checkUpdatesAll.label;"
-    accesskey="&cmd.checkUpdatesAll.accesskey;"
   />
 
   <button id="newUserscript"
@@ -76,11 +67,10 @@
 <window id="extensionsManager">
   <commandset id="userscripts-commands"
       oncommand="greasemonkeyAddons.doCommand(event.target.id);">
-    <command id="cmd_userscript_installUpdate"/>
-    <command id="cmd_userscript_checkForUpdate"/>
     <command id="cmd_userscript_edit"/>
     <command id="cmd_userscript_options"/>
     <command id="cmd_userscript_show"/>
+    <command id="cmd_userscript_checkUpdate"/>
     <command id="cmd_userscript_enable"/>
     <command id="cmd_userscript_disable"/>
     <command id="cmd_userscript_uninstall"/>
@@ -98,15 +88,6 @@
   <menupopup id="userscriptContextMenu"
     onpopupshowing="greasemonkeyAddons.buildContextMenu(event);"
   >
-    <menuitem id="userscript_context_installUpdate" command="cmd_userscript_installUpdate"
-      label="&InstallUpdate;"
-    />
-    <menuitem id="userscript_context_checkForUpdate" command="cmd_userscript_checkForUpdate"
-      label="&FindUpdate;"
-    />
-
-    <menuseparator id="userscript_context_move_separator"/>
-
     <menuitem id="userscript_context_move_up" command="cmd_userscript_move_up"
       label="&MoveUp;" accesskey="&MoveUp.accesskey;"
     />
@@ -146,14 +127,14 @@
 
     <menuseparator/>
 
+    <menuitem id="userscript_context_checkUpdate" command="cmd_userscript_checkUpdate"
+      label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
     <!--
     Todo: Make install/upgrade menu items like extensions if/when added.
     <menuitem id="userscript_context_cancelInstall" command="cmd_cancelInstall"
       label="&cmd.cancelInstall.label;" accesskey="&cmd.cancelInstall.accesskey;"/>
     <menuitem id="userscript_context_cancelUpgrade" command="cmd_cancelUpgrade"
       label="&cmd.cancelUpgrade.label;" accesskey="&cmd.cancelUpgrade.accesskey;"/>
-    <menuitem id="userscript_context_checkUpdate" command="cmd_checkUpdate"
-      label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
     -->
 
     <menuitem id="userscript_context_enable" command="cmd_userscript_enable"

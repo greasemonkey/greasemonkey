@@ -134,9 +134,9 @@ var observer = {
         currentViewNode.removeChild(node);
         break;
       case 'move':
-        currentViewNode.removeChild(node);
-        currentViewNode.insertBefore(node, gUserscriptsView.childNodes[data]);
-        currentViewNode.reselectLastSelected();
+        gUserscriptsView.removeChild(node);
+        gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
+        greasemonkeyAddons.reselectLastSelected();
         break;
       case 'modified':
         var item = greasemonkeyAddons.listitemForScript(
@@ -343,10 +343,11 @@ var greasemonkeyAddons = {
       return;
     }
 
+    var currentViewNode = null;
     if ('updates' == gView) {
       currentViewNode = gExtensionsView;
     } else if ('userscripts' == gView) {
-      currentViewNode = gUserscriptsView;2
+      currentViewNode = gUserscriptsView;
     }
 
     var selectedListitem = currentViewNode.selectedItem;
@@ -401,10 +402,7 @@ var greasemonkeyAddons = {
       delete(GM_uninstallQueue[script.id]);
       GM_config.uninstall(script);
       break;
-    case 'cmd_userscript_installUpdate':
-      script.installUpdate(GM_util.getBrowserWindow());
-      break;
-    case 'cmd_userscript_checkForUpdate':
+    case 'cmd_userscript_checkUpdate':
       script.checkForRemoteUpdate(
           GM_util.getBrowserWindow(), new Date().getTime(), 0, true);
       break;
@@ -435,24 +433,16 @@ var greasemonkeyAddons = {
     }
 
     var standardItems = [
-        'installUpdate',
         'move_up', 'move_down', 'move_top', 'move_bottom', 'sort',
         'move_separator',
         'edit', 'show',
         'edit_separator',
+        'checkUpdate',
         'uninstall'];
     var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
     // Set everything hidden now, reveal the right selection below.
     setItemsHidden(true);
-
-    if (!script.updateAvailable) {
-      $('userscript_context_installUpdate').style.display = 'none';
-      $('userscript_context_checkForUpdate').style.display = 'block';
-    } else {
-      $('userscript_context_installUpdate').style.display = 'block';
-      $('userscript_context_checkForUpdate').style.display = 'none';
-    }
 
     var selectedItem = gUserscriptsView.selectedItem;
     if ('needs-uninstall' == selectedItem.getAttribute('opType')) {

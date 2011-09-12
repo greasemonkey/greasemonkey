@@ -8,6 +8,8 @@
 %greasemonkeyDTD;
 <!ENTITY % greasemonkeyAddonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
 %greasemonkeyAddonsDTD;
+<!ENTITY % extensionsDTD SYSTEM "chrome://mozapps/locale/extensions/extensions.dtd">
+%extensionsDTD;
 ]>
 
 <overlay id="greasemonkey-browser-overlay"
@@ -24,24 +26,17 @@
 </richlistbox>
 
 <commandset id="viewCommandSet">
-  <command id="cmd_userscript_checkForUpdate" />
-  <command id="cmd_userscript_installUpdate" />
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />
   <command id="cmd_userscript_execute_first" />
   <command id="cmd_userscript_execute_sooner" />
   <command id="cmd_userscript_execute_later" />
   <command id="cmd_userscript_execute_last" />
+  <command id="cmd_userscript_showItemPreferences" />
+  <command id="cmd_userscript_find_update" />
 </commandset>
 
 <menupopup id="addonitem-popup">
-  <menuitem id="menuitem_userscript_checkForUpdate" command="cmd_userscript_checkForUpdate"
-    label="&FindUpdate;" type="user-script"
-  />
-  <menuitem id="menuitem_userscript_installUpdate" command="cmd_userscript_installUpdate"
-    label="&InstallUpdate;" type="user-script"
-  />
-  <menuseparator type="user-script"/>
   <menuitem id="menuitem_userscript_edit" command="cmd_userscript_edit"
     label="&Edit;" accesskey="&Edit.accesskey;" type="user-script"
   />
@@ -64,6 +59,13 @@
   <menuitem id="menuitem_userscript_execute_last"
     command="cmd_userscript_execute_last"
     label="&ExecuteLast;" type="user-script"
+  />
+
+  <menuseparator type="user-script"/>
+
+  <menuitem id="menuitem_userscript_find_update"
+    command="cmd_userscript_find_update" type="user-script"
+    label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
   />
 </menupopup>
 

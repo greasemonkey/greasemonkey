@@ -119,27 +119,6 @@ function sortedByExecOrder() {
 function init() {
   GM_util.getService().config.addObserver(observer);
 
-  gViewController.commands.cmd_userscript_checkForUpdate = {
-    isEnabled: function(aAddon) {
-      return addonIsInstalledScript(aAddon) && !aAddon._script.updateAvailable;
-    },
-    doCommand: function(aAddon) {
-      if (aAddon._script.updateAvailable) return;
-      aAddon._script.checkForRemoteUpdate(window, new Date().getTime(), 0, true);
-    }
-  };
-  gViewController.commands.cmd_userscript_installUpdate = {
-    isEnabled: function(aAddon) {
-      return addonIsInstalledScript(aAddon) && aAddon._script.updateAvailable;
-    },
-    doCommand: function(aAddon) {
-      if (!aAddon._script.updateAvailable) return;
-      AddonManagerPrivate.callAddonListeners(
-          'onInstallStarted', aAddon._installer);
-      aAddon._script.installUpdate(window);
-    }
-  };
-
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_util.openInEditor(aAddon._script); }
@@ -164,6 +143,17 @@ function init() {
   gViewController.commands.cmd_userscript_execute_last = {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
+    };
+  gViewController.commands.cmd_userscript_find_update = {
+      isEnabled: function(aAddon) {
+        return addonIsInstalledScript(aAddon)
+        && !aAddon._script.updateAvailable;
+      },
+      doCommand: function(aAddon) {
+        if (aAddon._script.updateAvailable) return;
+        aAddon._script.checkForRemoteUpdate(
+            window, new Date().getTime(), 0, true);
+      }
     };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
