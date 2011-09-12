@@ -522,7 +522,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 };
 
 Script.prototype.checkForRemoteUpdate = function(
-    chromeWin, currentTime, updateCheckingInterval, forced
+    currentTime, updateCheckingInterval, forced
 ) {
   if (this.updateAvailable) return;
   if (!this._updateURL) return;
@@ -534,7 +534,8 @@ Script.prototype.checkForRemoteUpdate = function(
   var lastCheck = this._lastUpdateCheck;
   this._lastUpdateCheck = currentTime;
 
-  var req = new chromeWin.XMLHttpRequest();
+  var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+      .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.open("GET", this.updateURL, true);
   req.onload = GM_util.hitch(this, "checkRemoteVersion", req);
   req.onerror = GM_util.hitch(this, "checkRemoteVersionErr", lastCheck);

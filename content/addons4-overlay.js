@@ -152,7 +152,7 @@ function init() {
       doCommand: function(aAddon) {
         if (aAddon._script.updateAvailable) return;
         aAddon._script.checkForRemoteUpdate(
-            window, new Date().getTime(), 0, true);
+            new Date().getTime(), 0, true);
       }
     };
 

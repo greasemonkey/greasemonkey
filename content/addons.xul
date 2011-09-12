@@ -46,7 +46,7 @@
     insertafter="checkUpdatesAllButton"
     label="&cmd.checkUpdatesAll.label;"
     accesskey="&cmd.checkUpdatesAll.accesskey;"
-    oncommand="GM_config.checkScriptsForRemoteUpdates(window);"
+    oncommand="GM_config.checkScriptsForRemoteUpdates();"
   />
 
   <label id="getMoreUserscripts" class="text-link"

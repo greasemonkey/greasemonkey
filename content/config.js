@@ -440,7 +440,7 @@ Config.prototype._notifyUpdates = function() {
   GM_util.getBrowserWindow().GM_OpenUpdatesMgr();
 };
 
-Config.prototype.checkScriptsForRemoteUpdates = function(chromeWin, scripts) {
+Config.prototype.checkScriptsForRemoteUpdates = function(scripts) {
   var currentTime = new Date().getTime();
   var minInterval = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
 
@@ -459,7 +459,7 @@ Config.prototype.checkScriptsForRemoteUpdates = function(chromeWin, scripts) {
 
   scripts.forEach(function(script) {
     script.checkForRemoteUpdate(
-        chromeWin, currentTime, updateCheckingInterval, forced);
+        currentTime, updateCheckingInterval, forced);
   });
 };
 
