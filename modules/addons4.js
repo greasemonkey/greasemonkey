@@ -129,7 +129,7 @@ function ScriptAddon_getIsActive() {
 });
 
 ScriptAddon.prototype.__defineGetter__('optionsURL',
-function ScriptAddon_getIsActive() {
+function ScriptAddon_getOptionsURL() {
   return 'chrome://greasemonkey/content/scriptprefs.xul#' + this._script.id;
 });
 
