@@ -24,7 +24,7 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
-ScriptInstallsCache = {};
+var ScriptInstallsCache = {};
 function getScriptInstall(script) {
   var scriptId = script.id;
   if (!(scriptId in ScriptInstallsCache)) {
