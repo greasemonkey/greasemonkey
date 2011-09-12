@@ -526,6 +526,8 @@ Script.prototype.checkForRemoteUpdate = function(
 ) {
   if (this.updateAvailable) return;
   if (!this._updateURL) return;
+  if (!GM_prefRoot.getValue("enableUpdateChecking")) return;
+
   var nextUpdate = parseInt(this._lastUpdateCheck, 10) + updateCheckingInterval;
   if (!forced && currentTime <= nextUpdate) return;
 

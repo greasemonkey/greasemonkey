@@ -417,10 +417,7 @@ service.prototype.runScripts = function(
   });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin, aChromeWin);
-
-    if (GM_prefRoot.getValue("enableUpdateChecking")) {
-      this._config.checkScriptsForRemoteUpdates(chromeWin, scripts);
-    }
+    this._config.checkScriptsForRemoteUpdates(scripts);
   }
 };
 
