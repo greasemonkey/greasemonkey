@@ -573,11 +573,11 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck) {
 };
 
 Script.prototype.installUpdate = function(chromeWin) {
-  var scriptDownloader = new GM_ScriptDownloader(
-      chromeWin, GM_util.uriFromUrl(this._downloadURL), null);
+  var uri = GM_util.uriFromUrl(this._downloadURL);
+  var scriptDownloader = new GM_ScriptDownloader(chromeWin, uri, null);
   scriptDownloader.replacedScript = this;
   scriptDownloader.installOnCompletion_ = true;
-  scriptDownloader.startInstall();
+  scriptDownloader.startDownload();
 };
 
 Script.prototype.allFiles = function() {

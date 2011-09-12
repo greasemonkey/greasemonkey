@@ -223,16 +223,6 @@ GM_BrowserUI.installCurrentScript = function() {
   GM_BrowserUI.scriptDownloader_.installScript();
 };
 
-GM_BrowserUI.installScript = function(script){
-  GM_util.getService().config.install(script);
-
-  var tools = {};
-  Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
-  tools.GM_notification(
-      "'" + script.name + "' "
-      + GM_BrowserUI.bundle.getString("statusbar.installed"));
-};
-
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.
  */

@@ -219,6 +219,8 @@ ScriptInstall.prototype.install = function() {
   AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
   var chromeWin = GM_util.getBrowserWindow();
   this._script.installUpdate(chromeWin);
+  // TODO: At the right time:
+  //AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
 };
 ScriptInstall.prototype.cancel = function() {};
 ScriptInstall.prototype.addListener = function() {};
