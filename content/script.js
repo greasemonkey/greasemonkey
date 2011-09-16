@@ -572,11 +572,12 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck) {
   GM_util.getService().config._save();
 };
 
-Script.prototype.installUpdate = function(chromeWin) {
+Script.prototype.installUpdate = function(aChromeWin, aCallback) {
   var uri = GM_util.uriFromUrl(this._downloadURL);
-  var scriptDownloader = new GM_ScriptDownloader(chromeWin, uri, null);
+  var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
   scriptDownloader.replacedScript = this;
   scriptDownloader.installOnCompletion_ = true;
+  if (aCallback) scriptDownloader.onInstall(aCallback);
   scriptDownloader.startDownload();
 };
 

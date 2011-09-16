@@ -216,12 +216,16 @@ ScriptInstall.prototype.type = 'user-script';
 ScriptInstall.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
-  AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
+  function installCallback() {
+    AddonManagerPrivate.callAddonListeners(
+        'onInstallEnded', this, this.existingAddon);
+  }
+
+  AddonManagerPrivate.callAddonListeners('onInstallStarted', this);
   var chromeWin = GM_util.getBrowserWindow();
-  this._script.installUpdate(chromeWin);
-  // TODO: At the right time:
-  //AddonManagerPrivate.callAddonListeners("onInstallStarted", this);
+  this._script.installUpdate(chromeWin, GM_util.hitch(this, installCallback));
 };
+
 ScriptInstall.prototype.cancel = function() {};
 ScriptInstall.prototype.addListener = function() {};
 ScriptInstall.prototype.removeListener = function() {};

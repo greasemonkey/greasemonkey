@@ -22,6 +22,8 @@ GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
   this._oldScriptId = null;
   this.updateScript = false;
   this.replacedScript = null;
+
+  this._onInstallCallbacks = [];
 };
 
 GM_ScriptDownloader.prototype.startInstall = function() {
@@ -314,6 +316,10 @@ GM_ScriptDownloader.prototype.installScript = function() {
     tools.GM_notification(
         "'" + this.script.name + "' "
         + this.win_.GM_BrowserUI.bundle.getString("statusbar.installed"));
+
+    this._onInstallCallbacks.forEach(function(callback) {
+      callback();
+    });
   } else {
     this.installOnCompletion_ = true;
   }
@@ -327,6 +333,10 @@ GM_ScriptDownloader.prototype.cleanupTempFiles = function() {
       // Ignore, go to next.
     }
   }
+};
+
+GM_ScriptDownloader.prototype.onInstall = function(callback) {
+  this._onInstallCallbacks.push(callback);
 };
 
 GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {
