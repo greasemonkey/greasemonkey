@@ -24,18 +24,6 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
-var ScriptInstallsCache = {};
-function getScriptInstall(script) {
-  var scriptId = script.id;
-  if (!(scriptId in ScriptInstallsCache)) {
-    var aAddon = ScriptAddonFactoryByScript(script);
-    var scriptInstall = aAddon._installer || new ScriptInstall(aAddon);
-    ScriptInstallsCache[scriptId] = scriptInstall;
-  }
-
-  return ScriptInstallsCache[scriptId];
-}
-
 // Patch the default loadView() to suppress the detail view for user scripts.
 var _loadViewOrig = gViewController.loadView.bind(gViewController);
 gViewController.loadView = function(aViewId) {
@@ -76,7 +64,8 @@ var observer = {
         oldItem.parentNode.replaceChild(item, oldItem);
         break;
       case 'update-found':
-        var scriptInstall = getScriptInstall(script);
+        var addon = ScriptAddonFactoryByScript(script)
+        var scriptInstall = ScriptInstallFactoryByAddon(addon);
         AddonManagerPrivate.callAddonListeners('onNewInstall', scriptInstall);
         document.getElementById('updates-manualUpdatesFound-btn').hidden = false;
         break;
@@ -209,7 +198,8 @@ function onViewChanged(aEvent) {
     var scripts = GM_util.getService().config.getMatchingScripts(
         function (script) { return script.updateAvailable; });
     scripts.forEach(function (script) {
-      var scriptInstall = getScriptInstall(script);
+      var addon = ScriptAddonFactoryByScript(script)
+      var scriptInstall = ScriptInstallFactoryByAddon(addon);
       AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
     });
     if (scripts.length > 0) {

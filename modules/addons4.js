@@ -8,7 +8,9 @@
 // Module exported symbols.
 var EXPORTED_SYMBOLS = [
     'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
-    'ScriptInstall', 'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
+    'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript',
+    'ScriptInstallFactoryByAddon',
+    ];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -186,7 +188,16 @@ ScriptAddon.prototype.performUninstall = function() {
   delete ScriptAddonCache[this.id];
 };
 
-// http://developer.mozilla.org/en/Addons/Add-on_Manager/AddonInstall
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+var ScriptInstallCache = {};
+function ScriptInstallFactoryByAddon(aAddon) {
+  if (!(aAddon.id in ScriptInstallCache)) {
+    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon);
+  }
+  return ScriptInstallCache[aAddon.id];
+}
+
 function ScriptInstall(aAddon) {
   this._script = aAddon._script;
   aAddon._installer = this;
