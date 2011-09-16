@@ -144,16 +144,6 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
-  gViewController.commands.cmd_userscript_find_update = {
-      isEnabled: function(aAddon) {
-        return addonIsInstalledScript(aAddon)
-        && !aAddon._script.updateAvailable;
-      },
-      doCommand: function(aAddon) {
-        if (aAddon._script.updateAvailable) return;
-        aAddon._script.checkForRemoteUpdate(true);
-      }
-    };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later

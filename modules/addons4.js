@@ -166,9 +166,6 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 };
 
 ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
-  if (this._script.updateAvailable) return;
-
-  var chromeWin = GM_util.getBrowserWindow();
   this._script.checkForRemoteUpdate(true);
 };
 
