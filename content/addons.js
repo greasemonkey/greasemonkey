@@ -29,44 +29,6 @@ function ourShowView(aView) {
 
     if ('updates' == aView) greasemonkeyAddons.showScriptUpdates();
   }
-
-  var _origInstallUpdates = installUpdatesAll;
-  installUpdatesAll = function() {
-    var chromeWin = GM_util.getBrowserWindow();
-    var children = gExtensionsView.children;
-    for (var i = 0, child = null; child = children[i]; i++) {
-      if (!/^urn:greasemonkey:update:item:/.test(child.id)) continue;
-
-      var checkbox = document.getAnonymousElementByAttribute(
-          child, 'anonid', 'includeUpdate');
-      if (!checkbox) continue;
-
-      checkbox.setAttribute('anonid', 'includeScriptUpdate');
-      if (checkbox.checked) {
-        var script = GM_config.getScriptById(child.getAttribute('addonId'));
-        script.installUpdate(chromeWin);
-      }
-    }
-
-    _origInstallUpdates();
-  }
-
-  var _origContextMenuBuilder = buildContextMenu;
-  buildContextMenu = function(event) {
-    _origContextMenuBuilder(event);
-
-    var selectedItem = gExtensionsView.selectedItem;
-    if (/^urn:greasemonkey:update:item:/.test(selectedItem.id)) {
-      document.getElementById('menuitem_homepage_clone')
-          .setAttribute('hidden', true);
-      document.getElementById('menuitem_about_clone')
-          .setAttribute('hidden', true);
-      document.getElementById('menuseparator_1_clone')
-          .setAttribute('hidden', true);
-      document.getElementById('menuitem_installUpdate_clone')
-          .setAttribute('command', 'cmd_userscript_installUpdate');
-    }
-  }
 };
 window.GM_overrideShowView = function() {
   if (showView != ourShowView) {
@@ -75,6 +37,44 @@ window.GM_overrideShowView = function() {
   }
 };
 GM_overrideShowView();
+
+var _origInstallUpdates = installUpdatesAll;
+installUpdatesAll = function() {
+  var chromeWin = GM_util.getBrowserWindow();
+  var children = gExtensionsView.children;
+  for (var i = 0, child = null; child = children[i]; i++) {
+    if (!/^urn:greasemonkey:update:item:/.test(child.id)) continue;
+
+    var checkbox = document.getAnonymousElementByAttribute(
+        child, 'anonid', 'includeUpdate');
+    if (!checkbox) continue;
+
+    checkbox.setAttribute('anonid', 'includeScriptUpdate');
+    if (checkbox.checked) {
+      var script = GM_config.getScriptById(child.getAttribute('addonId'));
+      script.installUpdate(chromeWin);
+    }
+  }
+
+  _origInstallUpdates();
+};
+
+var _origBuildContextMenu = buildContextMenu;
+buildContextMenu = function(event) {
+  _origBuildContextMenu(event);
+
+  var selectedItem = gExtensionsView.selectedItem;
+  if (/^urn:greasemonkey:update:item:/.test(selectedItem.id)) {
+    document.getElementById('menuitem_homepage_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuitem_about_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuseparator_1_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuitem_installUpdate_clone')
+        .setAttribute('command', 'cmd_userscript_installUpdate');
+  }
+};
 
 // Set up an 'observer' on the config, to keep the displayed items up to date
 // with their actual state.
