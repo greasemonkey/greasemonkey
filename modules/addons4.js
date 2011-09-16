@@ -180,6 +180,8 @@ ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
   this._script.checkForRemoteUpdate(true, GM_util.hitch(this, updateCallback));
 };
 
+ScriptAddon.prototype.toString = function() {
+  return '[ScriptAddon object ' + this.id + ']';
 };
 
 ScriptAddon.prototype.uninstall = function() {
@@ -248,6 +250,10 @@ ScriptInstall.prototype.install = function() {
 ScriptInstall.prototype.cancel = function() {};
 ScriptInstall.prototype.addListener = function() {};
 ScriptInstall.prototype.removeListener = function() {};
+
+ScriptInstall.prototype.toString = function() {
+  return '[ScriptInstall object ' + this._script.id + ']';
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
