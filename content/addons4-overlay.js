@@ -63,12 +63,6 @@ var observer = {
         var oldItem = gListView.getListItemForID(oldAddon.id);
         oldItem.parentNode.replaceChild(item, oldItem);
         break;
-      case 'update-found':
-        var addon = ScriptAddonFactoryByScript(script)
-        var scriptInstall = ScriptInstallFactoryByAddon(addon);
-        AddonManagerPrivate.callAddonListeners('onNewInstall', scriptInstall);
-        document.getElementById('updates-manualUpdatesFound-btn').hidden = false;
-        break;
     }
   }
 };
@@ -191,20 +185,6 @@ function onViewChanged(aEvent) {
   } else {
     document.documentElement.className = document.documentElement.className
         .replace(/ greasemonkey/g, '');
-  }
-
-  // Show which scripts have available updates.
-  if (isScriptView()) {
-    var scripts = GM_util.getService().config.getMatchingScripts(
-        function (script) { return script.updateAvailable; });
-    scripts.forEach(function (script) {
-      var addon = ScriptAddonFactoryByScript(script)
-      var scriptInstall = ScriptInstallFactoryByAddon(addon);
-      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-    });
-    if (scripts.length > 0) {
-      document.getElementById("updates-manualUpdatesFound-btn").hidden = false;
-    }
   }
 };
 

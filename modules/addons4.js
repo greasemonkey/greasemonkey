@@ -168,7 +168,18 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 };
 
 ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
-  this._script.checkForRemoteUpdate(true);
+  function updateCallback(aAvailable) {
+    if (aAvailable) {
+      var scriptInstall = ScriptInstallFactoryByAddon(this);
+      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+      aListener.onUpdateAvailable(this, scriptInstall);
+    } else {
+      aListener.onNoUpdateAvailable(this);
+    }
+  }
+  this._script.checkForRemoteUpdate(true, GM_util.hitch(this, updateCallback));
+};
+
 };
 
 ScriptAddon.prototype.uninstall = function() {

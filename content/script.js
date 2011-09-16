@@ -520,20 +520,22 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(aForced) {
-  if (this.updateAvailable) return;
-  if (!this._updateURL) return;
+Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
+  var callback = aCallback || function() {};
+
+  if (this.updateAvailable) return callback(true);
+  if (!this._updateURL) return callback(false);
 
   var currentTime = new Date().getTime();
 
   if (!aForced) {
-    if (!GM_prefRoot.getValue("enableUpdateChecking")) return;
+    if (!GM_prefRoot.getValue("enableUpdateChecking")) return aCallback(false);
 
     var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
     if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
     var minIntervalMs = 86400000 * minIntervalDays;
     var nextUpdateTime = parseInt(this._lastUpdateCheck, 10) + minIntervalMs;
-    if (currentTime <= nextUpdateTime) return;
+    if (currentTime <= nextUpdateTime) return callback(false);
   }
 
   var lastCheck = this._lastUpdateCheck;
@@ -542,49 +544,57 @@ Script.prototype.checkForRemoteUpdate = function(aForced) {
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.open("GET", this.updateURL, true);
-  req.onload = GM_util.hitch(this, "checkRemoteVersion", req);
-  req.onerror = GM_util.hitch(this, "checkRemoteVersionErr", lastCheck);
+  req.onload = GM_util.hitch(
+      this, "checkRemoteVersion", req, callback);
+  req.onerror = GM_util.hitch(
+      this, "checkRemoteVersionErr", lastCheck, callback);
   req.send(null);
 };
 
-Script.prototype.checkRemoteVersion = function(req) {
-  if (req.status != 200 && req.status != 0) return;
+Script.prototype.checkRemoteVersion = function(req, aCallback) {
+  if (req.status != 200 && req.status != 0) return aCallback(false);
 
   var source = req.responseText;
   var newScript = GM_util.getService().config.parse(source);
   var remoteVersion = newScript.version;
-  if (!remoteVersion) return;
+  if (!remoteVersion) return aCallback(false);
 
   var versionChecker = Components
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
 
-  if (versionChecker.compare(this._version, remoteVersion) >= 0) return;
+  if (versionChecker.compare(this._version, remoteVersion) >= 0) {
+    return aCallback(false);
+  }
 
   this.updateAvailable = true;
   this._updateVersion = remoteVersion;
+  // TODO: Remove this _changed() call when em:minVersion >= 4.0.
   this._changed("update-found", {
     version: remoteVersion,
     url: this._downloadURL,
     secure: this.updateIsSecure
   });
   GM_util.getService().config._save();
+  aCallback(true);
 };
 
-Script.prototype.checkRemoteVersionErr = function(lastCheck) {
+Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
   // Set the time back.
   this._lastUpdateCheck = lastCheck;
   GM_util.getService().config._save();
+  aCallback(false);
 };
 
 Script.prototype.installUpdate = function(aChromeWin, aCallback) {
   var oldScriptId = new String(this.id);
   function updateAddons(aNewScript) {
     // Timeout puts this update after core code has removed the download
-    // progress bar.
+    // progress bar.  It causes an open add-ons manager to be updated with the
+    // new script details.
     GM_util.timeout(
         0, GM_util.hitch(GM_util.getService().config, '_changed',
-            aNewScript, "modified", oldScriptId));
+            aNewScript, 'modified', oldScriptId));
   }
   var uri = GM_util.uriFromUrl(this._downloadURL);
   var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
