@@ -512,16 +512,11 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
     }
 
-    // Re-download dependencies.  The timer guarantees that it will
+    // Re-download dependencies.  The timeout guarantees that it will
     // reliably complete after the normal document-end time.  (See #1402; going
     // from some -> no requires means this is a short-circuit call.)
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    var timer = Components.classes["@mozilla.org/timer;1"]
-        .createInstance(Components.interfaces.nsITimer);
-    var that = this; // closure-passing safe "this" reference.
-    timer.initWithCallback(
-        {'notify': function() { scriptDownloader.startUpdateScript(that); }},
-        0, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
+    GM_util.timeout(0, GM_hitch(scriptDownloader, 'startUpdateScript', this));
   }
 };
 
@@ -583,10 +578,19 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck) {
 };
 
 Script.prototype.installUpdate = function(aChromeWin, aCallback) {
+  var oldScriptId = new String(this.id);
+  function updateAddons(aNewScript) {
+    // Timeout puts this update after core code has removed the download
+    // progress bar.
+    GM_util.timeout(
+        0, GM_util.hitch(GM_util.getService().config, '_changed',
+            aNewScript, "modified", oldScriptId));
+  }
   var uri = GM_util.uriFromUrl(this._downloadURL);
   var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
   scriptDownloader.replacedScript = this;
   scriptDownloader.installOnCompletion_ = true;
+  scriptDownloader.onInstall(GM_util.hitch(this, updateAddons));
   if (aCallback) scriptDownloader.onInstall(aCallback);
   scriptDownloader.startDownload();
 };

@@ -317,9 +317,9 @@ GM_ScriptDownloader.prototype.installScript = function() {
         "'" + this.script.name + "' "
         + this.win_.GM_BrowserUI.bundle.getString("statusbar.installed"));
 
-    this._onInstallCallbacks.forEach(function(callback) {
-      callback();
-    });
+    this._onInstallCallbacks.forEach(GM_util.hitch(this, function(callback) {
+      callback(this.script);
+    }));
   } else {
     this.installOnCompletion_ = true;
   }
