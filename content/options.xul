@@ -42,25 +42,15 @@
 
   <groupbox>
     <caption label="&UpdateChecking;" />
-    <checkbox id="check-update"
-      label="&EnableUpdateChecking;" 
-      oncommand="GM_setUpdatePrefs(this)" />
-    <label 
-      value="&UpdateInterval;"
-      control="slide-updateInterval" />
-    <popupset>
-      <menupopup noautohide="true"
-        id="tip-updateInterval">
-        <menuitem id="txt-updateInterval" />
-      </menupopup>
-    </popupset>
-    <scale 
-      id="slide-updateInterval" 
-      orient="horizontal"
-      popup="tip-updateInterval"
-      min="1" 
-      max="30"
-      onchange="GM_setMinUpdateInterval(this)"/>
+    <checkbox id="check-update" label="&EnableUpdateChecking;" />
+    <separator class="thin" />
+    <label value="&UpdateInterval;" control="slide-updateInterval" />
+    <hbox>
+      <scale id="slide-updateInterval" flex="1"
+        orient="horizontal" min="1" max="30"
+        onchange="GM_setMinUpdateIntervalLabel()"/>
+      <label id="txt-updateInterval" />
+    </hbox>
   </groupbox>
 </vbox>
 
