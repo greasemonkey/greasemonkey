@@ -403,8 +403,7 @@ var greasemonkeyAddons = {
       GM_config.uninstall(script);
       break;
     case 'cmd_userscript_checkUpdate':
-      script.checkForRemoteUpdate(
-          GM_util.getBrowserWindow(), new Date().getTime(), 0, true);
+      script.checkForRemoteUpdate(true);
       break;
     }
   },

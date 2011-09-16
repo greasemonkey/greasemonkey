@@ -441,13 +441,7 @@ Config.prototype._notifyUpdates = function() {
 };
 
 Config.prototype.checkScriptsForRemoteUpdates = function(scripts) {
-  var currentTime = new Date().getTime();
-  var minInterval = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
-
-  if (isNaN(minInterval) || minInterval < 1) minInterval = 1;
-  var updateCheckingInterval = 86400000 * minInterval;
   var forced = false;
-
   if ('undefined' == typeof scripts) {
     forced = true;
     var scripts = this.getMatchingScripts(function (script) {
@@ -458,8 +452,7 @@ Config.prototype.checkScriptsForRemoteUpdates = function(scripts) {
   }
 
   scripts.forEach(function(script) {
-    script.checkForRemoteUpdate(
-        currentTime, updateCheckingInterval, forced);
+    script.checkForRemoteUpdate(forced);
   });
 };
 

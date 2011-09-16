@@ -521,15 +521,21 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(
-    currentTime, updateCheckingInterval, forced
-) {
+Script.prototype.checkForRemoteUpdate = function(aForced) {
   if (this.updateAvailable) return;
   if (!this._updateURL) return;
-  if (!GM_prefRoot.getValue("enableUpdateChecking")) return;
 
-  var nextUpdate = parseInt(this._lastUpdateCheck, 10) + updateCheckingInterval;
-  if (!forced && currentTime <= nextUpdate) return;
+  var currentTime = new Date().getTime();
+
+  if (!aForced) {
+    if (!GM_prefRoot.getValue("enableUpdateChecking")) return;
+
+    var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
+    if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
+    var minIntervalMs = 86400000 * minIntervalDays;
+    var nextUpdateTime = parseInt(this._lastUpdateCheck, 10) + minIntervalMs;
+    if (currentTime <= nextUpdateTime) return;
+  }
 
   var lastCheck = this._lastUpdateCheck;
   this._lastUpdateCheck = currentTime;

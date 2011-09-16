@@ -13,10 +13,10 @@ function GM_loadOptions() {
       .checked = GM_prefRoot.getValue("enableUpdateChecking");
 
   document.getElementById("slide-updateInterval")
-      .value = GM_prefRoot.getValue("minIntervalBetweenUpdateChecks");
+      .value = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
 
   document.getElementById("txt-updateInterval")
-      .setAttribute("label", GM_prefRoot.getValue("minIntervalBetweenUpdateChecks"));
+      .setAttribute("label", GM_prefRoot.getValue("minDaysBetweenUpdateChecks"));
   GM_setOptionsYet = true;
 }
 
@@ -38,5 +38,5 @@ function GM_setMinUpdateInterval(input) {
 
   document.getElementById("txt-updateInterval")
     .setAttribute("label", days);
-  GM_prefRoot.setValue("minIntervalBetweenUpdateChecks", days);
+  GM_prefRoot.setValue("minDaysBetweenUpdateChecks", days);
 }
