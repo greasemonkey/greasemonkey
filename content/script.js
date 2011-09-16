@@ -399,6 +399,10 @@ Script.prototype.toConfigNode = function(doc) {
   return scriptNode;
 };
 
+Script.prototype.toString = function() {
+  return '[Greasemonkey Script ' + this.id + ']';
+};
+
 Script.prototype._initFile = function(tempFile) {
   var name = this._initFileName(this._name, false);
   this._basedir = name;
