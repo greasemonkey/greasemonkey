@@ -29,6 +29,9 @@
 <!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
 <!ENTITY greasemonkey.youhavenoscripts "您尚未安裝任何腳本">
 <!ENTITY greasemonkey.getuserscripts "取得使用者腳本">

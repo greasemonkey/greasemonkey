@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Изврши последњу">
 <!ENTITY ExecuteLater "Изврши касније">
 <!ENTITY ExecuteSooner "Изврши раније">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Помери надоле">
 <!ENTITY MoveDown.accesskey "Д">
 <!ENTITY MoveToBottom "Помери на крај">

@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "اجرای آخرین">
 <!ENTITY ExecuteLater "دیرتر اجرا شود">
 <!ENTITY ExecuteSooner "زود تر اجرا شود">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "حرکت به پایین">
 <!ENTITY MoveDown.accesskey "ح">
 <!ENTITY MoveToBottom "حرکت به انتها">

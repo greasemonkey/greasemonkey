@@ -2,9 +2,9 @@
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Kullanıcı betik kaynağını gör">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Kullanıcı Betik Komutları ...">
+<!ENTITY menu.commands "Kullanıcı Betik Komutları...">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "Yeni Kullanıcı Betiği ...">
+<!ENTITY menu.new "Yeni Kullanıcı Betiği...">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Kullanıcı Betiklerini Yönet...">
 <!ENTITY menu.manage.accesskey "M">
@@ -32,9 +32,9 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY greasemonkey.noscriptshere "Bu sayfada çalışan yüklenmiş betikler yok">
+<!ENTITY greasemonkey.noscriptshere "Bu sayfada çalışan yüklenmiş betikler yok.">
 <!ENTITY greasemonkey.youhavenoscripts "Yüklü bir kullanıcı betiğiniz yok">
 <!ENTITY greasemonkey.getuserscripts "Kullanıcı betikleri al">
-<!ENTITY scriptprefs.title "Greasemonkey Kullanıcı Betik Tercihleri -!">
+<!ENTITY scriptprefs.title "Greasemonkey Kullanıcı Betik Tercihleri -!!">
 <!ENTITY scriptprefs.usersettings "Kullanıcı Ayarları">
 <!ENTITY scriptprefs.scriptsettings "Betik Ayarları">

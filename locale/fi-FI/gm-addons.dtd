@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Suorita viimeisenä">
 <!ENTITY ExecuteLater "Suorita myöhemmin">
 <!ENTITY ExecuteSooner "Suorita aiemmin">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Siirrä alaspäin">
 <!ENTITY MoveDown.accesskey "A">
 <!ENTITY MoveToBottom "Siirrä loppuun">

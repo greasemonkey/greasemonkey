@@ -29,6 +29,9 @@
 <!ENTITY userscripts "유저 스크립트">
 <!ENTITY Uninstall "삭제">
 <!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 삭제">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
 <!ENTITY greasemonkey.getuserscripts "Get user scripts">

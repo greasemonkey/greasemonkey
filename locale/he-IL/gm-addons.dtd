@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "בצע בסוף">
 <!ENTITY ExecuteLater "בצע מאוחר יותר">
 <!ENTITY ExecuteSooner "בצע מוקדם יותר">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "הזז למטה">
 <!ENTITY MoveDown.accesskey "ט">
 <!ENTITY MoveToBottom "הזז לסוף הרשימה">

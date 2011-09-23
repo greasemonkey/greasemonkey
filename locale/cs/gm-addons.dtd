@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Spustit poslední">
 <!ENTITY ExecuteLater "Spustit později">
 <!ENTITY ExecuteSooner "Spustit dříve">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Posunout níže">
 <!ENTITY MoveDown.accesskey "n">
 <!ENTITY MoveToBottom "Posunout úplně dolů">

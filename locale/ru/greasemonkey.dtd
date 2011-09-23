@@ -29,6 +29,9 @@
 <!ENTITY userscripts "Пользовательские скрипты">
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AlsoUninstallPrefs "Также удалять настройки скриптов">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "Для этой страницы нет скриптов">
 <!ENTITY greasemonkey.youhavenoscripts "У вас не установлено ни одного скрипта">
 <!ENTITY greasemonkey.getuserscripts "Скачать скрипты">

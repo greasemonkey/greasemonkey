@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Végrehajtás utolsóként">
 <!ENTITY ExecuteLater "Végrehajtás később">
 <!ENTITY ExecuteSooner "Végrehajtás előbb">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Mozgatás lefele">
 <!ENTITY MoveDown.accesskey "l">
 <!ENTITY MoveToBottom "Mozgatás legalulra">

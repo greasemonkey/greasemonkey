@@ -29,6 +29,9 @@
 <!ENTITY userscripts "Scripts">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AlsoUninstallPrefs "Tamén desinstalar as preferencias asociadas">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "Ningún script instalado en execución.">
 <!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">
 <!ENTITY greasemonkey.getuserscripts "Obter scripts">

@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Als laatste uitvoeren">
 <!ENTITY ExecuteLater "Later uitvoeren">
 <!ENTITY ExecuteSooner "Eerder uitvoeren">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Omlaag">
 <!ENTITY MoveDown.accesskey "L">
 <!ENTITY MoveToBottom "Onderaan plaatsen">

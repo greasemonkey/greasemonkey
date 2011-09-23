@@ -29,6 +29,9 @@
 <!ENTITY userscripts "Uživatelské skripty">
 <!ENTITY Uninstall "Odinstalovat">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">
 <!ENTITY greasemonkey.getuserscripts "Získat uživatelské skripty">

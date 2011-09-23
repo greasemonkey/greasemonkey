@@ -29,6 +29,9 @@
 <!ENTITY userscripts "Parancsfájlok">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "Ezen az oldalon nem futnak telepített parancsfájlok.">
 <!ENTITY greasemonkey.youhavenoscripts "Nincsenek parancsfájlok telepítve">
 <!ENTITY greasemonkey.getuserscripts "Töltsön le parancsfájlokat!">

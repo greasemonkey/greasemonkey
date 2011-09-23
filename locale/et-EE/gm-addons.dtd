@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Execute last">
 <!ENTITY ExecuteLater "Execute later">
 <!ENTITY ExecuteSooner "Execute sooner">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Liiguta Allapoole">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Liiguta Viimaseks">

@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "最後に実行">
 <!ENTITY ExecuteLater "後で実行">
 <!ENTITY ExecuteSooner "先に実行">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "下へ移動">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "最後へ移動">

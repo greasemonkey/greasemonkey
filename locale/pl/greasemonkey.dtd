@@ -29,6 +29,9 @@
 <!ENTITY userscripts "Skrypty">
 <!ENTITY Uninstall "Odinstaluj">
 <!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
+<!ENTITY UpdateInterval "Minimum number of days between update checks">
 <!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
 <!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">
 <!ENTITY greasemonkey.getuserscripts "Pobierz skrypty">

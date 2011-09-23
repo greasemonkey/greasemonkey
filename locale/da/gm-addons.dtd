@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "Kør sidst">
 <!ENTITY ExecuteLater "Kør senere">
 <!ENTITY ExecuteSooner "Kør før">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Flyt op">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Flyt til bunden">

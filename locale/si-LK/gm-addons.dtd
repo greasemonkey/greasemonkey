@@ -5,6 +5,8 @@
 <!ENTITY ExecuteLast "අවසානයට ක්‍රියාකරවන්න">
 <!ENTITY ExecuteLater "පසුව ක්‍රියාත්මක කරන්න">
 <!ENTITY ExecuteSooner "ඉක්මනින් ක්‍රියාත්මක කරන්න">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "පහලට යවන්න">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "අවසානයට යවන්න">
