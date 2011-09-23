@@ -387,7 +387,7 @@ service.prototype.contentDestroyed = function(contentWindowId) {
     if (closed || (command.contentWindowId == contentWindowId)) {
       gMenuCommands.splice(index, 1);
     }
-  });
+  }, true);
 };
 
 service.prototype.contentFrozen = function(contentWindowId) {
@@ -462,14 +462,16 @@ service.prototype.injectScripts = function(
 };
 
 service.prototype.withAllMenuCommandsForWindowId = function(
-    contentWindowId, callback
+    aContentWindowId, aCallback, aForce
 ) {
+  if(!aContentWindowId && !aForce) return;
+
   var l = gMenuCommands.length - 1;
   for (var i = l, command = null; command = gMenuCommands[i]; i--) {
-    if (!contentWindowId
-        || (command.contentWindowId == contentWindowId)
+    if (aForce
+        || (command.contentWindowId == aContentWindowId)
     ) {
-      callback(i, command);
+      aCallback(i, command);
     }
   }
 };
