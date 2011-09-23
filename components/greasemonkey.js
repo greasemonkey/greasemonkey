@@ -170,7 +170,7 @@ function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
   var currentTab = tabs[
       browser.getBrowserIndexForDocument(safeContentWin.document)];
   var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
-  var newWin = GM_util.windowForTab(newTab, browser);
+  var newWin = GM_windowForTab(newTab, browser);
 
   var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
       .getService(Ci.nsIPrefService)
