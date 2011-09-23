@@ -21,14 +21,18 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
 
   // Add menu items for commands for the active window.
   var haveCommands = false;
-  GM_BrowserUI.gmSvc.withAllMenuCommandsForWindowId(
-      GM_util.windowId(gBrowser.contentWindow),
-      function(index, command) {
-        if (command.frozen) return;
-        aMenuPopup.insertBefore(
-            GM_MenuCommander.createMenuItem(command),
-            aMenuPopup.firstChild);
-        haveCommands = true;
-      });
+  var windowId = GM_util.windowId(gBrowser.contentWindow);
+
+  if(windowId) {
+    GM_BrowserUI.gmSvc.withAllMenuCommandsForWindowId(
+        windowId,
+        function(index, command) {
+          if (command.frozen) return;
+          aMenuPopup.insertBefore(
+              GM_MenuCommander.createMenuItem(command),
+              aMenuPopup.firstChild);
+          haveCommands = true;
+        });
+  }
   aMenuPopup.parentNode.disabled = !haveCommands;
 };
