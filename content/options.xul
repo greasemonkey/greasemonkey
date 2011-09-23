@@ -39,6 +39,19 @@
     <caption label="&options.globalExcludes;" />
     <cludes id="globalExcludes" />
   </groupbox>
+
+  <groupbox>
+    <caption label="&UpdateChecking;" />
+    <checkbox id="check-update" label="&EnableUpdateChecking;" />
+    <separator class="thin" />
+    <label value="&UpdateInterval;" control="slide-updateInterval" />
+    <hbox>
+      <scale id="slide-updateInterval" flex="1"
+        orient="horizontal" min="1" max="30"
+        onchange="GM_setMinUpdateIntervalLabel()"/>
+      <label id="txt-updateInterval" />
+    </hbox>
+  </groupbox>
 </vbox>
 
 </dialog>

@@ -39,7 +39,7 @@ gViewController.loadView = function(aViewId) {
 // with their actual state.
 var observer = {
   notifyEvent: function observer_notifyEvent(script, event, data) {
-    if (userScriptViewId != gViewController.currentViewId) return;
+    if (!isScriptView()) return;
 
     var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
@@ -47,7 +47,7 @@ var observer = {
         gListView.addItem(addon);
         setEmptyWarningVisible();
         break;
-      case "edit-enabled":
+      case 'edit-enabled':
         addon.userDisabled = !data;
         var item = gListView.getListItemForID(addon.id);
         item.setAttribute('active', data);
@@ -75,6 +75,10 @@ function addonIsInstalledScript(aAddon) {
   if (aAddon._script.needsUninstall) return false;
   return true;
 };
+
+function isScriptView() {
+  return 'addons://list/user-script' == gViewController.currentViewId;
+}
 
 function addonExecutesNonFirst(aAddon) {
   if (!aAddon) return false;

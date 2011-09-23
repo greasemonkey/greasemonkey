@@ -4,5 +4,7 @@ pref("greasemonkey.globalExcludes", '[]');
 pref("greasemonkey.unmhtIsGreaseable", false);
 pref("greasemonkey.enableScriptRefreshing", true);
 pref("greasemonkey.uninstallPreferences", true);
+pref("greasemonkey.enableUpdateChecking", false);
+pref("greasemonkey.minDaysBetweenUpdateChecks", 7);
 pref("greasemonkey.haveInsertedToolbarbutton", false);
 pref("greasemonkey.logChrome", false);

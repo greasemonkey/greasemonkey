@@ -8,13 +8,13 @@ var gUserscriptsView = null;
 var GM_os;
 (function() {
 var xulRuntime = Components
-    .classes["@mozilla.org/xre/app-info;1"]
+    .classes['@mozilla.org/xre/app-info;1']
     .getService(Components.interfaces.nsIXULRuntime);
 
 GM_os = xulRuntime.OS;
 })();
 
-(function() {
+(function private_scope() {
 var _origShowView;
 function ourShowView(aView) {
   if ('userscripts' == aView) {
@@ -26,6 +26,8 @@ function ourShowView(aView) {
     if ('userscripts' == gView) gView = null;
 
     _origShowView(aView);
+
+    if ('updates' == aView) greasemonkeyAddons.showScriptUpdates();
   }
 };
 window.GM_overrideShowView = function() {
@@ -36,37 +38,110 @@ window.GM_overrideShowView = function() {
 };
 GM_overrideShowView();
 
-// Set up an "observer" on the config, to keep the displayed items up to date
+var _origInstallUpdates = installUpdatesAll;
+installUpdatesAll = function() {
+  var chromeWin = GM_util.getBrowserWindow();
+  var children = gExtensionsView.children;
+  for (var i = 0, child = null; child = children[i]; i++) {
+    if (!/^urn:greasemonkey:update:item:/.test(child.id)) continue;
+
+    var checkbox = document.getAnonymousElementByAttribute(
+        child, 'anonid', 'includeUpdate');
+    if (!checkbox) continue;
+
+    checkbox.setAttribute('anonid', 'includeScriptUpdate');
+    if (checkbox.checked) {
+      var script = GM_config.getScriptById(child.getAttribute('addonId'));
+      script.installUpdate(chromeWin);
+    }
+  }
+
+  _origInstallUpdates();
+};
+
+var _origBuildContextMenu = buildContextMenu;
+buildContextMenu = function(event) {
+  _origBuildContextMenu(event);
+
+  var selectedItem = gExtensionsView.selectedItem;
+  if (/^urn:greasemonkey:update:item:/.test(selectedItem.id)) {
+    document.getElementById('menuitem_homepage_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuitem_about_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuseparator_1_clone')
+        .setAttribute('hidden', true);
+    document.getElementById('menuitem_installUpdate_clone')
+        .setAttribute('command', 'cmd_userscript_installUpdate');
+  }
+};
+
+// Set up an 'observer' on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
-  notifyEvent: function(script, event, data) {
-    if (event == "install") {
-      var beforeNode = data > -1 ? gUserscriptsView.childNodes[data] : null;
-      var item = greasemonkeyAddons.addScriptToList(script, beforeNode);
-      if (gView == "userscripts") gUserscriptsView.selectedItem = item;
-      item.setAttribute('newAddon', 'true');
-      return;
+  notifyEvent: function(script, event, data, aView) {
+    if ('undefined' == typeof aView) var aView = gView;
+
+    var currentViewNode = null;
+    if ('updates' == aView) {
+      currentViewNode = gExtensionsView;
+      this.notifyEvent(script, event, data, 'userscripts');
+    } else if ('userscripts' == aView) {
+      currentViewNode = gUserscriptsView;
     }
 
-    // find the script's node
-    var node = document.getElementById('urn:greasemonkey:item:'+script.id);
-    if (!node) return;
+    if ('userscripts' == aView && 'install' == event) {
+      var beforeNode = data > -1 ? currentViewNode.childNodes[data] : null;
+      var item = greasemonkeyAddons.listitemForScript(script);
+      item.setAttribute('newAddon', 'true');
+      currentViewNode.insertBefore(item, beforeNode);
+      if ('userscripts' == gView) gUserscriptsView.selectedItem = item;
+      return;
+    } else if ('updates' == aView && 'install' == event) {
+      var node = document.getElementById('urn:greasemonkey:'
+          + (aView == 'updates' ? 'update:' : '') + 'item:' + script.id);
+      if (node) currentViewNode.removeChild(node);
+      if (currentViewNode.children.length == 0) {
+        showView('userscripts');
+        document.getElementById('updates-view').hidden = true;
+      }
+      return;
+    } else if ('updates' == aView && 'update-found' == event) {
+      var node = greasemonkeyAddons.listitemForScript(script, true);
+      node.setAttribute('typeName', 'update');
+      currentViewNode.insertBefore(node, null);
+    }
+
+    var node = document.getElementById('urn:greasemonkey:'
+        + (aView == 'updates' ? 'update:' : '') + 'item:' + script.id);
+    if (!node || !currentViewNode) return;
 
     switch (event) {
-      case "edit-enabled":
+      case 'edit-enabled':
         node.setAttribute('isDisabled', !data);
         break;
-      case "uninstall":
-        gUserscriptsView.removeChild(node);
+      case 'update-found':
+        node.setAttribute('updateable', 'true');
+        node.setAttribute('availableUpdateVersion', data.version);
+        node.setAttribute('availableUpdateURL', data.url);
+        node.setAttribute('providesUpdatesSecurely', data.secure.toString());
+        node.setAttribute('updateAvailableMsg',
+            'Version ' + data.version + ' is available.');
+        document.getElementById('updates-view').hidden = false;
+        showView('updates');
         break;
-      case "move":
+      case 'uninstall':
+        currentViewNode.removeChild(node);
+        break;
+      case 'move':
         gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
         greasemonkeyAddons.reselectLastSelected();
         break;
-      case "modified":
-        var item = greasemonkeyAddons.listitemForScript(script);
-        gUserscriptsView.replaceChild(item, node);
+      case 'modified':
+        var item = greasemonkeyAddons.listitemForScript(
+            script, 'updates' == aView);
+        currentViewNode.replaceChild(item, node);
         break;
     }
   }
@@ -114,6 +189,12 @@ window.addEventListener('load', function() {
       setTimeout(showView, 0, 'userscripts');
     }
   }
+
+  var scripts = GM_config.getMatchingScripts(
+      function (script) { return script.updateAvailable; });
+  if (scripts.length > 0) {
+    document.getElementById('updates-view').hidden = false;
+  }
 }, false);
 
 window.addEventListener('unload', function() {
@@ -137,7 +218,7 @@ var greasemonkeyAddons = {
     document.getElementById('viewGroup')
         .setAttribute('last-selected', 'userscripts');
     var userscriptsRadio = document.getElementById('userscripts-view');
-    var viewGroup = document.getElementById("viewGroup");
+    var viewGroup = document.getElementById('viewGroup');
     viewGroup.selectedItem = userscriptsRadio;
     greasemonkeyAddons.reselectLastSelected();
     gView='userscripts';
@@ -152,6 +233,18 @@ var greasemonkeyAddons = {
     document.documentElement.className =
       document.documentElement.className.replace(/ *\buserscripts\b/g, '');
     gExtensionsView.focus();
+  },
+
+  showScriptUpdates: function() {
+    var scripts = GM_config.getMatchingScripts(
+        function (script) { return script.updateAvailable; });
+
+    // Add a list item for each script.
+    for (var i = 0, script = null; script = scripts[i]; i++) {
+      var item = greasemonkeyAddons.listitemForScript(script, true);
+      item.setAttribute('typeName', 'update');
+      gExtensionsView.insertBefore(item, null);
+    }
   },
 
   updateLastSelected: function() {
@@ -194,7 +287,7 @@ var greasemonkeyAddons = {
         }, 0);
   },
 
-  listitemForScript: function(script) {
+  listitemForScript: function(script, updateView) {
     var item = document.createElement('richlistitem');
 
     // Setting these attributes inherits the values into the same place they
@@ -204,8 +297,20 @@ var greasemonkeyAddons = {
     item.setAttribute('description', script.description);
     item.setAttribute('version', script.version);
     item.setAttribute('iconURL', script.icon.fileURL);
-    item.setAttribute('id', 'urn:greasemonkey:item:'+script.id);
+    item.setAttribute('id', 'urn:greasemonkey:'
+        + (updateView ? 'update:' : '') + 'item:' + script.id);
     item.setAttribute('isDisabled', !script.enabled);
+
+    if (script.updateAvailable) {
+      item.setAttribute('updateable', 'true');
+      item.setAttribute('availableUpdateVersion', script._updateVersion);
+      item.setAttribute('availableUpdateURL', script._downloadURL);
+      item.setAttribute('satisfiesDependencies', 'true');
+      item.setAttribute('updateAvailableMsg',
+          'Version ' + script._updateVersion + ' is available.');
+      item.setAttribute('providesUpdatesSecurely', script.updateIsSecure);
+    }
+
     if (script.id in GM_uninstallQueue) {
       item.setAttribute('opType', 'needs-uninstall');
     }
@@ -220,25 +325,32 @@ var greasemonkeyAddons = {
   },
 
   findSelectedScript: function() {
-    if (!gUserscriptsView.selectedItem) return null;
-    var scripts = GM_config.scripts;
-    var selectedScriptId = gUserscriptsView.selectedItem.getAttribute('addonId');
-    for (var i = 0, script = null; script = scripts[i]; i++) {
-      if (selectedScriptId == script.id) {
-        return script;
-      }
+    var currentViewNode = null;
+    if ('updates' == gView) {
+      currentViewNode = gExtensionsView;
+    } else if ('userscripts' == gView) {
+      currentViewNode = gUserscriptsView;
     }
-    return null;
+    if (!currentViewNode || !currentViewNode.selectedItem) return null;
+    var selectedScriptId = currentViewNode.selectedItem.getAttribute('addonId');
+    return GM_config.getScriptById(selectedScriptId) || null;
   },
 
   doCommand: function(command) {
     var script = greasemonkeyAddons.findSelectedScript();
     if (!script) {
-      dump("greasemonkeyAddons.doCommand() could not find selected script.\n");
+      dump('greasemonkeyAddons.doCommand() could not find selected script.\n');
       return;
     }
 
-    var selectedListitem = gUserscriptsView.selectedItem;
+    var currentViewNode = null;
+    if ('updates' == gView) {
+      currentViewNode = gExtensionsView;
+    } else if ('userscripts' == gView) {
+      currentViewNode = gUserscriptsView;
+    }
+
+    var selectedListitem = currentViewNode.selectedItem;
     switch (command) {
     case 'cmd_userscript_edit':
       GM_util.openInEditor(script);
@@ -290,13 +402,16 @@ var greasemonkeyAddons = {
       delete(GM_uninstallQueue[script.id]);
       GM_config.uninstall(script);
       break;
+    case 'cmd_userscript_checkUpdate':
+      script.checkForRemoteUpdate(true);
+      break;
     }
   },
 
   buildContextMenu: function(aEvent) {
     var script = greasemonkeyAddons.findSelectedScript();
     if (!script) {
-      dump("greasemonkeyAddons.buildContextMenu() could not find selected script.\n");
+      dump('greasemonkeyAddons.buildContextMenu() could not find selected script.\n');
       return;
     }
 
@@ -317,11 +432,12 @@ var greasemonkeyAddons = {
     }
 
     var standardItems = [
-      'move_up', 'move_down', 'move_top', 'move_bottom', 'sort',
-      'move_separator',
-      'edit', 'show',
-      'edit_separator',
-      'uninstall'];
+        'move_up', 'move_down', 'move_top', 'move_bottom', 'sort',
+        'move_separator',
+        'edit', 'show',
+        'edit_separator',
+        'checkUpdate',
+        'uninstall'];
     var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
     // Set everything hidden now, reveal the right selection below.
@@ -341,23 +457,24 @@ var greasemonkeyAddons = {
       // these values.
       // Todo: better fix.
       setTimeout(function() {
-            setElementDisabledByID('userscript_context_move_up', atTop);
-            setElementDisabledByID('userscript_context_move_down', atBottom);
-            setElementDisabledByID('userscript_context_move_top', atTop);
-            setElementDisabledByID('userscript_context_move_bottom', atBottom);
-            setElementDisabledByID('userscript_context_sort', (atTop && atBottom));
-          }, 0);
+        setElementDisabledByID('userscript_context_move_up', atTop);
+        setElementDisabledByID('userscript_context_move_down', atBottom);
+        setElementDisabledByID('userscript_context_move_top', atTop);
+        setElementDisabledByID('userscript_context_move_bottom', atBottom);
+        setElementDisabledByID('userscript_context_sort', (atTop && atBottom));
+      }, 0);
     }
   },
 
   onKeypress: function(aEvent) {
-    var viewGroup = document.getElementById("viewGroup");
+    var viewGroup = document.getElementById('viewGroup');
     switch (aEvent.keyCode) {
       case aEvent.DOM_VK_LEFT:
       case aEvent.DOM_VK_RIGHT:
-        let nextFlag = (aEvent.keyCode == aEvent.DOM_VK_RIGHT);
-        if (getComputedStyle(viewGroup, "").direction == "rtl")
+        var nextFlag = (aEvent.keyCode == aEvent.DOM_VK_RIGHT);
+        if ('rtl' == getComputedStyle(viewGroup, '').direction) {
           nextFlag = !nextFlag;
+        }
         viewGroup.checkAdjacentElement(nextFlag);
         break;
       default:
@@ -392,7 +509,7 @@ var greasemonkeyDragObserver = {
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
       url = GM_util.getUriFromFile(dropData.data).spec;
     }
-    dump("Dropped url: ["+url+"]\n");
+    dump('Dropped url: ['+url+']\n');
     if (url && url.match(/\.user\.js$/)) {
       // TODO: Make this UI appear in the add-ons win, rather than the browser?
       GM_util.installUri(GM_util.uriFromUrl(url));

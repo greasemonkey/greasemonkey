@@ -12,9 +12,6 @@ const converter = Components
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 converter.charset = "UTF-8";
 
-const ostream = Components
-    .classes["@mozilla.org/network/safe-file-output-stream;1"]
-    .createInstance(Components.interfaces.nsIFileOutputStream);
 
 /** Given string data and an nsIFile, write it safely to that file. */
 function writeToFile(aData, aFile, aCallback) {
@@ -24,6 +21,9 @@ function writeToFile(aData, aFile, aCallback) {
   // Create a temporary file (stream) to hold the data.
   var tmpFile = aFile.clone();
   tmpFile.createUnique(NORMAL_FILE_TYPE, GM_constants.fileMask);
+  var ostream = Components
+      .classes["@mozilla.org/network/safe-file-output-stream;1"]
+      .createInstance(Components.interfaces.nsIFileOutputStream);
   ostream.init(tmpFile, STREAM_FLAGS, GM_constants.fileMask, 0);
 
   NetUtil.asyncCopy(istream, ostream, function(status) {

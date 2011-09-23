@@ -8,7 +8,9 @@
 // Module exported symbols.
 var EXPORTED_SYMBOLS = [
     'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
-    'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript'];
+    'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript',
+    'ScriptInstallFactoryByAddon',
+    ];
 
 ////////////////////////////////////////////////////////////////////////////////
 // Module level imports / constants / globals.
@@ -44,6 +46,19 @@ var AddonProvider = {
       });
       aCallback(scriptAddons);
     }
+  },
+
+  getInstallsByTypes: function(aTypes, aCallback) {
+    var scriptInstalls = [];
+    GM_util.getService().config.scripts.forEach(function(script) {
+      if (!script.updateAvailable) return;
+
+      var aAddon = ScriptAddonFactoryByScript(script);
+      var scriptInstall = aAddon._installer || new ScriptInstall(aAddon);
+
+      scriptInstalls.push(scriptInstall);
+    });
+    aCallback(scriptInstalls);
   }
 };
 
@@ -94,12 +109,15 @@ ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
 ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
+ScriptAddon.prototype.applyBackgroundUpdates = AddonManager.AUTOUPDATE_DISABLE;
+ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART_NONE;
 
 // Optional attributes
 ScriptAddon.prototype.description = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
+ScriptAddon.prototype._installer = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
 function ScriptAddon_getExecutionIndex() {
@@ -113,7 +131,7 @@ function ScriptAddon_getIsActive() {
 });
 
 ScriptAddon.prototype.__defineGetter__('optionsURL',
-function ScriptAddon_getIsActive() {
+function ScriptAddon_getOptionsURL() {
   return 'chrome://greasemonkey/content/scriptprefs.xul#' + this._script.id;
 });
 
@@ -141,6 +159,7 @@ function ScriptAddon_getPermissions() {
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
+  if (this._script.updateURL) perms |= AddonManager.PERM_CAN_UPGRADE;
   return perms;
 });
 
@@ -148,16 +167,21 @@ ScriptAddon.prototype.isCompatibleWith = function() {
   return true;
 };
 
-ScriptAddon.prototype.findUpdates = function(aListener) {
-  if ('onNoCompatibilityUpdateAvailable' in aListener) {
-    aListener.onNoCompatibilityUpdateAvailable(this);
+ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
+  function updateCallback(aAvailable) {
+    if (aAvailable) {
+      var scriptInstall = ScriptInstallFactoryByAddon(this);
+      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+      aListener.onUpdateAvailable(this, scriptInstall);
+    } else {
+      aListener.onNoUpdateAvailable(this);
+    }
   }
-  if ('onNoUpdateAvailable' in aListener) {
-    aListener.onNoUpdateAvailable(this);
-  }
-  if ('onUpdateFinished' in aListener) {
-    aListener.onUpdateFinished(this);
-  }
+  this._script.checkForRemoteUpdate(true, GM_util.hitch(this, updateCallback));
+};
+
+ScriptAddon.prototype.toString = function() {
+  return '[ScriptAddon object ' + this.id + ']';
 };
 
 ScriptAddon.prototype.uninstall = function() {
@@ -175,6 +199,60 @@ ScriptAddon.prototype.cancelUninstall = function() {
 ScriptAddon.prototype.performUninstall = function() {
   GM_util.getService().config.uninstall(this._script);
   delete ScriptAddonCache[this.id];
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+var ScriptInstallCache = {};
+function ScriptInstallFactoryByAddon(aAddon) {
+  if (!(aAddon.id in ScriptInstallCache)) {
+    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon);
+  }
+  return ScriptInstallCache[aAddon.id];
+}
+
+function ScriptInstall(aAddon) {
+  this._script = aAddon._script;
+  aAddon._installer = this;
+
+  this.name = this._script.name;
+  this.version = this._script.version;
+  this.iconURL = this._script.icon.fileURL;
+  this.existingAddon = aAddon;
+}
+
+// Required attributes.
+ScriptInstall.prototype.addon = null;
+ScriptInstall.prototype.error = null;
+ScriptInstall.prototype.file = null;
+ScriptInstall.prototype.maxProgress = -1;
+ScriptInstall.prototype.pendingOperations = 0;
+ScriptInstall.prototype.progress = -1;
+ScriptInstall.prototype.releaseNotesURI = null;
+ScriptInstall.prototype.sourceURI = null;
+ScriptInstall.prototype.state = AddonManager.STATE_AVAILABLE;
+ScriptInstall.prototype.type = 'user-script';
+
+// Private and custom attributes.
+ScriptInstall.prototype._script = null;
+
+ScriptInstall.prototype.install = function() {
+  function installCallback() {
+    AddonManagerPrivate.callAddonListeners(
+        'onInstallEnded', this, this.existingAddon);
+  }
+
+  AddonManagerPrivate.callAddonListeners('onInstallStarted', this);
+  var chromeWin = GM_util.getBrowserWindow();
+  this._script.installUpdate(chromeWin, GM_util.hitch(this, installCallback));
+};
+
+ScriptInstall.prototype.cancel = function() {};
+ScriptInstall.prototype.addListener = function() {};
+ScriptInstall.prototype.removeListener = function() {};
+
+ScriptInstall.prototype.toString = function() {
+  return '[ScriptInstall object ' + this._script.id + ']';
 };
 
 ////////////////////////////////////////////////////////////////////////////////

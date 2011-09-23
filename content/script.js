@@ -7,8 +7,9 @@ Components.utils.import('resource://greasemonkey/util.js');
 function Script(configNode) {
   this._observers = [];
 
-  this._downloadURL = null; // Only for scripts not installed
-  this._tempFile = null; // Only for scripts not installed
+  this._downloadURL = null;
+  this._updateURL = null;
+  this._tempFile = null;
   this._basedir = null;
   this._filename = null;
   this._modified = null;
@@ -34,6 +35,9 @@ function Script(configNode) {
   this._dependFail = false;
   this._runAt = null;
   this._rawMeta = null;
+  this._lastUpdateCheck = null;
+  this.updateAvailable = null;
+  this._updateVersion = null;
   this.pendingExec = [];
 
   if (configNode) this._loadFromConfigNode(configNode);
@@ -155,6 +159,30 @@ function Script_getFile() {
   return file;
 });
 
+Script.prototype.__defineGetter__('updateURL',
+function Script_getUpdateURL() { return this._updateURL; });
+Script.prototype.__defineSetter__('updateURL',
+function Script_setUpdateURL(url) {
+  if (!url && !this._downloadURL) return null;
+
+  if (!url) url = this._downloadURL;
+
+  // US.o gets special treatment for being so large
+  var usoURL = url.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
+  if (usoURL) {
+    this._updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
+  } else {
+    this._updateURL = url;
+  }
+});
+
+Script.prototype.__defineGetter__('updateIsSecure',
+function Script_getUpdateIsSecure() {
+  if (!this._downloadURL) return null;
+
+  return /^https/.test(this._downloadURL);
+});
+
 Script.prototype.__defineGetter__('_basedirFile',
 function Script_getBasedirFile() {
   var file = GM_util.scriptDir();
@@ -202,6 +230,7 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._filename = node.getAttribute("filename");
   this._basedir = node.getAttribute("basedir") || ".";
   this._downloadURL = node.getAttribute("installurl") || null;
+  this.updateURL = node.getAttribute("updateurl") || null;
 
   if (!this.fileExists(this._basedirFile)) return;
   if (!this.fileExists(this.file)) return;
@@ -222,6 +251,19 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._modified = node.getAttribute("modified");
     this._dependhash = node.getAttribute("dependhash");
     this._version = node.getAttribute("version");
+  }
+
+  if (!node.getAttribute("updateAvailable")
+      || !node.getAttribute("lastUpdateCheck")
+  ) {
+    this.updateAvailable = false;
+    this._lastUpdateCheck = this._modified;
+
+    GM_util.getService().config._changed(this, "modified", null);
+  } else {
+    this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
+    this._updateVersion = node.getAttribute("updateVersion") || null;
+    this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
   }
 
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
@@ -335,9 +377,19 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("basedir", this._basedir);
   scriptNode.setAttribute("modified", this._modified);
   scriptNode.setAttribute("dependhash", this._dependhash);
+  scriptNode.setAttribute("updateAvailable", this.updateAvailable);
+  scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
 
   if (this._downloadURL) {
     scriptNode.setAttribute("installurl", this._downloadURL);
+  }
+
+  if (this._updateURL) {
+    scriptNode.setAttribute("updateurl", this._updateURL);
+  }
+
+  if (this._updateVersion) {
+    scriptNode.setAttribute("updateVersion", this._updateVersion);
   }
 
   if (this.icon.filename) {
@@ -345,6 +397,10 @@ Script.prototype.toConfigNode = function(doc) {
   }
 
   return scriptNode;
+};
+
+Script.prototype.toString = function() {
+  return '[Greasemonkey Script ' + this.id + ']';
 };
 
 Script.prototype._initFile = function(tempFile) {
@@ -427,6 +483,8 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._runAt = newScript._runAt;
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
+  this._downloadURL = newScript._downloadURL;
+  this._updateURL = newScript._updateURL;
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
@@ -454,17 +512,97 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
     }
 
-    // Re-download dependencies.  The timer guarantees that it will
+    // Re-download dependencies.  The timeout guarantees that it will
     // reliably complete after the normal document-end time.  (See #1402; going
     // from some -> no requires means this is a short-circuit call.)
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    var timer = Components.classes["@mozilla.org/timer;1"]
-        .createInstance(Components.interfaces.nsITimer);
-    var that = this; // closure-passing safe "this" reference.
-    timer.initWithCallback(
-        {'notify': function() { scriptDownloader.startUpdateScript(that); }},
-        0, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
+    GM_util.timeout(0, GM_hitch(scriptDownloader, 'startUpdateScript', this));
   }
+};
+
+Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
+  var callback = aCallback || function() {};
+
+  if (this.updateAvailable) return callback(true);
+  if (!this._updateURL) return callback(false);
+
+  var currentTime = new Date().getTime();
+
+  if (!aForced) {
+    if (!GM_prefRoot.getValue("enableUpdateChecking")) return aCallback(false);
+
+    var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
+    if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
+    var minIntervalMs = 86400000 * minIntervalDays;
+    var nextUpdateTime = parseInt(this._lastUpdateCheck, 10) + minIntervalMs;
+    if (currentTime <= nextUpdateTime) return callback(false);
+  }
+
+  var lastCheck = this._lastUpdateCheck;
+  this._lastUpdateCheck = currentTime;
+
+  var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+      .createInstance(Components.interfaces.nsIXMLHttpRequest);
+  req.open("GET", this.updateURL, true);
+  req.onload = GM_util.hitch(
+      this, "checkRemoteVersion", req, callback);
+  req.onerror = GM_util.hitch(
+      this, "checkRemoteVersionErr", lastCheck, callback);
+  req.send(null);
+};
+
+Script.prototype.checkRemoteVersion = function(req, aCallback) {
+  if (req.status != 200 && req.status != 0) return aCallback(false);
+
+  var source = req.responseText;
+  var newScript = GM_util.getService().config.parse(source);
+  var remoteVersion = newScript.version;
+  if (!remoteVersion) return aCallback(false);
+
+  var versionChecker = Components
+      .classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+
+  if (versionChecker.compare(this._version, remoteVersion) >= 0) {
+    return aCallback(false);
+  }
+
+  this.updateAvailable = true;
+  this._updateVersion = remoteVersion;
+  // TODO: Remove this _changed() call when em:minVersion >= 4.0.
+  this._changed("update-found", {
+    version: remoteVersion,
+    url: this._downloadURL,
+    secure: this.updateIsSecure
+  });
+  GM_util.getService().config._save();
+  aCallback(true);
+};
+
+Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
+  // Set the time back.
+  this._lastUpdateCheck = lastCheck;
+  GM_util.getService().config._save();
+  aCallback(false);
+};
+
+Script.prototype.installUpdate = function(aChromeWin, aCallback) {
+  var oldScriptId = new String(this.id);
+  function updateAddons(aNewScript) {
+    // Timeout puts this update after core code has removed the download
+    // progress bar.  It causes an open add-ons manager to be updated with the
+    // new script details.
+    GM_util.timeout(
+        0, GM_util.hitch(GM_util.getService().config, '_changed',
+            aNewScript, 'modified', oldScriptId));
+  }
+  var uri = GM_util.uriFromUrl(this._downloadURL);
+  var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
+  scriptDownloader.replacedScript = this;
+  scriptDownloader.installOnCompletion_ = true;
+  scriptDownloader.onInstall(GM_util.hitch(this, updateAddons));
+  if (aCallback) scriptDownloader.onInstall(aCallback);
+  scriptDownloader.startDownload();
 };
 
 Script.prototype.allFiles = function() {

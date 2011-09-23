@@ -174,8 +174,11 @@ Config.prototype.parse = function(source, uri, updateScript) {
         case "namespace":
         case "description":
         case "version":
+        case "updateURL":
           script["_" + header] = value;
           break;
+        case "installURL":
+          script._downloadURL = value;
         case "include":
           script._includes.push(value);
           break;
@@ -266,6 +269,10 @@ Config.prototype.parse = function(source, uri, updateScript) {
     }
   }
 
+  if (!script.updateURL && script._downloadURL) {
+    script.updateURL = script._downloadURL;
+  }
+
   // if no meta info, default to reasonable values
   if (!script._name) {
     var name = (uri && uri.spec) || (updateScript && updateScript.filename);
@@ -290,17 +297,18 @@ Config.prototype.parse = function(source, uri, updateScript) {
   return script;
 };
 
-Config.prototype.install = function(script) {
-  var existingIndex = this._find(script);
-  if (existingIndex > -1) {
+Config.prototype.install = function(script, oldScript) {
+  var existingIndex = this._find(oldScript || script);
+  if (!oldScript) oldScript = this.scripts[existingIndex];
+
+  if (oldScript) {
     // Save the old script's state.
-    var oldScript = this._scripts[existingIndex];
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
     script.userIncludes = oldScript.userIncludes;
 
     // Uninstall the old script.
-    this.uninstall(this._scripts[existingIndex], true);
+    this.uninstall(oldScript, true);
   }
 
   script._initFile(script._tempFile);
@@ -422,6 +430,38 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
   }
 
   this._save();
+};
+
+Config.prototype._notifyUpdates = function() {
+  var scripts = this.getMatchingScripts(
+      function (script) { return script.updateAvailable; });
+  if (0 == scripts.length) return;
+
+  GM_util.getBrowserWindow().GM_OpenUpdatesMgr();
+};
+
+Config.prototype.checkScriptsForRemoteUpdates = function(scripts) {
+  var forced = false;
+  if ('undefined' == typeof scripts) {
+    forced = true;
+    var scripts = this.getMatchingScripts(function (script) {
+      return !script.updateAvailable &&
+          script.updateURL &&
+          script.enabled;
+    });
+  }
+
+  scripts.forEach(function(script) {
+    script.checkForRemoteUpdate(forced);
+  });
+};
+
+Config.prototype.getScriptById = function(scriptId) {
+  for (var i = 0, script = null; script = this.scripts[i]; i++) {
+    if (scriptId == script.id) {
+      return script;
+    }
+  }
 };
 
 /**

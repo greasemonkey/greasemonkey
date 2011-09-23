@@ -3,8 +3,8 @@ Components.utils.import('resource://greasemonkey/util.js');
 function ScriptResource(script) {
   this._script = script || null;
 
-  this._downloadURL = null; // Only for scripts not installed
-  this._tempFile = null; // Only for scripts not installed
+  this._downloadURL = null;
+  this._tempFile = null;
   this._filename = null;
   this._mimetype = null;
   this._charset = null;

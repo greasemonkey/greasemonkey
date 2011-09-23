@@ -21,6 +21,9 @@ GM_ScriptDownloader = function(win, uri, bundle, contentWin) {
 
   this._oldScriptId = null;
   this.updateScript = false;
+  this.replacedScript = null;
+
+  this._onInstallCallbacks = [];
 };
 
 GM_ScriptDownloader.prototype.startInstall = function() {
@@ -43,7 +46,7 @@ GM_ScriptDownloader.prototype.startViewScript = function(uri) {
 GM_ScriptDownloader.prototype.startDownload = function() {
   GM_util.getService().ignoreNextScript();
 
-  this.req_ = new XMLHttpRequest();
+  this.req_ = new this.win_.XMLHttpRequest();
   this.req_.overrideMimeType("text/plain");
   this.req_.open("GET", this.uri_.spec, true);
   this.req_.onreadystatechange = GM_util.hitch(this, "checkContentTypeBeforeDownload");
@@ -88,17 +91,15 @@ GM_ScriptDownloader.prototype.checkContentTypeBeforeDownload = function () {
 
 GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
   try {
-    // If loading from file, status might be zero on success
+    // If loading from file, status might be zero on success.
     if (this.req_.status != 200 && this.req_.status != 0) {
-      // NOTE: Unlocalized string
+      // TODO: Unlocalized string.
       alert("Error loading user script:\n" +
-      this.req_.status + ": " +
-      this.req_.statusText);
+          this.req_.status + ": " + this.req_.statusText);
       return;
     }
 
     var source = this.req_.responseText;
-
     this.script = GM_util.getService().config.parse(source, this.uri_);
 
     var file = Components.classes["@mozilla.org/file/directory_service;1"]
@@ -110,9 +111,6 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
     file.createUnique(
         Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
     this.tempFiles_.push(file);
-
-    function handleWriteComplete() {
-    }
 
     GM_util.writeToFile(source, file,
         GM_util.hitch(this, 'handleScriptDownloadWriteComplete', file));
@@ -126,9 +124,11 @@ GM_ScriptDownloader.prototype.handleScriptDownloadComplete = function() {
 GM_ScriptDownloader.prototype.handleScriptDownloadWriteComplete = function(file) {
   this.script.setDownloadedFile(file);
 
-  window.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
+  this.win_.setTimeout(GM_util.hitch(this, "fetchDependencies"), 0);
 
-  if (this.installing_) {
+  if (this.installOnCompletion_) {
+    // Unattended install (i.e. remote script update), no UI.
+  } else if (this.installing_) {
     this.showInstallDialog();
   } else {
     this.showScriptView();
@@ -305,11 +305,21 @@ function(script, dep, msg) {
   }
 };
 
-GM_ScriptDownloader.prototype.installScript = function(){
+GM_ScriptDownloader.prototype.installScript = function() {
   if (this.dependencyError) {
     alert(this.dependencyError);
-  } else if(this.dependenciesLoaded_) {
-    this.win_.GM_BrowserUI.installScript(this.script);
+  } else if (this.dependenciesLoaded_) {
+    GM_util.getService().config.install(this.script, this.replacedScript);
+
+    var tools = {};
+    Components.utils.import("resource://greasemonkey/GM_notification.js", tools);
+    tools.GM_notification(
+        "'" + this.script.name + "' "
+        + this.win_.GM_BrowserUI.bundle.getString("statusbar.installed"));
+
+    this._onInstallCallbacks.forEach(GM_util.hitch(this, function(callback) {
+      callback(this.script);
+    }));
   } else {
     this.installOnCompletion_ = true;
   }
@@ -317,8 +327,16 @@ GM_ScriptDownloader.prototype.installScript = function(){
 
 GM_ScriptDownloader.prototype.cleanupTempFiles = function() {
   for (var i = 0, file = null; file = this.tempFiles_[i]; i++) {
-    file.remove(false);
+    try {
+      file.remove(false);
+    } catch (e) {
+      // Ignore, go to next.
+    }
   }
+};
+
+GM_ScriptDownloader.prototype.onInstall = function(callback) {
+  this._onInstallCallbacks.push(callback);
 };
 
 GM_ScriptDownloader.prototype.showInstallDialog = function(timer) {

@@ -6,8 +6,8 @@ function hitch(obj, method) {
       throw "method '" + method + "' does not exist on object '" + obj + "'";
     }
     method = obj[method];
-  } else if (!obj && ('function' == typeof method)) {
-    obj = {};
+  } else if ('function' == typeof method) {
+    obj = obj || {};
   } else {
     throw "Invalid arguments to GM_util.hitch().";
   }

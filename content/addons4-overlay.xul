@@ -8,6 +8,8 @@
 %greasemonkeyDTD;
 <!ENTITY % greasemonkeyAddonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
 %greasemonkeyAddonsDTD;
+<!ENTITY % extensionsDTD SYSTEM "chrome://mozapps/locale/extensions/extensions.dtd">
+%extensionsDTD;
 ]>
 
 <overlay id="greasemonkey-browser-overlay"
@@ -30,31 +32,34 @@
   <command id="cmd_userscript_execute_sooner" />
   <command id="cmd_userscript_execute_later" />
   <command id="cmd_userscript_execute_last" />
+  <command id="cmd_userscript_showItemPreferences" />
 </commandset>
 
 <menupopup id="addonitem-popup">
-  <menuitem id="menuitem_userscript_edit" command="cmd_userscript_edit"
+  <menuitem command="cmd_userscript_edit"
     label="&Edit;" accesskey="&Edit.accesskey;" type="user-script"
   />
-  <menuitem id="menuitem_userscript_show" command="cmd_userscript_show"
+  <menuitem command="cmd_userscript_show"
     label="&Show;" accesskey="&Show.accesskey;" type="user-script"
   />
   <menuseparator type="user-script"/>
-  <menuitem id="menuitem_userscript_execute_first"
-    command="cmd_userscript_execute_first"
+  <menuitem command="cmd_userscript_execute_first"
     label="&ExecuteFirst;" type="user-script"
   />
-  <menuitem id="menuitem_userscript_execute_sooner"
-    command="cmd_userscript_execute_sooner"
+  <menuitem command="cmd_userscript_execute_sooner"
     label="&ExecuteSooner;" type="user-script"
   />
-  <menuitem id="menuitem_userscript_execute_later"
-    command="cmd_userscript_execute_later"
+  <menuitem command="cmd_userscript_execute_later"
     label="&ExecuteLater;" type="user-script"
   />
-  <menuitem id="menuitem_userscript_execute_last"
-    command="cmd_userscript_execute_last"
+  <menuitem command="cmd_userscript_execute_last"
     label="&ExecuteLast;" type="user-script"
+  />
+
+  <menuseparator type="user-script"/>
+
+  <menuitem command="cmd_findItemUpdates" type="user-script"
+    label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
   />
 </menupopup>
 
