@@ -529,7 +529,7 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   var currentTime = new Date().getTime();
 
   if (!aForced) {
-    if (!GM_prefRoot.getValue("enableUpdateChecking")) return aCallback(false);
+    if (!GM_prefRoot.getValue("enableUpdateChecking")) return callback(false);
 
     var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
     if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
