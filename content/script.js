@@ -526,6 +526,30 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   if (this.updateAvailable) return callback(true);
   if (!this._updateURL) return callback(false);
 
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var scheme = ioService.extractScheme(this._updateURL);
+  switch (scheme) {
+  case 'about':
+  case 'chrome':
+  case 'file':
+    // These schemes are explicitly never OK!
+    return callback(false);
+  case 'ftp':
+  case 'http':
+    // These schemes are OK only if the user opts in.
+    if (GM_prefRoot.getValue('requireSecureUpdates')) {
+      return callback(false);
+    }
+    break;
+  case 'https':
+    // HTTPs is always OK.
+    break;
+  default:
+    // Anything not listed: default to not allow.
+    return callback(false);
+  }
+
   var currentTime = new Date().getTime();
 
   if (!aForced) {
@@ -540,6 +564,7 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
 
   var lastCheck = this._lastUpdateCheck;
   this._lastUpdateCheck = currentTime;
+
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);

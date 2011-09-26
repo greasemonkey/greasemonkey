@@ -10,11 +10,14 @@ function GM_loadOptions() {
 
   document.getElementById('check-update')
       .checked = GM_prefRoot.getValue('enableUpdateChecking');
+  document.getElementById('secure-update')
+      .checked = GM_prefRoot.getValue('requireSecureUpdates');
 
   document.getElementById('slide-updateInterval')
       .value = GM_prefRoot.getValue('minDaysBetweenUpdateChecks');
 
   GM_setMinUpdateIntervalLabel();
+  GM_onChangeUpdateChecking();
 }
 
 function GM_saveOptions(checkbox) {
@@ -24,11 +27,20 @@ function GM_saveOptions(checkbox) {
       document.getElementById('globalExcludes').pages;
   GM_prefRoot.setValue('enableUpdateChecking',
       !!document.getElementById('check-update').checked);
+  GM_prefRoot.setValue('requireSecureUpdates',
+      !!document.getElementById('secure-update').checked);
   GM_prefRoot.setValue("minDaysBetweenUpdateChecks", GM_getMinUpdateDays());
 }
 
 function GM_getMinUpdateDays() {
   return parseInt(document.getElementById('slide-updateInterval').value);
+}
+
+function GM_onChangeUpdateChecking() {
+  var enabled = document.getElementById('check-update').checked;
+  document.getElementById('secure-update').disabled = !enabled;
+  document.getElementById('slide-updateInterval').disabled = !enabled;
+  document.getElementById('label-slide-updateInterval').disabled = !enabled;
 }
 
 function GM_setMinUpdateIntervalLabel() {

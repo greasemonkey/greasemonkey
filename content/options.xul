@@ -42,9 +42,14 @@
 
   <groupbox>
     <caption label="&UpdateChecking;" />
-    <checkbox id="check-update" label="&EnableUpdateChecking;" />
-    <separator class="thin" />
-    <label value="&UpdateInterval;" control="slide-updateInterval" />
+    <checkbox id="check-update" label="&EnableUpdateChecking;"
+        oncommand="GM_onChangeUpdateChecking()" />
+    <hbox>
+      <separator orient="vertical" />
+      <checkbox id="secure-update" label="&RequireSecureUpdates;" />
+    </hbox>
+    <label value="&UpdateInterval;" control="slide-updateInterval"
+        id="label-slide-updateInterval" />
     <hbox>
       <scale id="slide-updateInterval" flex="1"
         orient="horizontal" min="1" max="30"
