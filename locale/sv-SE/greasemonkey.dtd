@@ -32,6 +32,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
+<!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "Inga installerade skript körs på denna sida.">
 <!ENTITY greasemonkey.youhavenoscripts "Du har inga installerade användarskript">
 <!ENTITY greasemonkey.getuserscripts "Hämta användarskript">

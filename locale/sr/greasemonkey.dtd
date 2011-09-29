@@ -32,6 +32,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
+<!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "Ни једна скрипта се не покреће на овој станици">
 <!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">
 <!ENTITY greasemonkey.getuserscripts "Набави коприсничке скрипте">

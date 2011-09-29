@@ -32,6 +32,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
+<!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您没有安装任何用户脚本">
 <!ENTITY greasemonkey.getuserscripts "获取用户脚本">
