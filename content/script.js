@@ -516,7 +516,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
     // reliably complete after the normal document-end time.  (See #1402; going
     // from some -> no requires means this is a short-circuit call.)
     var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    GM_util.timeout(0, GM_hitch(scriptDownloader, 'startUpdateScript', this));
+    GM_util.timeout(0, GM_util.hitch(scriptDownloader, 'startUpdateScript', this));
   }
 };
 
