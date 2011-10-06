@@ -25,8 +25,8 @@ function openInEditor(script) {
     var xulRuntime = Components.classes["@mozilla.org/xre/app-info;1"]
         .getService(Components.interfaces.nsIXULRuntime);
     if ("Darwin"==xulRuntime.OS) {
-      args = ["-a", appFile.path, script.file.path];
-        editor = Components.classes["@mozilla.org/file/local;1"]
+      args = ["-a", editor.path, script.file.path];
+      editor = Components.classes["@mozilla.org/file/local;1"]
           .createInstance(Components.interfaces.nsILocalFile);
       editor.followLinks = true;
       editor.initWithPath("/usr/bin/open");
@@ -39,7 +39,7 @@ function openInEditor(script) {
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
-    alert(COULD_NOT_LAUNCH + "\n" + e);
+    GM_util.alert(COULD_NOT_LAUNCH + "\n" + e);
     GM_prefRoot.remove("editor");
     throw(e);
   }

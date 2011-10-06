@@ -33,6 +33,7 @@ var gStartupHasRun = false;
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
+// TODO: Remove this, see #1318.
 function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)

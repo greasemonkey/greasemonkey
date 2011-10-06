@@ -41,8 +41,7 @@ function getEditor(change) {
 
     filePicker.init(
         GM_util.getBrowserWindow(), EDITOR_PROMPT, nsIFilePicker.modeOpen);
-    filePicker.appendFilters(nsIFilePicker.filterApplication);
-    filePicker.appendFilters(nsIFilePicker.filterAll);
+    filePicker.appendFilters(nsIFilePicker.filterApps);
 
     if (filePicker.show() != nsIFilePicker.returnOK) {
       // The user canceled, return null.
@@ -53,7 +52,7 @@ function getEditor(change) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
       return filePicker.file;
     } else {
-      alert(PICK_EXE);
+      GM_util.alert(PICK_EXE);
     }
   }
 }
