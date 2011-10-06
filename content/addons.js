@@ -73,6 +73,9 @@ buildContextMenu = function(event) {
         .setAttribute('hidden', true);
     document.getElementById('menuitem_installUpdate_clone')
         .setAttribute('command', 'cmd_userscript_installUpdate');
+  } else {
+    document.getElementById('menuitem_installUpdate')
+        .setAttribute('command', 'cmd_installUpdate');
   }
 };
 
@@ -404,6 +407,9 @@ var greasemonkeyAddons = {
       break;
     case 'cmd_userscript_checkUpdate':
       script.checkForRemoteUpdate(true);
+      break;
+    case 'cmd_userscript_installUpdate':
+      script.installUpdate(GM_util.getBrowserWindow());
       break;
     }
   },
