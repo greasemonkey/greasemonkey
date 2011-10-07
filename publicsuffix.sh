@@ -8,7 +8,7 @@
 
 set -e
 
-URL="http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1"
+URL="https://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1"
 
 # Create the mega list of TLDs as a regular expression.
 TLDS=`curl -s "$URL" | \
