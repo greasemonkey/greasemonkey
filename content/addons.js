@@ -442,7 +442,6 @@ var greasemonkeyAddons = {
         'move_separator',
         'edit', 'show',
         'edit_separator',
-        'checkUpdate',
         'uninstall'];
     var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
@@ -456,6 +455,8 @@ var greasemonkeyAddons = {
       // Set visibility.
       setItemsHidden(false, standardItems);
       setItemsHidden(false, script.enabled ? ['disable'] : ['enable']);
+      setItemsHidden(script.updateAvailable, ['checkUpdate']);
+      setItemsHidden(!script.updateAvailable, ['installUpdate']);
       // Set disabled.
       var atBottom = !selectedItem.nextSibling;
       var atTop = !selectedItem.previousSibling;

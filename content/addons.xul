@@ -130,25 +130,13 @@
 
     <menuitem id="userscript_context_checkUpdate" command="cmd_userscript_checkUpdate"
       label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
-    <!--
-    Todo: Make install/upgrade menu items like extensions if/when added.
-    <menuitem id="userscript_context_cancelInstall" command="cmd_cancelInstall"
-      label="&cmd.cancelInstall.label;" accesskey="&cmd.cancelInstall.accesskey;"/>
-    <menuitem id="userscript_context_cancelUpgrade" command="cmd_cancelUpgrade"
-      label="&cmd.cancelUpgrade.label;" accesskey="&cmd.cancelUpgrade.accesskey;"/>
-    -->
+    <menuitem id="userscript_context_installUpdate" command="cmd_userscript_installUpdate"
+      label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"/>
 
     <menuitem id="userscript_context_enable" command="cmd_userscript_enable"
       label="&cmd.enable.label;" accesskey="&cmd.enable.accesskey;"/>
     <menuitem id="userscript_context_disable" command="cmd_userscript_disable"
       label="&cmd.disable.label;" accesskey="&cmd.disable.accesskey;"/>
-
-    <!--
-    Todo: as above.
-    <menuitem id="userscript_context_includeUpdate" command="cmd_includeUpdate"
-      label="&cmd.includeUpdate.label;" accesskey="&cmd.includeUpdate.accesskey;"
-      type="checkbox"/>
-    -->
   </menupopup>
 </window>
 
