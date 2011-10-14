@@ -37,28 +37,28 @@
 
 <menupopup id="addonitem-popup">
   <menuitem command="cmd_userscript_edit"
-    label="&Edit;" accesskey="&Edit.accesskey;" type="user-script"
+    label="&Edit;" accesskey="&Edit.accesskey;" class="greasemonkey"
   />
   <menuitem command="cmd_userscript_show"
-    label="&Show;" accesskey="&Show.accesskey;" type="user-script"
+    label="&Show;" accesskey="&Show.accesskey;" class="greasemonkey"
   />
-  <menuseparator type="user-script"/>
+  <menuseparator class="greasemonkey"/>
   <menuitem command="cmd_userscript_execute_first"
-    label="&ExecuteFirst;" type="user-script"
+    label="&ExecuteFirst;" class="greasemonkey"
   />
   <menuitem command="cmd_userscript_execute_sooner"
-    label="&ExecuteSooner;" type="user-script"
+    label="&ExecuteSooner;" class="greasemonkey"
   />
   <menuitem command="cmd_userscript_execute_later"
-    label="&ExecuteLater;" type="user-script"
+    label="&ExecuteLater;" class="greasemonkey"
   />
   <menuitem command="cmd_userscript_execute_last"
-    label="&ExecuteLast;" type="user-script"
+    label="&ExecuteLast;" class="greasemonkey"
   />
 
-  <menuseparator type="user-script"/>
+  <menuseparator class="greasemonkey"/>
 
-  <menuitem command="cmd_findItemUpdates" type="user-script"
+  <menuitem command="cmd_findItemUpdates" class="greasemonkey"
     label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
   />
 </menupopup>
