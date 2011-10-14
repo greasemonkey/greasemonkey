@@ -84,6 +84,7 @@
 
     <command id="cmd_userscript_sort"/>
     <command id="cmd_userscript_installUpdate"/>
+    <command id="cmd_userscript_toggleCheckUpdates" />
   </commandset>
 
   <menupopup id="userscriptContextMenu"
@@ -132,6 +133,9 @@
       label="&cmd.checkUpdate.label;" accesskey="&cmd.checkUpdate.accesskey;"/>
     <menuitem id="userscript_context_installUpdate" command="cmd_userscript_installUpdate"
       label="&cmd.installUpdate.label;" accesskey="&cmd.installUpdate.accesskey;"/>
+    <menuitem id="userscript_context_toggleCheckUpdates" command="cmd_userscript_toggleCheckUpdates"
+      label="&CheckUpdates;" accesskey="&CheckUpdates.accesskey;"
+      type="checkbox" />
 
     <menuitem id="userscript_context_enable" command="cmd_userscript_enable"
       label="&cmd.enable.label;" accesskey="&cmd.enable.accesskey;"/>

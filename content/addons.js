@@ -198,6 +198,10 @@ window.addEventListener('load', function() {
   if (scripts.length > 0) {
     document.getElementById('updates-view').hidden = false;
   }
+
+  var contextMenu = document.getElementById("userscriptContextMenu");
+  contextMenu.addEventListener(
+      "popupshowing", greasemonkeyAddons.onContextShowing, false);
 }, false);
 
 window.addEventListener('unload', function() {
@@ -411,6 +415,10 @@ var greasemonkeyAddons = {
     case 'cmd_userscript_installUpdate':
       script.installUpdate(GM_util.getBrowserWindow());
       break;
+    case 'cmd_userscript_toggleCheckUpdates':
+      script.checkRemoteUpdates = !script.checkRemoteUpdates;
+      GM_util.getService().config._changed(script, "modified", null);
+      break;
     }
   },
 
@@ -442,7 +450,7 @@ var greasemonkeyAddons = {
         'move_separator',
         'edit', 'show',
         'edit_separator',
-        'uninstall'];
+        'uninstall', 'toggleCheckUpdates'];
     var uninstallItems = ['uninstall_now', 'cancelUninstall'];
 
     // Set everything hidden now, reveal the right selection below.
@@ -470,6 +478,17 @@ var greasemonkeyAddons = {
         setElementDisabledByID('userscript_context_move_bottom', atBottom);
         setElementDisabledByID('userscript_context_sort', (atTop && atBottom));
       }, 0);
+    }
+  },
+
+  onContextShowing: function(aEvent) {
+    var script = greasemonkeyAddons.findSelectedScript();
+    var menuitem = document.getElementById(
+        'userscript_context_toggleCheckUpdates');
+    if (script.checkRemoteUpdates) {
+      menuitem.setAttribute('checked', 'true');
+    } else {
+      menuitem.removeAttribute('checked');
     }
   },
 

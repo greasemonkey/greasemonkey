@@ -33,6 +33,7 @@
   <command id="cmd_userscript_execute_later" />
   <command id="cmd_userscript_execute_last" />
   <command id="cmd_userscript_showItemPreferences" />
+  <command id="cmd_userscript_toggleCheckUpdates" />
 </commandset>
 
 <menupopup id="addonitem-popup">
@@ -60,6 +61,10 @@
 
   <menuitem command="cmd_findItemUpdates" class="greasemonkey"
     label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
+  />
+  <menuitem command="cmd_userscript_toggleCheckUpdates" class="greasemonkey"
+    label="&CheckUpdates;" accesskey="&CheckUpdates.accesskey;"
+    type="checkbox" id="menuitem_userscript_toggleCheckUpdates"
   />
 </menupopup>
 

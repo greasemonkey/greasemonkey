@@ -36,6 +36,7 @@ function Script(configNode) {
   this._runAt = null;
   this._rawMeta = null;
   this._lastUpdateCheck = null;
+  this.checkRemoteUpdates = true;
   this.updateAvailable = null;
   this._updateVersion = null;
   this.pendingExec = [];
@@ -266,6 +267,9 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
   }
 
+  this.checkRemoteUpdates = node.hasAttribute('checkRemoteUpdates')
+      ? node.getAttribute('checkRemoteUpdates') == 'true' : true;
+
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
     switch (childNode.nodeName) {
     case "Include":
@@ -377,6 +381,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("basedir", this._basedir);
   scriptNode.setAttribute("modified", this._modified);
   scriptNode.setAttribute("dependhash", this._dependhash);
+  scriptNode.setAttribute("checkRemoteUpdates", this.checkRemoteUpdates);
   scriptNode.setAttribute("updateAvailable", this.updateAvailable);
   scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
 
@@ -523,6 +528,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   var callback = aCallback || function() {};
 
+  if (!this.checkRemoteUpdates) return callback(false);
   if (this.updateAvailable) return callback(true);
   if (!this._updateURL) return callback(false);
 

@@ -93,7 +93,7 @@ function ScriptAddon(aScript) {
   this.name = this._script.name;
   this.version = this._script.version;
   this.description = this._script.description;
-  this.iconURL = this._script.icon.fileURL;
+  this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.updateDate = this._script.modifiedDate;
 }
 

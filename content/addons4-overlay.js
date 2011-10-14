@@ -54,6 +54,7 @@ var observer = {
         break;
       case 'modified':
         // Bust the addon cache, and get references to the old and new version.
+        if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
         ScriptAddonReplaceScript(script);
         addon = ScriptAddonFactoryByScript(script);
@@ -127,6 +128,13 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
+  gViewController.commands.cmd_userscript_toggleCheckUpdates = {
+      isEnabled: addonIsInstalledScript,
+      doCommand: function(aAddon) {
+        aAddon._script.checkRemoteUpdates = !aAddon._script.checkRemoteUpdates;
+        GM_util.getService().config._changed(aAddon._script, "modified", null);
+      }
+    };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later
@@ -134,7 +142,21 @@ function init() {
   document.getElementById('greasemonkey-sort-bar').addEventListener(
       'command', onSortersClicked, false);
   applySort();
+
+  var contextMenu = document.getElementById("addonitem-popup");
+  contextMenu.addEventListener("popupshowing", onContextShowing, false);
 };
+
+function onContextShowing(aEvent) {
+  var addon = gViewController.currentViewObj.getSelectedAddon();
+  var menuitem = document.getElementById(
+      'menuitem_userscript_toggleCheckUpdates');
+  if (addon._script.checkRemoteUpdates) {
+    menuitem.setAttribute('checked', 'true');
+  } else {
+    menuitem.removeAttribute('checked');
+  }
+}
 
 function onSortersClicked(aEvent) {
   if ('button' != aEvent.target.tagName) return;
