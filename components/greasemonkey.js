@@ -109,8 +109,7 @@ function createSandbox(
   sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
   sandbox.GM_openInTab = GM_util.hitch(null, openInTab, aContentWin, aChromeWin);
   sandbox.GM_xmlhttpRequest = GM_util.hitch(
-      new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
-      'contentStartRequest');
+      new GM_xmlhttpRequester(aContentWin, aUrl), 'contentStartRequest');
 
   return sandbox;
 }
