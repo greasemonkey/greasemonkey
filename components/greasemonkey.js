@@ -91,7 +91,6 @@ function createSandbox(
   var imp = sandbox.importFunction;
   imp(function(css) { GM_addStyle(aContentWin.document, css); }, 'GM_addStyle');
   imp(GM_util.hitch(new GM_ScriptLogger(aScript), 'log'), 'GM_log');
-  imp(GM_util.hitch(null, openInTab, aContentWin, aChromeWin), 'GM_openInTab');
   imp(GM_util.hitch(null, registerMenuCommand, aContentWin, aChromeWin, aScript),
       'GM_registerMenuCommand');
 
@@ -106,7 +105,9 @@ function createSandbox(
 
   // The .importMethod() is safe because it can't return object values (I
   // think?) -- but sometimes we want to, so in that case do a straight assign.
+  // TODO: When minVer=4 check if this is still necessary.
   sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
+  sandbox.GM_openInTab = GM_util.hitch(null, openInTab, aContentWin, aChromeWin);
   sandbox.GM_xmlhttpRequest = GM_util.hitch(
       new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
       'contentStartRequest');
