@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Kullanıcı Betiklerini Yönet...">
 <!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Etkin">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Kurulumu">

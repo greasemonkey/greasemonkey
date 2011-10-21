@@ -1,3 +1,5 @@
+<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Upravit">
 <!ENTITY Edit.accesskey "U">
 <!ENTITY Edit.tooltip "Upravit tento uživatelský skript">

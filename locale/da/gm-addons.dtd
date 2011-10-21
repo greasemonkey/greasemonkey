@@ -1,3 +1,5 @@
+<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Rediger">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "Rediger dette User Script">

@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "p">
 <!ENTITY menu.manage "Parancsfájlok kezelése...">
 <!ENTITY menu.manage.accesskey "k">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Engedélyezve">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey telepítés">

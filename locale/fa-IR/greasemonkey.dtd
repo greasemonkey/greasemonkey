@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "ج">
 <!ENTITY menu.manage "مدیریت دستنویس های کاربری...">
 <!ENTITY menu.manage.accesskey "م">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "فعال">
 <!ENTITY statusbar.enabled.accesskey "ع">
 <!ENTITY install.title "فرآیند نصب گریسمانکی">

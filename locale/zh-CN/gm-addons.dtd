@@ -1,3 +1,5 @@
+<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "编辑">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "编辑这个用户脚本">

@@ -1,3 +1,5 @@
+<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "編集">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "このユーザスクリプトを編集します">

@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "ח">
 <!ENTITY menu.manage "ניהול סקריפטים של משתמש">
 <!ENTITY menu.manage.accesskey "נ">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "הפעל">
 <!ENTITY statusbar.enabled.accesskey "פ">
 <!ENTITY install.title "התקנת גריזמונקי">

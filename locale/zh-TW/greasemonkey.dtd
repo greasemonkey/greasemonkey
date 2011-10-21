@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安裝">

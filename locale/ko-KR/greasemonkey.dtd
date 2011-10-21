@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "유저 스크립트 관리...">
 <!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "활성화">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "그리스몽키 설치">

@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Gebruikersscripts beheren…">
 <!ENTITY menu.manage.accesskey "U">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Ingeschakeld">
 <!ENTITY statusbar.enabled.accesskey "I">
 <!ENTITY install.title "Greasemonkey-installatie">

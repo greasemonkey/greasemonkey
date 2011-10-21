@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
 <!ENTITY menu.manage.accesskey "S">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Instalace Greasemonkey">

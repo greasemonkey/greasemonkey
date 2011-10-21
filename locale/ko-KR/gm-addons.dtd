@@ -1,3 +1,5 @@
+<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "편집">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "이 유저 스크립트 편집">

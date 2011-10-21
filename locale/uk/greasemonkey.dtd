@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "Н">
 <!ENTITY menu.manage "Керування скриптами…">
 <!ENTITY menu.manage.accesskey "е">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">

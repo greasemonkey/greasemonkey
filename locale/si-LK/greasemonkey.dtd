@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "පරිශීලක ස්ක්‍රිප්ට් කලමනාකරනය කරන්න">
 <!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "ක්‍රියාත්මකයි">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey ස්ථාපනය">

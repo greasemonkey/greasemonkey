@@ -8,6 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Hantera användarskript…">
 <!ENTITY menu.manage.accesskey "H">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Aktiverat">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installation av Greasemonkey">
