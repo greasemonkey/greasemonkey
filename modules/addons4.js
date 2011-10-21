@@ -95,6 +95,8 @@ function ScriptAddon(aScript) {
   this.description = this._script.description;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.updateDate = this._script.modifiedDate;
+  this.providesUpdatesSecurely = !!aScript.updateURL
+      && (0 === aScript.updateURL.indexOf('https:'));
 }
 
 // Required attributes.
@@ -102,14 +104,13 @@ ScriptAddon.prototype.id = null;
 ScriptAddon.prototype.version = null;
 ScriptAddon.prototype.type = SCRIPT_ADDON_TYPE;
 ScriptAddon.prototype.isCompatible = true;
-ScriptAddon.prototype.providesUpdatesSecurely = true;
 ScriptAddon.prototype.blocklistState = 0;
 ScriptAddon.prototype.appDisabled = false;
 ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
 ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
-ScriptAddon.prototype.applyBackgroundUpdates = AddonManager.AUTOUPDATE_DISABLE;
+ScriptAddon.prototype.applyBackgroundUpdates = AddonManager.AUTOUPDATE_DEFAULT;
 ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART_NONE;
 
 // Optional attributes
@@ -169,13 +170,7 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 
 ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
   function updateCallback(aAvailable) {
-    if (aAvailable) {
-      var scriptInstall = ScriptInstallFactoryByAddon(this);
-      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-      aListener.onUpdateAvailable(this, scriptInstall);
-    } else {
-      aListener.onNoUpdateAvailable(this);
-    }
+    this._script.handleRemoteUpdate(aAvailable, aListener);
   }
   this._script.checkForRemoteUpdate(true, GM_util.hitch(this, updateCallback));
 };

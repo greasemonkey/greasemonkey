@@ -526,7 +526,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 };
 
 Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
-  var callback = aCallback || function() {};
+  var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
 
   if (!this.checkRemoteUpdates) return callback(false);
   if (this.updateAvailable) return callback(true);
@@ -570,7 +570,6 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
 
   var lastCheck = this._lastUpdateCheck;
   this._lastUpdateCheck = currentTime;
-
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -616,6 +615,30 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
   GM_util.getService().config._save();
   aCallback(false);
 };
+
+Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
+      if (aAvailable) scriptInstall.install();
+  } else {
+    var addons4 = {};
+    Components.utils.import('resource://greasemonkey/addons4.js', addons4);
+    var addon = addons4.ScriptAddonFactoryByScript(this);
+    var scriptInstall = addons4.ScriptInstallFactoryByAddon(addon);
+    if (aListener) {
+      // When in the add-ons manager, listeners are passed around to keep
+      // the UI up to date.
+      if (aAvailable) {
+        AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+        aListener.onUpdateAvailable(addon, scriptInstall);
+      } else {
+        aListener.onNoUpdateAvailable(addon);
+      }
+    } else {
+      // Otherwise, just install.
+      if (aAvailable) scriptInstall.install();
+    }
+  }
+}
 
 Script.prototype.installUpdate = function(aChromeWin, aCallback) {
   var oldScriptId = new String(this.id);
