@@ -528,7 +528,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
 
-  if (!this.checkRemoteUpdates) return callback(false);
+  if (!this.checkRemoteUpdates && !aForced) return callback(false);
   if (this.updateAvailable) return callback(true);
   if (!this._updateURL) return callback(false);
 
