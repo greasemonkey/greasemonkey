@@ -618,7 +618,9 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
 
 Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
   if (GM_util.compareFirefoxVersion("4.0") < 0) {
-      if (aAvailable) scriptInstall.install();
+    if (aAvailable) {
+      this.installUpdate(GM_util.getBrowserWindow());
+    }
   } else {
     var addons4 = {};
     Components.utils.import('resource://greasemonkey/addons4.js', addons4);
