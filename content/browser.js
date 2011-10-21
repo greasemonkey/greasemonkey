@@ -303,6 +303,10 @@ GM_BrowserUI.showToolbarButton = function() {
   }
 };
 
+GM_BrowserUI.openOptions = function() {
+  openDialog('chrome://greasemonkey/content/options.xul');
+};
+
 GM_BrowserUI.init();
 
 

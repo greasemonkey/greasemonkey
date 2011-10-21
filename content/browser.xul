@@ -65,6 +65,10 @@
         command="gm_toggle_checked"/>
       <menuseparator />
       <menuitem
+        accesskey="&menu.options.accesskey;"
+        label="&menu.options;"
+        oncommand="GM_BrowserUI.openOptions();" />
+      <menuitem
         accesskey="&menu.manage.accesskey;"
         label="&menu.manage;"
         oncommand="GM_OpenScriptsMgr();" />
