@@ -102,8 +102,9 @@ GM_BrowserUI.contentLoad = function(event) {
   var safeWin = event.target.defaultView;
   var href = safeWin.location.href;
 
-  // Make sure we are still on the page that fired this event, see issue #1083
-  if (href == event.target.documentURI) {
+  // Make sure we are still on the page that fired this event, see issue #1083.
+  // But ignore hashes; see issue #1445.
+  if (href.replace(/#.*/, '') == event.target.documentURI.replace(/#.*/, '')) {
     GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
   }
 
