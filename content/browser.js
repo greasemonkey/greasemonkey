@@ -305,7 +305,7 @@ GM_BrowserUI.showToolbarButton = function() {
 };
 
 GM_BrowserUI.openOptions = function() {
-  openDialog('chrome://greasemonkey/content/options.xul');
+  openDialog('chrome://greasemonkey/content/options.xul', null, 'modal');
 };
 
 GM_BrowserUI.init();
