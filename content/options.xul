@@ -13,12 +13,13 @@
 <dialog
   title="Greasemonkey - &prefWindow.titleWin;"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  buttons="accept"
+  buttons="accept,cancel"
 
   id="greasemonkey-options-dialog"
   persist="screenX screenY"
   onload="GM_loadOptions()"
   ondialogaccept="GM_saveOptions()"
+  ondialogcancel="close()"
 >
 <script type="application/x-javascript" src="chrome://greasemonkey/content/options.js" />
 
