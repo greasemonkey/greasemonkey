@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "自动检查更新">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "编辑">
 <!ENTITY Edit.accesskey "E">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "最后执行">
 <!ENTITY ExecuteLater "稍后执行">
 <!ENTITY ExecuteSooner "稍早执行">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "查找更新">
+<!ENTITY InstallUpdate "安装更新">
 <!ENTITY MoveDown "下移">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "移至最后">

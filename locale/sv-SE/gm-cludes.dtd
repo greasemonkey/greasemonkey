@@ -1,12 +1,12 @@
-<!ENTITY promptForNewPage.msg "Skriv in en ny adress nedan. Du kan specifiera flera sidor med jokertecknet (*).">
+<!ENTITY promptForNewPage.msg "Skriv in en ny adress nedan. Du kan inkludera flera sidor med jokertecknet (*).">
 <!ENTITY promptForNewPage.title "Lägg till sida">
-<!ENTITY promptForNewPage.defVal "http://example.com/*">
-<!ENTITY promptForEdit.msg "Modifiera adressen av sidan nedan. Du kan specifiera flera sidor med jokertecknet (*).">
+<!ENTITY promptForNewPage.defVal "http://exempel.se/*">
+<!ENTITY promptForEdit.msg "Ändra adressen för sidan nedan. Du kan inkludera flera sidor med jokertecknet (*).">
 <!ENTITY promptForEdit.title "Redigera sida">
-<!ENTITY button.add "Lägg till...">
-<!ENTITY button.addUserExclude "Lägg till som användarundantagen">
-<!ENTITY button.addUserInclude "Lägg till som användarinkluderad">
-<!ENTITY button.edit "Redigera...">
+<!ENTITY button.add "Lägg till…">
+<!ENTITY button.addUserExclude "Lägg till som användarundantag">
+<!ENTITY button.addUserInclude "Lägg till som användarinkludering">
+<!ENTITY button.edit "Redigera…">
 <!ENTITY button.remove "Ta bort">
 <!ENTITY label.grpIncluded "Inkluderade sidor">
 <!ENTITY label.grpExcluded "Undantagna sidor">

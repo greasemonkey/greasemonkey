@@ -1,5 +1,5 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY CheckUpdates "Sök efter uppdateringar automatiskt">
+<!ENTITY CheckUpdates.accesskey "u">
 <!ENTITY Edit "Redigera">
 <!ENTITY Edit.accesskey "R">
 <!ENTITY Edit.tooltip "Redigera detta användarskript">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Kör sist">
 <!ENTITY ExecuteLater "Kör senare">
 <!ENTITY ExecuteSooner "Kör tidigare">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Sök efter uppdatering">
+<!ENTITY InstallUpdate "Installera uppdatering">
 <!ENTITY MoveDown "Flytta nedåt">
 <!ENTITY MoveDown.accesskey "n">
 <!ENTITY MoveToBottom "Flytta nederst">
@@ -25,13 +25,13 @@
 <!ENTITY Sort.Status "Status">
 <!ENTITY Sort.ByName "Sortera efter namn">
 <!ENTITY Sort.Name "Namn">
-<!ENTITY Sort.ByExecution "Sortera efter tillämpningsordning">
-<!ENTITY Sort.Execution "Tillämpningsordning">
+<!ENTITY Sort.ByExecution "Sortera efter körningsordning">
+<!ENTITY Sort.Execution "Körningsordning">
 <!ENTITY SortScripts "Sortera skript">
 <!ENTITY SortScripts.accesskey "o">
 <!ENTITY UninstallCancel "Avbryt avinstallation">
 <!ENTITY UninstallCancel.accesskey "v">
 <!ENTITY UninstallCancel.tooltip "Avbryter avinstallationen av detta användarskript">
-<!ENTITY UninstallCancelDescription "Detta användarskript kommer att avinstalleras när dialogen stängs.  (Eller högerklicka och välj &quot;Avinstallera nu&quot;.)">
+<!ENTITY UninstallCancelDescription "Detta användarskript kommer att avinstalleras när dialogen stängs. (Eller högerklicka och välj &quot;Avinstallera nu&quot;.)">
 <!ENTITY UninstallNow "Avinstallera nu">
 <!ENTITY UninstallNow.accesskey "A">
