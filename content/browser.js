@@ -177,9 +177,9 @@ GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
     return;
   }
 
-  GM_BrowserUI.scriptDownloader_ =
+  GM_BrowserUI._scriptDownloader =
     new GM_ScriptDownloader(window, uri, GM_BrowserUI.bundle, contentWin);
-  GM_BrowserUI.scriptDownloader_.startInstall();
+  GM_BrowserUI._scriptDownloader.startInstall();
 };
 
 
@@ -188,7 +188,7 @@ GM_BrowserUI.startInstallScript = function(uri, contentWin, timer) {
  * the user install it.
  */
 GM_BrowserUI.showScriptView = function(scriptDownloader) {
-  GM_BrowserUI.scriptDownloader_ = scriptDownloader;
+  GM_BrowserUI._scriptDownloader = scriptDownloader;
 
   var tab = GM_BrowserUI.tabBrowser.addTab(scriptDownloader.script.previewURL);
   GM_BrowserUI.tabBrowser.selectedTab = tab;
@@ -221,7 +221,7 @@ GM_BrowserUI.openTab = function(url) {
  * Handles the install button getting clicked.
  */
 GM_BrowserUI.installCurrentScript = function() {
-  GM_BrowserUI.scriptDownloader_.installScript();
+  GM_BrowserUI._scriptDownloader.installScript();
 };
 
 /**
@@ -286,9 +286,9 @@ GM_BrowserUI.refreshStatus = function() {
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
 
-  GM_BrowserUI.scriptDownloader_ = new GM_ScriptDownloader(
+  GM_BrowserUI._scriptDownloader = new GM_ScriptDownloader(
       window, uri, GM_BrowserUI.bundle);
-  GM_BrowserUI.scriptDownloader_.startViewScript();
+  GM_BrowserUI._scriptDownloader.startViewScript();
 };
 
 GM_BrowserUI.showToolbarButton = function() {

@@ -51,7 +51,7 @@ GM_Resources.prototype.getResourceURL = function(name) {
     return undefined;
   }
 
-  return this.getDep_(name).dataContent;
+  return this._getDep(name).dataContent;
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
@@ -59,10 +59,10 @@ GM_Resources.prototype.getResourceText = function(name) {
     return undefined;
   }
 
-  return this.getDep_(name).textContent;
+  return this._getDep(name).textContent;
 };
 
-GM_Resources.prototype.getDep_ = function(name) {
+GM_Resources.prototype._getDep = function(name) {
   var resources = this.script.resources;
   for (var i = 0, resource; resource = resources[i]; i++) {
     if (resource.name == name) {

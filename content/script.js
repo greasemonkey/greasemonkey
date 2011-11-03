@@ -655,7 +655,7 @@ Script.prototype.installUpdate = function(aChromeWin, aCallback) {
   var uri = GM_util.uriFromUrl(this._downloadURL);
   var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
   scriptDownloader.replacedScript = this;
-  scriptDownloader.installOnCompletion_ = true;
+  scriptDownloader._installOnCompletion = true;
   scriptDownloader.onInstall(GM_util.hitch(this, updateAddons));
   if (aCallback) scriptDownloader.onInstall(aCallback);
   scriptDownloader.startDownload();

@@ -1,27 +1,27 @@
 var GMInstall = {
   init: function() {
-    this.htmlNs_ = "http://www.w3.org/1999/xhtml";
+    this._htmlNs = "http://www.w3.org/1999/xhtml";
 
-    this.scriptDownloader_ = window.arguments[0];
-    this.script_ = this.scriptDownloader_.script;
+    this._scriptDownloader = window.arguments[0];
+    this._script = this._scriptDownloader.script;
 
-    this.setupIncludes("includes", "includes-desc", this.script_.includes);
-    this.setupIncludes("excludes", "excludes-desc", this.script_.excludes);
+    this.setupIncludes("includes", "includes-desc", this._script.includes);
+    this.setupIncludes("excludes", "excludes-desc", this._script.excludes);
     var matches = [];
-    for (var i = 0, match = null; match = this.script_.matches[i]; i++) {
+    for (var i = 0, match = null; match = this._script.matches[i]; i++) {
       matches.push(match.pattern);
     }
     this.setupIncludes("matches", "matches-desc", matches);
 
-    this.dialog_ = document.documentElement;
-    this.extraButton_ = this.dialog_.getButton("extra1");
-    this.extraButton_.setAttribute("type", "checkbox");
+    this._dialog = document.documentElement;
+    this._extraButton = this._dialog.getButton("extra1");
+    this._extraButton.setAttribute("type", "checkbox");
 
-    this.acceptButton_ = this.dialog_.getButton("accept");
-    this.acceptButton_.baseLabel = this.acceptButton_.label;
+    this._acceptButton = this._dialog.getButton("accept");
+    this._acceptButton.baseLabel = this._acceptButton.label;
 
-    this.timer_ = null;
-    this.seconds_ = 0;
+    this._timer = null;
+    this._seconds = 0;
     this.startTimer();
 
     this.bundle = document.getElementById("gm-browser-bundle");
@@ -31,13 +31,13 @@ var GMInstall = {
         this.bundle.getString("greeting.msg")));
 
     var desc = document.getElementById("scriptDescription");
-    desc.appendChild(document.createElementNS(this.htmlNs_, "strong"));
-    desc.firstChild.appendChild(document.createTextNode(this.script_.name));
-    if (this.script_.version) {
-      desc.appendChild(document.createTextNode(' ' + this.script_.version));
+    desc.appendChild(document.createElementNS(this._htmlNs, "strong"));
+    desc.firstChild.appendChild(document.createTextNode(this._script.name));
+    if (this._script.version) {
+      desc.appendChild(document.createTextNode(' ' + this._script.version));
     }
-    desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
-    desc.appendChild(document.createTextNode(this.script_.description));
+    desc.appendChild(document.createElementNS(this._htmlNs, "br"));
+    desc.appendChild(document.createTextNode(this._script.description));
   },
 
   onFocus: function(e) {
@@ -49,39 +49,39 @@ var GMInstall = {
   },
 
   startTimer: function() {
-    this.seconds_ = 4;
+    this._seconds = 4;
     this.updateLabel();
 
-    if (this.timer_) {
-      window.clearInterval(this.timer_);
+    if (this._timer) {
+      window.clearInterval(this._timer);
     }
 
-    this.timer_ = window.setInterval(function() { GMInstall.onInterval(); }, 500);
+    this._timer = window.setInterval(function() { GMInstall.onInterval(); }, 500);
   },
 
   onInterval: function() {
-    this.seconds_--;
+    this._seconds--;
     this.updateLabel();
 
-    if (this.seconds_ == 0) {
-      this.timer_ = window.clearInterval(this.timer_);
+    if (this._seconds == 0) {
+      this._timer = window.clearInterval(this._timer);
     }
   },
 
   stopTimer: function() {
-    this.seconds_ = 5;
-    this.timer_ = window.clearInterval(this.timer_);
+    this._seconds = 5;
+    this._timer = window.clearInterval(this._timer);
     this.updateLabel();
   },
 
   updateLabel: function() {
-    if (this.seconds_ > 0) {
-      this.acceptButton_.focus();
-      this.acceptButton_.disabled = true;
-      this.acceptButton_.label = this.acceptButton_.baseLabel + " (" + this.seconds_ + ")";
+    if (this._seconds > 0) {
+      this._acceptButton.focus();
+      this._acceptButton.disabled = true;
+      this._acceptButton.label = this._acceptButton.baseLabel + " (" + this._seconds + ")";
     } else {
-      this.acceptButton_.disabled = false;
-      this.acceptButton_.label = this.acceptButton_.baseLabel;
+      this._acceptButton.disabled = false;
+      this._acceptButton.label = this._acceptButton.baseLabel;
     }
   },
 
@@ -92,7 +92,7 @@ var GMInstall = {
 
       for (var i = 0; i < includes.length; i++) {
         desc.appendChild(document.createTextNode(includes[i]));
-        desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
+        desc.appendChild(document.createElementNS(this._htmlNs, "br"));
       }
 
       desc.removeChild(desc.lastChild);
@@ -100,17 +100,17 @@ var GMInstall = {
   },
 
   onOK: function() {
-    this.scriptDownloader_.installScript();
+    this._scriptDownloader.installScript();
     window.setTimeout(window.close, 0);
   },
 
   onCancel: function(){
-    this.scriptDownloader_.cleanupTempFiles();
+    this._scriptDownloader.cleanupTempFiles();
     window.close();
   },
 
   onShowSource: function() {
-    this.scriptDownloader_.showScriptView();
+    this._scriptDownloader.showScriptView();
     window.setTimeout(window.close, 0);
   }
 };

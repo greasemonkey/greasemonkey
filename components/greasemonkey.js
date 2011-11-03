@@ -337,7 +337,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
        || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
       && cl.spec.match(/\.user\.js$/)
   ) {
-    if (!this.ignoreNextScript_
+    if (!this._ignoreNextScript
         && !isTempScript(cl)
         && GM_util.installUri(cl, ctx.contentWindow)
     ) {
@@ -345,7 +345,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
     }
   }
 
-  this.ignoreNextScript_ = false;
+  this._ignoreNextScript = false;
   return ret;
 };
 
@@ -423,7 +423,7 @@ service.prototype.runScripts = function(
 };
 
 service.prototype.ignoreNextScript = function() {
-  this.ignoreNextScript_ = true;
+  this._ignoreNextScript = true;
 };
 
 service.prototype.injectScripts = function(
