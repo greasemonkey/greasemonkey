@@ -128,7 +128,7 @@ function Script_setUserIncludes(includes) { this._userIncludes = includes.concat
 Script.prototype.__defineGetter__('excludes',
 function Script_getExcludes() { return this._excludes.concat(); });
 Script.prototype.__defineSetter__('excludes',
-function Script_SetExcludes(excludes) { this._excludes = excludes.concat(); });
+function Script_setExcludes(excludes) { this._excludes = excludes.concat(); });
 
 Script.prototype.__defineGetter__('userExcludes',
 function Script_getUserExcludes() { return this._userExcludes.concat(); });
