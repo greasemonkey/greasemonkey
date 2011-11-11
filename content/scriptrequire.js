@@ -5,7 +5,6 @@ function ScriptRequire(script) {
   this._script = script;
 
   this._downloadURL = null;
-  this._tempFile = null;
   this._filename = null;
   this.type = "require";
   this.updateScript = false;
@@ -18,6 +17,9 @@ function ScriptRequire_getFile() {
   return file;
 });
 
+ScriptRequire.prototype.__defineGetter__("filename",
+function ScriptRequire_getFilename() { return new String(this._filename); });
+
 ScriptRequire.prototype.__defineGetter__('fileURL',
 function ScriptRequire_getFileURL() {
   return GM_util.getUriFromFile(this.file).spec;
@@ -29,26 +31,7 @@ function ScriptRequire_getTextContent() { return GM_util.getContents(this.file);
 ScriptRequire.prototype.__defineGetter__('urlToDownload',
 function ScriptRequire_getUrlToDownload() { return this._downloadURL; });
 
-ScriptRequire.prototype._initFile = function() {
-  var name = this._downloadURL.substr(this._downloadURL.lastIndexOf("/") + 1);
-  if(name.indexOf("?") > 0) {
-    name = name.substr(0, name.indexOf("?"));
-  }
-  name = this._script._initFileName(name, true);
-
-  var file = this._script._basedirFile;
-  file.append(name);
-  file.createUnique(
-      Components.interfaces.nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
-  this._filename = file.leafName;
-
-  file.remove(true);
-  this._tempFile.moveTo(file.parent, file.leafName);
-  this._tempFile = null;
-};
-
-ScriptRequire.prototype.setDownloadedFile = function(file) {
-  this._tempFile = file;
-  if (this.updateScript)
-    this._initFile();
+ScriptRequire.prototype.setFilename = function(aFile) {
+  aFile.QueryInterface(Components.interfaces.nsILocalFile);
+  this._filename = aFile.leafName;
 };

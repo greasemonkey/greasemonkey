@@ -4,6 +4,7 @@ function ScriptIcon(script) {
   ScriptResource.call(this, script);
   this.type = "icon";
   this._dataURI = null;
+  this._downloadURL = null;
   this.dataUriError = false;
 }
 

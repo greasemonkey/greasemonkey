@@ -14,6 +14,10 @@ function ScriptResource(script) {
   this._name = null;
 }
 
+ScriptResource.prototype.toString = function() {
+  return '[ScriptResource; ' + this._downloadURL + ']';
+}
+
 ScriptResource.prototype.__defineGetter__('name',
 function ScriptResource_getName() { return this._name; });
 
@@ -23,6 +27,9 @@ function ScriptResource_getFile() {
   file.append(this._filename);
   return file;
 });
+
+ScriptResource.prototype.__defineGetter__("filename",
+function ScriptResource_getFilename() { return new String(this._filename); });
 
 ScriptResource.prototype.__defineGetter__('textContent',
 function ScriptResource_getTextContent() { return GM_util.getContents(this.file); });
@@ -44,15 +51,17 @@ function ScriptResource_getDataContent() {
       + ";base64," + window.encodeURIComponent(window.btoa(binaryContents));
 });
 
-ScriptResource.prototype._initFile = ScriptRequire.prototype._initFile;
-
 ScriptResource.prototype.__defineGetter__('urlToDownload',
 function ScriptResource_getUrlToDownload() { return this._downloadURL; });
 
-ScriptResource.prototype.setDownloadedFile =
-function(tempFile, mimetype, charset) {
-  this._tempFile = tempFile;
-  this._mimetype = mimetype;
-  this._charset = charset;
-  if (this.updateScript) this._initFile();
-};
+ScriptResource.prototype.setFilename = ScriptRequire.prototype.setFilename;
+
+/** This should only be called as part of the download process. */
+ScriptResource.prototype.setMimetype = function(aMimetype) {
+  this._mimetype = aMimetype;
+}
+
+/** This should only be called as part of the download process. */
+ScriptResource.prototype.setCharset = function(aCharset) {
+  this._charset = aCharset;
+}

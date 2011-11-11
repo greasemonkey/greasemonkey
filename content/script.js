@@ -203,28 +203,9 @@ function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; })
 Script.prototype.__defineGetter__('textContent',
 function Script_getTextContent() { return GM_util.getContents(this.file); });
 
-Script.prototype._initFileName = function(name, useExt) {
-  var ext = "";
-  name = name.toLowerCase();
-
-  var dotIndex = name.lastIndexOf(".");
-  if (dotIndex > 0 && useExt) {
-    ext = name.substring(dotIndex + 1);
-    name = name.substring(0, dotIndex);
-  }
-
-  name = name.replace(/\s+/g, "_").replace(/[^-_A-Z0-9]+/gi, "");
-  ext = ext.replace(/\s+/g, "_").replace(/[^-_A-Z0-9]+/gi, "");
-
-  // If no Latin characters found - use default
-  if (!name) name = "gm_script";
-
-  // 24 is a totally arbitrary max length
-  if (name.length > 24) name = name.substring(0, 24);
-
-  if (ext) name += "." + ext;
-
-  return name;
+Script.prototype.setFilename = function(aBaseName, aFileName) {
+  this._basedir = aBaseName;
+  this._filename = aFileName;
 };
 
 Script.prototype._loadFromConfigNode = function(node) {
@@ -407,25 +388,6 @@ Script.prototype.toConfigNode = function(doc) {
 Script.prototype.toString = function() {
   return '[Greasemonkey Script ' + this.id + ']';
 };
-
-Script.prototype._initFile = function(tempFile) {
-  var name = this._initFileName(this._name, false);
-  this._basedir = name;
-
-  var nsIFile = Components.interfaces.nsIFile;
-  var file = GM_util.scriptDir();
-  file.append(name);
-  file.createUnique(nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
-  this._basedir = file.leafName;
-
-  file.append(name + ".user.js");
-  file.createUnique(nsIFile.NORMAL_FILE_TYPE, GM_constants.fileMask);
-  this._filename = file.leafName;
-
-  file.remove(true);
-  tempFile.moveTo(file.parent, file.leafName);
-};
-
 
 Script.prototype.__defineGetter__('urlToDownload',
 function Script_getUrlToDownload() { return this._downloadURL; });

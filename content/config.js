@@ -311,22 +311,6 @@ Config.prototype.install = function(script, oldScript) {
     this.uninstall(oldScript, true);
   }
 
-  script._initFile(script._tempFile);
-  script._tempFile = null;
-
-  // if icon had to be downloaded, then move the file
-  if (script.icon.hasDownloadURL()) {
-    script.icon._initFile();
-  }
-
-  for (var i = 0; i < script._requires.length; i++) {
-    script._requires[i]._initFile();
-  }
-
-  for (var i = 0; i < script._resources.length; i++) {
-    script._resources[i]._initFile();
-  }
-
   script._modified = script.file.lastModifiedTime;
   script._dependhash = GM_util.sha1(script._rawMeta);
 

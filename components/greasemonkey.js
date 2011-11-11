@@ -17,7 +17,7 @@ var gExtensionPath = (function() {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
   var uri = ioService.newURI(Components.stack.filename, null, null);
-  var file = uri.QueryInterface(Components.interfaces.nsIFileURL).file
+  var file = uri.QueryInterface(Components.interfaces.nsIFileURL).file;
   // ... to find the containing directory.
   var dir = file.parent.parent;
   // Then get the URL back for that path.
@@ -30,6 +30,9 @@ var gMaxJSVersion = "1.8";
 
 var gMenuCommands = [];
 var gStartupHasRun = false;
+
+var gWindowWatcher = Cc["@mozilla.org/embedcomp/window-watcher;1"]
+    .getService(Ci.nsIWindowWatcher);
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -144,6 +147,41 @@ function getFirebugConsole(wrappedContentWin, chromeWin) {
     dump('Greasemonkey: Failure Firebug console:\n' + uneval(e) + '\n');
     return null;
   }
+}
+
+function installDialog(aUri, aBrowser, aService) {
+  var scope = {};
+  Cu.import('resource://greasemonkey/remoteScript.js', scope);
+  var rs = new scope.RemoteScript(aUri.spec);
+
+  rs.onScriptMeta(function(aRemoteScript, aType, aScript) {
+    var params = [rs, aScript];
+    params.wrappedJSObject = params;
+    // TODO: Find a better fix than this sloppy workaround.
+    // Apparently this version of .openWindow() blocks; and as called by the
+    // "script meta data available" callback as this is, blocks the further
+    // download of the script!
+    var curriedOpenWindow = GM_util.hitch(
+        null, gWindowWatcher.openWindow,
+        /* aParent */ null,
+        'chrome://greasemonkey/content/install.xul',
+        /* aName */ null,
+        'chrome,centerscreen,modal,dialog,titlebar,resizable',
+        params);
+    GM_util.timeout(0, curriedOpenWindow);
+  });
+
+  rs.download(function(aSuccess, aType) {
+    if (!aSuccess) {
+      // Failure downloading script; browse to it.
+      aService.ignoreNextScript();
+      aBrowser.loadURI(aUri.spec, /* aReferrer */ null, /* aCharset */ null);
+//    } else if (aSuccess && 'script' == aType) {
+//      dump('script is downloaded.\n');
+//    } else if (aSuccess && 'dependencies' == aType) {
+//      dump('script and all dependencies downloaded.\n');
+    }
+  });
 }
 
 function isTempScript(uri) {
@@ -337,10 +375,8 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
        || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
       && cl.spec.match(/\.user\.js$/)
   ) {
-    if (!this._ignoreNextScript
-        && !isTempScript(cl)
-        && GM_util.installUri(cl, ctx.contentWindow)
-    ) {
+    if (!this._ignoreNextScript && !isTempScript(cl)) {
+      installDialog(cl, ctx, this);
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
     }
   }

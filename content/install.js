@@ -1,121 +1,136 @@
-var GMInstall = {
-  init: function() {
-    this._htmlNs = "http://www.w3.org/1999/xhtml";
+var gRemoteScript = window.arguments[0].wrappedJSObject[0];
+var gScript = window.arguments[0].wrappedJSObject[1];
+var gHtmlNs = 'http://www.w3.org/1999/xhtml';
 
-    this._scriptDownloader = window.arguments[0];
-    this._script = this._scriptDownloader.script;
+var gAcceptButton = null;
+var gCurrentDelay = null;
+var gProgress = 0;
+var gTimer = null;
+var gTotalDelay = 5;
 
-    this.setupIncludes("includes", "includes-desc", this._script.includes);
-    this.setupIncludes("excludes", "excludes-desc", this._script.excludes);
-    var matches = [];
-    for (var i = 0, match = null; match = this._script.matches[i]; i++) {
-      matches.push(match.pattern);
-    }
-    this.setupIncludes("matches", "matches-desc", matches);
+function init() {
+  setUpIncludes('includes', 'includes-desc', gScript.includes);
+  setUpIncludes('excludes', 'excludes-desc', gScript.excludes);
 
-    this._dialog = document.documentElement;
-    this._extraButton = this._dialog.getButton("extra1");
-    this._extraButton.setAttribute("type", "checkbox");
-
-    this._acceptButton = this._dialog.getButton("accept");
-    this._acceptButton.baseLabel = this._acceptButton.label;
-
-    this._timer = null;
-    this._seconds = 0;
-    this.startTimer();
-
-    this.bundle = document.getElementById("gm-browser-bundle");
-
-    var heading = document.getElementById("heading");
-    heading.appendChild(document.createTextNode(
-        this.bundle.getString("greeting.msg")));
-
-    var desc = document.getElementById("scriptDescription");
-    desc.appendChild(document.createElementNS(this._htmlNs, "strong"));
-    desc.firstChild.appendChild(document.createTextNode(this._script.name));
-    if (this._script.version) {
-      desc.appendChild(document.createTextNode(' ' + this._script.version));
-    }
-    desc.appendChild(document.createElementNS(this._htmlNs, "br"));
-    desc.appendChild(document.createTextNode(this._script.description));
-  },
-
-  onFocus: function(e) {
-    this.startTimer();
-  },
-
-  onBlur: function(e) {
-    this.stopTimer();
-  },
-
-  startTimer: function() {
-    this._seconds = 4;
-    this.updateLabel();
-
-    if (this._timer) {
-      window.clearInterval(this._timer);
-    }
-
-    this._timer = window.setInterval(function() { GMInstall.onInterval(); }, 500);
-  },
-
-  onInterval: function() {
-    this._seconds--;
-    this.updateLabel();
-
-    if (this._seconds == 0) {
-      this._timer = window.clearInterval(this._timer);
-    }
-  },
-
-  stopTimer: function() {
-    this._seconds = 5;
-    this._timer = window.clearInterval(this._timer);
-    this.updateLabel();
-  },
-
-  updateLabel: function() {
-    if (this._seconds > 0) {
-      this._acceptButton.focus();
-      this._acceptButton.disabled = true;
-      this._acceptButton.label = this._acceptButton.baseLabel + " (" + this._seconds + ")";
-    } else {
-      this._acceptButton.disabled = false;
-      this._acceptButton.label = this._acceptButton.baseLabel;
-    }
-  },
-
-  setupIncludes: function(box, desc, includes) {
-    if (includes.length > 0) {
-      desc = document.getElementById(desc);
-      document.getElementById(box).style.display = "";
-
-      for (var i = 0; i < includes.length; i++) {
-        desc.appendChild(document.createTextNode(includes[i]));
-        desc.appendChild(document.createElementNS(this._htmlNs, "br"));
-      }
-
-      desc.removeChild(desc.lastChild);
-    }
-  },
-
-  onOK: function() {
-    this._scriptDownloader.installScript();
-    window.setTimeout(window.close, 0);
-  },
-
-  onCancel: function(){
-    this._scriptDownloader.cleanupTempFiles();
-    window.close();
-  },
-
-  onShowSource: function() {
-    this._scriptDownloader.showScriptView();
-    window.setTimeout(window.close, 0);
+  var matches = [];
+  for (var i = 0, match = null; match = gScript.matches[i]; i++) {
+    matches.push(match.pattern);
   }
-};
+  setUpIncludes('matches', 'matches-desc', matches);
+
+  document.documentElement.getButton('extra1').setAttribute('type', 'checkbox');
+
+  gAcceptButton = document.documentElement.getButton('accept');
+  gAcceptButton.baseLabel = gAcceptButton.label;
+
+  startTimer();
+
+  var bundle = document.getElementById('gm-browser-bundle');
+
+  document.getElementById('heading').appendChild(
+      document.createTextNode(bundle.getString('greeting.msg')));
+
+  var desc = document.getElementById('scriptDescription');
+  desc.appendChild(document.createElementNS(gHtmlNs, 'strong'));
+  desc.firstChild.appendChild(document.createTextNode(gScript.name));
+  if (gScript.version) {
+    desc.appendChild(document.createTextNode(' ' + gScript.version));
+  }
+  desc.appendChild(document.createElementNS(gHtmlNs, 'br'));
+  desc.appendChild(document.createTextNode(gScript.description));
+
+  if (gRemoteScript.done) {
+    // Download finished before we could open, fake a progress event.
+    onProgress(null, null, 1);
+  } else {
+    // Otherwise, listen for future progress events.
+    gRemoteScript.onProgress(onProgress);
+  }
+}
+
+function onBlur(e) {
+  stopTimer();
+}
+
+function onCancel() {
+  gRemoteScript.cleanup();
+  window.close();
+}
+
+function onFocus(e) {
+  startTimer();
+}
+
+function onInterval() {
+  gCurrentDelay--;
+  updateLabel();
+
+  if (gCurrentDelay == 0) stopTimer();
+}
+
+function onOk() {
+  gRemoteScript.install();
+  window.setTimeout(window.close, 0);
+}
+
+function onProgress(aRemoteScript, aEventType, aData) {
+  if (!document) return; // lingering download after window cancel
+  gProgress = Math.floor(100 * aData);
+  if (1 == aData) {
+    document.getElementById('loading').style.display = 'none';
+  } else {
+    document.getElementById('progressmeter').setAttribute('value', gProgress);
+  }
+  updateLabel();
+}
+
+function onShowSource() {
+  // _scriptDownloader.showScriptView();
+  window.setTimeout(window.close, 0);
+}
+
+function pauseTimer() {
+  stopTimer();
+  gCurrentDelay = gTotalDelay;
+  updateLabel();
+}
+
+function setUpIncludes(box, desc, includes) {
+  if (includes.length > 0) {
+    desc = document.getElementById(desc);
+    document.getElementById(box).style.display = '';
+
+    for (var i = 0; i < includes.length; i++) {
+      desc.appendChild(document.createTextNode(includes[i]));
+      desc.appendChild(document.createElementNS(gHtmlNs, 'br'));
+    }
+
+    desc.removeChild(desc.lastChild);
+  }
+}
+
+function startTimer() {
+  gCurrentDelay = gTotalDelay;
+  updateLabel();
+
+  gTimer = window.setInterval(onInterval, 500);
+}
+
+function stopTimer() {
+  if (gTimer) window.clearInterval(gTimer);
+}
+
+function updateLabel() {
+  if (gCurrentDelay > 0) {
+    gAcceptButton.focus();
+    gAcceptButton.label = gAcceptButton.baseLabel + ' (' + gCurrentDelay + ')';
+  } else {
+    gAcceptButton.label = gAcceptButton.baseLabel;
+  }
+  gAcceptButton.disabled = (gCurrentDelay > 0) || (gProgress < 100);
+}
 
 // See: closewindow.xul .
 function GM_onClose() {
-  GMInstall.onCancel();
+  gRemoteScript.cleanup();
 }
