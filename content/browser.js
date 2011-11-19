@@ -268,10 +268,15 @@ GM_BrowserUI.refreshStatus = function() {
 
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
+  if (!uri) return;
 
-  GM_BrowserUI._scriptDownloader = new GM_ScriptDownloader(
-      window, uri, GM_BrowserUI.bundle);
-  GM_BrowserUI._scriptDownloader.startViewScript();
+  var doc = document.popupNode.ownerDocument;
+  GM_util.getService().ignoreNextScript();
+  // TODO: Is this right for Firefox 3?
+  openLinkIn(uri.spec, 'tab', {
+      'charset': doc.characterset,
+      'referrerURI': doc.documentURIObject
+      });
 };
 
 GM_BrowserUI.showToolbarButton = function() {

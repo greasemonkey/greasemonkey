@@ -379,9 +379,10 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
       installDialog(cl, ctx, this);
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
     }
+
+    this._ignoreNextScript = false;
   }
 
-  this._ignoreNextScript = false;
   return ret;
 };
 
