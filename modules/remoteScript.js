@@ -234,8 +234,6 @@ RemoteScript.prototype._dispatchCallbacks = function(aType, aData) {
 
 /** Download any dependencies (@icon, @require, @resource). */
 RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
-  dump('>>> RemoteScript._downloadDependencies() ...\n');
-
   this._progressIndex++;
   if (this._progressIndex > this._dependencies.length) {
     this.done = true;
@@ -252,11 +250,9 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
 
   function dependencyDownloadComplete(aChannel) {
     if (dependency.setMimetype) {
-      dump('setting mime type for ' + dependency + ' to ' + aChannel.contentType + '\n');
       dependency.setMimetype(aChannel.contentType);
     }
     if (dependency.setCharset) {
-      dump('setting charset for ' + dependency + ' to ' + aChannel.contentCharset + '\n');
       dependency.setCharset(aChannel.contentCharset || null);
     }
     this._downloadDependencies(aCompletionCallback);
@@ -269,8 +265,6 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
 /** Download a given nsIURI to a given nsILocalFile, with optional callback. */
 RemoteScript.prototype._downloadFile = function(
     aUri, aFile, aCompletionCallback) {
-  dump('>>> RemoteScript._downloadFile('+aUri.spec+') ...\n');
-  try {
   aUri = aUri.QueryInterface(Ci.nsIURI);
   aFile = aFile.QueryInterface(Ci.nsILocalFile);
   aCompletionCallback = aCompletionCallback || function() {};
@@ -293,13 +287,11 @@ RemoteScript.prototype._downloadFile = function(
       GM_util.hitch(null, aCompletionCallback, channel),
       GM_util.hitch(this, this._downloadFileProgress, channel));
   this._wbp.saveChannel(channel, aFile);
-  } catch (e) { dump(e+'\n'); }
 };
 
 RemoteScript.prototype._htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
 RemoteScript.prototype._downloadFileProgress = function(
     aChannel, aFileProgress) {
-  dump('>>> RemoteScript._downloadFileProgress('+aChannel+', '+aFileProgress+') ...\n');
   if (0 == this._progressIndex && !this.script) {
     // We are downloading the first file, and haven't parsed a script yet ...
 
@@ -313,7 +305,7 @@ RemoteScript.prototype._downloadFileProgress = function(
         return false;
       }
     } catch (e) {
-      dump('RemoteScript._downloadFileProgress():\n\t' + e);
+      dump('RemoteScript._downloadFileProgress() error:\n\t' + e);
     }
 
     // 2) Otherwise try to parse the script from the downloaded file.
@@ -342,7 +334,6 @@ RemoteScript.prototype._downloadFileProgress = function(
 
 RemoteScript.prototype._downloadScriptCb = function(
     aCompletionCallback, aChannel, aSuccess) {
-  dump('>>> RemoteScript._downloadScriptCb() ...\n');
   if (aSuccess) {
     // At this point downloading the script itself is definitely done.
     if (!this.script) {
