@@ -70,10 +70,10 @@ ProgressListener.prototype.onProgressChange = function(
   var progress = aCurTotalProgress / aMaxTotalProgress;
   if (-1 == aMaxTotalProgress) progress = 0;
 
-  if (!this._progressCallback(progress)) {
-    // The progress callback is where we check for HTML type, and return false
-    // if so.  In such a case, immediately complete as a failure.
-    this._completionCallback(false, 'script');
+  if (this._progressCallback(aRequest, progress)) {
+    // The progress callback is where we check for HTML type, and return true
+    // (error status) if so.  In such a case, immediately complete as a failure.
+    this._completionCallback(aRequest, false, 'script');
   }
 };
 
@@ -119,8 +119,8 @@ ProgressListener.prototype.onStateChange = function(
         + '\n' + this._uri.spec + '\n\n' + errorMessage;
     this._remoteScript.cleanup(errorMessage);
   }
-  this._progressCallback(1);
-  this._completionCallback(!error);
+  error |= this._progressCallback(aRequest, 1);
+  this._completionCallback(aRequest, !error);
 };
 
 ProgressListener.prototype.onStatusChange = function(
@@ -129,7 +129,7 @@ ProgressListener.prototype.onStatusChange = function(
   // "This interface does not define the set of possible status codes."
 
   // Manually found when reading an invalid file:/// URL.
-  if (2152857618 == aStatus) this._completionCallback(false);
+  if (2152857618 == aStatus) this._completionCallback(aRequest, false);
 };
 
 /////////////////////////////// Public Interface ///////////////////////////////
@@ -314,8 +314,7 @@ RemoteScript.prototype._downloadFile = function(
       Ci.nsIWebBrowserPersist.PERSIST_FLAGS_FORCE_ALLOW_COOKIES;
   this._wbp.progressListener = new ProgressListener(
       this, aUri,
-      GM_util.hitch(null, aCompletionCallback, channel),
-      GM_util.hitch(this, this._downloadFileProgress, channel));
+      aCompletionCallback, GM_util.hitch(this, this._downloadFileProgress));
   this._wbp.saveChannel(channel, aFile);
 };
 
@@ -327,12 +326,11 @@ RemoteScript.prototype._downloadFileProgress = function(
 
     // 1) Detect an HTML page and abort if so.
     try {
-      // TODO: Detect the content type *after* 30x redirect.
       var httpChannel = aChannel.QueryInterface(Ci.nsIHttpChannel);
       var contentType = httpChannel.getResponseHeader('Content-Type');
       if (this._htmlTypeRegex.test(contentType)) {
         this.cleanup();
-        return false;
+        return true;
       }
     } catch (e) {
       dump('RemoteScript._downloadFileProgress() error:\n\t' + e);
@@ -359,7 +357,7 @@ RemoteScript.prototype._downloadFileProgress = function(
 
   this._dispatchCallbacks('progress', progress);
 
-  return true;
+  return false;
 };
 
 RemoteScript.prototype._downloadScriptCb = function(
