@@ -1,3 +1,5 @@
+Components.utils.import('resource://greasemonkey/util.js');
+
 var gRemoteScript = window.arguments[0].wrappedJSObject[0];
 var gScript = window.arguments[0].wrappedJSObject[1];
 var gHtmlNs = 'http://www.w3.org/1999/xhtml';
@@ -95,7 +97,14 @@ function onProgress(aRemoteScript, aEventType, aData) {
 }
 
 function onShowSource() {
-  // _scriptDownloader.showScriptView();
+  gRemoteScript.cleanup();
+  GM_util.getService().ignoreNextScript();
+
+  var win = GM_util.getBrowserWindow();
+  // TODO: Test this in Firefox 3.
+  win.gBrowser.loadURI(
+      gRemoteScript.url, /* aReferrer */ null, /* aCharset */ null);
+
   window.setTimeout(window.close, 0);
 }
 

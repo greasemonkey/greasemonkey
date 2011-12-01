@@ -155,6 +155,9 @@ function RemoteScript(aUrl) {
   this.script = null;
 }
 
+RemoteScript.prototype.__defineGetter__(
+    'url', function() { return new String(this._url); });
+
 /** Clean up all temporary files, stop all actions. */
 RemoteScript.prototype.cleanup = function(aErrorMessage) {
   this.errorMessage = aErrorMessage || null;
