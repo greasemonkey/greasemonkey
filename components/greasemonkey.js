@@ -31,8 +31,12 @@ var gMaxJSVersion = "1.8";
 var gMenuCommands = [];
 var gStartupHasRun = false;
 
-var gWindowWatcher = Cc["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Ci.nsIWindowWatcher);
+var gFileProtocolHandler = Components
+    .classes["@mozilla.org/network/protocol;1?name=file"]
+    .getService(Ci.nsIFileProtocolHandler);
+var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
+    .getService(Components.interfaces.nsIProperties)
+    .get("TmpD", Components.interfaces.nsILocalFile);
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -149,52 +153,10 @@ function getFirebugConsole(wrappedContentWin, chromeWin) {
   }
 }
 
-function installDialog(aUri, aBrowser, aService) {
-  var scope = {};
-  Cu.import('resource://greasemonkey/remoteScript.js', scope);
-  var rs = new scope.RemoteScript(aUri.spec);
-
-  rs.onScriptMeta(function(aRemoteScript, aType, aScript) {
-    var params = [rs, aScript];
-    params.wrappedJSObject = params;
-    // TODO: Find a better fix than this sloppy workaround.
-    // Apparently this version of .openWindow() blocks; and called by the
-    // "script meta data available" callback as this is, blocks the further
-    // download of the script!
-    var curriedOpenWindow = GM_util.hitch(
-        null, gWindowWatcher.openWindow,
-        /* aParent */ null,
-        'chrome://greasemonkey/content/install.xul',
-        /* aName */ null,
-        'chrome,centerscreen,modal,dialog,titlebar,resizable',
-        params);
-    GM_util.timeout(0, curriedOpenWindow);
-  });
-
-  rs.download(function(aSuccess, aType) {
-    if (!aSuccess) {
-      if ('script' == aType) {
-        // Failure downloading script; browse to it.
-        aService.ignoreNextScript();
-        // TODO: Test this in Firefox 3.
-        aBrowser.loadURI(aUri.spec, /* aReferrer */ null, /* aCharset */ null);
-      }
-    }
-  });
-}
-
 function isTempScript(uri) {
   if (uri.scheme != "file") return false;
-
-  var fph = Components.classes["@mozilla.org/network/protocol;1?name=file"]
-      .getService(Ci.nsIFileProtocolHandler);
-
-  var file = fph.getFileFromURLSpec(uri.spec);
-  var tmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
-      .getService(Components.interfaces.nsIProperties)
-      .get("TmpD", Components.interfaces.nsILocalFile);
-
-  return file.parent.equals(tmpDir) && file.leafName != "newscript.user.js";
+  var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
+  return gTmpDir.contains(file, true);
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
@@ -375,7 +337,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
       && cl.spec.match(/\.user\.js$/)
   ) {
     if (!this._ignoreNextScript && !isTempScript(cl)) {
-      installDialog(cl, ctx, this);
+      GM_util.showInstallDialog(cl.spec, ctx, this);
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
     }
 

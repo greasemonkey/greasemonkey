@@ -107,16 +107,6 @@ GM_BrowserUI.contentLoad = function(event) {
   if (href.replace(/#.*/, '') == event.target.documentURI.replace(/#.*/, '')) {
     GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
   }
-
-  // Show the greasemonkey install banner if we are navigating to a .user.js
-  // file in a top-level tab.  If the file was previously cached it might have
-  // been given a number after .user, like gmScript.user-12.js
-  if (safeWin == safeWin.top &&
-      href.match(/\.user(?:-\d+)?\.js$/) &&
-      !/text\/html/i.test(safeWin.document.contentType)) {
-    var browser = GM_BrowserUI.tabBrowser.getBrowserForDocument(safeWin.document);
-    GM_BrowserUI.showInstallBanner(browser);
-  }
 };
 
 GM_BrowserUI.pagehide = function(aEvent) {
@@ -131,50 +121,6 @@ GM_BrowserUI.pagehide = function(aEvent) {
 GM_BrowserUI.pageshow = function(aEvent) {
   var windowId = GM_util.windowIdForEvent(aEvent);
   GM_BrowserUI.gmSvc.contentThawed(windowId);
-};
-
-/**
- * Shows the install banner across the top of the tab that is displayed when
- * a user selects "show script source" in the install dialog.
- */
-GM_BrowserUI.showInstallBanner = function(browser) {
-  var greeting = GM_BrowserUI.bundle.getString("greeting.msg");
-
-  var notificationBox = GM_BrowserUI.tabBrowser.getNotificationBox(browser);
-
-  // Remove existing notifications. Notifications get removed
-  // automatically onclick and on page navigation, but we need to remove
-  // them ourselves in the case of reload, or they stack up.
-  for (var i = 0, child; child = notificationBox.childNodes[i]; i++) {
-    if (child.getAttribute("value") == "install-userscript") {
-      notificationBox.removeNotification(child);
-    }
-  }
-
-  notificationBox.appendNotification(
-    greeting,
-    "install-userscript",
-    "chrome://greasemonkey/skin/icon16.png",
-    notificationBox.PRIORITY_WARNING_MEDIUM,
-    [{
-      label: GM_BrowserUI.bundle.getString("greeting.btn"),
-      accessKey: GM_BrowserUI.bundle.getString("greeting.btnAccess"),
-      popup: null,
-      callback: GM_BrowserUI.installCurrentScript
-    }]
-  );
-};
-
-
-/**
- * Open the tab to show the contents of a script and display the banner to let
- * the user install it.
- */
-GM_BrowserUI.showScriptView = function(scriptDownloader) {
-  GM_BrowserUI._scriptDownloader = scriptDownloader;
-
-  var tab = GM_BrowserUI.tabBrowser.addTab(scriptDownloader.script.previewURL);
-  GM_BrowserUI.tabBrowser.selectedTab = tab;
 };
 
 /**
@@ -199,13 +145,6 @@ GM_BrowserUI.observe = function(subject, topic, data) {
 GM_BrowserUI.openTab = function(url) {
   gBrowser.selectedTab = gBrowser.addTab(url);
 }
-
-/**
- * Handles the install button getting clicked.
- */
-GM_BrowserUI.installCurrentScript = function() {
-  GM_BrowserUI._scriptDownloader.installScript();
-};
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.
@@ -270,13 +209,16 @@ GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
   if (!uri) return;
 
-  var doc = document.popupNode.ownerDocument;
-  GM_util.getService().ignoreNextScript();
-  // TODO: Is this right for Firefox 3?
-  openLinkIn(uri.spec, 'tab', {
-      'charset': doc.characterset,
-      'referrerURI': doc.documentURIObject
-      });
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+  var rs = new scope.RemoteScript(uri.spec);
+  rs.downloadScript(function(aSuccess) {
+    if (aSuccess) {
+      rs.showSource(gBrowser);
+    } else {
+      alert(rs.errorMessage);
+    }
+  });
 };
 
 GM_BrowserUI.showToolbarButton = function() {

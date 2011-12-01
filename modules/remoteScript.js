@@ -21,6 +21,10 @@ var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+var stringBundleBrowser = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
 /////////////////////////////// Private Helpers ////////////////////////////////
 
@@ -177,10 +181,16 @@ RemoteScript.prototype.download = function(aCompletionCallback) {
   assertIsFunction(
       aCompletionCallback, 'Completion callback is not a function.');
 
-  this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint) {
-    if (aSuccess) this._downloadDependencies(aCompletionCallback);
-    aCompletionCallback(aSuccess, aPoint);
-  }));
+  if (this.script) {
+    // TODO: Verify that this condition really is sufficient.  Is the script
+    // completely loaded?
+    this._downloadDependencies(aCompletionCallback);
+  } else {
+    this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint) {
+      if (aSuccess) this._downloadDependencies(aCompletionCallback);
+      aCompletionCallback(aSuccess, aPoint);
+    }));
+  }
 };
 
 /** Download just enough of the script to find the metadata. */
@@ -236,6 +246,37 @@ RemoteScript.prototype.onProgress = function(aCallback) {
 RemoteScript.prototype.onScriptMeta = function(aCallback) {
   assertIsFunction(aCallback, 'Script meta callback is not a function.');
   this._scriptMetaCallbacks.push(aCallback);
+};
+
+RemoteScript.prototype.showSource = function(aTabBrowser) {
+  // Turn standard browser into tab browser, if necessary.
+  if (aTabBrowser.getTabBrowser) aTabBrowser = aTabBrowser.getTabBrowser()
+
+  if (this._progress[0] < 1) {
+    throw new Error('Script is not loaded!');
+  }
+
+  var tab = aTabBrowser.loadOneTab(
+      ioService.newFileURI(this._scriptFile).spec,
+      {'inBackground': false});
+  var notificationBox = aTabBrowser.getNotificationBox();
+  notificationBox.appendNotification(
+    stringBundleBrowser.GetStringFromName('greeting.msg'),
+    "install-userscript",
+    "chrome://greasemonkey/skin/icon16.png",
+    notificationBox.PRIORITY_WARNING_MEDIUM,
+    [{
+      'label': stringBundleBrowser.GetStringFromName('greeting.btn'),
+      'accessKey': stringBundleBrowser.GetStringFromName('greeting.btnAccess'),
+      'popup': null,
+      'callback': GM_util.hitch(this, function() {
+        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+        // Timeout puts this after the notification closes itself for the
+        // button click, avoiding an error inside that (Firefox) code.
+        GM_util.timeout(0, function() { aTabBrowser.removeTab(tab); });
+      })
+    }]
+  );
 };
 
 RemoteScript.prototype.toString = function() {
