@@ -26,9 +26,7 @@
 
   <script type="application/x-javascript" src="chrome://greasemonkey/content/install.js" />
 
-  <vbox id="dialogContentBox"
-    flex="1"
-  >
+  <vbox id="dialogContentBox" flex="1">
     <description id="heading"
       style="margin-bottom:1em" />
     <vbox id="itemBox"
@@ -82,4 +80,11 @@
     </vbox>
   </vbox>
 
+  <vbox id="errorContentBox" flex="1" style="display: none">
+    <description style="margin-bottom: 1em; font-weight: bold;">
+      <!-- TODO: Localize. -->
+      Download Error
+    </description>
+    <description id="errorMessage" style="white-space: pre-line" />
+  </vbox>
 </dialog>

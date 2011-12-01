@@ -158,7 +158,7 @@ function installDialog(aUri, aBrowser, aService) {
     var params = [rs, aScript];
     params.wrappedJSObject = params;
     // TODO: Find a better fix than this sloppy workaround.
-    // Apparently this version of .openWindow() blocks; and as called by the
+    // Apparently this version of .openWindow() blocks; and called by the
     // "script meta data available" callback as this is, blocks the further
     // download of the script!
     var curriedOpenWindow = GM_util.hitch(
@@ -173,13 +173,12 @@ function installDialog(aUri, aBrowser, aService) {
 
   rs.download(function(aSuccess, aType) {
     if (!aSuccess) {
-      // Failure downloading script; browse to it.
-      aService.ignoreNextScript();
-      aBrowser.loadURI(aUri.spec, /* aReferrer */ null, /* aCharset */ null);
-//    } else if (aSuccess && 'script' == aType) {
-//      dump('script is downloaded.\n');
-//    } else if (aSuccess && 'dependencies' == aType) {
-//      dump('script and all dependencies downloaded.\n');
+      if ('script' == aType) {
+        // Failure downloading script; browse to it.
+        aService.ignoreNextScript();
+        // TODO: Test this in Firefox 3.
+        aBrowser.loadURI(aUri.spec, /* aReferrer */ null, /* aCharset */ null);
+      }
     }
   });
 }

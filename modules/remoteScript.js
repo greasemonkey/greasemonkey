@@ -17,6 +17,11 @@ var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
 
+var stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
 /////////////////////////////// Private Helpers ////////////////////////////////
 
 function assertIsFunction(aFunc, aMessage) {
@@ -48,10 +53,11 @@ function filenameFromUri(aUri, aDefault) {
 ////////////////////////// Private Progress Listener ///////////////////////////
 
 function ProgressListener(
-    aRemoteScript, aCompletionCallback, aProgressCallback) {
-  this._remoteScript = aRemoteScript;
+    aRemoteScript, aUri, aCompletionCallback, aProgressCallback) {
   this._completionCallback = aCompletionCallback || function() {};
   this._progressCallback = aProgressCallback || function() {};
+  this._remoteScript = aRemoteScript;
+  this._uri = aUri;
 }
 
 ProgressListener.prototype.onLocationChange = function(
@@ -67,7 +73,7 @@ ProgressListener.prototype.onProgressChange = function(
   if (!this._progressCallback(progress)) {
     // The progress callback is where we check for HTML type, and return false
     // if so.  In such a case, immediately complete as a failure.
-    this._completionCallback(false, 'any');
+    this._completionCallback(false, 'script');
   }
 };
 
@@ -83,10 +89,14 @@ ProgressListener.prototype.onStateChange = function(
     return;
   }
   var error = aStatus !== 0;
+  var errorMessage = stringBundle.GetStringFromName('error.unknown');
   try {
     var httpChannel = aRequest.QueryInterface(Ci.nsIHttpChannel);
     error |= !httpChannel.requestSucceeded;
     error |= httpChannel.responseStatus >= 400;
+    errorMessage = stringBundle.GetStringFromName('error.serverReturned')
+        + ' ' + httpChannel.responseStatus + ' '
+        + httpChannel.responseStatusText + '.';
   } catch (e) {
     try {
       aRequest.QueryInterface(Ci.nsIFileChannel);
@@ -104,9 +114,12 @@ ProgressListener.prototype.onStateChange = function(
     }
   }
 
-  // Indicate final progress (complete).
+  if (error) {
+    errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
+        + '\n' + this._uri.spec + '\n\n' + errorMessage;
+    this._remoteScript.cleanup(errorMessage);
+  }
   this._progressCallback(1);
-  // Call back with that found error state.
   this._completionCallback(!error);
 };
 
@@ -138,15 +151,21 @@ function RemoteScript(aUrl) {
   this._url = aUrl;
 
   this.done = false;
+  this.errorMessage = null;
   this.script = null;
 }
 
-/** Clean up all temporary files. */
-RemoteScript.prototype.cleanup = function() {
+/** Clean up all temporary files, stop all actions. */
+RemoteScript.prototype.cleanup = function(aErrorMessage) {
+  this.errorMessage = aErrorMessage || null;
+  this.done = true;
+
   if (this._wbp) this._wbp.cancelSave();
   if (this._tempDir && this._tempDir.exists()) {
     this._tempDir.remove(true);
   }
+
+  this._dispatchCallbacks('progress', 1);
 };
 
 /** Download the entire script, starting from the .user.js itself. */
@@ -193,7 +212,7 @@ RemoteScript.prototype.install = function(aOldScript) {
   while (file.exists()) {
     suffix++;
     file = GM_util.scriptDir();
-    file = append(this._baseName + '-' + suffix);
+    file.append(this._baseName + '-' + suffix);
   }
   this._baseName = file.leafName;
 
@@ -234,6 +253,8 @@ RemoteScript.prototype._dispatchCallbacks = function(aType, aData) {
 
 /** Download any dependencies (@icon, @require, @resource). */
 RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
+  if (this.done) return;
+
   this._progressIndex++;
   if (this._progressIndex > this._dependencies.length) {
     this.done = true;
@@ -248,7 +269,11 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
   var file = GM_util.getTempFile(this._tempDir, filenameFromUri(uri));
   dependency.setFilename(file);
 
-  function dependencyDownloadComplete(aChannel) {
+  function dependencyDownloadComplete(aChannel, aSuccess) {
+    if (!aSuccess) {
+      aCompletionCallback(aSuccess, 'dependency');
+      return;
+    }
     if (dependency.setMimetype) {
       dependency.setMimetype(aChannel.contentType);
     }
@@ -271,6 +296,11 @@ RemoteScript.prototype._downloadFile = function(
   assertIsFunction(aCompletionCallback,
       '_downloadFile() completion callback is not a function.');
 
+  if (!GM_util.isGreasemonkeyable(aUri.spec)) {
+    this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
+    return;
+  }
+
   // Dangerous semi-global state:  The web browser persist object is stored
   // in the object, so that it can be canceled.  Parallel downloads would need
   // to be handled differently.
@@ -283,7 +313,7 @@ RemoteScript.prototype._downloadFile = function(
       Ci.nsIWebBrowserPersist.PERSIST_FLAGS_CLEANUP_ON_FAILURE |
       Ci.nsIWebBrowserPersist.PERSIST_FLAGS_FORCE_ALLOW_COOKIES;
   this._wbp.progressListener = new ProgressListener(
-      this,
+      this, aUri,
       GM_util.hitch(null, aCompletionCallback, channel),
       GM_util.hitch(this, this._downloadFileProgress, channel));
   this._wbp.saveChannel(channel, aFile);
@@ -364,9 +394,8 @@ RemoteScript.prototype._parseScriptFile = function(aForce) {
     try {
       var script = GM_config.parse(source, this._uri);
     } catch (e) {
-      dump('RemoteScript._parseScriptFile error: ' + e + '\n');
-      // TODO: Surface this error?  How?
-      // TODO: In case of parse error, stop download?
+      this.cleanup(
+          stringBundle.GetStringFromName('error.parsingScript') + ':\n' + e);
       return null;
     }
     this._baseName = cleanFilename(script.name, 'gm-script');

@@ -76,8 +76,18 @@ function onOk() {
 function onProgress(aRemoteScript, aEventType, aData) {
   if (!document) return; // lingering download after window cancel
   gProgress = Math.floor(100 * aData);
-  if (1 == aData) {
+  if (gRemoteScript.done) {
     document.getElementById('loading').style.display = 'none';
+    if (gRemoteScript.errorMessage) {
+      document.documentElement.getButton('extra1').disabled = true;
+      document.getElementById('dialogContentBox').style.display = 'none';
+      document.getElementById('errorContentBox').style.display = '-moz-box';
+      document.getElementById('errorMessage')
+          .textContent = gRemoteScript.errorMessage;
+      stopTimer();
+      updateLabel(false);
+      return;
+    }
   } else {
     document.getElementById('progressmeter').setAttribute('value', gProgress);
   }
@@ -118,16 +128,22 @@ function startTimer() {
 
 function stopTimer() {
   if (gTimer) window.clearInterval(gTimer);
+  gCurrentDelay = 0;
 }
 
-function updateLabel() {
+function updateLabel(aOkAllowed) {
+  if ('undefined' == typeof aOkAllowed) aOkAllowed = true;
+
   if (gCurrentDelay > 0) {
     gAcceptButton.focus();
     gAcceptButton.label = gAcceptButton.baseLabel + ' (' + gCurrentDelay + ')';
   } else {
     gAcceptButton.label = gAcceptButton.baseLabel;
   }
-  gAcceptButton.disabled = (gCurrentDelay > 0) || (gProgress < 100);
+
+  gAcceptButton.disabled = aOkAllowed
+      ? ((gCurrentDelay > 0) || (gProgress < 100))
+      : true;
 }
 
 // See: closewindow.xul .
