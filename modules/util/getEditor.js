@@ -1,13 +1,13 @@
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
-const EXPORTED_SYMBOLS = ['getEditor'];
+var EXPORTED_SYMBOLS = ['getEditor'];
 var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
-const EDITOR_PROMPT = stringBundle.GetStringFromName("editor.prompt");
-const PICK_EXE = stringBundle.GetStringFromName("editor.please_pick_executable");
+var EDITOR_PROMPT = stringBundle.GetStringFromName("editor.prompt");
+var PICK_EXE = stringBundle.GetStringFromName("editor.please_pick_executable");
 
 function getEditor(change) {
   var editorPath = GM_prefRoot.getValue("editor");
