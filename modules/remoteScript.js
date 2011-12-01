@@ -215,23 +215,35 @@ RemoteScript.prototype.install = function(aOldScript) {
   if (!this.script) {
     throw new Error('RemoteScript.install(): Script is not downloaded.');
   }
-  if (!this._baseName) {
-    throw new Error('RemoteScript.install(): Script base name unknown.');
-  }
 
-  var suffix = 0;
-  var file = GM_util.scriptDir();
-  file.append(this._baseName);
-  while (file.exists()) {
-    suffix++;
-    file = GM_util.scriptDir();
-    file.append(this._baseName + '-' + suffix);
-  }
-  this._baseName = file.leafName;
+  if (aOldScript) {
+    // Just move the dependencies in.
+    var enumerator = this._tempDir.directoryEntries;
+    while (enumerator.hasMoreElements()) {
+      var file = enumerator.getNext().QueryInterface(Ci.nsILocalFile);
+      // TODO: Fix invalid private access.
+      file.moveTo(this.script._basedirFile, null);
+    }
+  } else {
+    // Completely install the new script.
+    if (!this._baseName) {
+      throw new Error('RemoteScript.install(): Script base name unknown.');
+    }
 
-  this.script.setFilename(this._baseName, this._scriptFile.leafName);
-  this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
-  this._tempDir = null;
+    var suffix = 0;
+    var file = GM_util.scriptDir();
+    file.append(this._baseName);
+    while (file.exists()) {
+      suffix++;
+      file = GM_util.scriptDir();
+      file.append(this._baseName + '-' + suffix);
+    }
+    this._baseName = file.leafName;
+
+    this.script.setFilename(this._baseName, this._scriptFile.leafName);
+    this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
+    this._tempDir = null;
+  }
 
   GM_config.install(this.script, aOldScript);
 };
@@ -247,6 +259,17 @@ RemoteScript.prototype.onScriptMeta = function(aCallback) {
   assertIsFunction(aCallback, 'Script meta callback is not a function.');
   this._scriptMetaCallbacks.push(aCallback);
 };
+
+/** Set the (installed) script, in order to download modified dependencies.
+ *
+ * After calling this, calling .download() will only get dependencies.  This
+ * RemoteScript can then safely be .install(oldScript)'ed.
+ */
+RemoteScript.prototype.setScript = function(aScript) {
+  this._scriptFile = aScript.file;
+  this.script = aScript;
+  this._postParseScriptFile();
+}
 
 RemoteScript.prototype.showSource = function(aTabBrowser) {
   // Turn standard browser into tab browser, if necessary.
@@ -384,14 +407,7 @@ RemoteScript.prototype._downloadFileProgress = function(
     this.script = this._parseScriptFile();
     if (this.script) {
       // And if successful, prepare to download dependencies.
-      this._dependencies = this.script.requires.concat(this.script.resources);
-      if (this.script.icon.hasDownloadURL()) {
-        this._dependencies.push(this.script.icon);
-      }
-      this._progress = [];
-      for (var i = 0; i < this._dependencies.length; i++) {
-        this._progress[i] = 0;
-      }
+      this._postParseScriptFile();
     }
   }
 
@@ -446,4 +462,15 @@ RemoteScript.prototype._parseScriptFile = function(aForce) {
   }
 
   return null;
+};
+
+RemoteScript.prototype._postParseScriptFile = function() {
+  this._dependencies = this.script.requires.concat(this.script.resources);
+  if (this.script.icon.hasDownloadURL()) {
+    this._dependencies.push(this.script.icon);
+  }
+  this._progress = [];
+  for (var i = 0; i < this._dependencies.length; i++) {
+    this._progress[i] = 0;
+  }
 };

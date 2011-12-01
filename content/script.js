@@ -480,10 +480,14 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
     }
 
     // Re-download dependencies.  The timeout guarantees that it will
-    // reliably complete after the normal document-end time.  (See #1402; going
-    // from some -> no requires means this is a short-circuit call.)
-    var scriptDownloader = new GM_ScriptDownloader(null, null, null);
-    GM_util.timeout(0, GM_util.hitch(scriptDownloader, 'startUpdateScript', this));
+    // reliably complete after the normal document-end time.
+    var scope = {};
+    Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+    var rs = new scope.RemoteScript(this._downloadURL);
+    rs.setScript(newScript);
+    rs.download(GM_util.hitch(this, function(aSuccess) {
+      rs.install(this);
+    }));
   }
 };
 
