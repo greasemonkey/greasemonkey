@@ -284,24 +284,28 @@ RemoteScript.prototype.showSource = function(aTabBrowser) {
   var tab = aTabBrowser.loadOneTab(
       ioService.newFileURI(this._scriptFile).spec,
       {'inBackground': false});
-  var notificationBox = aTabBrowser.getNotificationBox();
-  notificationBox.appendNotification(
-    stringBundleBrowser.GetStringFromName('greeting.msg'),
-    "install-userscript",
-    "chrome://greasemonkey/skin/icon16.png",
-    notificationBox.PRIORITY_WARNING_MEDIUM,
-    [{
-      'label': stringBundleBrowser.GetStringFromName('greeting.btn'),
-      'accessKey': stringBundleBrowser.GetStringFromName('greeting.btnAccess'),
-      'popup': null,
-      'callback': GM_util.hitch(this, function() {
-        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
-        // Timeout puts this after the notification closes itself for the
-        // button click, avoiding an error inside that (Firefox) code.
-        GM_util.timeout(0, function() { aTabBrowser.removeTab(tab); });
-      })
-    }]
-  );
+  function addNotification() {
+    var notificationBox = aTabBrowser.getNotificationBox();
+    notificationBox.appendNotification(
+      stringBundleBrowser.GetStringFromName('greeting.msg'),
+      "install-userscript",
+      "chrome://greasemonkey/skin/icon16.png",
+      notificationBox.PRIORITY_WARNING_MEDIUM,
+      [{
+        'label': stringBundleBrowser.GetStringFromName('greeting.btn'),
+        'accessKey': stringBundleBrowser.GetStringFromName('greeting.btnAccess'),
+        'popup': null,
+        'callback': GM_util.hitch(this, function() {
+          GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+          // Timeout puts this after the notification closes itself for the
+          // button click, avoiding an error inside that (Firefox) code.
+          GM_util.timeout(0, function() { aTabBrowser.removeTab(tab); });
+        })
+      }]
+    );
+  }
+  // Timeout necessary only for Firefox 3 as a dirty hack around timing issues.
+  GM_util.timeout(0, GM_util.hitch(this, addNotification));
 };
 
 RemoteScript.prototype.toString = function() {
