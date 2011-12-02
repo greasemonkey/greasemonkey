@@ -49,7 +49,7 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
         // Failure downloading script; browse to it.
         aService.ignoreNextScript();
         // TODO: Test this in Firefox 3.
-        aBrowser.loadURI(aUrl, /* aReferrer */ null, /* aCharset */ null);
+        aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
       }
     }
   });
