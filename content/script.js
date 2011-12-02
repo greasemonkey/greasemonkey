@@ -486,7 +486,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
     var rs = new scope.RemoteScript(this._downloadURL);
     rs.setScript(newScript);
     rs.download(GM_util.hitch(this, function(aSuccess) {
-      rs.install(this);
+      rs.install(this, true);
     }));
   }
 };
@@ -558,7 +558,6 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
   var versionChecker = Components
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
-
   if (versionChecker.compare(this._version, remoteVersion) >= 0) {
     return aCallback(false);
   }
@@ -613,18 +612,24 @@ Script.prototype.installUpdate = function(aChromeWin, aCallback) {
   function updateAddons(aNewScript) {
     // Timeout puts this update after core code has removed the download
     // progress bar.  It causes an open add-ons manager to be updated with the
-    // new script details.
+    // new script details (version, primarily).
     GM_util.timeout(
-        0, GM_util.hitch(GM_util.getService().config, '_changed',
-            aNewScript, 'modified', oldScriptId));
+        0, function() {
+          aCallback();
+          GM_util.getService().config._changed(
+              aNewScript, 'modified', oldScriptId);
+        });
   }
-  var uri = GM_util.uriFromUrl(this._downloadURL);
-  var scriptDownloader = new GM_ScriptDownloader(aChromeWin, uri, null);
-  scriptDownloader.replacedScript = this;
-  scriptDownloader._installOnCompletion = true;
-  scriptDownloader.onInstall(GM_util.hitch(this, updateAddons));
-  if (aCallback) scriptDownloader.onInstall(aCallback);
-  scriptDownloader.startDownload();
+
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+  var rs = new scope.RemoteScript(this._downloadURL);
+  rs.download(GM_util.hitch(this, function(aSuccess, aType) {
+    if (aSuccess && 'dependencies' == aType) {
+      rs.install(this);
+      updateAddons(rs.script);
+    }
+  }));
 };
 
 Script.prototype.allFiles = function() {

@@ -211,12 +211,13 @@ RemoteScript.prototype.downloadScript = function(aCompletionCallback) {
       GM_util.hitch(this, this._downloadScriptCb, aCompletionCallback));
 };
 
-RemoteScript.prototype.install = function(aOldScript) {
+RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
   if (!this.script) {
     throw new Error('RemoteScript.install(): Script is not downloaded.');
   }
+  if ('undefined' == typeof aOnlyDependencies) aOnlyDependencies = false;
 
-  if (aOldScript) {
+  if (aOnlyDependencies) {
     // Just move the dependencies in.
     var enumerator = this._tempDir.directoryEntries;
     while (enumerator.hasMoreElements()) {
@@ -267,6 +268,7 @@ RemoteScript.prototype.onScriptMeta = function(aCallback) {
  */
 RemoteScript.prototype.setScript = function(aScript) {
   this._scriptFile = aScript.file;
+  this._baseName = aScript._basedir;
   this.script = aScript;
   this._postParseScriptFile();
 }
