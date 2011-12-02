@@ -48,7 +48,6 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
       if ('script' == aType) {
         // Failure downloading script; browse to it.
         aService.ignoreNextScript();
-        // TODO: Test this in Firefox 3.
         aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
       }
     }
