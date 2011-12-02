@@ -271,7 +271,6 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/scripticon.js");
   loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
   loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
-  loader.loadSubScript("chrome://greasemonkey/content/scriptdownloader.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   if (GM_util.compareFirefoxVersion("4.0") >= 0) {

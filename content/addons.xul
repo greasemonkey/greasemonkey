@@ -20,7 +20,6 @@
 <script src="chrome://global/content/nsTransferable.js" />
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
-<script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons.js" />
 
 <radiogroup id="viewGroup">
