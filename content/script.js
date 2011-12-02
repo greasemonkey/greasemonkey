@@ -551,7 +551,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
   if (req.status != 200 && req.status != 0) return aCallback(false);
 
   var source = req.responseText;
-  var newScript = GM_util.getService().config.parse(source);
+  var newScript = GM_util.getService().config.parse(source, this._downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) return aCallback(false);
 
@@ -607,29 +607,20 @@ Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
   }
 }
 
-Script.prototype.installUpdate = function(aChromeWin, aCallback) {
+Script.prototype.installUpdate = function(aProgressCallback) {
   var oldScriptId = new String(this.id);
-  function updateAddons(aNewScript) {
-    // Timeout puts this update after core code has removed the download
-    // progress bar.  It causes an open add-ons manager to be updated with the
-    // new script details (version, primarily).
-    GM_util.timeout(
-        0, function() {
-          aCallback();
-          GM_util.getService().config._changed(
-              aNewScript, 'modified', oldScriptId);
-        });
-  }
-
   var scope = {};
   Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
   var rs = new scope.RemoteScript(this._downloadURL);
+  if (aProgressCallback) rs.onProgress(aProgressCallback);
   rs.download(GM_util.hitch(this, function(aSuccess, aType) {
     if (aSuccess && 'dependencies' == aType) {
       rs.install(this);
-      updateAddons(rs.script);
+      aProgressCallback(rs, 'progress', 1);
+      GM_util.getService().config._changed(rs.script, 'modified', oldScriptId);
     }
   }));
+  return rs;
 };
 
 Script.prototype.allFiles = function() {

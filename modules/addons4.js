@@ -54,7 +54,7 @@ var AddonProvider = {
       if (!script.updateAvailable) return;
 
       var aAddon = ScriptAddonFactoryByScript(script);
-      var scriptInstall = aAddon._installer || new ScriptInstall(aAddon);
+      var scriptInstall = ScriptInstallFactoryByAddon(aAddon);
 
       scriptInstalls.push(scriptInstall);
     });
@@ -118,7 +118,6 @@ ScriptAddon.prototype.description = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
-ScriptAddon.prototype._installer = null;
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
 function ScriptAddon_getExecutionIndex() {
@@ -180,15 +179,15 @@ ScriptAddon.prototype.toString = function() {
 };
 
 ScriptAddon.prototype.uninstall = function() {
-  AddonManagerPrivate.callAddonListeners("onUninstalling", this, false);
+  AddonManagerPrivate.callAddonListeners('onUninstalling', this, false);
   // TODO: pick an appropriate time, and act on these pending uninstalls.
   this.pendingOperations |= AddonManager.PENDING_UNINSTALL;
-  AddonManagerPrivate.callAddonListeners("onUninstalled", this);
+  AddonManagerPrivate.callAddonListeners('onUninstalled', this);
 };
 
 ScriptAddon.prototype.cancelUninstall = function() {
   this.pendingOperations ^= AddonManager.PENDING_UNINSTALL;
-  AddonManagerPrivate.callAddonListeners("onOperationCancelled", this);
+  AddonManagerPrivate.callAddonListeners('onOperationCancelled', this);
 };
 
 ScriptAddon.prototype.performUninstall = function() {
@@ -208,12 +207,13 @@ function ScriptInstallFactoryByAddon(aAddon) {
 
 function ScriptInstall(aAddon) {
   this._script = aAddon._script;
-  aAddon._installer = this;
 
   this.name = this._script.name;
   this.version = this._script.version;
   this.iconURL = this._script.icon.fileURL;
   this.existingAddon = aAddon;
+
+  this._listeners = [];
 }
 
 // Required attributes.
@@ -221,8 +221,7 @@ ScriptInstall.prototype.addon = null;
 ScriptInstall.prototype.error = null;
 ScriptInstall.prototype.file = null;
 ScriptInstall.prototype.maxProgress = -1;
-ScriptInstall.prototype.pendingOperations = 0;
-ScriptInstall.prototype.progress = -1;
+ScriptInstall.prototype.progress = 0;
 ScriptInstall.prototype.releaseNotesURI = null;
 ScriptInstall.prototype.sourceURI = null;
 ScriptInstall.prototype.state = AddonManager.STATE_AVAILABLE;
@@ -232,19 +231,39 @@ ScriptInstall.prototype.type = 'user-script';
 ScriptInstall.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
-  function installCallback() {
-    AddonManagerPrivate.callAddonListeners(
-        'onInstallEnded', this, this.existingAddon);
+  function progressCallback(aRemoteScript, aType, aData) {
+    this.maxProgress = 100;
+    this.progress = Math.floor(aData * 100);
+    AddonManagerPrivate.callInstallListeners(
+        'onDownloadProgress', this._listeners, this);
   }
 
   AddonManagerPrivate.callAddonListeners('onInstallStarted', this);
-  var chromeWin = GM_util.getBrowserWindow();
-  this._script.installUpdate(chromeWin, GM_util.hitch(this, installCallback));
+  this.state = AddonManager.STATE_DOWNLOADING;
+  this._remoteScript = this._script.installUpdate(
+      GM_util.hitch(this, progressCallback));
 };
 
-ScriptInstall.prototype.cancel = function() {};
-ScriptInstall.prototype.addListener = function() {};
-ScriptInstall.prototype.removeListener = function() {};
+ScriptInstall.prototype.cancel = function() {
+  this.state = AddonManager.STATE_AVAILABLE;
+  AddonManagerPrivate.callAddonListeners(
+      'onInstallEnded', this, this.existingAddon);
+  if (this._remoteScript) {
+    this._remoteScript.cleanup();
+    this._remoteScript = null;
+  }
+};
+
+ScriptInstall.prototype.addListener = function AI_addListener(aListener) {
+  if (!this._listeners.some(function(i) { return i == aListener; })) {
+    this._listeners.push(aListener);
+  }
+};
+
+ScriptInstall.prototype.removeListener = function AI_removeListener(aListener) {
+  this._listeners =
+      this._listeners.filter(function(i) { return i != aListener; });
+};
 
 ScriptInstall.prototype.toString = function() {
   return '[ScriptInstall object ' + this._script.id + ']';
