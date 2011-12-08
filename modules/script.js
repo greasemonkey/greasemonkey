@@ -174,12 +174,13 @@ function Script_setUpdateURL(url) {
 
   if (!url) url = this._downloadURL;
 
+  this._updateURL = url;
   // US.o gets special treatment for being so large
-  var usoURL = url.match(/^(https?:\/\/userscripts.org\/[^?]*\.user\.js)\??/);
-  if (usoURL) {
-    this._updateURL = usoURL[1].replace(/\.user\.js$/,".meta.js");
-  } else {
-    this._updateURL = url;
+  var usoMatch = url.match(
+      /^https?:\/\/userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
+  if (usoMatch) {
+    this._updateURL = 'http://userscripts.org/scripts/source/'
+        + usoMatch[1] + '.user.js';
   }
 });
 
