@@ -1,3 +1,4 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var gRemoteScript = window.arguments[0].wrappedJSObject[0];
@@ -9,7 +10,7 @@ var gAcceptButton = null;
 var gCurrentDelay = null;
 var gProgress = 0;
 var gTimer = null;
-var gTotalDelay = 5;
+var gTotalDelay = new GM_PrefManager().getValue('installDelay', 5);
 
 function init() {
   setUpIncludes('includes', 'includes-desc', gScript.includes);
