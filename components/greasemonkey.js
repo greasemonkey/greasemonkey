@@ -265,10 +265,6 @@ function startup() {
       .getService(Ci.mozIJSSubScriptLoader);
   loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
-  loader.loadSubScript("chrome://greasemonkey/content/script.js");
-  loader.loadSubScript("chrome://greasemonkey/content/scriptrequire.js");
-  loader.loadSubScript("chrome://greasemonkey/content/scriptresource.js");
-  loader.loadSubScript("chrome://greasemonkey/content/scripticon.js");
   loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
   loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");

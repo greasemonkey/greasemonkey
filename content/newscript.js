@@ -28,7 +28,9 @@ function doInstall() {
   var config = GM_util.getService().config;
 
   // Create a script object with parsed metadata, and ...
-  var script = config.parse(scriptSrc);
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  var script = scope.parse(scriptSrc);
   // ... make sure entered details will not ruin an existing file.
   if (config.installIsUpdate(script)) {
     var overwrite = confirm(bundle.getString("newscript.exists"));

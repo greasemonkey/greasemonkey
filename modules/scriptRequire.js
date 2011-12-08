@@ -1,3 +1,5 @@
+var EXPORTED_SYMBOLS = ['ScriptRequire'];
+
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/util.js');
 

@@ -1,3 +1,6 @@
+var EXPORTED_SYMBOLS = ['ScriptResource'];
+
+Components.utils.import('resource://greasemonkey/scriptRequire.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 function ScriptResource(script) {

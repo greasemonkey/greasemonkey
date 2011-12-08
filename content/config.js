@@ -1,5 +1,6 @@
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -124,179 +125,6 @@ Config.prototype._save = function(saveNow) {
   GM_util.writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
-Config.prototype.parse = function(source, uri, updateScript) {
-  var script = new Script();
-
-  if (uri) script._downloadURL = uri.spec;
-
-  // read one line at a time looking for start meta delimiter or EOF
-  var lines = source.match(/.+/g);
-  var lnIdx = 0;
-  var result = {};
-  var foundMeta = false;
-
-  while ((result = lines[lnIdx++])) {
-    if (result.indexOf("// ==UserScript==") == 0) {
-      foundMeta = true;
-      break;
-    }
-  }
-
-  // gather up meta lines
-  if (foundMeta) {
-    // used for duplicate resource name detection
-    var previousResourceNames = {};
-    script._rawMeta = "";
-
-    while ((result = lines[lnIdx++])) {
-      if (result.indexOf("// ==/UserScript==") == 0) {
-        break;
-      }
-
-      var match = result.match(/\/\/ \@(\S+)(?:\s+([^\n]+))?/);
-      if (match === null) continue;
-
-      var header = match[1];
-      var value = (match[2] && match[2].replace(/\s+$/, '')) || null;
-
-      if (!value) {
-        switch (header) {
-          case "unwrap":
-            script._unwrap = true;
-            break;
-          default:
-            continue;
-        }
-      }
-
-      switch (header) {
-        case "name":
-        case "namespace":
-        case "description":
-        case "version":
-        case "updateURL":
-          script["_" + header] = value;
-          break;
-        case "installURL":
-          script._downloadURL = value;
-        case "include":
-          script._includes.push(value);
-          break;
-        case "userInclude":
-          script._userIncludes.push(value);
-          break;
-        case "exclude":
-          script._excludes.push(value);
-          break;
-        case "userExclude":
-          script._userExcludes.push(value);
-          break;
-        case "match":
-          try {
-            var match = new MatchPattern(value);
-            script._matches.push(match);
-          } catch (e) {
-            GM_util.logError("Ignoring @match pattern " + value + " because:\n" + e);
-          }
-          break;
-        case "icon":
-          script._rawMeta += header + '\0' + value + '\0';
-          try {
-            script.icon.metaVal = value;
-          } catch (e) {
-            if (updateScript) {
-              script._dependFail = true;
-            } else if (script.icon.dataUriError) {
-              throw new Error(e.message);
-            } else {
-              throw new Error('Failed to get @icon '+ value);
-            }
-          }
-          break;
-        case "require":
-          try {
-            var reqUri = GM_util.uriFromUrl(value, uri);
-            var scriptRequire = new ScriptRequire(script);
-            scriptRequire._downloadURL = reqUri.spec;
-            script._requires.push(scriptRequire);
-            script._rawMeta += header + '\0' + value + '\0';
-          } catch (e) {
-            if (updateScript) {
-              script._dependFail = true;
-            } else {
-              throw new Error('Failed to @require '+ value);
-            }
-          }
-          break;
-        case "resource":
-          var res = value.match(/(\S+)\s+(.*)/);
-          if (res === null) {
-            // NOTE: Unlocalized strings
-            throw new Error("Invalid syntax for @resource declaration '" +
-                            value + "'. Resources are declared like: " +
-                            "@resource <name> <url>.");
-          }
-
-          var resName = res[1];
-          if (previousResourceNames[resName]) {
-            throw new Error("Duplicate resource name '" + resName + "' " +
-                            "detected. Each resource must have a unique " +
-                            "name.");
-          } else {
-            previousResourceNames[resName] = true;
-          }
-
-          try {
-            var resUri = GM_util.uriFromUrl(res[2], uri);
-            var scriptResource = new ScriptResource(script);
-            scriptResource._name = resName;
-            scriptResource._downloadURL = resUri.spec;
-            script._resources.push(scriptResource);
-            script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
-          } catch (e) {
-            if (updateScript) {
-              script._dependFail = true;
-            } else {
-              throw new Error('Failed to get @resource '+ resName +' from '+
-                              res[2]);
-            }
-          }
-          break;
-        case "run-at":
-          script._runAt = value;
-          break;
-      }
-    }
-  }
-
-  if (!script.updateURL && script._downloadURL) {
-    script.updateURL = script._downloadURL;
-  }
-
-  // if no meta info, default to reasonable values
-  if (!script._name) {
-    var name = (uri && uri.spec) || (updateScript && updateScript.filename);
-    if (name) {
-      name = name.substring(0, name.indexOf(".user.js"));
-      name = name.substring(name.lastIndexOf("/") + 1);
-      script._name = name;
-    } else {
-      script._name = 'user-script';
-    }
-  }
-  if (!script._namespace && uri) script._namespace = uri.host;
-  if (!script._description) script._description = "";
-  if (!script._version) script._version = "";
-  if ("document-start" != script._runAt && "document-end" != script._runAt) {
-    script._runAt = "document-end";
-  }
-  if (script._includes.length == 0 && script._matches.length == 0) {
-    script._includes.push("*");
-  }
-
-  return script;
-};
-
 Config.prototype.install = function(script, oldScript) {
   var existingIndex = this._find(oldScript || script);
   if (!oldScript) oldScript = this.scripts[existingIndex];
@@ -402,8 +230,11 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
   for (var i = 0, script; script = scripts[i]; i++) {
     if (0 == script.pendingExec.length) {
       var oldScriptId = new String(script.id);
-      var parsedScript = this.parse(
-          script.textContent, GM_util.uriFromUrl(script._downloadURL), !!script);
+      var scope = {};
+      Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+      var parsedScript = scope.parse(
+          script.textContent, GM_util.uriFromUrl(script._downloadURL));
+      // TODO: Show PopupNotifications   about parse error(s)?
       script.updateFromNewScript(parsedScript, aSafeWin, aChromeWin);
       this._changed(script, "modified", oldScriptId, true);
     } else {

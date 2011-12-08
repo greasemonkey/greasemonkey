@@ -1,8 +1,8 @@
-Components.utils.import('resource://greasemonkey/util.js');
-
 var EXPORTED_SYMBOLS = ['showInstallDialog'];
 
+Components.utils.import('resource://greasemonkey/util.js');
 Components.utils.import('resource://greasemonkey/remoteScript.js');
+
 var gWindowWatcher = Components
     .classes["@mozilla.org/embedcomp/window-watcher;1"]
     .getService(Components.interfaces.nsIWindowWatcher);

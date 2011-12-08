@@ -3,15 +3,8 @@ var EXPORTED_SYMBOLS = ['RemoteScript'];
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 
+Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/util.js');
-
-// Load in the Script objects, not yet module-ized.
-var loader = Cc['@mozilla.org/moz/jssubscript-loader;1']
-    .getService(Ci.mozIJSSubScriptLoader);
-loader.loadSubScript('chrome://greasemonkey/content/script.js');
-loader.loadSubScript('chrome://greasemonkey/content/scriptrequire.js');
-loader.loadSubScript('chrome://greasemonkey/content/scriptresource.js');
-loader.loadSubScript('chrome://greasemonkey/content/scripticon.js');
 
 var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
@@ -447,27 +440,25 @@ RemoteScript.prototype._downloadScriptCb = function(
 };
 
 /** Produce a Script object from the contents of this._scriptFile. */
-RemoteScript.prototype._metadataRegExp = new RegExp(
-    '^// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
-RemoteScript.prototype._parseScriptFile = function(aForce) {
-  var content = GM_util.getContents(this._scriptFile);
-  var meta = content.match(this._metadataRegExp);
+RemoteScript.prototype._parseScriptFile = function() {
+  if (this.errorMessage) return;
 
-  var source = (meta && meta[0]) || (aForce && content) || null;
-  if (source) {
-    try {
-      var script = GM_config.parse(source, this._uri);
-    } catch (e) {
-      this.cleanup(
-          stringBundle.GetStringFromName('error.parsingScript') + ':\n' + e);
-      return null;
-    }
-    this._baseName = cleanFilename(script.name, 'gm-script');
-    this._dispatchCallbacks('scriptMeta', script);
-    return script;
+  var source = GM_util.getContents(this._scriptFile);
+  if (!source) return null;
+
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  var script = scope.parse(source, this._uri);
+  if (script.parseErrors.length) {
+    this.cleanup(
+        stringBundle.GetStringFromName('error.parsingScript')
+        + '\n' + script.parseErrors);
+    return null;
   }
+  this._baseName = cleanFilename(script.name, 'gm-script');
+  this._dispatchCallbacks('scriptMeta', script);
 
-  return null;
+  return script;
 };
 
 RemoteScript.prototype._postParseScriptFile = function() {

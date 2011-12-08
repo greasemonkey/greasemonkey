@@ -1,3 +1,6 @@
+var EXPORTED_SYMBOLS = ['ScriptIcon'];
+
+Components.utils.import('resource://greasemonkey/scriptResource.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 function ScriptIcon(script) {
@@ -12,26 +15,6 @@ function ScriptIcon(script) {
 ScriptIcon.prototype = new ScriptResource();
 ScriptIcon.prototype.constructor = ScriptIcon;
 
-ScriptIcon.prototype.__defineSetter__("metaVal", function(value) {
-  // accept data uri schemes for image mime types
-  if (/^data:image\//i.test(value)) {
-    this._dataURI = value;
-  } else if (/^data:/i.test(value)) {
-    this.dataUriError = true;
-    throw new Error('@icon data: uri must be an image type');
-  } else {
-    var resUri = GM_util.uriFromUrl(this._script._downloadURL);
-    this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;
-  }
-});
-
-ScriptIcon.prototype.hasDownloadURL = function() {
-  return !!this._downloadURL;
-};
-
-ScriptIcon.prototype.isImage = function(contentType) {
-  return /^image\//i.test(contentType);
-};
 
 ScriptIcon.prototype.__defineGetter__("filename",
 function ScriptIcon_getFilename() {
@@ -59,3 +42,25 @@ function ScriptIcon_setFileURL(iconURL) {
     this._filename = iconURL;
   }
 });
+
+
+ScriptIcon.prototype.hasDownloadURL = function() {
+  return !!this._downloadURL;
+};
+
+ScriptIcon.prototype.isImage = function(contentType) {
+  return /^image\//i.test(contentType);
+};
+
+ScriptIcon.prototype.setMetaVal = function(value) {
+  // accept data uri schemes for image mime types
+  if (/^data:image\//i.test(value)) {
+    this._dataURI = value;
+  } else if (/^data:/i.test(value)) {
+    this.dataUriError = true;
+    throw new Error('@icon data: uri must be an image type');
+  } else {
+    var resUri = GM_util.uriFromUrl(this._script._downloadURL);
+    this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;
+  }
+};

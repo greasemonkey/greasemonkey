@@ -1,5 +1,10 @@
+var EXPORTED_SYMBOLS = ['Script'];
+
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/scriptIcon.js');
+Components.utils.import('resource://greasemonkey/scriptRequire.js');
+Components.utils.import('resource://greasemonkey/scriptResource.js');
 Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
 Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
 Components.utils.import('resource://greasemonkey/util.js');
@@ -7,39 +12,40 @@ Components.utils.import('resource://greasemonkey/util.js');
 function Script(configNode) {
   this._observers = [];
 
-  this._downloadURL = null;
-  this._updateURL = null;
-  this._tempFile = null;
   this._basedir = null;
-  this._filename = null;
-  this._modified = null;
+  this._dependFail = false;
   this._dependhash = null;
-
-  this._name = null;
-  this._namespace = "";
-  this._id = null;
-  this._prefroot = null;
-  this._description = null;
-  this._version = null;
-  this._icon = new ScriptIcon(this);
+  this._description = '';
+  this._downloadURL = null;
   this._enabled = true;
-  this.needsUninstall = false;
-  this._includes = [];
-  this._userIncludes = [];
   this._excludes = [];
-  this._userExcludes = [];
+  this._filename = null;
+  this._icon = new ScriptIcon(this);
+  this._id = null;
+  this._includes = [];
+  this._lastUpdateCheck = null;
   this._matches = [];
+  this._modified = null;
+  this._name = 'user-script';
+  this._namespace = '';
+  this._prefroot = null;
+  this._rawMeta = '';
   this._requires = [];
   this._resources = [];
-  this._unwrap = false;
-  this._dependFail = false;
   this._runAt = null;
-  this._rawMeta = null;
-  this._lastUpdateCheck = null;
-  this.checkRemoteUpdates = true;
-  this.updateAvailable = null;
+  this._tempFile = null;
+  this._unwrap = false;
+  this._updateURL = null;
   this._updateVersion = null;
+  this._userExcludes = [];
+  this._userIncludes = [];
+  this._version = null;
+
+  this.checkRemoteUpdates = true;
+  this.needsUninstall = false;
+  this.parseErrors = [];
   this.pendingExec = [];
+  this.updateAvailable = null;
 
   if (configNode) this._loadFromConfigNode(configNode);
 }
@@ -221,8 +227,10 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.hasAttribute("dependhash")
       || !node.hasAttribute("version")
   ) {
-    var parsedScript = GM_util.getService().config.parse(
-        this.textContent, GM_util.uriFromUrl(this._downloadURL), !!this);
+    var scope = {};
+    Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+    var parsedScript = scope.parse(
+        this.textContent, GM_util.uriFromUrl(this._downloadURL));
 
     this._modified = this.file.lastModifiedTime;
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);
@@ -551,7 +559,9 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
   if (req.status != 200 && req.status != 0) return aCallback(false);
 
   var source = req.responseText;
-  var newScript = GM_util.getService().config.parse(source, this._downloadURL);
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  var newScript = scope.parse(source, this._downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) return aCallback(false);
 
