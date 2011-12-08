@@ -426,13 +426,13 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
     if (!GM_util.getService().config.installIsUpdate(newScript)) {
       // Migrate preferences.
       if (this.prefroot != newScript.prefroot) {
-        var storageOld = new GM_ScriptStorage(this);
-        var storageNew = new GM_ScriptStorage(newScript);
+        var prefmanOld = new GM_PrefManager(this.prefroot);
+        var prefmanNew = new GM_PrefManager(newScript.prefroot);
 
-        var names = storageOld.listValues();
+        var names = prefmanOld.listValues();
         for (var i = 0, name = null; name = names[i]; i++) {
-          storageNew.setValue(name, storageOld.getValue(name));
-          storageOld.deleteValue(name);
+          prefmanNew.setValue(name, prefmanOld.getValue(name));
+          prefmanOld.remove(name);
         }
       }
 
