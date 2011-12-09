@@ -177,10 +177,10 @@ function Script_setUpdateURL(url) {
   this._updateURL = url;
   // US.o gets special treatment for being so large
   var usoMatch = url.match(
-      /^https?:\/\/userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
+      /^(https?:\/\/)userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
   if (usoMatch) {
-    this._updateURL = 'http://userscripts.org/scripts/source/'
-        + usoMatch[1] + '.user.js';
+    this._updateURL = usoMatch[1] + 'userscripts.org/scripts/source/'
+        + usoMatch[2] + '.meta.js';
   }
 });
 
