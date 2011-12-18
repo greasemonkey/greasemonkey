@@ -9,7 +9,7 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 var gLineSplitRegexp = /.+/g;
 var gAllMetaRegexp = new RegExp(
-    '^// ==UserScript==([\\s\\S]*?)// ==/UserScript==', 'm');
+    '^// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
 var gMetaLineRegexp = new RegExp('// @(\\S+)(?:\\s+(.*))?');
 
 /** Parse the source of a script; produce Script object. */
