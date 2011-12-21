@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
 <!ENTITY menu.manage.accesskey "S">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Možnosti Greasemonkey...">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
@@ -31,13 +31,13 @@
 <!ENTITY userscripts "Uživatelské skripty">
 <!ENTITY Uninstall "Odinstalovat">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
-<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY UpdateChecking "Kontrola aktualizací">
+<!ENTITY EnableUpdateChecking "Zapnout automatickou kontrolu aktualizací skriptů">
+<!ENTITY UpdateInterval "Minimální počet dnů mezi kontrolami aktualizací">
+<!ENTITY RequireSecureUpdates "Požadovat zabezpečené aktualizace">
+<!ENTITY greasemonkey.noscriptshere "Na této stránce neběží žádné nainstalované skripty.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">
 <!ENTITY greasemonkey.getuserscripts "Získat uživatelské skripty">
-<!ENTITY scriptprefs.title "Greasemonkey uživatelský skript Nastavení -!!">
+<!ENTITY scriptprefs.title "Nastavení uživatelského skriptu Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "Uživatelské nastavení">
 <!ENTITY scriptprefs.scriptsettings "Nastavení skriptů">

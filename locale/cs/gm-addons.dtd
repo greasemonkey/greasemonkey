@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "Automaticky kontrolovat aktualizace">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Upravit">
 <!ENTITY Edit.accesskey "U">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Spustit poslední">
 <!ENTITY ExecuteLater "Spustit později">
 <!ENTITY ExecuteSooner "Spustit dříve">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Najít aktualizaci">
+<!ENTITY InstallUpdate "Instalovat aktualizaci">
 <!ENTITY MoveDown "Posunout níže">
 <!ENTITY MoveDown.accesskey "n">
 <!ENTITY MoveToBottom "Posunout úplně dolů">
@@ -32,6 +32,6 @@
 <!ENTITY UninstallCancel "Zrušit odinstalaci">
 <!ENTITY UninstallCancel.accesskey "Z">
 <!ENTITY UninstallCancel.tooltip "Zrušit odinstalaci uživatelského skriptu">
-<!ENTITY UninstallCancelDescription "Tento uživatelský skript bude po odinstalován po zavření dialogu. (Nebo rovnou klikněte na &quot;Odinstalovat nyní&quot;.)">
+<!ENTITY UninstallCancelDescription "Tento uživatelský skript bude odinstalován po zavření dialogu. (Nebo rovnou klikněte na &quot;Odinstalovat nyní&quot;.)">
 <!ENTITY UninstallNow "Odinstalovat nyní">
 <!ENTITY UninstallNow.accesskey "n">
