@@ -1,0 +1,37 @@
+<!ENTITY CheckUpdates "Automaticky kontrolovať aktualizácie">
+<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY Edit "Upraviť">
+<!ENTITY Edit.accesskey "U">
+<!ENTITY Edit.tooltip "Upraviť tento používateľský skript">
+<!ENTITY ExecuteFirst "Spustiť prvý">
+<!ENTITY ExecuteLast "Spustiť posledný">
+<!ENTITY ExecuteLater "Spustiť neskôr">
+<!ENTITY ExecuteSooner "Spustit skôr">
+<!ENTITY FindUpdate "Nájsť aktualizáciu">
+<!ENTITY InstallUpdate "Nainštalovať aktualizáciu">
+<!ENTITY MoveDown "Posunúť nižšie">
+<!ENTITY MoveDown.accesskey "n">
+<!ENTITY MoveToBottom "Posunúť celkom dolu">
+<!ENTITY MoveToBottom.accesskey "d">
+<!ENTITY MoveToTop "Posunúť celkom hore">
+<!ENTITY MoveToTop.accesskey "h">
+<!ENTITY MoveUp "Posunúť vyššie">
+<!ENTITY MoveUp.accesskey "v">
+<!ENTITY NewScript "Vytvoriť nový skript">
+<!ENTITY NewScript.accesskey "n">
+<!ENTITY Show "Zobraziť zahrnuté priečinky">
+<!ENTITY Show.accesskey "Z">
+<!ENTITY Sort.ByStatus "Zoradiť podľa stavu">
+<!ENTITY Sort.Status "Stav">
+<!ENTITY Sort.ByName "Zoradiť podľe názvu">
+<!ENTITY Sort.Name "Názov">
+<!ENTITY Sort.ByExecution "Zoradiť podľa vykonania príkazu">
+<!ENTITY Sort.Execution "Podľa poradia">
+<!ENTITY SortScripts "Zoradiť skripty">
+<!ENTITY SortScripts.accesskey "S">
+<!ENTITY UninstallCancel "Zrušiť odinštalovanie">
+<!ENTITY UninstallCancel.accesskey "Z">
+<!ENTITY UninstallCancel.tooltip "Zrušiť odinštalovanie používateľského skriptu">
+<!ENTITY UninstallCancelDescription "Tento používateľský skript bude odinštalovaný po zatvorení dialógu. (Alebo priamo kliknite na &quot;Odinštalovať teraz&quot;.)">
+<!ENTITY UninstallNow "Odinštalovať teraz">
+<!ENTITY UninstallNow.accesskey "n">
