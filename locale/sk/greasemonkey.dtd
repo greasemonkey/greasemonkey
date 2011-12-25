@@ -1,0 +1,43 @@
+<!ENTITY menu.install "Inštalovať tento užívateľský skript...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Zobraziť zdrojový kód">
+<!ENTITY menu.show.accesskey "Z">
+<!ENTITY menu.commands "Príkazy užívateľských skriptov...">
+<!ENTITY menu.commands.accesskey "P">
+<!ENTITY menu.new "Nový užívateľský skript...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Správca užívateľských skriptov...">
+<!ENTITY menu.manage.accesskey "S">
+<!ENTITY menu.options "Greasemonkey Možnosti...">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "Povolené">
+<!ENTITY statusbar.enabled.accesskey "P">
+<!ENTITY install.title "Inštalácia Greasemonkey">
+<!ENTITY install.runson "spúšťa sa na:">
+<!ENTITY install.matches "odpovedá:">
+<!ENTITY install.butnoton "nespúšťa sa na:">
+<!ENTITY install.warning1 "Zákerné skripty môžu poškodiť Vaše súkromie a jednať Vaším menom bez Vášho vedomia.">
+<!ENTITY install.warning2 "Mali by ste inštalovať skripty iba zo zdrojov, ktorým veríte.">
+<!ENTITY install.showscriptsource "Zobraziť zdrojový kód skriptu">
+<!ENTITY install.installbutton "Inštalovať">
+<!ENTITY newscript.name "Názov">
+<!ENTITY newscript.namespace "Menný priestor">
+<!ENTITY newscript.description "Popis">
+<!ENTITY newscript.includes "Zahrňuje (jedna na riadok)">
+<!ENTITY newscript.excludes "Vylučuje (jedna na riadok)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Zmeniť editor">
+<!ENTITY options.globalExcludes "Zahrnúť globálne">
+<!ENTITY userscripts "Užívateľské skripty">
+<!ENTITY Uninstall "Odinštalovať">
+<!ENTITY AlsoUninstallPrefs "Odinštalovať aj pridružené nastavenia">
+<!ENTITY UpdateChecking "Kontrola Aktualizácií">
+<!ENTITY EnableUpdateChecking "Povoliť automatickú kontrolu aktualizácií skriptov">
+<!ENTITY UpdateInterval "Minimálny počet dní medzi kontrolou aktualizácií">
+<!ENTITY RequireSecureUpdates "Vyžadovať bezpečné aktualizácie">
+<!ENTITY greasemonkey.noscriptshere "Nespúšťa sa žiaden inštalovaný skript na tejto stránke.">
+<!ENTITY greasemonkey.youhavenoscripts "Nemáte nainštalované užívateľské skripty">
+<!ENTITY greasemonkey.getuserscripts "Získať užívateľské skripty">
+<!ENTITY scriptprefs.title "Greasemonkey užívateľský skript Nastavenia -!!">
+<!ENTITY scriptprefs.usersettings "Užívateľské nastavenia">
+<!ENTITY scriptprefs.scriptsettings "Nastavenia skriptov">
