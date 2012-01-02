@@ -264,11 +264,11 @@ RemoteScript.prototype.setScript = function(aScript) {
   this._baseName = aScript._basedir;
   this.script = aScript;
   this._postParseScriptFile();
-}
+};
 
 RemoteScript.prototype.showSource = function(aTabBrowser) {
   // Turn standard browser into tab browser, if necessary.
-  if (aTabBrowser.getTabBrowser) aTabBrowser = aTabBrowser.getTabBrowser()
+  if (aTabBrowser.getTabBrowser) aTabBrowser = aTabBrowser.getTabBrowser();
 
   if (this._progress[0] < 1) {
     throw new Error('Script is not loaded!');

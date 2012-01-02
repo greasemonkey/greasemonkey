@@ -144,7 +144,7 @@ GM_BrowserUI.observe = function(subject, topic, data) {
 
 GM_BrowserUI.openTab = function(url) {
   gBrowser.selectedTab = gBrowser.addTab(url);
-}
+};
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.
