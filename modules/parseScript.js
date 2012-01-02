@@ -30,7 +30,7 @@ function parse(aSource, aUri) {
   meta = meta.match(gLineSplitRegexp);
 
   var resourceNames = {};
-  for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {
+  if (meta) for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {
     metaLine = metaLine.replace(/\s+$/, '');
 
     var match = metaLine.match(gMetaLineRegexp);

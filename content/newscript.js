@@ -39,17 +39,20 @@ function doInstall() {
 
   // finish making the script object ready to install
   // (put this created script into a file -- only way to install it)
-  var tempFile = GM_util.getTempFile();
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+  var remoteScript = new scope.RemoteScript();
+  var tempFile = GM_util.getTempFile(
+      remoteScript._tempDir, scope.cleanFilename(script.name, 'gm_script'));
   GM_util.writeToFile(scriptSrc, tempFile, function() {
-    script.setDownloadedFile(tempFile);
-
     // install this script
-    config.install(script);
+    remoteScript.setScript(script, tempFile);
+    remoteScript.install();
     // and fire up the editor!
     GM_util.openInEditor(script);
+
     // persist namespace value
     GM_prefRoot.setValue("newscript_namespace", script.namespace);
-
     // Now that async write is complete, close the window.
     close();
   });

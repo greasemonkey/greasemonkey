@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ['RemoteScript'];
+var EXPORTED_SYMBOLS = ['cleanFilename', 'RemoteScript'];
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -259,10 +259,15 @@ RemoteScript.prototype.onScriptMeta = function(aCallback) {
  * After calling this, calling .download() will only get dependencies.  This
  * RemoteScript can then safely be .install(oldScript)'ed.
  */
-RemoteScript.prototype.setScript = function(aScript) {
+RemoteScript.prototype.setScript = function(aScript, aTempFile) {
   this._scriptFile = aScript.file;
   this._baseName = aScript._basedir;
   this.script = aScript;
+  if (aTempFile) {
+    // Special case for "new script" dialog.
+    this._scriptFile = aTempFile;
+    this._baseName = cleanFilename(aScript.name, 'gm-script');
+  }
   this._postParseScriptFile();
 };
 
