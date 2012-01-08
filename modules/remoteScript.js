@@ -30,6 +30,8 @@ function cleanFilename(aFilename, aDefault) {
   // Blacklist problem characters (slashes, colons, etc.).
   var filename = (aFilename || aDefault).replace(
       disallowedFilenameCharacters, '');
+  // Make whitespace readable.
+  filename = filename.replace(/\s+/g, '_');
   // Ensure that it's something.
   if (!filename) filename = aDefault || 'unknown';
   return filename;

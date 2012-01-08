@@ -42,8 +42,8 @@ function doInstall() {
   var scope = {};
   Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
   var remoteScript = new scope.RemoteScript();
-  var tempFile = GM_util.getTempFile(
-      remoteScript._tempDir, scope.cleanFilename(script.name, 'gm_script'));
+  var tempFileName = scope.cleanFilename(script.name, 'gm_script') + '.user.js';
+  var tempFile = GM_util.getTempFile(remoteScript._tempDir, tempFileName);
   GM_util.writeToFile(scriptSrc, tempFile, function() {
     // install this script
     remoteScript.setScript(script, tempFile);
