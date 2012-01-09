@@ -378,7 +378,7 @@ service.prototype.contentDestroyed = function(contentWindowId) {
     try { closed = command.contentWindow.closed; } catch (e) { }
 
     if (closed ||
-        (contentWindowId && command.contentWindowId == contentWindowId)
+        (contentWindowId && (command.contentWindowId == contentWindowId))
     ) {
       gMenuCommands.splice(index, 1);
     }
