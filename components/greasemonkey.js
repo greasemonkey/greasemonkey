@@ -373,12 +373,13 @@ service.prototype.__defineGetter__('config', function() {
 });
 
 service.prototype.contentDestroyed = function(contentWindowId) {
-  if (!contentWindowId) return;
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
     var closed = false;
     try { closed = command.contentWindow.closed; } catch (e) { }
 
-    if (closed || (command.contentWindowId == contentWindowId)) {
+    if (closed ||
+        (contentWindowId && command.contentWindowId == contentWindowId)
+    ) {
       gMenuCommands.splice(index, 1);
     }
   }, true);
