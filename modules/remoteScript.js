@@ -31,7 +31,7 @@ function cleanFilename(aFilename, aDefault) {
   var filename = (aFilename || aDefault).replace(
       disallowedFilenameCharacters, '');
   // Make whitespace readable.
-  filename = filename.replace(/\s+/g, '_');
+  filename = filename.replace(/(\s|%20)+/g, '_');
   // Ensure that it's something.
   if (!filename) filename = aDefault || 'unknown';
   return filename;
