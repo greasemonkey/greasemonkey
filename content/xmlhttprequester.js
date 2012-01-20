@@ -1,7 +1,8 @@
 Components.utils.import("resource://greasemonkey/util.js");
 
-function GM_xmlhttpRequester(wrappedContentWin, originUrl) {
+function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
   this.wrappedContentWin = wrappedContentWin;
+  this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
 }
 
@@ -33,9 +34,8 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-      var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-          .createInstance();
-      this.chromeStartRequest(url, details, req);
+        var req = new this.chromeWindow.XMLHttpRequest();
+        GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
       throw new Error("Disallowed scheme in URL: " + details.url);
