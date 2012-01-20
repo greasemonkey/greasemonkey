@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Installeer alleen scripts van auteurs die u vertrouwt.">
 <!ENTITY install.showscriptsource "Scriptbron weergeven">
 <!ENTITY install.installbutton "Installeren">
+<!ENTITY loading "Downloaden…">
 <!ENTITY newscript.name "Naam">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Beschrijving">

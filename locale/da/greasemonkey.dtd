@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Du bør kun installere scripts fra kilder, du stoler på.">
 <!ENTITY install.showscriptsource "Vis Script kildekode">
 <!ENTITY install.installbutton "Installer">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Navn">
 <!ENTITY newscript.namespace "Navnerum">
 <!ENTITY newscript.description "Beskrivelse">

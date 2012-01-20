@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Csak megbízható forrásból telepítsen parancsfájlt!">
 <!ENTITY install.showscriptsource "Parancsfájl forrásának megtekintése">
 <!ENTITY install.installbutton "Telepítés">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Név">
 <!ENTITY newscript.namespace "Névtér">
 <!ENTITY newscript.description "Leírás">

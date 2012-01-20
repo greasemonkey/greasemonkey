@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Скрипте требате инсталирати само са проверених извора.">
 <!ENTITY install.showscriptsource "Прикажи изворни кôд скрипте">
 <!ENTITY install.installbutton "Инсталирај">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Име">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Опис">

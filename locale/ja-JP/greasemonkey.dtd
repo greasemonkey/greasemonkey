@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "信頼できるソースからのみスクリプトをインストールすべきです。">
 <!ENTITY install.showscriptsource "スクリプトのソースを表示">
 <!ENTITY install.installbutton "インストール">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "名前">
 <!ENTITY newscript.namespace "名前空間">
 <!ENTITY newscript.description "説明">

@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "您應該只安裝來自可信任來源的使用者腳本。">
 <!ENTITY install.showscriptsource "顯示腳本來源">
 <!ENTITY install.installbutton "安裝">
+<!ENTITY loading "下載中…">
 <!ENTITY newscript.name "名稱">
 <!ENTITY newscript.namespace "命名空間">
 <!ENTITY newscript.description "說明">
@@ -31,10 +32,10 @@
 <!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "檢查更新">
+<!ENTITY EnableUpdateChecking "自動檢查腳本更新">
+<!ENTITY UpdateInterval "檢查更新的最短時間間隔">
+<!ENTITY RequireSecureUpdates "要求透過安全通道更新">
 <!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
 <!ENTITY greasemonkey.youhavenoscripts "您尚未安裝任何腳本">
 <!ENTITY greasemonkey.getuserscripts "取得使用者腳本">

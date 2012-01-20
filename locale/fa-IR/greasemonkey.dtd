@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "شما می بایست فقط دستنویس هایی را نصب کنید که از منابع آنها مطمئن هستید.">
 <!ENTITY install.showscriptsource "نمایش متن دستنویس کاربری">
 <!ENTITY install.installbutton "نصب">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "نام">
 <!ENTITY newscript.namespace "فضای نام">
 <!ENTITY newscript.description "شرح">

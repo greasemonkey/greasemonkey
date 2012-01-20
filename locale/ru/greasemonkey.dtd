@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Устанавливайте скрипты только из доверенных источников.">
 <!ENTITY install.showscriptsource "Показать код скрипта">
 <!ENTITY install.installbutton "Начать установку">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Название">
 <!ENTITY newscript.namespace "Пространство имен">
 <!ENTITY newscript.description "Описание">

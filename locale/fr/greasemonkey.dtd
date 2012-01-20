@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "N'installez que des scripts à partir de sources dont vous avez confiance.">
 <!ENTITY install.showscriptsource "Afficher la Source du Script">
 <!ENTITY install.installbutton "Installer">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Nom">
 <!ENTITY newscript.namespace "Espace de nom">
 <!ENTITY newscript.description "Description">

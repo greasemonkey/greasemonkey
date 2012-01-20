@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "믿을 수 있는 출처에서 나온 스크립트만 설치하셔야 합니다.">
 <!ENTITY install.showscriptsource "스크립트 소스 보기">
 <!ENTITY install.installbutton "설치">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "이름">
 <!ENTITY newscript.namespace "네임스페이스">
 <!ENTITY newscript.description "설명">

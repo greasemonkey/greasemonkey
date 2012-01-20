@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Yalnızca güvendiğiniz kaynaklardan gelen betikleri yükleyin.">
 <!ENTITY install.showscriptsource "Betik Kaynağını Göster">
 <!ENTITY install.installbutton "Kur">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "İsim">
 <!ENTITY newscript.namespace "İsim alanı">
 <!ENTITY newscript.description "Tanım">

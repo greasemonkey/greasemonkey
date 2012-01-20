@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "ضع الرابط الجديد في الأسفل.\\n يمكنك تحديد صفحات متعددة باستخدام النجمة (*).">
+<!ENTITY promptForNewPage.title "أضف صفحة">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "ضع الرابط الجديد في الأسفل.\\n يمكنك تحديد صفحات متعددة باستخدام النجمة (*).">
+<!ENTITY promptForEdit.title "تعديل الصفحة">
+<!ENTITY button.add "أضف..">
+<!ENTITY button.addUserExclude "إضافة كمستخدم مستبعد">
+<!ENTITY button.addUserInclude "إضافة كمستخدم مستثنى">
+<!ENTITY button.edit "عدٌل..">
+<!ENTITY button.remove "أحذف">
+<!ENTITY label.grpIncluded "يشمل صفحات">
+<!ENTITY label.grpExcluded "لايشمل صفحات">

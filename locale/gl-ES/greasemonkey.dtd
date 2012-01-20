@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Debería instalar scripts unicamente de fontes nas que confíe.">
 <!ENTITY install.showscriptsource "Mostrar o código fonte">
 <!ENTITY install.installbutton "Instalar">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Nome">
 <!ENTITY newscript.namespace "Espazo do nome">
 <!ENTITY newscript.description "Descrición">

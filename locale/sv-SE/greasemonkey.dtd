@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Du bör endast installera skript från källor som du litar på.">
 <!ENTITY install.showscriptsource "Visa skriptkällkod">
 <!ENTITY install.installbutton "Installera">
+<!ENTITY loading "Hämtar…">
 <!ENTITY newscript.name "Namn">
 <!ENTITY newscript.namespace "Namnrymd">
 <!ENTITY newscript.description "Beskrivning">

@@ -20,6 +20,7 @@
 <!ENTITY install.warning2 "Należy instalować tylko skrypty pochodzące z zaufanych źródeł.">
 <!ENTITY install.showscriptsource "Pokaż kod źródłowy skryptu">
 <!ENTITY install.installbutton "Instaluj">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Nazwa">
 <!ENTITY newscript.namespace "Lokalizacja">
 <!ENTITY newscript.description "Opis">
