@@ -443,8 +443,9 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       this._name = newScript._name;
       this._namespace = newScript._namespace;
     } else {
+      // TODO: Unlocalized string.
       // Notify the user of the conflict
-      alert('Error: Another script with @name: "' + newScript._name +
+      GM_util.alert('Error: Another script with @name: "' + newScript._name +
             '" and @namespace: "' + newScript._namespace +
             '" is already installed.\nThese values must be unique.');
     }
