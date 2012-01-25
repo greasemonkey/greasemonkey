@@ -446,7 +446,9 @@ service.prototype.injectScripts = function(
     // These newlines are critical for error line calculation.  The last handles
     // a script whose final line is a line comment, to not break the wrapper
     // function.
-    var scriptSrc = requires.join("\n") + "\n" + script.textContent + "\n";
+    // The semicolons after requires fix a failure of javascript's semicolon
+    // insertion rules (see #1491).
+    var scriptSrc = requires.join(";\n") + ";\n" + script.textContent + "\n";
     if (!script.unwrap) {
       scriptSrc = "(function(){"+ scriptSrc +"})()";
     }
