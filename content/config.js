@@ -101,7 +101,9 @@ Config.prototype._save = function(saveNow) {
     this._saveTimer = Components.classes["@mozilla.org/timer;1"]
         .createInstance(Components.interfaces.nsITimer);
 
-    var _save = GM_util.hitch(this, "_save"); // dereference 'this' for the closure
+    // dereference 'this' for the closure
+    var _save = GM_util.hitch(this, "_save");
+
     this._saveTimer.initWithCallback(
         {'notify': function() { _save(true); }}, 250,
         Components.interfaces.nsITimer.TYPE_ONE_SHOT);
@@ -109,8 +111,8 @@ Config.prototype._save = function(saveNow) {
   }
 
   var doc = Components.classes["@mozilla.org/xmlextras/domparser;1"]
-    .createInstance(Components.interfaces.nsIDOMParser)
-    .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
+      .createInstance(Components.interfaces.nsIDOMParser)
+      .parseFromString("<UserScriptConfig></UserScriptConfig>", "text/xml");
 
   for (var i = 0, scriptObj; scriptObj = this._scripts[i]; i++) {
     doc.firstChild.appendChild(doc.createTextNode("\n\t"));
@@ -234,7 +236,7 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
       Components.utils.import('resource://greasemonkey/parseScript.js', scope);
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script._downloadURL));
-      // TODO: Show PopupNotifications   about parse error(s)?
+      // TODO: Show PopupNotifications about parse error(s)?
       script.updateFromNewScript(parsedScript, aSafeWin, aChromeWin);
       this._changed(script, "modified", oldScriptId, true);
     } else {
