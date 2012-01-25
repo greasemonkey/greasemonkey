@@ -11,10 +11,13 @@ function ScriptIcon(script) {
   this.dataUriError = false;
 }
 
+ScriptIcon.prototype.toString = function() {
+  return '[ScriptIcon; ' + this.filename + ']';
+};
+
 // Inherit from ScriptResource
 ScriptIcon.prototype = new ScriptResource();
 ScriptIcon.prototype.constructor = ScriptIcon;
-
 
 ScriptIcon.prototype.__defineGetter__("filename",
 function ScriptIcon_getFilename() {

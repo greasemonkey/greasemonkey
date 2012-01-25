@@ -18,7 +18,7 @@ function ScriptResource(script) {
 }
 
 ScriptResource.prototype.toString = function() {
-  return '[ScriptResource; ' + this._downloadURL + ']';
+  return '[ScriptResource; ' + this.filename + ']';
 }
 
 ScriptResource.prototype.__defineGetter__('name',

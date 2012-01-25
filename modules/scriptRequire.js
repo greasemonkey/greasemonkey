@@ -12,6 +12,10 @@ function ScriptRequire(script) {
   this.updateScript = false;
 }
 
+ScriptRequire.prototype.toString = function() {
+  return '[ScriptRequire; ' + this.filename + ']';
+};
+
 ScriptRequire.prototype.__defineGetter__('file',
 function ScriptRequire_getFile() {
   var file = this._script._basedirFile;
