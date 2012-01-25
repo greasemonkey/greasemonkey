@@ -246,20 +246,18 @@ GM_BrowserUI.init();
  * state, right-click opens in an editor.
  */
 function GM_popupClicked(aEvent) {
-  if (aEvent.button == 0 || aEvent.button == 2) {
-    var script = aEvent.target.script;
-    if (!script) return;
+  var script = aEvent.target.script;
+  if (!script) return;
 
-    if (aEvent.button == 0) {
-      // left-click: toggle enabled state
-      script.enabled =! script.enabled;
-    } else {
-      // right-click: open in editor
-      GM_util.openInEditor(script);
-    }
-
-    closeMenus(aEvent.target);
+  if ('command' == aEvent.type) {
+    // left-click: toggle enabled state
+    script.enabled =! script.enabled;
+  } else if ('click' == aEvent.type && aEvent.button == 2) {
+    // right-click: open in editor
+    GM_util.openInEditor(script);
   }
+
+  closeMenus(aEvent.target);
 }
 
 
