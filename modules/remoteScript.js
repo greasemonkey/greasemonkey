@@ -369,7 +369,12 @@ RemoteScript.prototype._downloadFile = function(
   assertIsFunction(aCompletionCallback,
       '_downloadFile() completion callback is not a function.');
 
-  if (!GM_util.isGreasemonkeyable(aUri.spec)) {
+  if (aUri == this._uri) {
+    // No-op, always download the script itself.
+  } else if (aUri.scheme == this._uri.scheme) {
+    // No-op, always allow files from the same scheme as the script.
+  } else if (!GM_util.isGreasemonkeyable(aUri.spec)) {
+    // Otherwise, these are unsafe.  Do not download them.
     this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
     return;
   }
@@ -398,15 +403,9 @@ RemoteScript.prototype._downloadFileProgress = function(
     // We are downloading the first file, and haven't parsed a script yet ...
 
     // 1) Detect an HTML page and abort if so.
-    try {
-      var httpChannel = aChannel.QueryInterface(Ci.nsIHttpChannel);
-      var contentType = httpChannel.getResponseHeader('Content-Type');
-      if (this._htmlTypeRegex.test(contentType)) {
-        this.cleanup();
-        return true;
-      }
-    } catch (e) {
-      dump('RemoteScript._downloadFileProgress() error:\n\t' + e);
+    if (this._htmlTypeRegex.test(aChannel.contentType)) {
+      this.cleanup();
+      return true;
     }
 
     // 2) Otherwise try to parse the script from the downloaded file.
