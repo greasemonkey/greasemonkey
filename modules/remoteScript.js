@@ -239,9 +239,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this.script.setFilename(this._baseName, this._scriptFile.leafName);
     this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
     this._tempDir = null;
+    GM_config.install(this.script, aOldScript);
   }
-
-  GM_config.install(this.script, aOldScript);
 };
 
 /** Add a progress callback. */
