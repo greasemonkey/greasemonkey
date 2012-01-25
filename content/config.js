@@ -238,7 +238,6 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
           script.textContent, GM_util.uriFromUrl(script._downloadURL));
       // TODO: Show PopupNotifications about parse error(s)?
       script.updateFromNewScript(parsedScript, aSafeWin, aChromeWin);
-      this._changed(script, "modified", oldScriptId, true);
     } else {
       // We are already downloading dependencies for this script
       // so add its window to the list

@@ -420,8 +420,8 @@ Script.prototype.isModified = function() {
 };
 
 Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
-  // if the @name and @namespace have changed
-  // make sure they don't conflict with another installed script
+  // If the @name and/or @namespace have changed, make sure they don't
+  // conflict with another installed script.
   if (newScript.id != this.id) {
     if (!GM_util.getService().config.installIsUpdate(newScript)) {
       // Migrate preferences.
@@ -448,6 +448,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       GM_util.alert('Error: Another script with @name: "' + newScript._name +
             '" and @namespace: "' + newScript._namespace +
             '" is already installed.\nThese values must be unique.');
+      return;
     }
   }
 
@@ -465,11 +466,19 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
+    // Import dependencies from new script.
     this._dependhash = dependhash;
     this._icon = newScript._icon;
-    this._icon._script = this;
     this._requires = newScript._requires;
     this._resources = newScript._resources;
+    // And fix those dependencies to still reference this script.
+    this._icon._script = this;
+    for (var i = 0, require = null; require = this._requires[i]; i++) {
+      require._script = this;
+    }
+    for (var i = 0, resource = null; resource = this._resources[i]; i++) {
+      resource._script = this;
+    }
 
     // Get rid of old dependencies.
     var dirFiles = this._basedirFile.directoryEntries;
@@ -489,14 +498,37 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
       this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
     }
 
-    // Re-download dependencies.  The timeout guarantees that it will
-    // reliably complete after the normal document-end time.
+    // Re-download dependencies.
     var scope = {};
     Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
     var rs = new scope.RemoteScript(this._downloadURL);
-    rs.setScript(newScript);
+    rs.setScript(this);
     rs.download(GM_util.hitch(this, function(aSuccess) {
+      // Install the downloaded files.
       rs.install(this, true);
+
+      // Inject the script in all windows that have been waiting.
+      var pendingExec;
+      var pendingExecAry = this.pendingExec;
+      this.pendingExec = [];
+      while (pendingExec = pendingExecAry.shift()) {
+        if ('document-start update' == pendingExec) {
+          GM_util.logError(
+              this.id + '\n... script update complete '
+              + '(will run at next document-start time).',
+              true);
+          continue;
+        }
+        if (pendingExec.safeWin.closed) continue;
+        var url = pendingExec.safeWin.location.href;
+        var shouldRun = GM_util.scriptMatchesUrlAndRuns(this, url, this.runAt);
+        if (shouldRun) {
+          GM_util.getService().injectScripts(
+              [this], url, pendingExec.safeWin, pendingExec.chromeWin);
+        }
+      }
+
+      GM_util.getService().config._changed(this, "modified", this.id);
     }));
   }
 };
