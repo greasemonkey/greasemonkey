@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Zarządzaj skryptami…">
 <!ENTITY menu.manage.accesskey "R">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey – ustawienia…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Włącz">
 <!ENTITY statusbar.enabled.accesskey "W">
@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Należy instalować tylko skrypty pochodzące z zaufanych źródeł.">
 <!ENTITY install.showscriptsource "Pokaż kod źródłowy skryptu">
 <!ENTITY install.installbutton "Instaluj">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Pobieranie…">
 <!ENTITY newscript.name "Nazwa">
 <!ENTITY newscript.namespace "Lokalizacja">
 <!ENTITY newscript.description "Opis">
@@ -32,10 +32,10 @@
 <!ENTITY userscripts "Skrypty">
 <!ENTITY Uninstall "Odinstaluj">
 <!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Sprawdzaj dostępność aktualizacji">
+<!ENTITY EnableUpdateChecking "Włącza automatyczne sprawdzanie dostępności aktualizacji skryptów">
+<!ENTITY UpdateInterval "Minimalna liczba dni pomiędzy kolejnymi sprawdzeniami">
+<!ENTITY RequireSecureUpdates "Wymaga bezpiecznych aktualizacji">
 <!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
 <!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">
 <!ENTITY greasemonkey.getuserscripts "Pobierz skrypty">

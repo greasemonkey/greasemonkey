@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Měli byste instalovat skripty pouze ze zdrojů kterým věříte.">
 <!ENTITY install.showscriptsource "Zobrazit zdrojový kód skriptu">
 <!ENTITY install.installbutton "Instalovat">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Stahuji...">
 <!ENTITY newscript.name "Název">
 <!ENTITY newscript.namespace "Název uložení">
 <!ENTITY newscript.description "Popis">
@@ -34,7 +34,7 @@
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
 <!ENTITY UpdateChecking "Zkontrolovat aktualizace">
 <!ENTITY EnableUpdateChecking "Povolit automatickou kontrolu aktualizací skriptu">
-<!ENTITY UpdateInterval "Minimální počet dní k aktualizaci">
+<!ENTITY UpdateInterval "Minimální počet dní ke kontrole aktualizací">
 <!ENTITY RequireSecureUpdates "Použít zabezpečené aktualizace">
 <!ENTITY greasemonkey.noscriptshere "Žádné nainstalované skripty neběží na této stránce.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">

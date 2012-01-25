@@ -1,5 +1,5 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY CheckUpdates "Автоматично перевіряти оновлення">
+<!ENTITY CheckUpdates.accesskey "о">
 <!ENTITY Edit "Редагувати">
 <!ENTITY Edit.accesskey "Р">
 <!ENTITY Edit.tooltip "Редагувати цей скрипт">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Виконувати останнім">
 <!ENTITY ExecuteLater "Виконувати пізніше">
 <!ENTITY ExecuteSooner "Виконувати раніше">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Пошук оновлення">
+<!ENTITY InstallUpdate "Встановити оновлення">
 <!ENTITY MoveDown "Нижче">
 <!ENTITY MoveDown.accesskey "Н">
 <!ENTITY MoveToBottom "Донизу">

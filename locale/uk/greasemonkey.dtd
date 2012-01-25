@@ -8,8 +8,8 @@
 <!ENTITY menu.new.accesskey "Н">
 <!ENTITY menu.manage "Керування скриптами…">
 <!ENTITY menu.manage.accesskey "е">
-<!ENTITY menu.options "Greasemonkey Options...">
-<!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.options "Налаштування Greasemonkey...">
+<!ENTITY menu.options.accesskey "л">
 <!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">
@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Встановлюйте скрипти тільки з тих джерел, яким довіряєте.">
 <!ENTITY install.showscriptsource "Показати початковий код скрипту">
 <!ENTITY install.installbutton "Встановити">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Завантаження...">
 <!ENTITY newscript.name "Ім’я">
 <!ENTITY newscript.namespace "Простір імен">
 <!ENTITY newscript.description "Опис">
@@ -32,10 +32,10 @@
 <!ENTITY userscripts "Скрипти">
 <!ENTITY Uninstall "Вилучити">
 <!ENTITY AlsoUninstallPrefs "Вилучити також пов'язані налаштування">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Перевірка оновлень">
+<!ENTITY EnableUpdateChecking "Увімкнути автоматичну перевірку оновлень для скриптів">
+<!ENTITY UpdateInterval "Інтервал між перевірками (днів)">
+<!ENTITY RequireSecureUpdates "Вимагати безпечних оновлень">
 <!ENTITY greasemonkey.noscriptshere "Жоден зі встановлених скриптів не працює на цій сторінці.">
 <!ENTITY greasemonkey.youhavenoscripts "Жодних скриптів не встановлено">
 <!ENTITY greasemonkey.getuserscripts "Отримати користувацькі скрипти">

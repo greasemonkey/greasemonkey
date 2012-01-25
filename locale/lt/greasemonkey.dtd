@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Scenarijus turėtumėte diegti tik iš patikimų šaltinių.">
 <!ENTITY install.showscriptsource "Rodyti scenarijaus pradinį kodą">
 <!ENTITY install.installbutton "Įdiegti">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Parsiunčiama...">
 <!ENTITY newscript.name "Pavadinimas">
 <!ENTITY newscript.namespace "Vardų sritis">
 <!ENTITY newscript.description "Aprašymas">

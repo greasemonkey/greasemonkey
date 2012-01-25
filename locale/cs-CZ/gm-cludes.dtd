@@ -1,7 +1,7 @@
-<!ENTITY promptForNewPage.msg "Sem napište novou adresu. Můžete blíže určit několik adres pomocí (*) znaků.">
+<!ENTITY promptForNewPage.msg "Zadejte novou adresu URL. Můžete zadat více stránek pomocí znaku (*).">
 <!ENTITY promptForNewPage.title "Přidat stránku">
 <!ENTITY promptForNewPage.defVal "http://example.com/*">
-<!ENTITY promptForEdit.msg "Zde upravíte stávající adresu. Můžete blíže určit několik adres pomocí (*) znaků.">
+<!ENTITY promptForEdit.msg "Zde upravíte stávající adresu. Můžete určit i několik adres pomocí znaku (*).">
 <!ENTITY promptForEdit.title "Upravit stránku">
 <!ENTITY button.add "Přidat...">
 <!ENTITY button.addUserExclude "Přidat uživatelskou výjimku">

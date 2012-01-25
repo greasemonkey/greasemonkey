@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "يجب عليك تركيب السكربتات من المصدر الذي تثق به فقط.">
 <!ENTITY install.showscriptsource "مصدر السكربت">
 <!ENTITY install.installbutton "تثبيت">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "تحميل...">
 <!ENTITY newscript.name "الاسم">
 <!ENTITY newscript.namespace "المساحة">
 <!ENTITY newscript.description "الوصف">

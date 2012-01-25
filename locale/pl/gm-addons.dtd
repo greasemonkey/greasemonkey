@@ -1,5 +1,5 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY CheckUpdates "Automatycznie sprawdzaj dostępność aktualizacji">
+<!ENTITY CheckUpdates.accesskey "T">
 <!ENTITY Edit "Edytuj">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "Edytuj ten skrypt">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Wykonaj jako ostatni">
 <!ENTITY ExecuteLater "Wykonaj później">
 <!ENTITY ExecuteSooner "Wykonaj wcześniej">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Znajdź aktualizację">
+<!ENTITY InstallUpdate "Zainstaluj aktualizację">
 <!ENTITY MoveDown "Przenieś w dół">
 <!ENTITY MoveDown.accesskey "P">
 <!ENTITY MoveToBottom "Przenieś na dół">

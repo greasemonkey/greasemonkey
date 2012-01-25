@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Mali by ste inštalovať skripty len zo zdrojov ktorým dôverujete.">
 <!ENTITY install.showscriptsource "Zobraziť zdrojový kód skriptu">
 <!ENTITY install.installbutton "Inštalovať">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Sťahujem...">
 <!ENTITY newscript.name "Meno">
 <!ENTITY newscript.namespace "Menný priestor">
 <!ENTITY newscript.description "Popis">

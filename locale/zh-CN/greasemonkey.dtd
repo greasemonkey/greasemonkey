@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "您应该只安装从可信任来源获得的脚本。">
 <!ENTITY install.showscriptsource "显示脚本源代码">
 <!ENTITY install.installbutton "安装">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "下载中...">
 <!ENTITY newscript.name "名称">
 <!ENTITY newscript.namespace "命名空间">
 <!ENTITY newscript.description "描述">

@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Xestionar os scripts...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Opcións do Greasemonkey...">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Activado">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Debería instalar scripts unicamente de fontes nas que confíe.">
 <!ENTITY install.showscriptsource "Mostrar o código fonte">
 <!ENTITY install.installbutton "Instalar">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Descargando...">
 <!ENTITY newscript.name "Nome">
 <!ENTITY newscript.namespace "Espazo do nome">
 <!ENTITY newscript.description "Descrición">
@@ -33,9 +33,9 @@
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AlsoUninstallPrefs "Tamén desinstalar as preferencias asociadas">
 <!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY EnableUpdateChecking "Activar a comprobación automática de actualización de scripts">
+<!ENTITY UpdateInterval "Número mínimo de días entre comprobación de actualizacións">
+<!ENTITY RequireSecureUpdates "Requerir actualizacións de seguranza">
 <!ENTITY greasemonkey.noscriptshere "Ningún script instalado en execución.">
 <!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">
 <!ENTITY greasemonkey.getuserscripts "Obter scripts">
