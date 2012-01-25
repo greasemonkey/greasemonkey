@@ -103,6 +103,15 @@ function Script_getPrefroot() {
   return this._prefroot;
 });
 
+Script.prototype.__defineGetter__('dependencies',
+function Script_getDependencies() {
+  var deps = this.requires.concat(this.resources);
+  if (this.icon.hasDownloadURL()) {
+    deps.push(this.icon);
+  }
+  return deps;
+});
+
 Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
 
@@ -466,6 +475,24 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
+    // Get rid of old dependencies' files.
+    for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
+      try {
+        if (dep.file.equals(this._basedirFile)) {
+          // Bugs like an empty file name can cause "dep.file" to point to
+          // the containing directory.  Don't remove that!
+          // TODO: Localize this string.
+          GM_util.logError('Warning!!! Refusing to delete script directory.');
+        } else {
+          dep.file.remove(true);
+        }
+      } catch (e) {
+        // Probably a locked file.  Ignore, warn.
+        // TODO: Localize this string.
+        GM_util.logError('Warning, could not delete for update:\n' + dep);
+      }
+    }
+
     // Import dependencies from new script.
     this._dependhash = dependhash;
     this._icon = newScript._icon;
@@ -478,14 +505,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
     }
     for (var i = 0, resource = null; resource = this._resources[i]; i++) {
       resource._script = this;
-    }
-
-    // Get rid of old dependencies.
-    var dirFiles = this._basedirFile.directoryEntries;
-    while (dirFiles.hasMoreElements()) {
-      var nextFile = dirFiles.getNext()
-          .QueryInterface(Components.interfaces.nsIFile);
-      if (!nextFile.equals(this.file)) nextFile.remove(true);
     }
 
     // Store window references for late injection.

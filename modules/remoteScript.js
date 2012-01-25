@@ -469,10 +469,7 @@ RemoteScript.prototype._parseScriptFile = function() {
 };
 
 RemoteScript.prototype._postParseScriptFile = function() {
-  this._dependencies = this.script.requires.concat(this.script.resources);
-  if (this.script.icon.hasDownloadURL()) {
-    this._dependencies.push(this.script.icon);
-  }
+  this._dependencies = this.script.dependencies;
   this._progress = [];
   for (var i = 0; i < this._dependencies.length; i++) {
     this._progress[i] = 0;
