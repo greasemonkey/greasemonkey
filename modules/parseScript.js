@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ['parse'];
+var EXPORTED_SYMBOLS = ['extractMeta', 'parse'];
 
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
@@ -11,6 +11,12 @@ var gLineSplitRegexp = /.+/g;
 var gAllMetaRegexp = new RegExp(
     '^// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
 var gMetaLineRegexp = new RegExp('// @(\\S+)(?:\\s+(.*))?');
+
+/** Get just the stuff between ==UserScript== lines. */
+function extractMeta(aSource) {
+  var meta = aSource.match(gAllMetaRegexp);
+  return meta && meta[1].replace(/^\s+/, '') || '';
+}
 
 /** Parse the source of a script; produce Script object. */
 function parse(aSource, aUri) {
@@ -25,9 +31,7 @@ function parse(aSource, aUri) {
   }
   if (aUri) script._namespace = aUri.host;
 
-  var meta = aSource.match(gAllMetaRegexp);
-  meta = meta && meta[1] || '';
-  meta = meta.match(gLineSplitRegexp);
+  meta = extractMeta(aSource).match(gLineSplitRegexp);
 
   var resourceNames = {};
   if (meta) for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {

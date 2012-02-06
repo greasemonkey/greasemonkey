@@ -434,6 +434,37 @@ Script.prototype.isModified = function() {
   return false;
 };
 
+Script.prototype.isRemoteUpdateAllowed = function() {
+  if (!this.checkRemoteUpdates && !aForced) return false;
+  if (!this._updateURL) return false;
+
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var scheme = ioService.extractScheme(this._updateURL);
+  switch (scheme) {
+  case 'about':
+  case 'chrome':
+  case 'file':
+    // These schemes are explicitly never OK!
+    return false;
+  case 'ftp':
+  case 'http':
+    // These schemes are OK only if the user opts in.
+    if (GM_prefRoot.getValue('requireSecureUpdates')) {
+      return false;
+    }
+    break;
+  case 'https':
+    // HTTPs is always OK.
+    break;
+  default:
+    // Anything not listed: default to not allow.
+    return false;
+  }
+
+  return true;
+};
+
 Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   // If the @name and/or @namespace have changed, make sure they don't
   // conflict with another installed script.
@@ -560,34 +591,9 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
 Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
-
-  if (!this.checkRemoteUpdates && !aForced) return callback(false);
   if (this.updateAvailable) return callback(true);
-  if (!this._updateURL) return callback(false);
 
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(this._updateURL);
-  switch (scheme) {
-  case 'about':
-  case 'chrome':
-  case 'file':
-    // These schemes are explicitly never OK!
-    return callback(false);
-  case 'ftp':
-  case 'http':
-    // These schemes are OK only if the user opts in.
-    if (GM_prefRoot.getValue('requireSecureUpdates')) {
-      return callback(false);
-    }
-    break;
-  case 'https':
-    // HTTPs is always OK.
-    break;
-  default:
-    // Anything not listed: default to not allow.
-    return callback(false);
-  }
+  if (!this.isRemoteUpdateAllowed()) return callback(false);
 
   var currentTime = new Date().getTime();
 

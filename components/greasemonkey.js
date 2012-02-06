@@ -3,6 +3,7 @@
 var DESCRIPTION = "GM_GreasemonkeyService";
 var CONTRACTID = "@greasemonkey.mozdev.org/greasemonkey-service;1";
 var CLASSID = Components.ID("{77bf3650-1cd6-11da-8cd6-0800200c9a66}");
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -27,6 +28,7 @@ var gExtensionPath = (function() {
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "1.8";
+var gGreasemonkeyVersion = 'unknown';
 
 var gMenuCommands = [];
 var gStartupHasRun = false;
@@ -119,6 +121,9 @@ function createSandbox(
       new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
       'contentStartRequest');
 
+  Components.utils.evalInSandbox(
+      'const GM_info = ' + uneval(info(aScript)), sandbox);
+
   return sandbox;
 }
 
@@ -154,10 +159,51 @@ function getFirebugConsole(wrappedContentWin, chromeWin) {
   }
 }
 
+function info(aScript) {
+  return {
+    'version': gGreasemonkeyVersion,
+    'scriptWillUpdate': aScript.isRemoteUpdateAllowed(),
+    'script': {
+      'description': aScript.description,
+      'excludes': aScript.excludes,
+      // 'icon': ???,
+      'includes': aScript.includes,
+      'matches': aScript.matches,
+      'name': aScript.name,
+      'namespace': aScript.namespace,
+      // 'requires': ???,
+      // 'resources': ???,
+      'run-at': aScript.runAt,
+      'unwrap': aScript.unwrap,
+      'version': aScript.version,
+    },
+    'scriptMetaStr': extractMeta(aScript.textContent),
+  }
+}
+
 function isTempScript(uri) {
   if (uri.scheme != "file") return false;
   var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
   return gTmpDir.contains(file, true);
+}
+
+function loadGreasemonkeyVersion() {
+  // Find the new version, and call the continuation when ready. (Firefox 4+
+  // gives us only an async API, requiring this cumbersome setup.)
+  if (GM_util.compareFirefoxVersion("4.0") < 0) {
+    // This is too early for Firefox 3.  Sloppy timeout workaround.
+    GM_util.timeout(0, function() {
+      var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
+          .getService(Components.interfaces.nsIExtensionManager);
+      var item = extMan.getItemForID(GM_GUID);
+      gGreasemonkeyVersion = new String(item.version);
+    });
+  } else {
+    Components.utils.import("resource://gre/modules/AddonManager.jsm");
+    AddonManager.getAddonByID(GM_GUID, function(addon) {
+      gGreasemonkeyVersion = new String(addon.version);
+    });
+  }
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
@@ -259,6 +305,7 @@ function startup() {
   gStartupHasRun = true;
 
   Cu.import(gmRunScriptFilename);
+  Cu.import("resource://greasemonkey/parseScript.js");
   Cu.import("resource://greasemonkey/prefmanager.js");
   Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
@@ -279,6 +326,8 @@ function startup() {
     // Pull the name out of the variable the module exports.
     gmRunScriptFilename = GM_runScript_filename;
   }
+
+  loadGreasemonkeyVersion();
 }
 
 /////////////////////////////////// Service ////////////////////////////////////
