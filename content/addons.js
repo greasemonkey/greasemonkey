@@ -535,10 +535,9 @@ var greasemonkeyDragObserver = {
     } else if ('application/x-moz-file' == dropData.flavour.contentType) {
       url = GM_util.getUriFromFile(dropData.data).spec;
     }
-    dump('Dropped url: ['+url+']\n');
     if (url && url.match(/\.user\.js$/)) {
-      // TODO: Make this UI appear in the add-ons win, rather than the browser?
-      GM_util.installUri(GM_util.uriFromUrl(url));
+      GM_util.showInstallDialog(
+          url, GM_util.getBrowserWindow().gBrowser, GM_util.getService());
     }
   },
   getSupportedFlavours: function() {

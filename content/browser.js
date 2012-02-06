@@ -205,6 +205,11 @@ GM_BrowserUI.refreshStatus = function() {
   }
 };
 
+// Not used directly, kept for GreaseFire.  See #1507.
+GM_BrowserUI.startInstallScript = function(aUri) {
+  GM_util.showInstallDialog(aUri.spec, gBrowser, GM_util.getService());
+};
+
 GM_BrowserUI.viewContextItemClicked = function() {
   var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
   if (!uri) return;
