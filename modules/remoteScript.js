@@ -369,14 +369,17 @@ RemoteScript.prototype._downloadFile = function(
   assertIsFunction(aCompletionCallback,
       '_downloadFile() completion callback is not a function.');
 
-  if (aUri == this._uri) {
-    // No-op, always download the script itself.
-  } else if (aUri.scheme == this._uri.scheme) {
-    // No-op, always allow files from the same scheme as the script.
-  } else if (!GM_util.isGreasemonkeyable(aUri.spec)) {
-    // Otherwise, these are unsafe.  Do not download them.
-    this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
-    return;
+  // If we have a URI (locally installed scripts, when updating, won't!) ...
+  if (this._uri) {
+    if (aUri == this._uri) {
+      // No-op, always download the script itself.
+    } else if (aUri.scheme == this._uri.scheme) {
+      // No-op, always allow files from the same scheme as the script.
+    } else if (!GM_util.isGreasemonkeyable(aUri.spec)) {
+      // Otherwise, these are unsafe.  Do not download them.
+      this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
+      return;
+    }
   }
 
   // Dangerous semi-global state:  The web browser persist object is stored

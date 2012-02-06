@@ -231,7 +231,6 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
 
   for (var i = 0, script; script = scripts[i]; i++) {
     if (0 == script.pendingExec.length) {
-      var oldScriptId = new String(script.id);
       var scope = {};
       Components.utils.import('resource://greasemonkey/parseScript.js', scope);
       var parsedScript = scope.parse(
