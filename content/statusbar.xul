@@ -17,6 +17,7 @@
     <menupopup id="gm-status-popup"
       onpopupshowing="GM_showPopup(event);"
       onclick="GM_popupClicked(event);"
+      oncommand="GM_popupClicked(event);"
       oncontextmenu="event.preventDefault();"
     >
       <menuseparator class="scripts-framed-point" collapsed="true" />

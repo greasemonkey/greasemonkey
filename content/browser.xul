@@ -54,8 +54,8 @@
     <menupopup
       onpopupshowing="GM_showPopup(event);"
       onclick="GM_popupClicked(event);event.stopPropagation();"
-      oncontextmenu="event.preventDefault();"
       oncommand="GM_popupClicked(event);event.stopPropagation();"
+      oncontextmenu="event.preventDefault();"
     >
       <menuitem class='gm-enabled-item'
         accesskey="&statusbar.enabled.accesskey;"
