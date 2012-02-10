@@ -141,8 +141,9 @@ Config.prototype.install = function(script, oldScript) {
     this.uninstall(oldScript, true);
   }
 
-  script._modified = script.file.lastModifiedTime;
   script._dependhash = GM_util.sha1(script._rawMeta);
+  script._installTime = new Date().getTime()
+  script._modified = script.file.lastModifiedTime;
 
   this._scripts.push(script);
 

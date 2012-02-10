@@ -28,6 +28,7 @@ function Script(configNode) {
   this._filename = null;
   this._icon = new ScriptIcon(this);
   this._id = null;
+  this._installTime = null;
   this._includes = [];
   this._lastUpdateCheck = null;
   this._matches = [];
@@ -88,8 +89,11 @@ Script.prototype._changed = function(event, data) {
   GM_util.getService().config._changed(this, event, data);
 };
 
+Script.prototype.__defineGetter__('installDate',
+function Script_getInstallDate() { return new Date(this._installTime); });
+
 Script.prototype.__defineGetter__('modifiedDate',
-function Script_getModifiedDate() { return new Date(parseInt(this._modified)); });
+function Script_getModifiedDate() { return new Date(this._modified); });
 
 Script.prototype.__defineGetter__('name',
 function Script_getName() { return this._name; });
@@ -254,7 +258,7 @@ Script.prototype._loadFromConfigNode = function(node) {
 
     GM_util.getService().config._changed(this, "modified", null);
   } else {
-    this._modified = node.getAttribute("modified");
+    this._modified = parseInt(node.getAttribute("modified"), 10);
     this._dependhash = node.getAttribute("dependhash");
     this._version = node.getAttribute("version");
   }
@@ -269,11 +273,18 @@ Script.prototype._loadFromConfigNode = function(node) {
   } else {
     this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
     this._updateVersion = node.getAttribute("updateVersion") || null;
-    this._lastUpdateCheck = node.getAttribute("lastUpdateCheck");
+    this._lastUpdateCheck = parseInt(node.getAttribute("lastUpdateCheck"), 10);
   }
 
   this.checkRemoteUpdates = node.hasAttribute('checkRemoteUpdates')
       ? node.getAttribute('checkRemoteUpdates') == 'true' : true;
+
+  if (!node.hasAttribute("installTime")) {
+    this._installTime = new Date().getTime();
+    this._changed('modified', 'installTime');
+  } else {
+    this._installTime = parseInt(node.getAttribute("installTime"), 10);
+  }
 
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
     switch (childNode.nodeName) {
@@ -376,32 +387,30 @@ Script.prototype.toConfigNode = function(doc) {
 
   scriptNode.appendChild(doc.createTextNode("\n\t"));
 
+  scriptNode.setAttribute("basedir", this._basedir);
+  scriptNode.setAttribute("checkRemoteUpdates", this.checkRemoteUpdates);
+  scriptNode.setAttribute("dependhash", this._dependhash);
+  scriptNode.setAttribute("description", this._description);
+  scriptNode.setAttribute("enabled", this._enabled);
   scriptNode.setAttribute("filename", this._filename);
+  scriptNode.setAttribute("installTime", this._installTime);
+  scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
+  scriptNode.setAttribute("modified", this._modified);
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
-  scriptNode.setAttribute("description", this._description);
-  scriptNode.setAttribute("version", this._version);
-  scriptNode.setAttribute("enabled", this._enabled);
   scriptNode.setAttribute("runAt", this._runAt);
-  scriptNode.setAttribute("basedir", this._basedir);
-  scriptNode.setAttribute("modified", this._modified);
-  scriptNode.setAttribute("dependhash", this._dependhash);
-  scriptNode.setAttribute("checkRemoteUpdates", this.checkRemoteUpdates);
   scriptNode.setAttribute("updateAvailable", this.updateAvailable);
-  scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
+  scriptNode.setAttribute("version", this._version);
 
   if (this._downloadURL) {
     scriptNode.setAttribute("installurl", this._downloadURL);
   }
-
   if (this._updateURL) {
     scriptNode.setAttribute("updateurl", this._updateURL);
   }
-
   if (this._updateVersion) {
     scriptNode.setAttribute("updateVersion", this._updateVersion);
   }
-
   if (this.icon.filename) {
     scriptNode.setAttribute("icon", this.icon.filename);
   }
@@ -603,7 +612,7 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
     var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
     if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
     var minIntervalMs = 86400000 * minIntervalDays;
-    var nextUpdateTime = parseInt(this._lastUpdateCheck, 10) + minIntervalMs;
+    var nextUpdateTime = this._lastUpdateCheck + minIntervalMs;
     if (currentTime <= nextUpdateTime) return callback(false);
   }
 
