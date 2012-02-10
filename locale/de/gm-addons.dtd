@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "Automatisch auf Updates prüfen">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Bearbeiten">
 <!ENTITY Edit.accesskey "B">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Zuletzt ausführen">
 <!ENTITY ExecuteLater "Später ausführen">
 <!ENTITY ExecuteSooner "Früher ausführen">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Nach Aktualisierungen suchen">
+<!ENTITY InstallUpdate "Aktualisierungen installieren">
 <!ENTITY MoveDown "Nach unten verschieben">
 <!ENTITY MoveDown.accesskey "u">
 <!ENTITY MoveToBottom "Ans Ende verschieben">

@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "Güncelleştirmeleri otomatik kontrol et">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Düzenle">
 <!ENTITY Edit.accesskey "E">
@@ -8,7 +8,7 @@
 <!ENTITY ExecuteLater "Sonra yürüt">
 <!ENTITY ExecuteSooner "Er geç yürüt">
 <!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY InstallUpdate "Güncelleştirme Yükle">
 <!ENTITY MoveDown "Aşağı Taşı">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "En alta Taşı">

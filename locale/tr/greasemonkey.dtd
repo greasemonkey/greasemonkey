@@ -1,14 +1,14 @@
-<!ENTITY menu.install "Kullacı Betiği yükle...">
+<!ENTITY menu.install "Kullacı Betiği yükle">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Kullanıcı betik kaynağını gör">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Kullanıcı Betik Komutları...">
+<!ENTITY menu.commands "Kullanıcı Betik Komutları">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "Yeni Kullanıcı Betiği...">
+<!ENTITY menu.new "Yeni Kullanıcı Betiği">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Kullanıcı Betiklerini Yönet...">
+<!ENTITY menu.manage "Kullanıcı Betiklerini Yönet">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey Seçenekleri">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Etkin">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Yalnızca güvendiğiniz kaynaklardan gelen betikleri yükleyin.">
 <!ENTITY install.showscriptsource "Betik Kaynağını Göster">
 <!ENTITY install.installbutton "Kur">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "İndirliyor">
 <!ENTITY newscript.name "İsim">
 <!ENTITY newscript.namespace "İsim alanı">
 <!ENTITY newscript.description "Tanım">
@@ -32,10 +32,10 @@
 <!ENTITY userscripts "Kullanıcı Betikleri">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AlsoUninstallPrefs "Ayrıca ilişkili tercihleri kaldır">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">
+<!ENTITY EnableUpdateChecking "Betiklerin otomatik güncelleme denetimini etkinleştirin">
+<!ENTITY UpdateInterval "Güncelleme kontrolleri arasındaki asgari gün sayısı">
+<!ENTITY RequireSecureUpdates "Gerekli güvenlik güncellemeleri">
 <!ENTITY greasemonkey.noscriptshere "Bu sayfada çalışan yüklenmiş betikler yok.">
 <!ENTITY greasemonkey.youhavenoscripts "Yüklü bir kullanıcı betiğiniz yok">
 <!ENTITY greasemonkey.getuserscripts "Kullanıcı betikleri al">

@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Sie sollten nur Skripte von Quellen installieren, denen Sie vertrauen.">
 <!ENTITY install.showscriptsource "Skript-Quelltext anzeigen">
 <!ENTITY install.installbutton "Installieren">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Wird heruntergeladen…">
 <!ENTITY newscript.name "Name:">
 <!ENTITY newscript.namespace "Namensraum:">
 <!ENTITY newscript.description "Beschreibung:">
@@ -28,17 +28,17 @@
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Editor ändern">
-<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY options.globalExcludes "Globale Ausschlüsse">
 <!ENTITY userscripts "Benutzerskripte">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
+<!ENTITY EnableUpdateChecking "Automatische Überprüfung der Skripte auf Aktualisierung">
+<!ENTITY UpdateInterval "Minimale Anzahl von Tagen zwischen Aktualisierungsprüfungen">
+<!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">
 <!ENTITY greasemonkey.getuserscripts "Benutzerskripte hinzufügen…">
-<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.title "Greasemonkey - Benutzerskript-Einstellungen">
+<!ENTITY scriptprefs.usersettings "Benutzereinstellungen">
+<!ENTITY scriptprefs.scriptsettings "Skript-Einstellungen">
