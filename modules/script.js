@@ -443,7 +443,7 @@ Script.prototype.isModified = function() {
   return false;
 };
 
-Script.prototype.isRemoteUpdateAllowed = function() {
+Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this.checkRemoteUpdates && !aForced) return false;
   if (!this._updateURL) return false;
 
@@ -602,7 +602,7 @@ Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
   var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
   if (this.updateAvailable) return callback(true);
 
-  if (!this.isRemoteUpdateAllowed()) return callback(false);
+  if (!this.isRemoteUpdateAllowed(aForced)) return callback(false);
 
   var currentTime = new Date().getTime();
 
