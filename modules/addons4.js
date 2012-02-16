@@ -95,8 +95,7 @@ function ScriptAddon(aScript) {
   this.description = this._script.description;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.updateDate = this._script.modifiedDate;
-  this.providesUpdatesSecurely = !!aScript.updateURL
-      && (0 === aScript.updateURL.indexOf('https:'));
+  this.providesUpdatesSecurely = aScript.updateIsSecure;
 }
 
 // Required attributes.
