@@ -5,7 +5,7 @@ pref("greasemonkey.installDelay", 5);
 pref("greasemonkey.unmhtIsGreaseable", false);
 pref("greasemonkey.enableScriptRefreshing", true);
 pref("greasemonkey.uninstallPreferences", true);
-pref("greasemonkey.enableUpdateChecking", false);
+pref("greasemonkey.enableUpdateChecking", true);
 pref("greasemonkey.minDaysBetweenUpdateChecks", 7);
 pref("greasemonkey.autoInstallUpdates", true);
 pref("greasemonkey.requireSecureUpdates", true);
