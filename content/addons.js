@@ -245,6 +245,13 @@ var greasemonkeyAddons = {
     var scripts = GM_config.getMatchingScripts(
         function (script) { return script.updateAvailable; });
 
+    // Remove any old script update items.
+    var children = gExtensionsView.children;
+    for (var i = children.length - 1, el = null; el = children[i]; i--) {
+      if (el.getAttribute('id').match(/^urn:greasemonkey:update:/)) {
+        el.parentNode.removeChild(el);
+      }
+    }
     // Add a list item for each script.
     for (var i = 0, script = null; script = scripts[i]; i++) {
       var item = greasemonkeyAddons.listitemForScript(script, true);
