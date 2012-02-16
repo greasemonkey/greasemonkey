@@ -32,7 +32,7 @@ function Script(configNode) {
   this._includes = [];
   this._lastUpdateCheck = null;
   this._matches = [];
-  this._modified = null;
+  this._modifiedTime = null;
   this._name = 'user-script';
   this._namespace = '';
   this._prefroot = null;
@@ -93,7 +93,7 @@ Script.prototype.__defineGetter__('installDate',
 function Script_getInstallDate() { return new Date(this._installTime); });
 
 Script.prototype.__defineGetter__('modifiedDate',
-function Script_getModifiedDate() { return new Date(this._modified); });
+function Script_getModifiedDate() { return new Date(this._modifiedTime); });
 
 Script.prototype.__defineGetter__('name',
 function Script_getName() { return this._name; });
@@ -252,13 +252,13 @@ Script.prototype._loadFromConfigNode = function(node) {
     var parsedScript = scope.parse(
         this.textContent, GM_util.uriFromUrl(this._downloadURL));
 
-    this._modified = this.file.lastModifiedTime;
+    this._modifiedTime = this.file.lastModifiedTime;
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);
     this._version = parsedScript._version;
 
     GM_util.getService().config._changed(this, "modified", null);
   } else {
-    this._modified = parseInt(node.getAttribute("modified"), 10);
+    this._modifiedTime = parseInt(node.getAttribute("modified"), 10);
     this._dependhash = node.getAttribute("dependhash");
     this._version = node.getAttribute("version");
   }
@@ -267,7 +267,7 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.getAttribute("lastUpdateCheck")
   ) {
     this.updateAvailable = false;
-    this._lastUpdateCheck = this._modified;
+    this._lastUpdateCheck = this._modifiedTime;
 
     GM_util.getService().config._changed(this, "modified", null);
   } else {
@@ -395,7 +395,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("filename", this._filename);
   scriptNode.setAttribute("installTime", this._installTime);
   scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
-  scriptNode.setAttribute("modified", this._modified);
+  scriptNode.setAttribute("modified", this._modifiedTime);
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
@@ -436,8 +436,8 @@ function Script_getPreviewURL() {
 
 Script.prototype.isModified = function() {
   if (!this.fileExists(this.file)) return false;
-  if (this._modified != this.file.lastModifiedTime) {
-    this._modified = this.file.lastModifiedTime;
+  if (this._modifiedTime != this.file.lastModifiedTime) {
+    this._modifiedTime = this.file.lastModifiedTime;
     return true;
   }
   return false;
