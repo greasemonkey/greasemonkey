@@ -151,7 +151,16 @@ Config.prototype.install = function(script, oldScript) {
     this.move(script, existingIndex - this._scripts.length + 1);
   }
 
-  this._changed(script, "install", existingIndex);
+  if (oldScript) {
+    if (GM_util.compareFirefoxVersion('4.0') >= 0) {
+      var scope = {};
+      Components.utils.import('resource://greasemonkey/addons4.js', scope);
+      scope.ScriptAddonReplaceScript(script);
+    }
+    this._changed(script, 'modified', oldScript.id);
+  } else {
+    this._changed(script, 'install', existingIndex);
+  }
 };
 
 Config.prototype.uninstall = function(script, forUpdate) {

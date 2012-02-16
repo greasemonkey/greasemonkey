@@ -761,5 +761,5 @@ Script.prototype.uninstall = function(forUpdate) {
     GM_prefRoot.remove(this.prefroot);
   }
 
-  GM_util.getService().config._changed(this, "uninstall", null);
+  GM_util.getService().config._changed(this, "uninstall", forUpdate);
 };

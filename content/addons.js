@@ -133,7 +133,10 @@ var observer = {
         showView('updates');
         break;
       case 'uninstall':
-        currentViewNode.removeChild(node);
+        if (!data) {
+          // data == forUpdate.  Remove only when uninstall was not for update.
+          currentViewNode.removeChild(node);
+        }
         break;
       case 'move':
         gUserscriptsView.removeChild(node);
