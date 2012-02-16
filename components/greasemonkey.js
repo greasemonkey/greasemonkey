@@ -160,6 +160,10 @@ function getFirebugConsole(wrappedContentWin, chromeWin) {
 }
 
 function info(aScript) {
+  var matches = [];
+  for (var i = 0, m = null; m = aScript.matches[i]; i++) {
+    matches[matches.length] = m.pattern;
+  }
   return {
     'version': gGreasemonkeyVersion,
     'scriptWillUpdate': aScript.isRemoteUpdateAllowed(),
@@ -168,7 +172,7 @@ function info(aScript) {
       'excludes': aScript.excludes,
       // 'icon': ???,
       'includes': aScript.includes,
-      'matches': aScript.matches,
+      'matches': matches,
       'name': aScript.name,
       'namespace': aScript.namespace,
       // 'requires': ???,
