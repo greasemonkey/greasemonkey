@@ -40,7 +40,6 @@ GM_overrideShowView();
 
 var _origInstallUpdates = installUpdatesAll;
 installUpdatesAll = function() {
-  var chromeWin = GM_util.getBrowserWindow();
   var children = gExtensionsView.children;
   for (var i = 0, child = null; child = children[i]; i++) {
     if (!/^urn:greasemonkey:update:item:/.test(child.id)) continue;
@@ -52,7 +51,7 @@ installUpdatesAll = function() {
     checkbox.setAttribute('anonid', 'includeScriptUpdate');
     if (checkbox.checked) {
       var script = GM_config.getScriptById(child.getAttribute('addonId'));
-      script.installUpdate(chromeWin);
+      script.installUpdate();
     }
   }
 
@@ -413,7 +412,7 @@ var greasemonkeyAddons = {
       script.checkForRemoteUpdate(true);
       break;
     case 'cmd_userscript_installUpdate':
-      script.installUpdate(GM_util.getBrowserWindow());
+      script.installUpdate();
       break;
     case 'cmd_userscript_toggleCheckUpdates':
       script.checkRemoteUpdates = !script.checkRemoteUpdates;

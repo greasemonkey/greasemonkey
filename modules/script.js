@@ -668,9 +668,7 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
 
 Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
   if (GM_util.compareFirefoxVersion("4.0") < 0) {
-    if (aAvailable) {
-      this.installUpdate(GM_util.getBrowserWindow());
-    }
+    if (aAvailable) this.installUpdate();
   } else {
     var addons4 = {};
     Components.utils.import('resource://greasemonkey/addons4.js', addons4);
@@ -693,11 +691,12 @@ Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
 }
 
 Script.prototype.installUpdate = function(aProgressCallback) {
+  aProgressCallback = aProgressCallback || function() {};
   var oldScriptId = new String(this.id);
   var scope = {};
   Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
   var rs = new scope.RemoteScript(this._downloadURL);
-  if (aProgressCallback) rs.onProgress(aProgressCallback);
+  rs.onProgress(aProgressCallback);
   rs.download(GM_util.hitch(this, function(aSuccess, aType) {
     if (aSuccess && 'dependencies' == aType) {
       rs.install(this);
