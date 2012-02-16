@@ -1,3 +1,4 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 // Globals.
@@ -139,6 +140,7 @@ var observer = {
         }
         break;
       case 'move':
+        if ('updates' == aView) break;
         gUserscriptsView.removeChild(node);
         gUserscriptsView.insertBefore(node, gUserscriptsView.childNodes[data]);
         greasemonkeyAddons.reselectLastSelected();
@@ -419,7 +421,8 @@ var greasemonkeyAddons = {
       GM_config.uninstall(script);
       break;
     case 'cmd_userscript_checkUpdate':
-      script.checkForRemoteUpdate(true);
+      script.checkForRemoteUpdate(true,
+          GM_util.hitch(this, this.conditionalInstallUpdate, script));
       break;
     case 'cmd_userscript_installUpdate':
       script.installUpdate();
@@ -428,6 +431,12 @@ var greasemonkeyAddons = {
       script.checkRemoteUpdates = !script.checkRemoteUpdates;
       GM_util.getService().config._changed(script, "modified", null);
       break;
+    }
+  },
+
+  conditionalInstallUpdate: function(aScript, aAvailable, aListener) {
+    if (GM_prefRoot.getValue('autoInstallUpdates')) {
+      aScript.handleRemoteUpdate(aAvailable, aListener);
     }
   },
 

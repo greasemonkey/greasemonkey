@@ -19,6 +19,7 @@ var EXPORTED_SYMBOLS = [
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var Cc = Components.classes;
@@ -109,7 +110,6 @@ ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
 ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.creator = null;
 ScriptAddon.prototype.pendingOperations = 0;
-ScriptAddon.prototype.applyBackgroundUpdates = AddonManager.AUTOUPDATE_DEFAULT;
 ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART_NONE;
 
 // Optional attributes
@@ -117,6 +117,12 @@ ScriptAddon.prototype.description = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
+
+ScriptAddon.prototype.__defineGetter__('applyBackgroundUpdates',
+function ScriptAddon_getApplyBackgroundUpdates() {
+  return GM_prefRoot.getValue('autoInstallUpdates')
+      ? AddonManager.AUTOUPDATE_ENABLE : AddonManager.AUTOUPDATE_DISABLE;
+});
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
 function ScriptAddon_getExecutionIndex() {

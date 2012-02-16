@@ -10,6 +10,8 @@ function GM_loadOptions() {
 
   document.getElementById('check-update')
       .checked = GM_prefRoot.getValue('enableUpdateChecking');
+  document.getElementById('auto-install-updates')
+      .checked = GM_prefRoot.getValue('autoInstallUpdates');
   document.getElementById('secure-update')
       .checked = GM_prefRoot.getValue('requireSecureUpdates');
 
@@ -27,6 +29,8 @@ function GM_saveOptions(checkbox) {
       document.getElementById('globalExcludes').pages;
   GM_prefRoot.setValue('enableUpdateChecking',
       !!document.getElementById('check-update').checked);
+  GM_prefRoot.setValue('autoInstallUpdates',
+      !!document.getElementById('auto-install-updates').checked);
   GM_prefRoot.setValue('requireSecureUpdates',
       !!document.getElementById('secure-update').checked);
   GM_prefRoot.setValue("minDaysBetweenUpdateChecks", GM_getMinUpdateDays());
@@ -38,6 +42,7 @@ function GM_getMinUpdateDays() {
 
 function GM_onChangeUpdateChecking() {
   var enabled = document.getElementById('check-update').checked;
+  document.getElementById('auto-install-updates').disabled = !enabled;
   document.getElementById('secure-update').disabled = !enabled;
   document.getElementById('slide-updateInterval').disabled = !enabled;
   document.getElementById('label-slide-updateInterval').disabled = !enabled;

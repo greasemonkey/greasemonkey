@@ -45,10 +45,8 @@
     <caption label="&UpdateChecking;" />
     <checkbox id="check-update" label="&EnableUpdateChecking;"
         oncommand="GM_onChangeUpdateChecking()" />
-    <hbox>
-      <separator orient="vertical" />
-      <checkbox id="secure-update" label="&RequireSecureUpdates;" />
-    </hbox>
+    <checkbox id="auto-install-updates" label="&AutoInstallUpdates;" />
+    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
     <label value="&UpdateInterval;" control="slide-updateInterval"
         id="label-slide-updateInterval" />
     <hbox>
