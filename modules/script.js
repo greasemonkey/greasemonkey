@@ -446,6 +446,7 @@ Script.prototype.isModified = function() {
 Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this.checkRemoteUpdates && !aForced) return false;
   if (!this._updateURL) return false;
+  if (this._modifiedTime > this._installTime) return false;
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
