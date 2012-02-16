@@ -149,6 +149,7 @@ function init() {
 
 function onContextShowing(aEvent) {
   var addon = gViewController.currentViewObj.getSelectedAddon();
+  if ('user-script' != addon.type) return;
   var menuitem = document.getElementById(
       'menuitem_userscript_toggleCheckUpdates');
   if (addon._script.checkRemoteUpdates) {
