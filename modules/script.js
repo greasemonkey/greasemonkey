@@ -186,7 +186,7 @@ function Script_getFile() {
 });
 
 Script.prototype.__defineGetter__('updateURL',
-function Script_getUpdateURL() { return new String(this._updateURL); });
+function Script_getUpdateURL() { return this._updateURL; });
 Script.prototype.__defineSetter__('updateURL',
 function Script_setUpdateURL(url) {
   if (!url && !this._downloadURL) return null;
@@ -448,34 +448,31 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this._updateURL) return false;
   if (this._modifiedTime > this._installTime) return false;
 
-  function schemeIsAllowed(aUrl) {
-    if (!aUrl) return true;
-    var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-        .getService(Components.interfaces.nsIIOService);
-    var scheme = ioService.extractScheme(aUrl);
-    switch (scheme) {
-    case 'about':
-    case 'chrome':
-    case 'file':
-      // These schemes are explicitly never OK!
-      return false;
-    case 'ftp':
-    case 'http':
-      // These schemes are OK only if the user opts in.
-      if (GM_prefRoot.getValue('requireSecureUpdates')) {
-        return false;
-      }
-      return true;
-    case 'https':
-      // HTTPs is always OK.
-      return true;
-    default:
-      // Anything not listed: default to not allow.
+  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var scheme = ioService.extractScheme(this._updateURL);
+  switch (scheme) {
+  case 'about':
+  case 'chrome':
+  case 'file':
+    // These schemes are explicitly never OK!
+    return false;
+  case 'ftp':
+  case 'http':
+    // These schemes are OK only if the user opts in.
+    if (GM_prefRoot.getValue('requireSecureUpdates')) {
       return false;
     }
+    break;
+  case 'https':
+    // HTTPs is always OK.
+    break;
+  default:
+    // Anything not listed: default to not allow.
+    return false;
   }
 
-  return schemeIsAllowed(this._updateURL) && schemeIsAllowed(this._downloadURL);
+  return true;
 };
 
 Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
