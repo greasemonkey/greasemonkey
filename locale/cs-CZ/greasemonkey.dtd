@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "Zkontrolovat aktualizace">
 <!ENTITY EnableUpdateChecking "Povolit automatickou kontrolu aktualizací skriptu">
 <!ENTITY UpdateInterval "Minimální počet dní ke kontrole aktualizací">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Použít zabezpečené aktualizace">
 <!ENTITY greasemonkey.noscriptshere "Žádné nainstalované skripty neběží na této stránce.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">

@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Benutzerskripte verwalten…">
 <!ENTITY menu.manage.accesskey "v">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey - Einstellungen…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Greasemonkey aktivieren">
 <!ENTITY statusbar.enabled.accesskey "A">
@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
 <!ENTITY EnableUpdateChecking "Automatische Überprüfung der Skripte auf Aktualisierung">
 <!ENTITY UpdateInterval "Minimale Anzahl von Tagen zwischen Aktualisierungsprüfungen">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">

@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "Перевірка оновлень">
 <!ENTITY EnableUpdateChecking "Увімкнути автоматичну перевірку оновлень для скриптів">
 <!ENTITY UpdateInterval "Інтервал між перевірками (днів)">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Вимагати безпечних оновлень">
 <!ENTITY greasemonkey.noscriptshere "Жоден зі встановлених скриптів не працює на цій сторінці.">
 <!ENTITY greasemonkey.youhavenoscripts "Жодних скриптів не встановлено">

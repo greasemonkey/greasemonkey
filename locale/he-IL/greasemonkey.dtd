@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "לא קיימים סקריפטים מותקנים פעילים בדף זה.">
 <!ENTITY greasemonkey.youhavenoscripts "לא מותקנים אצלך סקריפטים של משתמש">

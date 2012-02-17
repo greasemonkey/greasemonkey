@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Activar a comprobación automática de actualización de scripts">
 <!ENTITY UpdateInterval "Número mínimo de días entre comprobación de actualizacións">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Requerir actualizacións de seguranza">
 <!ENTITY greasemonkey.noscriptshere "Ningún script instalado en execución.">
 <!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">

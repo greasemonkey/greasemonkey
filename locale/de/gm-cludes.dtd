@@ -6,7 +6,7 @@
 <!ENTITY button.add "Hinzufügen...">
 <!ENTITY button.addUserExclude "Add as user exclude">
 <!ENTITY button.addUserInclude "Add as user include">
-<!ENTITY button.edit "Bearbeiten...">
+<!ENTITY button.edit "Bearbeiten…">
 <!ENTITY button.remove "Entfernen">
 <!ENTITY label.grpIncluded "Auf diese Seiten anwenden:">
 <!ENTITY label.grpExcluded "Nicht auf diese Seiten anwenden:">

@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理用户脚本...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey 选项...">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "启用">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -35,6 +35,7 @@
 <!ENTITY UpdateChecking "检查更新">
 <!ENTITY EnableUpdateChecking "启用脚本的自动检查更新">
 <!ENTITY UpdateInterval "两次更新检查间的最小间隔（天）">
+<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "需要安全地更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您没有安装任何用户脚本">

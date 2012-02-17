@@ -32,6 +32,6 @@
 <!ENTITY UninstallCancel "Deinstallation abbrechen">
 <!ENTITY UninstallCancel.accesskey "a">
 <!ENTITY UninstallCancel.tooltip "Deinstallation dieses Benutzerskripts abbrechen">
-<!ENTITY UninstallCancelDescription "Dieses Benutzerskript wird deinstalliert, wenn der Dialog geschlossen wird. (Oder Rechtsklick für &quot;Jetzt Deinstallieren&quot;.)">
-<!ENTITY UninstallNow "Jetzt Deinstallieren">
+<!ENTITY UninstallCancelDescription "Dieses Benutzerskript wird deinstalliert, wenn der Dialog geschlossen wird. (Oder Rechtsklick für &quot;Jetzt deinstallieren&quot;.)">
+<!ENTITY UninstallNow "Jetzt deinstallieren">
 <!ENTITY UninstallNow.accesskey "J">
