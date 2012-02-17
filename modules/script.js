@@ -449,6 +449,7 @@ Script.prototype.isModified = function() {
 
 Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this.checkRemoteUpdates && !aForced) return false;
+  if (!this.enabled && !aForced) return false;
   if (!this.updateURL) return false;
   if (this._modifiedTime > this._installTime) return false;
 
