@@ -186,21 +186,25 @@ function Script_getFile() {
 });
 
 Script.prototype.__defineGetter__('updateURL',
-function Script_getUpdateURL() { return this._updateURL; });
-Script.prototype.__defineSetter__('updateURL',
-function Script_setUpdateURL(url) {
-  if (!url && !this._downloadURL) return null;
-
+function Script_getUpdateURL() {
+  var url = this._updateURL;
   if (!url) url = this._downloadURL;
 
-  this._updateURL = url;
-  // US.o gets special treatment for being so large
-  var usoMatch = url.match(
+  // US.o gets special treatment for being so large.  For *update*, plain http
+  // to work through coral cache.  If an update is found, it gets downloaded
+  // from the downloadURL (not updateURL), which can still be https.
+  var usoMatch = url && url.match(
       /^(https?:\/\/)userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
   if (usoMatch) {
-    this._updateURL = usoMatch[1] + 'userscripts.org/scripts/source/'
+    url = 'http://userscripts.org.nyud.net/scripts/source/'
         + usoMatch[2] + '.meta.js';
   }
+
+  return url;
+});
+Script.prototype.__defineSetter__('updateURL',
+function Script_setUpdateURL(url) {
+   this._updateURL = url;
 });
 
 Script.prototype.__defineGetter__('updateIsSecure',
@@ -405,8 +409,8 @@ Script.prototype.toConfigNode = function(doc) {
   if (this._downloadURL) {
     scriptNode.setAttribute("installurl", this._downloadURL);
   }
-  if (this._updateURL) {
-    scriptNode.setAttribute("updateurl", this._updateURL);
+  if (this.updateURL) {
+    scriptNode.setAttribute("updateurl", this.updateURL);
   }
   if (this._updateVersion) {
     scriptNode.setAttribute("updateVersion", this._updateVersion);
@@ -445,12 +449,12 @@ Script.prototype.isModified = function() {
 
 Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this.checkRemoteUpdates && !aForced) return false;
-  if (!this._updateURL) return false;
+  if (!this.updateURL) return false;
   if (this._modifiedTime > this._installTime) return false;
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(this._updateURL);
+  var scheme = ioService.extractScheme(this.updateURL);
   switch (scheme) {
   case 'about':
   case 'chrome':
@@ -518,7 +522,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
   this._unwrap = newScript._unwrap;
   this._version = newScript._version;
   this._downloadURL = newScript._downloadURL;
-  this._updateURL = newScript._updateURL;
+  this.updateURL = newScript.updateURL;
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
