@@ -226,6 +226,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
       throw new Error('RemoteScript.install(): Script base name unknown.');
     }
 
+    GM_config.install(this.script, aOldScript);
+
     var suffix = 0;
     var file = GM_util.scriptDir();
     file.append(this._baseName);
@@ -239,8 +241,6 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this.script.setFilename(this._baseName, this._scriptFile.leafName);
     this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
     this._tempDir = null;
-
-    GM_config.install(this.script, aOldScript);
   }
 };
 
