@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "شما می بایست فقط دستنویس هایی را نصب کنید که از منابع آنها مطمئن هستید.">
 <!ENTITY install.showscriptsource "نمایش متن دستنویس کاربری">
 <!ENTITY install.installbutton "نصب">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "در حال دریافت ...">
 <!ENTITY newscript.name "نام">
 <!ENTITY newscript.namespace "فضای نام">
 <!ENTITY newscript.description "شرح">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "نصب خودکار بروز رسانی به محض مشاهده">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "دستنویس ای که در این صفحه اجرا شود موجود نیست.">
 <!ENTITY greasemonkey.youhavenoscripts "شما هیچ دستنویس نسب شده ای ندارید">

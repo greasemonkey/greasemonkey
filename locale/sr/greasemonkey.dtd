@@ -24,8 +24,8 @@
 <!ENTITY newscript.name "Име">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Опис">
-<!ENTITY newscript.includes "Укључи (једно по линији)">
-<!ENTITY newscript.excludes "Изузми (једно по линији)">
+<!ENTITY newscript.includes "Обухвата (једно по линији)">
+<!ENTITY newscript.excludes "Изузима (једно по линији)">
 <!ENTITY options.editor "Уређивач">
 <!ENTITY options.changeEditor "Промени уређивач">
 <!ENTITY options.globalExcludes "Општа изузимања">
@@ -34,8 +34,8 @@
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
 <!ENTITY UpdateChecking "Проверавање ажурирања">
 <!ENTITY EnableUpdateChecking "Омогући аутоматско ажурирање скрипти">
-<!ENTITY UpdateInterval "Најмањи број који прође између две провере ажурирања">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY UpdateInterval "Најмањи број дана који прође између две провере ажурирања">
+<!ENTITY AutoInstallUpdates "Аутоматски инсталирај исправке када постану доступне.">
 <!ENTITY RequireSecureUpdates "Тражи безбедносна ажурирања">
 <!ENTITY greasemonkey.noscriptshere "Ниједна скрипта се не покреће на овој станици">
 <!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">

@@ -1,5 +1,5 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY CheckUpdates "Аутоматски провери да ли постоје исправке">
+<!ENTITY CheckUpdates.accesskey "И">
 <!ENTITY Edit "Уреди">
 <!ENTITY Edit.accesskey "У">
 <!ENTITY Edit.tooltip "Уреди ову корисничку скрипту">
@@ -7,12 +7,12 @@
 <!ENTITY ExecuteLast "Изврши последњу">
 <!ENTITY ExecuteLater "Изврши касније">
 <!ENTITY ExecuteSooner "Изврши раније">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Пронађи исправке">
+<!ENTITY InstallUpdate "Инсталирај исправку">
 <!ENTITY MoveDown "Помери надоле">
-<!ENTITY MoveDown.accesskey "Д">
-<!ENTITY MoveToBottom "Помери на крај">
-<!ENTITY MoveToBottom.accesskey "К">
+<!ENTITY MoveDown.accesskey "л">
+<!ENTITY MoveToBottom "Помери на дно">
+<!ENTITY MoveToBottom.accesskey "Д">
 <!ENTITY MoveToTop "Помери на врх">
 <!ENTITY MoveToTop.accesskey "В">
 <!ENTITY MoveUp "Помери нагоре">

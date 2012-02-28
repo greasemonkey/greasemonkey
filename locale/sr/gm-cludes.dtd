@@ -1,12 +1,12 @@
-<!ENTITY promptForNewPage.msg "Испод унесите нови URL. Можете да одредите неколико странице коришћењем џокер знака (*)">
+<!ENTITY promptForNewPage.msg "Испод унесите нови URL. Можете да одредите више страница коришћењем џокер знака (*).">
 <!ENTITY promptForNewPage.title "Додај страницу">
 <!ENTITY promptForNewPage.defVal "http://primer.com/*">
-<!ENTITY promptForEdit.msg "Измените URL на страници испод. Можете да одредите неколико странице коришћењем џокер знака (*)">
+<!ENTITY promptForEdit.msg "Испод измените URL. Можете да одредите више страница коришћењем џокер знака (*).">
 <!ENTITY promptForEdit.title "Уреди страницу">
 <!ENTITY button.add "Додај...">
-<!ENTITY button.addUserExclude "Додај као занемаривање корисника">
-<!ENTITY button.addUserInclude "Додај као укључивање корисника">
+<!ENTITY button.addUserExclude "Додај за изузимање">
+<!ENTITY button.addUserInclude "Додај за обухватање">
 <!ENTITY button.edit "Уреди...">
 <!ENTITY button.remove "Уклони">
-<!ENTITY label.grpIncluded "Укључене странице">
-<!ENTITY label.grpExcluded "Занемарене странице">
+<!ENTITY label.grpIncluded "Обухваћене странице">
+<!ENTITY label.grpExcluded "Изузете странице">

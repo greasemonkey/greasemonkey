@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "更新があれば自動でインストールする">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">
 <!ENTITY greasemonkey.youhavenoscripts "スクリプトが何もインストールされていません">

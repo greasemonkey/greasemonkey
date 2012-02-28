@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "N'installez que des scripts à partir de sources dont vous avez confiance.">
 <!ENTITY install.showscriptsource "Afficher la Source du Script">
 <!ENTITY install.installbutton "Installer">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Téléchargement...">
 <!ENTITY newscript.name "Nom">
 <!ENTITY newscript.namespace "Espace de nom">
 <!ENTITY newscript.description "Description">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "Installer les mises à jour automatiquement lorsqu'elles sont trouvées">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "Aucun script installé n'est exécuté sur cette page.">
 <!ENTITY greasemonkey.youhavenoscripts "Vous avez aucun scripts d'installé">

@@ -15,7 +15,7 @@
 <!ENTITY install.title "Greasemonkey 安装过程">
 <!ENTITY install.runson "脚本应用到下列网页：">
 <!ENTITY install.matches "匹配：">
-<!ENTITY install.butnoton "不包括下列网页：">
+<!ENTITY install.butnoton "不要应用到下列网页：">
 <!ENTITY install.warning1 "恶意脚本可能会侵犯您的隐私并在您不知情的情况下以您的身份运行。">
 <!ENTITY install.warning2 "您应该只安装从可信任来源获得的脚本。">
 <!ENTITY install.showscriptsource "显示脚本源代码">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "检查更新">
 <!ENTITY EnableUpdateChecking "启用脚本的自动检查更新">
 <!ENTITY UpdateInterval "两次更新检查间的最小间隔（天）">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "发现更新时自动安装">
 <!ENTITY RequireSecureUpdates "需要安全地更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您没有安装任何用户脚本">

@@ -8,13 +8,13 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Benutzerskripte verwalten…">
 <!ENTITY menu.manage.accesskey "v">
-<!ENTITY menu.options "Greasemonkey - Einstellungen…">
+<!ENTITY menu.options "Greasemonkey-Einstellungen…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Greasemonkey aktivieren">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Greasemonkey-Installation">
 <!ENTITY install.runson "Wird angewendet auf:">
-<!ENTITY install.matches "matches:">
+<!ENTITY install.matches "Treffer:">
 <!ENTITY install.butnoton "Wird nicht angewendet auf:">
 <!ENTITY install.warning1 "Bösartige Skripte können Ihre Privatsphäre verletzen und ohne Ihr Wissen eigenmächtige Aktionen ausführen.">
 <!ENTITY install.warning2 "Sie sollten nur Skripte von Quellen installieren, denen Sie vertrauen.">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
 <!ENTITY EnableUpdateChecking "Automatische Überprüfung der Skripte auf Aktualisierung">
 <!ENTITY UpdateInterval "Minimale Anzahl von Tagen zwischen Aktualisierungsprüfungen">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "Gefundene Aktualisierungen automatisch installieren">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">
