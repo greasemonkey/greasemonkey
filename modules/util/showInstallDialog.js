@@ -28,7 +28,7 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
         /* aName */ null,
         'chrome,centerscreen,modal,dialog,titlebar,resizable',
         params);
-    GM_util.timeout(0, curriedOpenWindow);
+    GM_util.timeout(curriedOpenWindow, 0);
   }
 
   if (rs.script) {

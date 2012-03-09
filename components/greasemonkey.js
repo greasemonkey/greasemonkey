@@ -196,12 +196,12 @@ function loadGreasemonkeyVersion() {
   // gives us only an async API, requiring this cumbersome setup.)
   if (GM_util.compareFirefoxVersion("4.0") < 0) {
     // This is too early for Firefox 3.  Sloppy timeout workaround.
-    GM_util.timeout(0, function() {
+    GM_util.timeout(function() {
       var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
           .getService(Components.interfaces.nsIExtensionManager);
       var item = extMan.getItemForID(GM_GUID);
       gGreasemonkeyVersion = new String(item.version);
-    });
+    }, 0);
   } else {
     Components.utils.import("resource://gre/modules/AddonManager.jsm");
     AddonManager.getAddonByID(GM_GUID, function(addon) {

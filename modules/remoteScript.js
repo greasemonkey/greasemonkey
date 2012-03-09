@@ -299,13 +299,13 @@ RemoteScript.prototype.showSource = function(aTabBrowser) {
           GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
           // Timeout puts this after the notification closes itself for the
           // button click, avoiding an error inside that (Firefox) code.
-          GM_util.timeout(0, function() { aTabBrowser.removeTab(tab); });
+          GM_util.timeout(function() { aTabBrowser.removeTab(tab); }, 0);
         })
       }]
     );
   }
   // Timeout necessary only for Firefox 3 as a dirty hack around timing issues.
-  GM_util.timeout(0, GM_util.hitch(this, addNotification));
+  GM_util.timeout(GM_util.hitch(this, addNotification), 0);
 };
 
 RemoteScript.prototype.toString = function() {
