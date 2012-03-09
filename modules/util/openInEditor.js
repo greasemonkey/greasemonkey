@@ -35,7 +35,12 @@ function openInEditor(script) {
     var process = Components.classes["@mozilla.org/process/util;1"]
         .createInstance(Components.interfaces.nsIProcess);
     process.init(editor);
-    process.run(false, args, args.length);
+    if (process.runw) {
+      // Firefox 4+; see #1173.
+      process.runw(false, args, args.length);
+    } else {
+      process.run(false, args, args.length);
+    }
   } catch (e) {
     // Something may be wrong with the editor the user selected. Remove so that
     // next time they can pick a different one.
