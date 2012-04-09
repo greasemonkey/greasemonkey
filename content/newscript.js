@@ -69,7 +69,7 @@ function createScriptSource() {
     alert(bundle.getString("newscript.noname"));
     return false;
   } else {
-    script.push("// @name           " + name);
+    script.push("// @name        " + name);
   }
 
   var namespace = document.getElementById("namespace").value;
@@ -77,25 +77,25 @@ function createScriptSource() {
     alert(bundle.getString("newscript.nonamespace"));
     return false;
   } else {
-    script.push("// @namespace      " + namespace);
+    script.push("// @namespace   " + namespace);
   }
 
   var descr = document.getElementById("descr").value;
   if ("" != descr) {
-    script.push("// @description    " + descr);
+    script.push("// @description " + descr);
   }
 
   var includes = document.getElementById("includes").value;
   if ("" != includes) {
     includes = includes.match(/.+/g);
-    includes = "// @include        " + includes.join("\n// @include        ");
+    includes = "// @include     " + includes.join("\n// @include     ");
     script.push(includes);
   }
 
   var excludes = document.getElementById("excludes").value;
   if ("" != excludes) {
     excludes = excludes.match(/.+/g);
-    excludes = "// @exclude        " + excludes.join("\n// @exclude        ");
+    excludes = "// @exclude     " + excludes.join("\n// @exclude     ");
     script.push(excludes);
   }
 
