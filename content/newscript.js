@@ -99,6 +99,7 @@ function createScriptSource() {
     script.push(excludes);
   }
 
+  script.push("// @version     1");
   script.push("// ==/UserScript==");
 
   var ending = "\n";
