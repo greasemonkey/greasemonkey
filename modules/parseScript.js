@@ -15,11 +15,15 @@ var gMetaLineRegexp = new RegExp('// @(\\S+)(?:\\s+(.*))?');
 /** Get just the stuff between ==UserScript== lines. */
 function extractMeta(aSource) {
   var meta = aSource.match(gAllMetaRegexp);
-  return meta && meta[1].replace(/^\s+/, '') || '';
+  if (meta) return meta[1].replace(/^\s+/, '');
+  return '';
 }
 
 /** Parse the source of a script; produce Script object. */
-function parse(aSource, aUri) {
+function parse(aSource, aUri, aFailWhenMissing) {
+  var meta = extractMeta(aSource).match(gLineSplitRegexp);
+  if (aFailWhenMissing && !meta) return null;
+
   var script = new Script();
 
   if (aUri) script._downloadURL = aUri.spec;
@@ -30,8 +34,6 @@ function parse(aSource, aUri) {
     script._name = name;
   }
   if (aUri) script._namespace = aUri.host;
-
-  meta = extractMeta(aSource).match(gLineSplitRegexp);
 
   var resourceNames = {};
   if (meta) for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {

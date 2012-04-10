@@ -16,40 +16,32 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
   }
 
   var params = null;
-  function openDialog() {
-    // TODO: Find a better fix than this sloppy workaround.
-    // Apparently this version of .openWindow() blocks; and called by the
-    // "script meta data available" callback as this is, blocks the further
-    // download of the script!
-    var curriedOpenWindow = GM_util.hitch(
-        null, gWindowWatcher.openWindow,
-        /* aParent */ null,
-        'chrome://greasemonkey/content/install.xul',
-        /* aName */ null,
-        'chrome,centerscreen,modal,dialog,titlebar,resizable',
-        params);
-    GM_util.timeout(curriedOpenWindow, 0);
+  function openDialog(aScript) {
+    params = [rs, aBrowser, aScript];
+    params.wrappedJSObject = params;
+    // Don't set "modal" param, or this blocks.  Even though we'd prefer the
+    // sort of behavior that gives us.
+    gWindowWatcher.openWindow(
+      /* aParent */ null,
+      'chrome://greasemonkey/content/install.xul',
+      /* aName */ null,
+      'chrome,centerscreen,dialog,titlebar,resizable',
+      params);
   }
 
   if (rs.script) {
-    params = [rs, aBrowser, rs.script];
-    params.wrappedJSObject = params;
-    openDialog();
+    openDialog(rs.script);
   } else {
     rs.onScriptMeta(function(aRemoteScript, aType, aScript) {
-      params = [rs, aBrowser, aScript];
-      params.wrappedJSObject = params;
-      openDialog();
+      openDialog(aScript);
     });
   }
 
   rs.download(function(aSuccess, aType) {
-    if (!aSuccess) {
-      if ('script' == aType) {
-        // Failure downloading script; browse to it.
-        aService.ignoreNextScript();
-        aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
-      }
+    if (!aSuccess && 'script' == aType) {
+      // Failure downloading script; browse to it.
+      aService.ignoreNextScript();
+      aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
     }
   });
 }

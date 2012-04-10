@@ -6,6 +6,8 @@ var Ci = Components.interfaces;
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
 var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
@@ -49,87 +51,136 @@ function filenameFromUri(aUri, aDefault) {
   return cleanFilename(filename, aDefault);
 }
 
-////////////////////////// Private Progress Listener ///////////////////////////
+////////////////////////// Private Download Listener ///////////////////////////
 
-function ProgressListener(
-    aRemoteScript, aUri, aCompletionCallback, aProgressCallback) {
-  this._completionCallback = aCompletionCallback || function() {};
-  this._progressCallback = aProgressCallback || function() {};
+function DownloadListener(
+    aTryToParse, aProgressCb, aCompletionCallback, aFile, aRemoteScript) {
+  this._completionCallback = aCompletionCallback;
+  this._data = [];
+  this._progressCallback = aProgressCb;
   this._remoteScript = aRemoteScript;
-  this._uri = aUri;
+  this._tryToParse = aTryToParse;
+
+  this._fileOutputStream = Cc["@mozilla.org/network/file-output-stream;1"]
+      .createInstance(Ci.nsIFileOutputStream);
+  this._fileOutputStream.init(aFile, -1, -1, null);
+  this._binOutputStream = Cc['@mozilla.org/binaryoutputstream;1']
+      .createInstance(Ci.nsIBinaryOutputStream);
+  this._binOutputStream.setOutputStream(this._fileOutputStream);
 }
 
-ProgressListener.prototype.onLocationChange = function(
-    aWebProgress, aRequest, aLocation) {
-};
+DownloadListener.prototype = {
+  _htmlTypeRegex: new RegExp('^text/(x|ht)ml', 'i'),
 
-ProgressListener.prototype.onProgressChange = function(
-    aWebProgress, aRequest, aCurSelfProgress, aMaxSelfProgress,
-    aCurTotalProgress, aMaxTotalProgress) {
-  var progress = aCurTotalProgress / aMaxTotalProgress;
-  if (-1 == aMaxTotalProgress) progress = 0;
+  _parse: function(aRemoteScript) {
+    var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
+        .createInstance(Ci.nsIScriptableUnicodeConverter);
+    converter.charset = 'UTF-8';
+    var source = converter.convertFromByteArray(this._data, this._data.length)
+    return this._remoteScript.parseScript(source, false);
+  },
 
-  if (this._progressCallback(aRequest, progress)) {
-    // The progress callback is where we check for HTML type, and return true
-    // (error status) if so.  In such a case, immediately complete as a failure.
-    this._completionCallback(aRequest, false, 'script');
-  }
-};
+  // nsIStreamListener
+  onDataAvailable: function(aRequest, aContext, aInputStream, aOffset, aCount) {
+    var binaryInputStream = Cc['@mozilla.org/binaryinputstream;1']
+        .createInstance(Ci.nsIBinaryInputStream);
+    binaryInputStream.setInputStream(aInputStream);
 
-ProgressListener.prototype.onSecurityChange = function(
-    aWebProgress, aRequest, aState) {
-};
+    // Read incoming data.
+    var data = binaryInputStream.readByteArray(aCount);
 
-/** Called at least at the start and stop of the request. */
-ProgressListener.prototype.onStateChange = function(
-    aWebProgress, aRequest, aStateFlags, aStatus) {
-  // Find if there has been any error.
-  if (!(aStateFlags & Ci.nsIWebProgressListener.STATE_STOP)) {
-    return;
-  }
-  var error = aStatus !== 0;
-  var errorMessage = stringBundle.GetStringFromName('error.unknown');
-  try {
-    var httpChannel = aRequest.QueryInterface(Ci.nsIHttpChannel);
-    error |= !httpChannel.requestSucceeded;
-    error |= httpChannel.responseStatus >= 400;
-    errorMessage = stringBundle.GetStringFromName('error.serverReturned')
-        + ' ' + httpChannel.responseStatus + ' '
-        + httpChannel.responseStatusText + '.';
-  } catch (e) {
+    if (this._tryToParse) {
+      this._data = this._data.concat(data);
+      if (this._parse(aContext)) this._tryToParse = false;
+    } else {
+      this._data = null;
+    }
+
+    // Write it to the file.
+    this._binOutputStream.writeByteArray(data, data.length);
+  },
+
+  // nsIProgressEventSink
+  onProgress: function(aRequest, aContext, aProgress, aProgressMax) {
+    var progress;
+    if (-1 == aProgressMax || 0 == aProgressMax
+        || 0xFFFFFFFFFFFFFFFF == aProgressMax) {
+      progress = 0
+    } else {
+      progress = aProgress / aProgressMax;
+    }
+    this._progressCallback(aRequest, progress);
+  },
+
+  // nsIRequestObserver
+  onStartRequest: function(aRequest, aContext) {
+    // For the first file (the script) detect an HTML page and abort if so.
+    if (this._tryToParse) {
+      try {
+        aRequest.QueryInterface(Ci.nsIHttpChannel);
+      } catch (e) {
+        return;  // Non-http channel?  Ignore.
+      }
+      if (this._htmlTypeRegex.test(aRequest.contentType)) {
+        this._completionCallback(aRequest, false, 'script');
+      }
+    }
+  },
+
+  // nsIRequestObserver
+  onStopRequest: function(aRequest, aContext, aStatusCode) {
+    this._binOutputStream.close();
+    this._fileOutputStream.close();
+
+    var error = aStatusCode !== 0;
+    var errorMessage = stringBundle.GetStringFromName('error.unknown');
     try {
-      aRequest.QueryInterface(Ci.nsIFileChannel);
-      // no-op; if it got this far, aStatus is accurate.
+      var httpChannel = aRequest.QueryInterface(Ci.nsIHttpChannel);
+      error |= !httpChannel.requestSucceeded;
+      error |= httpChannel.responseStatus >= 400;
+      errorMessage = stringBundle.GetStringFromName('error.serverReturned')
+          + ' ' + httpChannel.responseStatus + ' '
+          + httpChannel.responseStatusText + '.';
     } catch (e) {
-      dump('aRequest is neither http nor file channel: ' + aRequest + '\n');
-      for (i in Ci) {
-        try {
-          aRequest.QueryInterface(Ci[i]);
-          dump('it is a: ' + i + '\n');
-        } catch (e) {
-          // ignore
+      try {
+        aRequest.QueryInterface(Ci.nsIFileChannel);
+        // no-op; if it got this far, aStatus is accurate.
+      } catch (e) {
+        dump('aRequest is neither http nor file channel: ' + aRequest + '\n');
+        for (i in Ci) {
+          try {
+            aRequest.QueryInterface(Ci[i]);
+            dump('it is a: ' + i + '\n');
+          } catch (e) {
+            // ignore
+          }
         }
       }
     }
-  }
 
-  if (error) {
-    errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
-        + '\n' + this._uri.spec + '\n\n' + errorMessage;
-    this._remoteScript.cleanup(errorMessage);
-  }
-  error |= this._progressCallback(aRequest, 1);
-  this._completionCallback(aRequest, !error);
-};
+    if (error) {
+      errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
+          + '\n' + this._uri.spec + '\n\n' + errorMessage;
+      this._remoteScript.cleanup(errorMessage);
+    }
 
-ProgressListener.prototype.onStatusChange = function(
-    aWebProgress, aRequest, aStatus, aMessage) {
-  // TODO: Better figure out the possible aStatus values.  Docs say:
-  // "This interface does not define the set of possible status codes."
+    this._completionCallback(aRequest, !error);
+  },
 
-  // Manually found when reading an invalid file:/// URL.
-  if (2152857618 == aStatus) this._completionCallback(aRequest, false);
-};
+  // nsIProgressEventSink
+  onStatus: function(aRequest, aContext, aStatus, aStatusArg) { },
+
+  // nsIInterfaceRequestor
+  getInterface: function(aIID) { return this.QueryInterface(aIID) },
+
+  // nsISupports
+  QueryInterface: XPCOMUtils.generateQI([
+      Ci.nsIClassInfo,
+      Ci.nsIProgressEventSink,
+      Ci.nsIStreamListener,
+      Ci.nsISupports,
+      ]),
+}
 
 /////////////////////////////// Public Interface ///////////////////////////////
 
@@ -138,6 +189,7 @@ ProgressListener.prototype.onStatusChange = function(
 
 function RemoteScript(aUrl) {
   this._baseName = null;
+  this._channels = [];
   this._dependencies = [];
   this._metadata = null;
   this._progress = [0, 0];
@@ -162,7 +214,14 @@ RemoteScript.prototype.cleanup = function(aErrorMessage) {
   this.errorMessage = aErrorMessage || null;
   this.done = true;
 
-  if (this._wbp) this._wbp.cancelSave();
+  this._channels.forEach(function(aChannel) {
+    try {
+      aChannel.QueryInterface(Ci.nsIRequest);
+    } catch (e) {
+      return;
+    }
+    aChannel.cancel(Components.results.NS_BINDING_ABORTED);
+  });
   if (this._tempDir && this._tempDir.exists()) {
     this._tempDir.remove(true);
   }
@@ -177,8 +236,6 @@ RemoteScript.prototype.download = function(aCompletionCallback) {
       aCompletionCallback, 'Completion callback is not a function.');
 
   if (this.script) {
-    // TODO: Verify that this condition really is sufficient.  Is the script
-    // completely loaded?
     this._downloadDependencies(aCompletionCallback);
   } else {
     this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint) {
@@ -256,6 +313,31 @@ RemoteScript.prototype.onScriptMeta = function(aCallback) {
   this._scriptMetaCallbacks.push(aCallback);
 };
 
+/** Parse the source code of the script, discover dependencies, data & etc. */
+RemoteScript.prototype.parseScript = function(aSource, aFatal) {
+  if (this.errorMessage) return false;
+  if (this.script) return true;
+
+  var scope = {};
+  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  var script = scope.parse(aSource, this._uri, true);
+  if (!script || script.parseErrors.length) {
+    if (aFatal) {
+      this.cleanup(
+          stringBundle.GetStringFromName('error.parsingScript')
+          + '\n' + script.parseErrors);
+    }
+    return false;
+  }
+
+  this._baseName = cleanFilename(script.name, 'gm-script');
+  this._dispatchCallbacks('scriptMeta', script);
+  this.script = script;
+  this._postParseScript();
+
+  return true;
+};
+
 /** Set the (installed) script, in order to download modified dependencies.
  *
  * After calling this, calling .download() will only get dependencies.  This
@@ -270,7 +352,7 @@ RemoteScript.prototype.setScript = function(aScript, aTempFile) {
     this._scriptFile = aTempFile;
     this._baseName = cleanFilename(aScript.name, 'gm-script');
   }
-  this._postParseScriptFile();
+  this._postParseScript();
 };
 
 RemoteScript.prototype.showSource = function(aTabBrowser) {
@@ -382,61 +464,32 @@ RemoteScript.prototype._downloadFile = function(
     }
   }
 
-  // Dangerous semi-global state:  The web browser persist object is stored
-  // in the object, so that it can be canceled.  Parallel downloads would need
-  // to be handled differently.
   var channel = ioService.newChannelFromURI(aUri);
-  this._wbp = Cc['@mozilla.org/embedding/browser/nsWebBrowserPersist;1']
-      .createInstance(Ci.nsIWebBrowserPersist);
-  this._wbp.persistFlags =
-      Ci.nsIWebBrowserPersist.PERSIST_FLAGS_BYPASS_CACHE |
-      Ci.nsIWebBrowserPersist.PERSIST_FLAGS_REPLACE_EXISTING_FILES |
-      Ci.nsIWebBrowserPersist.PERSIST_FLAGS_CLEANUP_ON_FAILURE |
-      Ci.nsIWebBrowserPersist.PERSIST_FLAGS_FORCE_ALLOW_COOKIES;
-  this._wbp.progressListener = new ProgressListener(
-      this, aUri,
-      aCompletionCallback, GM_util.hitch(this, this._downloadFileProgress));
-  this._wbp.saveChannel(channel, aFile);
+  this._channels.push(channel);
+  var dsl = new DownloadListener(
+      0 == this._progressIndex,
+      GM_util.hitch(this, this._downloadFileProgress),
+      aCompletionCallback,
+      aFile,
+      this
+      );
+  channel.notificationCallbacks = dsl;
+  channel.asyncOpen(dsl, this);
 };
 
-RemoteScript.prototype._htmlTypeRegex = new RegExp('^text/(x|ht)ml', 'i');
 RemoteScript.prototype._downloadFileProgress = function(
     aChannel, aFileProgress) {
-  if (0 == this._progressIndex && !this.script) {
-    // We are downloading the first file, and haven't parsed a script yet ...
-
-    // 1) Detect an HTML page and abort if so.
-    if (this._htmlTypeRegex.test(aChannel.contentType)) {
-      this.cleanup();
-      return true;
-    }
-
-    // 2) Otherwise try to parse the script from the downloaded file.
-    this.script = this._parseScriptFile();
-    if (this.script) {
-      // And if successful, prepare to download dependencies.
-      this._postParseScriptFile();
-    }
-  }
-
   this._progress[this._progressIndex] = aFileProgress;
   var progress = this._progress.reduce(function(a, b) { return a + b; })
       / this._progress.length;
-
   this._dispatchCallbacks('progress', progress);
-
-  return false;
 };
 
 RemoteScript.prototype._downloadScriptCb = function(
     aCompletionCallback, aChannel, aSuccess) {
   if (aSuccess) {
     // At this point downloading the script itself is definitely done.
-    if (!this.script) {
-      // If we don't have a script object, we failed to find metadata and parse
-      // it during download.  Try one last time.
-      this.script = this._parseScriptFile(true);
-    }
+    this._parseScriptFile();
     if (!this.script) {
       dump('RemoteScript: finishing with error because no script was found.\n');
       // If we STILL don't have a script, this is a fatal error.
@@ -448,29 +501,14 @@ RemoteScript.prototype._downloadScriptCb = function(
   aCompletionCallback(aSuccess, 'script');
 };
 
-/** Produce a Script object from the contents of this._scriptFile. */
 RemoteScript.prototype._parseScriptFile = function() {
-  if (this.errorMessage) return;
-
+  if (this.done) return;
   var source = GM_util.getContents(this._scriptFile);
   if (!source) return null;
-
-  var scope = {};
-  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
-  var script = scope.parse(source, this._uri);
-  if (script.parseErrors.length) {
-    this.cleanup(
-        stringBundle.GetStringFromName('error.parsingScript')
-        + '\n' + script.parseErrors);
-    return null;
-  }
-  this._baseName = cleanFilename(script.name, 'gm-script');
-  this._dispatchCallbacks('scriptMeta', script);
-
-  return script;
+  return this.parseScript(source, true);
 };
 
-RemoteScript.prototype._postParseScriptFile = function() {
+RemoteScript.prototype._postParseScript = function() {
   this._dependencies = this.script.dependencies;
   this._progress = [];
   for (var i = 0; i < this._dependencies.length; i++) {
