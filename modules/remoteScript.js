@@ -338,7 +338,7 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
   // Because _progressIndex includes the base script at 0, subtract one to
   // get the dependency index.
   var dependency = this._dependencies[this._progressIndex - 1];
-  var uri = GM_util.uriFromUrl(dependency.urlToDownload);
+  var uri = GM_util.uriFromUrl(dependency.downloadURL);
   var file = GM_util.getTempFile(this._tempDir, filenameFromUri(uri));
   dependency.setFilename(file);
 

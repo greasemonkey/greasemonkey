@@ -116,9 +116,7 @@ function Script_getPrefroot() {
 Script.prototype.__defineGetter__('dependencies',
 function Script_getDependencies() {
   var deps = this.requires.concat(this.resources);
-  if (this.icon.hasDownloadURL()) {
-    deps.push(this.icon);
-  }
+  if (this.icon.downloadURL) deps.push(this.icon);
   return deps;
 });
 
@@ -425,9 +423,6 @@ Script.prototype.toConfigNode = function(doc) {
 Script.prototype.toString = function() {
   return '[Greasemonkey Script ' + this.id + ']';
 };
-
-Script.prototype.__defineGetter__('urlToDownload',
-function Script_getUrlToDownload() { return this._downloadURL; });
 
 Script.prototype.setDownloadedFile = function(file) { this._tempFile = file; };
 
