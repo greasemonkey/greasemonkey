@@ -156,6 +156,7 @@ function findError(script, lineNumber) {
 function getFirebugConsole(wrappedContentWin, chromeWin) {
   try {
     return chromeWin.Firebug
+        && chromeWin.Firebug.getConsoleByGlobal
         && chromeWin.Firebug.getConsoleByGlobal(wrappedContentWin)
         || null;
   } catch (e) {
