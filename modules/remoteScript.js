@@ -300,6 +300,10 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
     this._tempDir = null;
 
+    // Let the config know the base/file name has changed to its real value now.
+    GM_config._changed(this.script, 'modified', this.script.id);
+
+    // Let the user know we're all done.
     GM_notification(
         "'" + this.script.name + "' "
         + stringBundleBrowser.GetStringFromName("statusbar.installed"));
