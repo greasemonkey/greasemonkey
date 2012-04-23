@@ -20,7 +20,7 @@
 <!ENTITY install.warning2 "Asenna skriptejä vain luetetuista lähteistä.">
 <!ENTITY install.showscriptsource "Näytä skriptin lähdekoodi">
 <!ENTITY install.installbutton "Asenna">
-<!ENTITY loading "Downloading ...">
+<!ENTITY loading "Ladataan...">
 <!ENTITY newscript.name "Nimi">
 <!ENTITY newscript.namespace "Nimiavaruus">
 <!ENTITY newscript.description "Kuvaus">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
 <!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "Asenna päivitykset automaattisesti">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "Mitään skripteistä ei ajeta tällä sivulla.">
 <!ENTITY greasemonkey.youhavenoscripts "Sinulla ei ole yhtään skriptiä asennettuna">

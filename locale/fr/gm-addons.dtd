@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "Vérifier automatiquement pour des mises à jour">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Modifier">
 <!ENTITY Edit.accesskey "E">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Exécuter en dernier">
 <!ENTITY ExecuteLater "Exécuter plus tard">
 <!ENTITY ExecuteSooner "Exécuter plus tôt">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Trouver mises à jour">
+<!ENTITY InstallUpdate "Installer mises à jour">
 <!ENTITY MoveDown "Descendre">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Descendre tout en bas">
@@ -19,7 +19,7 @@
 <!ENTITY MoveUp.accesskey "U">
 <!ENTITY NewScript "Créer un Nouveau Script">
 <!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "Afficher le dossier correspondant">
+<!ENTITY Show "Afficher le dossier contenant">
 <!ENTITY Show.accesskey "S">
 <!ENTITY Sort.ByStatus "Trier par statut">
 <!ENTITY Sort.Status "Statut">
@@ -32,6 +32,6 @@
 <!ENTITY UninstallCancel "Annuler la Désinstallation">
 <!ENTITY UninstallCancel.accesskey "C">
 <!ENTITY UninstallCancel.tooltip "Annuler la désinstallation de ce Script Utilisateur">
-<!ENTITY UninstallCancelDescription "Ce Script Utilisateur sera désinstallé lorsque la boîte de dialogue se fermera. (Ou faites un clic droit pour le &quot;Désinstaller Maintenant&quot;.)">
+<!ENTITY UninstallCancelDescription "Ce Script Utilisateur sera désinstallé lorsque la boîte de dialogue se fermera. (Ou faites un clic droit pour &quot;Désinstaller Maintenant&quot;.)">
 <!ENTITY UninstallNow "Désinstaller Maintenant">
 <!ENTITY UninstallNow.accesskey "N">
