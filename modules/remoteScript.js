@@ -3,6 +3,7 @@ var EXPORTED_SYMBOLS = ['cleanFilename', 'RemoteScript'];
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 
+Components.utils.import("resource://greasemonkey/GM_notification.js");
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -298,6 +299,10 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this.script.setFilename(this._baseName, this._scriptFile.leafName);
     this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
     this._tempDir = null;
+
+    GM_notification(
+        "'" + this.script.name + "' "
+        + stringBundleBrowser.GetStringFromName("statusbar.installed"));
   }
 };
 
