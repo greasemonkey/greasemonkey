@@ -128,6 +128,12 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
+  gViewController.commands.cmd_findItemUpdates = {
+      isEnabled: addonIsInstalledScript,
+      doCommand: function(aAddon) {
+        aAddon._script.checkForRemoteUpdate(true);
+      }
+    };
   gViewController.commands.cmd_userscript_toggleCheckUpdates = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) {
