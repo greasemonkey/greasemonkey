@@ -40,8 +40,7 @@
   </popup>
 
   <menupopup id="menu_ToolsPopup">
-    <menu id="gm_general_menu"
-      insertbefore="javascriptConsole" />
+    <menu id="gm_general_menu" insertafter="devToolsSeparator" />
   </menupopup>
 
   <!--
