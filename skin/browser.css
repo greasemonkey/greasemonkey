@@ -8,6 +8,9 @@ toolbar[iconsize="small"] #greasemonkey-tbb {
 #greasemonkey-tbb[disabled="yes"] {
   opacity: 0.8;
 }
+#greasemonkey-tbb[disabled="yes"] .toolbarbutton-text {
+  text-decoration: line-through;
+}
 #greasemonkey-tbb[disabled="yes"] .toolbarbutton-icon {
   opacity: 0.5;
 }
