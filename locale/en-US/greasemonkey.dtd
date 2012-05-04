@@ -27,7 +27,7 @@
 <!ENTITY newscript.includes "Includes (One per line)">
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY options.changeEditor "Select Script Editor">
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Uninstall">

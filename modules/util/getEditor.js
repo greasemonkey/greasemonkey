@@ -12,17 +12,17 @@ var PICK_EXE = stringBundle.GetStringFromName("editor.please_pick_executable");
 function getEditor(change) {
   var editorPath = GM_prefRoot.getValue("editor");
 
-  if (!change && editorPath) {
-    var editor;
-    try {
-      editor = Components.classes["@mozilla.org/file/local;1"]
-          .createInstance(Components.interfaces.nsILocalFile);
-      editor.followLinks = true;
-      editor.initWithPath(editorPath);
-    } catch (e) {
-      editor = null;
-    }
+  var editor;
+  try {
+    editor = Components.classes["@mozilla.org/file/local;1"]
+        .createInstance(Components.interfaces.nsILocalFile);
+    editor.followLinks = true;
+    editor.initWithPath(editorPath);
+  } catch (e) {
+    editor = null;
+  }
 
+  if (!change && editorPath) {
     // make sure the editor preference is still valid
     if (editor && editor.exists() && editor.isExecutable()) {
       return editor;
@@ -42,6 +42,11 @@ function getEditor(change) {
     filePicker.init(
         GM_util.getBrowserWindow(), EDITOR_PROMPT, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApps);
+
+    if (editor) {
+      filePicker.defaultString = editor.leafName;
+      filePicker.displayDirectory = editor.parent;
+    }
 
     if (filePicker.show() != nsIFilePicker.returnOK) {
       // The user canceled, return null.
