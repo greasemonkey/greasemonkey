@@ -21,6 +21,14 @@ var stringBundleBrowser = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
+var xulRuntime = Components
+    .classes["@mozilla.org/xre/app-info;1"]
+    .getService(Components.interfaces.nsIXULRuntime);
+
+// See: http://goo.gl/vDSk9
+// Actual limit is 260; 240 ensures e.g. ".user.js" and slashes still fit.
+// The "/ 2" thing is so that we can have a directory, and a file in it.
+var windowsMaxNameLen = (240 - GM_util.scriptDir().path.length) / 2;
 
 /////////////////////////////// Private Helpers ////////////////////////////////
 
@@ -33,8 +41,24 @@ function cleanFilename(aFilename, aDefault) {
   // Blacklist problem characters (slashes, colons, etc.).
   var filename = (aFilename || aDefault).replace(
       disallowedFilenameCharacters, '');
+
   // Make whitespace readable.
   filename = filename.replace(/(\s|%20)+/g, '_');
+
+  // Limit length on Windows (#1548; http://goo.gl/vDSk9)
+  if ('WINNT' == xulRuntime.OS) {
+    if (windowsMaxNameLen <= 0) {
+      throw Error('Could not make a valid file name to save.');
+    }
+
+    var match = filename.match(/^(.+?)(\.(:?user\.js)|[^.{,8}])$/);
+    if (match) {
+      filename = match[1].substr(0, windowsMaxNameLen) + match[2];
+    } else {
+      filename = filename.substr(0, windowsMaxNameLen);
+    }
+  }
+
   // Ensure that it's something.
   if (!filename) filename = aDefault || 'unknown';
   return filename;
