@@ -112,11 +112,6 @@ function createSandbox(
   imp(GM_util.hitch(scriptResources, 'getResourceURL'), 'GM_getResourceURL');
   imp(GM_util.hitch(scriptResources, 'getResourceText'), 'GM_getResourceText');
 
-  // Import bare setTimeout (see #1209), and alias it inside the window object.
-  imp(GM_util.hitch(null, GM_util.timeout), 'setTimeout');
-  Components.utils.evalInSandbox(
-      'window.setTimeout = setTimeout;', sandbox);
-
   // The .importMethod() is safe because it can't return object values (I
   // think?) -- but sometimes we want to, so in that case do a straight assign.
   // TODO: When minVer=4 check if this is still necessary.
@@ -338,9 +333,6 @@ function startup() {
   }
 
   loadGreasemonkeyVersion();
-
-  // Guarantee this getter-powered reference is set up.
-  GM_util.timeout(function() {}, 0);
 }
 
 /////////////////////////////////// Service ////////////////////////////////////
