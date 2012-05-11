@@ -696,6 +696,7 @@ Script.prototype.installUpdate = function(aProgressCallback) {
   var scope = {};
   Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
   var rs = new scope.RemoteScript(this._downloadURL);
+  rs.messageName = 'script.updated';
   rs.onProgress(aProgressCallback);
   rs.download(GM_util.hitch(this, function(aSuccess, aType) {
     if (aSuccess && 'dependencies' == aType) {
