@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "Н">
 <!ENTITY menu.manage "Управљање корисничким скриптама…">
 <!ENTITY menu.manage.accesskey "У">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Опције…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Омогућен">
 <!ENTITY statusbar.enabled.accesskey "о">
