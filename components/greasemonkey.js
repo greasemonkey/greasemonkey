@@ -79,12 +79,21 @@ function GM_apiLeakCheck(apiName) {
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
+  var sandbox;
+  if (GM_util.inArray(aScript.grants, 'none')) {
+    // If there is an explicit none grant, use a plain unwrapped sandbox
+    // with no other content.
+    sandbox = new Components.utils.Sandbox(aContentWin.wrappedJSObject);
+    sandbox.__proto__ = aContentWin.wrappedJSObject;
+    return sandbox;
+  }
+
   var unsafeWin = aContentWin.wrappedJSObject;
-  var sandbox = new Components.utils.Sandbox(aContentWin);
+  sandbox = new Components.utils.Sandbox(aContentWin);
 
   if (GM_util.compareFirefoxVersion("4.0") < 0) {
     // Fixes .. something confusing.  Must be before __proto__ assignment.
-    //  See #1192
+    // See #1192
     sandbox.document = aContentWin.document;
   }
 
@@ -98,31 +107,59 @@ function createSandbox(
   sandbox.console = aFirebugConsole ? aFirebugConsole : new GM_console(aScript);
 
   var imp = sandbox.importFunction;
-  imp(function(css) { GM_addStyle(aContentWin.document, css); }, 'GM_addStyle');
-  imp(GM_util.hitch(new GM_ScriptLogger(aScript), 'log'), 'GM_log');
-  imp(GM_util.hitch(null, registerMenuCommand, aContentWin, aChromeWin, aScript),
-      'GM_registerMenuCommand');
+  if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
+    imp(function(css) { GM_addStyle(aContentWin.document, css); },
+        'GM_addStyle');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_log')) {
+    imp(GM_util.hitch(new GM_ScriptLogger(aScript), 'log'), 'GM_log');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
+    var gmrmc = GM_util.hitch(
+        null, registerMenuCommand, aContentWin, aChromeWin, aScript);
+    imp(gmrmc, 'GM_registerMenuCommand');
+  }
 
   var scriptStorage = new GM_ScriptStorage(aScript);
-  imp(GM_util.hitch(scriptStorage, 'deleteValue'), 'GM_deleteValue');
-  imp(GM_util.hitch(scriptStorage, 'getValue'), 'GM_getValue');
-  imp(GM_util.hitch(scriptStorage, 'setValue'), 'GM_setValue');
+  if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
+    imp(GM_util.hitch(scriptStorage, 'deleteValue'), 'GM_deleteValue');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_getValue')) {
+    imp(GM_util.hitch(scriptStorage, 'getValue'), 'GM_getValue');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_setValue')) {
+    imp(GM_util.hitch(scriptStorage, 'setValue'), 'GM_setValue');
+  }
 
   var scriptResources = new GM_Resources(aScript);
-  imp(GM_util.hitch(scriptResources, 'getResourceURL'), 'GM_getResourceURL');
-  imp(GM_util.hitch(scriptResources, 'getResourceText'), 'GM_getResourceText');
+  if (GM_util.inArray(aScript.grants, 'GM_getResourceURL')) {
+    imp(GM_util.hitch(scriptResources, 'getResourceURL'), 'GM_getResourceURL');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_getResourceText')) {
+    imp(GM_util.hitch(
+        scriptResources, 'getResourceText'), 'GM_getResourceText');
+  }
 
   // The .importMethod() is safe because it can't return object values (I
   // think?) -- but sometimes we want to, so in that case do a straight assign.
   // TODO: When minVer=4 check if this is still necessary.
-  sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
-  sandbox.GM_openInTab = GM_util.hitch(null, openInTab, aContentWin, aChromeWin);
-  sandbox.GM_xmlhttpRequest = GM_util.hitch(
-      new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
-      'contentStartRequest');
+  if (GM_util.inArray(aScript.grants, 'GM_listValues')) {
+    sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
+    sandbox.GM_openInTab = GM_util.hitch(
+        null, openInTab, aContentWin, aChromeWin);
+  }
+  if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
+    sandbox.GM_xmlhttpRequest = GM_util.hitch(
+        new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
+        'contentStartRequest');
+  }
 
-  Components.utils.evalInSandbox(
-      'const GM_info = ' + uneval(info(aScript)), sandbox);
+  if (GM_util.inArray(aScript.grants, 'GM_info')) {
+    Components.utils.evalInSandbox(
+        'const GM_info = ' + uneval(info(aScript)), sandbox);
+  }
 
   return sandbox;
 }
