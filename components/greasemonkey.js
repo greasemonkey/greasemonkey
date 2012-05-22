@@ -484,28 +484,7 @@ service.prototype.injectScripts = function(
     var sandbox = createSandbox(
         script, wrappedContentWin, chromeWin, firebugConsole, url);
 
-    var requires = [];
-    var offsets = [];
-    var offset = 0;
-
-    script.requires.forEach(function(req){
-      var contents = req.textContent;
-      var lineCount = contents.split("\n").length;
-      requires.push(contents);
-      offset += lineCount;
-      offsets.push(offset);
-    });
-    script.offsets = offsets;
-
-    // These newlines are critical for error line calculation.  The last handles
-    // a script whose final line is a line comment, to not break the wrapper
-    // function.
-    // The semicolons after requires fix a failure of javascript's semicolon
-    // insertion rules (see #1491).
-    var scriptSrc = requires.join(";\n") + ";\n" + script.textContent + "\n";
-    if (!script.unwrap) {
-      scriptSrc = "(function(){"+ scriptSrc +"})()";
-    }
+    var scriptSrc = GM_util.getScriptSource(script);
     if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
       // Wrap anyway on early return.
       runScriptInSandbox("(function(){"+ scriptSrc +"})()", sandbox, script);
