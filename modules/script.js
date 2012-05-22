@@ -26,6 +26,7 @@ function Script(configNode) {
   this._enabled = true;
   this._excludes = [];
   this._filename = null;
+  this._grants = [];
   this._icon = new ScriptIcon(this);
   this._id = null;
   this._installTime = null;
@@ -138,6 +139,16 @@ function Script_setEnabled(enabled) {
   this._changed("edit-enabled", enabled);
 });
 
+Script.prototype.__defineGetter__('excludes',
+function Script_getExcludes() { return this._excludes.concat(); });
+Script.prototype.__defineSetter__('excludes',
+function Script_setExcludes(excludes) { this._excludes = excludes.concat(); });
+
+Script.prototype.__defineGetter__('grants',
+function Script_getGrants() { return this._grants.concat(); });
+Script.prototype.__defineSetter__('grants',
+function Script_setGrants(grants) { this._grants = grants.concat(); });
+
 Script.prototype.__defineGetter__('includes',
 function Script_getIncludes() { return this._includes.concat(); });
 Script.prototype.__defineSetter__('includes',
@@ -147,11 +158,6 @@ Script.prototype.__defineGetter__('userIncludes',
 function Script_getUserIncludes() { return this._userIncludes.concat(); });
 Script.prototype.__defineSetter__('userIncludes',
 function Script_setUserIncludes(includes) { this._userIncludes = includes.concat(); });
-
-Script.prototype.__defineGetter__('excludes',
-function Script_getExcludes() { return this._excludes.concat(); });
-Script.prototype.__defineSetter__('excludes',
-function Script_setExcludes(excludes) { this._excludes = excludes.concat(); });
 
 Script.prototype.__defineGetter__('userExcludes',
 function Script_getUserExcludes() { return this._userExcludes.concat(); });
@@ -290,11 +296,14 @@ Script.prototype._loadFromConfigNode = function(node) {
 
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
     switch (childNode.nodeName) {
-    case "Include":
-      this._includes.push(childNode.textContent);
-      break;
     case "Exclude":
       this._excludes.push(childNode.textContent);
+      break;
+    case "Grant":
+      this._grants.push(childNode.textContent);
+      break;
+    case "Include":
+      this._includes.push(childNode.textContent);
       break;
     case "UserInclude":
       this._userIncludes.push(childNode.textContent);
@@ -348,10 +357,11 @@ Script.prototype.toConfigNode = function(doc) {
     }
   }
 
-  addArrayNodes('Include', this._includes);
-  addArrayNodes('UserInclude', this._userIncludes);
   addArrayNodes('Exclude', this._excludes);
+  addArrayNodes('Grant', this._grants);
+  addArrayNodes('Include', this._includes);
   addArrayNodes('UserExclude', this._userExcludes);
+  addArrayNodes('UserInclude', this._userIncludes);
 
   for (var j = 0; j < this._matches.length; j++) {
     addNode('Match', this._matches[j].pattern);
@@ -510,8 +520,9 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
 
   // Copy new values.
   //  NOTE: User 'cludes are _not_ copied!  They should remain as-is.
-  this._includes = newScript._includes;
   this._excludes = newScript._excludes;
+  this._grants = newScript._grants;
+  this._includes = newScript._includes;
   this._matches = newScript._matches;
   this._description = newScript._description;
   this._runAt = newScript._runAt;

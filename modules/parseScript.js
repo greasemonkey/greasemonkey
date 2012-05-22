@@ -61,6 +61,9 @@ function parse(aSource, aUri, aFailWhenMissing) {
     case 'exclude':
       script._excludes.push(value);
       break;
+    case 'grant':
+      script._grants.push(value);
+      break;
     case 'icon':
       try {
         script.icon.setMetaVal(value);
