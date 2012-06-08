@@ -333,6 +333,12 @@ Script.prototype._loadFromConfigNode = function(node) {
     }
   }
 
+  // TODO: Some day, make "none" the default.  Until then: sniff.
+  if (0 == this._grants.length) {
+    this.grants = GM_util.sniffGrants(this);
+    this._changed('modified', 'grants');
+  }
+
   this._name = node.getAttribute("name");
   this._namespace = node.getAttribute("namespace");
   this._description = node.getAttribute("description");
