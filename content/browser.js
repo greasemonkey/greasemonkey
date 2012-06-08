@@ -105,7 +105,7 @@ GM_BrowserUI.contentLoad = function(event) {
   // Make sure we are still on the page that fired this event, see issue #1083.
   // But ignore hashes; see issue #1445.
   if (href.replace(/#.*/, '') == event.target.documentURI.replace(/#.*/, '')) {
-    GM_BrowserUI.gmSvc.runScripts('document-end', safeWin, window);
+    GM_BrowserUI.gmSvc.runScripts('document-end', safeWin);
   }
 };
 

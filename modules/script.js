@@ -475,7 +475,7 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   return true;
 };
 
-Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
+Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   // If the @name and/or @namespace have changed, make sure they don't
   // conflict with another installed script.
   if (newScript.id != this.id) {
@@ -589,8 +589,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin, chromeWin) {
         var url = pendingExec.safeWin.location.href;
         var shouldRun = GM_util.scriptMatchesUrlAndRuns(this, url, this.runAt);
         if (shouldRun) {
-          GM_util.getService().injectScripts(
-              [this], url, pendingExec.safeWin, pendingExec.chromeWin);
+          GM_util.getService().injectScripts([this], url, pendingExec.safeWin);
         }
       }
 

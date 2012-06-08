@@ -230,7 +230,7 @@ Config.prototype.getMatchingScripts = function(testFunc) {
   return this._scripts.filter(testFunc);
 };
 
-Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
+Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin) {
   // Find any updated scripts or scripts with delayed injection
   var scripts = this.getMatchingScripts(
       function (script) {
@@ -246,11 +246,11 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin, aChromeWin) {
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script._downloadURL));
       // TODO: Show PopupNotifications about parse error(s)?
-      script.updateFromNewScript(parsedScript, aSafeWin, aChromeWin);
+      script.updateFromNewScript(parsedScript, aSafeWin);
     } else {
       // We are already downloading dependencies for this script
       // so add its window to the list
-      script.pendingExec.push({'safeWin': aSafeWin, 'chromeWin': aChromeWin});
+      script.pendingExec.push({'safeWin': aSafeWin});
     }
   }
 

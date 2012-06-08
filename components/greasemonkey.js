@@ -310,6 +310,7 @@ function startup() {
   gStartupHasRun = true;
 
   Cu.import(gmRunScriptFilename);
+  Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
   Cu.import("resource://greasemonkey/parseScript.js");
   Cu.import("resource://greasemonkey/prefmanager.js");
   Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
@@ -452,21 +453,19 @@ service.prototype.contentThawed = function(contentWindowId) {
       function(index, command) { command.frozen = false; });
 };
 
-service.prototype.runScripts = function(
-    aRunWhen, aWrappedContentWin, aChromeWin
-) {
+service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   var url = aWrappedContentWin.document.location.href;
   if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-    this._config.updateModifiedScripts(aRunWhen, aWrappedContentWin, aChromeWin);
+    this._config.updateModifiedScripts(aRunWhen, aWrappedContentWin);
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
     return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
   });
   if (scripts.length > 0) {
-    this.injectScripts(scripts, url, aWrappedContentWin, aChromeWin);
+    this.injectScripts(scripts, url, aWrappedContentWin);
     this._config.checkScriptsForRemoteUpdates(scripts);
   }
 };
@@ -476,8 +475,9 @@ service.prototype.ignoreNextScript = function() {
 };
 
 service.prototype.injectScripts = function(
-    scripts, url, wrappedContentWin, chromeWin
+    scripts, url, wrappedContentWin
 ) {
+  var chromeWin = getChromeWinForContentWin(wrappedContentWin);
   var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
