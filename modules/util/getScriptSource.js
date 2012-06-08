@@ -21,8 +21,6 @@ function getScriptSource(aScript) {
   // The semicolons after requires fix a failure of javascript's semicolon
   // insertion rules (see #1491).
   var scriptSrc = requires.join(';\n') + ';\n' + aScript.textContent + '\n';
-  if (!aScript.unwrap) {
-    return '(function(){' + scriptSrc + '})()';
-  }
+
   return scriptSrc;
 }

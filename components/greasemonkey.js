@@ -49,6 +49,10 @@ function alert(msg) {
     .alert(null, "Greasemonkey alert", msg);
 }
 
+function anonWrap(aSource) {
+  return ['(function(){', aSource, '})()'].join('');
+}
+
 // Examines the stack to determine if an API should be callable.
 function GM_apiLeakCheck(apiName) {
   var stack = Components.stack;
@@ -522,9 +526,12 @@ service.prototype.injectScripts = function(
         script, wrappedContentWin, chromeWin, firebugConsole, url);
 
     var scriptSrc = GM_util.getScriptSource(script);
+    if (!script.unwrap && !GM_util.inArray(script.grants, 'none')) {
+      scriptSrc = anonWrap(scriptSrc);
+    }
     if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
       // Wrap anyway on early return.
-      runScriptInSandbox("(function(){"+ scriptSrc +"})()", sandbox, script);
+      runScriptInSandbox(anonWrap(scriptSrc), sandbox, script);
     }
   }
 };
