@@ -83,26 +83,30 @@ function GM_apiLeakCheck(apiName) {
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
-  var sandbox;
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
-    sandbox = new Components.utils.Sandbox(aContentWin.wrappedJSObject);
-    sandbox.__proto__ = aContentWin.wrappedJSObject;
-    return sandbox;
+    return new Components.utils.Sandbox(
+        aContentWin,
+        {
+          'sandboxName': aScript.id,
+          'sandboxPrototype': aContentWin,
+          'wantXrays': false,
+        });
   }
 
-  var unsafeWin = aContentWin.wrappedJSObject;
-  var sandbox = new Components.utils.Sandbox(aContentWin);
-
-  sandbox.__proto__ = aContentWin;
-  sandbox.unsafeWindow = unsafeWin;
-  sandbox.XPathResult = Ci.nsIDOMXPathResult;
+  var sandbox = new Components.utils.Sandbox(
+      aContentWin,
+      {
+        'sandboxName': aScript.id,
+        'sandboxPrototype': aContentWin,
+        'wantXrays': true,
+      });
+  sandbox.unsafeWindow = aContentWin.wrappedJSObject;
+  sandbox.console = aFirebugConsole ? aFirebugConsole : new GM_console(aScript);
 
   // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
   sandbox.alert = alert;
-
-  sandbox.console = aFirebugConsole ? aFirebugConsole : new GM_console(aScript);
 
   var imp = sandbox.importFunction;
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
