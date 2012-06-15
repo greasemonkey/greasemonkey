@@ -56,6 +56,7 @@ var observer = {
         // Bust the addon cache, and get references to the old and new version.
         if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
+        if (!oldAddon) break;
         ScriptAddonReplaceScript(script);
         addon = ScriptAddonFactoryByScript(script);
 
