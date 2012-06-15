@@ -152,11 +152,9 @@ Config.prototype.install = function(script, oldScript) {
   }
 
   if (oldScript) {
-    if (GM_util.compareFirefoxVersion('4.0') >= 0) {
-      var scope = {};
-      Components.utils.import('resource://greasemonkey/addons4.js', scope);
-      scope.ScriptAddonReplaceScript(script);
-    }
+    var scope = {};
+    Components.utils.import('resource://greasemonkey/addons4.js', scope);
+    scope.ScriptAddonReplaceScript(script);
     this._changed(script, 'modified', oldScript.id);
   } else {
     this._changed(script, 'install', existingIndex);

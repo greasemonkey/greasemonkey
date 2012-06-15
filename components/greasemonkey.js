@@ -27,7 +27,7 @@ var gExtensionPath = (function() {
 })();
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
-var gMaxJSVersion = "1.8";
+var gMaxJSVersion = "ECMAv5";
 var gGreasemonkeyVersion = 'unknown';
 
 var gMenuCommands = [];
@@ -93,13 +93,7 @@ function createSandbox(
   }
 
   var unsafeWin = aContentWin.wrappedJSObject;
-  sandbox = new Components.utils.Sandbox(aContentWin);
-
-  if (GM_util.compareFirefoxVersion("4.0") < 0) {
-    // Fixes .. something confusing.  Must be before __proto__ assignment.
-    // See #1192
-    sandbox.document = aContentWin.document;
-  }
+  var sandbox = new Components.utils.Sandbox(aContentWin);
 
   sandbox.__proto__ = aContentWin;
   sandbox.unsafeWindow = unsafeWin;
@@ -234,22 +228,10 @@ function isTempScript(uri) {
 }
 
 function loadGreasemonkeyVersion() {
-  // Find the new version, and call the continuation when ready. (Firefox 4+
-  // gives us only an async API, requiring this cumbersome setup.)
-  if (GM_util.compareFirefoxVersion("4.0") < 0) {
-    // This is too early for Firefox 3.  Sloppy timeout workaround.
-    GM_util.timeout(function() {
-      var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
-          .getService(Components.interfaces.nsIExtensionManager);
-      var item = extMan.getItemForID(GM_GUID);
-      gGreasemonkeyVersion = new String(item.version);
-    }, 0);
-  } else {
-    Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    AddonManager.getAddonByID(GM_GUID, function(addon) {
-      gGreasemonkeyVersion = new String(addon.version);
-    });
-  }
+  Components.utils.import("resource://gre/modules/AddonManager.jsm");
+  AddonManager.getAddonByID(GM_GUID, function(addon) {
+    gGreasemonkeyVersion = new String(addon.version);
+  });
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
@@ -363,16 +345,6 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
   loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
-
-  if (GM_util.compareFirefoxVersion("4.0") >= 0) {
-    gMaxJSVersion = "ECMAv5";
-  }
-
-  // Firefox <4 reports a different stack.fileName for the module.
-  if (GM_util.compareFirefoxVersion("4.0") < 0) {
-    // Pull the name out of the variable the module exports.
-    gmRunScriptFilename = GM_runScript_filename;
-  }
 
   loadGreasemonkeyVersion();
 }

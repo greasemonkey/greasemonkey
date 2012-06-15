@@ -70,16 +70,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   var observerService = Components.classes["@mozilla.org/observer-service;1"]
      .getService(Components.interfaces.nsIObserverService);
   observerService.addObserver(GM_BrowserUI, "install-userscript", true);
-
-  // Since Firefox 3 does not give us inner-window-destroyed, which is exactly
-  // what we want, instead we listen for dom-window-destroyed, which comes
-  // pretty close (at least it doesn't leak memory).  But: listening for dom-
-  // in Firefox 4 causes breakage, so we just do either-or.
-  if (GM_util.compareFirefoxVersion("4.0") >= 0) {
-    observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
-  } else {
-    observerService.addObserver(GM_BrowserUI, "dom-window-destroyed", true);
-  }
+  observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
 
   // we use this to determine if we are the active window sometimes
   GM_BrowserUI.winWat = Components
