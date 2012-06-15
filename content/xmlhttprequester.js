@@ -66,6 +66,7 @@ function(safeUrl, details, req) {
   setupRequestEvent(req, "load", details);
   setupRequestEvent(req, "progress", details);
   setupRequestEvent(req, "readystatechange", details);
+  setupRequestEvent(req, "timeout", details);
   if (details.upload) {
     setupRequestEvent(req.upload, "abort", details.upload);
     setupRequestEvent(req.upload, "error", details.upload);
@@ -80,6 +81,9 @@ function(safeUrl, details, req) {
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
+  }
+  if (details.timeout) {
+    req.timeout = details.timeout;
   }
 
   if (details.headers) {
