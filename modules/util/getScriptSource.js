@@ -2,14 +2,14 @@ const EXPORTED_SYMBOLS = ['getScriptSource'];
 
 /** Given a script, return its entire source as a plain string. */
 function getScriptSource(aScript) {
-  var requires = [];
+  var parts = [];
   var offsets = [];
   var offset = 0;
 
   aScript.requires.forEach(function(req) {
     var contents = req.textContent;
     var lineCount = contents.split('\n').length;
-    requires.push(contents);
+    parts.push(contents);
     offset += lineCount;
     offsets.push(offset);
   });
@@ -20,7 +20,8 @@ function getScriptSource(aScript) {
   // function.
   // The semicolons after requires fix a failure of javascript's semicolon
   // insertion rules (see #1491).
-  var scriptSrc = requires.join(';\n') + ';\n' + aScript.textContent + '\n';
+  parts.push(aScript.textContent);
+  var scriptSrc = parts.join(';\n') + '\n';
 
   return scriptSrc;
 }
