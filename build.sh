@@ -47,20 +47,6 @@ for entry in locale/*; do
   fi
 done
 
-echo "Creating greasemonkey.jar ..."
-sed \
-    -e "s/^content  *\([^ ]*\)  *\([^ ]*\)/content \1 jar:chrome\/greasemonkey.jar!\/\2/" \
-    -e "s/^skin  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/skin \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
-    -e "s/^locale  *\([^ ]*\)  *\([^ ]*\)  *\([^ ]*\)/locale \1 \2 jar:chrome\/greasemonkey.jar!\/\3/" \
-    chrome.manifest > tmp
-cat tmp > chrome.manifest
-rm tmp
-find content skin locale | sort | \
-  zip -qr0D@ "greasemonkey.jar"
-rm -fr content/ skin/ locale/
-mkdir chrome
-mv greasemonkey.jar chrome/
-
 echo "Creating $GMXPI ..."
 zip -qr9DX "../$GMXPI" *
 
