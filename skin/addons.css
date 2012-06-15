@@ -1,8 +1,0 @@
-radio#userscripts-view {
-  list-style-image: url(chrome://greasemonkey/skin/icon32.png);
-}
-
-#userscripts {
-  margin: 8px;
-  margin-bottom: 0;
-}
