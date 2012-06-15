@@ -86,13 +86,16 @@ function createSandbox(
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
-    return new Components.utils.Sandbox(
+    var contentSandbox = new Components.utils.Sandbox(
         aContentWin,
         {
           'sandboxName': aScript.id,
           'sandboxPrototype': aContentWin,
           'wantXrays': false,
         });
+    Components.utils.evalInSandbox(
+        'const GM_info = ' + uneval(info(aScript)), contentSandbox);
+    return contentSandbox;
   }
 
   var sandbox = new Components.utils.Sandbox(
