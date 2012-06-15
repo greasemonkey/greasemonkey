@@ -328,12 +328,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     }
   }
 
-  // TODO: Some day, make "none" the default.  Until then: sniff.
-  if (0 == this._grants.length) {
-    this.grants = GM_util.sniffGrants(this);
-    this._changed('modified', 'grants');
-  }
-
+  this.checkConfig();
   this._name = node.getAttribute("name");
   this._namespace = node.getAttribute("namespace");
   this._description = node.getAttribute("description");
@@ -607,6 +602,14 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
 
       GM_util.getService().config._changed(this, "modified", this.id);
     }));
+  }
+};
+
+Script.prototype.checkConfig = function() {
+  // TODO: Some day, make "none" the default.  Until then: sniff.
+  if (0 == this._grants.length) {
+    this.grants = GM_util.sniffGrants(this);
+    this._changed('modified', 'grants');
   }
 };
 

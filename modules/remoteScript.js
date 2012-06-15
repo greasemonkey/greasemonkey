@@ -328,14 +328,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Let the config know the base/file name has changed to its real value now.
     GM_config._changed(this.script, 'modified', this.script.id);
 
-    // TODO: One day we hope to remove sniffing as the default.  For some time
-    // however, we need to sniff to preserve backwards compatibility.
-    // This happens here because it has to be after the whole script is
-    // installed and available so we can read its contents.
-    if (this.script.grants.length == 0) {
-      this.script.grants = GM_util.sniffGrants(this.script);
-      dump('On install, set sniffed grants: ' + this.script.grants + '\n');
-    }
+    this.script.checkConfig();
 
     // Let the user know we're all done.
     GM_notification(
