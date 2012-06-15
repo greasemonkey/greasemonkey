@@ -20,9 +20,9 @@ function extractMeta(aSource) {
 }
 
 /** Parse the source of a script; produce Script object. */
-function parse(aSource, aUri, aFailWhenMissing) {
+function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
   var meta = extractMeta(aSource).match(gLineSplitRegexp);
-  if (aFailWhenMissing && !meta) return null;
+  if (aFailWhenMissing && !meta && !aNoMetaOk) return null;
 
   var script = new Script();
 
@@ -34,6 +34,11 @@ function parse(aSource, aUri, aFailWhenMissing) {
     script._name = name;
   }
   if (aUri) script._namespace = aUri.host;
+
+  if (!meta && aNoMetaOk) {
+    setDefaults(script);
+    return script;
+  }
 
   var resourceNames = {};
   if (meta) for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {
@@ -137,6 +142,11 @@ function parse(aSource, aUri, aFailWhenMissing) {
     }
   }
 
+  setDefaults(script);
+  return script;
+}
+
+function setDefaults(script) {
   if (!script.updateURL && script._downloadURL) {
     script.updateURL = script._downloadURL;
   }
@@ -146,6 +156,4 @@ function parse(aSource, aUri, aFailWhenMissing) {
   if (script._includes.length == 0 && script._matches.length == 0) {
     script._includes.push('*');
   }
-
-  return script;
 }

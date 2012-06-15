@@ -356,9 +356,10 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
 
   var scope = {};
   Components.utils.import('resource://greasemonkey/parseScript.js', scope);
-  var script = scope.parse(aSource, this._uri, true);
+  var script = scope.parse(aSource, this._uri, true, aFatal);
   if (!script || script.parseErrors.length) {
     if (aFatal) {
+      dump('fatal failure to parse script!\n');
       this.cleanup(
           stringBundle.GetStringFromName('error.parsingScript')
           + '\n' + script.parseErrors);
