@@ -241,8 +241,7 @@ function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
   var browser = chromeWin.gBrowser;
-  var tabs = browser.mTabs /* Firefox <=3.6 */ || browser.tabs /* >=4.0 */;
-  var currentTab = tabs[
+  var currentTab = browser.tabs[
       browser.getBrowserIndexForDocument(safeContentWin.document)];
   var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
   var newWin = GM_windowForTab(newTab, browser);
@@ -525,10 +524,4 @@ service.prototype.withAllMenuCommandsForWindowId = function(
 
 //////////////////////////// Component Registration ////////////////////////////
 
-if (XPCOMUtils.generateNSGetFactory) {
-  // Firefox >= 4
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory([service]);
-} else {
-  // Firefox <= 3.6.*
-  var NSGetModule = XPCOMUtils.generateNSGetModule([service]);
-}
+var NSGetFactory = XPCOMUtils.generateNSGetFactory([service]);

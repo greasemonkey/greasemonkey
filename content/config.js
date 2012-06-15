@@ -294,23 +294,10 @@ Config.prototype.getScriptById = function(scriptId) {
 Config.prototype._updateVersion = function() {
   var initialized = GM_prefRoot.getValue("version", "0.0");
 
-  // Find the new version, and call the continuation when ready.  (Firefox 4+
-  // gives us only an async API, requiring this cumbersome setup.)
-  if ("@mozilla.org/extensions/manager;1" in Components.classes) {
-    // Firefox <= 3.6.*
-    var extMan = Components.classes["@mozilla.org/extensions/manager;1"]
-        .getService(Components.interfaces.nsIExtensionManager);
-    var item = extMan.getItemForID(this.GM_GUID);
-    continuation(item.version);
-  } else {
-    // Firefox 3.7+
-    Components.utils.import("resource://gre/modules/AddonManager.jsm");
-    AddonManager.getAddonByID(this.GM_GUID, function(addon) {
-      continuation(addon.version);
-    });
-  }
+  Components.utils.import("resource://gre/modules/AddonManager.jsm");
+  AddonManager.getAddonByID(this.GM_GUID, function(addon) {
+    var newVersion = addon.version;
 
-  function continuation(newVersion) {
     // Update the currently initialized version so we don't do this work again.
     GM_prefRoot.setValue("version", newVersion);
 
@@ -325,5 +312,5 @@ Config.prototype._updateVersion = function() {
         chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 0, url);
       }
     }
-  }
+  });
 };

@@ -351,11 +351,6 @@ function GM_showPopup(aEvent) {
   GM_MenuCommander.onPopupShowing(menuCommandPopup);
 }
 
-// Firefox 3.6: addons4-overlay is not loaded, so this is not defined.
-if (typeof GM_OpenScriptsMgr == "undefined") {
-  function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
-}
-
 
 // Short-term workaround for #1406: Tab Mix Plus breaks opening links in
 // new tabs because it depends on this function, and incorrectly checks for

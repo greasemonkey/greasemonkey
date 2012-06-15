@@ -1,11 +1,6 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
-try {
-  Components.utils.import('resource://gre/modules/AddonManager.jsm');
-} catch (e) {
-  // Ignore; assume we're in Firefox 3, where this is not present.
-}
-
+Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');

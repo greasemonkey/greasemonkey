@@ -278,12 +278,6 @@ ScriptInstall.prototype.toString = function() {
 
 var WindowObserver = {
   // Inject the 'User Scripts' choice into the list of add-on types.
-  addToAddonsManager: function WindowObserver_addToAddonsManager(aWindow) {
-    // This function used to handle tasks that are now done in a XUL overlay.
-    // Leaving the function here in case the routing to make it run at the
-    // right time proves useful.
-    // TODO: Remove once Firefox 4 is final, if it is still unused.
-  },
 
   findAllAddonsManagers: function WindowObserver_findAllAddonsManagers() {
     var managers = [];
