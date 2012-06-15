@@ -568,7 +568,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
           true);
       this.pendingExec.push('document-start update');
     } else {
-      this.pendingExec.push({'safeWin': safeWin, 'chromeWin': chromeWin});
+      this.pendingExec.push({'safeWin': safeWin});
     }
 
     // Re-download dependencies.
