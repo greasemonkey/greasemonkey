@@ -10,6 +10,11 @@ Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
 Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
+var stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
 function Script(configNode) {
   this._observers = [];
 
@@ -526,6 +531,35 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._version = newScript._version;
   this._downloadURL = newScript._downloadURL;
   this.updateURL = newScript.updateURL;
+
+  if (0 == this._grants.length && GM_prefRoot.getValue('showGrantsWarning')) {
+    try {
+    var getString = stringBundle.GetStringFromName;
+    var chromeWin = GM_util.getBrowserWindow();
+    chromeWin.PopupNotifications.show(
+        chromeWin.gBrowser.selectedBrowser,
+        'greasemonkey-grants',
+        getString('warning.scripts-should-grant'),
+        null,  // anchorID
+        {
+          'label': getString('warning.scripts-should-grant.read-docs'),
+          'accessKey': getString('warning.scripts-should-grant.read-docs.key'),
+          'callback': function() {
+            chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
+                'http://wiki.greasespot.net/@grant',
+                {'ownerTab': chromeWin.gBrowser.selectedTab});
+          }
+        },
+        [{
+          'label': getString('warning.scripts-should-grant.dont-show'),
+          'accessKey': getString('warning.scripts-should-grant.dont-show.key'),
+          'callback': function() {
+            GM_prefRoot.setValue('showGrantsWarning', false);
+          }
+        }]);
+    } catch (e) { dump(e+'\n') }
+  }
+  this.checkConfig();
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {

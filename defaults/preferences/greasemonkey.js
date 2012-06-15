@@ -11,3 +11,4 @@ pref("greasemonkey.autoInstallUpdates", true);
 pref("greasemonkey.requireSecureUpdates", true);
 pref("greasemonkey.haveInsertedToolbarbutton", false);
 pref("greasemonkey.logChrome", false);
+pref("greasemonkey.showGrantsWarning", true);
