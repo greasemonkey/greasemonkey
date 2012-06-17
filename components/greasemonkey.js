@@ -504,10 +504,9 @@ service.prototype.injectScripts = function(
         script, wrappedContentWin, chromeWin, firebugConsole, url);
 
     var scriptSrc = GM_util.getScriptSource(script);
-    if (!script.unwrap && !GM_util.inArray(script.grants, 'none')) {
-      scriptSrc = anonWrap(scriptSrc);
-    }
-    if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
+    var shouldWrap = !script.unwrap && !GM_util.inArray(script.grants, 'none');
+    if (shouldWrap) scriptSrc = anonWrap(scriptSrc);
+    if (!runScriptInSandbox(scriptSrc, sandbox, script) && !shouldWrap) {
       // Wrap anyway on early return.
       runScriptInSandbox(anonWrap(scriptSrc), sandbox, script);
     }
