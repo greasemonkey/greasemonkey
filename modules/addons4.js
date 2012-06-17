@@ -276,71 +276,11 @@ ScriptInstall.prototype.toString = function() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-var WindowObserver = {
-  // Inject the 'User Scripts' choice into the list of add-on types.
-
-  findAllAddonsManagers: function WindowObserver_findAllAddonsManagers() {
-    var managers = [];
-    var windows = Services.wm.getEnumerator('navigator:browser');
-    while (windows.hasMoreElements()) {
-      var window = windows.getNext().QueryInterface(Ci.nsIDOMWindow);
-      window.gBrowser.browsers.forEach(function(aBrowser) {
-        if (aBrowser.currentURI.spec == 'about:addons')
-          managers.push(aBrowser.contentWindow);
-      });
-    }
-    return managers;
-  },
-
-  addToAddonsManagers: function WindowObserver_addToAddonsManagers() {
-    var managers = this.findAllAddonsManagers();
-    managers.forEach(function(aWindow) {
-      this.addToAddonsManager(aWindow);
-    }, this);
-  },
-
-  /* TODO: restore when we are restartless for FF4.
-  removeFromAddonsManagers: function WindowObserver_removeFromAddonsManagers() {
-    var managers = this.findAllAddonsManagers();
-    managers.forEach(function(aWindow) {
-      var window = aWindow.wrappedJSObject;
-      var scripts = window.document.getElementById('category-scripts');
-      scripts.parentNode.removeChild(scripts);
-      var styles = window.document.getElementById('script-styles');
-      styles.parentNode.removeChild(styles);
-      window.gStrings.ext = window.gStrings.ext.basebundle;
-    });
-  },
-  */
-
-  observe: function WindowObserver_observe(aSubject, aTopic, aData) {
-    var win = aSubject;
-    var uri = win.document.documentURIObject;
-    if (uri.spec != 'about:addons') return;
-    // Run after DOM load, so that the window contents exist, to be altered.
-    win.addEventListener('DOMContentLoaded',
-        function() { WindowObserver.addToAddonsManager(win); },
-        false);
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
 var _addonsStartupHasRun = false;
 function GM_addonsStartup(aParams) {
   if (_addonsStartupHasRun) return;
   _addonsStartupHasRun = true;
 
-  Services.obs.addObserver(WindowObserver, 'chrome-document-global-created', false);
   AddonManagerPrivate.registerProvider(AddonProvider,
       [{'id': 'user-script'}]);
-  WindowObserver.addToAddonsManagers();
 }
-
-/* TODO: restore when we are restartless for FF4.
-function addonsShutdown() {
-  WindowObserver.removeFromAddonsManagers();
-  AddonManagerPrivate.unregisterProvider(AddonProvider);
-  Services.obs.removeObserver(WindowObserver, 'chrome-document-global-created');
-}
-*/
