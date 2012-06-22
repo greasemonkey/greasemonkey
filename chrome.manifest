@@ -5,6 +5,9 @@ contract   @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8
 category   profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
 category   content-policy @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
 
+component  {20d898f3-2fb8-4b3a-b8c7-7ad6c2c48598} components/scriptProtocol.js
+contract   @mozilla.org/network/protocol;1?name=greasemonkey-script {20d898f3-2fb8-4b3a-b8c7-7ad6c2c48598}
+
 content    greasemonkey content/
 skin       greasemonkey classic/1.0 skin/
 

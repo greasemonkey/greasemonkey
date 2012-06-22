@@ -3,7 +3,6 @@
 var DESCRIPTION = "GM_GreasemonkeyService";
 var CONTRACTID = "@greasemonkey.mozdev.org/greasemonkey-service;1";
 var CLASSID = Components.ID("{77bf3650-1cd6-11da-8cd6-0800200c9a66}");
-var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -34,7 +33,6 @@ var gExtensionPath = (function() {
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
-var gGreasemonkeyVersion = 'unknown';
 
 var gMenuCommands = [];
 var gStartupHasRun = false;
@@ -89,21 +87,6 @@ function GM_apiLeakCheck(apiName) {
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
-  if (GM_util.inArray(aScript.grants, 'none')) {
-    // If there is an explicit none grant, use a plain unwrapped sandbox
-    // with no other content.
-    var contentSandbox = new Components.utils.Sandbox(
-        aContentWin,
-        {
-          'sandboxName': aScript.id,
-          'sandboxPrototype': aContentWin,
-          'wantXrays': false,
-        });
-    Components.utils.evalInSandbox(
-        'const GM_info = ' + uneval(info(aScript)), contentSandbox);
-    return contentSandbox;
-  }
-
   var sandbox = new Components.utils.Sandbox(
       aContentWin,
       {
@@ -167,11 +150,6 @@ function createSandbox(
         'contentStartRequest');
   }
 
-  if (GM_util.inArray(aScript.grants, 'GM_info')) {
-    Components.utils.evalInSandbox(
-        'const GM_info = ' + uneval(info(aScript)), sandbox);
-  }
-
   return sandbox;
 }
 
@@ -208,43 +186,10 @@ function getFirebugConsole(wrappedContentWin, chromeWin) {
   }
 }
 
-function info(aScript) {
-  var matches = [];
-  for (var i = 0, m = null; m = aScript.matches[i]; i++) {
-    matches[matches.length] = m.pattern;
-  }
-  return {
-    'version': gGreasemonkeyVersion,
-    'scriptWillUpdate': aScript.isRemoteUpdateAllowed(),
-    'script': {
-      'description': aScript.description,
-      'excludes': aScript.excludes,
-      // 'icon': ???,
-      'includes': aScript.includes,
-      'matches': matches,
-      'name': aScript.name,
-      'namespace': aScript.namespace,
-      // 'requires': ???,
-      // 'resources': ???,
-      'run-at': aScript.runAt,
-      'unwrap': aScript.unwrap,
-      'version': aScript.version,
-    },
-    'scriptMetaStr': extractMeta(aScript.textContent),
-  }
-}
-
 function isTempScript(uri) {
   if (uri.scheme != "file") return false;
   var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
   return gTmpDir.contains(file, true);
-}
-
-function loadGreasemonkeyVersion() {
-  Components.utils.import("resource://gre/modules/AddonManager.jsm");
-  AddonManager.getAddonByID(GM_GUID, function(addon) {
-    gGreasemonkeyVersion = new String(addon.version);
-  });
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
@@ -346,7 +291,6 @@ function startup(aService) {
 
   Cu.import(gmRunScriptFilename);
   Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
-  Cu.import("resource://greasemonkey/parseScript.js");
   Cu.import("resource://greasemonkey/prefmanager.js");
   Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
@@ -357,8 +301,6 @@ function startup(aService) {
   loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
   loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
-
-  loadGreasemonkeyVersion();
 
   var observerService = Components.classes['@mozilla.org/observer-service;1']
      .getService(Components.interfaces.nsIObserverService);
@@ -406,9 +348,9 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
     return ret;
   }
 
-  // Don't interrupt the "view-source:" scheme (which is
-  // triggered if the link in the error console is clicked).
-  if ("view-source" == cl.scheme) {
+  // Don't interrupt the "view-source:" scheme (which is triggered if the link
+  // in the error console is clicked), nor the "greasemonkey-script:" scheme.
+  if ("view-source" == cl.scheme || "greasemonkey-script" == cl.scheme) {
     return ret;
   }
 
@@ -517,15 +459,26 @@ service.prototype.injectScripts = function(
   var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var sandbox = createSandbox(
-        script, wrappedContentWin, chromeWin, firebugConsole, url);
-
-    var scriptSrc = GM_util.getScriptSource(script);
-    var shouldWrap = !script.unwrap && !GM_util.inArray(script.grants, 'none');
-    if (shouldWrap) scriptSrc = anonWrap(scriptSrc);
-    if (!runScriptInSandbox(scriptSrc, sandbox, script) && !shouldWrap) {
-      // Wrap anyway on early return.
-      runScriptInSandbox(anonWrap(scriptSrc), sandbox, script);
+    if (GM_util.inArray(script.grants, 'none')) {
+      // Create a script node.
+      var scriptNode = wrappedContentWin.document.createElement('script');
+      scriptNode.setAttribute('type', 'application/javascript;version=1.8');
+      scriptNode.setAttribute('src', [
+          'greasemonkey-script:', script.uuid, '/', script.name, '.user.js'
+          ].join(''));
+      // Append it to the document to execute, remove it to clean up.
+      var insertPoint = wrappedContentWin.document.documentElement.firstChild;
+      insertPoint.appendChild(scriptNode);
+      insertPoint.removeChild(scriptNode);
+    } else {
+      var sandbox = createSandbox(
+          script, wrappedContentWin, chromeWin, firebugConsole, url);
+      var scriptSrc = GM_util.getScriptSource(script);
+      if (!script.unwrap) scriptSrc = anonWrap(scriptSrc);
+      if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
+        // Wrap anyway on early return.
+        runScriptInSandbox(anonWrap(scriptSrc), sandbox, script);
+      }
     }
   }
 };

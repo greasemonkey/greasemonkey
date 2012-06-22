@@ -2,7 +2,7 @@ const EXPORTED_SYMBOLS = ['getScriptSource'];
 
 /** Given a script, return its entire source as a plain string. */
 function getScriptSource(aScript) {
-  var parts = [];
+  var parts = ['const GM_info = ' + uneval(aScript.info())];
   var offsets = [];
   var offset = 0;
 

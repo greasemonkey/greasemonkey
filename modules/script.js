@@ -2,6 +2,7 @@ var EXPORTED_SYMBOLS = ['Script'];
 
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
 Components.utils.import('resource://greasemonkey/scriptRequire.js');
@@ -14,6 +15,13 @@ var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+var gGreasemonkeyVersion = 'unknown';
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+AddonManager.getAddonByID(GM_GUID, function(addon) {
+  gGreasemonkeyVersion = '' + addon.version;
+});
 
 function Script(configNode) {
   this._observers = [];
@@ -47,6 +55,7 @@ function Script(configNode) {
   this._updateVersion = null;
   this._userExcludes = [];
   this._userIncludes = [];
+  this._uuid = [];
   this._version = null;
 
   this.checkRemoteUpdates = true;
@@ -123,6 +132,9 @@ function Script_getDependencies() {
 
 Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
+
+Script.prototype.__defineGetter__('uuid',
+function Script_getUuid() { return this._uuid; });
 
 Script.prototype.__defineGetter__('version',
 function Script_getVersion() { return this._version; });
@@ -298,6 +310,8 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._installTime = parseInt(node.getAttribute("installTime"), 10);
   }
 
+  this._uuid = node.getAttribute("uuid");
+
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
     switch (childNode.nodeName) {
     case "Exclude":
@@ -417,6 +431,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
   scriptNode.setAttribute("updateAvailable", this.updateAvailable);
+  scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
   if (this._downloadURL) {
@@ -447,6 +462,32 @@ function Script_getPreviewURL() {
       .getService(Components.interfaces.nsIIOService)
       .newFileURI(this._tempFile).spec;
 });
+
+Script.prototype.info = function() {
+  var matches = [];
+  for (var i = 0, m = null; m = this.matches[i]; i++) {
+    matches[matches.length] = m.pattern;
+  }
+  return {
+    'version': gGreasemonkeyVersion,
+    'scriptWillUpdate': this.isRemoteUpdateAllowed(),
+    'script': {
+      'description': this.description,
+      'excludes': this.excludes,
+      // 'icon': ???,
+      'includes': this.includes,
+      'matches': matches,
+      'name': this.name,
+      'namespace': this.namespace,
+      // 'requires': ???,
+      // 'resources': ???,
+      'run-at': this.runAt,
+      'unwrap': this.unwrap,
+      'version': this.version,
+    },
+    'scriptMetaStr': extractMeta(this.textContent),
+  }
+};
 
 Script.prototype.isModified = function() {
   if (!this.fileExists(this.file)) return false;
@@ -658,6 +699,11 @@ Script.prototype.checkConfig = function() {
   if (0 == this._grants.length) {
     this.grants = GM_util.sniffGrants(this);
     this._changed('modified', 'grants');
+  }
+
+  if (!this._uuid || !this._uuid.length) {
+    this._uuid = GM_util.uuid();
+    this._changed('modified', 'uuid');
   }
 };
 
