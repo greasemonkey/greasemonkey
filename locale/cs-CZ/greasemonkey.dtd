@@ -24,8 +24,8 @@
 <!ENTITY newscript.name "Název">
 <!ENTITY newscript.namespace "Název uložení">
 <!ENTITY newscript.description "Popis">
-<!ENTITY newscript.includes "Zahrnuje (jeden řádek)">
-<!ENTITY newscript.excludes "Vylučuje (jeden řádek)">
+<!ENTITY newscript.includes "Zahrnout (jeden řádek)">
+<!ENTITY newscript.excludes "Vyloučit (jeden řádek)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Změnit editor">
 <!ENTITY options.globalExcludes "Zahrnout globálně">
@@ -35,7 +35,7 @@
 <!ENTITY UpdateChecking "Zkontrolovat aktualizace">
 <!ENTITY EnableUpdateChecking "Povolit automatickou kontrolu aktualizací skriptu">
 <!ENTITY UpdateInterval "Minimální počet dní ke kontrole aktualizací">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
+<!ENTITY AutoInstallUpdates "Automaticky instalovat nalezené aktualizace">
 <!ENTITY RequireSecureUpdates "Použít zabezpečené aktualizace">
 <!ENTITY greasemonkey.noscriptshere "Žádné nainstalované skripty neběží na této stránce.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">

@@ -1,5 +1,5 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
+<!ENTITY CheckUpdates "Frissítések keresése automatikusan">
+<!ENTITY CheckUpdates.accesskey "F">
 <!ENTITY Edit "Szerkesztés">
 <!ENTITY Edit.accesskey "S">
 <!ENTITY Edit.tooltip "Parancsfájl szerkesztése">
@@ -7,16 +7,16 @@
 <!ENTITY ExecuteLast "Végrehajtás utolsóként">
 <!ENTITY ExecuteLater "Végrehajtás később">
 <!ENTITY ExecuteSooner "Végrehajtás előbb">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Frissítések keresése">
+<!ENTITY InstallUpdate "Frissítés telepítése">
 <!ENTITY MoveDown "Mozgatás lefele">
 <!ENTITY MoveDown.accesskey "l">
 <!ENTITY MoveToBottom "Mozgatás legalulra">
 <!ENTITY MoveToBottom.accesskey "a">
 <!ENTITY MoveToTop "Mozgatás legfelülre">
-<!ENTITY MoveToTop.accesskey "f">
+<!ENTITY MoveToTop.accesskey "e">
 <!ENTITY MoveUp "Mozgatás felfelé">
-<!ENTITY MoveUp.accesskey "f">
+<!ENTITY MoveUp.accesskey "g">
 <!ENTITY NewScript "Új parancsfájl létrehozása">
 <!ENTITY NewScript.accesskey "p">
 <!ENTITY Show "Tartalmazó mappa megnyitása">
