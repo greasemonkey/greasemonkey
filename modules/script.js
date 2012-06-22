@@ -532,33 +532,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._downloadURL = newScript._downloadURL;
   this.updateURL = newScript.updateURL;
 
-  if (0 == this._grants.length && GM_prefRoot.getValue('showGrantsWarning')) {
-    try {
-    var getString = stringBundle.GetStringFromName;
-    var chromeWin = GM_util.getBrowserWindow();
-    chromeWin.PopupNotifications.show(
-        chromeWin.gBrowser.selectedBrowser,
-        'greasemonkey-grants',
-        getString('warning.scripts-should-grant'),
-        null,  // anchorID
-        {
-          'label': getString('warning.scripts-should-grant.read-docs'),
-          'accessKey': getString('warning.scripts-should-grant.read-docs.key'),
-          'callback': function() {
-            chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
-                'http://wiki.greasespot.net/@grant',
-                {'ownerTab': chromeWin.gBrowser.selectedTab});
-          }
-        },
-        [{
-          'label': getString('warning.scripts-should-grant.dont-show'),
-          'accessKey': getString('warning.scripts-should-grant.dont-show.key'),
-          'callback': function() {
-            GM_prefRoot.setValue('showGrantsWarning', false);
-          }
-        }]);
-    } catch (e) { dump(e+'\n') }
-  }
+  this.showGrantWarning();
   this.checkConfig();
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
@@ -637,6 +611,39 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       GM_util.getService().config._changed(this, "modified", this.id);
     }));
   }
+};
+
+Script.prototype.showGrantWarning = function () {
+  if (0 != this._grants.length || !GM_prefRoot.getValue('showGrantsWarning')) {
+    return;
+  }
+  var getString = stringBundle.GetStringFromName;
+  var chromeWin = GM_util.getBrowserWindow();
+
+  var primaryAction = {
+        'label': getString('warning.scripts-should-grant.read-docs'),
+        'accessKey': getString('warning.scripts-should-grant.read-docs.key'),
+        'callback': function() {
+          chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
+              'http://wiki.greasespot.net/@grant',
+              {'ownerTab': chromeWin.gBrowser.selectedTab});
+        }
+      };
+  var secondaryActions = [{
+        'label': getString('warning.scripts-should-grant.dont-show'),
+        'accessKey': getString('warning.scripts-should-grant.dont-show.key'),
+        'callback': function() {
+          GM_prefRoot.setValue('showGrantsWarning', false);
+        }
+      }];
+
+  chromeWin.PopupNotifications.show(
+      chromeWin.gBrowser.selectedBrowser,
+      'greasemonkey-grants',
+      getString('warning.scripts-should-grant'),
+      null,  // anchorID
+      primaryAction, secondaryActions
+      );
 };
 
 Script.prototype.checkConfig = function() {
