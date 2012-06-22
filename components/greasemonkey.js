@@ -127,7 +127,8 @@ function createSandbox(
 
   var scriptResources = new GM_Resources(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_getResourceURL')) {
-    imp(GM_util.hitch(scriptResources, 'getResourceURL'), 'GM_getResourceURL');
+    imp(GM_util.hitch(scriptResources, 'getResourceURL', aScript),
+        'GM_getResourceURL');
   }
   if (GM_util.inArray(aScript.grants, 'GM_getResourceText')) {
     imp(GM_util.hitch(

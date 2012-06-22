@@ -46,12 +46,12 @@ function GM_Resources(script){
   this.script = script;
 }
 
-GM_Resources.prototype.getResourceURL = function(name) {
+GM_Resources.prototype.getResourceURL = function(aScript, name) {
   if (!GM_apiLeakCheck("GM_getResourceURL")) {
     return undefined;
   }
 
-  return this._getDep(name).dataContent;
+  return ['greasemonkey-script:', aScript.uuid, '/', name].join('');
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
