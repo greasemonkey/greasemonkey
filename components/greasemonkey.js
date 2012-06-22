@@ -340,7 +340,7 @@ function runScriptInSandbox(code, sandbox, script) {
   return true; // did not need a (function() {...})() enclosure.
 }
 
-function startup() {
+function startup(aService) {
   if (gStartupHasRun) return;
   gStartupHasRun = true;
 
@@ -359,6 +359,10 @@ function startup() {
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   loadGreasemonkeyVersion();
+
+  var observerService = Components.classes['@mozilla.org/observer-service;1']
+     .getService(Components.interfaces.nsIObserverService);
+  observerService.addObserver(aService, 'document-element-inserted', false);
 }
 
 /////////////////////////////////// Service ////////////////////////////////////
@@ -433,7 +437,14 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
   switch (aTopic) {
     case 'app-startup':
     case 'profile-after-change':
-      startup();
+      startup(this);
+      break;
+    case 'document-element-inserted':
+      var doc = aSubject;
+      if (null === doc.location) break;
+      if (!GM_util.isGreasemonkeyable(doc.location.href)) break;
+      var win = doc.defaultView;
+      this.runScripts('document-start', win);
       break;
   }
 };

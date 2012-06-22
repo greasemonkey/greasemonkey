@@ -26,20 +26,6 @@ GM_BrowserUI.init = function() {
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
 };
 
-GM_BrowserUI.progressListener = {
-  onLocationChange:function(aBrowser, aProgress, aRequest, aURI) {
-    if (aProgress.isLoadingDocument) {
-      GM_BrowserUI.gmSvc.runScripts(
-          'document-start', aProgress.DOMWindow, window);
-    }
-  },
-  onStateChange:function() { },
-  onProgressChange:function() { },
-  onStatusChange:function() { },
-  onSecurityChange:function() { },
-  onLinkIconAvailable:function() { }
-};
-
 /**
  * The browser XUL has loaded. Find the elements we need and set up our
  * listeners and wrapper objects.
@@ -83,8 +69,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
-
-  gBrowser.addTabsProgressListener(GM_BrowserUI.progressListener);
 };
 
 GM_BrowserUI.contentLoad = function(event) {
