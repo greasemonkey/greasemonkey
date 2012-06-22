@@ -242,6 +242,10 @@ Script.prototype.setFilename = function(aBaseName, aFileName) {
   this._filename = aFileName;
 };
 
+Script.prototype.setModTimeFromFile = function() {
+  this._modifiedTime = this.file.lastModifiedTime;
+};
+
 Script.prototype._loadFromConfigNode = function(node) {
   this._filename = node.getAttribute("filename");
   this._basedir = node.getAttribute("basedir") || ".";

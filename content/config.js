@@ -143,7 +143,6 @@ Config.prototype.install = function(script, oldScript) {
 
   script._dependhash = GM_util.sha1(script._rawMeta);
   script._installTime = new Date().getTime()
-  script._modifiedTime = script.file.lastModifiedTime;
 
   this._scripts.push(script);
 
