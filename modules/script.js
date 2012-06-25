@@ -624,6 +624,10 @@ Script.prototype.showGrantWarning = function () {
   var getString = stringBundle.GetStringFromName;
   var chromeWin = GM_util.getBrowserWindow();
 
+  function muteWarnings() {
+    GM_prefRoot.setValue('showGrantsWarning', false);
+  }
+
   var primaryAction = {
         'label': getString('warning.scripts-should-grant.read-docs'),
         'accessKey': getString('warning.scripts-should-grant.read-docs.key'),
@@ -631,14 +635,13 @@ Script.prototype.showGrantWarning = function () {
           chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
               'http://wiki.greasespot.net/@grant',
               {'ownerTab': chromeWin.gBrowser.selectedTab});
+          muteWarnings();
         }
       };
   var secondaryActions = [{
         'label': getString('warning.scripts-should-grant.dont-show'),
         'accessKey': getString('warning.scripts-should-grant.dont-show.key'),
-        'callback': function() {
-          GM_prefRoot.setValue('showGrantsWarning', false);
-        }
+        'callback': muteWarnings
       }];
 
   chromeWin.PopupNotifications.show(
