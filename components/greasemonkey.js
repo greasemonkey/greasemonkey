@@ -97,8 +97,11 @@ function createSandbox(
   sandbox.unsafeWindow = aContentWin.wrappedJSObject;
   if (aFirebugConsole) sandbox.console = aFirebugConsole;
 
-  // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
-  sandbox.alert = alert;
+  if (GM_util.compareFirefoxVersion("16.0") < 0) {
+    // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
+    // only in older versions.
+    sandbox.alert = alert;
+  }
 
   var imp = sandbox.importFunction;
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
