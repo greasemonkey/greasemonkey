@@ -95,7 +95,7 @@ function createSandbox(
         'wantXrays': true,
       });
   sandbox.unsafeWindow = aContentWin.wrappedJSObject;
-  sandbox.console = aFirebugConsole ? aFirebugConsole : new GM_console(aScript);
+  if (aFirebugConsole) sandbox.console = aFirebugConsole;
 
   // Temporary workaround for #1318.  TODO: Remove when upstream bug fixed.
   sandbox.alert = alert;
