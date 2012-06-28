@@ -473,7 +473,9 @@ service.prototype.injectScripts = function(
       // Append it to the document to execute, remove it to clean up.
       var insertPoint = wrappedContentWin.document.documentElement.firstChild;
       insertPoint.appendChild(scriptNode);
-      insertPoint.removeChild(scriptNode);
+      if (GM_prefRoot.getValue('removeContentScripts')) {
+        insertPoint.removeChild(scriptNode);
+      }
     } else {
       var sandbox = createSandbox(
           script, wrappedContentWin, chromeWin, firebugConsole, url);

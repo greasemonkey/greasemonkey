@@ -12,3 +12,4 @@ pref("greasemonkey.requireSecureUpdates", true);
 pref("greasemonkey.haveInsertedToolbarbutton", false);
 pref("greasemonkey.logChrome", false);
 pref("greasemonkey.showGrantsWarning", true);
+pref("greasemonkey.removeContentScripts", true);
