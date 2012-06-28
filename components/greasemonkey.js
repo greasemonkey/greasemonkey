@@ -53,10 +53,6 @@ function alert(msg) {
     .alert(null, "Greasemonkey alert", msg);
 }
 
-function anonWrap(aSource) {
-  return ['(function(){', aSource, '})()'].join('');
-}
-
 // Examines the stack to determine if an API should be callable.
 function GM_apiLeakCheck(apiName) {
   var stack = Components.stack;
@@ -468,7 +464,8 @@ service.prototype.injectScripts = function(
       var scriptNode = wrappedContentWin.document.createElement('script');
       scriptNode.setAttribute('type', 'application/javascript;version=1.8');
       scriptNode.setAttribute('src', [
-          'greasemonkey-script:', script.uuid, '/', script.name, '.user.js'
+          'greasemonkey-script:', script.uuid, '/', script.name, '.user.js',
+          '?wrapped=1'
           ].join(''));
       // Append it to the document to execute, remove it to clean up.
       var insertPoint = wrappedContentWin.document.documentElement.firstChild;
@@ -480,10 +477,10 @@ service.prototype.injectScripts = function(
       var sandbox = createSandbox(
           script, wrappedContentWin, chromeWin, firebugConsole, url);
       var scriptSrc = GM_util.getScriptSource(script);
-      if (!script.unwrap) scriptSrc = anonWrap(scriptSrc);
+      if (!script.unwrap) scriptSrc = GM_util.anonWrap(scriptSrc);
       if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
         // Wrap anyway on early return.
-        runScriptInSandbox(anonWrap(scriptSrc), sandbox, script);
+        runScriptInSandbox(GM_util.anonWrap(scriptSrc), sandbox, script);
       }
     }
   }

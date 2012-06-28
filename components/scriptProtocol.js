@@ -22,6 +22,10 @@ function ScriptChannel(aUri, aScript) {
     this.status = 404;
   }
 
+  if (aUri.spec.match(/\?.*wrapped=1/)) {
+    this.content = GM_util.anonWrap(this.content);
+  }
+
   // nsIChannel
   this.contentCharset = 'utf-8';
   this.contentLength = this.content.length;
@@ -94,7 +98,7 @@ ScriptProtocol.prototype.newChannel = function(aUri) {
   var script = GM_util.getService().config.getMatchingScripts(function(script) {
     return script.uuid == m[1];
   })[0];
-  if (aUri.spec.match(/\.user\.js$/)) {
+  if (aUri.spec.match(/\.user\.js($|\?)/)) {
     return new ScriptChannel(aUri, script);
   } else if (script) {
     for (var i = 0, resource = null; resource = script.resources[i]; i++) {
