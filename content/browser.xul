@@ -52,6 +52,7 @@
   >
     <menupopup
       onpopupshowing="GM_showPopup(event);"
+      onpopuphiding="GM_hidePopup(event);"
       onclick="GM_popupClicked(event);event.stopPropagation();"
       oncommand="GM_popupClicked(event);event.stopPropagation();"
       oncontextmenu="event.preventDefault();"
