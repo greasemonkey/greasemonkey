@@ -8,7 +8,6 @@ const APIS = [
     'GM_getResourceText',
     'GM_getResourceURL',
     'GM_getValue',
-    'GM_info',
     'GM_listValues',
     'GM_log',
     'GM_openInTab',
