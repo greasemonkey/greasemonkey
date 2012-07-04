@@ -252,6 +252,11 @@ function Script_getTextContent() { return GM_util.getContents(this.file); });
 Script.prototype.setFilename = function(aBaseName, aFileName) {
   this._basedir = aBaseName;
   this._filename = aFileName;
+
+  // If this script was created from the "new script" dialog, pretend it
+  // has been installed from its final location, so that relative dependency
+  // paths can be resolved correctly.
+  if (!this._downloadURL) this._downloadURL = this.fileURL;
 };
 
 Script.prototype.setModTimeFromFile = function() {
