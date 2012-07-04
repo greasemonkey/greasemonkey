@@ -280,7 +280,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);
     this._version = parsedScript._version;
 
-    GM_util.getService().config._changed(this, "modified", null);
+    this._changed('modified', null);
   } else {
     this._modifiedTime = parseInt(node.getAttribute("modified"), 10);
     this._dependhash = node.getAttribute("dependhash");
@@ -293,7 +293,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     this.updateAvailable = false;
     this._lastUpdateCheck = this._modifiedTime;
 
-    GM_util.getService().config._changed(this, "modified", null);
+    this_changed('modified', null);
   } else {
     this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
     this._updateVersion = node.getAttribute("updateVersion") || null;
@@ -305,7 +305,7 @@ Script.prototype._loadFromConfigNode = function(node) {
 
   if (!node.hasAttribute("installTime")) {
     this._installTime = new Date().getTime();
-    this._changed('modified', 'installTime');
+    this._changed('modified', null);
   } else {
     this._installTime = parseInt(node.getAttribute("installTime"), 10);
   }
@@ -653,7 +653,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
         }
       }
 
-      GM_util.getService().config._changed(this, "modified", this.id);
+      this._changed('modified', this.id);
     }));
   }
 };
@@ -698,12 +698,12 @@ Script.prototype.checkConfig = function() {
   // TODO: Some day, make "none" the default.  Until then: sniff.
   if (0 == this._grants.length) {
     this.grants = GM_util.sniffGrants(this);
-    this._changed('modified', 'grants');
+    this._changed('modified', this.id);
   }
 
   if (!this._uuid || !this._uuid.length) {
     this._uuid = GM_util.uuid();
-    this._changed('modified', 'uuid');
+    this._changed('modified', this.id);
   }
 };
 
@@ -757,12 +757,6 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
 
   this.updateAvailable = true;
   this._updateVersion = remoteVersion;
-  // TODO: Remove this _changed() call when em:minVersion >= 4.0.
-  this._changed("update-found", {
-    version: remoteVersion,
-    url: this._downloadURL,
-    secure: this.updateIsSecure
-  });
   GM_util.getService().config._save();
   aCallback(true);
 };
@@ -806,7 +800,7 @@ Script.prototype.installUpdate = function(aProgressCallback) {
     if (aSuccess && 'dependencies' == aType) {
       rs.install(this);
       aProgressCallback(rs, 'progress', 1);
-      GM_util.getService().config._changed(rs.script, 'modified', oldScriptId);
+      rs.script._changed('modified', oldScriptId);
     }
   }));
   return rs;
@@ -863,5 +857,5 @@ Script.prototype.uninstall = function(forUpdate) {
     GM_prefRoot.remove(this.prefroot);
   }
 
-  GM_util.getService().config._changed(this, "uninstall", forUpdate);
+  this._changed('uninstall', forUpdate);
 };
