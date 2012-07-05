@@ -293,7 +293,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     this.updateAvailable = false;
     this._lastUpdateCheck = this._modifiedTime;
 
-    this_changed('modified', null);
+    this._changed('modified', null);
   } else {
     this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
     this._updateVersion = node.getAttribute("updateVersion") || null;
