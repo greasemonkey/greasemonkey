@@ -30,6 +30,7 @@ var gExtensionPath = (function() {
     throw Error('Could not detect gExtensionPath!');
   }
 })();
+var ELEMENT_NODE = Ci.nsIDOMNode.ELEMENT_NODE;
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
@@ -469,9 +470,17 @@ service.prototype.injectScripts = function(
           ].join(''));
       // Append it to the document to execute, remove it to clean up.
       var insertPoint = wrappedContentWin.document.documentElement.firstChild;
-      insertPoint.appendChild(scriptNode);
-      if (GM_prefRoot.getValue('removeContentScripts')) {
-        insertPoint.removeChild(scriptNode);
+      while (insertPoint && ELEMENT_NODE != insertPoint.nodeType) {
+        insertPoint = insertPoint.nextSibling;
+      }
+      if (insertPoint) {
+        insertPoint.appendChild(scriptNode);
+        if (GM_prefRoot.getValue('removeContentScripts')) {
+          insertPoint.removeChild(scriptNode);
+        }
+      } else {
+        dump('Fatal error: insertPoint is ' + insertPoint
+            + '; ' + script + '\n');
       }
     } else {
       var sandbox = createSandbox(
