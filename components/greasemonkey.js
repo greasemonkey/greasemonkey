@@ -99,8 +99,13 @@ function createSandbox(
           'sandboxPrototype': aContentWin,
           'wantXrays': false,
         });
+    // GM_info is always provided.
     Components.utils.evalInSandbox(
         'const GM_info = ' + uneval(aScript.info()), contentSandbox);
+    // Alias unsafeWindow for compatibility.
+    Components.utils.evalInSandbox(
+        'const unsafeWindow = window;', contentSandbox);
+
     return contentSandbox;
   }
 
