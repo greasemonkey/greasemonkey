@@ -14,6 +14,13 @@ Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
+var gScriptDirPath = (function() {
+  var ios = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var scriptDir = GM_util.scriptDir();
+  scriptDir.normalize();  // in case of symlinks
+  return ios.newFileURI(scriptDir).spec;
+})();
 var gExtensionPath = (function() {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
@@ -69,7 +76,7 @@ function GM_apiLeakCheck(apiName) {
     // Anything else on the stack and we will reject the API, to make sure that
     // the content window (whose path would be e.g. http://...) has no access.
     if (2 == stack.language
-        && stack.filename.substr(0, gmScriptDirPath.length) !== gmScriptDirPath
+        && stack.filename.substr(0, gScriptDirPath.length) !== gScriptDirPath
         && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
         && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
         && stack.filename.substr(0, 9) !== 'chrome://'
@@ -294,12 +301,6 @@ function startup(aService) {
   var observerService = Components.classes['@mozilla.org/observer-service;1']
      .getService(Components.interfaces.nsIObserverService);
   observerService.addObserver(aService, 'document-element-inserted', false);
-
-  var ios = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  var scriptDir = GM_util.scriptDir();
-  scriptDir.normalize();  // in case of symlinks
-  gmScriptDirPath = ios.newFileURI(scriptDir).spec;
 }
 
 /////////////////////////////////// Service ////////////////////////////////////
