@@ -8,8 +8,6 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
-Cu.import(gmRunScriptFilename);
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
@@ -35,7 +33,6 @@ var gExtensionPath = (function() {
     throw Error('Could not detect gExtensionPath!');
   }
 })();
-var ELEMENT_NODE = Ci.nsIDOMNode.ELEMENT_NODE;
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
@@ -65,15 +62,17 @@ function GM_apiLeakCheck(apiName) {
 
   do {
     // Valid locations for GM API calls are:
+    //  * Greasemonkey scripts.
+    //  * Greasemonkey extension by path.
     //  * Greasemonkey modules.
     //  * All of chrome.  (In the script update case, chrome will list values.)
-    //  * Greasemonkey extension by path. (FF 3 does this instead of the above.)
     // Anything else on the stack and we will reject the API, to make sure that
     // the content window (whose path would be e.g. http://...) has no access.
     if (2 == stack.language
+        && stack.filename.substr(0, gmScriptDirPath.length) !== gmScriptDirPath
+        && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
         && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
         && stack.filename.substr(0, 9) !== 'chrome://'
-        && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
         ) {
       GM_util.logError(new Error("Greasemonkey access violation: " +
           "unsafeWindow cannot call " + apiName + "."));
@@ -182,27 +181,6 @@ function createSandbox(
   return sandbox;
 }
 
-function findError(script, lineNumber) {
-  var start = 0;
-  var end = 1;
-
-  for (var i = 0; i < script.offsets.length; i++) {
-    end = script.offsets[i];
-    if (lineNumber <= end) {
-      return {
-        uri: script.requires[i].fileURL,
-        lineNumber: (lineNumber - start)
-      };
-    }
-    start = end;
-  }
-
-  return {
-    uri: script.fileURL,
-    lineNumber: (lineNumber - end)
-  };
-}
-
 function getFirebugConsole(wrappedContentWin, chromeWin) {
   try {
     return chromeWin.Firebug
@@ -280,38 +258,25 @@ function registerMenuCommand(
   gMenuCommands.push(command);
 };
 
-function runScriptInSandbox(code, sandbox, script) {
-  try {
-    GM_runScript(code, sandbox, gMaxJSVersion);
-  } catch (e) { // catches errors while running the script code
+function runScriptInSandbox(script, sandbox) {
+  function doEval(code, fileName) {
     try {
-      if (e && "return not in function" == e.message) {
-        // Means this script depends on the function enclosure.
-        return false;
-      }
-
-      // Most errors seem to have a ".fileName", but rarely they're in
-      // ".filename" instead.
-      var fileName = e.fileName || e.filename;
-
-      // TODO: Climb the stack to find the script-source line?
-      if (fileName == gmRunScriptFilename) {
-        // Now that we know where the error is, find it (inside @requires if
-        // necessary) in the script and log it.
-        var err = findError(script, e.lineNumber);
-        GM_util.logError(
-             e, // error obj
-             0, // 0 = error (1 = warning)
-             err.uri, err.lineNumber);
-      } else {
-        GM_util.logError(e);
-      }
+      Components.utils.evalInSandbox(code, sandbox, gMaxJSVersion, fileName, 1);
     } catch (e) {
-      // Do not raise (this would stop all scripts), log.
-      GM_util.logError(e);
+      // Log it properly.
+      GM_util.logError(e, false, fileName, e.lineNumber);
+      // Stop the script, in the case of requires, as if it was one big script.
+      return false;
+    }
+    return true;
+  }
+
+  for (var i = 0, require = null; require = script.requires[i]; i++) {
+    if (!doEval(require.textContent, require.fileURL)) {
+      return;
     }
   }
-  return true; // did not need a (function() {...})() enclosure.
+  doEval(script.textContent, script.fileURL);
 }
 
 function startup(aService) {
@@ -329,6 +294,12 @@ function startup(aService) {
   var observerService = Components.classes['@mozilla.org/observer-service;1']
      .getService(Components.interfaces.nsIObserverService);
   observerService.addObserver(aService, 'document-element-inserted', false);
+
+  var ios = Components.classes["@mozilla.org/network/io-service;1"]
+      .getService(Components.interfaces.nsIIOService);
+  var scriptDir = GM_util.scriptDir();
+  scriptDir.normalize();  // in case of symlinks
+  gmScriptDirPath = ios.newFileURI(scriptDir).spec;
 }
 
 /////////////////////////////////// Service ////////////////////////////////////
@@ -485,14 +456,7 @@ service.prototype.injectScripts = function(
   for (var i = 0, script = null; script = scripts[i]; i++) {
     var sandbox = createSandbox(
         script, wrappedContentWin, chromeWin, firebugConsole, url);
-
-    var scriptSrc = GM_util.getScriptSource(script);
-    var shouldWrap = !script.unwrap && !GM_util.inArray(script.grants, 'none');
-    if (shouldWrap) scriptSrc = GM_util.anonWrap(scriptSrc);
-    if (!runScriptInSandbox(scriptSrc, sandbox, script) && !shouldWrap) {
-      // Wrap anyway on early return.
-      runScriptInSandbox(GM_util.anonWrap(scriptSrc), sandbox, script);
-    }
+    runScriptInSandbox(script, sandbox);
   }
 };
 
