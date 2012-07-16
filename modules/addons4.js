@@ -164,7 +164,9 @@ function ScriptAddon_getPermissions() {
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
-  if (this._script.updateURL) perms |= AddonManager.PERM_CAN_UPGRADE;
+  if (this._script.isRemoteUpdateAllowed()) {
+    perms |= AddonManager.PERM_CAN_UPGRADE;
+  }
   return perms;
 });
 
