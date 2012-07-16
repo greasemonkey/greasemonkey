@@ -84,6 +84,21 @@ function GM_apiLeakCheck(apiName) {
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
+  if (GM_util.inArray(aScript.grants, 'none')) {
+    // If there is an explicit none grant, use a plain unwrapped sandbox
+    // with no other content.
+    var contentSandbox = new Components.utils.Sandbox(
+        aContentWin,
+        {
+          'sandboxName': aScript.id,
+          'sandboxPrototype': aContentWin,
+          'wantXrays': false,
+        });
+    Components.utils.evalInSandbox(
+        'const GM_info = ' + uneval(aScript.info()), contentSandbox);
+    return contentSandbox;
+  }
+
   var sandbox = new Components.utils.Sandbox(
       aContentWin,
       {
@@ -150,6 +165,9 @@ function createSandbox(
         new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
         'contentStartRequest');
   }
+
+  Components.utils.evalInSandbox(
+      'const GM_info = ' + uneval(aScript.info()), sandbox);
 
   return sandbox;
 }
@@ -460,37 +478,15 @@ service.prototype.injectScripts = function(
   var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    if (GM_util.inArray(script.grants, 'none')) {
-      // Create a script node.
-      var scriptNode = wrappedContentWin.document.createElement('script');
-      scriptNode.setAttribute('type', 'application/javascript;version=1.8');
-      scriptNode.setAttribute('src', [
-          'greasemonkey-script:', script.uuid, '/', script.name, '.user.js',
-          '?wrapped=1'
-          ].join(''));
-      // Append it to the document to execute, remove it to clean up.
-      var insertPoint = wrappedContentWin.document.documentElement.firstChild;
-      while (insertPoint && ELEMENT_NODE != insertPoint.nodeType) {
-        insertPoint = insertPoint.nextSibling;
-      }
-      if (insertPoint) {
-        insertPoint.appendChild(scriptNode);
-        if (GM_prefRoot.getValue('removeContentScripts')) {
-          insertPoint.removeChild(scriptNode);
-        }
-      } else {
-        dump('Fatal error: insertPoint is ' + insertPoint
-            + '; ' + script + '\n');
-      }
-    } else {
-      var sandbox = createSandbox(
-          script, wrappedContentWin, chromeWin, firebugConsole, url);
-      var scriptSrc = GM_util.getScriptSource(script);
-      if (!script.unwrap) scriptSrc = GM_util.anonWrap(scriptSrc);
-      if (!runScriptInSandbox(scriptSrc, sandbox, script) && script.unwrap) {
-        // Wrap anyway on early return.
-        runScriptInSandbox(GM_util.anonWrap(scriptSrc), sandbox, script);
-      }
+    var sandbox = createSandbox(
+        script, wrappedContentWin, chromeWin, firebugConsole, url);
+
+    var scriptSrc = GM_util.getScriptSource(script);
+    var shouldWrap = !script.unwrap && !GM_util.inArray(script.grants, 'none');
+    if (shouldWrap) scriptSrc = GM_util.anonWrap(scriptSrc);
+    if (!runScriptInSandbox(scriptSrc, sandbox, script) && !shouldWrap) {
+      // Wrap anyway on early return.
+      runScriptInSandbox(GM_util.anonWrap(scriptSrc), sandbox, script);
     }
   }
 };
