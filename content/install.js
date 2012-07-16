@@ -9,6 +9,7 @@ var gHtmlNs = 'http://www.w3.org/1999/xhtml';
 var gAcceptButton = null;
 var gCurrentDelay = null;
 var gProgress = 0;
+var gShowScriptButton = null;
 var gTimer = null;
 var gTotalDelay = new GM_PrefManager().getValue('installDelay', 5);
 
@@ -22,8 +23,7 @@ function init() {
   }
   setUpIncludes('matches', 'matches-desc', matches);
 
-  document.documentElement.getButton('extra1').setAttribute('type', 'checkbox');
-
+  gShowScriptButton = document.documentElement.getButton('extra1');
   gAcceptButton = document.documentElement.getButton('accept');
   gAcceptButton.baseLabel = gAcceptButton.label;
 
@@ -145,9 +145,11 @@ function updateLabel(aOkAllowed) {
     gAcceptButton.label = gAcceptButton.baseLabel;
   }
 
-  gAcceptButton.disabled = aOkAllowed
+  var disabled = aOkAllowed
       ? ((gCurrentDelay > 0) || (gProgress < 100))
       : true;
+  gAcceptButton.disabled = disabled;
+  gShowScriptButton.disabled = disabled;
 }
 
 // See: closewindow.xul .
