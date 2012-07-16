@@ -8,9 +8,14 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
+var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
+Cu.import(gmRunScriptFilename);
+Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
+Cu.import("resource://greasemonkey/parseScript.js");
+Cu.import("resource://greasemonkey/prefmanager.js");
+Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var gmRunScriptFilename = "resource://greasemonkey/runScript.js";
 var gExtensionPath = (function() {
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
@@ -307,11 +312,6 @@ function runScriptInSandbox(code, sandbox, script) {
 function startup(aService) {
   if (gStartupHasRun) return;
   gStartupHasRun = true;
-
-  Cu.import(gmRunScriptFilename);
-  Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
-  Cu.import("resource://greasemonkey/prefmanager.js");
-  Cu.import("resource://greasemonkey/util.js");  // At top = fail in FF3.
 
   var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"]
       .getService(Ci.mozIJSSubScriptLoader);
