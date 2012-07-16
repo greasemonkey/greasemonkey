@@ -101,7 +101,10 @@ DownloadListener.prototype = {
     var converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"]
         .createInstance(Ci.nsIScriptableUnicodeConverter);
     converter.charset = 'UTF-8';
-    var source = converter.convertFromByteArray(this._data, this._data.length)
+    var source = '';
+    try {
+      source = converter.convertFromByteArray(this._data, this._data.length);
+    } catch (e) { }
     return this._remoteScript.parseScript(source, false);
   },
 
@@ -524,7 +527,23 @@ RemoteScript.prototype._downloadScriptCb = function(
     aCompletionCallback, aChannel, aSuccess) {
   if (aSuccess) {
     // At this point downloading the script itself is definitely done.
-    this._parseScriptFile();
+
+    // Parse the script.
+    try {
+      this._parseScriptFile();
+    } catch (e) {
+      // If that failed, set the error message, and ...
+      if (-1 === new String(e).indexOf('Unicode')) {
+        this.cleanup(stringBundle.GetStringFromName('error.unknown'));
+      } else {
+        this.cleanup(stringBundle.GetStringFromName('error.scriptCharset'));
+      }
+      // ... fake a successful download, so the install window will show, with
+      // that error message.
+      this._dispatchCallbacks('scriptMeta', new Script());
+      return aCompletionCallback(true, 'script');
+    }
+
     if (!this.script) {
       dump('RemoteScript: finishing with error because no script was found.\n');
       // If we STILL don't have a script, this is a fatal error.
@@ -538,9 +557,15 @@ RemoteScript.prototype._downloadScriptCb = function(
 
 RemoteScript.prototype._parseScriptFile = function() {
   if (this.done) return;
-  var source = GM_util.getContents(this._scriptFile);
+  var source = GM_util.getContents(this._scriptFile, null, true);
   if (!source) return null;
-  return this.parseScript(source, true);
+  var script = null;
+  try {
+    this.parseScript(source, true);
+  } catch (e) {
+    dump('RemoteScript._parseScriptFile: ' + e + '\n');
+  }
+  return script;
 };
 
 RemoteScript.prototype._postParseScript = function() {

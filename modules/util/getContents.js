@@ -11,15 +11,14 @@ const unicodeConverter = Components
     .classes["@mozilla.org/intl/scriptableunicodeconverter"]
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 
-function getContents(file, charset) {
-  if (!charset) charset = "UTF-8";
-  unicodeConverter.charset = charset;
+function getContents(aFile, aCharset, aFatal) {
+  unicodeConverter.charset = aCharset || 'UTF-8';
 
-  var channel = ioService.newChannelFromURI(GM_util.getUriFromFile(file));
+  var channel = ioService.newChannelFromURI(GM_util.getUriFromFile(aFile));
   try {
     var input = channel.open();
   } catch (e) {
-    GM_util.logError(new Error("Could not open file: " + file.path));
+    GM_util.logError(new Error("Could not open file: " + aFile.path));
     return "";
   }
 
@@ -31,6 +30,7 @@ function getContents(file, charset) {
   try {
     return unicodeConverter.ConvertToUnicode(str);
   } catch (e) {
+    if (aFatal) throw e;
     return str;
   }
 }
