@@ -469,6 +469,7 @@ Script.prototype.info = function() {
     matches[matches.length] = m.pattern;
   }
   return {
+    'uuid': this.uuid,
     'version': gGreasemonkeyVersion,
     'scriptWillUpdate': this.isRemoteUpdateAllowed(),
     'script': {
