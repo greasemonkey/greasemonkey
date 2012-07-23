@@ -270,7 +270,9 @@ function runScriptInSandbox(script, sandbox) {
   function evalWithWrapper(code, fileName) {
     // By default, unless we've explicitly been told to unwrap, do an anonymous
     // wrapper scope.  See http://goo.gl/0sFqU for detailed reasoning.
-    if (!script.unwrap) code = GM_util.anonWrap(code);
+
+    // Very temporary workaround (See #1592): Do not wrap.
+    //if (!script.unwrap) code = GM_util.anonWrap(code);
 
     try {
       Components.utils.evalInSandbox(code, sandbox, gMaxJSVersion, fileName, 1);
