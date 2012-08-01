@@ -40,6 +40,10 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsILocalFile);
 
+if (!Cu.isDeadWrapper) {
+  Cu.isDeadWrapper = function() { return false; };
+}
+
 /////////////////////// Component-global Helper Functions //////////////////////
 
 // TODO: Remove this, see #1318.
@@ -429,7 +433,7 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(contentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = false;
+    var closed = Cu.isDeadWrapper(command.contentWindow);
     try { closed = command.contentWindow.closed; } catch (e) { }
 
     if (closed ||
