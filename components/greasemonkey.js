@@ -425,21 +425,42 @@ service.prototype.__defineGetter__('config', function() {
   return this._config;
 });
 
-service.prototype.contentDestroyed = function(contentWindowId) {
+service.prototype.contentDestroyed = function(aContentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    // Only Firefox 15+ defines isDeadWrapper; use it to detect dead windows
-    // (for which we will never be able to access the .closed property).
-    var closed = Cu.isDeadWrapper
-        ? Cu.isDeadWrapper(command.contentWindow)
-        : false;
-    try { closed = command.contentWindow.closed; } catch (e) { }
+    var closed = false;
 
-    if (closed ||
-        (contentWindowId && (command.contentWindowId == contentWindowId))
-    ) {
+    try {
+      // If this content destroyed message matches the command's window id.
+      if (aContentWindowId && (command.contentWindowId == aContentWindowId)) {
+        closed = true;
+      }
+
+      // If isDeadWrapper (Firefox 15+ only) tells us the window is dead.
+      if (Cu.isDeadWrapper && Cu.isDeadWrapper(command.contentWindow)) {
+        closed = true;
+      }
+
+      // If we can access the .closed property and it is true, or there is any
+      // problem accessing that property.
+      try {
+        if (command.contentWindow.closed) {
+          closed = true;
+        }
+      } catch (e) {
+        closed = true;
+      }
+    } catch (e) {
+      Cu.reportError(e);
+      // Failsafe.  In case of any failure, destroy the command to avoid leaks.
+      closed = true;
+    }
+
+    if (closed) {
+      // If anything above decided the window is closed, remove the command
+      // that holds a reference to it.
       gMenuCommands.splice(index, 1);
     }
-  }, true);
+  }, true);  // Don't forget the aForced=true passed here!
 };
 
 service.prototype.contentFrozen = function(contentWindowId) {
