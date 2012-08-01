@@ -40,9 +40,6 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsILocalFile);
 
-if (!Cu.isDeadWrapper) {
-  Cu.isDeadWrapper = function() { return false; };
-}
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -213,6 +210,10 @@ function loadGreasemonkeyVersion() {
       gGreasemonkeyVersion = new String(addon.version);
     });
   }
+}
+
+function isDeadWrapper(aWin) {
+  return Cu.isDeadWrapper && Cu.isDeadWrapper(aWin) || false;
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
@@ -433,7 +434,7 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(contentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = Cu.isDeadWrapper(command.contentWindow);
+    var closed = isDeadWrapper(command.contentWindow);
     try { closed = command.contentWindow.closed; } catch (e) { }
 
     if (closed ||
