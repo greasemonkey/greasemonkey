@@ -365,6 +365,15 @@ if (typeof GM_OpenScriptsMgr == "undefined") {
   function GM_OpenScriptsMgr() { BrowserOpenAddonsMgr('userscripts'); }
 }
 
+/**
+ * Clean up the menu after it hides to prevent memory leaks
+ */
+function GM_hidePopup(aEvent) {
+  var popup = aEvent.target;
+
+  var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
+  if(menuCommandPopup) GM_util.emptyEl(menuCommandPopup);
+}
 
 // Short-term workaround for #1406: Tab Mix Plus breaks opening links in
 // new tabs because it depends on this function, and incorrectly checks for
