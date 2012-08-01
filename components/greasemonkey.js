@@ -14,6 +14,10 @@ Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
+if (!Cu.isDeadWrapper) {
+  Cu.isDeadWrapper = function() { return false; };
+}
+
 var gScriptDirPath = (function() {
   var ios = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
@@ -427,7 +431,7 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(contentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = false;
+    var closed = Cu.isDeadWrapper(command.contentWindow);
     try { closed = command.contentWindow.closed; } catch (e) { }
 
     if (closed ||
