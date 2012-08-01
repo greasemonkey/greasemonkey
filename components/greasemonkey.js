@@ -14,10 +14,6 @@ Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-if (!Cu.isDeadWrapper) {
-  Cu.isDeadWrapper = function() { return false; };
-}
-
 var gScriptDirPath = (function() {
   var ios = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
@@ -431,7 +427,11 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(contentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = Cu.isDeadWrapper(command.contentWindow);
+    // Only Firefox 15+ defines isDeadWrapper; use it to detect dead windows
+    // (for which we will never be able to access the .closed property).
+    var closed = Cu.isDeadWrapper
+        ? Cu.isDeadWrapper(command.contentWindow)
+        : false;
     try { closed = command.contentWindow.closed; } catch (e) { }
 
     if (closed ||
