@@ -136,9 +136,6 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'run-at':
       script._runAt = value;
       break;
-    case 'unwrap':
-      script._unwrap = true;
-      break;
     }
   }
 

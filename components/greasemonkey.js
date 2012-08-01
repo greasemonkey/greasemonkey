@@ -50,6 +50,10 @@ var gStartupHasRun = false;
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
     .getService(Ci.nsIFileProtocolHandler);
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsILocalFile);
@@ -268,17 +272,16 @@ function registerMenuCommand(
 function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
   function evalWithWrapper(code, fileName) {
-    // By default, unless we've explicitly been told to unwrap, do an anonymous
-    // wrapper scope.  See http://goo.gl/0sFqU for detailed reasoning.
-
-    // Very temporary workaround (See #1592): Do not wrap.
-    //if (!script.unwrap) code = GM_util.anonWrap(code);
-
     try {
       Components.utils.evalInSandbox(code, sandbox, gMaxJSVersion, fileName, 1);
     } catch (e) {
-      if (script.unwrap && e && "return not in function" == e.message) {
-        // If we didn't wrap, but have an early return, run wrapped anyway.
+      if ("return not in function" == e.message) {
+        // See #1592; we never anon wrap anymore, unless forced to by a return
+        // not in a function.
+        GM_util.logError(
+            gStringBundle.GetStringFromName('return-not-in-func-deprecated'),
+            true // is a warning
+            );
         Components.utils.evalInSandbox(
             GM_util.anonWrap(code), sandbox, gMaxJSVersion, fileName, 1);
       } else {

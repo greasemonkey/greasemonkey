@@ -50,7 +50,6 @@ function Script(configNode) {
   this._resources = [];
   this._runAt = null;
   this._tempFile = null;
-  this._unwrap = false;
   this._updateURL = null;
   this._updateVersion = null;
   this._userExcludes = [];
@@ -187,9 +186,6 @@ function Script_getResources() { return this._resources.concat(); });
 
 Script.prototype.__defineGetter__('runAt',
 function Script_getRunAt() { return this._runAt; });
-
-Script.prototype.__defineGetter__('unwrap',
-function Script_getUnwrap() { return this._unwrap; });
 
 Script.prototype.__defineGetter__('filename',
 function Script_getFilename() { return this._filename; });
@@ -350,9 +346,6 @@ Script.prototype._loadFromConfigNode = function(node) {
       scriptResource._charset = childNode.getAttribute("charset");
       this._resources.push(scriptResource);
       break;
-    case "Unwrap":
-      this._unwrap = true;
-      break;
     }
   }
 
@@ -414,11 +407,6 @@ Script.prototype.toConfigNode = function(doc) {
 
     scriptNode.appendChild(doc.createTextNode("\n\t\t"));
     scriptNode.appendChild(resourceNode);
-  }
-
-  if (this._unwrap) {
-    scriptNode.appendChild(doc.createTextNode("\n\t\t"));
-    scriptNode.appendChild(doc.createElement("Unwrap"));
   }
 
   scriptNode.appendChild(doc.createTextNode("\n\t"));
@@ -488,7 +476,6 @@ Script.prototype.info = function() {
       // 'requires': ???,
       // 'resources': ???,
       'run-at': this.runAt,
-      'unwrap': this.unwrap,
       'version': this.version,
     },
     'scriptMetaStr': extractMeta(this.textContent),
@@ -578,7 +565,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._matches = newScript._matches;
   this._description = newScript._description;
   this._runAt = newScript._runAt;
-  this._unwrap = newScript._unwrap;
   this._version = newScript._version;
   this._downloadURL = newScript._downloadURL;
   this.updateURL = newScript.updateURL;
