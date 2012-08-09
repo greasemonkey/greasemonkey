@@ -9,6 +9,7 @@ var Ci = Components.interfaces;
 var Cu = Components.utils;
 
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
+Cu.import('resource://greasemonkey/constants.js');
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/util.js");
@@ -18,6 +19,11 @@ var gScriptDirPath = (function() {
   var ios = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
   var scriptDir = GM_util.scriptDir();
+  if (!scriptDir.exists()) {
+    scriptDir.create(
+        Components.interfaces.nsIFile.DIRECTORY_TYPE,
+        GM_constants.directoryMask);
+  }
   scriptDir.normalize();  // in case of symlinks
   return ios.newFileURI(scriptDir).spec;
 })();

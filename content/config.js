@@ -9,10 +9,7 @@ function Config() {
   this._scripts = null;
   this._configFile = GM_util.scriptDir();
   this._configFile.append("config.xml");
-  this._initScriptDir();
-
   this._globalExcludes = JSON.parse(GM_prefRoot.getValue("globalExcludes"));
-
   this._observers = [];
 }
 
@@ -68,7 +65,10 @@ Config.prototype._load = function() {
   var domParser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
       .createInstance(Components.interfaces.nsIDOMParser);
 
-  var configContents = GM_util.getContents(this._configFile);
+  var configContents = "<UserScriptConfig/>";
+  if (this._configFile.exists()) {
+    configContents = GM_util.getContents(this._configFile);
+  }
   var doc = domParser.parseFromString(configContents, "text/xml");
   var nodes = doc.evaluate("/UserScriptConfig/Script", doc, null,
       7 /* XPathResult.ORDERED_NODE_SNAPSHOT_TYPE */,
@@ -197,17 +197,6 @@ Config.prototype.move = function(script, destination) {
   this._scripts.splice(to, 0, tmp);
   this._changed(script, "move", to);
 },
-
-/**
- * Create an empty configuration if none exist.
- */
-Config.prototype._initScriptDir = function() {
-  var dir = GM_util.scriptDir();
-  if (!dir.exists()) {
-    dir.create(Components.interfaces.nsIFile.DIRECTORY_TYPE, GM_constants.directoryMask);
-    GM_util.writeToFile("<UserScriptConfig/>", this._configFile);
-  }
-};
 
 Config.prototype.__defineGetter__('globalExcludes',
 function Config_getGlobalExcludes() { return this._globalExcludes.concat(); }
