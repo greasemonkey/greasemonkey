@@ -445,14 +445,15 @@ service.prototype.contentDestroyed = function(aContentWindowId) {
       }
 
       // If isDeadWrapper (Firefox 15+ only) tells us the window is dead.
-      if (Cu.isDeadWrapper && Cu.isDeadWrapper(command.contentWindow)) {
+      if (!closed &&
+          Cu.isDeadWrapper && Cu.isDeadWrapper(command.contentWindow)) {
         closed = true;
       }
 
       // If we can access the .closed property and it is true, or there is any
       // problem accessing that property.
       try {
-        if (command.contentWindow.closed) {
+        if (!closed && command.contentWindow.closed) {
           closed = true;
         }
       } catch (e) {
