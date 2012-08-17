@@ -12,7 +12,6 @@ content    greasemonkey content/
 skin       greasemonkey classic/1.0 skin/
 
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
-style      chrome://browser/content/browser.xul chrome://greasemonkey/skin/browser-mac.css os=Darwin
 style      chrome://global/content/alerts/alert.xul chrome://greasemonkey/skin/third-party/alert.css os=Darwin
 style      chrome://global/content/customizeToolbar.xul chrome://greasemonkey/skin/browser.css
 
