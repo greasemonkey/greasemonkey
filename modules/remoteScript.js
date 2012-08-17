@@ -188,7 +188,7 @@ DownloadListener.prototype = {
 
     if (error) {
       errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
-          + '\n' + this._uri.spec + '\n\n' + errorMessage;
+          + '\n' + this._remoteScript._uri.spec + '\n\n' + errorMessage;
       this._remoteScript.cleanup(errorMessage);
     }
 
