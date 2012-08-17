@@ -645,7 +645,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
         }
       }
 
-      this._changed('modified', this.id);
+      this._changed('modified');
     }));
   }
 };
@@ -690,12 +690,12 @@ Script.prototype.checkConfig = function() {
   // TODO: Some day, make "none" the default.  Until then: sniff.
   if (0 == this._grants.length) {
     this.grants = GM_util.sniffGrants(this);
-    this._changed('modified', this.id);
+    this._changed('modified');
   }
 
   if (!this._uuid || !this._uuid.length) {
     this._uuid = GM_util.uuid();
-    this._changed('modified', this.id);
+    this._changed('modified');
   }
 };
 
