@@ -203,12 +203,11 @@ function applySort() {
 
 function onViewChanged(aEvent) {
   if (userScriptViewId == gViewController.currentViewId) {
-    document.documentElement.className += ' greasemonkey';
+    document.documentElement.classList.add('greasemonkey');
     setEmptyWarningVisible();
     applySort();
   } else {
-    document.documentElement.className = document.documentElement.className
-        .replace(/ greasemonkey/g, '');
+    document.documentElement.classList.remove('greasemonkey');
   }
 };
 
