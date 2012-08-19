@@ -208,7 +208,7 @@ function onViewChanged(aEvent) {
     applySort();
   } else {
     document.documentElement.className = document.documentElement.className
-        .replace(/ greasemonkey/g, '');
+        .replace(/^greasemonkey| greasemonkey/g, '');
   }
 };
 
