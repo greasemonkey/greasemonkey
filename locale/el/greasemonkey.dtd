@@ -1,0 +1,45 @@
+<!ENTITY menu.install "Εγκατάσταση Κώδικα Χρήστη...">
+<!ENTITY menu.install.accesskey "Ε">
+<!ENTITY menu.show "Προβολή Προέλευσης Κώδικα Χρήστη">
+<!ENTITY menu.show.accesskey "Π">
+<!ENTITY menu.commands "Εντολές Κώδικα Χρήστη...">
+<!ENTITY menu.commands.accesskey "Κ">
+<!ENTITY menu.new "Νέος Κώδικας Χρήστη...">
+<!ENTITY menu.new.accesskey "Ν">
+<!ENTITY menu.manage "Διαχείριση Κώδικα Χρηστών...">
+<!ENTITY menu.manage.accesskey "Δ">
+<!ENTITY menu.options "Επιλογές Greasemonkey...">
+<!ENTITY menu.options.accesskey "Ι">
+<!ENTITY statusbar.enabled "Ενεργοποιημένo">
+<!ENTITY statusbar.enabled.accesskey "Ρ">
+<!ENTITY install.title "Εγκατάσταση Greasemonkey">
+<!ENTITY install.runson "εκτελείται ως:">
+<!ENTITY install.matches "ταιριάζει:">
+<!ENTITY install.butnoton "δεν εκτελείται ως:">
+<!ENTITY install.warning1 "Κακόβουλοι κώδικες μπορούν να παραβιάσουν την ιδιωτικότητά σας και να ενεργούν για σας χωρίς να το γνωρίζετε.">
+<!ENTITY install.warning2 "Πρέπει να εγκαθιστάτε κώδικες που προελεύσεις που εμπιστεύεστε.">
+<!ENTITY install.showscriptsource "Προβολή Προέλευσης Κώδικα">
+<!ENTITY install.installbutton "Εγκατάσταση">
+<!ENTITY loading "Λήψη ...">
+<!ENTITY newscript.name "Όνομα">
+<!ENTITY newscript.namespace "Όνομα χώρου">
+<!ENTITY newscript.description "Περιγραφή">
+<!ENTITY newscript.includes "Ενσωματώσεις (Μια ανά γραμμή)">
+<!ENTITY newscript.excludes "Εξαιρέσεις (Μια ανά γραμμή)">
+<!ENTITY options.editor "Επεξεργαστής κειμένου">
+<!ENTITY options.changeEditor "Επιλέξτε Επεξεργαστή Κώδικα">
+<!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
+<!ENTITY userscripts "Κώδικες Χρηστών">
+<!ENTITY Uninstall "Απεγκατάσταση">
+<!ENTITY AlsoUninstallPrefs "Απεγκατάσταση και των σχετικών ρυθμίσεων">
+<!ENTITY UpdateChecking "Έλεγχος Ενημέρωσης">
+<!ENTITY EnableUpdateChecking "Ενεργοποιηση αυτύματου ελέγχου ενημερώσεων του κώδικα χρηστών">
+<!ENTITY UpdateInterval "Ελάχιστος αριθμός ημερών μεταξύ ελέγχων για ενημερώσεις">
+<!ENTITY AutoInstallUpdates "Αυτόματη εγκατάσταση ενημερώσεων όταν βρεθούν">
+<!ENTITY RequireSecureUpdates "Απαιτούνται ασφαλείς ενημερώσεις">
+<!ENTITY greasemonkey.noscriptshere "Κανένας εγκατεστημένος κώδικας δεν εκτελείτε σε αυτή τη σελίδα.">
+<!ENTITY greasemonkey.youhavenoscripts "Δεν έχετε κανένα εγκατεστημένο κώδικα χρήστη">
+<!ENTITY greasemonkey.getuserscripts "Λήψη κώδικα χρηστών">
+<!ENTITY scriptprefs.title "Ρυθμίσεις Κώδικα Χρήστη του Greasemonkey - !!">
+<!ENTITY scriptprefs.usersettings "Επιλογές Χρήστη">
+<!ENTITY scriptprefs.scriptsettings "Επιλογές Κώδικα">

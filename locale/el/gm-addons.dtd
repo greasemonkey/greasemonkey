@@ -1,0 +1,37 @@
+<!ENTITY CheckUpdates "Αυτόματος έλεγχος για ενημερώσεις">
+<!ENTITY CheckUpdates.accesskey "Α">
+<!ENTITY Edit "Επεξεργασία">
+<!ENTITY Edit.accesskey "Ε">
+<!ENTITY Edit.tooltip "Επεξεργασία αυτού του Κώδικα Χρήστη">
+<!ENTITY ExecuteFirst "Εκτέλεση στην αρχή">
+<!ENTITY ExecuteLast "Εκτέλεση στο τέλος">
+<!ENTITY ExecuteLater "Εκτέλεση αργότερα">
+<!ENTITY ExecuteSooner "Εκτέλεση νωρίτερα">
+<!ENTITY FindUpdate "Εύρεση Ενημέρωσης">
+<!ENTITY InstallUpdate "Εγκατάσταση Ενημέρωσης">
+<!ENTITY MoveDown "Μετακίνηση Κάτω">
+<!ENTITY MoveDown.accesskey "Κ">
+<!ENTITY MoveToBottom "Μετακίνηση στο Τέλος">
+<!ENTITY MoveToBottom.accesskey "Τ">
+<!ENTITY MoveToTop "Μετακίνηση στην Αρχή">
+<!ENTITY MoveToTop.accesskey "Ρ">
+<!ENTITY MoveUp "Μετακίνηση Πάνω">
+<!ENTITY MoveUp.accesskey "Π">
+<!ENTITY NewScript "Δημιουργία Νέου Κώδικα">
+<!ENTITY NewScript.accesskey "Δ">
+<!ENTITY Show "Προβολή Περιέχοντος Φακέλου">
+<!ENTITY Show.accesskey "Φ">
+<!ENTITY Sort.ByStatus "Ταξινόμησαη κατά κατάσταση">
+<!ENTITY Sort.Status "Κατάσταση">
+<!ENTITY Sort.ByName "Ταξινόμηση κατά όνομα">
+<!ENTITY Sort.Name "Όνομα">
+<!ENTITY Sort.ByExecution "Ταξινόμηση κατά σειρά εκτέλεσης">
+<!ENTITY Sort.Execution "Σειρά Εκτέλεσης">
+<!ENTITY SortScripts "Ταξινόμηση Κωδικα Χρήστών">
+<!ENTITY SortScripts.accesskey "Χ">
+<!ENTITY UninstallCancel "Ακύρωση Απεγκατάστασης">
+<!ENTITY UninstallCancel.accesskey "Ω">
+<!ENTITY UninstallCancel.tooltip "Ακύρωση απεγκάτάστασης αυτού του Κώδικα Χρήστη">
+<!ENTITY UninstallCancelDescription "Αυτός ο Κώδικας Χρήστη θα απεγκατασταθεί όταν κλείσει το παράθυρο. (Ή με δεξί κλικ για «Απεγκατάσταση Τώρα».)">
+<!ENTITY UninstallNow "Απεγκατάσταση Τώρα">
+<!ENTITY UninstallNow.accesskey "Γ">
