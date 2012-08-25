@@ -333,6 +333,11 @@ function GM_showPopup(aEvent) {
   // Delegate menu commands call.
   var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
   GM_MenuCommander.onPopupShowing(menuCommandPopup);
+
+  // Check/uncheck 'Enabled' menuitem in Greasemonkey menu
+  // depends on Greasemonkey status.
+  var gmStatus = popup.getElementsByClassName("gm-enabled-item")[0];
+  gmStatus.setAttribute("checked", GM_getEnabled());
 }
 
 /**
