@@ -175,7 +175,7 @@ GM_BrowserUI.refreshStatus = function() {
     checkedEl.setAttribute('checked', true);
     enabledEl.removeAttribute('disabled');
   } else {
-    checkedEl.removeAttribute('checked');
+    checkedEl.setAttribute('checked', false);
     enabledEl.setAttribute('disabled', 'yes');
   }
 };
