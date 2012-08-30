@@ -41,7 +41,17 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
       throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
-  var rv = { abort: function () { return req.abort(); } };
+  var rv = {
+    __exposedProps__: {
+        finalUrl: "r",
+        readyState: "r",
+        responseHeaders: "r",
+        responseText: "r",
+        status: "r",
+        statusText: "r"
+        },
+    abort: function () { return req.abort(); }
+  };
   if (!!details.synchronous) {
     rv.finalUrl = req.finalUrl;
     rv.readyState = req.readyState;
@@ -137,6 +147,14 @@ function(wrappedContentWin, req, event, details) {
 
   req.addEventListener(event, function(evt) {
     var responseState = {
+      __exposedProps__: {
+          finalUrl: "r",
+          readyState: "r",
+          responseHeaders: "r",
+          responseText: "r",
+          status: "r",
+          statusText: "r"
+          },
       // Can't support responseXML because security won't
       // let the browser call properties on it.
       responseText: req.responseText,
