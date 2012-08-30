@@ -32,6 +32,6 @@
 <!ENTITY UninstallCancel "取消卸载">
 <!ENTITY UninstallCancel.accesskey "C">
 <!ENTITY UninstallCancel.tooltip "取消卸载这个用户脚本">
-<!ENTITY UninstallCancelDescription "这个用户脚本将在对话框关闭后被卸载。（或者右键选择“立即卸载”。）">
+<!ENTITY UninstallCancelDescription "这个用户脚本将在对话框关闭后被卸载。（或者右击选择“立即卸载”）">
 <!ENTITY UninstallNow "立即卸载">
 <!ENTITY UninstallNow.accesskey "N">

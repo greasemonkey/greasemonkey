@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Gebruikersscripts beheren…">
 <!ENTITY menu.manage.accesskey "U">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey-opties…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Ingeschakeld">
 <!ENTITY statusbar.enabled.accesskey "I">
@@ -32,14 +32,14 @@
 <!ENTITY userscripts "Gebruikersscripts">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Installeer automatisch updates wanneer deze gevonden worden">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Updatecontrole">
+<!ENTITY EnableUpdateChecking "Automatische controle op scriptupdates inschakelen">
+<!ENTITY UpdateInterval "Minimaal aantal dagen tussen updatecontroles">
+<!ENTITY AutoInstallUpdates "Updates automatisch installeren wanneer deze gevonden worden">
+<!ENTITY RequireSecureUpdates "Beveiligde updates vereisen">
 <!ENTITY greasemonkey.noscriptshere "Op deze pagina draaien geen geïnstalleerde scripts.">
 <!ENTITY greasemonkey.youhavenoscripts "Er zijn geen gebruikersscripts geïnstalleerd">
-<!ENTITY greasemonkey.getuserscripts "Verkrijg gebruikersscripts">
+<!ENTITY greasemonkey.getuserscripts "Gebruikersscripts verkrijgen">
 <!ENTITY scriptprefs.title "Greasemonkey-gebruikersscriptvoorkeuren - !!">
 <!ENTITY scriptprefs.usersettings "Gebruikersinstellingen">
 <!ENTITY scriptprefs.scriptsettings "Scriptinstellingen">

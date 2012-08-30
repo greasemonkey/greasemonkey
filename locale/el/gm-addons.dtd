@@ -32,6 +32,6 @@
 <!ENTITY UninstallCancel "Ακύρωση Απεγκατάστασης">
 <!ENTITY UninstallCancel.accesskey "Ω">
 <!ENTITY UninstallCancel.tooltip "Ακύρωση απεγκάτάστασης αυτού του Κώδικα Χρήστη">
-<!ENTITY UninstallCancelDescription "Αυτός ο Κώδικας Χρήστη θα απεγκατασταθεί όταν κλείσει το παράθυρο. (Ή με δεξί κλικ για «Απεγκατάσταση Τώρα».)">
+<!ENTITY UninstallCancelDescription "Αυτός ο Κώδικας Χρήστη θα απεγκατασταθεί όταν κλείσει το παράθυρο. (Ή δεξί κλικ για «Απεγκατάσταση Τώρα».)">
 <!ENTITY UninstallNow "Απεγκατάσταση Τώρα">
 <!ENTITY UninstallNow.accesskey "Γ">

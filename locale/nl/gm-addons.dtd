@@ -1,4 +1,4 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
+<!ENTITY CheckUpdates "Automatisch op updates controleren">
 <!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Bewerken">
 <!ENTITY Edit.accesskey "W">
@@ -7,8 +7,8 @@
 <!ENTITY ExecuteLast "Als laatste uitvoeren">
 <!ENTITY ExecuteLater "Later uitvoeren">
 <!ENTITY ExecuteSooner "Eerder uitvoeren">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Update zoeken">
+<!ENTITY InstallUpdate "Update installeren">
 <!ENTITY MoveDown "Omlaag">
 <!ENTITY MoveDown.accesskey "L">
 <!ENTITY MoveToBottom "Onderaan plaatsen">

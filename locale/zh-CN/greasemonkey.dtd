@@ -13,10 +13,10 @@
 <!ENTITY statusbar.enabled "启用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安装过程">
-<!ENTITY install.runson "脚本应用到下列网页：">
+<!ENTITY install.runson "脚本会应用到：">
 <!ENTITY install.matches "匹配：">
-<!ENTITY install.butnoton "不要应用到下列网页：">
-<!ENTITY install.warning1 "恶意脚本可能会侵犯您的隐私并在您不知情的情况下以您的身份运行。">
+<!ENTITY install.butnoton "不会应用到：">
+<!ENTITY install.warning1 "恶意的脚本可能会侵犯您的隐私并在您不知情的情况下以您的名义进行操作。">
 <!ENTITY install.warning2 "您应该只安装从可信任来源获得的脚本。">
 <!ENTITY install.showscriptsource "显示脚本源代码">
 <!ENTITY install.installbutton "安装">
@@ -24,10 +24,10 @@
 <!ENTITY newscript.name "名称">
 <!ENTITY newscript.namespace "命名空间">
 <!ENTITY newscript.description "描述">
-<!ENTITY newscript.includes "脚本应用到下列网页（每行一条网页地址）">
-<!ENTITY newscript.excludes "不包括下列网页（每行一条网页地址）">
+<!ENTITY newscript.includes "脚本应用到（每行一条）">
+<!ENTITY newscript.excludes "排除（每行一条）">
 <!ENTITY options.editor "编辑器">
-<!ENTITY options.changeEditor "更换编辑器">
+<!ENTITY options.changeEditor "选择脚本编辑器">
 <!ENTITY options.globalExcludes "全局排除">
 <!ENTITY userscripts "用户脚本">
 <!ENTITY Uninstall "卸载">
@@ -36,10 +36,10 @@
 <!ENTITY EnableUpdateChecking "启用脚本的自动检查更新">
 <!ENTITY UpdateInterval "两次更新检查间的最小间隔（天）">
 <!ENTITY AutoInstallUpdates "发现更新时自动安装">
-<!ENTITY RequireSecureUpdates "需要安全地更新（HTTPS）">
+<!ENTITY RequireSecureUpdates "要求安全地更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
-<!ENTITY greasemonkey.youhavenoscripts "您没有安装任何用户脚本">
+<!ENTITY greasemonkey.youhavenoscripts "您还没有安装任何用户脚本">
 <!ENTITY greasemonkey.getuserscripts "获取用户脚本">
 <!ENTITY scriptprefs.title "Greasemonkey 用户脚本首选项 - !!">
-<!ENTITY scriptprefs.usersettings "用户设置">
-<!ENTITY scriptprefs.scriptsettings "脚本设置">
+<!ENTITY scriptprefs.usersettings "用户的设置">
+<!ENTITY scriptprefs.scriptsettings "脚本的设置">

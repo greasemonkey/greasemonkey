@@ -24,8 +24,8 @@
 <!ENTITY newscript.name "Name">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (uno por lÃnea)">
-<!ENTITY newscript.excludes "Excludes (uno por lÃnea)">
+<!ENTITY newscript.includes "Includes (uno por lÃ­nea)">
+<!ENTITY newscript.excludes "Excludes (uno por lÃ­nea)">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Elegir editor de scripts">
 <!ENTITY options.globalExcludes "Global Excludes">
@@ -34,7 +34,7 @@
 <!ENTITY AlsoUninstallPrefs "Eliminar preferencias asociadas">
 <!ENTITY UpdateChecking "Verificar para actualizar">
 <!ENTITY EnableUpdateChecking "Habilitar auto-verificar para actualizar scripts">
-<!ENTITY UpdateInterval "Lapso menor de días entre verificaciones">
+<!ENTITY UpdateInterval "Lapso menor de dÃ­as entre verificaciones">
 <!ENTITY AutoInstallUpdates "Auto-actualizar de ser el caso">
 <!ENTITY RequireSecureUpdates "Requerir actualizaciones seguras">
 <!ENTITY greasemonkey.noscriptshere "No hay  scripts instalados para este sitio.">
