@@ -79,6 +79,7 @@
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
         onpopupshowing="event.stopPropagation();"
+        onpopuphiding="GM_MenuCommander.onPopupHiding(this);"
       >
         <menupopup/>
       </menu>

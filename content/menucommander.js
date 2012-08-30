@@ -16,6 +16,10 @@ GM_MenuCommander.createMenuItem = function(command) {
   return menuItem;
 };
 
+GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
+  GM_util.emptyEl(aMenuPopup);
+}
+
 GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   GM_util.emptyEl(aMenuPopup);
 
