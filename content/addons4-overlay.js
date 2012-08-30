@@ -197,7 +197,7 @@ function applySort() {
   var list = document.getElementById('addon-list');
   var elements = Array.slice(list.childNodes, 0);
   sortElements(elements, sortBy, ascending);
-  while (list.listChild) list.removeChild(list.lastChild);
+  while (list.lastChild) list.removeChild(list.lastChild);
   elements.forEach(function(el) { list.appendChild(el); });
 };
 
