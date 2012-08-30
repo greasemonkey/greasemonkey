@@ -192,6 +192,7 @@ DownloadListener.prototype = {
       this._remoteScript.cleanup(errorMessage);
     }
 
+    this._progressCallback(aRequest, 1);
     this._completionCallback(aRequest, !error);
   },
 
