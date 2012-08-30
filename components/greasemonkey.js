@@ -436,38 +436,11 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(aContentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = false;
-
-    try {
-      // If this content destroyed message matches the command's window id.
-      if (aContentWindowId && (command.contentWindowId == aContentWindowId)) {
-        closed = true;
-      }
-
-      // If isDeadWrapper (Firefox 15+ only) tells us the window is dead.
-      if (!closed &&
-          Cu.isDeadWrapper && Cu.isDeadWrapper(command.contentWindow)) {
-        closed = true;
-      }
-
-      // If we can access the .closed property and it is true, or there is any
-      // problem accessing that property.
-      try {
-        if (!closed && command.contentWindow.closed) {
-          closed = true;
-        }
-      } catch (e) {
-        closed = true;
-      }
-    } catch (e) {
-      Cu.reportError(e);
-      // Failsafe.  In case of any failure, destroy the command to avoid leaks.
-      closed = true;
-    }
-
-    if (closed) {
-      // If anything above decided the window is closed, remove the command
-      // that holds a reference to it.
+    if (GM_util.windowIsClosed(command.contentWindow)
+        // This content destroyed message matches the command's window id.
+        || (aContentWindowId && (command.contentWindowId == aContentWindowId))
+    ) {
+      // If the window is closed, remove the reference to it.
       gMenuCommands.splice(index, 1);
     }
   }, true);  // Don't forget the aForced=true passed here!
