@@ -122,6 +122,12 @@ function createSandbox(
     Components.utils.evalInSandbox(
         'const unsafeWindow = window;', contentSandbox);
 
+    if (GM_util.compareFirefoxVersion("16.0") < 0) {
+      // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
+      // only in older versions.
+      contentSandbox.alert = alert;
+    }
+
     return contentSandbox;
   }
 
