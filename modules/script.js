@@ -768,11 +768,17 @@ Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
   if (aListener) {
     // When in the add-ons manager, listeners are passed around to keep
     // the UI up to date.
-    if (aAvailable) {
-      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-      aListener.onUpdateAvailable(addon, scriptInstall);
-    } else {
-      aListener.onNoUpdateAvailable(addon);
+    try {
+      if (aAvailable) {
+        AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
+        aListener.onUpdateAvailable(addon, scriptInstall);
+      } else {
+        aListener.onNoUpdateAvailable(addon);
+      }
+      aListener(onUpdateFinished(addon, 0));
+    } catch (e) {
+      // See #1621.  Don't die if (e.g.) an addon listener doesn't provide
+      // the entire interface and thus a method is undefined.
     }
   } else {
     // Otherwise, just install.
