@@ -149,11 +149,14 @@ function(wrappedContentWin, req, event, details) {
     var responseState = {
       __exposedProps__: {
           finalUrl: "r",
+          lengthComputable: "r",
+          loaded: "r",
           readyState: "r",
           responseHeaders: "r",
           responseText: "r",
           status: "r",
-          statusText: "r"
+          statusText: "r",
+          total: "r",
           },
       // Can't support responseXML because security won't
       // let the browser call properties on it.
