@@ -329,10 +329,6 @@ function GM_showPopup(aEvent) {
   var point = scriptsTopEl;
   runsOnTop.forEach(
       function(script) { point = appendScriptAfter(script, point); });
-
-  // Delegate menu commands call.
-  var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
-  GM_MenuCommander.onPopupShowing(menuCommandPopup);
 }
 
 /**

@@ -16,12 +16,13 @@ GM_MenuCommander.createMenuItem = function(command) {
   return menuItem;
 };
 
-GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
+GM_MenuCommander.onPopupHiding = function(aEvent, aMenuPopup) {
+  aEvent.stopPropagation();  // Do not bubble event up to containing popup.
   GM_util.emptyEl(aMenuPopup);
 }
 
-GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
-  GM_util.emptyEl(aMenuPopup);
+GM_MenuCommander.onPopupShowing = function(aEvent, aMenuPopup) {
+  aEvent.stopPropagation();  // Do not bubble event up to containing popup.
 
   // Add menu items for commands for the active window.
   var haveCommands = false;

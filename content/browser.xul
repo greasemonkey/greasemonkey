@@ -78,10 +78,11 @@
       <menu
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
-        onpopupshowing="event.stopPropagation();"
-        onpopuphiding="GM_MenuCommander.onPopupHiding(this);"
       >
-        <menupopup/>
+        <menupopup
+          onpopupshowing="GM_MenuCommander.onPopupShowing(event, this);"
+          onpopuphiding="GM_MenuCommander.onPopupHiding(event, this);"
+          />
       </menu>
 
       <menuseparator />
