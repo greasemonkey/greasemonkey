@@ -461,6 +461,13 @@ Script.prototype.info = function() {
   for (var i = 0, m = null; m = this.matches[i]; i++) {
     matches[matches.length] = m.pattern;
   }
+  var resources = {};
+  for (var i = 0, r = null; r = this.resources[i]; i++) {
+    resources[r.name] = {
+        'name': r.name,
+        'mimetype': r.mimetype,
+        };
+  }
   return {
     'uuid': this.uuid,
     'version': gGreasemonkeyVersion,
@@ -474,7 +481,7 @@ Script.prototype.info = function() {
       'name': this.name,
       'namespace': this.namespace,
       // 'requires': ???,
-      // 'resources': ???,
+      'resources': resources,
       'run-at': this.runAt,
       'version': this.version,
     },

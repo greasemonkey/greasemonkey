@@ -52,6 +52,15 @@ function ScriptDependency_getFilename() {
   return '' + (this._filename || this._dataURI || '');
 });
 
+ScriptDependency.prototype.__defineGetter__('mimetype',
+function ScriptDependency_getMimetype() {
+  var mimetype = this._mimetype;
+  if (this._charset && this._charset.length > 0) {
+    mimetype += ';charset=' + this._charset;
+  }
+  return mimetype;
+});
+
 ScriptDependency.prototype.__defineGetter__('name',
 function ScriptDependency_getName() { return '' + this._name; });
 
