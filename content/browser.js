@@ -98,10 +98,7 @@ GM_BrowserUI.pageshow = function(aEvent) {
   GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
-/**
- * Implements nsIObserve.observe. Right now we're only observing our own
- * install-userscript, which happens when the install bar is clicked.
- */
+// nsIObserve
 GM_BrowserUI.observe = function(subject, topic, data) {
   if (topic == "install-userscript") {
     if (window == GM_BrowserUI.winWat.activeWindow) {
