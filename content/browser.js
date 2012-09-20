@@ -78,8 +78,12 @@ GM_BrowserUI.contentLoad = function(event) {
   var href = safeWin.location.href;
 
   // Make sure we are still on the page that fired this event, see issue #1083.
-  // But ignore hashes; see issue #1445.
-  if (href.replace(/#.*/, '') == event.target.documentURI.replace(/#.*/, '')) {
+  // But ignore differences in formats; see issue #1445 and #1631.
+  var comparisonHref = href.replace(/#.*/, '');
+  var comparsionUri = event.target.documentURI
+      .replace(/#.*/, '')
+      .replace(/\/\/[^\/:]+:[^\/@]+@/, '//');
+  if (comparisonHref == comparsionUri) {
     GM_BrowserUI.gmSvc.runScripts('document-end', safeWin);
   }
 };
