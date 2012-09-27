@@ -339,7 +339,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Let the user know we're all done.
     GM_notification(
         "'" + this.script.name + "' "
-        + stringBundleBrowser.GetStringFromName(this.messageName));
+            + stringBundleBrowser.GetStringFromName(this.messageName),
+        this.messageName);
   }
 };
 
