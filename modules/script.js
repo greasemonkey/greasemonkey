@@ -707,7 +707,8 @@ Script.prototype.checkConfig = function() {
 };
 
 Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
-  var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
+  var callback = aCallback || GM_util.hitch(
+      this, this.handleRemoteUpdate, aForced);
   if (this.updateAvailable) return callback(true);
 
   if (!this.isRemoteUpdateAllowed(aForced)) return callback(false);
@@ -767,7 +768,8 @@ Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
   aCallback(false);
 };
 
-Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
+Script.prototype.handleRemoteUpdate = function(
+    aForced, aAvailable, aListener) {
   var addons4 = {};
   Components.utils.import('resource://greasemonkey/addons4.js', addons4);
   var addon = addons4.ScriptAddonFactoryByScript(this);
@@ -789,7 +791,10 @@ Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
     }
   } else {
     // Otherwise, just install.
-    if (aAvailable) scriptInstall.install();
+    if (aAvailable &&
+        aForced || GM_prefRoot.getValue('autoInstallUpdates')) {
+      scriptInstall.install();
+    }
   }
 }
 
