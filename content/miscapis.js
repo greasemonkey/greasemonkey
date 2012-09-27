@@ -37,7 +37,10 @@ GM_ScriptStorage.prototype.listValues = function() {
     return undefined;
   }
 
-  return this.prefMan.listValues();
+  // See #1637.
+  var vals = Array.prototype.slice.call(this.prefMan.listValues());
+  vals.__exposedProps__ = {'length': 'r'};
+  return vals;
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
