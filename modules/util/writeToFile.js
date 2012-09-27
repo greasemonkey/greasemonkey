@@ -3,7 +3,7 @@ Components.utils.import('resource://greasemonkey/constants.js');
 
 const EXPORTED_SYMBOLS = ['writeToFile'];
 
-const NORMAL_FILE_TYPE = Components.interfaces.nsILocalFile.NORMAL_FILE_TYPE;
+const NORMAL_FILE_TYPE = Components.interfaces.nsIFile.NORMAL_FILE_TYPE;
 //                   PR_WRONLY PR_CREATE_FILE PR_TRUNCATE
 const STREAM_FLAGS = 0x02      | 0x08         | 0x20;
 

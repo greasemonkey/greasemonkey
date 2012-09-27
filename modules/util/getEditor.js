@@ -15,7 +15,7 @@ function getEditor(change) {
   var editor;
   try {
     editor = Components.classes["@mozilla.org/file/local;1"]
-        .createInstance(Components.interfaces.nsILocalFile);
+        .createInstance(Components.interfaces.nsIFile);
     editor.followLinks = true;
     editor.initWithPath(editorPath);
   } catch (e) {

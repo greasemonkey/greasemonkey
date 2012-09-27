@@ -27,7 +27,7 @@ function openInEditor(script) {
     if ("Darwin"==xulRuntime.OS) {
       args = ["-a", editor.path, script.file.path];
       editor = Components.classes["@mozilla.org/file/local;1"]
-          .createInstance(Components.interfaces.nsILocalFile);
+          .createInstance(Components.interfaces.nsIFile);
       editor.followLinks = true;
       editor.initWithPath("/usr/bin/open");
     }

@@ -303,7 +303,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Just move the dependencies in.
     var enumerator = this._tempDir.directoryEntries;
     while (enumerator.hasMoreElements()) {
-      var file = enumerator.getNext().QueryInterface(Ci.nsILocalFile);
+      var file = enumerator.getNext().QueryInterface(Ci.nsIFile);
       // TODO: Fix invalid private access.
       file.moveTo(this.script._basedirFile, null);
     }
@@ -482,11 +482,11 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
       uri, file, GM_util.hitch(this, dependencyDownloadComplete));
 };
 
-/** Download a given nsIURI to a given nsILocalFile, with optional callback. */
+/** Download a given nsIURI to a given nsIFile, with optional callback. */
 RemoteScript.prototype._downloadFile = function(
     aUri, aFile, aCompletionCallback) {
   aUri = aUri.QueryInterface(Ci.nsIURI);
-  aFile = aFile.QueryInterface(Ci.nsILocalFile);
+  aFile = aFile.QueryInterface(Ci.nsIFile);
   aCompletionCallback = aCompletionCallback || function() {};
   assertIsFunction(aCompletionCallback,
       '_downloadFile() completion callback is not a function.');

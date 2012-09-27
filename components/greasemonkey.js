@@ -62,7 +62,7 @@ var gStringBundle = Components
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
-    .get("TmpD", Components.interfaces.nsILocalFile);
+    .get("TmpD", Components.interfaces.nsIFile);
 
 /////////////////////// Component-global Helper Functions //////////////////////
 

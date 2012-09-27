@@ -22,7 +22,7 @@ ScriptDependency.prototype = {
   },
 
   setFilename: function(aFile) {
-    aFile.QueryInterface(Components.interfaces.nsILocalFile);
+    aFile.QueryInterface(Components.interfaces.nsIFile);
     this._filename = aFile.leafName;
   },
 
