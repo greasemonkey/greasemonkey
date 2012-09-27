@@ -28,6 +28,7 @@ function init() {
   gAcceptButton.baseLabel = gAcceptButton.label;
 
   startTimer();
+  gShowScriptButton.disabled = true;
 
   var bundle = document.getElementById('gm-browser-bundle');
 
@@ -81,6 +82,8 @@ function onProgress(aRemoteScript, aEventType, aData) {
   if (!document) return; // lingering download after window cancel
   gProgress = Math.floor(100 * aData);
   if (gRemoteScript.done) {
+    gShowScriptButton.disabled = false;
+
     document.getElementById('loading').style.display = 'none';
     if (gRemoteScript.errorMessage) {
       document.documentElement.getButton('extra1').disabled = true;
@@ -149,7 +152,6 @@ function updateLabel(aOkAllowed) {
       ? ((gCurrentDelay > 0) || (gProgress < 100))
       : true;
   gAcceptButton.disabled = disabled;
-  gShowScriptButton.disabled = disabled;
 }
 
 // See: closewindow.xul .
