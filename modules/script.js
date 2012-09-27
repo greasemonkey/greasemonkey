@@ -792,7 +792,7 @@ Script.prototype.handleRemoteUpdate = function(
   } else {
     // Otherwise, just install.
     if (aAvailable &&
-        aForced || GM_prefRoot.getValue('autoInstallUpdates')) {
+        (aForced || GM_prefRoot.getValue('autoInstallUpdates'))) {
       scriptInstall.install();
     }
   }
