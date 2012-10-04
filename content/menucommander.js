@@ -18,7 +18,9 @@ GM_MenuCommander.createMenuItem = function(command) {
 
 GM_MenuCommander.onPopupHiding = function(aEvent, aMenuPopup) {
   aEvent.stopPropagation();  // Do not bubble event up to containing popup.
-  GM_util.emptyEl(aMenuPopup);
+
+  // Asynchronously.  See #1632.
+  GM_util.timeout(function() { GM_util.emptyEl(aMenuPopup); }, 0);
 }
 
 GM_MenuCommander.onPopupShowing = function(aEvent, aMenuPopup) {
