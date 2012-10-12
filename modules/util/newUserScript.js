@@ -14,6 +14,7 @@ function newUserScript(aWin) {
   try {
     var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
         .createInstance(Components.interfaces.nsITransferable);
+    if ('init' in transferable) transferable.init(null);
     transferable.addDataFlavor('text/unicode');
     gClipboard.getData(transferable, gClipboard.kGlobalClipboard);
     var str = new Object(), strLen = new Object();
