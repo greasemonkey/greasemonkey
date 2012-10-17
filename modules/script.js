@@ -50,7 +50,6 @@ function Script(configNode) {
   this._runAt = null;
   this._tempFile = null;
   this._updateURL = null;
-  this._updateVersion = null;
   this._userExcludes = [];
   this._userIncludes = [];
   this._uuid = [];
@@ -60,7 +59,7 @@ function Script(configNode) {
   this.needsUninstall = false;
   this.parseErrors = [];
   this.pendingExec = [];
-  this.updateAvailable = null;
+  this.availableUpdate = null;
 
   if (configNode) this._loadFromConfigNode(configNode);
 }
@@ -287,16 +286,6 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._version = node.getAttribute("version");
   }
 
-  if (!node.getAttribute("updateAvailable")
-      || !node.getAttribute("lastUpdateCheck")
-  ) {
-    this.updateAvailable = false;
-    this._changed('modified', null);
-  } else {
-    this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
-    this._updateVersion = node.getAttribute("updateVersion") || null;
-  }
-
   // Note that "checkRemoteUpdates" used to be a boolean.  As of #1647, it now
   // holds one of the AddonManager.AUTOUPDATE_* values; so it's name is
   // suboptimal.
@@ -426,7 +415,6 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
-  scriptNode.setAttribute("updateAvailable", this.updateAvailable);
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
@@ -436,9 +424,6 @@ Script.prototype.toConfigNode = function(doc) {
   if (this.updateURL) {
     scriptNode.setAttribute("updateurl", this.updateURL);
   }
-  if (this._updateVersion) {
-    scriptNode.setAttribute("updateVersion", this._updateVersion);
-  }
   if (this.icon.filename) {
     scriptNode.setAttribute("icon", this.icon.filename);
   }
@@ -447,7 +432,7 @@ Script.prototype.toConfigNode = function(doc) {
 };
 
 Script.prototype.toString = function() {
-  return '[Greasemonkey Script ' + this.id + ']';
+  return '[Greasemonkey Script ' + this.id + '; ' + this.version + ']';
 };
 
 Script.prototype.setDownloadedFile = function(file) { this._tempFile = file; };
@@ -709,7 +694,7 @@ Script.prototype.checkConfig = function() {
 };
 
 Script.prototype.checkForRemoteUpdate = function(aCallback) {
-  if (this.updateAvailable) return aCallback(true);
+  if (this.availableUpdate) return aCallback(true);
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -736,8 +721,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
     return aCallback(false);
   }
 
-  this.updateAvailable = true;
-  this._updateVersion = remoteVersion;
+  this.availableUpdate = newScript;
   this._changed('modified', null);
   aCallback(true);
 };

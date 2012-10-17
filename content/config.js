@@ -243,14 +243,6 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin) {
   this._save();
 };
 
-Config.prototype._notifyUpdates = function() {
-  var scripts = this.getMatchingScripts(
-      function (script) { return script.updateAvailable; });
-  if (0 == scripts.length) return;
-
-  GM_util.getBrowserWindow().GM_OpenUpdatesMgr();
-};
-
 Config.prototype.getScriptById = function(scriptId) {
   for (var i = 0, script = null; script = this.scripts[i]; i++) {
     if (scriptId == script.id) {

@@ -57,7 +57,7 @@ var AddonProvider = {
   getInstallsByTypes: function(aTypes, aCallback) {
     var scriptInstalls = [];
     GM_util.getService().config.scripts.forEach(function(script) {
-      if (!script.updateAvailable) return;
+      if (!script.availableUpdate) return;
 
       var aAddon = ScriptAddonFactoryByScript(script);
       var scriptInstall = ScriptInstallFactoryByAddon(aAddon);
@@ -295,9 +295,9 @@ ScriptInstall.prototype.install = function() {
       // was just downloaded; "this._script" is the previously existing script
       // that rs.install() just removed from the config, to update it.
       if (gVersionChecker.compare(
-          this._script._updateVersion, rs.script.version) > 0
+          this._script.availableUpdate.version, rs.script.version) > 0
       ) {
-        rs.script._version = this._script._updateVersion;
+        rs.script._version = this._script.availableUpdate.version;
       }
 
       this.state = AddonManager.STATE_INSTALLING;
