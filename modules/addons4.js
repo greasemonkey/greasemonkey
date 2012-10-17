@@ -29,6 +29,10 @@ var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 var SCRIPT_ID_SUFFIX = '@greasespot.net';
 var SCRIPT_ADDON_TYPE = 'user-script';
 
+var gVersionChecker = Components
+    .classes["@mozilla.org/xpcom/version-comparator;1"]
+    .getService(Components.interfaces.nsIVersionComparator);
+
 ////////////////////////////////////////////////////////////////////////////////
 // Addons API Integration
 ////////////////////////////////////////////////////////////////////////////////
@@ -284,11 +288,22 @@ ScriptInstall.prototype.install = function() {
       AddonManagerPrivate.callInstallListeners(
           'onDownloadEnded', this._listeners);
 
+      // See #1659 .  Pick the biggest of "remote version" (possibly from an
+      // @updateURL file) and "downloaded version".
+      // Tricky note: in this scope "rs.script" is the script object that
+      // was just downloaded; "this._script" is the previously existing script
+      // that rs.install() just removed from the config, to update it.
+      if (gVersionChecker.compare(
+          this._script._updateVersion, rs.script.version) > 0
+      ) {
+        rs.script._version = this._script._updateVersion;
+      }
+
       this.state = AddonManager.STATE_INSTALLING;
       AddonManagerPrivate.callInstallListeners(
           'onInstallStarted', this._listeners);
       rs.install(this._script);
-      rs.script._changed('modified', oldScriptId);
+      rs.script._changed('modified');
       AddonManagerPrivate.callInstallListeners(
           'onInstallEnded', this._listeners);
     } else if (!aSuccess) {
