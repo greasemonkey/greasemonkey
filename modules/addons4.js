@@ -201,7 +201,13 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
 
   try {
     if (aAvailable) {
-      var scriptInstall = ScriptInstallFactoryByAddon(this);
+      // Purge any possible ScriptInstall cache.
+      if (this.id in ScriptInstallCache) {
+        delete ScriptInstallCache[this.id];
+      }
+      // Then create one with this newly found update info.
+      var scriptInstall = ScriptInstallFactoryByAddon(
+          this, this._script.availableUpdate);
       AddonManagerPrivate.callInstallListeners(
           'onNewInstall', [], scriptInstall);
       tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
@@ -243,15 +249,15 @@ ScriptAddon.prototype.performUninstall = function() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var ScriptInstallCache = {};
-function ScriptInstallFactoryByAddon(aAddon) {
+function ScriptInstallFactoryByAddon(aAddon, aScriptToInstall) {
   if (!(aAddon.id in ScriptInstallCache)) {
-    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon);
+    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon, aScriptToInstall);
   }
   return ScriptInstallCache[aAddon.id];
 }
 
-function ScriptInstall(aAddon) {
-  this._script = aAddon._script;
+function ScriptInstall(aAddon, aScriptToInstall) {
+  this._script = aScriptToInstall || aAddon._script;
 
   this.name = this._script.name;
   this.version = this._script.version;
