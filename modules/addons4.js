@@ -202,18 +202,20 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
   try {
     if (aAvailable) {
       var scriptInstall = ScriptInstallFactoryByAddon(this);
+      AddonManagerPrivate.callInstallListeners(
+          'onNewInstall', [], scriptInstall);
       tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
     } else {
       tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
     }
-    if ('undefined' != typeof aUpdateListener.onUpdateFinished) {
-      tryToCall(aUpdateListener, 'onUpdateFinished', this, 0);
-    }
+    tryToCall(aUpdateListener, 'onUpdateFinished', this,
+        AddonManager.UPDATE_STATUS_NO_ERROR);
   } catch (e) {
     // See #1621.  Don't die if (e.g.) an addon listener doesn't provide
     // the entire interface and thus a method is undefined.
     Components.utils.reportError(e);
-    tryToCall(aUpdateListener, 'onUpdateFinished', this, 1);
+    tryToCall(aUpdateListener, 'onUpdateFinished', this,
+        AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
   }
 };
 
