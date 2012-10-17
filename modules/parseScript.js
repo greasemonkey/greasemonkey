@@ -7,6 +7,8 @@ Components.utils.import('resource://greasemonkey/scriptResource.js');
 Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
+var gIoService = Components.classes["@mozilla.org/network/io-service;1"]
+    .getService(Components.interfaces.nsIIOService);
 var gLineSplitRegexp = /.+/g;
 var gAllMetaRegexp = new RegExp(
     '^// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
@@ -54,15 +56,22 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'description':
     case 'name':
     case 'namespace':
-    case 'updateURL':
     case 'version':
       script['_' + header] = value;
       break;
 
-    case 'downloadURL':
     case 'installURL':
-      script._downloadURL = value;
+      header = 'downloadURL';
+    case 'downloadURL':
+    case 'updateURL':
+      try {
+        var uri = GM_util.uriFromUrl(value, aUri || this._downloadURL);
+        script['_' + header] = uri.spec;
+      } catch (e) {
+        dump('Failed to parse ' + header + ' "' + value + '":\n' + e + '\n');
+      }
       break;
+
     case 'exclude':
       script._excludes.push(value);
       break;
