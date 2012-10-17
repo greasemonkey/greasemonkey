@@ -278,7 +278,6 @@ ScriptInstall.prototype.install = function() {
       'onDownloadStarted', this._listeners);
   this.state = AddonManager.STATE_DOWNLOADING;
 
-  var oldScriptId = new String(this._script.id);
   var rs = new RemoteScript(this._script._downloadURL);
   rs.messageName = 'script.updated';
   rs.onProgress(this._progressCallback);
