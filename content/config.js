@@ -256,16 +256,29 @@ Config.prototype.getScriptById = function(scriptId) {
  * any necessary upgrades.
  */
 Config.prototype._updateVersion = function() {
-  var initialized = GM_prefRoot.getValue("version", "0.0");
-
   Components.utils.import("resource://gre/modules/AddonManager.jsm");
-  AddonManager.getAddonByID(this.GM_GUID, function(addon) {
+  AddonManager.getAddonByID(this.GM_GUID, GM_util.hitch(this, function(addon) {
+    var oldVersion = GM_prefRoot.getValue("version");
+    if ('0.0' == oldVersion) {
+      // In case of pref branch transition, find the existing version there.
+      oldVersion = this._getLegacyPrefMan().getValue("version", "0.0");
+    }
     var newVersion = addon.version;
 
-    // Update the currently initialized version so we don't do this work again.
+    var versionChecker = Components
+        .classes["@mozilla.org/xpcom/version-comparator;1"]
+        .getService(Components.interfaces.nsIVersionComparator);
+    if (oldVersion != '0.0'
+        && (versionChecker.compare(oldVersion, '1.5') < 0)
+        && (versionChecker.compare(newVersion, '1.5') >= 0)
+    ) {
+      this._migratePrefs();
+    }
+
+    // Update the stored current version so we don't do this work again.
     GM_prefRoot.setValue("version", newVersion);
 
-    if ("0.0" == initialized) {
+    if ("0.0" == oldVersion) {
       // This is the first launch.  Show the welcome screen.
       var chromeWin = GM_util.getBrowserWindow();
       // If we found it, use it to open a welcome tab.
@@ -276,5 +289,25 @@ Config.prototype._updateVersion = function() {
         chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 0, url);
       }
     }
-  });
+  }));
+};
+
+Config.prototype._getLegacyPrefMan = function() {
+  // Supports #1652.
+  var legacyPrefMan = new GM_PrefManager();
+  legacyPrefMan.pref = Components.classes["@mozilla.org/preferences-service;1"]
+     .getService(Components.interfaces.nsIPrefService)
+     .getBranch('greasemonkey.');
+  return legacyPrefMan;
+};
+
+Config.prototype._migratePrefs = function() {
+  // See #1652.  Migrates from "greasemonkey." to "extensions.greasemonkey.".
+  var fromBranch = this._getLegacyPrefMan();
+  var toBranch = GM_prefRoot;
+  var prefNames = fromBranch.listValues();
+  for (var i = 0, prefName = null; prefName = prefNames[i]; i++) {
+    toBranch.setValue(prefName, fromBranch.getValue(prefName));
+    fromBranch.remove(prefName);
+  }
 };

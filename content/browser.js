@@ -203,6 +203,14 @@ GM_BrowserUI.viewContextItemClicked = function() {
 };
 
 GM_BrowserUI.showToolbarButton = function() {
+  // See #1652.  During transition, this might be set, but not readable yet;
+  // transition happens in an async callback to get addon version.  If existing
+  // version is "0.0" (the default), this hasn't happened yet, so try later.
+  if ('0.0' == GM_prefRoot.getValue("version")) {
+    setTimeout(GM_BrowserUI.showToolbarButton, 50);
+    return;
+  }
+
   // Once, enforce that the toolbar button is present.  For discoverability.
   if (!GM_prefRoot.getValue('haveInsertedToolbarbutton')) {
     GM_prefRoot.setValue('haveInsertedToolbarbutton', true);

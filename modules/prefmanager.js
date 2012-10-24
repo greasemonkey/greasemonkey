@@ -6,7 +6,7 @@ const EXPORTED_SYMBOLS = ['GM_PrefManager', 'GM_prefRoot'];
  * "greasemonkey." prefix is assumed.
  */
 function GM_PrefManager(startPoint) {
-  startPoint = "greasemonkey." + (startPoint || "");
+  startPoint = "extensions.greasemonkey." + (startPoint || "");
 
   this.pref = Components.classes["@mozilla.org/preferences-service;1"]
      .getService(Components.interfaces.nsIPrefService)
