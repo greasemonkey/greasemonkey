@@ -14,6 +14,10 @@ Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var gPrefMan = new GM_PrefManager();
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
 // Check once, soon.
 GM_util.timeout(check, 1000 * 10) // ms = 10 seconds
@@ -24,7 +28,10 @@ GM_util.timeout(
 
 
 function check() {
-  if (!gPrefMan.getValue('stats.optedin')) return;
+  if (!gPrefMan.getValue('stats.optedin')) {
+    promptUser();
+    return;
+  }
 
   var lastSubmit = new Date(gPrefMan.getValue('stats.lastsubmittime'));
   var nextSubmit = new Date(
@@ -141,4 +148,39 @@ function getStatsObj() {
   // TODO: Specify "ui" metrics, i.e. clicks on various things.
 
   return stats;
+}
+
+
+function promptUser() {
+  if (gPrefMan.getValue('stats.prompted')) return;
+  gPrefMan.setValue('stats.prompted', true);
+
+  var win = GM_util.getBrowserWindow();
+  var browser = win.gBrowser;
+
+  var notificationBox = browser.getNotificationBox();
+  notificationBox.appendNotification(
+    gStringBundle.GetStringFromName('stats-prompt.msg'),
+    "greasemonkey-stats-opt-in",
+    "chrome://greasemonkey/skin/icon16.png",
+    notificationBox.PRIORITY_INFO_MEDIUM,
+    [{
+      'label': gStringBundle.GetStringFromName('stats-prompt.readmore'),
+      'accessKey': gStringBundle.GetStringFromName('stats-prompt.readmore.accesskey'),
+      'popup': null,
+      'callback': function() {
+        browser.loadOneTab(
+            'http://www.greasespot.net/2012/11/anonymous-statistic-gathering.html',
+            {'inBackground': false});
+      }
+    },{
+      'label': gStringBundle.GetStringFromName('stats-prompt.optin'),
+      'accessKey': gStringBundle.GetStringFromName('stats-prompt.optin.accesskey'),
+      'popup': null,
+      'callback': function() {
+        gPrefMan.setValue('stats.optedin', true);
+        check();
+      }
+    }]
+  );
 }
