@@ -42,6 +42,11 @@
   </groupbox>
 
   <groupbox>
+    <caption label="&AnonymousStatistics;" />
+    <checkbox id="submit-stats" label="&SubmitStats;" />
+  </groupbox>
+
+  <groupbox>
     <caption label="&options.globalExcludes;" />
     <cludes id="globalExcludes" />
   </groupbox>
