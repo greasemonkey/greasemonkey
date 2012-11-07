@@ -53,8 +53,8 @@
     <menupopup
       onpopupshowing="GM_showPopup(event);"
       onpopuphiding="GM_hidePopup(event);"
-      onclick="GM_popupClicked(event);event.stopPropagation();"
-      oncommand="GM_popupClicked(event);event.stopPropagation();"
+      onclick="GM_popupClicked(event); event.stopPropagation();"
+      oncommand="GM_popupClicked(event); event.stopPropagation();"
       oncontextmenu="event.preventDefault();"
     >
       <menuitem class='gm-enabled-item'
@@ -80,8 +80,9 @@
         label="&menu.commands;"
       >
         <menupopup
-          onpopupshowing="GM_MenuCommander.onPopupShowing(event, this);"
-          onpopuphiding="GM_MenuCommander.onPopupHiding(event, this);"
+          class='greasemonkey-user-script-commands-popup'
+          onpopupshowing="event.stopPropagation();"
+          onpopuphiding="event.stopPropagation();"
           />
       </menu>
 
