@@ -1,6 +1,7 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
+Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
@@ -568,38 +569,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
-    // Get rid of old dependencies' files.
-    for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
-      try {
-        if (dep.file.equals(this._basedirFile)) {
-          // Bugs like an empty file name can cause "dep.file" to point to
-          // the containing directory.  Don't remove that!
-          // TODO: Localize this string.
-          GM_util.logError('Warning!!! Refusing to delete script directory.');
-        } else {
-          dep.file.remove(true);
-        }
-      } catch (e) {
-        // Probably a locked file.  Ignore, warn.
-        // TODO: Localize this string.
-        GM_util.logError('Warning, could not delete for update:\n' + dep);
-      }
-    }
-
-    // Import dependencies from new script.
-    this._dependhash = dependhash;
-    this._icon = newScript._icon;
-    this._requires = newScript._requires;
-    this._resources = newScript._resources;
-    // And fix those dependencies to still reference this script.
-    this._icon._script = this;
-    for (var i = 0, require = null; require = this._requires[i]; i++) {
-      require._script = this;
-    }
-    for (var i = 0, resource = null; resource = this._resources[i]; i++) {
-      resource._script = this;
-    }
-
     // Store window references for late injection.
     if ('document-start' == this._runAt) {
       GM_util.logError(
@@ -614,8 +583,49 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
     var scope = {};
     Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
     var rs = new scope.RemoteScript(this._downloadURL);
-    rs.setScript(this);
+    newScript._basedir = this._basedir;
+    rs.setScript(newScript);
     rs.download(GM_util.hitch(this, function(aSuccess) {
+      if (!aSuccess) {
+        GM_notification(
+            'Could not update modified script\'s dependencies: '
+            + rs.errorMessage,
+        'dependency-update-failed');
+        return;
+      }
+
+      // Get rid of old dependencies' files.
+      for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
+        try {
+          if (dep.file.equals(this._basedirFile)) {
+            // Bugs like an empty file name can cause "dep.file" to point to
+            // the containing directory.  Don't remove that!
+            // TODO: Localize this string.
+            GM_util.logError('Warning!!! Refusing to delete script directory.');
+          } else {
+            dep.file.remove(true);
+          }
+        } catch (e) {
+          // Probably a locked file.  Ignore, warn.
+          // TODO: Localize this string.
+          GM_util.logError('Warning, could not delete for update:\n' + dep);
+        }
+      }
+
+      // Import dependencies from new script.
+      this._dependhash = dependhash;
+      this._icon = newScript._icon;
+      this._requires = newScript._requires;
+      this._resources = newScript._resources;
+      // And fix those dependencies to still reference this script.
+      this._icon._script = this;
+      for (var i = 0, require = null; require = this._requires[i]; i++) {
+        require._script = this;
+      }
+      for (var i = 0, resource = null; resource = this._resources[i]; i++) {
+        resource._script = this;
+      }
+
       // Install the downloaded files.
       rs.install(this, true);
 
