@@ -69,6 +69,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
+
+  // Make sure this is imported at least once, so its internal timer starts.
+  Components.utils.import('resource://greasemonkey/stats.js');
 };
 
 GM_BrowserUI.contentLoad = function(event) {

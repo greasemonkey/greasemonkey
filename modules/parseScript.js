@@ -1,4 +1,5 @@
-var EXPORTED_SYMBOLS = ['extractMeta', 'parse'];
+var EXPORTED_SYMBOLS = [
+    'extractMeta', 'parse', 'gLineSplitRegexp', 'gMetaLineRegexp'];
 
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
