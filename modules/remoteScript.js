@@ -79,12 +79,13 @@ function filenameFromUri(aUri, aDefault) {
 ////////////////////////// Private Download Listener ///////////////////////////
 
 function DownloadListener(
-    aTryToParse, aProgressCb, aCompletionCallback, aFile, aRemoteScript) {
+    aTryToParse, aProgressCb, aCompletionCallback, aFile, aUri, aRemoteScript) {
   this._completionCallback = aCompletionCallback;
   this._data = [];
   this._progressCallback = aProgressCb;
   this._remoteScript = aRemoteScript;
   this._tryToParse = aTryToParse;
+  this._uri = aUri;
 
   this._fileOutputStream = Cc["@mozilla.org/network/file-output-stream;1"]
       .createInstance(Ci.nsIFileOutputStream);
@@ -188,7 +189,7 @@ DownloadListener.prototype = {
 
     if (error) {
       errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
-          + '\n' + this._remoteScript._uri.spec + '\n\n' + errorMessage;
+          + '\n' + this._uri.spec + '\n\n' + errorMessage;
       this._remoteScript.cleanup(errorMessage);
     }
 
@@ -511,6 +512,7 @@ RemoteScript.prototype._downloadFile = function(
       GM_util.hitch(this, this._downloadFileProgress),
       aCompletionCallback,
       aFile,
+      aUri,
       this
       );
   channel.notificationCallbacks = dsl;
