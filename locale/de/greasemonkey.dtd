@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
-<!ENTITY EnableUpdateChecking "Automatische Überprüfung der Skripte auf Aktualisierung">
-<!ENTITY UpdateInterval "Minimale Anzahl von Tagen zwischen Aktualisierungsprüfungen">
-<!ENTITY AutoInstallUpdates "Gefundene Aktualisierungen automatisch installieren">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">

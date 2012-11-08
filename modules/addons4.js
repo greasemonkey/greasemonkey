@@ -20,6 +20,7 @@ Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/remoteScript.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var Cc = Components.classes;
@@ -120,8 +121,15 @@ ScriptAddon.prototype._script = null;
 
 ScriptAddon.prototype.__defineGetter__('applyBackgroundUpdates',
 function ScriptAddon_getApplyBackgroundUpdates() {
-  return GM_prefRoot.getValue('autoInstallUpdates')
-      ? AddonManager.AUTOUPDATE_ENABLE : AddonManager.AUTOUPDATE_DISABLE;
+  return this._script.checkRemoteUpdates;
+});
+
+ScriptAddon.prototype.__defineSetter__('applyBackgroundUpdates',
+function ScriptAddon_SetApplyBackgroundUpdates(aVal) {
+  this._script.checkRemoteUpdates = aVal;
+  this._script._changed('modified', null);
+  AddonManagerPrivate.callAddonListeners(
+      'onPropertyChanged', this, ['applyBackgroundUpdates']);
 });
 
 ScriptAddon.prototype.__defineGetter__('executionIndex',
@@ -174,11 +182,35 @@ ScriptAddon.prototype.isCompatibleWith = function() {
   return true;
 };
 
-ScriptAddon.prototype.findUpdates = function(aListener, aReason) {
-  function updateCallback(aAvailable) {
-    this._script.handleRemoteUpdate(aAvailable, aListener);
+ScriptAddon.prototype.findUpdates = function(aUpdateListener, aReason) {
+  this._script.checkForRemoteUpdate(
+      GM_util.hitch(this, this._handleRemoteUpdate, aUpdateListener));
+};
+
+ScriptAddon.prototype._handleRemoteUpdate = function(
+    aUpdateListener, aAvailable) {
+  function tryToCall(obj, methName) {
+    if (obj && ('undefined' != typeof obj[methName])) {
+      obj[methName].apply(obj, Array.prototype.slice.call(arguments, 2));
+    }
   }
-  this._script.checkForRemoteUpdate(true, GM_util.hitch(this, updateCallback));
+
+  try {
+    if (aAvailable) {
+      var scriptInstall = ScriptInstallFactoryByAddon(this);
+      tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
+    } else {
+      tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+    }
+    if ('undefined' != typeof aUpdateListener.onUpdateFinished) {
+      tryToCall(aUpdateListener, 'onUpdateFinished', this, 0);
+    }
+  } catch (e) {
+    // See #1621.  Don't die if (e.g.) an addon listener doesn't provide
+    // the entire interface and thus a method is undefined.
+    Components.utils.reportError(e);
+    tryToCall(aUpdateListener, 'onUpdateFinished', this, 1);
+  }
 };
 
 ScriptAddon.prototype.toString = function() {
@@ -238,36 +270,62 @@ ScriptInstall.prototype.type = 'user-script';
 ScriptInstall.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
-  function progressCallback(aRemoteScript, aType, aData) {
-    this.maxProgress = 100;
-    this.progress = Math.floor(aData * 100);
-    AddonManagerPrivate.callInstallListeners(
-        'onDownloadProgress', this._listeners, this);
-  }
-
-  AddonManagerPrivate.callAddonListeners('onInstallStarted', this);
+  AddonManagerPrivate.callInstallListeners(
+      'onDownloadStarted', this._listeners);
   this.state = AddonManager.STATE_DOWNLOADING;
-  this._remoteScript = this._script.installUpdate(
-      GM_util.hitch(this, progressCallback));
+
+  var oldScriptId = new String(this._script.id);
+  var rs = new RemoteScript(this._script._downloadURL);
+  rs.messageName = 'script.updated';
+  rs.onProgress(this._progressCallback);
+  rs.download(GM_util.hitch(this, function(aSuccess, aType) {
+    if (aSuccess && 'dependencies' == aType) {
+      this._progressCallback(rs, 'progress', 1);
+      AddonManagerPrivate.callInstallListeners(
+          'onDownloadEnded', this._listeners);
+
+      this.state = AddonManager.STATE_INSTALLING;
+      AddonManagerPrivate.callInstallListeners(
+          'onInstallStarted', this._listeners);
+      rs.install(this._script);
+      rs.script._changed('modified', oldScriptId);
+      AddonManagerPrivate.callInstallListeners(
+          'onInstallEnded', this._listeners);
+    } else if (!aSuccess) {
+      this.state = AddonManager.STATE_DOWNLOAD_FAILED;
+      AddonManagerPrivate.callInstallListeners(
+          'onDownloadFailed', this._listeners);
+    }
+  }));
+};
+
+ScriptInstall.prototype._progressCallback = function(
+    aRemoteScript, aType, aData) {
+  this.maxProgress = 100;
+  this.progress = Math.floor(aData * 100);
+  AddonManagerPrivate.callInstallListeners(
+      'onDownloadProgress', this._listeners);
 };
 
 ScriptInstall.prototype.cancel = function() {
   this.state = AddonManager.STATE_AVAILABLE;
-  AddonManagerPrivate.callAddonListeners(
-      'onInstallEnded', this, this.existingAddon);
+  AddonManagerPrivate.callInstallListeners(
+      'onInstallEnded', this._listeners, this, this.existingAddon);
+  AddonManagerPrivate.callInstallListeners(
+      'onInstallCancelled', this._listeners, this, this.existingAddon);
   if (this._remoteScript) {
     this._remoteScript.cleanup();
     this._remoteScript = null;
   }
 };
 
-ScriptInstall.prototype.addListener = function AI_addListener(aListener) {
+ScriptInstall.prototype.addListener = function(aListener) {
   if (!this._listeners.some(function(i) { return i == aListener; })) {
     this._listeners.push(aListener);
   }
 };
 
-ScriptInstall.prototype.removeListener = function AI_removeListener(aListener) {
+ScriptInstall.prototype.removeListener = function(aListener) {
   this._listeners =
       this._listeners.filter(function(i) { return i != aListener; });
 };

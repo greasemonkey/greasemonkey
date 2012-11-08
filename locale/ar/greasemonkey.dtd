@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "إلغاء التثبيت">
 <!ENTITY AlsoUninstallPrefs "أيضا مسح جميع الأعدادات">
 <!ENTITY UpdateChecking "تحديث السكربت">
-<!ENTITY EnableUpdateChecking "تمكين التحديث التلقائي للتحقق من السكربتات">
-<!ENTITY UpdateInterval "الحد الأدنى لعدد الأيام للتحقق من تحديث السكربتات">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "تتطلب تحديثات آمنة">
 <!ENTITY greasemonkey.noscriptshere "لايوجد سكربت مثبت يعمل على هذه الصفحة.">
 <!ENTITY greasemonkey.youhavenoscripts "انت لم تثبت أي سكربت">

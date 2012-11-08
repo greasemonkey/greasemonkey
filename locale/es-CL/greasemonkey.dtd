@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Eliminar">
 <!ENTITY AlsoUninstallPrefs "Eliminar preferencias asociadas">
 <!ENTITY UpdateChecking "Verificar para actualizar">
-<!ENTITY EnableUpdateChecking "Habilitar auto-verificar para actualizar scripts">
-<!ENTITY UpdateInterval "Lapso menor de días entre verificaciones">
-<!ENTITY AutoInstallUpdates "Auto-actualizar de ser el caso">
 <!ENTITY RequireSecureUpdates "Requerir actualizaciones seguras">
 <!ENTITY greasemonkey.noscriptshere "No hay  scripts instalados para este sitio.">
 <!ENTITY greasemonkey.youhavenoscripts "No hay  scripts instalados">

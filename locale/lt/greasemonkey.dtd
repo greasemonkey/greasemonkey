@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Pašalinti">
 <!ENTITY AlsoUninstallPrefs "Taipogi pašalinti susijusius nustatymus">
 <!ENTITY UpdateChecking "Atnaujinimų tikrinimas">
-<!ENTITY EnableUpdateChecking "Įjungti automatinę scenarijų atnaujinimų paiešką">
-<!ENTITY UpdateInterval "Mažiausias dienų skaičius tarp atnaujinimų paieškos">
-<!ENTITY AutoInstallUpdates "Radus atnaujinimų, įdiegti automatiškai">
 <!ENTITY RequireSecureUpdates "Reikalauti saugumo atnaujinimų">
 <!ENTITY greasemonkey.noscriptshere "Nėra įdiegtų scenarijų kurie veiktų šiame puslapyje.">
 <!ENTITY greasemonkey.youhavenoscripts "Jūs neturite įdiegtų scenarijų">

@@ -251,22 +251,6 @@ Config.prototype._notifyUpdates = function() {
   GM_util.getBrowserWindow().GM_OpenUpdatesMgr();
 };
 
-Config.prototype.checkScriptsForRemoteUpdates = function(scripts) {
-  var forced = false;
-  if ('undefined' == typeof scripts) {
-    forced = true;
-    var scripts = this.getMatchingScripts(function (script) {
-      return !script.updateAvailable &&
-          script.updateURL &&
-          script.enabled;
-    });
-  }
-
-  scripts.forEach(function(script) {
-    script.checkForRemoteUpdate(forced);
-  });
-};
-
 Config.prototype.getScriptById = function(scriptId) {
   for (var i = 0, script = null; script = this.scripts[i]; i++) {
     if (scriptId == script.id) {

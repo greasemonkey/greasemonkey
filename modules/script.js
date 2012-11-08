@@ -39,7 +39,6 @@ function Script(configNode) {
   this._id = null;
   this._installTime = null;
   this._includes = [];
-  this._lastUpdateCheck = null;
   this._matches = [];
   this._modifiedTime = null;
   this._name = 'user-script';
@@ -57,7 +56,7 @@ function Script(configNode) {
   this._uuid = [];
   this._version = null;
 
-  this.checkRemoteUpdates = true;
+  this.checkRemoteUpdates = AddonManager.AUTOUPDATE_DEFAULT;
   this.needsUninstall = false;
   this.parseErrors = [];
   this.pendingExec = [];
@@ -292,17 +291,22 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.getAttribute("lastUpdateCheck")
   ) {
     this.updateAvailable = false;
-    this._lastUpdateCheck = this._modifiedTime;
-
     this._changed('modified', null);
   } else {
     this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
     this._updateVersion = node.getAttribute("updateVersion") || null;
-    this._lastUpdateCheck = parseInt(node.getAttribute("lastUpdateCheck"), 10);
   }
 
-  this.checkRemoteUpdates = node.hasAttribute('checkRemoteUpdates')
-      ? node.getAttribute('checkRemoteUpdates') == 'true' : true;
+  // Note that "checkRemoteUpdates" used to be a boolean.  As of #1647, it now
+  // holds one of the AddonManager.AUTOUPDATE_* values; so it's name is
+  // suboptimal.
+  if (node.getAttribute('checkRemoteUpdates') === 'true') {
+    // Legacy support, cast "true" to default.
+    this.checkRemoteUpdates = AddonManager.AUTOUPDATE_DEFAULT;
+  } else if (node.hasAttribute('checkRemoteUpdates')) {
+    this.checkRemoteUpdates = parseInt(
+        node.getAttribute('checkRemoteUpdates'), 10);
+  }
 
   if (!node.hasAttribute("installTime")) {
     this._installTime = new Date().getTime();
@@ -418,7 +422,6 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("enabled", this._enabled);
   scriptNode.setAttribute("filename", this._filename);
   scriptNode.setAttribute("installTime", this._installTime);
-  scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
   scriptNode.setAttribute("modified", this._modifiedTime);
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
@@ -498,9 +501,8 @@ Script.prototype.isModified = function() {
   return false;
 };
 
-Script.prototype.isRemoteUpdateAllowed = function(aForced) {
-  if (!this.checkRemoteUpdates && !aForced) return false;
-  if (!this.enabled && !aForced) return false;
+Script.prototype.isRemoteUpdateAllowed = function() {
+  if (!this.enabled) return false;
   if (!this.updateURL) return false;
   if (this._modifiedTime > this._installTime) return false;
 
@@ -706,35 +708,14 @@ Script.prototype.checkConfig = function() {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
-  var callback = aCallback || GM_util.hitch(
-      this, this.handleRemoteUpdate, aForced);
-  if (this.updateAvailable) return callback(true);
-
-  if (!this.isRemoteUpdateAllowed(aForced)) return callback(false);
-
-  var currentTime = new Date().getTime();
-
-  if (!aForced) {
-    if (!GM_prefRoot.getValue("enableUpdateChecking")) return callback(false);
-
-    var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
-    if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
-    var minIntervalMs = 86400000 * minIntervalDays;
-    var nextUpdateTime = this._lastUpdateCheck + minIntervalMs;
-    if (currentTime <= nextUpdateTime) return callback(false);
-  }
-
-  var lastCheck = this._lastUpdateCheck;
-  this._lastUpdateCheck = currentTime;
+Script.prototype.checkForRemoteUpdate = function(aCallback) {
+  if (this.updateAvailable) return aCallback(true);
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.open("GET", this.updateURL, true);
-  req.onload = GM_util.hitch(
-      this, "checkRemoteVersion", req, callback);
-  req.onerror = GM_util.hitch(
-      this, "checkRemoteVersionErr", lastCheck, callback);
+  req.onload = GM_util.hitch(this, "checkRemoteVersion", req, aCallback);
+  req.onerror = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
@@ -757,63 +738,8 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
 
   this.updateAvailable = true;
   this._updateVersion = remoteVersion;
-  GM_util.getService().config._save();
+  this._changed('modified', null);
   aCallback(true);
-};
-
-Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
-  // Set the time back.
-  this._lastUpdateCheck = lastCheck;
-  GM_util.getService().config._save();
-  aCallback(false);
-};
-
-Script.prototype.handleRemoteUpdate = function(
-    aForced, aAvailable, aListener) {
-  var addons4 = {};
-  Components.utils.import('resource://greasemonkey/addons4.js', addons4);
-  var addon = addons4.ScriptAddonFactoryByScript(this);
-  var scriptInstall = addons4.ScriptInstallFactoryByAddon(addon);
-  if (aListener) {
-    // When in the add-ons manager, listeners are passed around to keep
-    // the UI up to date.
-    try {
-      if (aAvailable) {
-        AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-        aListener.onUpdateAvailable(addon, scriptInstall);
-      } else {
-        aListener.onNoUpdateAvailable(addon);
-      }
-      aListener(onUpdateFinished(addon, 0));
-    } catch (e) {
-      // See #1621.  Don't die if (e.g.) an addon listener doesn't provide
-      // the entire interface and thus a method is undefined.
-    }
-  } else {
-    // Otherwise, just install.
-    if (aAvailable &&
-        (aForced || GM_prefRoot.getValue('autoInstallUpdates'))) {
-      scriptInstall.install();
-    }
-  }
-}
-
-Script.prototype.installUpdate = function(aProgressCallback) {
-  aProgressCallback = aProgressCallback || function() {};
-  var oldScriptId = new String(this.id);
-  var scope = {};
-  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
-  var rs = new scope.RemoteScript(this._downloadURL);
-  rs.messageName = 'script.updated';
-  rs.onProgress(aProgressCallback);
-  rs.download(GM_util.hitch(this, function(aSuccess, aType) {
-    if (aSuccess && 'dependencies' == aType) {
-      rs.install(this);
-      aProgressCallback(rs, 'progress', 1);
-      rs.script._changed('modified', oldScriptId);
-    }
-  }));
-  return rs;
 };
 
 Script.prototype.allFiles = function() {

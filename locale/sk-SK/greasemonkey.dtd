@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Odinštalovať">
 <!ENTITY AlsoUninstallPrefs "Odinštalovať aj pridružené nastavenia">
 <!ENTITY UpdateChecking "Kontrolovanie aktualizácií">
-<!ENTITY EnableUpdateChecking "Zapnúť kontrolovanie aktualizácií skriptov">
-<!ENTITY UpdateInterval "Minimálny počet dní medzi kontrolou aktualizácií">
-<!ENTITY AutoInstallUpdates "Ak sa nájdu aktualizácie, automaticky ich nainštalovať">
 <!ENTITY RequireSecureUpdates "Požaduje bezpečnostné aktualizácie">
 <!ENTITY greasemonkey.noscriptshere "Na tejto stránke nie sú spustené nainštalované skripty.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainštalované užívateľské skripty">

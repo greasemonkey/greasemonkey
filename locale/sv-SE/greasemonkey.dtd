@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AlsoUninstallPrefs "Avinstallera även associerade inställningar">
 <!ENTITY UpdateChecking "Uppdateringskontroll">
-<!ENTITY EnableUpdateChecking "Aktivera automatisk uppdateringskontroll av skript">
-<!ENTITY UpdateInterval "Minsta antal dagar mellan två uppdateringskontroller">
-<!ENTITY AutoInstallUpdates "Installera tillgängliga uppdateringar automatiskt">
 <!ENTITY RequireSecureUpdates "Kräv säkra uppdateringar">
 <!ENTITY greasemonkey.noscriptshere "Inga installerade skript körs på denna sida.">
 <!ENTITY greasemonkey.youhavenoscripts "Du har inga installerade användarskript">

@@ -37,24 +37,13 @@
   </groupbox>
 
   <groupbox>
-    <caption label="&options.globalExcludes;" />
-    <cludes id="globalExcludes" />
+    <caption label="&UpdateChecking;" />
+    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
   </groupbox>
 
   <groupbox>
-    <caption label="&UpdateChecking;" />
-    <checkbox id="check-update" label="&EnableUpdateChecking;"
-        oncommand="GM_onChangeUpdateChecking()" />
-    <checkbox id="auto-install-updates" label="&AutoInstallUpdates;" />
-    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
-    <label value="&UpdateInterval;" control="slide-updateInterval"
-        id="label-slide-updateInterval" />
-    <hbox>
-      <scale id="slide-updateInterval" flex="1"
-        orient="horizontal" min="1" max="30"
-        onchange="GM_setMinUpdateIntervalLabel()"/>
-      <label id="txt-updateInterval" />
-    </hbox>
+    <caption label="&options.globalExcludes;" />
+    <cludes id="globalExcludes" />
   </groupbox>
 </vbox>
 

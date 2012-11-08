@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Изменить">
 <!ENTITY Edit.accesskey "з">
 <!ENTITY Edit.tooltip "Редактировать этот скрипт">

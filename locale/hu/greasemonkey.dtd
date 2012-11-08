@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">
 <!ENTITY UpdateChecking "Frissítések keresése">
-<!ENTITY EnableUpdateChecking "Parancsfájlok automatikus frissítésének engedélyezése">
-<!ENTITY UpdateInterval "Frissítési időköz (napok)">
-<!ENTITY AutoInstallUpdates "Frissítések automatikus telepítése">
 <!ENTITY RequireSecureUpdates "Biztonsági frissítések igénylése">
 <!ENTITY greasemonkey.noscriptshere "Ezen az oldalon nem futnak telepített parancsfájlok.">
 <!ENTITY greasemonkey.youhavenoscripts "Nincsenek parancsfájlok telepítve">

@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "卸载">
 <!ENTITY AlsoUninstallPrefs "同时清除相关的首选项设置">
 <!ENTITY UpdateChecking "检查更新">
-<!ENTITY EnableUpdateChecking "启用脚本的自动检查更新">
-<!ENTITY UpdateInterval "两次更新检查间的最小间隔（天）">
-<!ENTITY AutoInstallUpdates "发现更新时自动安装">
 <!ENTITY RequireSecureUpdates "要求安全地更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您还没有安装任何用户脚本">

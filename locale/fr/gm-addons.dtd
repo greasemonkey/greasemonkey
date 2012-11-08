@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Vérifier automatiquement pour des mises à jour">
-<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Modifier">
 <!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "Modifier ce Script Utilisateur">

@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "削除">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY UpdateChecking "更新の確認">
-<!ENTITY EnableUpdateChecking "スクリプトの自動更新確認を有効にする">
-<!ENTITY UpdateInterval "更新確認の間隔の最小日数">
-<!ENTITY AutoInstallUpdates "更新があれば自動でインストールする">
 <!ENTITY RequireSecureUpdates "安全な更新のみ確認する">
 <!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">
 <!ENTITY greasemonkey.youhavenoscripts "スクリプトが何もインストールされていません">

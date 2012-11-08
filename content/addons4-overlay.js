@@ -24,17 +24,6 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
-// Patch the default loadView() to suppress the detail view for user scripts.
-var _loadViewOrig = gViewController.loadView.bind(gViewController);
-gViewController.loadView = function(aViewId) {
-  if (userScriptViewId == gViewController.currentViewId
-      && 0 === aViewId.indexOf('addons://detail/')
-  ) {
-    return false;
-  }
-  _loadViewOrig(aViewId);
-};
-
 // Set up an "observer" on the config, to keep the displayed items up to date
 // with their actual state.
 var observer = {
@@ -129,13 +118,6 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
-  gViewController.commands.cmd_userscript_toggleCheckUpdates = {
-      isEnabled: addonIsInstalledScript,
-      doCommand: function(aAddon) {
-        aAddon._script.checkRemoteUpdates = !aAddon._script.checkRemoteUpdates;
-        GM_util.getService().config._changed(aAddon._script, "modified", null);
-      }
-    };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later
@@ -143,22 +125,7 @@ function init() {
   document.getElementById('greasemonkey-sort-bar').addEventListener(
       'command', onSortersClicked, false);
   applySort();
-
-  var contextMenu = document.getElementById("addonitem-popup");
-  contextMenu.addEventListener("popupshowing", onContextShowing, false);
 };
-
-function onContextShowing(aEvent) {
-  var addon = gViewController.currentViewObj.getSelectedAddon();
-  if ('user-script' != addon.type) return;
-  var menuitem = document.getElementById(
-      'menuitem_userscript_toggleCheckUpdates');
-  if (addon._script.checkRemoteUpdates) {
-    menuitem.setAttribute('checked', 'true');
-  } else {
-    menuitem.removeAttribute('checked');
-  }
-}
 
 function onSortersClicked(aEvent) {
   if ('button' != aEvent.target.tagName) return;

@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "عزل">
 <!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">
 <!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "نصب خودکار بروز رسانی به محض مشاهده">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "دستنویس ای که در این صفحه اجرا شود موجود نیست.">
 <!ENTITY greasemonkey.youhavenoscripts "شما هیچ دستنویس نسب شده ای ندارید">

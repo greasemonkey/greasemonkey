@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
 <!ENTITY UpdateChecking "Проверавање ажурирања">
-<!ENTITY EnableUpdateChecking "Омогући аутоматско ажурирање скрипти">
-<!ENTITY UpdateInterval "Најмањи број дана који прође између две провере ажурирања">
-<!ENTITY AutoInstallUpdates "Аутоматски инсталирај исправке када постану доступне.">
 <!ENTITY RequireSecureUpdates "Тражи безбедносна ажурирања">
 <!ENTITY greasemonkey.noscriptshere "Ниједна скрипта се не покреће на овој станици">
 <!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">

@@ -477,7 +477,6 @@ service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin);
-    this._config.checkScriptsForRemoteUpdates(scripts);
   }
 };
 

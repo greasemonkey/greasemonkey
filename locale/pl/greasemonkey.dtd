@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Odinstaluj">
 <!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">
 <!ENTITY UpdateChecking "Sprawdzaj dostępność aktualizacji">
-<!ENTITY EnableUpdateChecking "Włącza automatyczne sprawdzanie dostępności aktualizacji skryptów">
-<!ENTITY UpdateInterval "Minimalna liczba dni pomiędzy kolejnymi sprawdzeniami">
-<!ENTITY AutoInstallUpdates "Automatycznie instaluj znalezione aktualizacje">
 <!ENTITY RequireSecureUpdates "Wymaga bezpiecznych aktualizacji">
 <!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
 <!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">

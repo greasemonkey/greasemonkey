@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AlsoUninstallPrefs "Также удалять настройки скриптов">
 <!ENTITY UpdateChecking "Проверка обновлений">
-<!ENTITY EnableUpdateChecking "Включить автоматическую проверку обновлений скриптов">
-<!ENTITY UpdateInterval "Минимальный интервал проверки обновлений (дней)">
-<!ENTITY AutoInstallUpdates "Автоматически устанавливать найденные обновления">
 <!ENTITY RequireSecureUpdates "Использовать безопасное обновление">
 <!ENTITY greasemonkey.noscriptshere "Для этой страницы нет скриптов">
 <!ENTITY greasemonkey.youhavenoscripts "У вас не установлено ни одного скрипта">

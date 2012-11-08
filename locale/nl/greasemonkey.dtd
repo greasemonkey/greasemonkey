@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
 <!ENTITY UpdateChecking "Updatecontrole">
-<!ENTITY EnableUpdateChecking "Automatische controle op scriptupdates inschakelen">
-<!ENTITY UpdateInterval "Minimaal aantal dagen tussen updatecontroles">
-<!ENTITY AutoInstallUpdates "Updates automatisch installeren wanneer deze gevonden worden">
 <!ENTITY RequireSecureUpdates "Beveiligde updates vereisen">
 <!ENTITY greasemonkey.noscriptshere "Op deze pagina draaien geen geïnstalleerde scripts.">
 <!ENTITY greasemonkey.youhavenoscripts "Er zijn geen gebruikersscripts geïnstalleerd">

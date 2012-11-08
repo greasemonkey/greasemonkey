@@ -33,9 +33,6 @@
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
 <!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
