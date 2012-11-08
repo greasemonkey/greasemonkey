@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Zahrnúť globálne">
 <!ENTITY userscripts "Užívateľské skripty">
 <!ENTITY Uninstall "Odinštalovať">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Odinštalovať aj pridružené nastavenia">
 <!ENTITY UpdateChecking "Kontrolovanie aktualizácií">
 <!ENTITY RequireSecureUpdates "Požaduje bezpečnostné aktualizácie">

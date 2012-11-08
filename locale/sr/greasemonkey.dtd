@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Општа изузимања">
 <!ENTITY userscripts "Корисничке скрипте">
 <!ENTITY Uninstall "Уклони">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
 <!ENTITY UpdateChecking "Проверавање ажурирања">
 <!ENTITY RequireSecureUpdates "Тражи безбедносна ажурирања">

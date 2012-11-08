@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey 選項…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "全域排除">
 <!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
+<!ENTITY AnonymousStatistics "匿名統計">
+<!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
 <!ENTITY UpdateChecking "檢查更新">
 <!ENTITY RequireSecureUpdates "要求透過安全通道更新">

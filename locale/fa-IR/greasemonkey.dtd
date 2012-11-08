@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "مستثنا های کلی">
 <!ENTITY userscripts "دستنویس های کاربری">
 <!ENTITY Uninstall "عزل">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "همچنین حذف تنظیمات وابسته">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">

@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Sluit globaal uit">
 <!ENTITY userscripts "Gebruikersscripts">
 <!ENTITY Uninstall "Deïnstalleren">
+<!ENTITY AnonymousStatistics "Anonieme statistieken">
+<!ENTITY SubmitStats "Verzamel en verstuur anonieme gebruiksstatistieken om Greasemonkey te verbeteren.">
 <!ENTITY AlsoUninstallPrefs "Bijbehorende instellingen ook verwijderen">
 <!ENTITY UpdateChecking "Updatecontrole">
 <!ENTITY RequireSecureUpdates "Beveiligde updates vereisen">

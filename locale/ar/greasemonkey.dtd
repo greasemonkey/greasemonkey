@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "باستثناء العالمية">
 <!ENTITY userscripts "مدير السكربتات">
 <!ENTITY Uninstall "إلغاء التثبيت">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "أيضا مسح جميع الأعدادات">
 <!ENTITY UpdateChecking "تحديث السكربت">
 <!ENTITY RequireSecureUpdates "تتطلب تحديثات آمنة">

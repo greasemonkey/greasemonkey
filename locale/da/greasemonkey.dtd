@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Globale ekskluderinger">
 <!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Afinstaller">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Også afinstallere tilhørende indstilliner">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">

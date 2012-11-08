@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Yleisesti poisluettavat">
 <!ENTITY userscripts "Skriptit">
 <!ENTITY Uninstall "Poisto">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Poista myös skriptin asetukset">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">

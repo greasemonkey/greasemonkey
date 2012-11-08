@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "පරිශීලක ස්ක්‍රිප්ට්">
 <!ENTITY Uninstall "ඉවත් කරන්න">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "එසේම ආශ්‍රිත අභිමතද ඉවත් කරන්න">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">

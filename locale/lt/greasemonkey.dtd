@@ -31,6 +31,8 @@
 <!ENTITY options.globalExcludes "Nevykdomi visur">
 <!ENTITY userscripts "Naudotojo scenarijai">
 <!ENTITY Uninstall "Pašalinti">
+<!ENTITY AnonymousStatistics "Anoniminė statistika">
+<!ENTITY SubmitStats "Rinkti ir siųsti anoniminę naudojimo statistiką.">
 <!ENTITY AlsoUninstallPrefs "Taipogi pašalinti susijusius nustatymus">
 <!ENTITY UpdateChecking "Atnaujinimų tikrinimas">
 <!ENTITY RequireSecureUpdates "Reikalauti saugumo atnaujinimų">
