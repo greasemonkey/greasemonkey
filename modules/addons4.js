@@ -9,7 +9,6 @@
 var EXPORTED_SYMBOLS = [
     'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
     'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript',
-    'ScriptInstallFactoryByAddon',
     ];
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -207,7 +206,7 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
       }
       // Then create one with this newly found update info.
       var scriptInstall = ScriptInstallFactoryByAddon(
-          this, this._script.availableUpdate);
+          this, this._script);
       AddonManagerPrivate.callInstallListeners(
           'onNewInstall', [], scriptInstall);
       tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
@@ -249,19 +248,20 @@ ScriptAddon.prototype.performUninstall = function() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var ScriptInstallCache = {};
-function ScriptInstallFactoryByAddon(aAddon, aScriptToInstall) {
+function ScriptInstallFactoryByAddon(aAddon) {
   if (!(aAddon.id in ScriptInstallCache)) {
-    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon, aScriptToInstall);
+    ScriptInstallCache[aAddon.id] = new ScriptInstall(aAddon);
   }
   return ScriptInstallCache[aAddon.id];
 }
 
-function ScriptInstall(aAddon, aScriptToInstall) {
-  this._script = aScriptToInstall || aAddon._script;
+function ScriptInstall(aAddon) {
+  var newScript = aAddon._script.availableUpdate;
+  this.iconURL = newScript.icon.fileURL;
+  this.name = newScript.name;
+  this.version = newScript.version;
 
-  this.name = this._script.name;
-  this.version = this._script.version;
-  this.iconURL = this._script.icon.fileURL;
+  this._script = aAddon._script;
   this.existingAddon = aAddon;
 
   this._listeners = [];
