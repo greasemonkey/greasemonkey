@@ -34,9 +34,9 @@
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY RequireSecureUpdates "Require secure updates">
-<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY UpdateChecking "Zkontrolovat aktualizace">
+<!ENTITY RequireSecureUpdates "Použít zabezpečené aktualizace">
+<!ENTITY greasemonkey.noscriptshere "Žádné nainstalované skripty neběží na této stránce.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalované uživatelské skripty">
 <!ENTITY greasemonkey.getuserscripts "Získat uživatelské skripty">
 <!ENTITY scriptprefs.title "Greasemonkey uživatelský skript Nastavení -!!">
