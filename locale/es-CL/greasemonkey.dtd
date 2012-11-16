@@ -29,10 +29,10 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Elegir editor de scripts">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "Scripts">
+<!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Eliminar">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "Estadãsticas Anônimas">
+<!ENTITY SubmitStats "Recolectar y enviar estadãsticas anônimas de uso para mejorar Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Eliminar preferencias asociadas">
 <!ENTITY UpdateChecking "Verificar para actualizar">
 <!ENTITY RequireSecureUpdates "Requerir actualizaciones seguras">

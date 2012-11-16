@@ -31,8 +31,8 @@
 <!ENTITY options.globalExcludes "どれも実行しないページ">
 <!ENTITY userscripts "ユーザスクリプト">
 <!ENTITY Uninstall "削除">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "匿名の統計">
+<!ENTITY SubmitStats "Greasemonkey を改善するために匿名の使用統計を送信する">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY UpdateChecking "更新の確認">
 <!ENTITY RequireSecureUpdates "安全な更新のみ確認する">

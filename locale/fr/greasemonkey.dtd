@@ -7,11 +7,11 @@
 <!ENTITY menu.new "Nouveau Script Utilisateur…">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Gérer les Scripts Utilisateur">
-<!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.manage.accesskey "G">
+<!ENTITY menu.options "Options de Greasemonkey">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Activé">
-<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installation de Greasemonkey">
 <!ENTITY install.runson "s'exécute sur:">
 <!ENTITY install.matches "matches:">
@@ -24,18 +24,18 @@
 <!ENTITY newscript.name "Nom">
 <!ENTITY newscript.namespace "Espace de nom">
 <!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Inclus (Un par ligne)">
-<!ENTITY newscript.excludes "Exclus (Un par ligne)">
+<!ENTITY newscript.includes "Inclus (un par ligne)">
+<!ENTITY newscript.excludes "Exclus (un par ligne)">
 <!ENTITY options.editor "Éditeur">
 <!ENTITY options.changeEditor "Changer d'Éditeur">
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY userscripts "Scripts Utilisateur">
 <!ENTITY Uninstall "Désinstaller">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "Statistiques anonymes">
+<!ENTITY SubmitStats "Récolte et envoie de statistiques anonymes destinées à améliorer Greasemonkey">
 <!ENTITY AlsoUninstallPrefs "Désinstalle également les préférences associées">
-<!ENTITY UpdateChecking "Update Checking">
-<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY UpdateChecking "Vérifcation des mises à jour">
+<!ENTITY RequireSecureUpdates "Mises à jour sécurisées nécessaires">
 <!ENTITY greasemonkey.noscriptshere "Aucun script installé n'est exécuté sur cette page.">
 <!ENTITY greasemonkey.youhavenoscripts "Vous avez aucun scripts d'installé">
 <!ENTITY greasemonkey.getuserscripts "Obtenir des scripts utilisateur">

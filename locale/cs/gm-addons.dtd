@@ -7,9 +7,9 @@
 <!ENTITY ExecuteSooner "Spustit dříve">
 <!ENTITY FindUpdate "Najít aktualizace">
 <!ENTITY InstallUpdate "Instalovat aktualizace">
-<!ENTITY MoveDown "Posunout níž">
-<!ENTITY MoveDown.accesskey "d">
-<!ENTITY MoveToBottom "Posunout dolů">
+<!ENTITY MoveDown "Posunout níže">
+<!ENTITY MoveDown.accesskey "n">
+<!ENTITY MoveToBottom "Posunout úplně dolů">
 <!ENTITY MoveToBottom.accesskey "d">
 <!ENTITY MoveToTop "Posunout úplně nahoru">
 <!ENTITY MoveToTop.accesskey "h">

@@ -31,8 +31,8 @@
 <!ENTITY options.globalExcludes "Глобальні винятки">
 <!ENTITY userscripts "Скрипти">
 <!ENTITY Uninstall "Вилучити">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "Анонимна статистика">
+<!ENTITY SubmitStats "Збирати та надсилати анонимну статистику про використання для покращення Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Вилучити також пов'язані налаштування">
 <!ENTITY UpdateChecking "Перевірка оновлень">
 <!ENTITY RequireSecureUpdates "Вимагати безпечних оновлень">
