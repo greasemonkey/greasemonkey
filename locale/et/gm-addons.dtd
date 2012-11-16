@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Name">
 <!ENTITY Sort.ByExecution "Sort by execution order">
 <!ENTITY Sort.Execution "Execution Order">
-<!ENTITY SortScripts "Sorteeri Skripte">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Tühista Eemaldamine">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancel uninstallation of this User Script">
-<!ENTITY UninstallCancelDescription "This User Script will be uninstalled when the dialog closes.  (Or right click for &quot;Uninstall Now&quot;.)">
-<!ENTITY UninstallNow "Eemalda">
-<!ENTITY UninstallNow.accesskey "N">

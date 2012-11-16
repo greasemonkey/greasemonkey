@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Namn">
 <!ENTITY Sort.ByExecution "Sortera efter körningsordning">
 <!ENTITY Sort.Execution "Körningsordning">
-<!ENTITY SortScripts "Sortera skript">
-<!ENTITY SortScripts.accesskey "o">
-<!ENTITY UninstallCancel "Avbryt avinstallation">
-<!ENTITY UninstallCancel.accesskey "v">
-<!ENTITY UninstallCancel.tooltip "Avbryter avinstallationen av detta användarskript">
-<!ENTITY UninstallCancelDescription "Detta användarskript kommer att avinstalleras när dialogen stängs. (Eller högerklicka och välj &quot;Avinstallera nu&quot;.)">
-<!ENTITY UninstallNow "Avinstallera nu">
-<!ENTITY UninstallNow.accesskey "A">

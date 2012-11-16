@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "نام">
 <!ENTITY Sort.ByExecution "مرتب کردن بر اساس ترتیب اجرا">
 <!ENTITY Sort.Execution "ترتیب اجرا">
-<!ENTITY SortScripts "مرتب سازی دستنویس ها">
-<!ENTITY SortScripts.accesskey "م">
-<!ENTITY UninstallCancel "لغو عزل">
-<!ENTITY UninstallCancel.accesskey "ل">
-<!ENTITY UninstallCancel.tooltip "لغو فرآیند عزل دستنویس کاربری">
-<!ENTITY UninstallCancelDescription "وقتی که پنجره محاوره ای بسته شود این دستنویس پاک خواهد شد. (یا برای &quot;عزل هم اکنون&quot; راست کلیک کنید.)">
-<!ENTITY UninstallNow "عزل هم اکنون">
-<!ENTITY UninstallNow.accesskey "ه">

@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Nume">
 <!ENTITY Sort.ByExecution "Sortează după ordinea de executare">
 <!ENTITY Sort.Execution "Ordine de executare">
-<!ENTITY SortScripts "Sortează scripturi">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Anulează dezinstalarea">
-<!ENTITY UninstallCancel.accesskey "A">
-<!ENTITY UninstallCancel.tooltip "Anulează dezinstalarea acestui script utilizator">
-<!ENTITY UninstallCancelDescription "Acest script utilizator va fi dezinstalat la închiderea dialogului. (Sau clic dreapta pentru &quot;Dezinstalează acum&quot;.)">
-<!ENTITY UninstallNow "Dezinstalează acum">
-<!ENTITY UninstallNow.accesskey "D">

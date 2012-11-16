@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Navn">
 <!ENTITY Sort.ByExecution "Sorter efter kørselsrækkefølge">
 <!ENTITY Sort.Execution "Kørselsrækkefølge">
-<!ENTITY SortScripts "Sorter Scripts">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Anuller afinstallation">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Anuller afinstallation af dette User Script">
-<!ENTITY UninstallCancelDescription "Dette User Script vil blive fjernet, når dialogboksen lukkes. (Eller højreklik for &quot;Afinstaller nu;.)">
-<!ENTITY UninstallNow "Afinstaller nu">
-<!ENTITY UninstallNow.accesskey "N">

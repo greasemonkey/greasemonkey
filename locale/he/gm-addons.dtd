@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "שם">
 <!ENTITY Sort.ByExecution "מיין לפי סדר ביצוע">
 <!ENTITY Sort.Execution "סדר ביצוע">
-<!ENTITY SortScripts "מיין סקריפטים">
-<!ENTITY SortScripts.accesskey "ס">
-<!ENTITY UninstallCancel "ביטול הסר התקנה">
-<!ENTITY UninstallCancel.accesskey "ב">
-<!ENTITY UninstallCancel.tooltip "ביטול הסרת התקנה של סקריפט משתמש זה">
-<!ENTITY UninstallCancelDescription "סקריפט משתמש זה יוסר עם סגירת תיבת הדו-שיח. (או לחץ לחיצה ימנית על &quot;הסר עכשיו&quot;.)">
-<!ENTITY UninstallNow "הסר עכשיו">
-<!ENTITY UninstallNow.accesskey "ס">

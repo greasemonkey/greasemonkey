@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "名稱">
 <!ENTITY Sort.ByExecution "依執行順序排序">
 <!ENTITY Sort.Execution "執行順序">
-<!ENTITY SortScripts "排序腳本">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "取消移除">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "取消移除此使用者腳本">
-<!ENTITY UninstallCancelDescription "此使用者腳本將會在對話框關閉後被移除。（或按右鍵，點擊「立即移除」。）">
-<!ENTITY UninstallNow "立即移除">
-<!ENTITY UninstallNow.accesskey "Ｎ">

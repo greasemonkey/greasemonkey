@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Nimi">
 <!ENTITY Sort.ByExecution "Järjestä suoritusjärjestyksen mukaan">
 <!ENTITY Sort.Execution "Suoritusjärjestys">
-<!ENTITY SortScripts "Järjestä skriptit">
-<!ENTITY SortScripts.accesskey "J">
-<!ENTITY UninstallCancel "Peru poisto">
-<!ENTITY UninstallCancel.accesskey "P">
-<!ENTITY UninstallCancel.tooltip "Peru tämän skriptin poisto">
-<!ENTITY UninstallCancelDescription "Tämä skripti poistetaan kun ikkuna suljetaan. (Tai voit poistaa sen heti oikean näppäimen painalluksella.)">
-<!ENTITY UninstallNow "Poista heti">
-<!ENTITY UninstallNow.accesskey "H">

@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Isim">
 <!ENTITY Sort.ByExecution "Yürütme sırasına göre sırala">
 <!ENTITY Sort.Execution "Yürütme Sırası">
-<!ENTITY SortScripts "Betikleri Sırala">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Kaldırma İptal">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Bu kullanıcı betiği kaldırma iptal">
-<!ENTITY UninstallCancelDescription "Bu kullanıcı betiği iletişim kutusu kapandığında kaldırılacaktır.(Ya da sağ tılayıp &quot;Şimdi Kaldır&quot; için tıklayınız.)">
-<!ENTITY UninstallNow "Şimdi Kaldır">
-<!ENTITY UninstallNow.accesskey "N">

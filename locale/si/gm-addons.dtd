@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Name">
 <!ENTITY Sort.ByExecution "Sort by execution order">
 <!ENTITY Sort.Execution "Execution Order">
-<!ENTITY SortScripts "ස්ක්‍රිප්ට් වර්ග කරන්න">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "ඉවත්කිරීම අවලංගු කරන">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "පරිශීලක ස්ක්‍රිප්ටය ඉවත් කිරිමේ විධානය අහෝසි කරන්න">
-<!ENTITY UninstallCancelDescription "මෙම ඩයලොග් බොක්ස් එක වසා දැමූ විට මෙම් පරිශීලක ස්ක්‍රිප්ටය පරිගනකයෙන් ඉවත් වේ">
-<!ENTITY UninstallNow "දැන්ම ඉවත් කරන්න">
-<!ENTITY UninstallNow.accesskey "N">

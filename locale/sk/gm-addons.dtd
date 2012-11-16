@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Meno">
 <!ENTITY Sort.ByExecution "Zoradiť podľa prevedenia príkazu">
 <!ENTITY Sort.Execution "Podľa poradia">
-<!ENTITY SortScripts "Zoradiť skripty">
-<!ENTITY SortScripts.accesskey "Z">
-<!ENTITY UninstallCancel "Zrušiť odinštaláciu">
-<!ENTITY UninstallCancel.accesskey "o">
-<!ENTITY UninstallCancel.tooltip "Zrušiť odinštaláciu tohto užívateľského skriptu">
-<!ENTITY UninstallCancelDescription "Tento užívateľský skript bude odinštalovaní po zavretí dialógu. (Alebo kliknite na \&quot;Odinštalovať teraz\&quot;.)">
-<!ENTITY UninstallNow "Odinštalovať teraz">
-<!ENTITY UninstallNow.accesskey "t">

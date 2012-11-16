@@ -25,11 +25,3 @@
 <!ENTITY Sort.Name "Name">
 <!ENTITY Sort.ByExecution "Sort by execution order">
 <!ENTITY Sort.Execution "Execution Order">
-<!ENTITY SortScripts "Ordenar Scripts">
-<!ENTITY SortScripts.accesskey "O">
-<!ENTITY UninstallCancel "Cancelar desinstalar">
-<!ENTITY UninstallCancel.accesskey "C">
-<!ENTITY UninstallCancel.tooltip "Cancelar la desinstalación de este Script">
-<!ENTITY UninstallCancelDescription "Este Script se desinstalará cuando el diálogo se cierre. (O haga clic en &quot;Desinstalar ahora&quot;.)">
-<!ENTITY UninstallNow "Desinstalar ahora">
-<!ENTITY UninstallNow.accesskey "D">
