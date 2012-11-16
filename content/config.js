@@ -270,7 +270,7 @@ Config.prototype._updateVersion = function() {
         .getService(Components.interfaces.nsIVersionComparator);
     if (oldVersion != '0.0'
         && (versionChecker.compare(oldVersion, '1.5') < 0)
-        && (versionChecker.compare(newVersion, '1.5') >= 0)
+        && (versionChecker.compare(newVersion, '1.5beta1') >= 0)
     ) {
       this._migratePrefs();
     }
