@@ -39,6 +39,6 @@
 <!ENTITY greasemonkey.noscriptshere "Ningún script instalado en execución.">
 <!ENTITY greasemonkey.youhavenoscripts "Non ten scripts de usuario instalados">
 <!ENTITY greasemonkey.getuserscripts "Obter scripts">
-<!ENTITY scriptprefs.title "Preferencias de script de Greasemonkey">
+<!ENTITY scriptprefs.title "Preferencias de script de Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "Axustes de usuario">
 <!ENTITY scriptprefs.scriptsettings "Axustes de script">

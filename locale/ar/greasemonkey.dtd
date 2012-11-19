@@ -39,6 +39,6 @@
 <!ENTITY greasemonkey.noscriptshere "لايوجد سكربت مثبت يعمل على هذه الصفحة.">
 <!ENTITY greasemonkey.youhavenoscripts "انت لم تثبت أي سكربت">
 <!ENTITY greasemonkey.getuserscripts "أجلب السكربتات">
-<!ENTITY scriptprefs.title "تفضيلات السكربت">
+<!ENTITY scriptprefs.title "تفضيلات السكربت - !!">
 <!ENTITY scriptprefs.usersettings "أعدادات العضوية">
 <!ENTITY scriptprefs.scriptsettings "أعدادات السكربت">

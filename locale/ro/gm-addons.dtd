@@ -12,11 +12,11 @@
 <!ENTITY MoveToBottom "Mută la coadă">
 <!ENTITY MoveToBottom.accesskey "C">
 <!ENTITY MoveToTop "Mută la început">
-<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveToTop.accesskey "P">
 <!ENTITY MoveUp "Mută sus">
-<!ENTITY MoveUp.accesskey "U">
+<!ENTITY MoveUp.accesskey "S">
 <!ENTITY NewScript "Creează script nou">
-<!ENTITY NewScript.accesskey "C">
+<!ENTITY NewScript.accesskey "N">
 <!ENTITY Show "Arată dosarul ce-l conține">
 <!ENTITY Show.accesskey "D">
 <!ENTITY Sort.ByStatus "Sortează după stare">

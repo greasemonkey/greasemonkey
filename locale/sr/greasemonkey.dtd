@@ -39,6 +39,6 @@
 <!ENTITY greasemonkey.noscriptshere "Ниједна скрипта се не покреће на овој станици">
 <!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">
 <!ENTITY greasemonkey.getuserscripts "Набави корисничке скрипте">
-<!ENTITY scriptprefs.title "Подешавања корисничких скрипти за Greasemonkey">
+<!ENTITY scriptprefs.title "Подешавања корисничких скрипти за Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "Корисничка подешавања">
 <!ENTITY scriptprefs.scriptsettings "Подешавања скрипте">

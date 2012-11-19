@@ -39,6 +39,6 @@
 <!ENTITY greasemonkey.noscriptshere "לא מותקנים קבצי Script פעילים בדף זה.">
 <!ENTITY greasemonkey.youhavenoscripts "לא מותקנים אצלך קבצי Script של משתמש כלשהם">
 <!ENTITY greasemonkey.getuserscripts "השג קבצי Script של משתמש">
-<!ENTITY scriptprefs.title "מאפייני קבצי Script של Greasemonkey">
+<!ENTITY scriptprefs.title "מאפייני קבצי Script של Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "הגדרות משתמש">
 <!ENTITY scriptprefs.scriptsettings "הגדרות קבצי Script">
