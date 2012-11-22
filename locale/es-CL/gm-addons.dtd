@@ -1,0 +1,27 @@
+<!ENTITY Edit "Editar">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Editar este script">
+<!ENTITY ExecuteFirst "Ejecutar primero">
+<!ENTITY ExecuteLast "Ejecutar al final">
+<!ENTITY ExecuteLater "Ejecutar luego">
+<!ENTITY ExecuteSooner "Ejecutar antes">
+<!ENTITY FindUpdate "Verificar para actualizar">
+<!ENTITY InstallUpdate "Actualizar">
+<!ENTITY MoveDown "Bajar">
+<!ENTITY MoveDown.accesskey "B">
+<!ENTITY MoveToBottom "Bajar al final">
+<!ENTITY MoveToBottom.accesskey "F">
+<!ENTITY MoveToTop "Subir al primero">
+<!ENTITY MoveToTop.accesskey "P">
+<!ENTITY MoveUp "Subir">
+<!ENTITY MoveUp.accesskey "S">
+<!ENTITY NewScript "Crear script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Mostrar carpeta contenedora">
+<!ENTITY Show.accesskey "M">
+<!ENTITY Sort.ByStatus "Ordenar por estado">
+<!ENTITY Sort.Status "Estado">
+<!ENTITY Sort.ByName "Ordenar por nombre">
+<!ENTITY Sort.Name "Nombre">
+<!ENTITY Sort.ByExecution "Ordenar por orden de funcionamiento">
+<!ENTITY Sort.Execution "Orden de funcionamiento">

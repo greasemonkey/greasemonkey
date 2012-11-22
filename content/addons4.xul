@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<overlay id="greasemonkey-browser-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
+<!-- Just injects the Firefox 4+ specific addons integration code. -->
+<script type="application/x-javascript"><![CDATA[
+window.addEventListener('load', function() {
+var addons = {};
+Components.utils.import("resource://greasemonkey/addons4.js", addons);
+addons.GM_addonsStartup();
+}, true);
+
+// Open the scripts manager in Firefox >= 4.0
+function GM_OpenScriptsMgr() {
+  BrowserOpenAddonsMgr('addons://list/user-script');
+}
+
+// Open the updates manager in Firefox >= 4.0
+function GM_OpenUpdatesMgr() {
+    BrowserOpenAddonsMgr('addons://updates/available');
+}
+]]></script>
+</overlay>

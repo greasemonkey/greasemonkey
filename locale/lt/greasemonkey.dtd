@@ -1,0 +1,44 @@
+<!ENTITY menu.install "Įdiegti naudotojo scenarijų...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Peržiūrėti naudotojo scenarijaus pradinį kodą">
+<!ENTITY menu.show.accesskey "S">
+<!ENTITY menu.commands "Naudotojo scenarijaus komandos...">
+<!ENTITY menu.commands.accesskey "K">
+<!ENTITY menu.new "Naujas naudotojo scenarijus...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Tvarkyti naudotojo scenarijus...">
+<!ENTITY menu.manage.accesskey "T">
+<!ENTITY menu.options "Greasemonkey pasirinktys...">
+<!ENTITY menu.options.accesskey "P">
+<!ENTITY statusbar.enabled "Įjungta">
+<!ENTITY statusbar.enabled.accesskey "I">
+<!ENTITY install.title "Greasemonkey įdiegimas">
+<!ENTITY install.runson "veikia:">
+<!ENTITY install.matches "atitinka:">
+<!ENTITY install.butnoton "neveikia:">
+<!ENTITY install.warning1 "Piktavaliai scenarijai gali pažeisti jūsų privatumą ir veikti jūsų vardu jums to nė nežinant.">
+<!ENTITY install.warning2 "Scenarijus turėtumėte diegti tik iš patikimų šaltinių.">
+<!ENTITY install.showscriptsource "Rodyti scenarijaus pradinį kodą">
+<!ENTITY install.installbutton "Įdiegti">
+<!ENTITY loading "Parsiunčiama...">
+<!ENTITY newscript.name "Pavadinimas">
+<!ENTITY newscript.namespace "Vardų sritis">
+<!ENTITY newscript.description "Aprašymas">
+<!ENTITY newscript.includes "Kuriuose veikia (po vieną eilutėj)">
+<!ENTITY newscript.excludes "Kuriuose neveikia (po vieną eilutėj)">
+<!ENTITY options.editor "Redaktorius">
+<!ENTITY options.changeEditor "Keisti redaktorių">
+<!ENTITY options.globalExcludes "Nevykdomi visur">
+<!ENTITY userscripts "Naudotojo scenarijai">
+<!ENTITY Uninstall "Pašalinti">
+<!ENTITY AnonymousStatistics "Anoniminė statistika">
+<!ENTITY SubmitStats "Rinkti ir siųsti anoniminę naudojimo statistiką.">
+<!ENTITY AlsoUninstallPrefs "Taipogi pašalinti susijusius nustatymus">
+<!ENTITY UpdateChecking "Atnaujinimų tikrinimas">
+<!ENTITY RequireSecureUpdates "Reikalauti saugumo atnaujinimų">
+<!ENTITY greasemonkey.noscriptshere "Nėra įdiegtų scenarijų kurie veiktų šiame puslapyje.">
+<!ENTITY greasemonkey.youhavenoscripts "Jūs neturite įdiegtų scenarijų">
+<!ENTITY greasemonkey.getuserscripts "Gauti naudotojo scenarijų">
+<!ENTITY scriptprefs.title "Greasemonkey naudotojo scenarijų nustatymai - !!">
+<!ENTITY scriptprefs.usersettings "Naudotojo nustatymai">
+<!ENTITY scriptprefs.scriptsettings "Scenarijaus nustatymai">

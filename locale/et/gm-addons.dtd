@@ -1,0 +1,27 @@
+<!ENTITY Edit "Muuda">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Muuda seda Kasutajaskripti">
+<!ENTITY ExecuteFirst "Execute first">
+<!ENTITY ExecuteLast "Execute last">
+<!ENTITY ExecuteLater "Execute later">
+<!ENTITY ExecuteSooner "Execute sooner">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
+<!ENTITY MoveDown "Liiguta Allapoole">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Liiguta Viimaseks">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Liiguta Esimeseks">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Liiguta Ülespoole">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Loo Uus Skript">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Show Containing Folder">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">

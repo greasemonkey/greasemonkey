@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Įveskite naują URL žemiau. Galite nurodyti kelis puslapius naudodami „*“.">
+<!ENTITY promptForNewPage.title "Pridėti puslapį">
+<!ENTITY promptForNewPage.defVal "http://pavyzdys.lt/*">
+<!ENTITY promptForEdit.msg "Keisti žemiau esančio puslapio URL. Galite nurodyti kelis puslapius naudodami „*“.">
+<!ENTITY promptForEdit.title "Keisti puslapį">
+<!ENTITY button.add "Pridėti...">
+<!ENTITY button.addUserExclude "Pridėti kaip naudotojo nerodomą">
+<!ENTITY button.addUserInclude "Pridėti kaip naudotojo įterpiamą">
+<!ENTITY button.edit "Keisti...">
+<!ENTITY button.remove "Pašalinti">
+<!ENTITY label.grpIncluded "Puslapiai kuriuose vykdoma">
+<!ENTITY label.grpExcluded "Puslapiai kuriuose nevykdoma">

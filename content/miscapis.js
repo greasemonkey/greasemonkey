@@ -1,12 +1,14 @@
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+
 function GM_ScriptStorage(script) {
-  this.prefMan = new GM_PrefManager(["scriptvals.",
-                                     script.namespace,
-                                     "/",
-                                     script.name,
-                                     "."].join(""));
+  this.prefMan = new GM_PrefManager(script.prefroot);
 }
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
+  if (2 !== arguments.length) {
+    throw new Error("Second argument not specified: Value");
+  }
+
   if (!GM_apiLeakCheck("GM_setValue")) {
     return;
   }
@@ -22,48 +24,6 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
   return this.prefMan.getValue(name, defVal);
 };
 
-function GM_Resources(script){
-  this.script = script;
-}
-
-GM_Resources.prototype.getResourceURL = function(name) {
-  if (!GM_apiLeakCheck("GM_getResourceURL")) {
-    return undefined;
-  }
-
-  return this.getDep_(name).dataContent;
-};
-
-GM_Resources.prototype.getResourceText = function(name) {
-  if (!GM_apiLeakCheck("GM_getResourceText")) {
-    return undefined;
-  }
-
-  return this.getDep_(name).textContent;
-};
-
-GM_Resources.prototype.getDep_ = function(name) {
-  var resources = this.script.resources;
-  for (var i = 0, resource; resource = resources[i]; i++)
-    if (resource.name == name)
-      return resource;
-  throw new Error("No resource with name: " + name); // NOTE: Non localised string
-};
-
-function GM_ScriptLogger(script) {
-  var namespace = script.namespace;
-
-  if (namespace.substring(namespace.length - 1) != "/") {
-    namespace += "/";
-  }
-
-  this.prefix = [namespace, script.name, ": "].join("");
-}
-
-GM_ScriptLogger.prototype.log = function(message) {
-  GM_log(this.prefix + message, true);
-};
-
 GM_ScriptStorage.prototype.deleteValue = function(name) {
   if (!GM_apiLeakCheck("GM_deleteValue")) {
     return undefined;
@@ -77,21 +37,80 @@ GM_ScriptStorage.prototype.listValues = function() {
     return undefined;
   }
 
-  return this.prefMan.listValues();
+  // See #1637.
+  var vals = Array.prototype.slice.call(this.prefMan.listValues());
+  vals.__exposedProps__ = {'length': 'r'};
+  return vals;
 };
 
-// Based on Mark Pilgrim's GM_addGlobalStyle from
-// http://diveintogreasemonkey.org/patterns/add-css.html. Used by permission
-// under GPL: http://diveintogreasemonkey.org/license/gpl.html
-function GM_addStyle(doc, css) {
-  var head, style;
-  head = doc.getElementsByTagName("head")[0];
-  if (!head) { return; }
-  style = doc.createElement("style");
-  style.type = "text/css";
-  style.innerHTML = css;
-  head.appendChild(style);
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function GM_Resources(script){
+  this.script = script;
 }
+
+GM_Resources.prototype.getResourceURL = function(aScript, name) {
+  if (!GM_apiLeakCheck("GM_getResourceURL")) {
+    return undefined;
+  }
+
+  return ['greasemonkey-script:', aScript.uuid, '/', name].join('');
+};
+
+GM_Resources.prototype.getResourceText = function(name) {
+  if (!GM_apiLeakCheck("GM_getResourceText")) {
+    return undefined;
+  }
+
+  return this._getDep(name).textContent;
+};
+
+GM_Resources.prototype._getDep = function(name) {
+  var resources = this.script.resources;
+  for (var i = 0, resource; resource = resources[i]; i++) {
+    if (resource.name == name) {
+      return resource;
+    }
+  }
+
+  throw new Error("No resource with name: " + name); // NOTE: Non localised string
+};
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function GM_ScriptLogger(script) {
+  var namespace = script.namespace;
+
+  if (namespace.substring(namespace.length - 1) != "/") {
+    namespace += "/";
+  }
+
+  this.prefix = [namespace, script.name, ": "].join("");
+}
+
+GM_ScriptLogger.prototype.consoleService = Components
+    .classes["@mozilla.org/consoleservice;1"]
+    .getService(Components.interfaces.nsIConsoleService);
+
+GM_ScriptLogger.prototype.log = function(message) {
+  this.consoleService.logStringMessage(this.prefix + '\n' + message);
+};
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function GM_addStyle(doc, css) {
+  var head = doc.getElementsByTagName("head")[0];
+  if (head) {
+    var style = doc.createElement("style");
+    style.textContent = css;
+    style.type = "text/css";
+    head.appendChild(style);
+    return style;
+  }
+  return null;
+}
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function GM_console(script) {
   // based on http://www.getfirebug.com/firebug/firebugx.js

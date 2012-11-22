@@ -1,6 +1,9 @@
-function GM_xmlhttpRequester(unsafeContentWin, chromeWindow) {
-  this.unsafeContentWin = unsafeContentWin;
+Components.utils.import("resource://greasemonkey/util.js");
+
+function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
+  this.wrappedContentWin = wrappedContentWin;
   this.chromeWindow = chromeWindow;
+  this.originUrl = originUrl;
 }
 
 // this function gets called by user scripts in content security scope to
@@ -16,109 +19,181 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     return;
   }
 
-  // don't actually need the timer functionality, but this pops it
-  // out into chromeWindow's thread so that we get that security
-  // context.
-  GM_log("> GM_xmlhttpRequest.contentStartRequest");
-
-  // important to store this locally so that content cannot trick us up with
-  // a fancy getter that checks the number of times it has been accessed,
-  // returning a dangerous URL the time that we actually use it.
-  var url = details.url;
-
-  // make sure that we have an actual string so that we can't be fooled with
-  // tricky toString() implementations.
-  if (typeof url != "string") {
-    throw new Error("Invalid url: url must be of type string");
+  try {
+    // Validate and parse the (possibly relative) given URL.
+    var uri = GM_util.uriFromUrl(details.url, this.originUrl);
+    var url = uri.spec;
+  } catch (e) {
+    // A malformed URL won't be parsed properly.
+    throw new Error("Invalid URL: " + details.url);
   }
-
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-                  .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(url);
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
   // access to things like files and chrome. Careful.
-  switch (scheme) {
+  switch (uri.scheme) {
     case "http":
     case "https":
     case "ftp":
-      this.chromeWindow.setTimeout(
-        GM_hitch(this, "chromeStartRequest", url, details), 0);
+        var req = new this.chromeWindow.XMLHttpRequest();
+        GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
-      throw new Error("Invalid url: " + url);
+      throw new Error("Disallowed scheme in URL: " + details.url);
   }
 
-  GM_log("< GM_xmlhttpRequest.contentStartRequest");
+  var rv = {
+    __exposedProps__: {
+        finalUrl: "r",
+        readyState: "r",
+        responseHeaders: "r",
+        responseText: "r",
+        status: "r",
+        statusText: "r"
+        },
+    abort: function () { return req.abort(); }
+  };
+  if (!!details.synchronous) {
+    rv.finalUrl = req.finalUrl;
+    rv.readyState = req.readyState;
+    rv.responseHeaders = req.getAllResponseHeaders();
+    rv.responseText = req.responseText;
+    rv.status = req.status;
+    rv.statusText = req.statusText;
+  }
+  return rv;
 };
 
 // this function is intended to be called in chrome's security context, so
 // that it can access other domains without security warning
-GM_xmlhttpRequester.prototype.chromeStartRequest = function(safeUrl, details) {
-  GM_log("> GM_xmlhttpRequest.chromeStartRequest");
-  var req = new this.chromeWindow.XMLHttpRequest();
+GM_xmlhttpRequester.prototype.chromeStartRequest =
+function(safeUrl, details, req) {
+  this.setupReferer(details, req);
 
-  this.setupRequestEvent(this.unsafeContentWin, req, "onload", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onerror", details);
-  this.setupRequestEvent(this.unsafeContentWin, req, "onreadystatechange",
-                         details);
+  var setupRequestEvent = GM_util.hitch(this, 'setupRequestEvent', this.wrappedContentWin);
 
-  req.open(details.method, safeUrl);
+  setupRequestEvent(req, "abort", details);
+  setupRequestEvent(req, "error", details);
+  setupRequestEvent(req, "load", details);
+  setupRequestEvent(req, "progress", details);
+  setupRequestEvent(req, "readystatechange", details);
+  setupRequestEvent(req, "timeout", details);
+  if (details.upload) {
+    setupRequestEvent(req.upload, "abort", details.upload);
+    setupRequestEvent(req.upload, "error", details.upload);
+    setupRequestEvent(req.upload, "load", details.upload);
+    setupRequestEvent(req.upload, "progress", details.upload);
+  }
+
+  req.mozBackgroundRequest = !!details.mozBackgroundRequest;
+
+  req.open(details.method, safeUrl,
+      !details.synchronous, details.user || "", details.password || "");
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
+  if (details.timeout) {
+    req.timeout = details.timeout;
+  }
 
-  var contentTypeSet = false;
   if (details.headers) {
-    for (var prop in details.headers) {
-      req.setRequestHeader(prop, details.headers[prop]);
-      if (prop.toLowerCase() == "content-type") contentTypeSet = true;
+    var headers = details.headers;
+
+    for (var prop in headers) {
+      if (Object.prototype.hasOwnProperty.call(headers, prop)) {
+        req.setRequestHeader(prop, headers[prop]);
+      }
     }
   }
-  // If request method is POST, the content type needs to be set for it to work as expected
-  if (details.method.toUpperCase() == "POST" && !contentTypeSet) {
-    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  }
 
-  req.send((details.data) ? details.data : null);
-  GM_log("< GM_xmlhttpRequest.chromeStartRequest");
-}
+  var body = details.data ? details.data : null;
+  if (details.binary) {
+    req.sendAsBinary(body);
+  } else {
+    req.send(body);
+  }
+};
+
+// sets the "Referer" HTTP header for this GM_XHR request.
+// Firefox does not let chrome JS set the "Referer" HTTP heade via XHR
+// directly. However, we can still set it indirectly via an
+// http-on-modify-request observer.
+GM_xmlhttpRequester.prototype.setupReferer =
+function(details, req) {
+  if (!details.headers || !details.headers.Referer) return;
+
+  var observerService = Components.classes["@mozilla.org/observer-service;1"]
+      .getService(Components.interfaces.nsIObserverService);
+  var requestObserver = {};
+  requestObserver.observe = function(subject, topic, data) {
+      observerService.removeObserver(requestObserver, "http-on-modify-request");
+
+      var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
+      if (channel == req.channel) {
+        var httpChannel = subject.QueryInterface(
+            Components.interfaces.nsIHttpChannel);
+        httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
+      }
+    };
+  observerService.addObserver(requestObserver, "http-on-modify-request", false);
+};
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
-function(unsafeContentWin, req, event, details) {
-  GM_log("> GM_xmlhttpRequester.setupRequestEvent");
+function(wrappedContentWin, req, event, details) {
+  if (!details["on" + event]) return;
 
-  if (details[event]) {
-    req[event] = function() {
-      GM_log("> GM_xmlhttpRequester -- callback for " + event);
+  req.addEventListener(event, function(evt) {
+    var responseState = {
+      __exposedProps__: {
+          finalUrl: "r",
+          lengthComputable: "r",
+          loaded: "r",
+          readyState: "r",
+          responseHeaders: "r",
+          responseText: "r",
+          status: "r",
+          statusText: "r",
+          total: "r",
+          },
+      // Can't support responseXML because security won't
+      // let the browser call properties on it.
+      responseText: req.responseText,
+      readyState: req.readyState,
+      responseHeaders: null,
+      status: null,
+      statusText: null,
+      finalUrl: null
+    };
 
-      var responseState = {
-        // can't support responseXML because security won't
-        // let the browser call properties on it
-        responseText:req.responseText,
-        readyState:req.readyState,
-        responseHeaders:(req.readyState == 4 ?
-                         req.getAllResponseHeaders() :
-                         ""),
-        status:(req.readyState == 4 ? req.status : 0),
-        statusText:(req.readyState == 4 ? req.statusText : ""),
-        finalUrl:(req.readyState == 4 ? req.channel.URI.spec : "")
-      }
-
-      // Pop back onto browser thread and call event handler.
-      // Have to use nested function here instead of GM_hitch because
-      // otherwise details[event].apply can point to window.setTimeout, which
-      // can be abused to get increased priveledges.
-      new XPCNativeWrapper(unsafeContentWin, "setTimeout()")
-        .setTimeout(function(){details[event](responseState);}, 0);
-
-      GM_log("< GM_xmlhttpRequester -- callback for " + event);
+    switch (event) {
+      case "progress":
+        responseState.lengthComputable = evt.lengthComputable;
+        responseState.loaded = evt.loaded;
+        responseState.total = evt.total;
+        break;
+      case "error":
+        break;
+      default:
+        if (4 != req.readyState) break;
+        responseState.responseHeaders = req.getAllResponseHeaders();
+        responseState.status = req.status;
+        responseState.statusText = req.statusText;
+        responseState.finalUrl = req.channel.URI.spec;
+        break;
     }
-  }
 
-  GM_log("< GM_xmlhttpRequester.setupRequestEvent");
+    if (GM_util.windowIsClosed(wrappedContentWin)) {
+      return;
+    }
+
+    // Pop back onto browser thread and call event handler.
+    // Have to use nested function here instead of GM_util.hitch because
+    // otherwise details[event].apply can point to window.setTimeout, which
+    // can be abused to get increased privileges.
+    new XPCNativeWrapper(wrappedContentWin, "setTimeout()")
+      .setTimeout(function(){ details["on" + event](responseState); }, 0);
+  }, false);
 };

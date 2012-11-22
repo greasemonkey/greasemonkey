@@ -1,0 +1,27 @@
+<!ENTITY Edit "Bewerken">
+<!ENTITY Edit.accesskey "W">
+<!ENTITY Edit.tooltip "Dit gebruikersscript bewerken">
+<!ENTITY ExecuteFirst "Als eerste uitvoeren">
+<!ENTITY ExecuteLast "Als laatste uitvoeren">
+<!ENTITY ExecuteLater "Later uitvoeren">
+<!ENTITY ExecuteSooner "Eerder uitvoeren">
+<!ENTITY FindUpdate "Update zoeken">
+<!ENTITY InstallUpdate "Update installeren">
+<!ENTITY MoveDown "Omlaag">
+<!ENTITY MoveDown.accesskey "L">
+<!ENTITY MoveToBottom "Onderaan plaatsen">
+<!ENTITY MoveToBottom.accesskey "O">
+<!ENTITY MoveToTop "Bovenaan plaatsen">
+<!ENTITY MoveToTop.accesskey "B">
+<!ENTITY MoveUp "Omhoog">
+<!ENTITY MoveUp.accesskey "H">
+<!ENTITY NewScript "Nieuw script aanmaken">
+<!ENTITY NewScript.accesskey "M">
+<!ENTITY Show "Map weergeven">
+<!ENTITY Show.accesskey "g">
+<!ENTITY Sort.ByStatus "Op status sorteren">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Op naam sorteren">
+<!ENTITY Sort.Name "Naam">
+<!ENTITY Sort.ByExecution "Op uitvoervolgorde sorteren">
+<!ENTITY Sort.Execution "Uitvoervolgorde">

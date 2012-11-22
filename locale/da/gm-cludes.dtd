@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Indsæt ny URL nedenfor. Du kan specificere flere sider vha. et stjerne (*) tegn.">
+<!ENTITY promptForNewPage.title "Tilføj side">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Modificer ULR'en på siden nedenfor. Du kan specificere flere sider vha. et stjerne (*) tegn.">
+<!ENTITY promptForEdit.title "Rediger side">
+<!ENTITY button.add "Tilføj...">
+<!ENTITY button.addUserExclude "Tilføj som brugerekskludering">
+<!ENTITY button.addUserInclude "Tilføj som brugerinkludering">
+<!ENTITY button.edit "Rediger...">
+<!ENTITY button.remove "Fjern">
+<!ENTITY label.grpIncluded "Inkluderede sider">
+<!ENTITY label.grpExcluded "Ekskluderede sider">

@@ -1,0 +1,27 @@
+<!ENTITY Edit "Keisti">
+<!ENTITY Edit.accesskey "K">
+<!ENTITY Edit.tooltip "Keisti šį naudotojo scenarijų">
+<!ENTITY ExecuteFirst "Vykdyti pirmą">
+<!ENTITY ExecuteLast "Vykdyti paskutinį">
+<!ENTITY ExecuteLater "Vykdyti vėliau">
+<!ENTITY ExecuteSooner "Vykdyti anksčiau">
+<!ENTITY FindUpdate "Rasti naujinimą">
+<!ENTITY InstallUpdate "Įdiegti atnaujinimą">
+<!ENTITY MoveDown "Perkelti žemyn">
+<!ENTITY MoveDown.accesskey "Z">
+<!ENTITY MoveToBottom "Perkelti į apačią">
+<!ENTITY MoveToBottom.accesskey "A">
+<!ENTITY MoveToTop "Perkelti į viršų">
+<!ENTITY MoveToTop.accesskey "V">
+<!ENTITY MoveUp "Perkelti aukštyn">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Kurti naują scenarijų">
+<!ENTITY NewScript.accesskey "N">
+<!ENTITY Show "Atverti aplanką">
+<!ENTITY Show.accesskey "a">
+<!ENTITY Sort.ByStatus "Rikiuoti pagal būseną">
+<!ENTITY Sort.Status "Būsena">
+<!ENTITY Sort.ByName "Rikiuoti pagal pavadinimą">
+<!ENTITY Sort.Name "Pavadinimas">
+<!ENTITY Sort.ByExecution "Rikiuoti pagal vykdymo eilę">
+<!ENTITY Sort.Execution "Vykdymo eilė">

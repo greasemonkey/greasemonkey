@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Introduza unha nova URL debaixo. Pode indicar múltiples páxinas empregando o comodín (*).">
+<!ENTITY promptForNewPage.title "Engadir páxina">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Modifique a URL da páxina. Pode indicar múltiples páxinas empregando o comodín (*).">
+<!ENTITY promptForEdit.title "Editar páxina">
+<!ENTITY button.add "Engadir...">
+<!ENTITY button.addUserExclude "Engadir como exclusión do usuario">
+<!ENTITY button.addUserInclude "Engadir como inclusión do usuario">
+<!ENTITY button.edit "Editar...">
+<!ENTITY button.remove "Eliminar">
+<!ENTITY label.grpIncluded "Páxinas incluídas">
+<!ENTITY label.grpExcluded "Páxinas excluídas">

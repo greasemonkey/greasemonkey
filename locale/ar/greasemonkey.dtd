@@ -1,37 +1,44 @@
-<!ENTITY manage.title "مدير السكربتات">
-<!ENTITY manage.button.close "إغلاق">
-<!ENTITY manage.button.add "إضافة…">
-<!ENTITY manage.button.edit "تحرير…">
-<!ENTITY manage.button.remove "إزالة">
-<!ENTITY manage.label.grpIncluded "يشمل الصفحات">
-<!ENTITY manage.label.grpExcluded "لايشمل الصفحات">
-<!ENTITY manage.label.btnEdit "تحرير">
-<!ENTITY manage.label.chkEnabled "تمكين">
-<!ENTITY manage.label.btnUninstall "إزالة التثبيت">
-<!ENTITY manage.label.chkUninstall "أيضا إزالة الاعدادات المرتبطه بها">
-<!ENTITY manage.reorderHelp "لترتيب قائمة السكربتات استخدم زر  (Alt+سهم للاعلى) او استخدم (Alt+سهم للاسفل) .">
 <!ENTITY menu.install "تثبيت السكربتات…">
 <!ENTITY menu.install.accesskey "ت">
-<!ENTITY menu.show "أظهار مصدر السكربت">
-<!ENTITY menu.show.accesskey "أ">
+<!ENTITY menu.show "مصدر السكربت">
+<!ENTITY menu.show.accesskey "م">
 <!ENTITY menu.commands "أوامر السكربتات…">
 <!ENTITY menu.commands.accesskey "أ">
 <!ENTITY menu.new "سكربت جديد…">
 <!ENTITY menu.new.accesskey "س">
-<!ENTITY menu.manage "مدير السكربتات…">
-<!ENTITY menu.manage.accesskey "م">
-<!ENTITY statusbar.noscripts "لم يتم تثبيت سكربتات !">
-<!ENTITY statusbar.enabled "تمكين">
+<!ENTITY menu.manage "إدارة السكربتات">
+<!ENTITY menu.manage.accesskey "إ">
+<!ENTITY menu.options "خيارات مدير السكربتات..">
+<!ENTITY menu.options.accesskey "خ">
+<!ENTITY statusbar.enabled "تشغيل">
 <!ENTITY statusbar.enabled.accesskey "ت">
-<!ENTITY install.title "تثبيت السكربت">
+<!ENTITY install.title "مثبت السكربتات">
 <!ENTITY install.runson "يعمل على :">
+<!ENTITY install.matches "البحوث:">
 <!ENTITY install.butnoton "لايعمل على :">
 <!ENTITY install.warning1 "السكربتات الخبيثة يمكن ان تنتهك خصوصيتك وتعمل دون علمك.">
 <!ENTITY install.warning2 "يجب عليك تركيب السكربتات من المصدر الذي تثق به فقط.">
-<!ENTITY install.showscriptsource "أظهار مصدر السكربت">
+<!ENTITY install.showscriptsource "مصدر السكربت">
 <!ENTITY install.installbutton "تثبيت">
+<!ENTITY loading "تحميل...">
 <!ENTITY newscript.name "الاسم">
-<!ENTITY newscript.namespace "المساحه">
+<!ENTITY newscript.namespace "المساحة">
 <!ENTITY newscript.description "الوصف">
-<!ENTITY newscript.includes "يشمل الصفحات (واحد في كل سطر)">
-<!ENTITY newscript.excludes "لايشمل الصفحات (واحد في كل سطر)">
+<!ENTITY newscript.includes "يعمل على (صفحة لكل سطر)">
+<!ENTITY newscript.excludes "لايعمل على (صحة لكل سطر)">
+<!ENTITY options.editor "المحرر">
+<!ENTITY options.changeEditor "تغيير المحرر">
+<!ENTITY options.globalExcludes "باستثناء العالمية">
+<!ENTITY userscripts "مدير السكربتات">
+<!ENTITY Uninstall "إلغاء التثبيت">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "أيضا مسح جميع الأعدادات">
+<!ENTITY UpdateChecking "تحديث السكربت">
+<!ENTITY RequireSecureUpdates "تتطلب تحديثات آمنة">
+<!ENTITY greasemonkey.noscriptshere "لايوجد سكربت مثبت يعمل على هذه الصفحة.">
+<!ENTITY greasemonkey.youhavenoscripts "انت لم تثبت أي سكربت">
+<!ENTITY greasemonkey.getuserscripts "أجلب السكربتات">
+<!ENTITY scriptprefs.title "تفضيلات السكربت - !!">
+<!ENTITY scriptprefs.usersettings "أعدادات العضوية">
+<!ENTITY scriptprefs.scriptsettings "أعدادات السكربت">

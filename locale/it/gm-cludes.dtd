@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Inserire un nuovo URL di seguito. È possibile specificare più pagine utilizzando il carattere jolly (*).">
+<!ENTITY promptForNewPage.title "Aggiungi pagina">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Modificare l\'URL della pagina di seguito. È possibile specificare più pagine utilizzando il carattere jolly (*).">
+<!ENTITY promptForEdit.title "Modifica pagina">
+<!ENTITY button.add "Aggiungi...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "Modifica...">
+<!ENTITY button.remove "Rimuovi">
+<!ENTITY label.grpIncluded "Pagine incluse">
+<!ENTITY label.grpExcluded "Pagine escluse">

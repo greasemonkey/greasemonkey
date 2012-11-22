@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Geben Sie unten eine neue URL ein. Sie können Platzhalter (*) verwenden, um mehrere Seiten gleichzeitig festzulegen.">
+<!ENTITY promptForNewPage.title "Seite hinzufügen">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Passen Sie die URL der Seite an. Sie können Platzhalter (*) verwenden, um mehrere Seiten gleichzeitig festzulegen.">
+<!ENTITY promptForEdit.title "Seite bearbeiten">
+<!ENTITY button.add "Hinzufügen...">
+<!ENTITY button.addUserExclude "Auf dieser Seite nicht anwenden">
+<!ENTITY button.addUserInclude "Auf dieser Seite dennoch anwenden">
+<!ENTITY button.edit "Bearbeiten…">
+<!ENTITY button.remove "Entfernen">
+<!ENTITY label.grpIncluded "Auf diese Seiten anwenden:">
+<!ENTITY label.grpExcluded "Nicht auf diese Seiten anwenden:">

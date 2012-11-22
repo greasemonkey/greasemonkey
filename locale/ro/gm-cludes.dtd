@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Introduceți un nou URL mai jos. Puteți specifica mai multe pagini folosind caracterul (*).">
+<!ENTITY promptForNewPage.title "Adaugă pagină">
+<!ENTITY promptForNewPage.defVal "http://exemplu.ro/*">
+<!ENTITY promptForEdit.msg "Modificați adresa paginii mai jos. Puteți specifica mai multe pagini folosind caracterul (*).">
+<!ENTITY promptForEdit.title "Editează pagina">
+<!ENTITY button.add "Adaugă...">
+<!ENTITY button.addUserExclude "Adaugă ca excludere utilizator">
+<!ENTITY button.addUserInclude "Adaugă ca includere utilizator">
+<!ENTITY button.edit "Editează...">
+<!ENTITY button.remove "Elimină">
+<!ENTITY label.grpIncluded "Pagini incluse">
+<!ENTITY label.grpExcluded "Pagini excluse">

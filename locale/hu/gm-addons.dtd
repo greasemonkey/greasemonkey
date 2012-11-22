@@ -1,0 +1,27 @@
+<!ENTITY Edit "Szerkesztés">
+<!ENTITY Edit.accesskey "S">
+<!ENTITY Edit.tooltip "Parancsfájl szerkesztése">
+<!ENTITY ExecuteFirst "Végrehajtás elsőként">
+<!ENTITY ExecuteLast "Végrehajtás utolsóként">
+<!ENTITY ExecuteLater "Végrehajtás később">
+<!ENTITY ExecuteSooner "Végrehajtás előbb">
+<!ENTITY FindUpdate "Frissítések keresése">
+<!ENTITY InstallUpdate "Frissítés telepítése">
+<!ENTITY MoveDown "Mozgatás lefele">
+<!ENTITY MoveDown.accesskey "l">
+<!ENTITY MoveToBottom "Mozgatás legalulra">
+<!ENTITY MoveToBottom.accesskey "a">
+<!ENTITY MoveToTop "Mozgatás legfelülre">
+<!ENTITY MoveToTop.accesskey "e">
+<!ENTITY MoveUp "Mozgatás felfelé">
+<!ENTITY MoveUp.accesskey "g">
+<!ENTITY NewScript "Új parancsfájl létrehozása">
+<!ENTITY NewScript.accesskey "p">
+<!ENTITY Show "Tartalmazó mappa megnyitása">
+<!ENTITY Show.accesskey "m">
+<!ENTITY Sort.ByStatus "Rendezés állapot szerint">
+<!ENTITY Sort.Status "Állapot">
+<!ENTITY Sort.ByName "Rendezés név szerint">
+<!ENTITY Sort.Name "Név">
+<!ENTITY Sort.ByExecution "Rendezés végrehajtási sorrend szerint">
+<!ENTITY Sort.Execution "Végrehajtási sorrend">

@@ -1,0 +1,27 @@
+<!ENTITY Edit "ویرایش">
+<!ENTITY Edit.accesskey ",">
+<!ENTITY Edit.tooltip "ویرایش این دستنویس کاربری">
+<!ENTITY ExecuteFirst "اجرای اولین">
+<!ENTITY ExecuteLast "اجرای آخرین">
+<!ENTITY ExecuteLater "دیرتر اجرا شود">
+<!ENTITY ExecuteSooner "زود تر اجرا شود">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
+<!ENTITY MoveDown "حرکت به پایین">
+<!ENTITY MoveDown.accesskey "ح">
+<!ENTITY MoveToBottom "حرکت به انتها">
+<!ENTITY MoveToBottom.accesskey "ت">
+<!ENTITY MoveToTop "حرکت به ابتدا">
+<!ENTITY MoveToTop.accesskey "ب">
+<!ENTITY MoveUp "حرکت به بالا">
+<!ENTITY MoveUp.accesskey "ب">
+<!ENTITY NewScript "ساخت دستنویس کاربری جدید">
+<!ENTITY NewScript.accesskey "س">
+<!ENTITY Show "نمایش پوشه حاوی">
+<!ENTITY Show.accesskey "ح">
+<!ENTITY Sort.ByStatus "مرتب کردن بر اساس وضعیت">
+<!ENTITY Sort.Status "وضعیت">
+<!ENTITY Sort.ByName "مرتب کردن بر اساس نام">
+<!ENTITY Sort.Name "نام">
+<!ENTITY Sort.ByExecution "مرتب کردن بر اساس ترتیب اجرا">
+<!ENTITY Sort.Execution "ترتیب اجرا">

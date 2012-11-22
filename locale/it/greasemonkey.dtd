@@ -1,0 +1,44 @@
+<!ENTITY menu.install "Installa script utente...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Mostra sorgente script utente">
+<!ENTITY menu.show.accesskey "M">
+<!ENTITY menu.commands "Comandi script utente...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Nuovo script utente...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Gestione script utente...">
+<!ENTITY menu.manage.accesskey "G">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "Attivo">
+<!ENTITY statusbar.enabled.accesskey "A">
+<!ENTITY install.title "Installazione di Greasemonkey">
+<!ENTITY install.runson "Viene eseguito in:">
+<!ENTITY install.matches "matches:">
+<!ENTITY install.butnoton "Non viene eseguito in:">
+<!ENTITY install.warning1 "Script malevoli possono violare la privacy e agire all\'insaputa dell\'utente.">
+<!ENTITY install.warning2 "Installare solo script provenienti da fonti sicure.">
+<!ENTITY install.showscriptsource "Mostra sorgente script utente">
+<!ENTITY install.installbutton "Installa">
+<!ENTITY loading "Downloading ...">
+<!ENTITY newscript.name "Nome">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Descrizione">
+<!ENTITY newscript.includes "Pagine incluse (una per riga)">
+<!ENTITY newscript.excludes "Pagine escluse (una per riga)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Disinstalla">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "Disinstalla anche le preferenze associate">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don\'t have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

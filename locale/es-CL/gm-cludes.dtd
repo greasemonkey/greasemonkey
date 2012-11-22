@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Escribir URL - Se puede especificar diversos sitios con asteriscos (*).">
+<!ENTITY promptForNewPage.title "Agregar sitio">
+<!ENTITY promptForNewPage.defVal "http://ejemplo.com/*">
+<!ENTITY promptForEdit.msg "Modificar URL de sitio - Se puede especificar diversos sitios con asteriscos (*).">
+<!ENTITY promptForEdit.title "Editar sitio">
+<!ENTITY button.add "Agregar...">
+<!ENTITY button.addUserExclude "Agregar como exclude">
+<!ENTITY button.addUserInclude "Agregar como include">
+<!ENTITY button.edit "Editar...">
+<!ENTITY button.remove "Eliminar">
+<!ENTITY label.grpIncluded "Sitios incluidos">
+<!ENTITY label.grpExcluded "Sitios excluidos">

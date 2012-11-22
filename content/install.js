@@ -1,117 +1,160 @@
-var GMInstall = {
-  init: function() {
-    var ioservice = Components.classes["@mozilla.org/network/io-service;1"]
-                              .getService(Components.interfaces.nsIIOService);
+Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/util.js');
 
-    this.htmlNs_ = "http://www.w3.org/1999/xhtml";
+var gRemoteScript = window.arguments[0].wrappedJSObject[0];
+var gBrowser = window.arguments[0].wrappedJSObject[1];
+var gScript = window.arguments[0].wrappedJSObject[2];
+var gHtmlNs = 'http://www.w3.org/1999/xhtml';
 
-    this.scriptDownloader_ = window.arguments[0];
-    this.script_ = this.scriptDownloader_.script;
+var gAcceptButton = null;
+var gCurrentDelay = null;
+var gProgress = 0;
+var gShowScriptButton = null;
+var gTimer = null;
+var gTotalDelay = new GM_PrefManager().getValue('installDelay', 5);
 
-    this.setupIncludes("includes", "includes-desc", this.script_.includes);
-    this.setupIncludes("excludes", "excludes-desc", this.script_.excludes);
+function init() {
+  setUpIncludes('includes', 'includes-desc', gScript.includes);
+  setUpIncludes('excludes', 'excludes-desc', gScript.excludes);
 
-    this.dialog_ = document.documentElement;
-    this.extraButton_ = this.dialog_.getButton("extra1");
-    this.extraButton_.setAttribute("type", "checkbox");
-
-    this.acceptButton_ = this.dialog_.getButton("accept");
-    this.acceptButton_.baseLabel = this.acceptButton_.label;
-
-    this.timer_ = null;
-    this.seconds_ = 0;
-    this.startTimer();
-
-    this.bundle = document.getElementById("gm-browser-bundle");
-    this.greetz = new Array();
-    for(var i = 0; i < 6; i++){
-      this.greetz.push(this.bundle.getString("greetz." + i));
-    }
-
-    var pick = Math.round(Math.random() * (this.greetz.length - 1));
-    var heading = document.getElementById("heading");
-    heading.appendChild(document.createElementNS(this.htmlNs_, "strong"));
-    heading.firstChild.appendChild(document.createTextNode(this.greetz[pick]));
-    heading.appendChild(document.createTextNode(" " + this.bundle.getString("greeting.msg")));
-
-    var desc = document.getElementById("scriptDescription");
-    desc.appendChild(document.createElementNS(this.htmlNs_, "strong"));
-    desc.firstChild.appendChild(document.createTextNode(this.script_.name));
-    desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
-    desc.appendChild(document.createTextNode(this.script_.description));
-  },
-
-  onFocus: function(e) {
-    this.startTimer();
-  },
-
-  onBlur: function(e) {
-    this.stopTimer();
-  },
-
-  startTimer: function() {
-    this.seconds_ = 4;
-    this.updateLabel();
-
-    if (this.timer_) {
-      window.clearInterval(this.timer_);
-    }
-
-    this.timer_ = window.setInterval(function() { GMInstall.onInterval() }, 500);
-  },
-
-  onInterval: function() {
-    this.seconds_--;
-    this.updateLabel();
-
-    if (this.seconds_ == 0) {
-      this.timer_ = window.clearInterval(this.timer_);
-    }
-  },
-
-  stopTimer: function() {
-    this.seconds_ = 5;
-    this.timer_ = window.clearInterval(this.timer_);
-    this.updateLabel();
-  },
-
-  updateLabel: function() {
-    if (this.seconds_ > 0) {
-      this.acceptButton_.focus();
-      this.acceptButton_.disabled = true;
-      this.acceptButton_.label = this.acceptButton_.baseLabel + " (" + this.seconds_ + ")";
-    } else {
-      this.acceptButton_.disabled = false;
-      this.acceptButton_.label = this.acceptButton_.baseLabel;
-    }
-  },
-
-  setupIncludes: function(box, desc, includes) {
-    if (includes.length > 0) {
-      desc = document.getElementById(desc);
-      document.getElementById(box).style.display = "";
-
-      for (var i = 0; i < includes.length; i++) {
-        desc.appendChild(document.createTextNode(includes[i]));
-        desc.appendChild(document.createElementNS(this.htmlNs_, "br"));
-      }
-
-      desc.removeChild(desc.lastChild);
-    }
-  },
-
-  onOK: function() {
-    this.scriptDownloader_.installScript();
-    window.setTimeout("window.close()", 0);
-  },
-
-  onCancel: function(){
-    this.scriptDownloader_.cleanupTempFiles();
-    window.close();
-  },
-
-  onShowSource: function() {
-    this.scriptDownloader_.showScriptView();
-    window.setTimeout("window.close()", 0);
+  var matches = [];
+  for (var i = 0, match = null; match = gScript.matches[i]; i++) {
+    matches.push(match.pattern);
   }
-};
+  setUpIncludes('matches', 'matches-desc', matches);
+
+  gShowScriptButton = document.documentElement.getButton('extra1');
+  gAcceptButton = document.documentElement.getButton('accept');
+  gAcceptButton.baseLabel = gAcceptButton.label;
+
+  startTimer();
+  gShowScriptButton.disabled = true;
+
+  var bundle = document.getElementById('gm-browser-bundle');
+
+  document.getElementById('heading').appendChild(
+      document.createTextNode(bundle.getString('greeting.msg')));
+
+  var desc = document.getElementById('scriptDescription');
+  desc.appendChild(document.createElementNS(gHtmlNs, 'strong'));
+  desc.firstChild.appendChild(document.createTextNode(gScript.name));
+  if (gScript.version) {
+    desc.appendChild(document.createTextNode(' ' + gScript.version));
+  }
+  desc.appendChild(document.createElementNS(gHtmlNs, 'br'));
+  desc.appendChild(document.createTextNode(gScript.description));
+
+  if (gRemoteScript.done) {
+    // Download finished before we could open, fake a progress event.
+    onProgress(null, null, 1);
+  } else {
+    // Otherwise, listen for future progress events.
+    gRemoteScript.onProgress(onProgress);
+  }
+}
+
+function onBlur(e) {
+  stopTimer();
+}
+
+function onCancel() {
+  gRemoteScript.cleanup();
+  window.close();
+}
+
+function onFocus(e) {
+  startTimer();
+}
+
+function onInterval() {
+  gCurrentDelay--;
+  updateLabel();
+
+  if (gCurrentDelay == 0) stopTimer();
+}
+
+function onOk() {
+  gRemoteScript.install();
+  window.setTimeout(window.close, 0);
+}
+
+function onProgress(aRemoteScript, aEventType, aData) {
+  if (!document) return; // lingering download after window cancel
+  gProgress = Math.floor(100 * aData);
+  if (gRemoteScript.done) {
+    gShowScriptButton.disabled = false;
+
+    document.getElementById('loading').style.display = 'none';
+    if (gRemoteScript.errorMessage) {
+      document.documentElement.getButton('extra1').disabled = true;
+      document.getElementById('dialogContentBox').style.display = 'none';
+      document.getElementById('errorContentBox').style.display = '-moz-box';
+      document.getElementById('errorMessage')
+          .textContent = gRemoteScript.errorMessage;
+      stopTimer();
+      updateLabel(false);
+      return;
+    }
+  } else {
+    document.getElementById('progressmeter').setAttribute('value', gProgress);
+  }
+  updateLabel();
+}
+
+function onShowSource() {
+  gRemoteScript.showSource(gBrowser);
+  window.setTimeout(window.close, 0);
+}
+
+function pauseTimer() {
+  stopTimer();
+  gCurrentDelay = gTotalDelay;
+  updateLabel();
+}
+
+function setUpIncludes(box, desc, includes) {
+  if (includes.length > 0) {
+    desc = document.getElementById(desc);
+    document.getElementById(box).style.display = '';
+
+    for (var i = 0; i < includes.length; i++) {
+      desc.appendChild(document.createTextNode(includes[i]));
+      desc.appendChild(document.createElementNS(gHtmlNs, 'br'));
+    }
+
+    desc.removeChild(desc.lastChild);
+  }
+}
+
+function startTimer() {
+  gCurrentDelay = gTotalDelay;
+  updateLabel();
+
+  gTimer = window.setInterval(onInterval, 500);
+}
+
+function stopTimer() {
+  if (gTimer) window.clearInterval(gTimer);
+  gCurrentDelay = 0;
+}
+
+function updateLabel(aOkAllowed) {
+  if ('undefined' == typeof aOkAllowed) aOkAllowed = true;
+
+  if (gCurrentDelay > 0) {
+    gAcceptButton.focus();
+    gAcceptButton.label = gAcceptButton.baseLabel + ' (' + gCurrentDelay + ')';
+  } else {
+    gAcceptButton.label = gAcceptButton.baseLabel;
+  }
+
+  var disabled = aOkAllowed
+      ? ((gCurrentDelay > 0) || (gProgress < 100))
+      : true;
+  gAcceptButton.disabled = disabled;
+}
+
+// See: closewindow.xul .
+function GM_onClose() {
+  gRemoteScript.cleanup();
+}

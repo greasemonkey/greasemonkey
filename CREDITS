@@ -1,0 +1,24 @@
+Greasemonkey is Open Source, released under the terms of the MIT license;
+see the LICENSE.mit file.
+
+Greasemonkey contains code derived from AdBlock ( http://adblock.mozdev.org/ ),
+reused under the terms of the MPL license; see LICENSE.mpl.
+
+Greasemonkey contains code derived from FireBug ( http://getfirebug.com/ ),
+reused under the terms of the BSD license; see LICENSE.bsd.
+
+Greasemonkey contains code derived from SlipperyMonkey, originally by
+Dave Townsend, reused under the terms of the MIT license.
+( http://www.oxymoronical.com/blog/2010/07/How-to-extend-the-new-Add-ons-Manager )
+
+Greasemonkey contains code derived from Scriptish
+( https://github.com/scriptish/scriptish ), reused under the terms of the MIT
+license.
+
+Greasemonkey also contains code derived from Mozilla projects, including
+Firefox ( http://mozilla.org/ ), reused under the MPL license; see the
+LICENSE.mpl file.
+
+All MPL code is located in the content/third-party/ and modules/third-party/
+and skin/third-party/ directories, and all such files contain the appropriate
+licensing disclaimers and notifications.

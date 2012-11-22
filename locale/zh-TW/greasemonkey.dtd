@@ -1,37 +1,44 @@
-<!ENTITY manage.title "管理使用者腳本">
-<!ENTITY manage.button.close "關閉">
-<!ENTITY manage.button.add "新增...">
-<!ENTITY manage.button.edit "編輯...">
-<!ENTITY manage.button.remove "移除">
-<!ENTITY manage.label.grpIncluded "腳本將套用到的網址">
-<!ENTITY manage.label.grpExcluded "例外網址">
-<!ENTITY manage.label.btnEdit "編輯">
-<!ENTITY manage.label.chkEnabled "啟用">
-<!ENTITY manage.label.btnUninstall "移除腳本">
-<!ENTITY manage.label.chkUninstall "同時清除腳本的相關設定">
-<!ENTITY manage.reorderHelp "用滑鼠拖放或按 Alt-Up/Alt-Down 來重新排列腳本。">
-<!ENTITY menu.install "安裝腳本">
+<!ENTITY menu.install "安裝使用者腳本…">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "檢視腳本原始碼">
+<!ENTITY menu.show "檢視使用者腳本原始碼">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "正在使用中的腳本">
+<!ENTITY menu.commands "使用者腳本指令…">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "新增腳本...">
+<!ENTITY menu.new "新使用者腳本…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "管理腳本...">
+<!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "沒有安裝腳本！">
-<!ENTITY statusbar.enabled "啟用">
+<!ENTITY menu.options "Greasemonkey 選項…">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
-<!ENTITY install.title "Greasemonkey 使用者腳本安裝">
-<!ENTITY install.runson "腳本將套用到下列網頁：">
-<!ENTITY install.butnoton "下列網頁例外：">
-<!ENTITY install.warning1 "惡意的腳本可能會侵犯您的隱私並在您不知情之下執行。">
-<!ENTITY install.warning2 "您應該只從可信任的來源安裝腳本。">
-<!ENTITY install.showscriptsource "檢視腳本原始碼">
+<!ENTITY install.title "Greasemonkey 安裝">
+<!ENTITY install.runson "執行於:">
+<!ENTITY install.matches "符合:">
+<!ENTITY install.butnoton "不執行於:">
+<!ENTITY install.warning1 "惡意的腳本可能會危害您的隱私，並在您不知情的情況下以您的名義執行。">
+<!ENTITY install.warning2 "您應該只安裝來自可信任來源的使用者腳本。">
+<!ENTITY install.showscriptsource "顯示腳本來源">
 <!ENTITY install.installbutton "安裝">
+<!ENTITY loading "下載中…">
 <!ENTITY newscript.name "名稱">
 <!ENTITY newscript.namespace "命名空間">
-<!ENTITY newscript.description "描述">
-<!ENTITY newscript.includes "腳本將套用到下列網頁 (每行一個網址)">
-<!ENTITY newscript.excludes "例外網頁 (每行一個網址)">
+<!ENTITY newscript.description "說明">
+<!ENTITY newscript.includes "包含（每行一項）">
+<!ENTITY newscript.excludes "不包含（每行一項）">
+<!ENTITY options.editor "腳本編輯器">
+<!ENTITY options.changeEditor "設定腳本編輯器">
+<!ENTITY options.globalExcludes "全域排除">
+<!ENTITY userscripts "使用者腳本">
+<!ENTITY Uninstall "腳本移除設定">
+<!ENTITY AnonymousStatistics "匿名統計">
+<!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">
+<!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
+<!ENTITY UpdateChecking "檢查更新">
+<!ENTITY RequireSecureUpdates "要求透過安全通道更新">
+<!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
+<!ENTITY greasemonkey.youhavenoscripts "您尚未安裝任何腳本">
+<!ENTITY greasemonkey.getuserscripts "取得使用者腳本">
+<!ENTITY scriptprefs.title "Greasemonkey 使用者腳本偏好設定 - !!">
+<!ENTITY scriptprefs.usersettings "使用者設定值">
+<!ENTITY scriptprefs.scriptsettings "腳本設定值">

@@ -13,10 +13,10 @@
   id="greasemonkey"
   title="&install.title;"
   style="width: 32em; height:32em;"
-  onload="GMInstall.init();"
-  ondialogaccept="return GMInstall.onOK();"
-  ondialogcancel="return GMInstall.onCancel();"
-  ondialogextra1="return GMInstall.onShowSource();"
+  onload="init();"
+  ondialogaccept="return onOk();"
+  ondialogcancel="return onCancel();"
+  ondialogextra1="return onShowSource();"
   buttons="accept,cancel,extra1"
   buttonlabelaccept="&install.installbutton;"
   buttonlabelextra1="&install.showscriptsource;"
@@ -24,14 +24,9 @@
 
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/utils.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptdownloader.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/prefmanager.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/install.js" />
 
-  <vbox id="dialogContentBox"
-    flex="1"
-  >
+  <vbox id="dialogContentBox" flex="1">
     <description id="heading"
       style="margin-bottom:1em" />
     <vbox id="itemBox"
@@ -52,6 +47,14 @@
         <description id="includes-desc"
           style="font-style:italic" />
       </vbox>
+      <vbox id="matches"
+        style="margin-bottom:1em; display:none"
+      >
+        <label
+          value="&install.matches;" />
+        <description id="matches-desc"
+          style="font-style:italic" />
+      </vbox>
       <vbox id="excludes"
         style="display:none"
       >
@@ -70,6 +73,18 @@
       style="margin-bottom:1em"
       class="warning"
     >&install.warning2;</description>
+
+    <vbox id="loading">
+      <label value="&loading;" />
+      <progressmeter id="progressmeter"/>
+    </vbox>
   </vbox>
 
+  <vbox id="errorContentBox" flex="1" style="display: none">
+    <description style="margin-bottom: 1em; font-weight: bold;">
+      <!-- TODO: Localize. -->
+      Download Error
+    </description>
+    <description id="errorMessage" style="white-space: pre-line" />
+  </vbox>
 </dialog>

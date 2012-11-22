@@ -1,0 +1,27 @@
+<!ENTITY Edit "編輯">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "編輯此使用者腳本">
+<!ENTITY ExecuteFirst "最先執行">
+<!ENTITY ExecuteLast "最後執行">
+<!ENTITY ExecuteLater "較晚執行">
+<!ENTITY ExecuteSooner "較早執行">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
+<!ENTITY MoveDown "下移">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "移到最下面">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "移到最上面">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "上移">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "建立新腳本">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "顯示腳本所在的資料夾">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "依狀態排序">
+<!ENTITY Sort.Status "狀態">
+<!ENTITY Sort.ByName "依名稱排序">
+<!ENTITY Sort.Name "名稱">
+<!ENTITY Sort.ByExecution "依執行順序排序">
+<!ENTITY Sort.Execution "執行順序">

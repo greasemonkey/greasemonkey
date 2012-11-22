@@ -1,0 +1,27 @@
+<!ENTITY Edit "تحرير">
+<!ENTITY Edit.accesskey "ت">
+<!ENTITY Edit.tooltip "تحرير هذا السكربت">
+<!ENTITY ExecuteFirst "لاول القائمة">
+<!ENTITY ExecuteLast "لاخر القائمة">
+<!ENTITY ExecuteLater "للاسفل">
+<!ENTITY ExecuteSooner "للاعلى">
+<!ENTITY FindUpdate "العثور على تحديث">
+<!ENTITY InstallUpdate "تثبيت التحديث">
+<!ENTITY MoveDown "تحريك لأسفل">
+<!ENTITY MoveDown.accesskey "ت">
+<!ENTITY MoveToBottom "الانتقال إلى أسفل">
+<!ENTITY MoveToBottom.accesskey "ا">
+<!ENTITY MoveToTop "الانتقال إلى الأعلى">
+<!ENTITY MoveToTop.accesskey "ا">
+<!ENTITY MoveUp "تحرك لأعلى">
+<!ENTITY MoveUp.accesskey "ت">
+<!ENTITY NewScript "أنشاء سكربت جديد">
+<!ENTITY NewScript.accesskey "أ">
+<!ENTITY Show "عرض المجلد المتضمن">
+<!ENTITY Show.accesskey "ع">
+<!ENTITY Sort.ByStatus "فرز حسب الحالة">
+<!ENTITY Sort.Status "الحالة">
+<!ENTITY Sort.ByName "فرز حسب الأسم">
+<!ENTITY Sort.Name "الأسم">
+<!ENTITY Sort.ByExecution "فرز حسب التنفيذ">
+<!ENTITY Sort.Execution "فرز التنفيذ">

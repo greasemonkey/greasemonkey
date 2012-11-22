@@ -1,0 +1,44 @@
+<!ENTITY menu.install "유저 스크립트 설치...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "유저 스크립트 소스 보기">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "유저 스크립트 명령...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "새로운 유저 스크립트...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "유저 스크립트 관리...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "활성화">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "그리스몽키 설치">
+<!ENTITY install.runson "다음에서 동작함:">
+<!ENTITY install.matches "matches:">
+<!ENTITY install.butnoton "다음에서 동작하지 않음:">
+<!ENTITY install.warning1 "악의적인 스크립트는 당신의 사생활을 침해할 수 있으며, 당신이 모르는 사이에 당신인 것처럼 행세할 수 있습니다.">
+<!ENTITY install.warning2 "믿을 수 있는 출처에서 나온 스크립트만 설치하셔야 합니다.">
+<!ENTITY install.showscriptsource "스크립트 소스 보기">
+<!ENTITY install.installbutton "설치">
+<!ENTITY loading "Downloading ...">
+<!ENTITY newscript.name "이름">
+<!ENTITY newscript.namespace "네임스페이스">
+<!ENTITY newscript.description "설명">
+<!ENTITY newscript.includes "포함함 (한 줄에 하나씩)">
+<!ENTITY newscript.excludes "제외함 (한 줄에 하나씩)">
+<!ENTITY options.editor "편집기">
+<!ENTITY options.changeEditor "편집기 변경">
+<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY userscripts "유저 스크립트">
+<!ENTITY Uninstall "삭제">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 삭제">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

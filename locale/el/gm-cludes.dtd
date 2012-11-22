@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Εισάγετε ένα νέο URL παρακάτω. Μπορείτε να ορίσετε πολλές σελίδες με χρήση του χαρακτήρα (*).">
+<!ENTITY promptForNewPage.title "Προσθήκη Σελίδας">
+<!ENTITY promptForNewPage.defVal "http://example.gr/*">
+<!ENTITY promptForEdit.msg "Αλλάξτε το URL της σελίδας παρακάτω. Μπορείτε να ορίσετε πολλές σελίδες με χρήση του χαρακτήρα (*).">
+<!ENTITY promptForEdit.title "Επεξεργασία Σελίδας">
+<!ENTITY button.add "Προσθήκη...">
+<!ENTITY button.addUserExclude "Προσθήκη ως εξαίρεση χρήστη">
+<!ENTITY button.addUserInclude "Προσθήκη ως ενσωμάτωση χρήστη">
+<!ENTITY button.edit "Επεξεργασία...">
+<!ENTITY button.remove "Απομάκρυνση">
+<!ENTITY label.grpIncluded "Ενσωματωμένες Σελίδες">
+<!ENTITY label.grpExcluded "Εξαιρούμενες Σελίδες">

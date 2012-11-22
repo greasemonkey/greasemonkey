@@ -1,0 +1,27 @@
+<!ENTITY Edit "Editează">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Editează acest script utilizator">
+<!ENTITY ExecuteFirst "Execută primul">
+<!ENTITY ExecuteLast "Execută ultimul">
+<!ENTITY ExecuteLater "Execută mai târziu">
+<!ENTITY ExecuteSooner "Execută mai devreme">
+<!ENTITY FindUpdate "Caută actualizare">
+<!ENTITY InstallUpdate "Instalează actualizare">
+<!ENTITY MoveDown "Mută jos">
+<!ENTITY MoveDown.accesskey "J">
+<!ENTITY MoveToBottom "Mută la coadă">
+<!ENTITY MoveToBottom.accesskey "C">
+<!ENTITY MoveToTop "Mută la început">
+<!ENTITY MoveToTop.accesskey "P">
+<!ENTITY MoveUp "Mută sus">
+<!ENTITY MoveUp.accesskey "S">
+<!ENTITY NewScript "Creează script nou">
+<!ENTITY NewScript.accesskey "N">
+<!ENTITY Show "Arată dosarul ce-l conține">
+<!ENTITY Show.accesskey "D">
+<!ENTITY Sort.ByStatus "Sortează după stare">
+<!ENTITY Sort.Status "Stare">
+<!ENTITY Sort.ByName "Sortează după nume">
+<!ENTITY Sort.Name "Nume">
+<!ENTITY Sort.ByExecution "Sortează după ordinea de executare">
+<!ENTITY Sort.Execution "Ordine de executare">

@@ -1,0 +1,27 @@
+<!ENTITY Edit "Rediger">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "Rediger dette User Script">
+<!ENTITY ExecuteFirst "Kør først">
+<!ENTITY ExecuteLast "Kør sidst">
+<!ENTITY ExecuteLater "Kør senere">
+<!ENTITY ExecuteSooner "Kør før">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
+<!ENTITY MoveDown "Flyt op">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "Flyt til bunden">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "Flyt til toppen">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "Flyt op">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "Opret nyt User Script">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "Vis indeholdende mappe">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sorter efter status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sorter efter navn">
+<!ENTITY Sort.Name "Navn">
+<!ENTITY Sort.ByExecution "Sorter efter kørselsrækkefølge">
+<!ENTITY Sort.Execution "Kørselsrækkefølge">

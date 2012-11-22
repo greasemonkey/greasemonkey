@@ -1,0 +1,27 @@
+#greasemonkey-tbb {
+  list-style-image: url("chrome://greasemonkey/skin/icon24.png");
+}
+toolbar[iconsize="small"] #greasemonkey-tbb {
+  list-style-image: url("chrome://greasemonkey/skin/icon16.png");
+}
+
+#greasemonkey-tbb[disabled="yes"] {
+  opacity: 0.8;
+}
+#greasemonkey-tbb[disabled="yes"] .toolbarbutton-text {
+  text-decoration: line-through;
+}
+#greasemonkey-tbb[disabled="yes"] .toolbarbutton-icon {
+  opacity: 0.5;
+}
+
+/* The "blank" ID prevents loops; it's not on the replacement. */
+#greasemonkey-tbb menupopup#blank {
+  -moz-binding: url('chrome://greasemonkey/content/bindings.xml#greasemonkey-tbb')/**/
+}
+
+.popup-notification-icon[popupid="greasemonkey-grants"],
+.popup-notification-icon[popupid="greasemonkey-notification"]
+{
+  list-style-image: url("chrome://greasemonkey/skin/icon32.png");
+}

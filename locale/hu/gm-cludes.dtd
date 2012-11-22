@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Írjon be egy URL-t. Több weboldalt is meghatározhat a helyettesítő (*) karakterrel.">
+<!ENTITY promptForNewPage.title "Oldal hozzáadása">
+<!ENTITY promptForNewPage.defVal "http://pelda.hu/*">
+<!ENTITY promptForEdit.msg "Módosítsa az alábbi URL-t. Több weboldalt is meghatározhat a helyettesítő (*) karakterrel.">
+<!ENTITY promptForEdit.title "Oldal szerkesztése">
+<!ENTITY button.add "Hozzáadás…">
+<!ENTITY button.addUserExclude "Hozzáadás felhasználói kivételként">
+<!ENTITY button.addUserInclude "Hozzáadás">
+<!ENTITY button.edit "Szerkesztés…">
+<!ENTITY button.remove "Eltávolítás">
+<!ENTITY label.grpIncluded "Tartalmazott oldalak">
+<!ENTITY label.grpExcluded "Kizárt oldalak">

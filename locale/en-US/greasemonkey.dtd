@@ -1,15 +1,3 @@
-<!ENTITY manage.title "Manage User Scripts">
-<!ENTITY manage.button.close "Close">
-<!ENTITY manage.button.add "Add...">
-<!ENTITY manage.button.edit "Edit...">
-<!ENTITY manage.button.remove "Remove">
-<!ENTITY manage.label.grpIncluded "Included Pages">
-<!ENTITY manage.label.grpExcluded "Excluded Pages">
-<!ENTITY manage.label.btnEdit "Edit">
-<!ENTITY manage.label.chkEnabled "Enabled">
-<!ENTITY manage.label.btnUninstall "Uninstall">
-<!ENTITY manage.label.chkUninstall "Also uninstall associated preferences">
-<!ENTITY manage.reorderHelp "Drag-and-drop with the mouse or press Alt-Up/Alt-Down to reorder scripts in this list.">
 <!ENTITY menu.install "Install User Script...">
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "View User Script Source">
@@ -20,18 +8,37 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Manage User Scripts...">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY statusbar.noscripts "No scripts installed!">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "Enabled">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Installation">
 <!ENTITY install.runson "runs on:">
+<!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "does not run on:">
 <!ENTITY install.warning1 "Malicious scripts can violate your privacy and act on your behalf without your knowledge.">
 <!ENTITY install.warning2 "You should only install scripts from sources that you trust.">
 <!ENTITY install.showscriptsource "Show Script Source">
 <!ENTITY install.installbutton "Install">
+<!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Name">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Description">
 <!ENTITY newscript.includes "Includes (One per line)">
 <!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY options.editor "Editor">
+<!ENTITY options.changeEditor "Select Script Editor">
+<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY userscripts "User Scripts">
+<!ENTITY Uninstall "Uninstall">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

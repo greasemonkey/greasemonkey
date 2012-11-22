@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Anna uusi URL-linkki. Voit myös käyttää tähti-merkkiä (*).">
+<!ENTITY promptForNewPage.title "Lisää sivu">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Muokkaa sivun URL-linkkiä. Voit myös käyttää tähti-merkkiä (*).">
+<!ENTITY promptForEdit.title "Muokkaa sivua">
+<!ENTITY button.add "Lisää...">
+<!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserInclude "Add as user include">
+<!ENTITY button.edit "Muokkaa...">
+<!ENTITY button.remove "Poista">
+<!ENTITY label.grpIncluded "Käytä sivuilla">
+<!ENTITY label.grpExcluded "Pois lukien sivut">
