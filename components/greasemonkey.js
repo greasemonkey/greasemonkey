@@ -292,7 +292,9 @@ function runScriptInSandbox(script, sandbox) {
         // not in a function.
         GM_util.logError(
             gStringBundle.GetStringFromName('return-not-in-func-deprecated'),
-            true // is a warning
+            true, // is a warning
+            fileName,
+            e.lineNumber
             );
         Components.utils.evalInSandbox(
             GM_util.anonWrap(code), sandbox, gMaxJSVersion, fileName, 1);
