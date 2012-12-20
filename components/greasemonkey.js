@@ -477,7 +477,7 @@ service.prototype.contentLoad = function(event) {
   var comparisonHref = href.replace(/#.*/, '');
   var comparsionUri = event.target.documentURI
       .replace(/#.*/, '')
-      .replace(/\/\/[^\/:]+:[^\/@]+@/, '//');
+      .replace(/\/\/[^\/:]+(:[^\/@]+)?@/, '//');
   if (comparisonHref == comparsionUri) {
     // Via an expando property on the *safe* window object (our wrapper of the
     // real window, not the wrapper that content sees), record a property to
