@@ -465,8 +465,6 @@ service.prototype.contentFrozen = function(contentWindowId) {
 };
 
 service.prototype.contentLoad = function(event) {
-  event.target.removeEventListener(event.type, arguments.callee, true);
-
   if (!GM_util.getEnabled()) return;
 
   var safeWin = event.target.defaultView;
