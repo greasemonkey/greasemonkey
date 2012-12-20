@@ -5,10 +5,14 @@
 
 <dialog id="greasemonkey"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  buttons="accept,cancel"
+  buttons="accept,cancel,extra2"
   ondialogaccept="return doInstall();"
   title="&menu.new;"
-  orient="vertical">
+  orient="vertical"
+
+  buttonlabelextra2="&newscript.fromClipboard;"
+  ondialogextra2="installFromClipboard(); window.close();"
+  >
 
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
 

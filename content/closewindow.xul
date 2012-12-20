@@ -3,7 +3,9 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <commandset>
-  <command id="cmd_close" oncommand="GM_onClose &amp;&amp; GM_onClose(); window.close();" />
+  <command id="cmd_close"
+      oncommand="if ('undefined' != typeof GM_onClose) GM_onClose(); window.close();"
+      />
 </commandset>
 
 <keyset>
