@@ -39,14 +39,13 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  // Use the appcontent element specifically, see #1344.
-  document.getElementById("appcontent")
-      .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   var sidebar = document.getElementById("sidebar");
-  sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  var svc = GM_util.getService();
+  sidebar.addEventListener(
+      "DOMContentLoaded", GM_util.hitch(svc, svc.contentLoad), true);
   sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
@@ -72,23 +71,6 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Make sure this is imported at least once, so its internal timer starts.
   Components.utils.import('resource://greasemonkey/stats.js');
-};
-
-GM_BrowserUI.contentLoad = function(event) {
-  if (!GM_util.getEnabled()) return;
-
-  var safeWin = event.target.defaultView;
-  var href = safeWin.location.href;
-
-  // Make sure we are still on the page that fired this event, see issue #1083.
-  // But ignore differences in formats; see issue #1445 and #1631.
-  var comparisonHref = href.replace(/#.*/, '');
-  var comparsionUri = event.target.documentURI
-      .replace(/#.*/, '')
-      .replace(/\/\/[^\/:]+:[^\/@]+@/, '//');
-  if (comparisonHref == comparsionUri) {
-    GM_BrowserUI.gmSvc.runScripts('document-end', safeWin);
-  }
 };
 
 GM_BrowserUI.pagehide = function(aEvent) {
