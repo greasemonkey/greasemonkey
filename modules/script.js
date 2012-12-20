@@ -131,6 +131,9 @@ function Script_getDependencies() {
 Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
 
+Script.prototype.__defineGetter__('downloadURL',
+    function Script_getDescription() { return '' + this._downloadURL; });
+
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
 

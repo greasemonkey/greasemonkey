@@ -6,7 +6,7 @@ https://github.com/greasemonkey/greasemonkey/issues/1651
 It does not export anything.  It only sets an interval and periodically does
 the work to send data to the server.
 */
-var EXPORTED_SYMBOLS = [];
+var EXPORTED_SYMBOLS = ['getStatsObj'];
 
 Components.utils.import('resource://services-common/utils.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
@@ -18,6 +18,9 @@ var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+var gTldService = Components
+    .classes["@mozilla.org/network/effective-tld-service;1"]
+    .getService(Components.interfaces.nsIEffectiveTLDService);
 
 // Check once, soon.
 GM_util.timeout(check, 1000 * 10) // ms = 10 seconds
@@ -127,14 +130,21 @@ function getStatsObj() {
       }
     }
 
+    var downloadUri = GM_util.uriFromUrl(script.downloadURL);
+    var domain = null;
+    try {
+      // Ignore errors here; i.e. invalid/empty URLs.
+      domain = gTldService.getBaseDomain(downloadUri)
+    } catch (e) { }
+
     var scriptStat = {
         'enabled': script.enabled,
         'explicitGrants': explicitGrants,
         'id': script.id,
         'imperatives': imperatives,
         'implicitGrants': script.grants,
-        'installScheme': '',
-        'installDomain': '',
+        'installScheme': downloadUri.scheme,
+        'installDomain': domain,
         'installTime': script.installDate.toISOString(),
         'modifiedTime': script.modifiedDate.toISOString(),
         'userExcludeCount': script.userExcludes.length,
