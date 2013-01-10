@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "الوصف">
 <!ENTITY newscript.includes "يعمل على (صفحة لكل سطر)">
 <!ENTITY newscript.excludes "لايعمل على (صحة لكل سطر)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "المحرر">
 <!ENTITY options.changeEditor "تغيير المحرر">
 <!ENTITY options.globalExcludes "باستثناء العالمية">

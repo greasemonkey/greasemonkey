@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Edytor">
 <!ENTITY options.changeEditor "Zmień edytor">
 <!ENTITY options.globalExcludes "Wykluczenia globalne">

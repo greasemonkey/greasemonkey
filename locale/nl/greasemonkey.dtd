@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Beschrijving">
 <!ENTITY newscript.includes "Beïnvloedt (één per regel)">
 <!ENTITY newscript.excludes "Sluit uit (één per regel)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Tekstverwerker">
 <!ENTITY options.changeEditor "Tekstverwerker kiezen">
 <!ENTITY options.globalExcludes "Sluit globaal uit">

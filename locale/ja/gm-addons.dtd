@@ -1,6 +1,6 @@
 <!ENTITY Edit "編集">
 <!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "このユーザスクリプトを編集します">
+<!ENTITY Edit.tooltip "このユーザスクリプトを編集">
 <!ENTITY ExecuteFirst "最初に実行">
 <!ENTITY ExecuteLast "最後に実行">
 <!ENTITY ExecuteLater "後で実行">
@@ -17,7 +17,7 @@
 <!ENTITY MoveUp.accesskey "U">
 <!ENTITY NewScript "新規スクリプトを作成">
 <!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "内包するフォルダを表示">
+<!ENTITY Show "保存先フォルダを表示">
 <!ENTITY Show.accesskey "S">
 <!ENTITY Sort.ByStatus "状態で並び替え">
 <!ENTITY Sort.Status "状態">

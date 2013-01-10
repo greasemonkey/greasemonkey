@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Описание">
 <!ENTITY newscript.includes "Включения (одно на строку)">
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Редактор">
 <!ENTITY options.changeEditor "Изменить редактор">
 <!ENTITY options.globalExcludes "Глобальные исключения">

@@ -4,7 +4,7 @@
 <!ENTITY menu.show.accesskey "V">
 <!ENTITY menu.commands "ユーザスクリプトコマンド...">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "新規ユーザスクリプト">
+<!ENTITY menu.new "新規ユーザスクリプト...">
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "ユーザスクリプトの管理...">
 <!ENTITY menu.manage.accesskey "M">
@@ -16,8 +16,8 @@
 <!ENTITY install.runson "実行するページ:">
 <!ENTITY install.matches "一致:">
 <!ENTITY install.butnoton "実行しないページ:">
-<!ENTITY install.warning1 "悪意のあるスクリプトはあなたのプライバシーを侵害し、あなたになり代わって活動します。">
-<!ENTITY install.warning2 "信頼できるソースからのみスクリプトをインストールすべきです。">
+<!ENTITY install.warning1 "悪意のあるスクリプトはあなたのプライバシーを侵害し、知らぬ間にあなたになりすまして動作することがあります。">
+<!ENTITY install.warning2 "信頼できるスクリプトのみインストールすべきです。">
 <!ENTITY install.showscriptsource "スクリプトのソースを表示">
 <!ENTITY install.installbutton "インストール">
 <!ENTITY loading "ダウンロード中...">
@@ -26,19 +26,20 @@
 <!ENTITY newscript.description "説明">
 <!ENTITY newscript.includes "実行するページ (改行で複数指定)">
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
+<!ENTITY newscript.fromClipboard "クリップボードのスクリプトを使用する">
 <!ENTITY options.editor "エディタ">
 <!ENTITY options.changeEditor "エディタを変更">
 <!ENTITY options.globalExcludes "どれも実行しないページ">
 <!ENTITY userscripts "ユーザスクリプト">
 <!ENTITY Uninstall "削除">
 <!ENTITY AnonymousStatistics "匿名の統計">
-<!ENTITY SubmitStats "Greasemonkey を改善するために匿名の使用統計を送信する">
+<!ENTITY SubmitStats "Greasemonkey を改善するために匿名の利用統計を送信する">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY UpdateChecking "更新の確認">
 <!ENTITY RequireSecureUpdates "安全な更新のみ確認する">
 <!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">
 <!ENTITY greasemonkey.youhavenoscripts "スクリプトが何もインストールされていません">
-<!ENTITY greasemonkey.getuserscripts "スクリプトを入手">
+<!ENTITY greasemonkey.getuserscripts "ユーザースクリプトを入手">
 <!ENTITY scriptprefs.title "Greasemonkey ユーザースクリプト設定 - !!">
 <!ENTITY scriptprefs.usersettings "ユーザー設定">
 <!ENTITY scriptprefs.scriptsettings "スクリプト設定">

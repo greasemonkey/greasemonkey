@@ -1,12 +1,12 @@
-<!ENTITY promptForNewPage.msg "Sem napište novou adresu. Můžete blíže určit několik adres pomocí divokých znaků (*).">
+<!ENTITY promptForNewPage.msg "Zadejte novou adresu stránky. Můžete specifikovat i více adres pomocí zástupného znaku (*).">
 <!ENTITY promptForNewPage.title "Přidat stránku">
 <!ENTITY promptForNewPage.defVal "http://example.com/*">
-<!ENTITY promptForEdit.msg "Zde upravte stávající adresu. Můžete blíže určit několik adres pomocí divokých znaků (*).">
+<!ENTITY promptForEdit.msg "Upravte stávající adresu stránky. Můžete specifikovat i více adres pomocí zástupného znaku (*).">
 <!ENTITY promptForEdit.title "Upravit stránku">
 <!ENTITY button.add "Přidat...">
-<!ENTITY button.addUserExclude "Přidat jako uživatelskou výjimku">
-<!ENTITY button.addUserInclude "Přidat a zahrnout uživatele">
+<!ENTITY button.addUserExclude "Přidat do uživatelsky vyloučených stránek">
+<!ENTITY button.addUserInclude "Přidat do uživatelsky zahrnutých stránek">
 <!ENTITY button.edit "Upravit...">
 <!ENTITY button.remove "Odstranit">
-<!ENTITY label.grpIncluded "Zahrnout stránky">
-<!ENTITY label.grpExcluded "Vyjmout stránky">
+<!ENTITY label.grpIncluded "Zahrnuté stránky">
+<!ENTITY label.grpExcluded "Vyloučené stránky">

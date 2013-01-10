@@ -23,16 +23,17 @@
 <!ENTITY loading "Descargando...">
 <!ENTITY newscript.name "Nombre">
 <!ENTITY newscript.namespace "Atributo">
-<!ENTITY newscript.description "DescripciÃ³n">
-<!ENTITY newscript.includes "Includes (uno por lÃnea)">
-<!ENTITY newscript.excludes "Excludes (uno por lÃnea)">
+<!ENTITY newscript.description "Descripción">
+<!ENTITY newscript.includes "Includes (uno por línea)">
+<!ENTITY newscript.excludes "Excludes (uno por línea)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Elegir editor de scripts">
 <!ENTITY options.globalExcludes "Exclusiones generales">
 <!ENTITY userscripts "Scripts">
 <!ENTITY Uninstall "Eliminar">
-<!ENTITY AnonymousStatistics "EstadÃsticas AnÃ³nimas">
-<!ENTITY SubmitStats "Recolectar y enviar estadÃsticas anÃ³nimas de uso para mejorar Greasemonkey.">
+<!ENTITY AnonymousStatistics "Estadãsticas Anônimas">
+<!ENTITY SubmitStats "Recolectar y enviar estadãsticas anônimas de uso para mejorar Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Eliminar preferencias asociadas">
 <!ENTITY UpdateChecking "Verificar para actualizar">
 <!ENTITY RequireSecureUpdates "Requerir actualizaciones seguras">

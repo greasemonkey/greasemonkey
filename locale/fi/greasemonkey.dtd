@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Kuvaus">
 <!ENTITY newscript.includes "Ajetaan sivuilla (yksi per rivi)">
 <!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Tekstieditori">
 <!ENTITY options.changeEditor "Vaihda tekstieditoria">
 <!ENTITY options.globalExcludes "Yleisesti poisluettavat">

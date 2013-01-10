@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Beschreibung:">
 <!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Editor ändern">
 <!ENTITY options.globalExcludes "Globale Ausschlüsse">

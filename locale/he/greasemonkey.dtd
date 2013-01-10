@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "תיאור">
 <!ENTITY newscript.includes "כולל (אחד בכל שורה)">
 <!ENTITY newscript.excludes "לא כולל (אחד בכל שורה)">
+<!ENTITY newscript.fromClipboard "השתמש בקובץ Script מהלוח">
 <!ENTITY options.editor "עורך">
 <!ENTITY options.changeEditor "שינוי עורך">
 <!ENTITY options.globalExcludes "אי הכללה כללית">

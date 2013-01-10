@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Tutvustus">
 <!ENTITY newscript.includes "Includes (One per line)">
 <!ENTITY newscript.excludes "Excludes (One per line)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redaktor">
 <!ENTITY options.changeEditor "Muuda Redaktorit">
 <!ENTITY options.globalExcludes "Global Excludes">

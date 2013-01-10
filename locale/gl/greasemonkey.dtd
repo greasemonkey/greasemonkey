@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Descrición">
 <!ENTITY newscript.includes "Incluír (un por liña)">
 <!ENTITY newscript.excludes "Excluír (un por liña)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Cambiar o editor">
 <!ENTITY options.globalExcludes "Exclusións globais">

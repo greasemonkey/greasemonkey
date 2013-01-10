@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Popis">
 <!ENTITY newscript.includes "Zahŕňa (jeden na riadok)">
 <!ENTITY newscript.excludes "Vylučuje (jeden na riadok)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Zmeniť editor">
 <!ENTITY options.globalExcludes "Zahrnúť globálne">

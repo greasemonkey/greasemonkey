@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Descrizione">
 <!ENTITY newscript.includes "Pagine incluse (una per riga)">
 <!ENTITY newscript.excludes "Pagine escluse (una per riga)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
 <!ENTITY options.globalExcludes "Global Excludes">

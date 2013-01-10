@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "شرح">
 <!ENTITY newscript.includes "شامل کردن (یکی در هر خط)">
 <!ENTITY newscript.excludes "مستثنا کردن (یکی در هر خط)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "ویراستار">
 <!ENTITY options.changeEditor "تغییر ویراستار">
 <!ENTITY options.globalExcludes "مستثنا های کلی">

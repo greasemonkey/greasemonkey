@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Beskrivning">
 <!ENTITY newscript.includes "Inkluderingar (ett per rad)">
 <!ENTITY newscript.excludes "Undantag (ett per rad)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redigeringsprogram">
 <!ENTITY options.changeEditor "Byt redigeringsprogram">
 <!ENTITY options.globalExcludes "Globala undantag">

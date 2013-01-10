@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Περιγραφή">
 <!ENTITY newscript.includes "Ενσωματώσεις (Μια ανά γραμμή)">
 <!ENTITY newscript.excludes "Εξαιρέσεις (Μια ανά γραμμή)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Επεξεργαστής κειμένου">
 <!ENTITY options.changeEditor "Επιλέξτε Επεξεργαστή Κώδικα">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">

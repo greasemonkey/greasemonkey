@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "විස්තරය">
 <!ENTITY newscript.includes "ඇතුලත් වෙබ් අඩවි (එක් පේලියකට එකකි)">
 <!ENTITY newscript.excludes "ඇතුලත් නොවූ වෙබ් අඩවි(එක පේලියකට එකකි)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "සංස්කාරකය">
 <!ENTITY options.changeEditor "සංස්කාරකය වෙනස් කරන්න">
 <!ENTITY options.globalExcludes "Global Excludes">

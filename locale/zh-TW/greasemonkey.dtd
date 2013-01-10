@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "說明">
 <!ENTITY newscript.includes "包含（每行一項）">
 <!ENTITY newscript.excludes "不包含（每行一項）">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "腳本編輯器">
 <!ENTITY options.changeEditor "設定腳本編輯器">
 <!ENTITY options.globalExcludes "全域排除">

@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Aprašymas">
 <!ENTITY newscript.includes "Kuriuose veikia (po vieną eilutėj)">
 <!ENTITY newscript.excludes "Kuriuose neveikia (po vieną eilutėj)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redaktorius">
 <!ENTITY options.changeEditor "Keisti redaktorių">
 <!ENTITY options.globalExcludes "Nevykdomi visur">

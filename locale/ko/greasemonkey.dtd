@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "설명">
 <!ENTITY newscript.includes "포함함 (한 줄에 하나씩)">
 <!ENTITY newscript.excludes "제외함 (한 줄에 하나씩)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "편집기">
 <!ENTITY options.changeEditor "편집기 변경">
 <!ENTITY options.globalExcludes "Global Excludes">

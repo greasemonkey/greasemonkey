@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Descriere">
 <!ENTITY newscript.includes "Includeri (una pe linie)">
 <!ENTITY newscript.excludes "Excluderi (una pe linie)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Schimbă editor">
 <!ENTITY options.globalExcludes "Excluderi globale">

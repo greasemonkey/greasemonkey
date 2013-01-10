@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Beskrivelse">
 <!ENTITY newscript.includes "Inkluderinger (en pr. linje)">
 <!ENTITY newscript.excludes "Ekskluderinger (en pr. linje)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redigeringsprogram">
 <!ENTITY options.changeEditor "Skift redigeringsprogram">
 <!ENTITY options.globalExcludes "Globale ekskluderinger">

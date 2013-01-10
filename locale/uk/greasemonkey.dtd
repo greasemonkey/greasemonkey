@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Охоплення (одне на рядок)">
 <!ENTITY newscript.excludes "Винятки (один на рядок)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Редактор">
 <!ENTITY options.changeEditor "Змінити редактор">
 <!ENTITY options.globalExcludes "Глобальні винятки">

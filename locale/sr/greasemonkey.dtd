@@ -26,6 +26,7 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Обухвата (једно по линији)">
 <!ENTITY newscript.excludes "Изузима (једно по линији)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Уређивач">
 <!ENTITY options.changeEditor "Промени уређивач">
 <!ENTITY options.globalExcludes "Општа изузимања">
