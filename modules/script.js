@@ -66,6 +66,8 @@ function Script(configNode) {
 }
 
 Script.prototype.matchesURL = function(url) {
+  var uri = GM_uriFromUrl(url);
+
   function testClude(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
     if (-1 !== url.indexOf('about:blank')
@@ -74,7 +76,7 @@ Script.prototype.matchesURL = function(url) {
       return false;
     }
 
-    return GM_convert2RegExp(glob).test(url);
+    return GM_convert2RegExp(glob, uri).test(url);
   }
   function testMatch(matchPattern) {
     return matchPattern.doMatch(url);
