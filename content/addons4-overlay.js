@@ -6,7 +6,7 @@ Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 Components.utils.import('resource://greasemonkey/util.js');
 
-var userScriptViewId = 'addons://list/user-script';
+var userScriptViewId = 'addons://list/greasemonkey-user-script';
 
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
@@ -68,7 +68,7 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function isScriptView() {
-  return 'addons://list/user-script' == gViewController.currentViewId;
+  return userScriptViewId == gViewController.currentViewId;
 }
 
 function addonExecutesNonFirst(aAddon) {
@@ -159,7 +159,7 @@ function applySort() {
   }
 
   var ascending = '1' != button.getAttribute('checkState');
-  var sortBy=button.getAttribute('sortBy').split(',');
+  var sortBy = button.getAttribute('sortBy').split(',');
 
   var list = document.getElementById('addon-list');
   var elements = Array.slice(list.childNodes, 0);

@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Schimbă editor">
 <!ENTITY options.globalExcludes "Excluderi globale">
-<!ENTITY userscripts "Scripturi utilizator">
 <!ENTITY Uninstall "Dezinstalare">
 <!ENTITY AnonymousStatistics "Statistici anonime">
 <!ENTITY SubmitStats "Adună și trimite statistici anonime de utilizare pentru a îmbunătății Greasemonkey.">

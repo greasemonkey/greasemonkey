@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Editör">
 <!ENTITY options.changeEditor "Editörü Değiştir">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
-<!ENTITY userscripts "Kullanıcı Betikleri">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

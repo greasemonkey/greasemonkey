@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Tekstieditori">
 <!ENTITY options.changeEditor "Vaihda tekstieditoria">
 <!ENTITY options.globalExcludes "Yleisesti poisluettavat">
-<!ENTITY userscripts "Skriptit">
 <!ENTITY Uninstall "Poisto">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

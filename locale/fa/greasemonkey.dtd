@@ -30,7 +30,6 @@
 <!ENTITY options.editor "ویراستار">
 <!ENTITY options.changeEditor "تغییر ویراستار">
 <!ENTITY options.globalExcludes "مستثنا های کلی">
-<!ENTITY userscripts "دستنویس های کاربری">
 <!ENTITY Uninstall "عزل">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

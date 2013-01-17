@@ -19,12 +19,6 @@
 <script type="application/x-javascript" src="chrome://greasemonkey/content/addons4-overlay.js" />
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
 
-<richlistbox id="categories">
-  <richlistitem id="category-scripts" class="category"
-      value="addons://list/user-script" name="&userscripts;"
-  />
-</richlistbox>
-
 <commandset id="viewCommandSet">
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />

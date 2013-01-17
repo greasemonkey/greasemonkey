@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Επεξεργαστής κειμένου">
 <!ENTITY options.changeEditor "Επιλέξτε Επεξεργαστή Κώδικα">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
-<!ENTITY userscripts "Κώδικες Χρηστών">
 <!ENTITY Uninstall "Απεγκατάσταση">
 <!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">
 <!ENTITY SubmitStats "Συγκέντρωση και υποβολή στατιστικών ανώνυμης χρήσης για βελτίωση του Greasemonkey.">

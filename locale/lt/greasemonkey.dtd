@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Redaktorius">
 <!ENTITY options.changeEditor "Keisti redaktorių">
 <!ENTITY options.globalExcludes "Nevykdomi visur">
-<!ENTITY userscripts "Naudotojo scenarijai">
 <!ENTITY Uninstall "Pašalinti">
 <!ENTITY AnonymousStatistics "Anoniminė statistika">
 <!ENTITY SubmitStats "Rinkti ir siųsti anoniminę naudojimo statistiką.">

@@ -30,7 +30,6 @@
 <!ENTITY options.editor "编辑器">
 <!ENTITY options.changeEditor "选择脚本编辑器">
 <!ENTITY options.globalExcludes "全局排除">
-<!ENTITY userscripts "用户脚本">
 <!ENTITY Uninstall "卸载">
 <!ENTITY AnonymousStatistics "匿名统计数据">
 <!ENTITY SubmitStats "收集和提交匿名的使用统计数据以帮助改善 Greasemonkey。">

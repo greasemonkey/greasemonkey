@@ -30,7 +30,6 @@
 <!ENTITY options.editor "සංස්කාරකය">
 <!ENTITY options.changeEditor "සංස්කාරකය වෙනස් කරන්න">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "පරිශීලක ස්ක්‍රිප්ට්">
 <!ENTITY Uninstall "ඉවත් කරන්න">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

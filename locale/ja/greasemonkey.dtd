@@ -30,7 +30,6 @@
 <!ENTITY options.editor "エディタ">
 <!ENTITY options.changeEditor "エディタを変更">
 <!ENTITY options.globalExcludes "どれも実行しないページ">
-<!ENTITY userscripts "ユーザスクリプト">
 <!ENTITY Uninstall "削除">
 <!ENTITY AnonymousStatistics "匿名の統計">
 <!ENTITY SubmitStats "Greasemonkey を改善するために匿名の利用統計を送信する">

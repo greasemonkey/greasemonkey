@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Vybrat editor skriptů">
 <!ENTITY options.globalExcludes "Vyloučené stránky globálně">
-<!ENTITY userscripts "Uživatelské skripty">
 <!ENTITY Uninstall "Odinstalace">
 <!ENTITY AnonymousStatistics "Anonymní statistiky">
 <!ENTITY SubmitStats "Shromažďovat a odesílat anonymní statistiky o používání pro zlepšení Greasemonkey.">

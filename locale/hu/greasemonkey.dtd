@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Szerkesztő">
 <!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
 <!ENTITY options.globalExcludes "Globális kivételek">
-<!ENTITY userscripts "Parancsfájlok">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

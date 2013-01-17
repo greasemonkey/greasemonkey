@@ -30,7 +30,6 @@
 <!ENTITY options.editor "עורך">
 <!ENTITY options.changeEditor "שינוי עורך">
 <!ENTITY options.globalExcludes "אי הכללה כללית">
-<!ENTITY userscripts "קבצי Script של משתמש">
 <!ENTITY Uninstall "הסר">
 <!ENTITY AnonymousStatistics "עיבוד נתונים ללא זיהוי המשתמש">
 <!ENTITY SubmitStats "אסיפה ומשלוח עיבוד נתונים ללא זיהוי המשתמש לצורך שיפור Greasemonkey.">

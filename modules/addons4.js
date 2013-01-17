@@ -26,7 +26,7 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 var SCRIPT_ID_SUFFIX = '@greasespot.net';
-var SCRIPT_ADDON_TYPE = 'user-script';
+var SCRIPT_ADDON_TYPE = 'greasemonkey-user-script';
 
 var gVersionChecker = Components
     .classes["@mozilla.org/xpcom/version-comparator;1"]
@@ -363,6 +363,17 @@ function GM_addonsStartup(aParams) {
   if (_addonsStartupHasRun) return;
   _addonsStartupHasRun = true;
 
-  AddonManagerPrivate.registerProvider(AddonProvider,
-      [{'id': 'user-script'}]);
+  var stringBundle = Components
+      .classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService)
+      .createBundle("chrome://greasemonkey/locale/gm-addons.properties");
+
+  AddonManagerPrivate.registerProvider(
+      AddonProvider,
+      [{
+        'id': 'greasemonkey-user-script',
+        'name': stringBundle.GetStringFromName('userscripts'),
+        'uiPriority': 4500,
+        'viewType': AddonManager.VIEW_TYPE_LIST,
+      }]);
 }

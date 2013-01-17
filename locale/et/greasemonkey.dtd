@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Redaktor">
 <!ENTITY options.changeEditor "Muuda Redaktorit">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "Kasutajaskriptid">
 <!ENTITY Uninstall "Eemalda">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

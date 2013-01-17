@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Редактор">
 <!ENTITY options.changeEditor "Изменить редактор">
 <!ENTITY options.globalExcludes "Глобальные исключения">
-<!ENTITY userscripts "Пользовательские скрипты">
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

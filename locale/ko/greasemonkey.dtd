@@ -30,7 +30,6 @@
 <!ENTITY options.editor "편집기">
 <!ENTITY options.changeEditor "편집기 변경">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "유저 스크립트">
 <!ENTITY Uninstall "삭제">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

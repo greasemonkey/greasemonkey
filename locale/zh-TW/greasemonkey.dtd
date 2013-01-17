@@ -30,7 +30,6 @@
 <!ENTITY options.editor "腳本編輯器">
 <!ENTITY options.changeEditor "設定腳本編輯器">
 <!ENTITY options.globalExcludes "全域排除">
-<!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AnonymousStatistics "匿名統計">
 <!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">

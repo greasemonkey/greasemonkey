@@ -30,7 +30,6 @@
 <!ENTITY options.editor "Tekstverwerker">
 <!ENTITY options.changeEditor "Tekstverwerker kiezen">
 <!ENTITY options.globalExcludes "Sluit globaal uit">
-<!ENTITY userscripts "Gebruikersscripts">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AnonymousStatistics "Anonieme statistieken">
 <!ENTITY SubmitStats "Verzamel en verstuur anonieme gebruiksstatistieken om Greasemonkey te verbeteren.">
