@@ -66,7 +66,7 @@ function Script(configNode) {
 }
 
 Script.prototype.matchesURL = function(url) {
-  var uri = GM_uriFromUrl(url);
+  var uri = GM_util.uriFromUrl(url);
 
   function testClude(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
