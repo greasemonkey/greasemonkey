@@ -54,7 +54,7 @@ function GM_convert2RegExp(pattern, uri) {
     }
   }
 
-  return new RegExp(reStr + "$", "i");
+  return new RegExp(reStr, "i");
 }
 
 
