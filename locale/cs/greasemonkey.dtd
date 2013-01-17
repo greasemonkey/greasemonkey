@@ -8,8 +8,8 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "Správce uživatelských skriptů...">
 <!ENTITY menu.manage.accesskey "S">
-<!ENTITY menu.options "">
-<!ENTITY menu.options.accesskey "">
+<!ENTITY menu.options "Greasemonkey nastavení...">
+<!ENTITY menu.options.accesskey "n">
 <!ENTITY statusbar.enabled "Povoleno">
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Instalace Greasemonkey">
@@ -40,6 +40,6 @@
 <!ENTITY greasemonkey.noscriptshere "Pro tuto stránku nejsou nainstalovány žádné skripty.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalovány žádné uživatelské skripty">
 <!ENTITY greasemonkey.getuserscripts "Získat uživatelské skripty">
-<!ENTITY scriptprefs.title "Uživatelský skript Greasemonkey - Nastavení - !!">
+<!ENTITY scriptprefs.title "Greasemonkey nastavení - Uživatelský skript - !!">
 <!ENTITY scriptprefs.usersettings "Uživatelské nastavení">
 <!ENTITY scriptprefs.scriptsettings "Nastavení skriptu">

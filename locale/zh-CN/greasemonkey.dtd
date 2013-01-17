@@ -26,7 +26,7 @@
 <!ENTITY newscript.description "描述">
 <!ENTITY newscript.includes "脚本应用到（每行一条）">
 <!ENTITY newscript.excludes "排除（每行一条）">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "使用剪贴板中的脚本">
 <!ENTITY options.editor "编辑器">
 <!ENTITY options.changeEditor "选择脚本编辑器">
 <!ENTITY options.globalExcludes "全局排除">
