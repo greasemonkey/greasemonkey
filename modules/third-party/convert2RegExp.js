@@ -41,6 +41,10 @@ var eTldService = Components
 function GM_convert2RegExp(pattern, uri) {
   var reStr = GM_convert2RegExpInner(pattern);
 
+  // Inner returns a RegExp, not str, for input regex (not glob) patterns.
+  // Use those directly without magic TLD modifications.
+  if (reStr instanceof RegExp) return reStr;
+
   if (uri && reStr.match(tldRegExp)) {
     var tld = null;
     try {
