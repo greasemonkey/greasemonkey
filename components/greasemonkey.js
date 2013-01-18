@@ -504,7 +504,13 @@ service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
-    return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+    try {
+      return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+    } catch (e) {
+      GM_util.logError(e, false, e.fileName, e.lineNumber);
+      // See #1692; Prevent failures like that from being so severe.
+      return false;
+    }
   });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin);
