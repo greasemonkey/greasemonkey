@@ -28,7 +28,7 @@ window.addEventListener("load", function window_load() {
 
   gClipText = getClipText()
   document.documentElement.getButton('extra2').collapsed =
-      !(clipText && extractMeta(clipText));
+      !(gClipText && extractMeta(gClipText));
 }, false);
 
 function doInstall() {
