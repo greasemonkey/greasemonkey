@@ -1,3 +1,4 @@
+Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/remoteScript.js');
 Components.utils.import('resource://greasemonkey/util.js');
@@ -12,9 +13,21 @@ function installScriptFromSource(aSource, aCallback) {
   GM_util.writeToFile(aSource, tempFile, function() {
     // install this script
     remoteScript.setScript(script, tempFile);
-    remoteScript.install();
-    // and fire up the editor!
-    GM_util.openInEditor(script);
+    remoteScript.download(function(aSuccess){
+      if (!aSuccess) {
+        GM_notification(
+            'Could not download script\'s dependencies: '
+            + remoteScript.errorMessage,
+        'dependency-download-failed');
+        return;
+      }
+
+      remoteScript.install();
+
+      // and fire up the editor!
+      GM_util.openInEditor(script);
+
+      if (aCallback) aCallback();
+    });
   });
-  if (aCallback) aCallback();
 }
