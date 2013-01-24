@@ -30,14 +30,19 @@ var _gDragDrop_onDrop_Orig = gDragDrop.onDrop;
 gDragDrop.onDrop = function GM_onDrop(aEvent) {
   var urls = droppedUrls(aEvent);
 
+  var droppedNonUserScript = false;
   for (var i = urls.length - 1, url = null; url = urls[i]; i--) {
     if (url.match(/\.user\.js$/)) {
       GM_util.showInstallDialog(
           url, GM_util.getBrowserWindow().gBrowser, GM_util.getService());
+    } else {
+      droppedNonUserScript = true;
     }
   }
 
-  _gDragDrop_onDrop_Orig(aEvent);
+  // Pass call through to the original handler, if any non-user-script
+  // was part of this drop action.
+  if (droppedNonUserScript) _gDragDrop_onDrop_Orig(aEvent);
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
