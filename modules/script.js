@@ -548,11 +548,12 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       this._name = newScript._name;
       this._namespace = newScript._namespace;
     } else {
-      // TODO: Unlocalized string.
       // Notify the user of the conflict
-      GM_util.alert('Error: Another script with @name: "' + newScript._name +
-            '" and @namespace: "' + newScript._namespace +
-            '" is already installed.\nThese values must be unique.');
+      GM_util.alert(
+          stringBundle.GetStringFromName('script.duplicate-installed')
+              .replace('%1', newScript._name)
+              .replace('%2', newScript._namespace)
+          );
       return;
     }
   }
@@ -605,15 +606,17 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
           if (dep.file.equals(this._basedirFile)) {
             // Bugs like an empty file name can cause "dep.file" to point to
             // the containing directory.  Don't remove that!
-            // TODO: Localize this string.
-            GM_util.logError('Warning!!! Refusing to delete script directory.');
+            GM_util.logError(
+                stringBundle.GetStringFromName('script.no-delete-directory'));
           } else {
             dep.file.remove(true);
           }
         } catch (e) {
           // Probably a locked file.  Ignore, warn.
-          // TODO: Localize this string.
-          GM_util.logError('Warning, could not delete for update:\n' + dep);
+            GM_util.logError(
+                stringBundle.GetStringFromName('delete-failed')
+                    .replace('%1', dep)
+                );
         }
       }
 
