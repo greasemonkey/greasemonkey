@@ -296,7 +296,8 @@ RemoteScript.prototype.downloadScript = function(aCompletionCallback) {
 
 RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
   if (!this.script) {
-    throw new Error('RemoteScript.install(): Script is not downloaded.');
+    throw new Error(
+        stringBundle.GetStringFromName('remotescript.not-downloaded'));
   }
   if ('undefined' == typeof aOnlyDependencies) aOnlyDependencies = false;
 
@@ -311,7 +312,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
   } else {
     // Completely install the new script.
     if (!this._baseName) {
-      throw new Error('RemoteScript.install(): Script base name unknown.');
+      throw new Error(
+          stringBundle.GetStringFromName('remotescript.name-unknown'));
     }
 
     GM_config.install(this.script, aOldScript);
@@ -367,7 +369,6 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
   var script = scope.parse(aSource, this._uri, true, aFatal);
   if (!script || script.parseErrors.length) {
     if (aFatal) {
-      dump('fatal failure to parse script!\n');
       this.cleanup(
           stringBundle.GetStringFromName('error.parsingScript')
           + '\n' + script.parseErrors);
@@ -500,7 +501,10 @@ RemoteScript.prototype._downloadFile = function(
       // No-op, always allow files from the same scheme as the script.
     } else if (!GM_util.isGreasemonkeyable(aUri.spec)) {
       // Otherwise, these are unsafe.  Do not download them.
-      this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
+      this.cleanup(
+          stringBundle.GetStringFromName('remotescript.unsafe-url')
+              .replace('%1', aUri.spec)
+          );
       return;
     }
   }

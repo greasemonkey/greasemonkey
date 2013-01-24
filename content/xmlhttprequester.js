@@ -25,7 +25,10 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     var url = uri.spec;
   } catch (e) {
     // A malformed URL won't be parsed properly.
-    throw new Error("Invalid URL: " + details.url);
+    throw new Error(
+        this.stringBundle.GetStringFromName('error.invalidUrl')
+            .replace('%1', name)
+        );
   }
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
@@ -38,7 +41,10 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
-      throw new Error("Disallowed scheme in URL: " + details.url);
+      throw new Error(
+          this.stringBundle.GetStringFromName('error.disallowedScheme')
+              .replace('%1', details.url)
+          );
   }
 
   var rv = {

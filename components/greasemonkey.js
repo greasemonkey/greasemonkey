@@ -91,8 +91,10 @@ function GM_apiLeakCheck(apiName) {
         && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
         && stack.filename.substr(0, 9) !== 'chrome://'
         ) {
-      GM_util.logError(new Error("Greasemonkey access violation: " +
-          "unsafeWindow cannot call " + apiName + "."));
+      GM_util.logError(new Error(
+          gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
+              .replace('%1', apiName)
+          ));
       return false;
     }
 
@@ -267,8 +269,10 @@ function registerMenuCommand(
   if (accessKey
       && (("string" != typeof accessKey) || (accessKey.length != 1))
   ) {
-    throw new Error('Error with menu command "'
-        + commandName + '": accessKey must be a single character');
+    throw new Error(
+        gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
+            .replace('%1', commandName)
+        );
   }
 
   var command = {
