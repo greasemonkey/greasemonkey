@@ -14,6 +14,10 @@ var gLineSplitRegexp = /.+/g;
 var gAllMetaRegexp = new RegExp(
     '^// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
 var gMetaLineRegexp = new RegExp('// @(\\S+)(?:\\s+(.*))?');
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
 /** Get just the stuff between ==UserScript== lines. */
 function extractMeta(aSource) {
@@ -95,9 +99,10 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
         var match = new MatchPattern(value);
         script._matches.push(match);
       } catch (e) {
-        // TODO: Localize.
         script.parseErrors.push(
-            'Ignoring @match pattern ' + value + ' because:\n' + e);
+            gStringBundle.GetStringFromName('parse.ignoring-match')
+                .replace('%1', value).replace('%2', e)
+            );
       }
       break;
     case 'require':
@@ -108,25 +113,28 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
         script._requires.push(scriptRequire);
         script._rawMeta += header + '\0' + value + '\0';
       } catch (e) {
-        // TODO: Localize.
-        script.parseErrors.push('Failed to @require URL: '+ value);
+        script.parseErrors.push(
+            gStringBundle.GetStringFromName('parse.require-failed')
+                .replace('%1', value)
+            );
       }
       break;
     case 'resource':
       var res = value.match(/(\S+)\s+(.*)/);
       if (res === null) {
-        // TODO: Localize.
         script.parseErrors.push(
-            'Invalid syntax for @resource declaration "' + value
-            + '". Resources are declared like "@resource <name> <url>".');
+            gStringBundle.GetStringFromName('parse.resource-syntax')
+                .replace('%1', value)
+            );
         break;
       }
 
       var resName = res[1];
       if (resourceNames[resName]) {
         script.parseErrors.push(
-            'Duplicate resource name "' + resName + '" detected. '
-            + 'Each resource must have a unique name.');
+            gStringBundle.GetStringFromName('parse.resource-duplicate')
+                .replace('%1', resName)
+            );
         break;
       }
       resourceNames[resName] = true;
@@ -140,7 +148,9 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
         script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
       } catch (e) {
         script.parseErrors.push(
-            'Failed to get @resource '+ resName +' from ' + res[2]);
+            gStringBundle.GetStringFromName('parse.resource-failed')
+                .replace('%1', resName).replace('%2', res[2])
+            );
       }
       break;
     case 'run-at':
