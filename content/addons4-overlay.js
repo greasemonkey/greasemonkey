@@ -4,6 +4,7 @@
 (function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
+Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var userScriptViewId = 'addons://list/greasemonkey-user-script';
@@ -22,6 +23,21 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
    setRichlistitemExecutionIndex(aObj);
   }
   return item;
+};
+
+// Patch the default onDrop() to make user script installation work.
+var _gDragDrop_onDrop_Orig = gDragDrop.onDrop;
+gDragDrop.onDrop = function GM_onDrop(aEvent) {
+  var urls = droppedUrls(aEvent);
+
+  for (var i = urls.length - 1, url = null; url = urls[i]; i--) {
+    if (url.match(/\.user\.js$/)) {
+      GM_util.showInstallDialog(
+          url, GM_util.getBrowserWindow().gBrowser, GM_util.getService());
+    }
+  }
+
+  _gDragDrop_onDrop_Orig(aEvent);
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
