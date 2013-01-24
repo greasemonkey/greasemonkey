@@ -28,7 +28,8 @@
 <!ENTITY newscript.excludes "Excludes (One per line)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.changeEditor "Select Script Editor">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

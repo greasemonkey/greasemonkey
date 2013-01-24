@@ -1,3 +1,4 @@
+Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -14,7 +15,11 @@ const COULD_NOT_LAUNCH = (function() {
 function openInEditor(script) {
   var editor = GM_util.getEditor();
   if (!editor) {
-    // The user did not choose an editor.
+    ScratchpadManager.openScratchpad({
+      'filename': script.file.path,
+      'text': script.textContent,
+      'saved': true,
+    });
     return;
   }
 
