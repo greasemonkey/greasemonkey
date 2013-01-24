@@ -82,8 +82,7 @@
 
   <vbox id="errorContentBox" flex="1" style="display: none">
     <description style="margin-bottom: 1em; font-weight: bold;">
-      <!-- TODO: Localize. -->
-      Download Error
+      &install.downloadError;
     </description>
     <description id="errorMessage" style="white-space: pre-line" />
   </vbox>
