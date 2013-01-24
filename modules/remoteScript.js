@@ -542,8 +542,11 @@ RemoteScript.prototype._downloadScriptCb = function(
       } else {
         this.cleanup(stringBundle.GetStringFromName('error.scriptCharset'));
       }
-      // ... fake a successful download, so the install window will show, with
-      // that error message.
+    }
+
+    if (this.errorMessage) {
+      // Fake a successful download, so the install window will show, with
+      // the error message.
       this._dispatchCallbacks('scriptMeta', new Script());
       return aCompletionCallback(true, 'script');
     }
