@@ -91,7 +91,7 @@ Script.prototype.matchesURL = function(url) {
   if (this._userIncludes.some(testClude)) return true;
 
   // Finally allow based on script cludes and matches.
-  if (this.excludes.some(testClude)) return false;
+  if (this._excludes.some(testClude)) return false;
   return (this._includes.some(testClude) || this._matches.some(testMatch));
 };
 
