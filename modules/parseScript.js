@@ -105,6 +105,10 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
             );
       }
       break;
+    case 'nosandbox':
+      script['_' + header] = typeof(value) === 'undefined' ?
+                             true : value == true.toString();
+      break;
     case 'require':
       try {
         var reqUri = GM_util.uriFromUrl(value, aUri);

@@ -44,6 +44,7 @@ function Script(configNode) {
   this._modifiedTime = null;
   this._name = 'user-script';
   this._namespace = '';
+  this._nosandbox = false;
   this._prefroot = null;
   this._rawMeta = '';
   this._requires = [];
@@ -110,6 +111,9 @@ function Script_getName() { return this._name; });
 
 Script.prototype.__defineGetter__('namespace',
 function Script_getNamespace() { return this._namespace; });
+
+Script.prototype.__defineGetter__('nosandbox',
+  function Script_getNosandbox() { return this._nosandbox; });
 
 Script.prototype.__defineGetter__('id',
 function Script_getId() {
@@ -355,6 +359,7 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
   this.icon.fileURL = node.getAttribute("icon");
   this._enabled = node.getAttribute("enabled") == true.toString();
+  this._nosandbox = node.getAttribute("nosandbox") == true.toString();
 };
 
 Script.prototype.toConfigNode = function(doc) {
@@ -423,6 +428,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("runAt", this._runAt);
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
+  scriptNode.setAttribute("nosandbox", this._nosandbox);
 
   if (this._downloadURL) {
     scriptNode.setAttribute("installurl", this._downloadURL);
@@ -474,6 +480,7 @@ Script.prototype.info = function() {
       'matches': matches,
       'name': this.name,
       'namespace': this.namespace,
+      'nosandbox': this.nosandbox,
       // 'requires': ???,
       'resources': resources,
       'run-at': this.runAt,
@@ -568,6 +575,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._runAt = newScript._runAt;
   this._version = newScript._version;
   this._downloadURL = newScript._downloadURL;
+  this._nosandbox = newScript._nosandbox;
   this.updateURL = newScript.updateURL;
 
   this.showGrantWarning();

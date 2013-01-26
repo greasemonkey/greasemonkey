@@ -107,47 +107,46 @@ function GM_apiLeakCheck(apiName) {
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
-  if (GM_util.inArray(aScript.grants, 'none')) {
-    // If there is an explicit none grant, use a plain unwrapped sandbox
-    // with no other content.
-    var contentSandbox = new Components.utils.Sandbox(
-        aContentWin,
-        {
-          'sandboxName': aScript.id,
-          'sandboxPrototype': aContentWin,
-          'wantXrays': false,
-        });
-    // GM_info is always provided.
-    Components.utils.evalInSandbox(
-        'const GM_info = ' + uneval(aScript.info()), contentSandbox);
+  var sandbox = null;
+  if (GM_util.inArray(aScript.grants, 'none') || aScript.nosandbox) {
+    // If there is an explicit none grant or nosandbox is set,
+    // use a plain unwrapped sandbox with no other content.
+    sandbox = new Components.utils.Sandbox(
+      aContentWin,
+      {
+        'sandboxName': aScript.id,
+        'sandboxPrototype': aContentWin,
+        'wantXrays': false,
+      });
     // Alias unsafeWindow for compatibility.
     Components.utils.evalInSandbox(
-        'const unsafeWindow = window;', contentSandbox);
-
-    if (GM_util.compareFirefoxVersion("16.0") < 0) {
-      // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
-      // only in older versions.
-      contentSandbox.alert = alert;
-    }
-
-    return contentSandbox;
-  }
-
-  var sandbox = new Components.utils.Sandbox(
+        'const unsafeWindow = window;', sandbox);
+  } else  { // Otherwise, create a wrapped object
+    sandbox = new Components.utils.Sandbox(
       aContentWin,
       {
         'sandboxName': aScript.id,
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
       });
-  sandbox.unsafeWindow = aContentWin.wrappedJSObject;
-  if (aFirebugConsole) sandbox.console = aFirebugConsole;
+    sandbox.unsafeWindow = aContentWin.wrappedJSObject;
+    // FIXME: why is this only done for the wrapped object?
+    if (aFirebugConsole) sandbox.console = aFirebugConsole;
+  }
+
+  // GM_info is always provided.
+  Components.utils.evalInSandbox(
+    'const GM_info = ' + uneval(aScript.info()), sandbox);
 
   if (GM_util.compareFirefoxVersion("16.0") < 0) {
     // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
     // only in older versions.
     sandbox.alert = alert;
   }
+
+  // if there are no grants, return now
+  if (GM_util.inArray(aScript.grants, 'none'))
+    return sandbox;
 
   var imp = sandbox.importFunction;
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
@@ -199,9 +198,6 @@ function createSandbox(
         new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl),
         'contentStartRequest');
   }
-
-  Components.utils.evalInSandbox(
-      'const GM_info = ' + uneval(aScript.info()), sandbox);
 
   return sandbox;
 }
