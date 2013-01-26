@@ -10,6 +10,8 @@ var gScriptIncludesEl;
 var gTabboxEl;
 var gUserExcludesEl;
 var gUserIncludesEl;
+var gUserNoSandboxEl;
+var gScriptNoSandboxEl;
 var gUserTabEl;
 
 window.addEventListener('load', function() {
@@ -21,8 +23,10 @@ window.addEventListener('load', function() {
 
   gUserIncludesEl = document.getElementById('user-includes');
   gUserExcludesEl = document.getElementById('user-excludes');
+  gUserNoSandboxEl = document.getElementById('user-nosandbox');
   gScriptIncludesEl = document.getElementById('script-includes');
   gScriptExcludesEl = document.getElementById('script-excludes');
+  gScriptNoSandboxEl = document.getElementById('script-nosandbox');
 
   gScriptIncludesEl.pages = gScript.includes;
   gScriptIncludesEl.onAddUserExclude = function(url) {
@@ -30,6 +34,9 @@ window.addEventListener('load', function() {
     gTabboxEl.selectedTab = gUserTabEl;
   };
   gUserIncludesEl.pages = gScript.userIncludes;
+
+  gUserNoSandboxEl.checked = gScript.userNosandbox;
+  gScriptNoSandboxEl.checked = gScript.nosandbox;
 
   gScriptExcludesEl.pages = gScript.excludes;
   gScriptExcludesEl.onAddUserInclude = function(url) {
@@ -44,5 +51,7 @@ function onDialogAccept() {
   gScript.userIncludes = gUserIncludesEl.pages;
   gScript.excludes = gScriptExcludesEl.pages;
   gScript.userExcludes = gUserExcludesEl.pages;
+  gScript.userNosandbox = gUserNoSandboxEl.checked;
+  gScript.nosandbox = gScriptNoSandboxEl.checked;
   GM_util.getService().config._changed(gScript, "cludes");
 }

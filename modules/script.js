@@ -45,6 +45,7 @@ function Script(configNode) {
   this._name = 'user-script';
   this._namespace = '';
   this._nosandbox = false;
+  this._userNosandbox = false;
   this._prefroot = null;
   this._rawMeta = '';
   this._requires = [];
@@ -114,6 +115,13 @@ function Script_getNamespace() { return this._namespace; });
 
 Script.prototype.__defineGetter__('nosandbox',
   function Script_getNosandbox() { return this._nosandbox; });
+Script.prototype.__defineSetter__('nosandbox',
+  function Script_setNosandbox(nosandbox) { this._nosandbox = nosandbox; });
+
+Script.prototype.__defineGetter__('userNosandbox',
+  function Script_getUserNosandbox() { return this._userNosandbox; });
+Script.prototype.__defineSetter__('userNosandbox',
+  function Script_setUserNosandbox(userNosandbox) { this._userNosandbox = userNosandbox; });
 
 Script.prototype.__defineGetter__('id',
 function Script_getId() {
@@ -360,6 +368,7 @@ Script.prototype._loadFromConfigNode = function(node) {
   this.icon.fileURL = node.getAttribute("icon");
   this._enabled = node.getAttribute("enabled") == true.toString();
   this._nosandbox = node.getAttribute("nosandbox") == true.toString();
+  this._userNosandbox = node.getAttribute("userNosandbox") == true.toString();
 };
 
 Script.prototype.toConfigNode = function(doc) {
@@ -429,6 +438,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
   scriptNode.setAttribute("nosandbox", this._nosandbox);
+  scriptNode.setAttribute("userNosandbox", this._userNosandbox);
 
   if (this._downloadURL) {
     scriptNode.setAttribute("installurl", this._downloadURL);
@@ -481,6 +491,7 @@ Script.prototype.info = function() {
       'name': this.name,
       'namespace': this.namespace,
       'nosandbox': this.nosandbox,
+      'userNosandbox': this.userNosandbox,
       // 'requires': ???,
       'resources': resources,
       'run-at': this.runAt,
@@ -566,7 +577,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   }
 
   // Copy new values.
-  //  NOTE: User 'cludes are _not_ copied!  They should remain as-is.
+  //  NOTE: User 'cludes  / nosandbox are _not_ copied!  They should remain as-is.
   this._excludes = newScript._excludes;
   this._grants = newScript._grants;
   this._includes = newScript._includes;

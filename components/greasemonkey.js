@@ -108,7 +108,8 @@ function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
   var sandbox = null;
-  if (GM_util.inArray(aScript.grants, 'none') || aScript.nosandbox) {
+  if (GM_util.inArray(aScript.grants, 'none')
+      || (aScript.nosandbox && aScript.userNosandbox)) {
     // If there is an explicit none grant or nosandbox is set,
     // use a plain unwrapped sandbox with no other content.
     sandbox = new Components.utils.Sandbox(
