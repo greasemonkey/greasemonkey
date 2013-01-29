@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "k">
 <!ENTITY menu.options "Greasemonkey beállítások…">
 <!ENTITY menu.options.accesskey "G">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Engedélyezve">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey telepítés">
