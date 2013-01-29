@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "إ">
 <!ENTITY menu.options "خيارات مدير السكربتات..">
 <!ENTITY menu.options.accesskey "خ">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "تشغيل">
 <!ENTITY statusbar.enabled.accesskey "ت">
 <!ENTITY install.title "مثبت السكربتات">
