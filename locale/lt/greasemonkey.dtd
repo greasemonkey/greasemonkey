@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "T">
 <!ENTITY menu.options "Greasemonkey pasirinktys...">
 <!ENTITY menu.options.accesskey "P">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Įjungta">
 <!ENTITY statusbar.enabled.accesskey "I">
 <!ENTITY install.title "Greasemonkey įdiegimas">
