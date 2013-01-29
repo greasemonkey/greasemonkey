@@ -63,6 +63,26 @@
         type="checkbox"
         command="gm_toggle_checked"/>
       <menuseparator />
+      <menu
+        accesskey="&menu.websites.accesskey;"
+        label="&menu.websites;"
+      >
+        <menupopup>
+          <menuitem
+            label="&menu.websites.greasespot;"
+            oncommand="GM_BrowserUI.openTab('http://greasespot.net/');" />
+          <menuitem
+            label="&menu.websites.greasespotwiki;"
+            oncommand="GM_BrowserUI.openTab('http://wiki.greasespot.net/');" />
+          <menuitem
+            label="&menu.websites.manual;"
+            oncommand="GM_BrowserUI.openTab('http://wiki.greasespot.net/Greasemonkey_Manual');" />
+          <menuitem
+            label="&menu.websites.userscripts;"
+            oncommand="GM_BrowserUI.openTab('http://userscripts.org/');" />
+        </menupopup>
+      </menu>
+      <menuseparator />
       <menuitem
         accesskey="&menu.options.accesskey;"
         label="&menu.options;"
