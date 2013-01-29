@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "G">
 <!ENTITY menu.options "Opções do Greasemonkey...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Habilitado">
 <!ENTITY statusbar.enabled.accesskey "H">
 <!ENTITY install.title "Instalação do Greasemonkey">
