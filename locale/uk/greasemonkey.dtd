@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "е">
 <!ENTITY menu.options "Налаштування Greasemonkey...">
 <!ENTITY menu.options.accesskey "л">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">
