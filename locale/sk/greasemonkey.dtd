@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "S">
 <!ENTITY menu.options "Greasemonkey nastavenia...">
 <!ENTITY menu.options.accesskey "n">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Povolený">
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Inštalácia Greasemonkey">

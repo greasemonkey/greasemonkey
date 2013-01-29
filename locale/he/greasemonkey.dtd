@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "נ">
 <!ENTITY menu.options "...Greasemonkey אפשרויות">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Websites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "הפוך לזמין">
 <!ENTITY statusbar.enabled.accesskey "מ">
 <!ENTITY install.title "התקנת Greasemonkey">
