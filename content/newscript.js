@@ -1,9 +1,16 @@
+Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 /////////////////////////////// global variables ///////////////////////////////
 
+const gClipboard = Components.classes["@mozilla.org/widget/clipboard;1"]
+    .getService(Components.interfaces.nsIClipboard);
+var gClipText = null;
 var bundle = null;
+
+////////////////////////////////// functions ///////////////////////////////////
+
 window.addEventListener("load", function window_load() {
   // init the global string bundle
   bundle = document.getElementById("gm-browser-bundle");
@@ -18,9 +25,11 @@ window.addEventListener("load", function window_load() {
     document.getElementById("includes").value =
       content.selectedBrowser.contentWindow.location.href;
   }
-}, false);
 
-////////////////////////////////// functions ///////////////////////////////////
+  gClipText = getClipText()
+  document.documentElement.getButton('extra2').collapsed =
+      !(gClipText && extractMeta(gClipText));
+}, false);
 
 function doInstall() {
   var scriptSrc = createScriptSource();
@@ -39,25 +48,38 @@ function doInstall() {
 
   // finish making the script object ready to install
   // (put this created script into a file -- only way to install it)
-  var scope = {};
-  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
-  var remoteScript = new scope.RemoteScript();
-  var tempFileName = scope.cleanFilename(script.name, 'gm_script') + '.user.js';
-  var tempFile = GM_util.getTempFile(remoteScript._tempDir, tempFileName);
-  GM_util.writeToFile(scriptSrc, tempFile, function() {
-    // install this script
-    remoteScript.setScript(script, tempFile);
-    remoteScript.install();
-    // and fire up the editor!
-    GM_util.openInEditor(script);
-
-    // persist namespace value
+  GM_util.installScriptFromSource(scriptSrc, function() {
+    // Persist namespace value.
     GM_prefRoot.setValue("newscript_namespace", script.namespace);
     // Now that async write is complete, close the window.
     close();
   });
 
   return false;
+}
+
+function getClipText() {
+  var clipText = '';
+  try {
+    var transferable = Components.classes["@mozilla.org/widget/transferable;1"]
+        .createInstance(Components.interfaces.nsITransferable);
+    if ('init' in transferable) transferable.init(null);
+    transferable.addDataFlavor('text/unicode');
+    gClipboard.getData(transferable, gClipboard.kGlobalClipboard);
+    var str = new Object(), strLen = new Object();
+    transferable.getTransferData('text/unicode', str, strLen);
+    if (str) {
+      str = str.value.QueryInterface(Components.interfaces.nsISupportsString);
+      clipText = str.data.substring(0, strLen.value / 2);
+    }
+  } catch (e) {
+    dump('Error reading clipboard:\n' + e + '\n');
+  }
+  return clipText;
+}
+
+function installFromClipboard() {
+  GM_util.installScriptFromSource(gClipText);
 }
 
 // assemble the XUL fields into a script template

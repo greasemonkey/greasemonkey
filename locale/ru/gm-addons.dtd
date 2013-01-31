@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Изменить">
 <!ENTITY Edit.accesskey "з">
 <!ENTITY Edit.tooltip "Редактировать этот скрипт">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Имя">
 <!ENTITY Sort.ByExecution "Сортировать по порядку выполнения">
 <!ENTITY Sort.Execution "Порядок выполнения">
-<!ENTITY SortScripts "Сортировать скрипты">
-<!ENTITY SortScripts.accesskey "т">
-<!ENTITY UninstallCancel "Отменить удаление">
-<!ENTITY UninstallCancel.accesskey "н">
-<!ENTITY UninstallCancel.tooltip "Отменить удаление пользовательского скрипта">
-<!ENTITY UninstallCancelDescription "Скрипт будет удален при закрытии диалога (для немедленного удаления нажмите правую кнопку)">
-<!ENTITY UninstallNow "Удалить немедленно">
-<!ENTITY UninstallNow.accesskey "о">

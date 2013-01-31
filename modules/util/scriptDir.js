@@ -5,7 +5,7 @@ const EXPORTED_SYMBOLS = ['scriptDir'];
 const SCRIPT_DIR = Components
     .classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
-    .get("ProfD", Components.interfaces.nsILocalFile);
+    .get("ProfD", Components.interfaces.nsIFile);
 SCRIPT_DIR.append("gm_scripts");
 
 function scriptDir() {

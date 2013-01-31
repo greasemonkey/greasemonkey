@@ -8,7 +8,7 @@
 <!ENTITY menu.new.accesskey "N">
 <!ENTITY menu.manage "管理使用者腳本…">
 <!ENTITY menu.manage.accesskey "M">
-<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options "Greasemonkey 選項…">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "說明">
 <!ENTITY newscript.includes "包含（每行一項）">
 <!ENTITY newscript.excludes "不包含（每行一項）">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "腳本編輯器">
 <!ENTITY options.changeEditor "設定腳本編輯器">
 <!ENTITY options.globalExcludes "全域排除">
-<!ENTITY userscripts "使用者腳本">
 <!ENTITY Uninstall "腳本移除設定">
+<!ENTITY AnonymousStatistics "匿名統計">
+<!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
 <!ENTITY UpdateChecking "檢查更新">
-<!ENTITY EnableUpdateChecking "自動檢查腳本更新">
-<!ENTITY UpdateInterval "檢查更新的最短時間間隔">
-<!ENTITY AutoInstallUpdates "有腳本更新時自動更新">
 <!ENTITY RequireSecureUpdates "要求透過安全通道更新">
 <!ENTITY greasemonkey.noscriptshere "沒有任何在此頁面執行的腳本。">
 <!ENTITY greasemonkey.youhavenoscripts "您尚未安裝任何腳本">

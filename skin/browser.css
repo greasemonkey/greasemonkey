@@ -20,6 +20,8 @@ toolbar[iconsize="small"] #greasemonkey-tbb {
   -moz-binding: url('chrome://greasemonkey/content/bindings.xml#greasemonkey-tbb')/**/
 }
 
-.popup-notification-icon[popupid="greasemonkey-grants"] {
+.popup-notification-icon[popupid="greasemonkey-grants"],
+.popup-notification-icon[popupid="greasemonkey-notification"]
+{
   list-style-image: url("chrome://greasemonkey/skin/icon32.png");
 }

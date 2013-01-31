@@ -79,12 +79,13 @@ function filenameFromUri(aUri, aDefault) {
 ////////////////////////// Private Download Listener ///////////////////////////
 
 function DownloadListener(
-    aTryToParse, aProgressCb, aCompletionCallback, aFile, aRemoteScript) {
+    aTryToParse, aProgressCb, aCompletionCallback, aFile, aUri, aRemoteScript) {
   this._completionCallback = aCompletionCallback;
   this._data = [];
   this._progressCallback = aProgressCb;
   this._remoteScript = aRemoteScript;
   this._tryToParse = aTryToParse;
+  this._uri = aUri;
 
   this._fileOutputStream = Cc["@mozilla.org/network/file-output-stream;1"]
       .createInstance(Ci.nsIFileOutputStream);
@@ -188,10 +189,11 @@ DownloadListener.prototype = {
 
     if (error) {
       errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
-          + '\n' + this._remoteScript._uri.spec + '\n\n' + errorMessage;
+          + '\n' + this._uri.spec + '\n\n' + errorMessage;
       this._remoteScript.cleanup(errorMessage);
     }
 
+    this._progressCallback(aRequest, 1);
     this._completionCallback(aRequest, !error);
   },
 
@@ -294,7 +296,8 @@ RemoteScript.prototype.downloadScript = function(aCompletionCallback) {
 
 RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
   if (!this.script) {
-    throw new Error('RemoteScript.install(): Script is not downloaded.');
+    throw new Error(
+        stringBundle.GetStringFromName('remotescript.not-downloaded'));
   }
   if ('undefined' == typeof aOnlyDependencies) aOnlyDependencies = false;
 
@@ -302,14 +305,15 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Just move the dependencies in.
     var enumerator = this._tempDir.directoryEntries;
     while (enumerator.hasMoreElements()) {
-      var file = enumerator.getNext().QueryInterface(Ci.nsILocalFile);
+      var file = enumerator.getNext().QueryInterface(Ci.nsIFile);
       // TODO: Fix invalid private access.
       file.moveTo(this.script._basedirFile, null);
     }
   } else {
     // Completely install the new script.
     if (!this._baseName) {
-      throw new Error('RemoteScript.install(): Script base name unknown.');
+      throw new Error(
+          stringBundle.GetStringFromName('remotescript.name-unknown'));
     }
 
     GM_config.install(this.script, aOldScript);
@@ -338,7 +342,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Let the user know we're all done.
     GM_notification(
         "'" + this.script.name + "' "
-        + stringBundleBrowser.GetStringFromName(this.messageName));
+            + stringBundleBrowser.GetStringFromName(this.messageName),
+        this.messageName);
   }
 };
 
@@ -364,7 +369,6 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
   var script = scope.parse(aSource, this._uri, true, aFatal);
   if (!script || script.parseErrors.length) {
     if (aFatal) {
-      dump('fatal failure to parse script!\n');
       this.cleanup(
           stringBundle.GetStringFromName('error.parsingScript')
           + '\n' + script.parseErrors);
@@ -480,11 +484,11 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
       uri, file, GM_util.hitch(this, dependencyDownloadComplete));
 };
 
-/** Download a given nsIURI to a given nsILocalFile, with optional callback. */
+/** Download a given nsIURI to a given nsIFile, with optional callback. */
 RemoteScript.prototype._downloadFile = function(
     aUri, aFile, aCompletionCallback) {
   aUri = aUri.QueryInterface(Ci.nsIURI);
-  aFile = aFile.QueryInterface(Ci.nsILocalFile);
+  aFile = aFile.QueryInterface(Ci.nsIFile);
   aCompletionCallback = aCompletionCallback || function() {};
   assertIsFunction(aCompletionCallback,
       '_downloadFile() completion callback is not a function.');
@@ -497,7 +501,10 @@ RemoteScript.prototype._downloadFile = function(
       // No-op, always allow files from the same scheme as the script.
     } else if (!GM_util.isGreasemonkeyable(aUri.spec)) {
       // Otherwise, these are unsafe.  Do not download them.
-      this.cleanup('Will not download unsafe URL:\n' + aUri.spec);
+      this.cleanup(
+          stringBundle.GetStringFromName('remotescript.unsafe-url')
+              .replace('%1', aUri.spec)
+          );
       return;
     }
   }
@@ -509,6 +516,7 @@ RemoteScript.prototype._downloadFile = function(
       GM_util.hitch(this, this._downloadFileProgress),
       aCompletionCallback,
       aFile,
+      aUri,
       this
       );
   channel.notificationCallbacks = dsl;
@@ -538,8 +546,11 @@ RemoteScript.prototype._downloadScriptCb = function(
       } else {
         this.cleanup(stringBundle.GetStringFromName('error.scriptCharset'));
       }
-      // ... fake a successful download, so the install window will show, with
-      // that error message.
+    }
+
+    if (this.errorMessage) {
+      // Fake a successful download, so the install window will show, with
+      // the error message.
       this._dispatchCallbacks('scriptMeta', new Script());
       return aCompletionCallback(true, 'script');
     }

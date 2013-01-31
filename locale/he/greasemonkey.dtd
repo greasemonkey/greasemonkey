@@ -1,0 +1,44 @@
+<!ENTITY menu.install "התקן קובץ Script של משתמש">
+<!ENTITY menu.install.accesskey "ת">
+<!ENTITY menu.show "הצג קוד מקור קובץ Script של משתמש">
+<!ENTITY menu.show.accesskey "צ">
+<!ENTITY menu.commands "פקודות קובץ Script של משתמש...">
+<!ENTITY menu.commands.accesskey "פ">
+<!ENTITY menu.new "קובץ Script של משתמש חדש">
+<!ENTITY menu.new.accesskey "ח">
+<!ENTITY menu.manage "ניהול קבצי Script של משתמש">
+<!ENTITY menu.manage.accesskey "נ">
+<!ENTITY menu.options "...Greasemonkey אפשרויות">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "הפוך לזמין">
+<!ENTITY statusbar.enabled.accesskey "מ">
+<!ENTITY install.title "התקנת Greasemonkey">
+<!ENTITY install.runson "עובד ב:">
+<!ENTITY install.matches "התאמות:">
+<!ENTITY install.butnoton "לא עובד ב:">
+<!ENTITY install.warning1 "קבצי Script זדוניים עלולים להפר פרטיותך ולפעול בשמך ללא ידיעתך.">
+<!ENTITY install.warning2 "עליך להתקין קבצי Script רק ממקורות שאתה נותן בהם אמון.">
+<!ENTITY install.showscriptsource "הצג קוד מקור של קובץ Script">
+<!ENTITY install.installbutton "התקן">
+<!ENTITY loading "מוריד...">
+<!ENTITY newscript.name "שם">
+<!ENTITY newscript.namespace "שם מרחב">
+<!ENTITY newscript.description "תיאור">
+<!ENTITY newscript.includes "כולל (אחד בכל שורה)">
+<!ENTITY newscript.excludes "לא כולל (אחד בכל שורה)">
+<!ENTITY newscript.fromClipboard "השתמש בקובץ Script מהלוח">
+<!ENTITY options.editor "עורך">
+<!ENTITY options.changeEditor "שינוי עורך">
+<!ENTITY options.globalExcludes "אי הכללה כללית">
+<!ENTITY Uninstall "הסר">
+<!ENTITY AnonymousStatistics "עיבוד נתונים ללא זיהוי המשתמש">
+<!ENTITY SubmitStats "אסיפה ומשלוח עיבוד נתונים ללא זיהוי המשתמש לצורך שיפור Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "הסר גם את המאייפנים המשוייכים לקובץ Script משתמש זה">
+<!ENTITY UpdateChecking "בדיקת עדכון">
+<!ENTITY RequireSecureUpdates "דורשת עדכונים מאובטחים">
+<!ENTITY greasemonkey.noscriptshere "לא מותקנים קבצי Script פעילים בדף זה.">
+<!ENTITY greasemonkey.youhavenoscripts "לא מותקנים אצלך קבצי Script של משתמש כלשהם">
+<!ENTITY greasemonkey.getuserscripts "השג קבצי Script של משתמש">
+<!ENTITY scriptprefs.title "מאפייני קבצי Script של Greasemonkey - !!">
+<!ENTITY scriptprefs.usersettings "הגדרות משתמש">
+<!ENTITY scriptprefs.scriptsettings "הגדרות קבצי Script">

@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Automatically check for updates">
-<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Bewerken">
 <!ENTITY Edit.accesskey "W">
 <!ENTITY Edit.tooltip "Dit gebruikersscript bewerken">
@@ -7,8 +5,8 @@
 <!ENTITY ExecuteLast "Als laatste uitvoeren">
 <!ENTITY ExecuteLater "Later uitvoeren">
 <!ENTITY ExecuteSooner "Eerder uitvoeren">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Update zoeken">
+<!ENTITY InstallUpdate "Update installeren">
 <!ENTITY MoveDown "Omlaag">
 <!ENTITY MoveDown.accesskey "L">
 <!ENTITY MoveToBottom "Onderaan plaatsen">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Naam">
 <!ENTITY Sort.ByExecution "Op uitvoervolgorde sorteren">
 <!ENTITY Sort.Execution "Uitvoervolgorde">
-<!ENTITY SortScripts "Scripts sorteren">
-<!ENTITY SortScripts.accesskey "S">
-<!ENTITY UninstallCancel "Deïnstallatie annuleren">
-<!ENTITY UninstallCancel.accesskey "D">
-<!ENTITY UninstallCancel.tooltip "Deïnstallatie van dit gebruikersscript annuleren">
-<!ENTITY UninstallCancelDescription "Dit gebruikersscript wordt gedeïnstalleerd na sluiten van het venster. (Of gebruik de rechter muisknop voor “Nu deïnstalleren”.)">
-<!ENTITY UninstallNow "Nu deïnstalleren">
-<!ENTITY UninstallNow.accesskey "N">

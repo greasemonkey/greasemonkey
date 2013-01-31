@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Descriere">
 <!ENTITY newscript.includes "Includeri (una pe linie)">
 <!ENTITY newscript.excludes "Excluderi (una pe linie)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Schimbă editor">
 <!ENTITY options.globalExcludes "Excluderi globale">
-<!ENTITY userscripts "Scripturi utilizator">
 <!ENTITY Uninstall "Dezinstalare">
+<!ENTITY AnonymousStatistics "Statistici anonime">
+<!ENTITY SubmitStats "Adună și trimite statistici anonime de utilizare pentru a îmbunătății Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Dezinstalează și preferințele asociate">
 <!ENTITY UpdateChecking "Verificare actualizări">
-<!ENTITY EnableUpdateChecking "Activează verificarea automată a actualizărilor pentru scripturi">
-<!ENTITY UpdateInterval "Număr minim de zile între verificările actualizărilor">
-<!ENTITY AutoInstallUpdates "Instalează automat actualizările când sunt găsite">
 <!ENTITY RequireSecureUpdates "Sunt necesare actualizări de securitate">
 <!ENTITY greasemonkey.noscriptshere "Nu sunt rulate pe această pagină scripturile instalate.">
 <!ENTITY greasemonkey.youhavenoscripts "Nu aveți scripturi utilizator instalate">

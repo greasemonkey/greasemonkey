@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Frissítések keresése automatikusan">
-<!ENTITY CheckUpdates.accesskey "F">
 <!ENTITY Edit "Szerkesztés">
 <!ENTITY Edit.accesskey "S">
 <!ENTITY Edit.tooltip "Parancsfájl szerkesztése">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Név">
 <!ENTITY Sort.ByExecution "Rendezés végrehajtási sorrend szerint">
 <!ENTITY Sort.Execution "Végrehajtási sorrend">
-<!ENTITY SortScripts "Parancsfájlok sorba rendezése">
-<!ENTITY SortScripts.accesskey "r">
-<!ENTITY UninstallCancel "Eltávolítás visszavonása">
-<!ENTITY UninstallCancel.accesskey "v">
-<!ENTITY UninstallCancel.tooltip "Parancsfájl eltávolításának visszavonása">
-<!ENTITY UninstallCancelDescription "A parancsfájl el lesz távolítva az ablak bezárása után. (vagy kattintson jobb gombbal majd az &quot;Eltávolítás most&quot;-ra)">
-<!ENTITY UninstallNow "Eltávolítás most">
-<!ENTITY UninstallNow.accesskey "t">

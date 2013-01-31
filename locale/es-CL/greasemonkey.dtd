@@ -21,25 +21,24 @@
 <!ENTITY install.showscriptsource "Fuente de script">
 <!ENTITY install.installbutton "Instalar">
 <!ENTITY loading "Descargando...">
-<!ENTITY newscript.name "Name">
-<!ENTITY newscript.namespace "Namespace">
-<!ENTITY newscript.description "Description">
-<!ENTITY newscript.includes "Includes (uno por l�nea)">
-<!ENTITY newscript.excludes "Excludes (uno por l�nea)">
+<!ENTITY newscript.name "Nombre">
+<!ENTITY newscript.namespace "Atributo">
+<!ENTITY newscript.description "Descripción">
+<!ENTITY newscript.includes "Includes (uno por línea)">
+<!ENTITY newscript.excludes "Excludes (uno por línea)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Elegir editor de scripts">
-<!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "Scripts">
+<!ENTITY options.globalExcludes "Exclusiones generales">
 <!ENTITY Uninstall "Eliminar">
+<!ENTITY AnonymousStatistics "Estadãsticas Anônimas">
+<!ENTITY SubmitStats "Recolectar y enviar estadãsticas anônimas de uso para mejorar Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Eliminar preferencias asociadas">
 <!ENTITY UpdateChecking "Verificar para actualizar">
-<!ENTITY EnableUpdateChecking "Habilitar auto-verificar para actualizar scripts">
-<!ENTITY UpdateInterval "Lapso menor de d�as entre verificaciones">
-<!ENTITY AutoInstallUpdates "Auto-actualizar de ser el caso">
 <!ENTITY RequireSecureUpdates "Requerir actualizaciones seguras">
 <!ENTITY greasemonkey.noscriptshere "No hay  scripts instalados para este sitio.">
 <!ENTITY greasemonkey.youhavenoscripts "No hay  scripts instalados">
 <!ENTITY greasemonkey.getuserscripts "Obtener scripts">
-<!ENTITY scriptprefs.title "Preferencias de scripts de Greasemonkey">
+<!ENTITY scriptprefs.title "Preferencias de scripts de Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "Opciones de usuario">
 <!ENTITY scriptprefs.scriptsettings "Opciones de script">

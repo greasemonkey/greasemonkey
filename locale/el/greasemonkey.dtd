@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Περιγραφή">
 <!ENTITY newscript.includes "Ενσωματώσεις (Μια ανά γραμμή)">
 <!ENTITY newscript.excludes "Εξαιρέσεις (Μια ανά γραμμή)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Επεξεργαστής κειμένου">
 <!ENTITY options.changeEditor "Επιλέξτε Επεξεργαστή Κώδικα">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
-<!ENTITY userscripts "Κώδικες Χρηστών">
 <!ENTITY Uninstall "Απεγκατάσταση">
+<!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">
+<!ENTITY SubmitStats "Συγκέντρωση και υποβολή στατιστικών ανώνυμης χρήσης για βελτίωση του Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Απεγκατάσταση και των σχετικών ρυθμίσεων">
 <!ENTITY UpdateChecking "Έλεγχος Ενημέρωσης">
-<!ENTITY EnableUpdateChecking "Ενεργοποιηση αυτύματου ελέγχου ενημερώσεων του κώδικα χρηστών">
-<!ENTITY UpdateInterval "Ελάχιστος αριθμός ημερών μεταξύ ελέγχων για ενημερώσεις">
-<!ENTITY AutoInstallUpdates "Αυτόματη εγκατάσταση ενημερώσεων όταν βρεθούν">
 <!ENTITY RequireSecureUpdates "Απαιτούνται ασφαλείς ενημερώσεις">
 <!ENTITY greasemonkey.noscriptshere "Κανένας εγκατεστημένος κώδικας δεν εκτελείτε σε αυτή τη σελίδα.">
 <!ENTITY greasemonkey.youhavenoscripts "Δεν έχετε κανένα εγκατεστημένο κώδικα χρήστη">

@@ -1,12 +1,17 @@
 const EXPORTED_SYMBOLS = ['GM_PrefManager', 'GM_prefRoot'];
 
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
 /**
  * Simple API on top of preferences for greasemonkey.
  * Construct an instance by passing the startPoint of a preferences subtree.
  * "greasemonkey." prefix is assumed.
  */
 function GM_PrefManager(startPoint) {
-  startPoint = "greasemonkey." + (startPoint || "");
+  startPoint = "extensions.greasemonkey." + (startPoint || "");
 
   this.pref = Components.classes["@mozilla.org/preferences-service;1"]
      .getService(Components.interfaces.nsIPrefService)
@@ -83,8 +88,8 @@ GM_PrefManager.prototype.setValue = function(prefName, value) {
   }
 
   if (!goodType) {
-    throw new Error("Unsupported type for GM_setValue. Supported types " +
-                    "are: string, bool, and 32 bit integers.");
+    throw new Error(
+        gStringBundle.GetStringFromName('error.args.getValue'));
   }
 
   // underlying preferences object throws an exception if new pref has a

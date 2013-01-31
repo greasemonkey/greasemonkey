@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Descrizione">
 <!ENTITY newscript.includes "Pagine incluse (una per riga)">
 <!ENTITY newscript.excludes "Pagine escluse (una per riga)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Change Editor">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY userscripts "User Scripts">
 <!ENTITY Uninstall "Disinstalla">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Disinstalla anche le preferenze associate">
 <!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don\'t have any user scripts installed">

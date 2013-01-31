@@ -26,20 +26,19 @@
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Edytor">
 <!ENTITY options.changeEditor "Zmień edytor">
 <!ENTITY options.globalExcludes "Wykluczenia globalne">
-<!ENTITY userscripts "Skrypty">
 <!ENTITY Uninstall "Odinstaluj">
+<!ENTITY AnonymousStatistics "Anonimowe statystyki">
+<!ENTITY SubmitStats "Zbieraj i przekazuj anonimowo statystyki używania Greasemonkey, by pomóc w udoskonaleniu aplikacji.">
 <!ENTITY AlsoUninstallPrefs "Odinstaluj również skojarzone ustawienia">
 <!ENTITY UpdateChecking "Sprawdzaj dostępność aktualizacji">
-<!ENTITY EnableUpdateChecking "Włącza automatyczne sprawdzanie dostępności aktualizacji skryptów">
-<!ENTITY UpdateInterval "Minimalna liczba dni pomiędzy kolejnymi sprawdzeniami">
-<!ENTITY AutoInstallUpdates "Automatycznie instaluj znalezione aktualizacje">
 <!ENTITY RequireSecureUpdates "Wymaga bezpiecznych aktualizacji">
 <!ENTITY greasemonkey.noscriptshere "Na tej stronie nie ma zainstalowanych skryptów do uruchomienia.">
 <!ENTITY greasemonkey.youhavenoscripts "Nie masz zainstalowanych żadnych skryptów użytkownika">
 <!ENTITY greasemonkey.getuserscripts "Pobierz skrypty">
-<!ENTITY scriptprefs.title "Ustawienia skryptów">
+<!ENTITY scriptprefs.title "Ustawienia skryptów - !!">
 <!ENTITY scriptprefs.usersettings "Ustawienia użytkownika">
 <!ENTITY scriptprefs.scriptsettings "Ustawienia skryptu">

@@ -28,7 +28,10 @@
 <vbox>
   <groupbox>
     <caption label="&options.editor;" />
-    <button oncommand="GM_util.getEditor(true)" label="&options.changeEditor;" />
+    <hbox>
+      <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" flex="1"/>
+      <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" flex="1"/>
+    </hbox>
   </groupbox>
 
   <groupbox>
@@ -37,24 +40,18 @@
   </groupbox>
 
   <groupbox>
-    <caption label="&options.globalExcludes;" />
-    <cludes id="globalExcludes" />
+    <caption label="&UpdateChecking;" />
+    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
   </groupbox>
 
   <groupbox>
-    <caption label="&UpdateChecking;" />
-    <checkbox id="check-update" label="&EnableUpdateChecking;"
-        oncommand="GM_onChangeUpdateChecking()" />
-    <checkbox id="auto-install-updates" label="&AutoInstallUpdates;" />
-    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
-    <label value="&UpdateInterval;" control="slide-updateInterval"
-        id="label-slide-updateInterval" />
-    <hbox>
-      <scale id="slide-updateInterval" flex="1"
-        orient="horizontal" min="1" max="30"
-        onchange="GM_setMinUpdateIntervalLabel()"/>
-      <label id="txt-updateInterval" />
-    </hbox>
+    <caption label="&AnonymousStatistics;" />
+    <checkbox id="submit-stats" label="&SubmitStats;" />
+  </groupbox>
+
+  <groupbox>
+    <caption label="&options.globalExcludes;" />
+    <cludes id="globalExcludes" />
   </groupbox>
 </vbox>
 

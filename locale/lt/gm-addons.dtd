@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Automatiškai ieškoti atnaujinimo">
-<!ENTITY CheckUpdates.accesskey "A">
 <!ENTITY Edit "Keisti">
 <!ENTITY Edit.accesskey "K">
 <!ENTITY Edit.tooltip "Keisti šį naudotojo scenarijų">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Pavadinimas">
 <!ENTITY Sort.ByExecution "Rikiuoti pagal vykdymo eilę">
 <!ENTITY Sort.Execution "Vykdymo eilė">
-<!ENTITY SortScripts "Rikiuoti scenarijus">
-<!ENTITY SortScripts.accesskey "R">
-<!ENTITY UninstallCancel "Atšaukti šalinimą">
-<!ENTITY UninstallCancel.accesskey "t">
-<!ENTITY UninstallCancel.tooltip "Atšaukti šio naudotojo scenarijaus šalinimą">
-<!ENTITY UninstallCancelDescription "Kai užsidarys dialogas šis naudotojo scenarijus bus pašalintas. (Norėdami pašalinti dabar paspauskite „Šalinti dabar“.)">
-<!ENTITY UninstallNow "Šalinti dabar">
-<!ENTITY UninstallNow.accesskey "l">

@@ -12,7 +12,7 @@ addons.GM_addonsStartup();
 
 // Open the scripts manager in Firefox >= 4.0
 function GM_OpenScriptsMgr() {
-  BrowserOpenAddonsMgr('addons://list/user-script');
+  BrowserOpenAddonsMgr('addons://list/greasemonkey-user-script');
 }
 
 // Open the updates manager in Firefox >= 4.0

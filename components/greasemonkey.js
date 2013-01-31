@@ -62,7 +62,7 @@ var gStringBundle = Components
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
-    .get("TmpD", Components.interfaces.nsILocalFile);
+    .get("TmpD", Components.interfaces.nsIFile);
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -91,8 +91,10 @@ function GM_apiLeakCheck(apiName) {
         && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
         && stack.filename.substr(0, 9) !== 'chrome://'
         ) {
-      GM_util.logError(new Error("Greasemonkey access violation: " +
-          "unsafeWindow cannot call " + apiName + "."));
+      GM_util.logError(new Error(
+          gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
+              .replace('%1', apiName)
+          ));
       return false;
     }
 
@@ -121,6 +123,12 @@ function createSandbox(
     // Alias unsafeWindow for compatibility.
     Components.utils.evalInSandbox(
         'const unsafeWindow = window;', contentSandbox);
+
+    if (GM_util.compareFirefoxVersion("16.0") < 0) {
+      // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
+      // only in older versions.
+      contentSandbox.alert = alert;
+    }
 
     return contentSandbox;
   }
@@ -261,8 +269,10 @@ function registerMenuCommand(
   if (accessKey
       && (("string" != typeof accessKey) || (accessKey.length != 1))
   ) {
-    throw new Error('Error with menu command "'
-        + commandName + '": accessKey must be a single character');
+    throw new Error(
+        gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
+            .replace('%1', commandName)
+        );
   }
 
   var command = {
@@ -286,7 +296,9 @@ function runScriptInSandbox(script, sandbox) {
         // not in a function.
         GM_util.logError(
             gStringBundle.GetStringFromName('return-not-in-func-deprecated'),
-            true // is a warning
+            true, // is a warning
+            fileName,
+            e.lineNumber
             );
         Components.utils.evalInSandbox(
             GM_util.anonWrap(code), sandbox, gMaxJSVersion, fileName, 1);
@@ -415,6 +427,10 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
       if (!GM_util.isGreasemonkeyable(doc.location.href)) break;
       var win = doc.defaultView;
       this.runScripts('document-start', win);
+      win.addEventListener(
+          'DOMContentLoaded', GM_util.hitch(this, this.contentLoad), true);
+      win.addEventListener(
+          'load', GM_util.hitch(this, this.contentLoad), true);
       break;
   }
 };
@@ -436,38 +452,11 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.contentDestroyed = function(aContentWindowId) {
   this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    var closed = false;
-
-    try {
-      // If this content destroyed message matches the command's window id.
-      if (aContentWindowId && (command.contentWindowId == aContentWindowId)) {
-        closed = true;
-      }
-
-      // If isDeadWrapper (Firefox 15+ only) tells us the window is dead.
-      if (!closed &&
-          Cu.isDeadWrapper && Cu.isDeadWrapper(command.contentWindow)) {
-        closed = true;
-      }
-
-      // If we can access the .closed property and it is true, or there is any
-      // problem accessing that property.
-      try {
-        if (!closed && command.contentWindow.closed) {
-          closed = true;
-        }
-      } catch (e) {
-        closed = true;
-      }
-    } catch (e) {
-      Cu.reportError(e);
-      // Failsafe.  In case of any failure, destroy the command to avoid leaks.
-      closed = true;
-    }
-
-    if (closed) {
-      // If anything above decided the window is closed, remove the command
-      // that holds a reference to it.
+    if (GM_util.windowIsClosed(command.contentWindow)
+        // This content destroyed message matches the command's window id.
+        || (aContentWindowId && (command.contentWindowId == aContentWindowId))
+    ) {
+      // If the window is closed, remove the reference to it.
       gMenuCommands.splice(index, 1);
     }
   }, true);  // Don't forget the aForced=true passed here!
@@ -477,6 +466,31 @@ service.prototype.contentFrozen = function(contentWindowId) {
   if (!contentWindowId) return;
   this.withAllMenuCommandsForWindowId(contentWindowId,
       function(index, command) { command.frozen = true; });
+};
+
+service.prototype.contentLoad = function(event) {
+  if (!GM_util.getEnabled()) return;
+
+  var safeWin = event.target.defaultView;
+  var href = safeWin.location.href;
+
+  // Make sure we are still on the page that fired this event, see issue #1083.
+  // But ignore differences in formats; see issue #1445 and #1631.
+  var comparisonHref = href.replace(/#.*/, '');
+  var comparsionUri = event.target.documentURI
+      .replace(/#.*/, '')
+      .replace(/\/\/[^\/:]+(:[^\/@]+)?@/, '//');
+  if (comparisonHref == comparsionUri) {
+    // Via an expando property on the *safe* window object (our wrapper of the
+    // real window, not the wrapper that content sees), record a property to
+    // note we've done injection into this window.  If we get a "load" after
+    // "DOMContentLoaded" then we won't run twice.  But if we never get
+    // "DOMContentLoaded" (i.e. for images) then we run at "load" time.
+    if (safeWin._greasemonkey_has_run_document_end) return;
+
+    safeWin._greasemonkey_has_run_document_end = true;
+    this.runScripts('document-end', safeWin);
+  }
 };
 
 service.prototype.contentThawed = function(contentWindowId) {
@@ -494,11 +508,16 @@ service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
-    return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+    try {
+      return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+    } catch (e) {
+      GM_util.logError(e, false, e.fileName, e.lineNumber);
+      // See #1692; Prevent failures like that from being so severe.
+      return false;
+    }
   });
   if (scripts.length > 0) {
     this.injectScripts(scripts, url, aWrappedContentWin);
-    this._config.checkScriptsForRemoteUpdates(scripts);
   }
 };
 

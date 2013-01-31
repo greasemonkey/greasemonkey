@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Автоматично перевіряти оновлення">
-<!ENTITY CheckUpdates.accesskey "о">
 <!ENTITY Edit "Редагувати">
 <!ENTITY Edit.accesskey "Р">
 <!ENTITY Edit.tooltip "Редагувати цей скрипт">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Назва">
 <!ENTITY Sort.ByExecution "Сортувати за порядком виконання">
 <!ENTITY Sort.Execution "Порядок виконання">
-<!ENTITY SortScripts "Сортувати скрипти">
-<!ENTITY SortScripts.accesskey "у">
-<!ENTITY UninstallCancel "Скасувати вилучення">
-<!ENTITY UninstallCancel.accesskey "л">
-<!ENTITY UninstallCancel.tooltip "Скасувати вилучення цього скрипту">
-<!ENTITY UninstallCancelDescription "Цей скрипт буде вилучено після закриття цього повідомлення (клацання правою кнопкою миші, щоб &quot;вилучити негайно&quot;).">
-<!ENTITY UninstallNow "Вилучити негайно">
-<!ENTITY UninstallNow.accesskey "ч">

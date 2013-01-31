@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Аутоматски провери да ли постоје исправке">
-<!ENTITY CheckUpdates.accesskey "И">
 <!ENTITY Edit "Уреди">
 <!ENTITY Edit.accesskey "У">
 <!ENTITY Edit.tooltip "Уреди ову корисничку скрипту">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Назив">
 <!ENTITY Sort.ByExecution "Поређај по редоследу извршавања">
 <!ENTITY Sort.Execution "Ред. извршавања">
-<!ENTITY SortScripts "Поређај скрипте">
-<!ENTITY SortScripts.accesskey "П">
-<!ENTITY UninstallCancel "Откажи уклањање">
-<!ENTITY UninstallCancel.accesskey "О">
-<!ENTITY UninstallCancel.tooltip "Откажи уклањање ове корисничке скрипте">
-<!ENTITY UninstallCancelDescription "Ова корисничка скрипта ће бити уклоњена након затварања прозора. Можете и да притиснете десни клик &gt; Уклони">
-<!ENTITY UninstallNow "Уклони">
-<!ENTITY UninstallNow.accesskey "У">

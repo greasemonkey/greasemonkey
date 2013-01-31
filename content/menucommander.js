@@ -16,14 +16,17 @@ GM_MenuCommander.createMenuItem = function(command) {
   return menuItem;
 };
 
-GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
-  GM_util.emptyEl(aMenuPopup);
+GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
+  // Asynchronously.  See #1632.
+  GM_util.timeout(function() { GM_util.emptyEl(aMenuPopup); }, 0);
+}
 
+GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   // Add menu items for commands for the active window.
   var haveCommands = false;
   var windowId = GM_util.windowId(gBrowser.contentWindow);
 
-  if(windowId) {
+  if (windowId) {
     GM_BrowserUI.gmSvc.withAllMenuCommandsForWindowId(
         windowId,
         function(index, command) {
@@ -34,5 +37,6 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
           haveCommands = true;
         });
   }
+
   aMenuPopup.parentNode.disabled = !haveCommands;
 };

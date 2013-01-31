@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Kuvaus">
 <!ENTITY newscript.includes "Ajetaan sivuilla (yksi per rivi)">
 <!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Tekstieditori">
 <!ENTITY options.changeEditor "Vaihda tekstieditoria">
 <!ENTITY options.globalExcludes "Yleisesti poisluettavat">
-<!ENTITY userscripts "Skriptit">
 <!ENTITY Uninstall "Poisto">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Poista myös skriptin asetukset">
 <!ENTITY UpdateChecking "Update Checking">
-<!ENTITY EnableUpdateChecking "Enable automatic update checking of scripts">
-<!ENTITY UpdateInterval "Minimum number of days between update checks">
-<!ENTITY AutoInstallUpdates "Asenna päivitykset automaattisesti">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "Mitään skripteistä ei ajeta tällä sivulla.">
 <!ENTITY greasemonkey.youhavenoscripts "Sinulla ei ole yhtään skriptiä asennettuna">

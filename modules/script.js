@@ -1,6 +1,7 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
+Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
@@ -39,7 +40,6 @@ function Script(configNode) {
   this._id = null;
   this._installTime = null;
   this._includes = [];
-  this._lastUpdateCheck = null;
   this._matches = [];
   this._modifiedTime = null;
   this._name = 'user-script';
@@ -51,22 +51,23 @@ function Script(configNode) {
   this._runAt = null;
   this._tempFile = null;
   this._updateURL = null;
-  this._updateVersion = null;
   this._userExcludes = [];
   this._userIncludes = [];
   this._uuid = [];
   this._version = null;
 
-  this.checkRemoteUpdates = true;
+  this.checkRemoteUpdates = AddonManager.AUTOUPDATE_DEFAULT;
   this.needsUninstall = false;
   this.parseErrors = [];
   this.pendingExec = [];
-  this.updateAvailable = null;
+  this.availableUpdate = null;
 
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
 Script.prototype.matchesURL = function(url) {
+  var uri = GM_util.uriFromUrl(url);
+
   function testClude(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
     if (-1 !== url.indexOf('about:blank')
@@ -75,7 +76,7 @@ Script.prototype.matchesURL = function(url) {
       return false;
     }
 
-    return GM_convert2RegExp(glob).test(url);
+    return GM_convert2RegExp(glob, uri).test(url);
   }
   function testMatch(matchPattern) {
     return matchPattern.doMatch(url);
@@ -90,7 +91,7 @@ Script.prototype.matchesURL = function(url) {
   if (this._userIncludes.some(testClude)) return true;
 
   // Finally allow based on script cludes and matches.
-  if (this.excludes.some(testClude)) return false;
+  if (this._excludes.some(testClude)) return false;
   return (this._includes.some(testClude) || this._matches.some(testMatch));
 };
 
@@ -131,6 +132,9 @@ function Script_getDependencies() {
 
 Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
+
+Script.prototype.__defineGetter__('downloadURL',
+    function Script_getDescription() { return '' + this._downloadURL; });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -288,21 +292,16 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._version = node.getAttribute("version");
   }
 
-  if (!node.getAttribute("updateAvailable")
-      || !node.getAttribute("lastUpdateCheck")
-  ) {
-    this.updateAvailable = false;
-    this._lastUpdateCheck = this._modifiedTime;
-
-    this._changed('modified', null);
-  } else {
-    this.updateAvailable = node.getAttribute("updateAvailable") == 'true';
-    this._updateVersion = node.getAttribute("updateVersion") || null;
-    this._lastUpdateCheck = parseInt(node.getAttribute("lastUpdateCheck"), 10);
+  // Note that "checkRemoteUpdates" used to be a boolean.  As of #1647, it now
+  // holds one of the AddonManager.AUTOUPDATE_* values; so it's name is
+  // suboptimal.
+  if (node.getAttribute('checkRemoteUpdates') === 'true') {
+    // Legacy support, cast "true" to default.
+    this.checkRemoteUpdates = AddonManager.AUTOUPDATE_DEFAULT;
+  } else if (node.hasAttribute('checkRemoteUpdates')) {
+    this.checkRemoteUpdates = parseInt(
+        node.getAttribute('checkRemoteUpdates'), 10);
   }
-
-  this.checkRemoteUpdates = node.hasAttribute('checkRemoteUpdates')
-      ? node.getAttribute('checkRemoteUpdates') == 'true' : true;
 
   if (!node.hasAttribute("installTime")) {
     this._installTime = new Date().getTime();
@@ -418,12 +417,10 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("enabled", this._enabled);
   scriptNode.setAttribute("filename", this._filename);
   scriptNode.setAttribute("installTime", this._installTime);
-  scriptNode.setAttribute("lastUpdateCheck", this._lastUpdateCheck);
   scriptNode.setAttribute("modified", this._modifiedTime);
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
-  scriptNode.setAttribute("updateAvailable", this.updateAvailable);
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
@@ -433,9 +430,6 @@ Script.prototype.toConfigNode = function(doc) {
   if (this.updateURL) {
     scriptNode.setAttribute("updateurl", this.updateURL);
   }
-  if (this._updateVersion) {
-    scriptNode.setAttribute("updateVersion", this._updateVersion);
-  }
   if (this.icon.filename) {
     scriptNode.setAttribute("icon", this.icon.filename);
   }
@@ -444,7 +438,7 @@ Script.prototype.toConfigNode = function(doc) {
 };
 
 Script.prototype.toString = function() {
-  return '[Greasemonkey Script ' + this.id + ']';
+  return '[Greasemonkey Script ' + this.id + '; ' + this.version + ']';
 };
 
 Script.prototype.setDownloadedFile = function(file) { this._tempFile = file; };
@@ -461,6 +455,13 @@ Script.prototype.info = function() {
   for (var i = 0, m = null; m = this.matches[i]; i++) {
     matches[matches.length] = m.pattern;
   }
+  var resources = {};
+  for (var i = 0, r = null; r = this.resources[i]; i++) {
+    resources[r.name] = {
+        'name': r.name,
+        'mimetype': r.mimetype,
+        };
+  }
   return {
     'uuid': this.uuid,
     'version': gGreasemonkeyVersion,
@@ -474,7 +475,7 @@ Script.prototype.info = function() {
       'name': this.name,
       'namespace': this.namespace,
       // 'requires': ???,
-      // 'resources': ???,
+      'resources': resources,
       'run-at': this.runAt,
       'version': this.version,
     },
@@ -491,9 +492,8 @@ Script.prototype.isModified = function() {
   return false;
 };
 
-Script.prototype.isRemoteUpdateAllowed = function(aForced) {
-  if (!this.checkRemoteUpdates && !aForced) return false;
-  if (!this.enabled && !aForced) return false;
+Script.prototype.isRemoteUpdateAllowed = function() {
+  if (!this.enabled) return false;
   if (!this.updateURL) return false;
   if (this._modifiedTime > this._installTime) return false;
 
@@ -548,11 +548,12 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       this._name = newScript._name;
       this._namespace = newScript._namespace;
     } else {
-      // TODO: Unlocalized string.
       // Notify the user of the conflict
-      GM_util.alert('Error: Another script with @name: "' + newScript._name +
-            '" and @namespace: "' + newScript._namespace +
-            '" is already installed.\nThese values must be unique.');
+      GM_util.alert(
+          stringBundle.GetStringFromName('script.duplicate-installed')
+              .replace('%1', newScript._name)
+              .replace('%2', newScript._namespace)
+          );
       return;
     }
   }
@@ -574,38 +575,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
 
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
-    // Get rid of old dependencies' files.
-    for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
-      try {
-        if (dep.file.equals(this._basedirFile)) {
-          // Bugs like an empty file name can cause "dep.file" to point to
-          // the containing directory.  Don't remove that!
-          // TODO: Localize this string.
-          GM_util.logError('Warning!!! Refusing to delete script directory.');
-        } else {
-          dep.file.remove(true);
-        }
-      } catch (e) {
-        // Probably a locked file.  Ignore, warn.
-        // TODO: Localize this string.
-        GM_util.logError('Warning, could not delete for update:\n' + dep);
-      }
-    }
-
-    // Import dependencies from new script.
-    this._dependhash = dependhash;
-    this._icon = newScript._icon;
-    this._requires = newScript._requires;
-    this._resources = newScript._resources;
-    // And fix those dependencies to still reference this script.
-    this._icon._script = this;
-    for (var i = 0, require = null; require = this._requires[i]; i++) {
-      require._script = this;
-    }
-    for (var i = 0, resource = null; resource = this._resources[i]; i++) {
-      resource._script = this;
-    }
-
     // Store window references for late injection.
     if ('document-start' == this._runAt) {
       GM_util.logError(
@@ -620,8 +589,51 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
     var scope = {};
     Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
     var rs = new scope.RemoteScript(this._downloadURL);
-    rs.setScript(this);
+    newScript._basedir = this._basedir;
+    rs.setScript(newScript);
     rs.download(GM_util.hitch(this, function(aSuccess) {
+      if (!aSuccess) {
+        GM_notification(
+            'Could not update modified script\'s dependencies: '
+            + rs.errorMessage,
+        'dependency-update-failed');
+        return;
+      }
+
+      // Get rid of old dependencies' files.
+      for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
+        try {
+          if (dep.file.equals(this._basedirFile)) {
+            // Bugs like an empty file name can cause "dep.file" to point to
+            // the containing directory.  Don't remove that!
+            GM_util.logError(
+                stringBundle.GetStringFromName('script.no-delete-directory'));
+          } else {
+            dep.file.remove(true);
+          }
+        } catch (e) {
+          // Probably a locked file.  Ignore, warn.
+            GM_util.logError(
+                stringBundle.GetStringFromName('delete-failed')
+                    .replace('%1', dep)
+                );
+        }
+      }
+
+      // Import dependencies from new script.
+      this._dependhash = dependhash;
+      this._icon = newScript._icon;
+      this._requires = newScript._requires;
+      this._resources = newScript._resources;
+      // And fix those dependencies to still reference this script.
+      this._icon._script = this;
+      for (var i = 0, require = null; require = this._requires[i]; i++) {
+        require._script = this;
+      }
+      for (var i = 0, resource = null; resource = this._resources[i]; i++) {
+        resource._script = this;
+      }
+
       // Install the downloaded files.
       rs.install(this, true);
 
@@ -699,34 +711,14 @@ Script.prototype.checkConfig = function() {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(aForced, aCallback) {
-  var callback = aCallback || GM_util.hitch(this, this.handleRemoteUpdate);
-  if (this.updateAvailable) return callback(true);
-
-  if (!this.isRemoteUpdateAllowed(aForced)) return callback(false);
-
-  var currentTime = new Date().getTime();
-
-  if (!aForced) {
-    if (!GM_prefRoot.getValue("enableUpdateChecking")) return callback(false);
-
-    var minIntervalDays = GM_prefRoot.getValue("minDaysBetweenUpdateChecks");
-    if (isNaN(minIntervalDays) || minIntervalDays < 1) minIntervalDays = 1;
-    var minIntervalMs = 86400000 * minIntervalDays;
-    var nextUpdateTime = this._lastUpdateCheck + minIntervalMs;
-    if (currentTime <= nextUpdateTime) return callback(false);
-  }
-
-  var lastCheck = this._lastUpdateCheck;
-  this._lastUpdateCheck = currentTime;
+Script.prototype.checkForRemoteUpdate = function(aCallback) {
+  if (this.availableUpdate) return aCallback(true);
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.open("GET", this.updateURL, true);
-  req.onload = GM_util.hitch(
-      this, "checkRemoteVersion", req, callback);
-  req.onerror = GM_util.hitch(
-      this, "checkRemoteVersionErr", lastCheck, callback);
+  req.onload = GM_util.hitch(this, "checkRemoteVersion", req, aCallback);
+  req.onerror = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
@@ -747,55 +739,9 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
     return aCallback(false);
   }
 
-  this.updateAvailable = true;
-  this._updateVersion = remoteVersion;
-  GM_util.getService().config._save();
+  this.availableUpdate = newScript;
+  this._changed('modified', null);
   aCallback(true);
-};
-
-Script.prototype.checkRemoteVersionErr = function(lastCheck, aCallback) {
-  // Set the time back.
-  this._lastUpdateCheck = lastCheck;
-  GM_util.getService().config._save();
-  aCallback(false);
-};
-
-Script.prototype.handleRemoteUpdate = function(aAvailable, aListener) {
-  var addons4 = {};
-  Components.utils.import('resource://greasemonkey/addons4.js', addons4);
-  var addon = addons4.ScriptAddonFactoryByScript(this);
-  var scriptInstall = addons4.ScriptInstallFactoryByAddon(addon);
-  if (aListener) {
-    // When in the add-ons manager, listeners are passed around to keep
-    // the UI up to date.
-    if (aAvailable) {
-      AddonManagerPrivate.callAddonListeners("onNewInstall", scriptInstall);
-      aListener.onUpdateAvailable(addon, scriptInstall);
-    } else {
-      aListener.onNoUpdateAvailable(addon);
-    }
-  } else {
-    // Otherwise, just install.
-    if (aAvailable) scriptInstall.install();
-  }
-}
-
-Script.prototype.installUpdate = function(aProgressCallback) {
-  aProgressCallback = aProgressCallback || function() {};
-  var oldScriptId = new String(this.id);
-  var scope = {};
-  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
-  var rs = new scope.RemoteScript(this._downloadURL);
-  rs.messageName = 'script.updated';
-  rs.onProgress(aProgressCallback);
-  rs.download(GM_util.hitch(this, function(aSuccess, aType) {
-    if (aSuccess && 'dependencies' == aType) {
-      rs.install(this);
-      aProgressCallback(rs, 'progress', 1);
-      rs.script._changed('modified', oldScriptId);
-    }
-  }));
-  return rs;
 };
 
 Script.prototype.allFiles = function() {

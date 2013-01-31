@@ -26,20 +26,19 @@
 <!ENTITY newscript.description "Опис">
 <!ENTITY newscript.includes "Обухвата (једно по линији)">
 <!ENTITY newscript.excludes "Изузима (једно по линији)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Уређивач">
 <!ENTITY options.changeEditor "Промени уређивач">
 <!ENTITY options.globalExcludes "Општа изузимања">
-<!ENTITY userscripts "Корисничке скрипте">
 <!ENTITY Uninstall "Уклони">
+<!ENTITY AnonymousStatistics "Анонимна статистика">
+<!ENTITY SubmitStats "Прикупљај и шаљи анонимну статистику о коришћењу ради побољшања додатка Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
 <!ENTITY UpdateChecking "Проверавање ажурирања">
-<!ENTITY EnableUpdateChecking "Омогући аутоматско ажурирање скрипти">
-<!ENTITY UpdateInterval "Најмањи број дана који прође између две провере ажурирања">
-<!ENTITY AutoInstallUpdates "Аутоматски инсталирај исправке када постану доступне.">
 <!ENTITY RequireSecureUpdates "Тражи безбедносна ажурирања">
 <!ENTITY greasemonkey.noscriptshere "Ниједна скрипта се не покреће на овој станици">
 <!ENTITY greasemonkey.youhavenoscripts "Није инсталирана ни једна корисничка скрипта">
 <!ENTITY greasemonkey.getuserscripts "Набави корисничке скрипте">
-<!ENTITY scriptprefs.title "Подешавања корисничких скрипти за Greasemonkey">
+<!ENTITY scriptprefs.title "Подешавања корисничких скрипти за Greasemonkey - !!">
 <!ENTITY scriptprefs.usersettings "Корисничка подешавања">
 <!ENTITY scriptprefs.scriptsettings "Подешавања скрипте">

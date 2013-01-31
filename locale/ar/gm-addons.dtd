@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "التحقق من وجود تحديثات تلقائيا">
-<!ENTITY CheckUpdates.accesskey "ت">
 <!ENTITY Edit "تحرير">
 <!ENTITY Edit.accesskey "ت">
 <!ENTITY Edit.tooltip "تحرير هذا السكربت">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "الأسم">
 <!ENTITY Sort.ByExecution "فرز حسب التنفيذ">
 <!ENTITY Sort.Execution "فرز التنفيذ">
-<!ENTITY SortScripts "فرز السكربتات">
-<!ENTITY SortScripts.accesskey "س">
-<!ENTITY UninstallCancel "إلغاء الحذف">
-<!ENTITY UninstallCancel.accesskey "ح">
-<!ENTITY UninstallCancel.tooltip "إلغاء حذف هذا السكربت">
-<!ENTITY UninstallCancelDescription "سيتم حذف هذا السكربت عند إغلاق النافذة.  (أو أضغط الزر الأيمن لـ  \&quot;إلغاء الحذف\&quot;.)">
-<!ENTITY UninstallNow "حذف الأن">
-<!ENTITY UninstallNow.accesskey "ح">

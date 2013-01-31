@@ -2,11 +2,15 @@ Components.utils.import('resource://greasemonkey/prefmanager.js');
 
 function GM_ScriptStorage(script) {
   this.prefMan = new GM_PrefManager(script.prefroot);
+  this.stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
 GM_ScriptStorage.prototype.setValue = function(name, val) {
   if (2 !== arguments.length) {
-    throw new Error("Second argument not specified: Value");
+    throw new Error(this.stringBundle.GetStringFromName('error.args.setValue'));
   }
 
   if (!GM_apiLeakCheck("GM_setValue")) {
@@ -37,7 +41,10 @@ GM_ScriptStorage.prototype.listValues = function() {
     return undefined;
   }
 
-  return this.prefMan.listValues();
+  // See #1637.
+  var vals = Array.prototype.slice.call(this.prefMan.listValues());
+  vals.__exposedProps__ = {'length': 'r'};
+  return vals;
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -70,7 +77,10 @@ GM_Resources.prototype._getDep = function(name) {
     }
   }
 
-  throw new Error("No resource with name: " + name); // NOTE: Non localised string
+  throw new Error(
+      this.stringBundle.GetStringFromName('error.missingResource')
+          .replace('%1', name)
+      );
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //

@@ -14,11 +14,6 @@ ScriptResource.prototype.__defineGetter__('dataContent',
 function ScriptResource_getDataContent() {
   var binaryContents = GM_util.getBinaryContents(this.file);
 
-  var mimetype = this._mimetype;
-  if (this._charset && this._charset.length > 0) {
-    mimetype += ';charset=' + this._charset;
-  }
-
-  return 'data:' + mimetype
+  return 'data:' + this.mimetype
       + ';base64,' + encodeURIComponent(btoa(binaryContents));
 });

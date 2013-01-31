@@ -1,0 +1,44 @@
+<!ENTITY menu.install "පරිශීලක ස්ක්‍රිප්ට්යක් ස්ථාපනය කරන්න">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "පරිශීලක ස්ක්‍රිප්ට්ය සදහා මූලය බලන්න">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "පරිශීලක ස්ක්‍රිප්ට් නියෝග...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "නව පරිශීලක ස්ක්‍රිප්ටයක්">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "පරිශීලක ස්ක්‍රිප්ට් කලමනාකරනය කරන්න">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Greasemonkey Options...">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY statusbar.enabled "ක්‍රියාත්මකයි">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Greasemonkey ස්ථාපනය">
+<!ENTITY install.runson "ක්‍රියාත්මක වනුයේ">
+<!ENTITY install.matches "matches:">
+<!ENTITY install.butnoton "ක්‍රියාත්මක නොවනුයේ">
+<!ENTITY install.warning1 "අවදානම් සහගත ස්ක්‍රිප්ට් මගින් ඔබගේ පෞද්ගලිකත්වයට හානි විය හැකි අතර ඔබේ අනුදැනුමෙන් තොරව ඔබ වෙනුවට ක්‍රියා කල හැක.">
+<!ENTITY install.warning2 "ඔබට මූලය (Source) විශ්වාසනම් පමනක් ස්ක්‍රිප්ට්ය ස්ථාපනය කරන්න.">
+<!ENTITY install.showscriptsource "ස්ක්‍රිප්ටයෙහි මූලය පෙන්වන්න">
+<!ENTITY install.installbutton "ස්ථාපනය">
+<!ENTITY loading "Downloading ...">
+<!ENTITY newscript.name "නම">
+<!ENTITY newscript.namespace "නාමාවකාශය">
+<!ENTITY newscript.description "විස්තරය">
+<!ENTITY newscript.includes "ඇතුලත් වෙබ් අඩවි (එක් පේලියකට එකකි)">
+<!ENTITY newscript.excludes "ඇතුලත් නොවූ වෙබ් අඩවි(එක පේලියකට එකකි)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY options.editor "සංස්කාරකය">
+<!ENTITY options.changeEditor "සංස්කාරකය වෙනස් කරන්න">
+<!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY Uninstall "ඉවත් කරන්න">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AlsoUninstallPrefs "එසේම ආශ්‍රිත අභිමතද ඉවත් කරන්න">
+<!ENTITY UpdateChecking "Update Checking">
+<!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
+<!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
+<!ENTITY greasemonkey.getuserscripts "Get user scripts">
+<!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
+<!ENTITY scriptprefs.usersettings "User Settings">
+<!ENTITY scriptprefs.scriptsettings "Script Settings">

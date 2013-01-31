@@ -25,7 +25,10 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     var url = uri.spec;
   } catch (e) {
     // A malformed URL won't be parsed properly.
-    throw new Error("Invalid URL: " + details.url);
+    throw new Error(
+        this.stringBundle.GetStringFromName('error.invalidUrl')
+            .replace('%1', name)
+        );
   }
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
@@ -38,10 +41,23 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
-      throw new Error("Disallowed scheme in URL: " + details.url);
+      throw new Error(
+          this.stringBundle.GetStringFromName('error.disallowedScheme')
+              .replace('%1', details.url)
+          );
   }
 
-  var rv = { abort: function () { return req.abort(); } };
+  var rv = {
+    __exposedProps__: {
+        finalUrl: "r",
+        readyState: "r",
+        responseHeaders: "r",
+        responseText: "r",
+        status: "r",
+        statusText: "r"
+        },
+    abort: function () { return req.abort(); }
+  };
   if (!!details.synchronous) {
     rv.finalUrl = req.finalUrl;
     rv.readyState = req.readyState;
@@ -137,6 +153,17 @@ function(wrappedContentWin, req, event, details) {
 
   req.addEventListener(event, function(evt) {
     var responseState = {
+      __exposedProps__: {
+          finalUrl: "r",
+          lengthComputable: "r",
+          loaded: "r",
+          readyState: "r",
+          responseHeaders: "r",
+          responseText: "r",
+          status: "r",
+          statusText: "r",
+          total: "r",
+          },
       // Can't support responseXML because security won't
       // let the browser call properties on it.
       responseText: req.responseText,
@@ -162,6 +189,10 @@ function(wrappedContentWin, req, event, details) {
         responseState.statusText = req.statusText;
         responseState.finalUrl = req.channel.URI.spec;
         break;
+    }
+
+    if (GM_util.windowIsClosed(wrappedContentWin)) {
+      return;
     }
 
     // Pop back onto browser thread and call event handler.

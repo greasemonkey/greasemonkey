@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Tanım">
 <!ENTITY newscript.includes "Eklenenler (satır başına bir tane)">
 <!ENTITY newscript.excludes "Çıkarılanlar (satır başına bir tane)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editör">
 <!ENTITY options.changeEditor "Editörü Değiştir">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
-<!ENTITY userscripts "Kullanıcı Betikleri">
 <!ENTITY Uninstall "Kaldır">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Ayrıca ilişkili tercihleri kaldır">
 <!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">
-<!ENTITY EnableUpdateChecking "Betiklerin otomatik güncelleme denetimini etkinleştirin">
-<!ENTITY UpdateInterval "Güncelleme kontrolleri arasındaki asgari gün sayısı">
-<!ENTITY AutoInstallUpdates "Güncellemeler bulunduğunda otomatik yükle">
 <!ENTITY RequireSecureUpdates "Gerekli güvenlik güncellemeleri">
 <!ENTITY greasemonkey.noscriptshere "Bu sayfada çalışan yüklenmiş betikler yok.">
 <!ENTITY greasemonkey.youhavenoscripts "Yüklü bir kullanıcı betiğiniz yok">

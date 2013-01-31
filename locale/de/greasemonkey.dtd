@@ -26,20 +26,19 @@
 <!ENTITY newscript.description "Beschreibung:">
 <!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.changeEditor "Editor ändern">
 <!ENTITY options.globalExcludes "Globale Ausschlüsse">
-<!ENTITY userscripts "Benutzerskripte">
 <!ENTITY Uninstall "Deinstallieren">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
-<!ENTITY EnableUpdateChecking "Automatische Überprüfung der Skripte auf Aktualisierung">
-<!ENTITY UpdateInterval "Minimale Anzahl von Tagen zwischen Aktualisierungsprüfungen">
-<!ENTITY AutoInstallUpdates "Gefundene Aktualisierungen automatisch installieren">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">
 <!ENTITY greasemonkey.getuserscripts "Benutzerskripte hinzufügen…">
-<!ENTITY scriptprefs.title "Greasemonkey - Benutzerskript-Einstellungen">
+<!ENTITY scriptprefs.title "Greasemonkey - Benutzerskript-Einstellungen - !!">
 <!ENTITY scriptprefs.usersettings "Benutzereinstellungen">
 <!ENTITY scriptprefs.scriptsettings "Skript-Einstellungen">

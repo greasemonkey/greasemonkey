@@ -26,16 +26,15 @@
 <!ENTITY newscript.description "Leírás">
 <!ENTITY newscript.includes "Engedélyezett oldalak (soronként egy)">
 <!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Szerkesztő">
 <!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
 <!ENTITY options.globalExcludes "Globális kivételek">
-<!ENTITY userscripts "Parancsfájlok">
 <!ENTITY Uninstall "Eltávolítás">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">
 <!ENTITY UpdateChecking "Frissítések keresése">
-<!ENTITY EnableUpdateChecking "Parancsfájlok automatikus frissítésének engedélyezése">
-<!ENTITY UpdateInterval "Frissítési időköz (napok)">
-<!ENTITY AutoInstallUpdates "Frissítések automatikus telepítése">
 <!ENTITY RequireSecureUpdates "Biztonsági frissítések igénylése">
 <!ENTITY greasemonkey.noscriptshere "Ezen az oldalon nem futnak telepített parancsfájlok.">
 <!ENTITY greasemonkey.youhavenoscripts "Nincsenek parancsfájlok telepítve">

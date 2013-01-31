@@ -1,3 +1,4 @@
+Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -14,7 +15,11 @@ const COULD_NOT_LAUNCH = (function() {
 function openInEditor(script) {
   var editor = GM_util.getEditor();
   if (!editor) {
-    // The user did not choose an editor.
+    ScratchpadManager.openScratchpad({
+      'filename': script.file.path,
+      'text': script.textContent,
+      'saved': true,
+    });
     return;
   }
 
@@ -27,7 +32,7 @@ function openInEditor(script) {
     if ("Darwin"==xulRuntime.OS) {
       args = ["-a", editor.path, script.file.path];
       editor = Components.classes["@mozilla.org/file/local;1"]
-          .createInstance(Components.interfaces.nsILocalFile);
+          .createInstance(Components.interfaces.nsIFile);
       editor.followLinks = true;
       editor.initWithPath("/usr/bin/open");
     }

@@ -39,14 +39,13 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  // Use the appcontent element specifically, see #1344.
-  document.getElementById("appcontent")
-      .addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
   gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
   var sidebar = document.getElementById("sidebar");
-  sidebar.addEventListener("DOMContentLoaded", GM_BrowserUI.contentLoad, true);
+  var svc = GM_util.getService();
+  sidebar.addEventListener(
+      "DOMContentLoaded", GM_util.hitch(svc, svc.contentLoad), true);
   sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
@@ -69,19 +68,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.gmSvc.config;
 
   GM_BrowserUI.showToolbarButton();
-};
 
-GM_BrowserUI.contentLoad = function(event) {
-  if (!GM_util.getEnabled()) return;
-
-  var safeWin = event.target.defaultView;
-  var href = safeWin.location.href;
-
-  // Make sure we are still on the page that fired this event, see issue #1083.
-  // But ignore hashes; see issue #1445.
-  if (href.replace(/#.*/, '') == event.target.documentURI.replace(/#.*/, '')) {
-    GM_BrowserUI.gmSvc.runScripts('document-end', safeWin);
-  }
+  // Make sure this is imported at least once, so its internal timer starts.
+  Components.utils.import('resource://greasemonkey/stats.js');
 };
 
 GM_BrowserUI.pagehide = function(aEvent) {
@@ -98,10 +87,7 @@ GM_BrowserUI.pageshow = function(aEvent) {
   GM_BrowserUI.gmSvc.contentThawed(windowId);
 };
 
-/**
- * Implements nsIObserve.observe. Right now we're only observing our own
- * install-userscript, which happens when the install bar is clicked.
- */
+// nsIObserve
 GM_BrowserUI.observe = function(subject, topic, data) {
   if (topic == "install-userscript") {
     if (window == GM_BrowserUI.winWat.activeWindow) {
@@ -175,7 +161,7 @@ GM_BrowserUI.refreshStatus = function() {
     checkedEl.setAttribute('checked', true);
     enabledEl.removeAttribute('disabled');
   } else {
-    checkedEl.removeAttribute('checked');
+    checkedEl.setAttribute('checked', false);
     enabledEl.setAttribute('disabled', 'yes');
   }
 };
@@ -202,6 +188,14 @@ GM_BrowserUI.viewContextItemClicked = function() {
 };
 
 GM_BrowserUI.showToolbarButton = function() {
+  // See #1652.  During transition, this might be set, but not readable yet;
+  // transition happens in an async callback to get addon version.  If existing
+  // version is "0.0" (the default), this hasn't happened yet, so try later.
+  if ('0.0' == GM_prefRoot.getValue("version")) {
+    setTimeout(GM_BrowserUI.showToolbarButton, 50);
+    return;
+  }
+
   // Once, enforce that the toolbar button is present.  For discoverability.
   if (!GM_prefRoot.getValue('haveInsertedToolbarbutton')) {
     GM_prefRoot.setValue('haveInsertedToolbarbutton', true);
@@ -330,14 +324,10 @@ function GM_showPopup(aEvent) {
   runsOnTop.forEach(
       function(script) { point = appendScriptAfter(script, point); });
 
-  // Delegate menu commands call.
-  var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
-  GM_MenuCommander.onPopupShowing(menuCommandPopup);
-
-  // Check/uncheck 'Enabled' menuitem in Greasemonkey menu
-  // depends on Greasemonkey status.
-  var gmStatus = popup.getElementsByClassName("gm-enabled-item")[0];
-  gmStatus.setAttribute("checked", GM_getEnabled());
+  // Propagate to commands sub-menu.
+  var commandsPopup = popup.querySelector(
+      'menupopup.greasemonkey-user-script-commands-popup');
+  GM_MenuCommander.onPopupShowing(commandsPopup);
 }
 
 /**
@@ -346,8 +336,10 @@ function GM_showPopup(aEvent) {
 function GM_hidePopup(aEvent) {
   var popup = aEvent.target;
 
-  var menuCommandPopup = popup.getElementsByTagName('menupopup')[0];
-  if(menuCommandPopup) GM_util.emptyEl(menuCommandPopup);
+  // Propagate to commands sub-menu.
+  var commandsPopup = popup.querySelector(
+      'menupopup.greasemonkey-user-script-commands-popup');
+  GM_MenuCommander.onPopupHiding(commandsPopup);
 }
 
 // Short-term workaround for #1406: Tab Mix Plus breaks opening links in

@@ -3,6 +3,11 @@ var EXPORTED_SYMBOLS = ['ScriptIcon'];
 Components.utils.import('resource://greasemonkey/scriptDependency.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
+var stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
 ScriptIcon.prototype = new ScriptDependency();
 ScriptIcon.prototype.constructor = ScriptIcon;
 function ScriptIcon(aScript) {
@@ -37,7 +42,7 @@ ScriptIcon.prototype.setMetaVal = function(value) {
   if (/^data:image\//i.test(value)) {
     this._dataURI = value;
   } else if (/^data:/i.test(value)) {
-    throw new Error('@icon data: uri must be an image type');
+    throw new Error(stringBundle.GetStringFromName('icon.uri-image-type'));
   } else {
     var resUri = GM_util.uriFromUrl(this._script._downloadURL);
     this._downloadURL = GM_util.uriFromUrl(value, resUri).spec;

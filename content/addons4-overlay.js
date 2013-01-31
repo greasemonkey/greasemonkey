@@ -4,9 +4,10 @@
 (function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
+Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
-var userScriptViewId = 'addons://list/user-script';
+var userScriptViewId = 'addons://list/greasemonkey-user-script';
 
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
@@ -24,15 +25,24 @@ createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   return item;
 };
 
-// Patch the default loadView() to suppress the detail view for user scripts.
-var _loadViewOrig = gViewController.loadView.bind(gViewController);
-gViewController.loadView = function(aViewId) {
-  if (userScriptViewId == gViewController.currentViewId
-      && 0 === aViewId.indexOf('addons://detail/')
-  ) {
-    return false;
+// Patch the default onDrop() to make user script installation work.
+var _gDragDrop_onDrop_Orig = gDragDrop.onDrop;
+gDragDrop.onDrop = function GM_onDrop(aEvent) {
+  var urls = droppedUrls(aEvent);
+
+  var droppedNonUserScript = false;
+  for (var i = urls.length - 1, url = null; url = urls[i]; i--) {
+    if (url.match(/\.user\.js$/)) {
+      GM_util.showInstallDialog(
+          url, GM_util.getBrowserWindow().gBrowser, GM_util.getService());
+    } else {
+      droppedNonUserScript = true;
+    }
   }
-  _loadViewOrig(aViewId);
+
+  // Pass call through to the original handler, if any non-user-script
+  // was part of this drop action.
+  if (droppedNonUserScript) _gDragDrop_onDrop_Orig(aEvent);
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
@@ -79,7 +89,7 @@ function addonIsInstalledScript(aAddon) {
 };
 
 function isScriptView() {
-  return 'addons://list/user-script' == gViewController.currentViewId;
+  return userScriptViewId == gViewController.currentViewId;
 }
 
 function addonExecutesNonFirst(aAddon) {
@@ -129,13 +139,6 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
-  gViewController.commands.cmd_userscript_toggleCheckUpdates = {
-      isEnabled: addonIsInstalledScript,
-      doCommand: function(aAddon) {
-        aAddon._script.checkRemoteUpdates = !aAddon._script.checkRemoteUpdates;
-        GM_util.getService().config._changed(aAddon._script, "modified", null);
-      }
-    };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later
@@ -143,22 +146,7 @@ function init() {
   document.getElementById('greasemonkey-sort-bar').addEventListener(
       'command', onSortersClicked, false);
   applySort();
-
-  var contextMenu = document.getElementById("addonitem-popup");
-  contextMenu.addEventListener("popupshowing", onContextShowing, false);
 };
-
-function onContextShowing(aEvent) {
-  var addon = gViewController.currentViewObj.getSelectedAddon();
-  if ('user-script' != addon.type) return;
-  var menuitem = document.getElementById(
-      'menuitem_userscript_toggleCheckUpdates');
-  if (addon._script.checkRemoteUpdates) {
-    menuitem.setAttribute('checked', 'true');
-  } else {
-    menuitem.removeAttribute('checked');
-  }
-}
 
 function onSortersClicked(aEvent) {
   if ('button' != aEvent.target.tagName) return;
@@ -192,12 +180,12 @@ function applySort() {
   }
 
   var ascending = '1' != button.getAttribute('checkState');
-  var sortBy=button.getAttribute('sortBy').split(',');
+  var sortBy = button.getAttribute('sortBy').split(',');
 
   var list = document.getElementById('addon-list');
   var elements = Array.slice(list.childNodes, 0);
   sortElements(elements, sortBy, ascending);
-  while (list.listChild) list.removeChild(list.lastChild);
+  while (list.lastChild) list.removeChild(list.lastChild);
   elements.forEach(function(el) { list.appendChild(el); });
 };
 

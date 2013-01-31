@@ -26,20 +26,19 @@
 <!ENTITY newscript.description "الوصف">
 <!ENTITY newscript.includes "يعمل على (صفحة لكل سطر)">
 <!ENTITY newscript.excludes "لايعمل على (صحة لكل سطر)">
+<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "المحرر">
 <!ENTITY options.changeEditor "تغيير المحرر">
 <!ENTITY options.globalExcludes "باستثناء العالمية">
-<!ENTITY userscripts "مدير السكربتات">
 <!ENTITY Uninstall "إلغاء التثبيت">
+<!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "أيضا مسح جميع الأعدادات">
 <!ENTITY UpdateChecking "تحديث السكربت">
-<!ENTITY EnableUpdateChecking "تمكين التحديث التلقائي للتحقق من السكربتات">
-<!ENTITY UpdateInterval "الحد الأدنى لعدد الأيام للتحقق من تحديث السكربتات">
-<!ENTITY AutoInstallUpdates "Automatically install updates when found">
 <!ENTITY RequireSecureUpdates "تتطلب تحديثات آمنة">
 <!ENTITY greasemonkey.noscriptshere "لايوجد سكربت مثبت يعمل على هذه الصفحة.">
 <!ENTITY greasemonkey.youhavenoscripts "انت لم تثبت أي سكربت">
 <!ENTITY greasemonkey.getuserscripts "أجلب السكربتات">
-<!ENTITY scriptprefs.title "تفضيلات السكربت">
+<!ENTITY scriptprefs.title "تفضيلات السكربت - !!">
 <!ENTITY scriptprefs.usersettings "أعدادات العضوية">
 <!ENTITY scriptprefs.scriptsettings "أعدادات السكربت">

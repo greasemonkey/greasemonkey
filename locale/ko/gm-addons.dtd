@@ -1,0 +1,27 @@
+<!ENTITY Edit "편집">
+<!ENTITY Edit.accesskey "E">
+<!ENTITY Edit.tooltip "이 유저 스크립트 편집">
+<!ENTITY ExecuteFirst "처음에 실행">
+<!ENTITY ExecuteLast "마지막에 실행">
+<!ENTITY ExecuteLater "나중에 실행">
+<!ENTITY ExecuteSooner "일찍 실행">
+<!ENTITY FindUpdate "Find Update">
+<!ENTITY InstallUpdate "Install Update">
+<!ENTITY MoveDown "아래로 이동">
+<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveToBottom "맨 아래로 이동">
+<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToTop "맨 위로 이동">
+<!ENTITY MoveToTop.accesskey "T">
+<!ENTITY MoveUp "위로 이동">
+<!ENTITY MoveUp.accesskey "U">
+<!ENTITY NewScript "새 스크립트 생성">
+<!ENTITY NewScript.accesskey "C">
+<!ENTITY Show "저장된 폴더 열기">
+<!ENTITY Show.accesskey "S">
+<!ENTITY Sort.ByStatus "Sort by status">
+<!ENTITY Sort.Status "Status">
+<!ENTITY Sort.ByName "Sort by name">
+<!ENTITY Sort.Name "Name">
+<!ENTITY Sort.ByExecution "Sort by execution order">
+<!ENTITY Sort.Execution "Execution Order">

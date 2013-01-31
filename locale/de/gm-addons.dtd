@@ -1,5 +1,3 @@
-<!ENTITY CheckUpdates "Automatisch auf Updates prüfen">
-<!ENTITY CheckUpdates.accesskey "U">
 <!ENTITY Edit "Bearbeiten">
 <!ENTITY Edit.accesskey "B">
 <!ENTITY Edit.tooltip "Dieses Benutzerskript bearbeiten">
@@ -27,11 +25,3 @@
 <!ENTITY Sort.Name "Name">
 <!ENTITY Sort.ByExecution "Sortieren nach Ausführungsreihenfolge">
 <!ENTITY Sort.Execution "Ausführungsreihenfolge">
-<!ENTITY SortScripts "Skripte sortieren">
-<!ENTITY SortScripts.accesskey "s">
-<!ENTITY UninstallCancel "Deinstallation abbrechen">
-<!ENTITY UninstallCancel.accesskey "a">
-<!ENTITY UninstallCancel.tooltip "Deinstallation dieses Benutzerskripts abbrechen">
-<!ENTITY UninstallCancelDescription "Dieses Benutzerskript wird deinstalliert, wenn der Dialog geschlossen wird. (Oder Rechtsklick für &quot;Jetzt deinstallieren&quot;.)">
-<!ENTITY UninstallNow "Jetzt deinstallieren">
-<!ENTITY UninstallNow.accesskey "J">
