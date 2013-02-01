@@ -92,7 +92,7 @@ function GM_apiLeakCheck(apiName) {
         && stack.filename.substr(0, 9) !== 'chrome://'
         ) {
       GM_util.logError(new Error(
-          gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
+          gStringBundle.GetStringFromName('error.access-violation')
               .replace('%1', apiName)
           ));
       return false;
