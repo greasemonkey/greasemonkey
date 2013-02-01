@@ -42,6 +42,24 @@ function alert(msg) {
     .alert(null, "Greasemonkey alert", msg);
 }
 
+function contentLoad(aEvent) {
+  var safeWin = aEvent.target.defaultView;
+  var href = safeWin.location.href;
+
+  safeWin.removeEventListener('DOMContentLoaded', contentLoad, true);
+  safeWin.removeEventListener('load', contentLoad, true);
+
+  // Make sure we are still on the page that fired this event, see issue #1083.
+  // But ignore differences in formats; see issue #1445 and #1631.
+  var comparisonHref = href.replace(/#.*/, '');
+  var comparsionUri = aEvent.target.documentURI
+      .replace(/#.*/, '')
+      .replace(/\/\/[^\/:]+(:[^\/@]+)?@/, '//');
+  if (comparisonHref == comparsionUri) {
+    GM_util.getService().runScripts('document-end', safeWin);
+  }
+}
+
 function createSandbox(
     aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
 ) {
@@ -287,8 +305,9 @@ function startup(aService) {
 /////////////////////////////////// Service ////////////////////////////////////
 
 function service() {
-  this.wrappedJSObject = this;
+  this.contentLoad = contentLoad;
   this.filename = Components.stack.filename;
+  this.wrappedJSObject = this;
 }
 
 ////////////////////////////////// Constants ///////////////////////////////////
@@ -360,15 +379,15 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
       startup(this);
       break;
     case 'document-element-inserted':
+      if (!GM_util.getEnabled()) break;
       var doc = aSubject;
-      if (null === doc.location) break;
-      if (!GM_util.isGreasemonkeyable(doc.location.href)) break;
-      var win = doc.defaultView;
-      this.runScripts('document-start', win);
-      win.addEventListener(
-          'DOMContentLoaded', GM_util.hitch(this, this.contentLoad), true);
-      win.addEventListener(
-          'load', GM_util.hitch(this, this.contentLoad), true);
+      var win = doc && doc.defaultView;
+      if (!doc || !doc.location || !win) break;
+      if (GM_util.isGreasemonkeyable(doc.location.href)) {
+        this.runScripts('document-start', win);
+        win.addEventListener('DOMContentLoaded', contentLoad, true);
+        win.addEventListener('load', contentLoad, true);
+      }
       break;
   }
 };
@@ -404,31 +423,6 @@ service.prototype.contentFrozen = function(contentWindowId) {
   if (!contentWindowId) return;
   this.withAllMenuCommandsForWindowId(contentWindowId,
       function(index, command) { command.frozen = true; });
-};
-
-service.prototype.contentLoad = function(event) {
-  if (!GM_util.getEnabled()) return;
-
-  var safeWin = event.target.defaultView;
-  var href = safeWin.location.href;
-
-  // Make sure we are still on the page that fired this event, see issue #1083.
-  // But ignore differences in formats; see issue #1445 and #1631.
-  var comparisonHref = href.replace(/#.*/, '');
-  var comparsionUri = event.target.documentURI
-      .replace(/#.*/, '')
-      .replace(/\/\/[^\/:]+(:[^\/@]+)?@/, '//');
-  if (comparisonHref == comparsionUri) {
-    // Via an expando property on the *safe* window object (our wrapper of the
-    // real window, not the wrapper that content sees), record a property to
-    // note we've done injection into this window.  If we get a "load" after
-    // "DOMContentLoaded" then we won't run twice.  But if we never get
-    // "DOMContentLoaded" (i.e. for images) then we run at "load" time.
-    if (safeWin._greasemonkey_has_run_document_end) return;
-
-    safeWin._greasemonkey_has_run_document_end = true;
-    this.runScripts('document-end', safeWin);
-  }
 };
 
 service.prototype.contentThawed = function(contentWindowId) {
