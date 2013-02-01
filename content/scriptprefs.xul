@@ -33,6 +33,10 @@
         <cludes id="user-includes"/>
         <label value="&label.grpExcluded;" />
         <cludes id="user-excludes" />
+        <groupbox>
+          <caption label="&UnsafeScripting;" />
+          <checkbox id="user-nosandbox" label="&NoSandboxMode;" />
+        </groupbox>
       </vbox>
     </tabpanel>
     <tabpanel>
@@ -45,6 +49,10 @@
           <label value="&label.grpExcluded;" />
           <cludes id="script-excludes" class="readonly" />
         </vbox>
+        <groupbox>
+          <caption label="&UnsafeScripting;" />
+          <checkbox id="script-nosandbox" label="&NoSandboxMode;" />
+        </groupbox>
       </vbox>
     </tabpanel>
   </tabpanels>

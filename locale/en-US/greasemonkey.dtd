@@ -43,6 +43,8 @@
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Also uninstall associated preferences">
 <!ENTITY UpdateChecking "Update Checking">
+<!ENTITY UnsafeScripting "Insecure Mode (allow full, unrestricted DOM and xmlHttpRequest access)">
+<!ENTITY NoSandboxMode "Warning: you should not enable this unless you fully understand the risk.">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
