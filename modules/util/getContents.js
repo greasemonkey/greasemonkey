@@ -12,6 +12,10 @@ const unicodeConverter = Components
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 
 function getContents(aFile, aCharset, aFatal) {
+  if (!aFile.isFile()) {
+    throw new Error(
+        'Greasemonkey tried to get contents of non-file:\n' + aFile.path);
+  }
   unicodeConverter.charset = aCharset || 'UTF-8';
 
   var channel = ioService.newChannelFromURI(GM_util.getUriFromFile(aFile));
