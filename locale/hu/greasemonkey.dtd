@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "k">
 <!ENTITY menu.options "Greasemonkey beállítások…">
 <!ENTITY menu.options.accesskey "G">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Engedélyezve">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey telepítés">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Csak megbízható forrásból telepítsen parancsfájlt!">
 <!ENTITY install.showscriptsource "Parancsfájl forrásának megtekintése">
 <!ENTITY install.installbutton "Telepítés">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Letöltés…">
 <!ENTITY newscript.name "Név">
 <!ENTITY newscript.namespace "Névtér">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Szerkesztő">
-<!ENTITY options.changeEditor "Szerkesztő megváltoztatása">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Globális kivételek">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

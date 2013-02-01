@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "е">
 <!ENTITY menu.options "Налаштування Greasemonkey...">
 <!ENTITY menu.options.accesskey "л">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Встановлюйте скрипти тільки з тих джерел, яким довіряєте.">
 <!ENTITY install.showscriptsource "Показати початковий код скрипту">
 <!ENTITY install.installbutton "Встановити">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Завантаження...">
 <!ENTITY newscript.name "Ім’я">
 <!ENTITY newscript.namespace "Простір імен">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Винятки (один на рядок)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Редактор">
-<!ENTITY options.changeEditor "Змінити редактор">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Глобальні винятки">
 <!ENTITY Uninstall "Вилучити">
 <!ENTITY AnonymousStatistics "Анонимна статистика">

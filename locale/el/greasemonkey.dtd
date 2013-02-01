@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "Δ">
 <!ENTITY menu.options "Επιλογές Greasemonkey...">
 <!ENTITY menu.options.accesskey "Ι">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Ενεργοποιημένo">
 <!ENTITY statusbar.enabled.accesskey "Ρ">
 <!ENTITY install.title "Εγκατάσταση Greasemonkey">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Πρέπει να εγκαθιστάτε κώδικες που προελεύσεις που εμπιστεύεστε.">
 <!ENTITY install.showscriptsource "Προβολή Προέλευσης Κώδικα">
 <!ENTITY install.installbutton "Εγκατάσταση">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Λήψη ...">
 <!ENTITY newscript.name "Όνομα">
 <!ENTITY newscript.namespace "Όνομα χώρου">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Εξαιρέσεις (Μια ανά γραμμή)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Επεξεργαστής κειμένου">
-<!ENTITY options.changeEditor "Επιλέξτε Επεξεργαστή Κώδικα">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
 <!ENTITY Uninstall "Απεγκατάσταση">
 <!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">

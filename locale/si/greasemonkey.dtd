@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey Options...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "ක්‍රියාත්මකයි">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey ස්ථාපනය">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "ඔබට මූලය (Source) විශ්වාසනම් පමනක් ස්ක්‍රිප්ට්ය ස්ථාපනය කරන්න.">
 <!ENTITY install.showscriptsource "ස්ක්‍රිප්ටයෙහි මූලය පෙන්වන්න">
 <!ENTITY install.installbutton "ස්ථාපනය">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "නම">
 <!ENTITY newscript.namespace "නාමාවකාශය">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "ඇතුලත් නොවූ වෙබ් අඩවි(එක පේලියකට එකකි)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "සංස්කාරකය">
-<!ENTITY options.changeEditor "සංස්කාරකය වෙනස් කරන්න">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY Uninstall "ඉවත් කරන්න">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

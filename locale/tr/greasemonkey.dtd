@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey Seçenekleri">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Etkin">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Kurulumu">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Yalnızca güvendiğiniz kaynaklardan gelen betikleri yükleyin.">
 <!ENTITY install.showscriptsource "Betik Kaynağını Göster">
 <!ENTITY install.installbutton "Kur">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "İndirliyor">
 <!ENTITY newscript.name "İsim">
 <!ENTITY newscript.namespace "İsim alanı">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Çıkarılanlar (satır başına bir tane)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editör">
-<!ENTITY options.changeEditor "Editörü Değiştir">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

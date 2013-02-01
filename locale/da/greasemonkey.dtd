@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey Options...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Aktiveret">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Installation">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Du bør kun installere scripts fra kilder, du stoler på.">
 <!ENTITY install.showscriptsource "Vis Script kildekode">
 <!ENTITY install.installbutton "Installer">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Navn">
 <!ENTITY newscript.namespace "Navnerum">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Ekskluderinger (en pr. linje)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redigeringsprogram">
-<!ENTITY options.changeEditor "Skift redigeringsprogram">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Globale ekskluderinger">
 <!ENTITY Uninstall "Afinstaller">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

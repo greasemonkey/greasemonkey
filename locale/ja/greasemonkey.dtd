@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey オプション...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "有効">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey インストール">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "信頼できるスクリプトのみインストールすべきです。">
 <!ENTITY install.showscriptsource "スクリプトのソースを表示">
 <!ENTITY install.installbutton "インストール">
+<!ENTITY install.downloadError "ダウンロードエラー">
 <!ENTITY loading "ダウンロード中...">
 <!ENTITY newscript.name "名前">
 <!ENTITY newscript.namespace "名前空間">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
 <!ENTITY newscript.fromClipboard "クリップボードのスクリプトを使用する">
 <!ENTITY options.editor "エディタ">
-<!ENTITY options.changeEditor "エディタを変更">
+<!ENTITY options.defaultEditor "標準のエディタを使用する">
+<!ENTITY options.browseForEditor "エディタプログラムを参照する">
 <!ENTITY options.globalExcludes "どれも実行しないページ">
 <!ENTITY Uninstall "削除">
 <!ENTITY AnonymousStatistics "匿名の統計">
