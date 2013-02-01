@@ -77,7 +77,8 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
-  var setupRequestEvent = GM_util.hitch(this, 'setupRequestEvent', this.wrappedContentWin);
+  var setupRequestEvent = GM_util.hitch(
+      this, 'setupRequestEvent', this.wrappedContentWin);
 
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
@@ -100,8 +101,19 @@ function(safeUrl, details, req) {
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
+
   if (details.timeout) {
     req.timeout = details.timeout;
+  }
+
+  if ('redirectionLimit' in details) {
+    try {
+      var httpChannel = req.channel.QueryInterface(
+          Components.interfaces.nsIHttpChannel);
+      httpChannel.redirectionLimit = details.redirectionLimit;
+    } catch (e) {
+      // Ignore.
+    }
   }
 
   if (details.headers) {
