@@ -13,39 +13,8 @@ Cu.import('resource://greasemonkey/constants.js');
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/util.js");
+Cu.import("resource://greasemonkey/xmlhttprequester.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-
-var gScriptDirPath = (function() {
-  var ios = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  var scriptDir = GM_util.scriptDir();
-  if (!scriptDir.exists()) {
-    scriptDir.create(
-        Components.interfaces.nsIFile.DIRECTORY_TYPE,
-        GM_constants.directoryMask);
-  }
-  scriptDir.normalize();  // in case of symlinks
-  return ios.newFileURI(scriptDir).spec;
-})();
-var gExtensionPath = (function() {
-  var ioService = Components.classes["@mozilla.org/network/io-service;1"]
-      .getService(Components.interfaces.nsIIOService);
-  if ('jar:' == Components.stack.filename.substr(0, 4)) {
-    // Unpacked XPI case.
-    return Components.stack.filename.replace(/\!\/.*/, '');
-  } else if ('file:' == Components.stack.filename.substr(0, 5)){
-    // Raw file, development case.
-    // Turn the file:/// URL into an nsIFile ...
-    var uri = ioService.newURI(Components.stack.filename, null, null);
-    var file = uri.QueryInterface(Components.interfaces.nsIFileURL).file;
-    // ... to find the containing directory.
-    var dir = file.parent.parent;
-    // Then get the URL back for that path.
-    return ioService.newFileURI(dir).spec;
-  } else {
-    throw Error('Could not detect gExtensionPath!');
-  }
-})();
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
@@ -71,37 +40,6 @@ function alert(msg) {
   Cc["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Ci.nsIPromptService)
     .alert(null, "Greasemonkey alert", msg);
-}
-
-// Examines the stack to determine if an API should be callable.
-function GM_apiLeakCheck(apiName) {
-  var stack = Components.stack;
-
-  do {
-    // Valid locations for GM API calls are:
-    //  * Greasemonkey scripts.
-    //  * Greasemonkey extension by path.
-    //  * Greasemonkey modules.
-    //  * All of chrome.  (In the script update case, chrome will list values.)
-    // Anything else on the stack and we will reject the API, to make sure that
-    // the content window (whose path would be e.g. http://...) has no access.
-    if (2 == stack.language
-        && stack.filename.substr(0, gScriptDirPath.length) !== gScriptDirPath
-        && stack.filename.substr(0, gExtensionPath.length) !== gExtensionPath
-        && stack.filename.substr(0, 24) !== 'resource://greasemonkey/'
-        && stack.filename.substr(0, 9) !== 'chrome://'
-        ) {
-      GM_util.logError(new Error(
-          gStringBundle.GetStringFromName('error.access-violation')
-              .replace('%1', apiName)
-          ));
-      return false;
-    }
-
-    stack = stack.caller;
-  } while (stack);
-
-  return true;
 }
 
 function createSandbox(
@@ -225,7 +163,7 @@ function isTempScript(uri) {
 }
 
 function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
-  if (!GM_apiLeakCheck("GM_openInTab")) {
+  if (!GM_util.apiLeakCheck("GM_openInTab")) {
     return undefined;
   }
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
@@ -251,7 +189,7 @@ function registerMenuCommand(
     wrappedContentWin, chromeWin, script,
     commandName, commandFunc, accessKey, unused, accessKey2
 ) {
-  if (!GM_apiLeakCheck("GM_registerMenuCommand")) {
+  if (!GM_util.apiLeakCheck("GM_registerMenuCommand")) {
     return;
   }
 
@@ -339,7 +277,6 @@ function startup(aService) {
   loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
-  loader.loadSubScript("chrome://greasemonkey/content/xmlhttprequester.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   var observerService = Components.classes['@mozilla.org/observer-service;1']
@@ -351,6 +288,7 @@ function startup(aService) {
 
 function service() {
   this.wrappedJSObject = this;
+  this.filename = Components.stack.filename;
 }
 
 ////////////////////////////////// Constants ///////////////////////////////////

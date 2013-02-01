@@ -1,3 +1,5 @@
+var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
+
 Components.utils.import("resource://greasemonkey/util.js");
 
 function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
@@ -15,7 +17,7 @@ function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
 // can't support mimetype because i think it's only used for forcing
 // text/xml and we can't support that
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
-  if (!GM_apiLeakCheck("GM_xmlhttpRequest")) {
+  if (!GM_util.apiLeakCheck("GM_xmlhttpRequest")) {
     return;
   }
 
