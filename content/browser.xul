@@ -8,8 +8,6 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <script type="application/x-javascript" src="chrome://greasemonkey/content/menucommander.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/xmlhttprequester.js" />
-  <script type="application/x-javascript" src="chrome://greasemonkey/content/miscapis.js" />
   <script type="application/x-javascript" src="chrome://greasemonkey/content/browser.js" />
 
   <commandset>
