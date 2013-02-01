@@ -49,6 +49,16 @@ GM_BrowserUI.chromeLoad = function(e) {
   sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
   sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
 
+  document.getElementById('content').addEventListener(
+      'DOMContentLoaded', function(aEvent) {
+        var safeWin = aEvent.target.defaultView;
+        var href = safeWin.location.href;
+        if (href == 'about:blank') {
+          // #1696: document-element-inserted doesn't see about:blank
+          svc.contentLoad(aEvent)
+        }
+      }, true);
+
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
