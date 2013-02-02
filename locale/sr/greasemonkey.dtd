@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "У">
 <!ENTITY menu.options "Опције…">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Омогућен">
 <!ENTITY statusbar.enabled.accesskey "о">
 <!ENTITY install.title "Greasemonkey - инсталација">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Скрипте требате инсталирати само са проверених извора.">
 <!ENTITY install.showscriptsource "Прикажи изворни кôд скрипте">
 <!ENTITY install.installbutton "Инсталирај">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Преузимање...">
 <!ENTITY newscript.name "Име">
 <!ENTITY newscript.namespace "Namespace">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Изузима (једно по линији)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Уређивач">
-<!ENTITY options.changeEditor "Промени уређивач">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Општа изузимања">
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AnonymousStatistics "Анонимна статистика">

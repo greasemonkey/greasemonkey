@@ -1,8 +1,15 @@
+Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/remoteScript.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
-const EXPORTED_SYMBOLS = ['installScriptFromSource'];
+var EXPORTED_SYMBOLS = ['installScriptFromSource'];
+
+var gCouldNotDownloadString = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties")
+    .GetStringFromName('error.could-not-download-dependencies');
 
 function installScriptFromSource(aSource, aCallback) {
   var remoteScript = new RemoteScript();
@@ -10,11 +17,17 @@ function installScriptFromSource(aSource, aCallback) {
   var tempFileName = cleanFilename(script.name, 'gm_script') + '.user.js';
   var tempFile = GM_util.getTempFile(remoteScript._tempDir, tempFileName);
   GM_util.writeToFile(aSource, tempFile, function() {
-    // install this script
     remoteScript.setScript(script, tempFile);
-    remoteScript.install();
-    // and fire up the editor!
-    GM_util.openInEditor(script);
+    remoteScript.download(function(aSuccess) {
+      if (!aSuccess) {
+        GM_notification(
+            gCouldNotDownloadString.replace('%1', remoteScript.errorMessage),
+            'dependency-download-failed');
+        return;
+      }
+      remoteScript.install();
+      GM_util.openInEditor(script);
+      if (aCallback) aCallback();
+    });
   });
-  if (aCallback) aCallback();
 }

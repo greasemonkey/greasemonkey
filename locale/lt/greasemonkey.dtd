@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "T">
 <!ENTITY menu.options "Greasemonkey pasirinktys...">
 <!ENTITY menu.options.accesskey "P">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Įjungta">
 <!ENTITY statusbar.enabled.accesskey "I">
 <!ENTITY install.title "Greasemonkey įdiegimas">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Scenarijus turėtumėte diegti tik iš patikimų šaltinių.">
 <!ENTITY install.showscriptsource "Rodyti scenarijaus pradinį kodą">
 <!ENTITY install.installbutton "Įdiegti">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Parsiunčiama...">
 <!ENTITY newscript.name "Pavadinimas">
 <!ENTITY newscript.namespace "Vardų sritis">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Kuriuose neveikia (po vieną eilutėj)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redaktorius">
-<!ENTITY options.changeEditor "Keisti redaktorių">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Nevykdomi visur">
 <!ENTITY Uninstall "Pašalinti">
 <!ENTITY AnonymousStatistics "Anoniminė statistika">

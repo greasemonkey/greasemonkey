@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "H">
 <!ENTITY menu.options "Inställningar för Greasemonkey…">
 <!ENTITY menu.options.accesskey "I">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Aktiverat">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installation av Greasemonkey">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Du bör endast installera skript från källor som du litar på.">
 <!ENTITY install.showscriptsource "Visa skriptkällkod">
 <!ENTITY install.installbutton "Installera">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Hämtar…">
 <!ENTITY newscript.name "Namn">
 <!ENTITY newscript.namespace "Namnrymd">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Undantag (ett per rad)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Redigeringsprogram">
-<!ENTITY options.changeEditor "Byt redigeringsprogram">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Globala undantag">
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AnonymousStatistics "Anonym statistik">

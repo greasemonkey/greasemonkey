@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "م">
 <!ENTITY menu.options "Greasemonkey Options...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "فعال">
 <!ENTITY statusbar.enabled.accesskey "ع">
 <!ENTITY install.title "فرآیند نصب گریسمانکی">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "شما می بایست فقط دستنویس هایی را نصب کنید که از منابع آنها مطمئن هستید.">
 <!ENTITY install.showscriptsource "نمایش متن دستنویس کاربری">
 <!ENTITY install.installbutton "نصب">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "در حال دریافت ...">
 <!ENTITY newscript.name "نام">
 <!ENTITY newscript.namespace "فضای نام">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "مستثنا کردن (یکی در هر خط)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "ویراستار">
-<!ENTITY options.changeEditor "تغییر ویراستار">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "مستثنا های کلی">
 <!ENTITY Uninstall "عزل">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

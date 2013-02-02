@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "G">
 <!ENTITY menu.options "Greasemonkey Options...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Attivo">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Installazione di Greasemonkey">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Installare solo script provenienti da fonti sicure.">
 <!ENTITY install.showscriptsource "Mostra sorgente script utente">
 <!ENTITY install.installbutton "Installa">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Downloading ...">
 <!ENTITY newscript.name "Nome">
 <!ENTITY newscript.namespace "Namespace">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Pagine escluse (una per riga)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.changeEditor "Change Editor">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY Uninstall "Disinstalla">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

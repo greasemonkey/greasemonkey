@@ -1,3 +1,5 @@
+var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
+
 Components.utils.import("resource://greasemonkey/util.js");
 
 function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
@@ -15,7 +17,7 @@ function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
 // can't support mimetype because i think it's only used for forcing
 // text/xml and we can't support that
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
-  if (!GM_apiLeakCheck("GM_xmlhttpRequest")) {
+  if (!GM_util.apiLeakCheck("GM_xmlhttpRequest")) {
     return;
   }
 
@@ -75,7 +77,8 @@ GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
-  var setupRequestEvent = GM_util.hitch(this, 'setupRequestEvent', this.wrappedContentWin);
+  var setupRequestEvent = GM_util.hitch(
+      this, 'setupRequestEvent', this.wrappedContentWin);
 
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
@@ -98,8 +101,19 @@ function(safeUrl, details, req) {
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
+
   if (details.timeout) {
     req.timeout = details.timeout;
+  }
+
+  if ('redirectionLimit' in details) {
+    try {
+      var httpChannel = req.channel.QueryInterface(
+          Components.interfaces.nsIHttpChannel);
+      httpChannel.redirectionLimit = details.redirectionLimit;
+    } catch (e) {
+      // Ignore.
+    }
   }
 
   if (details.headers) {

@@ -13,7 +13,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
     throw new Error(this.stringBundle.GetStringFromName('error.args.setValue'));
   }
 
-  if (!GM_apiLeakCheck("GM_setValue")) {
+  if (!GM_util.apiLeakCheck("GM_setValue")) {
     return;
   }
 
@@ -21,7 +21,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
 };
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
-  if (!GM_apiLeakCheck("GM_getValue")) {
+  if (!GM_util.apiLeakCheck("GM_getValue")) {
     return undefined;
   }
 
@@ -29,7 +29,7 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
 };
 
 GM_ScriptStorage.prototype.deleteValue = function(name) {
-  if (!GM_apiLeakCheck("GM_deleteValue")) {
+  if (!GM_util.apiLeakCheck("GM_deleteValue")) {
     return undefined;
   }
 
@@ -37,7 +37,7 @@ GM_ScriptStorage.prototype.deleteValue = function(name) {
 };
 
 GM_ScriptStorage.prototype.listValues = function() {
-  if (!GM_apiLeakCheck("GM_listValues")) {
+  if (!GM_util.apiLeakCheck("GM_listValues")) {
     return undefined;
   }
 
@@ -54,7 +54,7 @@ function GM_Resources(script){
 }
 
 GM_Resources.prototype.getResourceURL = function(aScript, name) {
-  if (!GM_apiLeakCheck("GM_getResourceURL")) {
+  if (!GM_util.apiLeakCheck("GM_getResourceURL")) {
     return undefined;
   }
 
@@ -62,7 +62,7 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
-  if (!GM_apiLeakCheck("GM_getResourceText")) {
+  if (!GM_util.apiLeakCheck("GM_getResourceText")) {
     return undefined;
   }
 

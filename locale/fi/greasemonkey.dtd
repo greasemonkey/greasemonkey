@@ -10,6 +10,12 @@
 <!ENTITY menu.manage.accesskey "H">
 <!ENTITY menu.options "Greasemonkey Options...">
 <!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
+<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Käytössä">
 <!ENTITY statusbar.enabled.accesskey "K">
 <!ENTITY install.title "Greasemonkey-asennus">
@@ -20,6 +26,7 @@
 <!ENTITY install.warning2 "Asenna skriptejä vain luetetuista lähteistä.">
 <!ENTITY install.showscriptsource "Näytä skriptin lähdekoodi">
 <!ENTITY install.installbutton "Asenna">
+<!ENTITY install.downloadError "Download Error">
 <!ENTITY loading "Ladataan...">
 <!ENTITY newscript.name "Nimi">
 <!ENTITY newscript.namespace "Nimiavaruus">
@@ -28,7 +35,8 @@
 <!ENTITY newscript.excludes "Pois lukien sivut (yksi per rivi)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Tekstieditori">
-<!ENTITY options.changeEditor "Vaihda tekstieditoria">
+<!ENTITY options.defaultEditor "Use Default Editor">
+<!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Yleisesti poisluettavat">
 <!ENTITY Uninstall "Poisto">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">

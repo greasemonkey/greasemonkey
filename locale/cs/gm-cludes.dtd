@@ -1,6 +1,6 @@
 <!ENTITY promptForNewPage.msg "Zadejte novou adresu stránky. Můžete specifikovat i více adres pomocí zástupného znaku (*).">
 <!ENTITY promptForNewPage.title "Přidat stránku">
-<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForNewPage.defVal "http://www.example.cz/*">
 <!ENTITY promptForEdit.msg "Upravte stávající adresu stránky. Můžete specifikovat i více adres pomocí zástupného znaku (*).">
 <!ENTITY promptForEdit.title "Upravit stránku">
 <!ENTITY button.add "Přidat...">
