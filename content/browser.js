@@ -212,23 +212,44 @@ GM_BrowserUI.openOptions = function() {
   openDialog('chrome://greasemonkey/content/options.xul', null, 'modal');
 };
 
+GM_BrowserUI.openScriptOptions = function(aScript) {
+  // Open script options
+  openDialog('chrome://greasemonkey/content/scriptprefs.xul#' +
+             aScript.namespace + '/' + encodeURIComponent(aScript.name),
+             null, 'modal=no, centerscreen');
+             // We don't use modal here, for example, to let user click
+             // URL bar to copy the URL to put on include/exclude field
+}
+
 GM_BrowserUI.init();
 
 
 /**
  * Handle clicking one of the items in the popup. Left-click toggles the enabled
- * state, right-click opens in an editor.
+ * state, right-click opens in an editor, middle-click or ctrl+left-click to
+ * open script options dialog.
  */
 function GM_popupClicked(aEvent) {
   var script = aEvent.target.script;
   if (!script) return;
 
   if ('command' == aEvent.type) {
-    // left-click: toggle enabled state
-    script.enabled =! script.enabled;
-  } else if ('click' == aEvent.type && aEvent.button == 2) {
-    // right-click: open in editor
-    GM_util.openInEditor(script);
+    // left click
+    if (aEvent.ctrlKey  || aEvent.metaKey) {
+      // ctrl + left click: open script options
+      GM_BrowserUI.openScriptOptions(script); 
+    } else {
+      // toggle enabled state
+      script.enabled =! script.enabled;
+    }
+  } else if ('click' == aEvent.type) {
+    if (aEvent.button == 2) {
+      // right-click: open in editor
+      GM_util.openInEditor(script);
+    } else if (aEvent.button == 1) {
+      // middle click: open script options
+      GM_BrowserUI.openScriptOptions(script); 
+    }
   }
 
   closeMenus(aEvent.target);
