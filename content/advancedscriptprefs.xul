@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/bindings.css" type="text/css"?>
+<?xml-stylesheet href="chrome://greasemonkey/skin/scriptprefs.css" type="text/css"?>
+
+<!DOCTYPE prefwindow [
+<!ENTITY % addonsDTD SYSTEM "chrome://greasemonkey/locale/gm-addons.dtd">
+<!ENTITY % cludesDTD SYSTEM "chrome://greasemonkey/locale/gm-cludes.dtd">
+<!ENTITY % greasemonkeyDTD SYSTEM "chrome://greasemonkey/locale/greasemonkey.dtd">
+%addonsDTD;
+%cludesDTD;
+%greasemonkeyDTD;
+]>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  buttons="accept,cancel"
+  title="&advancedscriptprefs.title;"
+  onload="return onAdvancedDialogLoad();"
+  ondialogaccept="return onAdvancedDialogAccept();"
+>
+<script type="application/x-javascript" src="chrome://greasemonkey/content/advancedscriptprefs.js" />
+
+<tabbox>
+  <tabs>
+    <tab label="&advancedscriptprefs.usersettings;" />
+    <tab label="&advancedscriptprefs.scriptsettings;" />
+  </tabs>
+  <tabpanels>
+    <tabpanel>
+      <vbox flex="1">
+        <label value="&label.corsIncluded;" />
+        <cludes id="cors-user-includes"/>
+        <label value="&label.corsExcluded;" />
+        <cludes id="cors-user-excludes" />
+        <groupbox>
+          <caption label="&UnsafeScripting;" />
+          <checkbox id="user-nosandbox" label="&NoSandboxMode;" />
+        </groupbox>
+      </vbox>
+    </tabpanel>
+    <tabpanel>
+      <vbox flex="1">
+        <vbox flex="1" class="in">
+          <label value="&label.corsIncluded;" />
+          <cludes id="cors-script-includes" class="readonly" />
+        </vbox>
+        <vbox flex="1" class="ex">
+          <label value="&label.corsExcluded;" />
+          <cludes id="cors-script-excludes" class="readonly" />
+        </vbox>
+        <groupbox>
+          <caption label="&UnsafeScripting;" />
+          <checkbox id="script-nosandbox" label="&NoSandboxMode;" />
+        </groupbox>
+      </vbox>
+    </tabpanel>
+  </tabpanels>
+</tabbox>
+
+</dialog>

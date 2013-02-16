@@ -65,6 +65,12 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
       script['_' + header] = value;
       break;
 
+    case 'corsExclude':
+      script._corsExcludes.push(value);
+      break;
+    case 'corsInclude':
+      script._corsIncludes.push(value);
+      break;
     case 'installURL':
       header = 'downloadURL';
     case 'downloadURL':

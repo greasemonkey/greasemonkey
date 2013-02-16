@@ -10,3 +10,5 @@
 <!ENTITY button.remove "Remove">
 <!ENTITY label.grpIncluded "Included Pages">
 <!ENTITY label.grpExcluded "Excluded Pages">
+<!ENTITY label.corsIncluded "CORS Included URL's">
+<!ENTITY label.corsExcluded "CORS Excluded URL's">

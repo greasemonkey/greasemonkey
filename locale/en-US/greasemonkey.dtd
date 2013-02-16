@@ -46,3 +46,6 @@
 <!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
 <!ENTITY scriptprefs.usersettings "User Settings">
 <!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY advancedscriptprefs.title "Greasemonkey Advanced User Script Preferences - !!">
+<!ENTITY advancedscriptprefs.usersettings "Advanced User Settings">
+<!ENTITY advancedscriptprefs.scriptsettings "Advanced Script Settings">

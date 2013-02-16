@@ -14,9 +14,11 @@
 ]>
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  buttons="accept,cancel"
+  buttons="extra1,accept,cancel"
   title="&scriptprefs.title;"
   ondialogaccept="return onDialogAccept();"
+  buttonlabelextra1="Advanced"
+  ondialogextra1="return onDisplayAdvancedDialog();"
 >
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
@@ -33,10 +35,6 @@
         <cludes id="user-includes"/>
         <label value="&label.grpExcluded;" />
         <cludes id="user-excludes" />
-        <groupbox>
-          <caption label="&UnsafeScripting;" />
-          <checkbox id="user-nosandbox" label="&NoSandboxMode;" />
-        </groupbox>
       </vbox>
     </tabpanel>
     <tabpanel>
@@ -49,10 +47,6 @@
           <label value="&label.grpExcluded;" />
           <cludes id="script-excludes" class="readonly" />
         </vbox>
-        <groupbox>
-          <caption label="&UnsafeScripting;" />
-          <checkbox id="script-nosandbox" label="&NoSandboxMode;" />
-        </groupbox>
       </vbox>
     </tabpanel>
   </tabpanels>

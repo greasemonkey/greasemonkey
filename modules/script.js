@@ -28,6 +28,10 @@ function Script(configNode) {
   this._observers = [];
 
   this._basedir = null;
+  this._corsExcludes = [];
+  this._corsIncludes = [];
+  this._corsUserExcludes = [];
+  this._corsUserIncludes = [];
   this._dependFail = false;
   this._dependhash = null;
   this._description = '';
@@ -95,6 +99,29 @@ Script.prototype.matchesURL = function(url) {
   // Finally allow based on script cludes and matches.
   if (this._excludes.some(testClude)) return false;
   return (this._includes.some(testClude) || this._matches.some(testMatch));
+};
+
+Script.prototype.corsAllowsURL = function(url) {
+  // For backwards-compatibility, we always allow access in cases where no
+  // in/excludes have been specified by either the script author or the user.
+  if (this._corsUserExcludes.length === 0 &&
+      this._corsUserIncludes.length === 0 &&
+      this._corsExcludes.length     === 0 &&
+      this._corsIncludes.length     === 0) return true;
+
+  var uri = GM_util.uriFromUrl(url);
+
+  function testClude(glob) {
+    return GM_convert2RegExp(glob, uri).test(url);
+  }
+
+  // Allow based on user cludes.
+  if (this._corsUserExcludes.some(testClude)) return false;
+  if (this._corsUserIncludes.some(testClude)) return true;
+
+  // Finally allow based on script cludes
+  if (this._corsExcludes.some(testClude)) return false;
+  return this._corsIncludes.some(testClude);
 };
 
 Script.prototype._changed = function(event, data) {
@@ -190,6 +217,26 @@ Script.prototype.__defineGetter__('userExcludes',
 function Script_getUserExcludes() { return this._userExcludes.concat(); });
 Script.prototype.__defineSetter__('userExcludes',
 function Script_setUserExcludes(excludes) { this._userExcludes = excludes.concat(); });
+
+Script.prototype.__defineGetter__('corsExcludes',
+  function Script_getCorsExcludes() { return this._corsExcludes.concat(); });
+Script.prototype.__defineSetter__('corsExcludes',
+  function Script_setCorsExcludes(excludes) { this._corsExcludes = excludes.concat(); });
+
+Script.prototype.__defineGetter__('corsIncludes',
+  function Script_getCorsIncludes() { return this._corsIncludes.concat(); });
+Script.prototype.__defineSetter__('corsIncludes',
+  function Script_setCorsIncludes(includes) { this._corsIncludes = includes.concat(); });
+
+Script.prototype.__defineGetter__('corsUserExcludes',
+  function Script_getCorsUserExcludes() { return this._corsUserExcludes.concat(); });
+Script.prototype.__defineSetter__('corsUserExcludes',
+  function Script_setCorsUserExcludes(excludes) { this._corsUserExcludes = excludes.concat(); });
+
+Script.prototype.__defineGetter__('corsUserIncludes',
+  function Script_getCorsUserIncludes() { return this._corsUserIncludes.concat(); });
+Script.prototype.__defineSetter__('corsUserIncludes',
+  function Script_setCorsUserIncludes(includes) { this._corsUserIncludes = includes.concat(); });
 
 Script.prototype.__defineGetter__('matches',
 function Script_getMatches() { return this._matches.concat(); });
@@ -326,6 +373,18 @@ Script.prototype._loadFromConfigNode = function(node) {
 
   for (var i = 0, childNode; childNode = node.childNodes[i]; i++) {
     switch (childNode.nodeName) {
+    case "CorsExclude":
+      this._corsExcludes.push(childNode.textContent);
+      break;
+    case "CorsInclude":
+      this._corsIncludes.push(childNode.textContent);
+      break;
+    case "CorsUserExclude":
+      this._corsUserExcludes.push(childNode.textContent);
+      break;
+    case "CorsUserInclude":
+      this._corsUserIncludes.push(childNode.textContent);
+      break;
     case "Exclude":
       this._excludes.push(childNode.textContent);
       break;
@@ -387,6 +446,10 @@ Script.prototype.toConfigNode = function(doc) {
     }
   }
 
+  addArrayNodes('CorsExclude', this._corsExcludes);
+  addArrayNodes('CorsInclude', this._corsIncludes);
+  addArrayNodes('CorsUserExclude', this._corsUserExcludes);
+  addArrayNodes('CorsUserInclude', this._corsUserIncludes);
   addArrayNodes('Exclude', this._excludes);
   addArrayNodes('Grant', this._grants);
   addArrayNodes('Include', this._includes);
@@ -483,6 +546,8 @@ Script.prototype.info = function() {
     'version': gGreasemonkeyVersion,
     'scriptWillUpdate': this.isRemoteUpdateAllowed(),
     'script': {
+      'corsIncludes': this.corsIncludes,
+      'corsExcludes': this.corsExcludes,
       'description': this.description,
       'excludes': this.excludes,
       // 'icon': ???,
@@ -491,7 +556,7 @@ Script.prototype.info = function() {
       'name': this.name,
       'namespace': this.namespace,
       'nosandbox': this.nosandbox,
-      'userNosandbox': this.userNosandbox,
+      'userNosandbox': this.userNosandbox, // FIXME: this likely needs removing
       // 'requires': ???,
       'resources': resources,
       'run-at': this.runAt,
@@ -578,6 +643,8 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
 
   // Copy new values.
   //  NOTE: User 'cludes  / nosandbox are _not_ copied!  They should remain as-is.
+  this._corsExcludes = newScript._corsExcludes;
+  this._corsIncludes = newScript._corsIncludes;
   this._excludes = newScript._excludes;
   this._grants = newScript._grants;
   this._includes = newScript._includes;

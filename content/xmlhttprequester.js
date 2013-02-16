@@ -1,9 +1,14 @@
 Components.utils.import("resource://greasemonkey/util.js");
 
-function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
+function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl, script) {
   this.wrappedContentWin = wrappedContentWin;
   this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
+  this.script = script;
+  this.stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
 // this function gets called by user scripts in content security scope to
@@ -27,8 +32,16 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     // A malformed URL won't be parsed properly.
     throw new Error(
         this.stringBundle.GetStringFromName('error.invalidUrl')
-            .replace('%1', name)
+            .replace('%1', url)
         );
+  }
+
+  // Ensure that the CORS policy allows this script to make the call
+  if (! this.script.corsAllowsURL(url)) {
+    throw new Error(
+      this.stringBundle.GetStringFromName('error.corsAccessDenied')
+          .replace('%1', url)
+    );
   }
 
   // This is important - without it, GM_xmlhttpRequest can be used to get
