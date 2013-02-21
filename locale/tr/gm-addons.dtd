@@ -5,7 +5,7 @@
 <!ENTITY ExecuteLast "Son Yürüt">
 <!ENTITY ExecuteLater "Sonra yürüt">
 <!ENTITY ExecuteSooner "Er geç yürüt">
-<!ENTITY FindUpdate "Find Update">
+<!ENTITY FindUpdate "Güncelleme Bul">
 <!ENTITY InstallUpdate "Güncelleştirme Yükle">
 <!ENTITY MoveDown "Aşağı Taşı">
 <!ENTITY MoveDown.accesskey "D">

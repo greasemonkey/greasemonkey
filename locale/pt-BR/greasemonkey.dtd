@@ -10,11 +10,11 @@
 <!ENTITY menu.manage.accesskey "G">
 <!ENTITY menu.options "Opções do Greasemonkey...">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "Sites da web...">
 <!ENTITY menu.websites.accesskey "W">
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.manual "Manual do Greasemonkey">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Habilitado">
 <!ENTITY statusbar.enabled.accesskey "H">
@@ -26,7 +26,7 @@
 <!ENTITY install.warning2 "Você deve instalar somente scripts de fontes confiáveis.">
 <!ENTITY install.showscriptsource "Mostrar Código-Fonte do Script">
 <!ENTITY install.installbutton "Instalar">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Erro no Download">
 <!ENTITY loading "Baixando…">
 <!ENTITY newscript.name "Nome">
 <!ENTITY newscript.namespace "Namespace">
@@ -35,8 +35,8 @@
 <!ENTITY newscript.excludes "Exclui (Um por linha)">
 <!ENTITY newscript.fromClipboard "Usar Script da Área de Transferência">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.defaultEditor "Usar Editor Padrão">
+<!ENTITY options.browseForEditor "Procurar Programa Padrão">
 <!ENTITY options.globalExcludes "Exclusões Globais">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AnonymousStatistics "Estatísticas anônimas">

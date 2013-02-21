@@ -10,11 +10,11 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey 选项...">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "网站...">
 <!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespot "Greasespot 博客">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.manual "Greasemonkey 手册">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "启用">
 <!ENTITY statusbar.enabled.accesskey "E">

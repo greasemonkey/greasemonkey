@@ -10,11 +10,11 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey Seçenekleri">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "Web siteleri">
 <!ENTITY menu.websites.accesskey "W">
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.manual "Greasemonkey Kılavuzu">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Etkin">
 <!ENTITY statusbar.enabled.accesskey "E">
@@ -26,21 +26,21 @@
 <!ENTITY install.warning2 "Yalnızca güvendiğiniz kaynaklardan gelen betikleri yükleyin.">
 <!ENTITY install.showscriptsource "Betik Kaynağını Göster">
 <!ENTITY install.installbutton "Kur">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "İndirme Hatası">
 <!ENTITY loading "İndirliyor">
 <!ENTITY newscript.name "İsim">
 <!ENTITY newscript.namespace "İsim alanı">
 <!ENTITY newscript.description "Tanım">
 <!ENTITY newscript.includes "Eklenenler (satır başına bir tane)">
 <!ENTITY newscript.excludes "Çıkarılanlar (satır başına bir tane)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Panodan Betik Kullan">
 <!ENTITY options.editor "Editör">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.defaultEditor "Varsayılan Düzenleyi Kullan">
+<!ENTITY options.browseForEditor "Düzenleyici Program Bul">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
 <!ENTITY Uninstall "Kaldır">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "Anonim İstatistikler">
+<!ENTITY SubmitStats "Greasemonkey geliştirmeleri için anonim kullanım istatistiklerini topla ve gönder.">
 <!ENTITY AlsoUninstallPrefs "Ayrıca ilişkili tercihleri kaldır">
 <!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">
 <!ENTITY RequireSecureUpdates "Gerekli güvenlik güncellemeleri">
