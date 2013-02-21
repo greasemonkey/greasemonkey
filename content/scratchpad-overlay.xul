@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<overlay id="greasemonkey-browser-overlay"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
+
+<script type="application/x-javascript">
+// If we're opening a user script, put the cursor at the top.
+// Workaround for #1708 ; remove when http://bugzil.la/843597 is fixed.
+window.addEventListener('load', function() {
+  var args = window.arguments;
+  if (!args) return;
+  if (!(args[0] instanceof Ci.nsIDialogParamBlock)) return;
+  args = args[0].GetString(1);
+  if (!args) return;
+  args = JSON.parse(args);
+  if (!args.filename) return;
+  if (!args.filename.match(/\.user\.js$/)) return;
+  function moveCursorToTop() {
+    // Retry via timeout until initialization is complete.
+    if (!Scratchpad.initialized) return setTimeout(moveCursorToTop, 50);
+    // Then move the cursor to the top.
+    Scratchpad.selectRange(0, 0);
+  }
+  moveCursorToTop();
+}, true);
+</script>
+
+</overlay>
