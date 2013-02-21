@@ -1,3 +1,4 @@
+Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 const EXPORTED_SYMBOLS = ['scriptDir'];
