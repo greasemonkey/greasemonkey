@@ -137,6 +137,11 @@ function getStatsObj() {
       domain = gTldService.getBaseDomain(downloadUri)
     } catch (e) { }
 
+    var sizes = [script.textContent.length];
+    for (var j = 0, require = null; require = script.requires[j]; j++) {
+      sizes[sizes.length] = require.textContent.length;
+    }
+
     var scriptStat = {
         'enabled': script.enabled,
         'explicitGrants': explicitGrants,
@@ -147,6 +152,7 @@ function getStatsObj() {
         'installDomain': domain,
         'installTime': script.installDate.toISOString(),
         'modifiedTime': script.modifiedDate.toISOString(),
+        'sizes': sizes,
         'userExcludeCount': script.userExcludes.length,
         'userIncludeCount': script.userIncludes.length,
         'valueCount': valueCount,
