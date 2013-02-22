@@ -56,7 +56,8 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
         responseHeaders: "r",
         responseText: "r",
         status: "r",
-        statusText: "r"
+        statusText: "r",
+        abort: "r"
         },
     abort: function () { return req.abort(); }
   };
