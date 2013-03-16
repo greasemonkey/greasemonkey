@@ -65,5 +65,4 @@ function GM_windowForTab(aTab, aBrowser) {
     .docShell
     .QueryInterface(Ci.nsIInterfaceRequestor)
     .getInterface(Ci.nsIDOMWindow);
-
 }
