@@ -110,7 +110,7 @@ ScriptProtocol.prototype.newChannel = function(aUri) {
   } else {
     return new ScriptChannel(aUri, script);
   }
-  
+
   // Default fall-through case, send a 404.  (By using a script channel
   // w/out any script object.)(
   return new ScriptChannel(aUri);
