@@ -1,0 +1,15 @@
+; EditorConfig is awesome: http://EditorConfig.org
+
+root = true ; only heed rules in Greasemonkey tree
+
+[*]
+charset = utf-8
+tab_width = 8
+end_of_line = lf
+indent_size = 2
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[LICENSE.mpl]
+indent_size = 5
