@@ -105,44 +105,37 @@ function createSandbox(
     sandbox.alert = alert;
   }
 
-  var imp = sandbox.importFunction;
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    imp(function(css) { GM_addStyle(aContentWin.document, css); },
-        'GM_addStyle');
+    sandbox.GM_addStyle = function(css) { GM_addStyle(aContentWin.document, css)};
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
-    imp(GM_util.hitch(new GM_ScriptLogger(aScript), 'log'), 'GM_log');
+    sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
   }
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
     var gmrmc = GM_util.hitch(
         null, registerMenuCommand, aContentWin, aChromeWin, aScript);
-    imp(gmrmc, 'GM_registerMenuCommand');
+    sandbox.GM_registerMenuCommand = gmrmc;
   }
 
   var scriptStorage = new GM_ScriptStorage(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
-    imp(GM_util.hitch(scriptStorage, 'deleteValue'), 'GM_deleteValue');
+    sandbox.GM_deleteValue = GM_util.hitch(scriptStorage, 'deleteValue');
   }
   if (GM_util.inArray(aScript.grants, 'GM_getValue')) {
-    imp(GM_util.hitch(scriptStorage, 'getValue'), 'GM_getValue');
+    sandbox.GM_getValue = GM_util.hitch(scriptStorage, 'getValue');
   }
   if (GM_util.inArray(aScript.grants, 'GM_setValue')) {
-    imp(GM_util.hitch(scriptStorage, 'setValue'), 'GM_setValue');
+    sandbox.GM_setValue = GM_util.hitch(scriptStorage, 'setValue');
   }
 
   var scriptResources = new GM_Resources(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_getResourceURL')) {
-    imp(GM_util.hitch(scriptResources, 'getResourceURL', aScript),
-        'GM_getResourceURL');
+    sandbox.GM_getResourceURL = GM_util.hitch(scriptResources, 'getResourceURL', aScript);
   }
   if (GM_util.inArray(aScript.grants, 'GM_getResourceText')) {
-    imp(GM_util.hitch(
-        scriptResources, 'getResourceText'), 'GM_getResourceText');
+    sandbox.GM_getResourceText = GM_util.hitch(scriptResources, 'getResourceText');
   }
 
-  // The .importMethod() is safe because it can't return object values (I
-  // think?) -- but sometimes we want to, so in that case do a straight assign.
-  // TODO: When minVer=4 check if this is still necessary.
   if (GM_util.inArray(aScript.grants, 'GM_listValues')) {
     sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
   }
