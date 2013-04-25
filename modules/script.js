@@ -724,6 +724,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback) {
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
+  req.overrideMimeType('application/javascript');
   req.open("GET", this.updateURL, true);
   req.onload = GM_util.hitch(this, "checkRemoteVersion", req, aCallback);
   req.onerror = GM_util.hitch(null, aCallback, false);
