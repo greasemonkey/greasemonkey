@@ -9,12 +9,12 @@
 <!ENTITY menu.manage "Hantera användarskript…">
 <!ENTITY menu.manage.accesskey "H">
 <!ENTITY menu.options "Inställningar för Greasemonkey…">
-<!ENTITY menu.options.accesskey "I">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.options.accesskey "G">
+<!ENTITY menu.websites "Webbplatser…">
 <!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
-<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.greasespot "Greasespots blogg">
+<!ENTITY menu.websites.greasespotwiki "Greasespots wiki">
+<!ENTITY menu.websites.manual "Handbok för Greasemonkey">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Aktiverat">
 <!ENTITY statusbar.enabled.accesskey "A">
@@ -26,17 +26,17 @@
 <!ENTITY install.warning2 "Du bör endast installera skript från källor som du litar på.">
 <!ENTITY install.showscriptsource "Visa skriptkällkod">
 <!ENTITY install.installbutton "Installera">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Filhämtningsfel">
 <!ENTITY loading "Hämtar…">
 <!ENTITY newscript.name "Namn">
 <!ENTITY newscript.namespace "Namnrymd">
 <!ENTITY newscript.description "Beskrivning">
 <!ENTITY newscript.includes "Inkluderingar (ett per rad)">
 <!ENTITY newscript.excludes "Undantag (ett per rad)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Använd skript från Urklipp">
 <!ENTITY options.editor "Redigeringsprogram">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.defaultEditor "Använd standardredigeringsprogrammet">
+<!ENTITY options.browseForEditor "Bläddra efter redigeringsprogram">
 <!ENTITY options.globalExcludes "Globala undantag">
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AnonymousStatistics "Anonym statistik">
