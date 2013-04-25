@@ -526,6 +526,10 @@ Script.prototype.isRemoteUpdateAllowed = function() {
 };
 
 Script.prototype.updateFromNewScript = function(newScript, safeWin) {
+  // Keep a _copy_ of the old script ID, so we can eventually pass it up
+  // to the Add-ons manager UI, to update this script's old entry.
+  var oldScriptId = '' + this.id;
+
   // If the @name and/or @namespace have changed, make sure they don't
   // conflict with another installed script.
   if (newScript.id != this.id) {
@@ -574,6 +578,9 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this.showGrantWarning();
   this.checkConfig();
 
+  // Update add-ons manager UI.
+  this._changed('modified', oldScriptId);
+
   var dependhash = GM_util.sha1(newScript._rawMeta);
   if (dependhash != this._dependhash && !newScript._dependFail) {
     // Store window references for late injection.
@@ -583,7 +590,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
           true);
       this.pendingExec.push('document-start update');
     } else {
-      this.pendingExec.push({'safeWin': safeWin});
+      if (safeWin) this.pendingExec.push({'safeWin': safeWin});
     }
 
     // Re-download dependencies.

@@ -9,6 +9,7 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 var userScriptViewId = 'addons://list/greasemonkey-user-script';
 
+window.addEventListener('focus', focus, false);
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
 
@@ -67,8 +68,7 @@ var observer = {
         if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
         if (!oldAddon) break;
-        ScriptAddonReplaceScript(script);
-        addon = ScriptAddonFactoryByScript(script);
+        addon = ScriptAddonReplaceScript(script);
 
         // Use the addon references to update the view to match the new state.
         var item = createItem(addon);
@@ -110,6 +110,14 @@ function sortedByExecOrder() {
     .getElementsByAttribute('sortBy', 'executionIndex')[0]
     .hasAttribute('checkState');
 };
+
+function focus() {
+  // When the window gains focus, it might be from switching to an editor
+  // and back, so scan for updated scripts.
+  var config = GM_util.getService().config;
+  config.updateModifiedScripts('document-start', null);
+  config.updateModifiedScripts('document-end', null);
+}
 
 function init() {
   GM_util.getService().config.addObserver(observer);
