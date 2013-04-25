@@ -259,8 +259,9 @@ Script.prototype.setFilename = function(aBaseName, aFileName) {
   if (!this._downloadURL) this._downloadURL = this.fileURL;
 };
 
-Script.prototype.setModTimeFromFile = function() {
+Script.prototype.fixTimestampsOnInstall = function() {
   this._modifiedTime = this.file.lastModifiedTime;
+  this._installTime = this.file.lastModifiedTime;
 };
 
 Script.prototype._loadFromConfigNode = function(node) {

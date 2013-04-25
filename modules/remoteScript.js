@@ -332,12 +332,9 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this._tempDir.moveTo(GM_util.scriptDir(), this._baseName);
     this._tempDir = null;
 
-    // Since we moved the file, it's modtime changed, update the script:
-    this.script.setModTimeFromFile();
-    // Let the config know the base/file name has changed to its real value now.
-    GM_config._changed(this.script, 'modified', this.script.id);
-
+    this.script.fixTimestampsOnInstall();
     this.script.checkConfig();
+    this.script._changed('modified');
 
     // Let the user know we're all done.
     GM_notification(
