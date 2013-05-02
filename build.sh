@@ -34,7 +34,7 @@ if [ "official" != "$1" ]; then
   rm tmp
 fi
 
-if [ "bz" == "$1" ]; then
+if [ "bz" = "$1" ]; then
   # For babelzilla, only include en-US locale.
   rm -r `find locale -type d -not -name locale -a -not -name en-US`
 fi
