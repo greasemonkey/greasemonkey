@@ -1,6 +1,6 @@
 Components.utils.import('resource://greasemonkey/util.js'); // ref'd in XUL
 
-var gScriptId = atob(location.hash.substring(1));
+var gScriptId = location.hash.substring(1);
 var gScript = GM_util.getService().config.getMatchingScripts(function(script) {
   return script.id == gScriptId;
 })[0];

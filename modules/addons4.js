@@ -149,7 +149,7 @@ function ScriptAddon_getIsActive() {
 ScriptAddon.prototype.__defineGetter__('optionsURL',
 function ScriptAddon_getOptionsURL() {
   return 'chrome://greasemonkey/content/scriptprefs.xul#'
-      + btoa(this._script.id);
+      + encodeURIComponent(this._script.id);
 });
 
 ScriptAddon.prototype.__defineGetter__('userDisabled',
