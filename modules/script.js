@@ -291,6 +291,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     this._modifiedTime = parseInt(node.getAttribute("modified"), 10);
     this._dependhash = node.getAttribute("dependhash");
     this._version = node.getAttribute("version");
+    if ('null' === this._version) this._version = null;
   }
 
   // Note that "checkRemoteUpdates" used to be a boolean.  As of #1647, it now
