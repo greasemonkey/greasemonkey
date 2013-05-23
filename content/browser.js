@@ -33,7 +33,9 @@ GM_BrowserUI.init = function() {
 GM_BrowserUI.chromeLoad = function(e) {
   // Store DOM element references in this object, also for use elsewhere.
   GM_BrowserUI.tabBrowser = document.getElementById("content");
-  GM_BrowserUI.bundle = document.getElementById("gm-browser-bundle");
+  GM_BrowserUI.bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService)
+      .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
 
   // Update visual status when enabled state changes.
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
@@ -53,6 +55,7 @@ GM_BrowserUI.chromeLoad = function(e) {
       'DOMContentLoaded', function(aEvent) {
         var safeWin = aEvent.target.defaultView;
         var href = safeWin.location.href;
+        GM_BrowserUI.checkDisabledScriptNavigation(aEvent, safeWin, href);
         if (href == 'about:blank') {
           // #1696: document-element-inserted doesn't see about:blank
           svc.contentLoad(aEvent)
@@ -220,6 +223,41 @@ GM_BrowserUI.showToolbarButton = function() {
 
 GM_BrowserUI.openOptions = function() {
   openDialog('chrome://greasemonkey/content/options.xul', null, 'modal');
+};
+
+GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
+  if (!aHref.match(/\.user\.js$/)) return;
+  if (aSafeWin.document.contentType.match(/^text\/(x|ht)ml/)) return;
+  var notificationBox = gBrowser.getNotificationBox();
+  notificationBox.appendNotification(
+    GM_BrowserUI.bundle.GetStringFromName('disabledWarning'),
+    "install-userscript",
+    "chrome://greasemonkey/skin/icon16.png",
+    notificationBox.PRIORITY_WARNING_MEDIUM,
+    [{
+      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable'),
+      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable.accessKey'),
+      'popup': null,
+      'callback': GM_util.hitch(this, function() {
+        GM_util.setEnabled(true);
+      })
+    },{
+      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall'),
+      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall.accessKey'),
+      'popup': null,
+      'callback': GM_util.hitch(this, function() {
+        GM_util.setEnabled(true);
+        GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
+      })
+    },{
+      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install'),
+      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
+      'popup': null,
+      'callback': GM_util.hitch(this, function() {
+        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+      })
+    }]
+  );
 };
 
 GM_BrowserUI.init();
