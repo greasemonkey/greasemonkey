@@ -283,10 +283,12 @@ Config.prototype._updateVersion = function() {
       var chromeWin = GM_util.getBrowserWindow();
       // If we found it, use it to open a welcome tab.
       if (chromeWin && chromeWin.gBrowser) {
-        var url = 'http://www.greasespot.net/p/welcome.html?' + newVersion;
+        var url = 'http://www.greasespot.net/p/welcome.html'
+            + '?utm_source=xpi&utm_medium=xpi&utm_campaign=welcome'
+            + '&utm_content=' + newVersion;
         // the setTimeout makes sure we do not execute too early -- sometimes
         // the window isn't quite ready to add a tab yet
-        chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 0, url);
+        chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 100, url);
       }
     }
   }));
