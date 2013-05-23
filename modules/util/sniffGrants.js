@@ -12,6 +12,7 @@ const APIS = [
     'GM_log',
     'GM_openInTab',
     'GM_registerMenuCommand',
+    'GM_setClipboard',
     'GM_setValue',
     'GM_xmlhttpRequest',
     'unsafeWindow',

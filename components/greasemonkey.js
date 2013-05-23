@@ -9,6 +9,7 @@ var Ci = Components.interfaces;
 var Cu = Components.utils;
 
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
+Cu.import('resource://greasemonkey/GM_setClipboard.js');
 Cu.import('resource://greasemonkey/constants.js');
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
@@ -126,6 +127,10 @@ function createSandbox(
   }
   if (GM_util.inArray(aScript.grants, 'GM_setValue')) {
     sandbox.GM_setValue = GM_util.hitch(scriptStorage, 'setValue');
+  }
+
+  if (GM_util.inArray(aScript.grants, 'GM_setClipboard')) {
+    sandbox.GM_setClipboard = GM_util.hitch(null, GM_setClipboard);
   }
 
   var scriptResources = new GM_Resources(aScript);
