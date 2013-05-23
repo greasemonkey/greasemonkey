@@ -26,6 +26,8 @@ var gStartupHasRun = false;
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
     .getService(Ci.nsIFileProtocolHandler);
+var gIoService = Cc["@mozilla.org/network/io-service;1"]
+    .getService(Ci.nsIIOService);
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
@@ -184,10 +186,15 @@ function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
   }
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
+  // Resolve URL relative to the location of the content window.
+  var baseUri = gIoService.newURI(safeContentWin.location.href, null, null);
+  var uri = gIoService.newURI(url, null, baseUri);
+
   var browser = chromeWin.gBrowser;
   var currentTab = browser.tabs[
       browser.getBrowserIndexForDocument(safeContentWin.document)];
-  var newTab = browser.loadOneTab(url, {'inBackground': aLoadInBackground});
+  var newTab = browser.loadOneTab(
+      uri.spec, {'inBackground': aLoadInBackground});
   var newWin = GM_windowForTab(newTab, browser);
 
   var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
