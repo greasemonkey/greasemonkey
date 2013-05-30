@@ -38,8 +38,8 @@ var eTldService = Components
 // Exposed outer method takes regex as string, and handles the magic TLD.
 // (Can't memoize a URI object, yet we want to do URL->URI outside this method,
 // once for efficiency.  Compromise: memoize just the internal string handling.)
-function GM_convert2RegExp(pattern, uri) {
-  var reStr = GM_convert2RegExpInner(pattern);
+function GM_convert2RegExp(pattern, uri, forceGlob) {
+  var reStr = GM_convert2RegExpInner(pattern, forceGlob);
 
   // Inner returns a RegExp, not str, for input regex (not glob) patterns.
   // Use those directly without magic TLD modifications.
@@ -63,10 +63,10 @@ function GM_convert2RegExp(pattern, uri) {
 
 
 // Memoized internal implementation just does glob -> regex translation.
-function GM_convert2RegExpInner(pattern) {
+function GM_convert2RegExpInner(pattern, forceGlob) {
   var s = new String(pattern);
 
-  if ('/' == s.substr(0, 1) && '/' == s.substr(-1, 1)) {
+  if (!forceGlob && '/' == s.substr(0, 1) && '/' == s.substr(-1, 1)) {
     // Leading and trailing slash means raw regex.
     return new RegExp(s.substring(1, s.length - 1), 'i');
   }
