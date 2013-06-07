@@ -169,6 +169,7 @@ function(wrappedContentWin, req, event, details) {
   req.addEventListener(event, function(evt) {
     var responseState = {
       __exposedProps__: {
+          context: "r",
           finalUrl: "r",
           lengthComputable: "r",
           loaded: "r",
@@ -179,6 +180,7 @@ function(wrappedContentWin, req, event, details) {
           statusText: "r",
           total: "r",
           },
+      context: details.context || null,
       // Can't support responseXML because security won't
       // let the browser call properties on it.
       responseText: req.responseText,
