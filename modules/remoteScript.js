@@ -334,7 +334,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
 
     this.script.fixTimestampsOnInstall();
     this.script.checkConfig();
-    this.script._changed('modified');
+    this.script._changed('modified', this.script.id);
 
     // Let the user know we're all done.
     GM_notification(
