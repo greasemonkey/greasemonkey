@@ -10,11 +10,11 @@
 <!ENTITY menu.manage.accesskey "U">
 <!ENTITY menu.options "Greasemonkey-opties…">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "Websites…">
 <!ENTITY menu.websites.accesskey "W">
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.manual "Greasemonkey-handleiding">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Ingeschakeld">
 <!ENTITY statusbar.enabled.accesskey "I">
@@ -26,17 +26,17 @@
 <!ENTITY install.warning2 "Installeer alleen scripts van auteurs die u vertrouwt.">
 <!ENTITY install.showscriptsource "Scriptbron weergeven">
 <!ENTITY install.installbutton "Installeren">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Downloadfout">
 <!ENTITY loading "Downloaden…">
 <!ENTITY newscript.name "Naam">
 <!ENTITY newscript.namespace "Namespace">
 <!ENTITY newscript.description "Beschrijving">
 <!ENTITY newscript.includes "Beïnvloedt (één per regel)">
 <!ENTITY newscript.excludes "Sluit uit (één per regel)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Script van klembord gebruiken">
 <!ENTITY options.editor "Tekstverwerker">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.defaultEditor "Standaard bewerkingsprogramma gebruiken">
+<!ENTITY options.browseForEditor "Naar bewerkingsprogramma bladeren">
 <!ENTITY options.globalExcludes "Sluit globaal uit">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AnonymousStatistics "Anonieme statistieken">
