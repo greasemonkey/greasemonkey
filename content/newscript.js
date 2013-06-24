@@ -103,7 +103,7 @@ function createScriptSource() {
     } else {
       alert(bundle.getString("newscript.nonamespace"));
       return false;
-	}
+    }
   }
 
   if (format.indexOf("%description%") >- 1) {
@@ -111,49 +111,42 @@ function createScriptSource() {
     if ("" != description) {
       format = format.replace("%description%", description);
     } else if (GM_util.getService().config.newScript.removeUnused) {
-	  format = format.replace(/\/\/\s*@description.*\n/i, "");  // remove line;
-	}
+      format = format.replace(/\/\/\s*@description.*\n/i, "");  // remove line;
+    }
   }
 
   if (format.indexOf("%include%") >- 1) {
     var includes = document.getElementById("includes").value;
     if ("" != includes) {
-	  includes = includes.match(/.+/g);
-	  var includeFormat;
-	  if ((includeFormat = format.match(/(\/\/\s*@include.*\n)/i)) && (includeFormat = includeFormat[0])) {
-		var includesFormat = "";
-	    for(var i = 0; i < includes.length; i++) {
-		  includesFormat += includeFormat.replace("%include%", includes[i]);
-		}
-		format = format.replace(includeFormat, includesFormat);
-	  }
-	} else if (GM_util.getService().config.newScript.removeUnused) {
-	  format = format.replace(/\/\/\s*@include.*\n/i, "");  // remove line;
-	}
+      includes = includes.match(/.+/g);
+      var includeFormat;
+      if ((includeFormat = format.match(/(\/\/\s*@include.*\n)/i)) && (includeFormat = includeFormat[0])) {
+        var includesFormat = "";
+        for(var i = 0; i < includes.length; i++) {
+          includesFormat += includeFormat.replace("%include%", includes[i]);
+        }
+        format = format.replace(includeFormat, includesFormat);
+      }
+    } else if (GM_util.getService().config.newScript.removeUnused) {
+      format = format.replace(/\/\/\s*@include.*\n/i, "");  // remove line;
+    }
   }
   
   if (format.indexOf("%exclude%") >- 1) {
     var excludes = document.getElementById("excludes").value;
     if ("" != excludes) {
-	  excludes = excludes.match(/.+/g);
-	  var excludeFormat;
-	  if ((excludeFormat = format.match(/(\/\/\s*@exclude.*\n)/i)) && (excludeFormat = excludeFormat[0])) {
-		var excludesFormat = "";
-	    for(var i = 0; i < excludes.length; i++) {
-		  excludesFormat += excludeFormat.replace("%exclude%", excludes[i]);
-		}
-		format = format.replace(excludeFormat, excludesFormat);
-	  }
-	} else if (GM_util.getService().config.newScript.removeUnused) {
-	  format = format.replace(/\/\/\s*@exclude.*\n/i, "");  // remove line;
-	}
-  }
-
-  var excludes = document.getElementById("excludes").value;
-  if ("" != excludes) {
-    excludes = excludes.match(/.+/g);
-    excludes = "// @exclude     " + excludes.join("\n// @exclude     ");
-    //script.push(excludes);
+      excludes = excludes.match(/.+/g);
+      var excludeFormat;
+      if ((excludeFormat = format.match(/(\/\/\s*@exclude.*\n)/i)) && (excludeFormat = excludeFormat[0])) {
+        var excludesFormat = "";
+        for(var i = 0; i < excludes.length; i++) {
+          excludesFormat += excludeFormat.replace("%exclude%", excludes[i]);
+        }
+        format = format.replace(excludeFormat, excludesFormat);
+      }
+    } else if (GM_util.getService().config.newScript.removeUnused) {
+      format = format.replace(/\/\/\s*@exclude.*\n/i, "");  // remove line;
+    }
   }
 
   if (window.navigator.platform.match(/^Win/)) {
