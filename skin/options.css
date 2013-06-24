@@ -1,3 +1,7 @@
 cludes {
   min-width: 500px;
 }
+
+#newScript-format {
+  font-family: monospace;
+}
