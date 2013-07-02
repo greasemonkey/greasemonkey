@@ -325,6 +325,7 @@ ScriptInstall.prototype.install = function() {
           'onDownloadFailed', this._listeners, this);
     }
   }));
+  this._remoteScript = rs;
 };
 
 ScriptInstall.prototype._progressCallback = function(
