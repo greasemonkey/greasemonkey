@@ -284,7 +284,7 @@ ScriptInstall.prototype._script = null;
 
 ScriptInstall.prototype.install = function() {
   AddonManagerPrivate.callInstallListeners(
-      'onDownloadStarted', this._listeners);
+      'onDownloadStarted', this._listeners, this);
   this.state = AddonManager.STATE_DOWNLOADING;
 
   var rs = new RemoteScript(this._script._downloadURL);
@@ -294,7 +294,7 @@ ScriptInstall.prototype.install = function() {
     if (aSuccess && 'dependencies' == aType) {
       this._progressCallback(rs, 'progress', 1);
       AddonManagerPrivate.callInstallListeners(
-          'onDownloadEnded', this._listeners);
+          'onDownloadEnded', this._listeners, this);
 
       // See #1659 .  Pick the biggest of "remote version" (possibly from an
       // @updateURL file) and "downloaded version".
@@ -309,17 +309,23 @@ ScriptInstall.prototype.install = function() {
 
       this.state = AddonManager.STATE_INSTALLING;
       AddonManagerPrivate.callInstallListeners(
-          'onInstallStarted', this._listeners);
+          'onInstallStarted', this._listeners, this);
+
+      // Note: This call also takes care of replacing the cached ScriptAddon
+      // object with a new one for the updated script.
       rs.install(this._script);
       rs.script._changed('modified');
+
+      this.addon = ScriptAddonFactoryByScript(rs.script);
       AddonManagerPrivate.callInstallListeners(
-          'onInstallEnded', this._listeners);
+          'onInstallEnded', this._listeners, this, this.addon);
     } else if (!aSuccess) {
       this.state = AddonManager.STATE_DOWNLOAD_FAILED;
       AddonManagerPrivate.callInstallListeners(
-          'onDownloadFailed', this._listeners);
+          'onDownloadFailed', this._listeners, this);
     }
   }));
+  this._remoteScript = rs;
 };
 
 ScriptInstall.prototype._progressCallback = function(
@@ -327,7 +333,7 @@ ScriptInstall.prototype._progressCallback = function(
   this.maxProgress = 100;
   this.progress = Math.floor(aData * 100);
   AddonManagerPrivate.callInstallListeners(
-      'onDownloadProgress', this._listeners);
+      'onDownloadProgress', this._listeners, this);
 };
 
 ScriptInstall.prototype.cancel = function() {
@@ -335,7 +341,7 @@ ScriptInstall.prototype.cancel = function() {
   AddonManagerPrivate.callInstallListeners(
       'onInstallEnded', this._listeners, this, this.existingAddon);
   AddonManagerPrivate.callInstallListeners(
-      'onInstallCancelled', this._listeners, this, this.existingAddon);
+      'onInstallCancelled', this._listeners, this);
   if (this._remoteScript) {
     this._remoteScript.cleanup();
     this._remoteScript = null;
