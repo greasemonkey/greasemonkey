@@ -148,7 +148,7 @@ function createSandbox(
   }
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
     sandbox.GM_openInTab = GM_util.hitch(
-        null, openInTab, aContentWin, aChromeWin);
+        null, openInTab, aContentWin);
   }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
@@ -180,7 +180,7 @@ function isTempScript(uri) {
   return gTmpDir.contains(file, true);
 }
 
-function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
+function openInTab(safeContentWin, url, aLoadInBackground) {
   if (!GM_util.apiLeakCheck("GM_openInTab")) {
     return undefined;
   }
@@ -190,6 +190,10 @@ function openInTab(safeContentWin, chromeWin, url, aLoadInBackground) {
   var baseUri = gIoService.newURI(safeContentWin.location.href, null, null);
   var uri = gIoService.newURI(url, null, baseUri);
 
+  // Get the chrome window currently corresponding to the content window, as
+  // this might have changed since the script was injected (e.g. by moving
+  // the tab to a different window).
+  var chromeWin = getChromeWinForContentWin(safeContentWin);
   var browser = chromeWin.gBrowser;
   var currentTab = browser.tabs[
       browser.getBrowserIndexForDocument(safeContentWin.document)];
