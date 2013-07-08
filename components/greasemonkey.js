@@ -116,7 +116,7 @@ function createSandbox(
   }
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
     var gmrmc = GM_util.hitch(
-        null, registerMenuCommand, aContentWin, aChromeWin, aScript);
+        null, registerMenuCommand, aContentWin, aScript);
     sandbox.GM_registerMenuCommand = gmrmc;
   }
 
@@ -213,7 +213,7 @@ function openInTab(safeContentWin, url, aLoadInBackground) {
 };
 
 function registerMenuCommand(
-    wrappedContentWin, chromeWin, script,
+    wrappedContentWin, script,
     commandName, commandFunc, accessKey, unused, accessKey2
 ) {
   if (!GM_util.apiLeakCheck("GM_registerMenuCommand")) {
