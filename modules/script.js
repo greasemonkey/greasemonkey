@@ -482,6 +482,7 @@ Script.prototype.info = function() {
       'version': this.version,
     },
     'scriptMetaStr': extractMeta(this.textContent),
+    'scriptSource': this.textContent,
   }
 };
 
