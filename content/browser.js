@@ -327,6 +327,10 @@ function GM_showPopup(aEvent) {
     return mi;
   }
 
+  // Make sure this event was triggered by opening the actual monkey menu,
+  // not one of its submenus.
+  if (aEvent.currentTarget != aEvent.target) return;
+
   var popup = aEvent.target;
   var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
   var scriptsTopEl = popup.getElementsByClassName("scripts-top-point")[0];
@@ -383,7 +387,8 @@ function GM_showPopup(aEvent) {
  */
 function GM_hidePopup(aEvent) {
   var popup = aEvent.target;
-
+  // Only handle the actual monkey menu event.
+  if (aEvent.currentTarget != aEvent.target) return;
   // Propagate to commands sub-menu.
   var commandsPopup = popup.querySelector(
       'menupopup.greasemonkey-user-script-commands-popup');

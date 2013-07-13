@@ -97,11 +97,7 @@
         accesskey="&menu.commands.accesskey;"
         label="&menu.commands;"
       >
-        <menupopup
-          class='greasemonkey-user-script-commands-popup'
-          onpopupshowing="event.stopPropagation();"
-          onpopuphiding="event.stopPropagation();"
-          />
+        <menupopup class='greasemonkey-user-script-commands-popup' />
       </menu>
 
       <menuseparator />
