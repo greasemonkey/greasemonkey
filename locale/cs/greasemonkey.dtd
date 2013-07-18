@@ -1,5 +1,5 @@
-<!ENTITY menu.install "Instalovat uživatelský skript...">
-<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.install "Nainstalovat uživatelský skript...">
+<!ENTITY menu.install.accesskey "i">
 <!ENTITY menu.show "Zobrazit zdrojový kód uživatelského skriptu">
 <!ENTITY menu.show.accesskey "Z">
 <!ENTITY menu.commands "Příkazy uživatelských skriptů...">
@@ -25,7 +25,7 @@
 <!ENTITY install.warning1 "Podvodné skripty mohou narušit vaše soukromí a jednat vaším jménem bez vašeho vědomí.">
 <!ENTITY install.warning2 "Měli byste instalovat skripty pouze ze zdrojů, kterým věříte.">
 <!ENTITY install.showscriptsource "Zobrazit zdrojový kód skriptu">
-<!ENTITY install.installbutton "Instalovat">
+<!ENTITY install.installbutton "Nainstalovat">
 <!ENTITY install.downloadError "Chyba při stahování">
 <!ENTITY loading "Stahování...">
 <!ENTITY newscript.name "Název">
