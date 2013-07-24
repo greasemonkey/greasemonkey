@@ -205,7 +205,6 @@ DownloadListener.prototype = {
 
   // nsISupports
   QueryInterface: XPCOMUtils.generateQI([
-      Ci.nsIClassInfo,
       Ci.nsIProgressEventSink,
       Ci.nsIStreamListener,
       Ci.nsISupports,
