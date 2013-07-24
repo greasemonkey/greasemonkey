@@ -8,13 +8,13 @@ const XMLHttpRequest = Components.Constructor(
 
 var gCheckIsRunning = false;
 
-function checkCoralCache(msg) {
+function checkCoralCache() {
   if (!gCheckIsRunning) {
     gCheckIsRunning = true;
     var req = new XMLHttpRequest();
     req.onerror = GM_util.hitch(null, onError, req);
     req.onload = GM_util.hitch(null, onLoad, req);
-    req.open('get', 'http://userscripts.org/scripts/source/1.meta.js');
+    req.open('get', 'http://userscripts.org.nyud.net/scripts/source/1.meta.js');
     req.send();
   }
 
