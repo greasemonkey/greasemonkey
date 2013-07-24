@@ -22,5 +22,6 @@ overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/conte
 overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://browser/content/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul
+overlay    chrome://browser/content/devtools/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul
 
 locale     greasemonkey en-US locale/en-US/
