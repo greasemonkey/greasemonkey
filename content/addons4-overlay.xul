@@ -27,6 +27,7 @@
   <command id="cmd_userscript_execute_later" />
   <command id="cmd_userscript_execute_last" />
   <command id="cmd_userscript_showItemPreferences" />
+  <command id="cmd_userscript_forcedFindItemUpdates" />
 </commandset>
 
 <menupopup id="addonitem-popup">
@@ -55,6 +56,10 @@
   <!-- Default find updates item. -->
   <menuitem command="cmd_findItemUpdates" class="greasemonkey"
     label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
+  />
+  <!-- Custom forced find updates item. -->
+  <menuitem command="cmd_userscript_forcedFindItemUpdates" class="greasemonkey"
+    label="&ForcedFindUpdate;"
   />
 </menupopup>
 

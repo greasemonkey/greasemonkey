@@ -95,6 +95,7 @@ function ScriptAddon(aScript) {
   this._script = aScript;
 
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
+  this.forceUpdate = false;
   this.name = this._script.name;
   this.version = this._script.version;
   this.description = this._script.description;
@@ -176,7 +177,7 @@ function ScriptAddon_getPermissions() {
   perms |= this.userDisabled
       ? AddonManager.PERM_CAN_ENABLE
       : AddonManager.PERM_CAN_DISABLE;
-  if (this._script.isRemoteUpdateAllowed()) {
+  if (this.forceUpdate || this._script.isRemoteUpdateAllowed()) {
     perms |= AddonManager.PERM_CAN_UPGRADE;
   }
   return perms;
@@ -187,8 +188,8 @@ ScriptAddon.prototype.isCompatibleWith = function() {
 };
 
 ScriptAddon.prototype.findUpdates = function(aUpdateListener, aReason) {
-  this._script.checkForRemoteUpdate(
-      GM_util.hitch(this, this._handleRemoteUpdate, aUpdateListener));
+  var callback = GM_util.hitch(this, this._handleRemoteUpdate, aUpdateListener);
+  this._script.checkForRemoteUpdate(callback, this.forceUpdate);
 };
 
 ScriptAddon.prototype._handleRemoteUpdate = function(

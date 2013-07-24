@@ -13,6 +13,11 @@ window.addEventListener('focus', focus, false);
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
 
+var stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-addons.properties");
+
 // Patch the default createItem() to add our custom property.
 var _createItemOrig = createItem;
 createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
@@ -105,6 +110,15 @@ function addonExecutesNonLast(aAddon) {
       != aAddon.executionIndex;
 }
 
+function addonUpdateCanBeForced(aAddon) {
+  if (!aAddon) return false;
+  if (SCRIPT_ADDON_TYPE != aAddon.type) return false;
+  var script = aAddon._script;
+  // Can be forced if non-forced isn't allowed, but forced is.
+  return !script.isRemoteUpdateAllowed(false)
+      && script.isRemoteUpdateAllowed(true);
+}
+
 function sortedByExecOrder() {
   return document.getElementById('greasemonkey-sort-bar')
     .getElementsByAttribute('sortBy', 'executionIndex')[0]
@@ -147,6 +161,19 @@ function init() {
       isEnabled: addonExecutesNonLast,
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 9999); }
     };
+
+  gViewController.commands.cmd_userscript_forcedFindItemUpdates = {
+      isEnabled: addonUpdateCanBeForced,
+      doCommand: function(aAddon) {
+        var result = confirm(
+            stringBundle.GetStringFromName('confirmForceUpdate'));
+        if (result) {
+          aAddon.forceUpdate = true;
+          gViewController.commands.cmd_findItemUpdates.doCommand(aAddon);
+          aAddon.forceUpdate = false;
+        }
+      }
+  };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later

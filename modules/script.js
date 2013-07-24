@@ -495,10 +495,12 @@ Script.prototype.isModified = function() {
   return false;
 };
 
-Script.prototype.isRemoteUpdateAllowed = function() {
-  if (!this.enabled) return false;
+Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!this.updateURL) return false;
-  if (this._modifiedTime > this._installTime) return false;
+  if (!aForced) {
+    if (!this.enabled) return false;
+    if (this._modifiedTime > this._installTime) return false;
+  }
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
@@ -721,19 +723,20 @@ Script.prototype.checkConfig = function() {
   }
 };
 
-Script.prototype.checkForRemoteUpdate = function(aCallback) {
+Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   if (this.availableUpdate) return aCallback(true);
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
   req.open("GET", this.updateURL, true);
-  req.onload = GM_util.hitch(this, "checkRemoteVersion", req, aCallback);
+  req.onload = GM_util.hitch(
+      this, "checkRemoteVersion", req, aCallback, aForced);
   req.onerror = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
-Script.prototype.checkRemoteVersion = function(req, aCallback) {
+Script.prototype.checkRemoteVersion = function(req, aCallback, aForced) {
   if (req.status != 200 && req.status != 0) return aCallback(false);
 
   var source = req.responseText;
@@ -746,7 +749,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback) {
   var versionChecker = Components
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
-  if (versionChecker.compare(this._version, remoteVersion) >= 0) {
+  if (!aForced && versionChecker.compare(this._version, remoteVersion) >= 0) {
     return aCallback(false);
   }
 
