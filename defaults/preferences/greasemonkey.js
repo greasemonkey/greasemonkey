@@ -4,7 +4,7 @@ pref("extensions.greasemonkey.enableScriptRefreshing", true);
 pref("extensions.greasemonkey.fileIsGreaseable", false);
 pref("extensions.greasemonkey.globalExcludes", '[]');
 pref("extensions.greasemonkey.newScript.removeUnused", true);
-pref("extensions.greasemonkey.newScript.format", '// ==UserScript==\n// @name        %name%\n// @namespace   %namespace%\n// @description %description%\n// @include     %include%\n// @exclude     %exclude%\n// @version     1\n// ==/UserScript==');
+pref("extensions.greasemonkey.newScript.template", '// ==UserScript==\n// @name        %name%\n// @namespace   %namespace%\n// @description %description%\n// @include     %include%\n// @exclude     %exclude%\n// @version     1\n// @grant       none\n// ==/UserScript==');
 pref("extensions.greasemonkey.haveInsertedToolbarbutton", false);
 pref("extensions.greasemonkey.installDelay", 5);
 pref("extensions.greasemonkey.logChrome", false);

@@ -53,12 +53,11 @@
     <caption label="&options.globalExcludes;" />
     <cludes id="globalExcludes" />
   </groupbox>
-  
+
   <groupbox>
-    <caption label="&options.newScript.format;" />
-	<description>&options.newScript.description;</description>
+    <caption label="&options.newScript.template;" />
     <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
-    <textbox id="newScript-format" multiline="true" rows="5" />
+    <textbox id="newScript-template" multiline="true" rows="5" />
   </groupbox>
 </vbox>
 
