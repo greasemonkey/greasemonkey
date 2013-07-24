@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Изврши касније">
 <!ENTITY ExecuteSooner "Изврши раније">
 <!ENTITY FindUpdate "Пронађи исправке">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Инсталирај исправку">
 <!ENTITY MoveDown "Помери надоле">
 <!ENTITY MoveDown.accesskey "л">

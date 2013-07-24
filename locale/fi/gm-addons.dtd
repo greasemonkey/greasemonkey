@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Suorita myöhemmin">
 <!ENTITY ExecuteSooner "Suorita aiemmin">
 <!ENTITY FindUpdate "Find Update">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "Siirrä alaspäin">
 <!ENTITY MoveDown.accesskey "A">

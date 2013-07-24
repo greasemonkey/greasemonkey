@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Standaard bewerkingsprogramma gebruiken">
 <!ENTITY options.browseForEditor "Naar bewerkingsprogramma bladeren">
 <!ENTITY options.globalExcludes "Sluit globaal uit">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AnonymousStatistics "Anonieme statistieken">
 <!ENTITY SubmitStats "Verzamel en verstuur anonieme gebruiksstatistieken om Greasemonkey te verbeteren.">

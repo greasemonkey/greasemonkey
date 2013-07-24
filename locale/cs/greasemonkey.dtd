@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Použít výchozí editor">
 <!ENTITY options.browseForEditor "Vybrat program pro editaci">
 <!ENTITY options.globalExcludes "Vyloučené stránky globálně">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Odinstalace">
 <!ENTITY AnonymousStatistics "Anonymní statistiky">
 <!ENTITY SubmitStats "Shromažďovat a odesílat anonymní statistiky o používání pro zlepšení Greasemonkey.">

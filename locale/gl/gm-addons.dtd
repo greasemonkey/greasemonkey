@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Executar máis tarde">
 <!ENTITY ExecuteSooner "Executar antes">
 <!ENTITY FindUpdate "Buscar actualizacións">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Instalar actualizacións">
 <!ENTITY MoveDown "Mover abaixo">
 <!ENTITY MoveDown.accesskey "D">

@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Global Excludes">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">

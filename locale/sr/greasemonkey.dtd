@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Користи подразумевани уређивач">
 <!ENTITY options.browseForEditor "Потражи уређивач">
 <!ENTITY options.globalExcludes "Општа изузимања">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AnonymousStatistics "Анонимна статистика">
 <!ENTITY SubmitStats "Прикупљај и шаљи анонимну статистику о коришћењу ради побољшања додатка Greasemonkey.">

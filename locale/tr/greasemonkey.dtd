@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Varsayılan Düzenleyi Kullan">
 <!ENTITY options.browseForEditor "Düzenleyici Program Bul">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AnonymousStatistics "Anonim İstatistikler">
 <!ENTITY SubmitStats "Greasemonkey geliştirmeleri için anonim kullanım istatistiklerini topla ve gönder.">

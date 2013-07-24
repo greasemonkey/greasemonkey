@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "後で実行">
 <!ENTITY ExecuteSooner "先に実行">
 <!ENTITY FindUpdate "更新を確認">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "更新をインストール">
 <!ENTITY MoveDown "下へ移動">
 <!ENTITY MoveDown.accesskey "D">

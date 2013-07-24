@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "للاسفل">
 <!ENTITY ExecuteSooner "للاعلى">
 <!ENTITY FindUpdate "العثور على تحديث">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "تثبيت التحديث">
 <!ENTITY MoveDown "تحريك لأسفل">
 <!ENTITY MoveDown.accesskey "ت">

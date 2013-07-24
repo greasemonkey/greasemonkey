@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Vykdyti vėliau">
 <!ENTITY ExecuteSooner "Vykdyti anksčiau">
 <!ENTITY FindUpdate "Rasti naujinimą">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Įdiegti atnaujinimą">
 <!ENTITY MoveDown "Perkelti žemyn">
 <!ENTITY MoveDown.accesskey "Z">

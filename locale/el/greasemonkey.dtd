@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Απεγκατάσταση">
 <!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">
 <!ENTITY SubmitStats "Συγκέντρωση και υποβολή στατιστικών ανώνυμης χρήσης για βελτίωση του Greasemonkey.">

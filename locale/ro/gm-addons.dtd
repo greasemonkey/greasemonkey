@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Execută mai târziu">
 <!ENTITY ExecuteSooner "Execută mai devreme">
 <!ENTITY FindUpdate "Caută actualizare">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Instalează actualizare">
 <!ENTITY MoveDown "Mută jos">
 <!ENTITY MoveDown.accesskey "J">

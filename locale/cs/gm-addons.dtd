@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Spouštět později">
 <!ENTITY ExecuteSooner "Spouštět dříve">
 <!ENTITY FindUpdate "Najít aktualizace">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Nainstalovat aktualizace">
 <!ENTITY MoveDown "Posunout dolů">
 <!ENTITY MoveDown.accesskey "d">

@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "Sonra yürüt">
 <!ENTITY ExecuteSooner "Er geç yürüt">
 <!ENTITY FindUpdate "Güncelleme Bul">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Güncelleştirme Yükle">
 <!ENTITY MoveDown "Aşağı Taşı">
 <!ENTITY MoveDown.accesskey "D">

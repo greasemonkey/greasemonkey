@@ -38,6 +38,8 @@
 <!ENTITY options.defaultEditor "標準のエディタを使用">
 <!ENTITY options.browseForEditor "エディタプログラムを参照">
 <!ENTITY options.globalExcludes "実行しないページ">
+<!ENTITY options.newScript.template "New script template">
+<!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "削除">
 <!ENTITY AnonymousStatistics "匿名の統計">
 <!ENTITY SubmitStats "Greasemonkey を改善するために匿名の利用統計を収集し送信する。">

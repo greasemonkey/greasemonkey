@@ -6,6 +6,7 @@
 <!ENTITY ExecuteLater "පසුව ක්‍රියාත්මක කරන්න">
 <!ENTITY ExecuteSooner "ඉක්මනින් ක්‍රියාත්මක කරන්න">
 <!ENTITY FindUpdate "Find Update">
+<!ENTITY ForcedFindUpdate "Forced Find Updates">
 <!ENTITY InstallUpdate "Install Update">
 <!ENTITY MoveDown "පහලට යවන්න">
 <!ENTITY MoveDown.accesskey "D">
