@@ -10,6 +10,10 @@ function GM_loadOptions() {
       .checked = GM_prefRoot.getValue('stats.optedin');
   document.getElementById('globalExcludes')
       .pages = GM_util.getService().config.globalExcludes;
+  document.getElementById('newScript-removeUnused')
+      .checked = GM_prefRoot.getValue('newScript.removeUnused');
+  document.getElementById('newScript-format')
+      .value = GM_util.getService().config.newScript.format;
 }
 
 function GM_saveOptions(checkbox) {
@@ -21,4 +25,8 @@ function GM_saveOptions(checkbox) {
       !!document.getElementById('submit-stats').checked);
   GM_util.getService().config.globalExcludes =
       document.getElementById('globalExcludes').pages;
+  GM_prefRoot.setValue('newScript.removeUnused',
+      !!document.getElementById('newScript-removeUnused').checked);
+  GM_util.getService().config.newScript.format =
+      document.getElementById('newScript-format').value;
 }

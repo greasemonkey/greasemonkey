@@ -84,49 +84,74 @@ function installFromClipboard() {
 
 // assemble the XUL fields into a script template
 function createScriptSource() {
-  var script = ["// ==UserScript=="];
+  var format = GM_util.getService().config.newScript.format;
 
-  var name = document.getElementById("name").value;
-  if ("" == name) {
-    alert(bundle.getString("newscript.noname"));
-    return false;
-  } else {
-    script.push("// @name        " + name);
+  if (format.indexOf("%name%") >- 1) {
+    var name = document.getElementById("name").value;
+    if ("" != name) {
+      format = format.replace("%name%", name);
+    } else {
+      alert(bundle.getString("newscript.noname"));
+      return false;
+    }
   }
 
-  var namespace = document.getElementById("namespace").value;
-  if ("" == namespace) {
-    alert(bundle.getString("newscript.nonamespace"));
-    return false;
-  } else {
-    script.push("// @namespace   " + namespace);
+  if (format.indexOf("%namespace%") >- 1) {
+    var namespace = document.getElementById("namespace").value;
+    if ("" != namespace) {
+      format = format.replace("%namespace%", namespace);
+    } else {
+      alert(bundle.getString("newscript.nonamespace"));
+      return false;
+    }
   }
 
-  var descr = document.getElementById("descr").value;
-  if ("" != descr) {
-    script.push("// @description " + descr);
+  if (format.indexOf("%description%") >- 1) {
+    var description = document.getElementById("descr").value;
+    if ("" != description) {
+      format = format.replace("%description%", description);
+    } else if (GM_util.getService().config.newScript.removeUnused) {
+      format = format.replace(/\/\/\s*@description.*\n/i, "");  // remove line;
+    }
   }
 
-  var includes = document.getElementById("includes").value;
-  if ("" != includes) {
-    includes = includes.match(/.+/g);
-    includes = "// @include     " + includes.join("\n// @include     ");
-    script.push(includes);
+  if (format.indexOf("%include%") >- 1) {
+    var includes = document.getElementById("includes").value;
+    if ("" != includes) {
+      includes = includes.match(/.+/g);
+      var includeFormat;
+      if ((includeFormat = format.match(/(\/\/\s*@include.*\n)/i)) && (includeFormat = includeFormat[0])) {
+        var includesFormat = "";
+        for(var i = 0; i < includes.length; i++) {
+          includesFormat += includeFormat.replace("%include%", includes[i]);
+        }
+        format = format.replace(includeFormat, includesFormat);
+      }
+    } else if (GM_util.getService().config.newScript.removeUnused) {
+      format = format.replace(/\/\/\s*@include.*\n/i, "");  // remove line;
+    }
+  }
+  
+  if (format.indexOf("%exclude%") >- 1) {
+    var excludes = document.getElementById("excludes").value;
+    if ("" != excludes) {
+      excludes = excludes.match(/.+/g);
+      var excludeFormat;
+      if ((excludeFormat = format.match(/(\/\/\s*@exclude.*\n)/i)) && (excludeFormat = excludeFormat[0])) {
+        var excludesFormat = "";
+        for(var i = 0; i < excludes.length; i++) {
+          excludesFormat += excludeFormat.replace("%exclude%", excludes[i]);
+        }
+        format = format.replace(excludeFormat, excludesFormat);
+      }
+    } else if (GM_util.getService().config.newScript.removeUnused) {
+      format = format.replace(/\/\/\s*@exclude.*\n/i, "");  // remove line;
+    }
   }
 
-  var excludes = document.getElementById("excludes").value;
-  if ("" != excludes) {
-    excludes = excludes.match(/.+/g);
-    excludes = "// @exclude     " + excludes.join("\n// @exclude     ");
-    script.push(excludes);
+  if (window.navigator.platform.match(/^Win/)) {
+    format = format.replace("\n", "\r\n");
   }
 
-  script.push("// @version     1");
-  script.push("// ==/UserScript==");
-
-  var ending = "\n";
-  if (window.navigator.platform.match(/^Win/)) ending = "\r\n";
-  script = script.join(ending);
-
-  return script;
+  return format;
 }

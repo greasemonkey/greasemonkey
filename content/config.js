@@ -208,6 +208,28 @@ function Config_setGlobalExcludes(val) {
   GM_prefRoot.setValue("globalExcludes", JSON.stringify(this._globalExcludes));
 });
 
+Config.prototype.newScript = {};
+
+Config.prototype.newScript.__defineGetter__('format',
+function Config_getNewScriptFormat() { 
+  return GM_prefRoot.getValue("newScript.format").replace(/\\n/g, "\n");
+});
+
+Config.prototype.newScript.__defineSetter__('format',
+function Config_setNewScriptFormat(val) {
+  GM_prefRoot.setValue("newScript.format", val.replace(/\n/g, "\\n"));
+});
+
+Config.prototype.newScript.__defineGetter__('removeUnused',
+function Config_getNewScriptRemoveUnused() { 
+  return GM_prefRoot.getValue("newScript.removeUnused");
+});
+
+Config.prototype.newScript.__defineSetter__('removeUnused',
+function Config_setNewScriptRemoveUnused(val) {
+  GM_prefRoot.setValue("newScript.removeUnused", val);
+});
+
 Config.prototype.__defineGetter__('scripts',
 function Config_getScripts() { return this._scripts.concat(); }
 );
