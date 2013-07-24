@@ -1,4 +1,3 @@
-Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 const EXPORTED_SYMBOLS = ['alert'];

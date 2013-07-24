@@ -203,20 +203,7 @@ function Script_getFile() {
 
 Script.prototype.__defineGetter__('updateURL',
 function Script_getUpdateURL() {
-  var url = this._updateURL;
-  if (!url) url = this._downloadURL;
-
-  // US.o gets special treatment for being so large.  For *update*, plain http
-  // to work through coral cache.  If an update is found, it gets downloaded
-  // from the downloadURL (not updateURL), which can still be https.
-  var usoMatch = url && url.match(
-      /^(https?:\/\/)userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
-  if (usoMatch) {
-    url = 'http://userscripts.org.nyud.net/scripts/source/'
-        + usoMatch[2] + '.meta.js';
-  }
-
-  return url;
+  return this._updateURL || this._downloadURL;
 });
 Script.prototype.__defineSetter__('updateURL',
 function Script_setUpdateURL(url) {
@@ -726,10 +713,25 @@ Script.prototype.checkConfig = function() {
 Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   if (this.availableUpdate) return aCallback(true);
 
+  GM_util.checkCoralCache();
+
+  var url = this.updateURL;
+  if (GM_prefRoot.getValue("coralCacheWorks")) {
+    // US.o gets special treatment for being so large.  For *update*, plain http
+    // to work through coral cache.  If an update is found, it gets downloaded
+    // from the downloadURL (not updateURL), which can still be https.
+    var usoMatch = url && url.match(
+        /^(https?:\/\/)userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
+    if (usoMatch) {
+      url = 'http://userscripts.org.nyud.net/scripts/source/'
+          + usoMatch[2] + '.meta.js';
+    }
+  }
+
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
-  req.open("GET", this.updateURL, true);
+  req.open("GET", url, true);
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced);
   req.onerror = GM_util.hitch(null, aCallback, false);
