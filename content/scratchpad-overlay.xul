@@ -5,6 +5,7 @@
 >
 
 <script type="application/x-javascript">
+<![CDATA[
 window.addEventListener('load', function() {
   var args = window.arguments;
   if (!args) return;
@@ -31,7 +32,34 @@ window.addEventListener('load', function() {
   if (executeMenu) executeMenu.collapsed = true;
   var environmentMenu = document.getElementById('sp-environment-menu');
   if (environmentMenu) environmentMenu.collapsed = true;
+  var textPopupFunction = function() {
+    var textRunId = 'sp-text-run';
+    var textInspectId = 'sp-text-inspect';
+    var textDisplayId = 'sp-text-display';
+    var textRun = document.getElementById(textRunId);
+    if (textRun) textRun.parentNode.removeChild(textRun);
+    var textInspect = document.getElementById(textInspectId);
+    if (textInspect) textInspect.parentNode.removeChild(textInspect);
+    var textDisplay = document.getElementById(textDisplayId);
+    if (textDisplay) textDisplay.parentNode.removeChild(textDisplay);
+  }
+  var textPopup = document.getElementById('scratchpad-popups');
+  if (textPopup) {
+    var textSeparators = textPopup.getElementsByTagName('menuseparator');
+    if (textSeparators && textSeparators[1]) textSeparators[1].parentNode.removeChild(textSeparators[1]);
+    document.addEventListener('contextmenu', textPopupFunction, false);
+    textPopup.addEventListener('popupshowing', textPopupFunction, false);
+  }
+
+  // Disable access keys
+  var keyRun = document.getElementById('sp-key-run');
+  if (keyRun) keyRun.setAttribute('disabled', true);
+  var keyInspect = document.getElementById('sp-key-inspect');
+  if (keyInspect) keyInspect.setAttribute('disabled', true);
+  var keyDisplay = document.getElementById('sp-key-display');
+  if (keyDisplay) keyDisplay.setAttribute('disabled', true);
 }, true);
+]]>
 </script>
 
 </overlay>
