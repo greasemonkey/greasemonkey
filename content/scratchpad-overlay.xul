@@ -50,6 +50,11 @@ window.addEventListener('load', function() {
     document.addEventListener('contextmenu', textPopupFunction, false);
     textPopup.addEventListener('popupshowing', textPopupFunction, false);
   }
+  var toolbar = document.getElementById('sp-toolbar'); 
+  if (toolbar) {
+    var toolbarSeparators = toolbar.getElementsByTagName('toolbarspacer'); 
+    if (toolbarSeparators && toolbarSeparators[0]) toolbarSeparators[0].parentNode.removeChild(toolbarSeparators[0]);
+  }
   var toolbarRunId = 'sp-toolbar-run';
   var toolbarInspectId = 'sp-toolbar-inspect';
   var toolbarDisplayId = 'sp-toolbar-display';
