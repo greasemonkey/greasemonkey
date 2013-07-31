@@ -22,23 +22,21 @@ window.addEventListener('load', function() {
   function moveCursorToTop() {
     // Retry via timeout until initialization is complete.
     if (!Scratchpad.initialized) {
-      ScratchpadInitializedLoop++;
-      if (ScratchpadInitializedLoop == 1)
-        ScratchpadInitializedInterval = setInterval(moveCursorToTop, ScratchpadInitializedIntervalMs);
-      if (ScratchpadInitializedLoop > ScratchpadInitializedLoopMax)
-        clearInterval(ScratchpadInitializedInterval);
+      scratchpadInitializedLoop++;
+      if (scratchpadInitializedLoop == 1) scratchpadInitializedInterval = setInterval(moveCursorToTop, scratchpadInitializedIntervalMs);
+      if (scratchpadInitializedLoop > scratchpadInitializedLoopMax) clearInterval(scratchpadInitializedInterval);
       return false;
     }
     else
-      clearInterval(ScratchpadInitializedInterval);
+      if (scratchpadInitializedInterval) clearInterval(scratchpadInitializedInterval);
     // Then move the cursor to the top.
     Scratchpad.selectRange(0, 0);
     return true;
   }
-  var ScratchpadInitializedLoop = 0;
-  var ScratchpadInitializedLoopMax = 10;
-  var ScratchpadInitializedInterval = null;
-  var ScratchpadInitializedIntervalMs = 20;
+  var scratchpadInitializedLoop = 0;
+  var scratchpadInitializedLoopMax = 10;
+  var scratchpadInitializedInterval = null;
+  var scratchpadInitializedIntervalMs = 20;
   moveCursorToTop();
 
   // Hide the menus which don't make sense when editing a script.  See #1771.
