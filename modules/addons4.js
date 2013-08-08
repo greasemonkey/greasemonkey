@@ -8,7 +8,7 @@
 // Module exported symbols.
 var EXPORTED_SYMBOLS = [
     'GM_addonsStartup', 'SCRIPT_ADDON_TYPE',
-    'ScriptAddonFactoryByScript', 'ScriptAddonReplaceScript',
+    'ScriptAddonFactoryByScript',
     ];
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,9 +68,9 @@ var AddonProvider = {
 };
 
 var ScriptAddonCache = {};
-function ScriptAddonFactoryByScript(aScript) {
+function ScriptAddonFactoryByScript(aScript, aReplace) {
   var id = aScript.id + SCRIPT_ID_SUFFIX;
-  if (!(id in ScriptAddonCache)) {
+  if (aReplace || !(id in ScriptAddonCache)) {
     ScriptAddonCache[id] = new ScriptAddon(aScript);
   }
   return ScriptAddonCache[id];
@@ -83,11 +83,6 @@ function ScriptAddonFactoryById(aId) {
   if (1 == scripts.length) return ScriptAddonFactoryByScript(scripts[0]);
   // TODO: throw an error instead?
   return null;
-}
-function ScriptAddonReplaceScript(aScript) {
-  var id = aScript.id + SCRIPT_ID_SUFFIX;
-  ScriptAddonCache[id] = new ScriptAddon(aScript);
-  return ScriptAddonCache[id];
 }
 
 // https://developer.mozilla.org/en/Addons/Add-on_Manager/Addon

@@ -69,13 +69,11 @@ var observer = {
         item.setAttribute('active', data);
         break;
       case 'modified':
-        // Bust the addon cache, and get references to the old and new version.
         if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
         if (!oldAddon) break;
-        addon = ScriptAddonReplaceScript(script);
 
-        // Use the addon references to update the view to match the new state.
+        // Use old and new the addon references to update the view.
         var item = createItem(addon);
         var oldItem = gListView.getListItemForID(oldAddon.id);
         oldItem.parentNode.replaceChild(item, oldItem);
