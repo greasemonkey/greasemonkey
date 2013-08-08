@@ -6,7 +6,7 @@ https://github.com/greasemonkey/greasemonkey/issues/1651
 It does not export anything.  It only sets an interval and periodically does
 the work to send data to the server.
 */
-var EXPORTED_SYMBOLS = ['getStatsObj'];
+var EXPORTED_SYMBOLS = [];
 
 Components.utils.import('resource://services-common/utils.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
