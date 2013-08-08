@@ -151,9 +151,6 @@ Config.prototype.install = function(script, oldScript) {
   }
 
   if (oldScript) {
-    var scope = {};
-    Components.utils.import('resource://greasemonkey/addons4.js', scope);
-    scope.ScriptAddonFactoryByScript(script, true);
     this._changed(script, 'modified', oldScript.id);
   } else {
     this._changed(script, 'install', existingIndex);

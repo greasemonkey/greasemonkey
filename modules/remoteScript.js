@@ -4,6 +4,7 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 
 Components.utils.import("resource://greasemonkey/GM_notification.js");
+Components.utils.import('resource://greasemonkey/addons4.js');
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -333,6 +334,10 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
 
     this.script.fixTimestampsOnInstall();
     this.script.checkConfig();
+
+    // Now that we've fully populated the new state, update the AOM and config
+    // data based on that.
+    ScriptAddonFactoryByScript(this.script, true);
     this.script._changed('modified', this.script.id);
 
     // Let the user know we're all done.
