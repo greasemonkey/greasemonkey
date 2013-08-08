@@ -8,83 +8,55 @@ window.addEventListener('load', function() {
   if (!args.filename) return;
   if (!args.filename.match(/\.user\.js$/)) return;
 
+  Components.utils.import('resource://greasemonkey/util.js');
+
   // If we're opening a user script:
   // Put the cursor at the top.  Workaround for #1708 ; remove when
   // http://bugzil.la/843597 is fixed.
+  var initializeCheckCount = 0;
+  var initializeCheckTimer = null;
   function moveCursorToTop() {
-    // Retry via timeout until initialization is complete.
-    if (!Scratchpad.initialized) {
-      ScratchpadInitializedLoop++;
-      if (ScratchpadInitializedLoop == 1)
-        ScratchpadInitializedInterval = setInterval(moveCursorToTop, ScratchpadInitializedIntervalMs);
-      if (ScratchpadInitializedLoop > ScratchpadInitializedLoopMax)
-        clearInterval(ScratchpadInitializedInterval);
-      return false;
+    if (initializeCheckCount > 50) {
+      GM_util.logError('Gave up waiting for Scratchpad.initialized!');
+      clearInterval(initializeCheckTimer);
     }
-    else
-      clearInterval(ScratchpadInitializedInterval);
-    // Then move the cursor to the top.
-    Scratchpad.selectRange(0, 0);
-    return true;
-  }
-  var ScratchpadInitializedLoop = 0;
-  var ScratchpadInitializedLoopMax = 10;
-  var ScratchpadInitializedInterval = null;
-  var ScratchpadInitializedIntervalMs = 20;
-  moveCursorToTop();
+    initializeCheckCount++;
 
-  // Hide the menus which don't make sense when editing a script.  See #1771.
-  var executeMenu = document.getElementById('sp-execute-menu');
-  if (executeMenu) executeMenu.collapsed = true;
-  var environmentMenu = document.getElementById('sp-environment-menu');
-  if (environmentMenu) environmentMenu.collapsed = true;
-  var textPopupFunction = function(e) {
-    var textRunId = 'sp-text-run';
-    var textInspectId = 'sp-text-inspect';
-    var textDisplayId = 'sp-text-display';
-    for (var i = 0, childNodesCount = textPopup.childNodes.length; i < childNodesCount; i++) {
-      if (textPopup.childNodes[i].id.toLowerCase() == textRunId.toLowerCase()) {
-        if (textPopup.childNodes[i - 1] && (textPopup.childNodes[i - 1].nodeName.toLowerCase() == 'menuseparator'))
-          textPopup.childNodes[i - 1].parentNode.removeChild(textPopup.childNodes[i - 1]);
-        break;
-      }
-    }
-    var textRun = document.getElementById(textRunId);
-    if (textRun) textRun.parentNode.removeChild(textRun);
-    var textInspect = document.getElementById(textInspectId);
-    if (textInspect) textInspect.parentNode.removeChild(textInspect);
-    var textDisplay = document.getElementById(textDisplayId);
-    if (textDisplay) textDisplay.parentNode.removeChild(textDisplay);
+    if (!Scratchpad.initialized) return;
+
+    Scratchpad.selectRange(0, 0);
+    clearInterval(initializeCheckTimer);
   }
+  initializeCheckTimer = setInterval(moveCursorToTop, 20);
+
+  // Hide all the elements which don't make sense when editing a script.
+  // See #1771 and #1774.
+  function setNodeAttr(aId, aAttr, aVal) {
+    var el = document.getElementById(aId);
+    if (el) el.setAttribute(aAttr, aVal);
+  }
+
+  setNodeAttr('sp-execute-menu', 'collapsed', true);
+  setNodeAttr('sp-environment-menu', 'collapsed', true);
+  setNodeAttr('sp-toolbar-run', 'collapsed', true);
+  setNodeAttr('sp-toolbar-inspect', 'collapsed', true);
+  setNodeAttr('sp-toolbar-display', 'collapsed', true);
+
+  // Plus the keyboard shortcuts for them.
+  setNodeAttr('sp-key-run', 'disabled', true);
+  setNodeAttr('sp-key-inspect', 'disabled', true);
+  setNodeAttr('sp-key-display', 'disabled', true);
+
+  // But the context menu items can't be accessed by ID (?!) so iterate.
   var textPopup = document.getElementById('scratchpad-text-popup');
   if (textPopup) {
-    document.addEventListener('contextmenu', textPopupFunction, false);
-    textPopup.addEventListener('popupshowing', textPopupFunction, false);
-  }
-  var toolbar = document.getElementById('sp-toolbar');
-  if (toolbar) {
-    var toolbarRunId = 'sp-toolbar-run';
-    var toolbarInspectId = 'sp-toolbar-inspect';
-    var toolbarDisplayId = 'sp-toolbar-display';
-    var toolbarRun = document.getElementById(toolbarRunId);
-    var toolbarInspect = document.getElementById(toolbarInspectId);
-    var toolbarDisplay = document.getElementById(toolbarDisplayId);
-    for (var i = 0, childNodesCount = toolbar.childNodes.length; i < childNodesCount; i++) {
-      if (toolbar.childNodes[i].id.toLowerCase() == toolbarRunId.toLowerCase()) {
-        if (toolbar.childNodes[i - 1] && (toolbar.childNodes[i - 1].nodeName.toLowerCase() == 'toolbarspacer'))
-          toolbar.childNodes[i - 1].parentNode.removeChild(toolbar.childNodes[i - 1]);
-        break;
+    for (var i = 0, node = null; node = textPopup.childNodes[i]; i++) {
+      if ('sp-text-run' == node.id) {
+        node.collapsed = true;
+        node.previousSibling.collapsed = true;
       }
+      if ('sp-text-inspect' == node.id) node.collapsed = true;
+      if ('sp-text-display' == node.id) node.collapsed = true;
     }
-    if (toolbarRun) toolbarRun.parentNode.removeChild(toolbarRun);
-    if (toolbarInspect) toolbarInspect.parentNode.removeChild(toolbarInspect);
-    if (toolbarDisplay) toolbarDisplay.parentNode.removeChild(toolbarDisplay);
   }
-  // Disable access keys
-  var keyRun = document.getElementById('sp-key-run');
-  if (keyRun) keyRun.setAttribute('disabled', true);
-  var keyInspect = document.getElementById('sp-key-inspect');
-  if (keyInspect) keyInspect.setAttribute('disabled', true);
-  var keyDisplay = document.getElementById('sp-key-display');
-  if (keyDisplay) keyDisplay.setAttribute('disabled', true);
 }, true);
