@@ -19,6 +19,13 @@ var gStringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+var gGreasemonkeyVersion = 'unknown';
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+AddonManager.getAddonByID(GM_GUID, function(addon) {
+  gGreasemonkeyVersion = '' + addon.version;
+});
+
 /** Get just the stuff between ==UserScript== lines. */
 function extractMeta(aSource) {
   var meta = aSource.match(gAllMetaRegexp);
@@ -155,6 +162,27 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
       break;
     case 'run-at':
       script._runAt = value;
+      break;
+    case 'minFFVer':
+      if ((null !== value) && (GM_util.compareFirefoxVersion(value) < 0)) {
+        script.parseErrors.push(
+          gStringBundle.GetStringFromName('parse.ff-failed')
+            .replace('%1', value)
+        );
+      }
+      script._minFFVer = value;
+      break;
+    case 'minGMVer':
+      var versionChecker = Components
+          .classes["@mozilla.org/xpcom/version-comparator;1"]
+          .getService(Components.interfaces.nsIVersionComparator);
+      if ((null !== value) && (versionChecker.compare(gGreasemonkeyVersion, value) < 0)) {
+        script.parseErrors.push(
+          gStringBundle.GetStringFromName('parse.gm-failed')
+            .replace('%1', value)
+        );
+      }
+      script._minGMVer = value;
       break;
     }
   }
