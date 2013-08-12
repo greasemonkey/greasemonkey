@@ -53,6 +53,8 @@ function Script(configNode) {
   this._updateURL = null;
   this._userExcludes = [];
   this._userIncludes = [];
+  this._minFFVer = null;
+  this._minGMVer = null;
   this._uuid = [];
   this._version = null;
 
@@ -190,6 +192,12 @@ function Script_getResources() { return this._resources.concat(); });
 
 Script.prototype.__defineGetter__('runAt',
 function Script_getRunAt() { return this._runAt; });
+
+Script.prototype.__defineGetter__('minFFVer',
+function Script_getMinFFVer() { return this._minFFVer; });
+
+Script.prototype.__defineGetter__('minGMVer',
+function Script_getMinGMVer() { return this._minGMVer; });
 
 Script.prototype.__defineGetter__('filename',
 function Script_getFilename() { return this._filename; });
@@ -343,6 +351,8 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._description = node.getAttribute("description");
   this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
   this.icon.fileURL = node.getAttribute("icon");
+  this._minFFVer = node.getAttribute("minFFVer");
+  this._minGMVer = node.getAttribute("minGMVer");
   this._enabled = node.getAttribute("enabled") == true.toString();
 };
 
@@ -410,6 +420,8 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
+  scriptNode.setAttribute("minFFVer", this._minFFVer);
+  scriptNode.setAttribute("minGMVer", this._minGMVer);
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
@@ -466,6 +478,8 @@ Script.prototype.info = function() {
       // 'requires': ???,
       'resources': resources,
       'run-at': this.runAt,
+      'minFFVer': this.minFFVer,
+      'minGMVer': this.minGMVer,
       'version': this.version,
     },
     'scriptMetaStr': extractMeta(this.textContent),
@@ -562,6 +576,8 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._matches = newScript._matches;
   this._description = newScript._description;
   this._runAt = newScript._runAt;
+  this._minFFVer = newScript._minFFVer;
+  this._minGMVer = newScript._minGMVer;
   this._version = newScript._version;
   this._downloadURL = newScript._downloadURL;
   this.updateURL = newScript.updateURL;
