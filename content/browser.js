@@ -254,7 +254,7 @@ GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
       'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
       'popup': null,
       'callback': GM_util.hitch(this, function() {
-        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+        GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
       })
     }]
   );
