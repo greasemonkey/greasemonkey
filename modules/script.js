@@ -134,7 +134,7 @@ Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
 
 Script.prototype.__defineGetter__('downloadURL',
-    function Script_getDescription() { return '' + this._downloadURL; });
+function Script_getDownloadURL() { return '' + this._downloadURL; });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -487,6 +487,9 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   if (!aForced) {
     if (!this.enabled) return false;
     if (this._modifiedTime > this._installTime) return false;
+  }
+  if (/^https?:\/\/userscripts\.org\//.test(this._downloadURL)) {
+    return true;
   }
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]

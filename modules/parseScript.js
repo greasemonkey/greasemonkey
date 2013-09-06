@@ -70,6 +70,9 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'downloadURL':
     case 'updateURL':
       try {
+        if (value) {
+          value = value.replace(/^http(:\/\/userscripts\.org\/)/i, 'https$1');
+        }
         var uri = GM_util.uriFromUrl(value, aUri || this._downloadURL);
         script['_' + header] = uri.spec;
       } catch (e) {
