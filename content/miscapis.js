@@ -51,6 +51,10 @@ GM_ScriptStorage.prototype.listValues = function() {
 
 function GM_Resources(script){
   this.script = script;
+  this.stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
 GM_Resources.prototype.getResourceURL = function(aScript, name) {

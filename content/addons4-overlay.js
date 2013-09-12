@@ -48,7 +48,12 @@ gDragDrop.onDrop = function GM_onDrop(aEvent) {
 
   // Pass call through to the original handler, if any non-user-script
   // was part of this drop action.
-  if (droppedNonUserScript) _gDragDrop_onDrop_Orig(aEvent);
+  if (droppedNonUserScript) {
+    _gDragDrop_onDrop_Orig(aEvent);
+  }
+  else {
+    aEvent.preventDefault();
+  }
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
@@ -72,6 +77,7 @@ var observer = {
         if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
         if (!oldAddon) break;
+        addon = ScriptAddonFactoryByScript(script, true);
 
         // Use old and new the addon references to update the view.
         var item = createItem(addon);
