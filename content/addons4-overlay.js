@@ -77,6 +77,7 @@ var observer = {
         if (!data) break;
         var oldAddon = ScriptAddonFactoryByScript({'id': data});
         if (!oldAddon) break;
+        addon = ScriptAddonFactoryByScript(script, true);
 
         // Use old and new the addon references to update the view.
         var item = createItem(addon);
