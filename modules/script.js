@@ -24,6 +24,13 @@ AddonManager.getAddonByID(GM_GUID, function(addon) {
   gGreasemonkeyVersion = '' + addon.version;
 });
 
+
+function usoFix(aUrl) {
+  return aUrl && aUrl.replace(
+      'http://userscripts.org/', 'https://userscripts.org/');
+}
+
+
 function Script(configNode) {
   this._observers = [];
 
@@ -134,7 +141,9 @@ Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
 
 Script.prototype.__defineGetter__('downloadURL',
-    function Script_getDescription() { return '' + this._downloadURL; });
+function Script_getDownloadUrl() { return this._downloadURL; });
+Script.prototype.__defineSetter__('downloadURL',
+function Script_setDownloadUrl(aVal) { this._downloadURL = usoFix(aVal); });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -202,19 +211,14 @@ function Script_getFile() {
 });
 
 Script.prototype.__defineGetter__('updateURL',
-function Script_getUpdateURL() {
-  return this._updateURL || this._downloadURL;
-});
+function Script_getUpdateURL() { return this._updateURL || this.downloadURL; });
 Script.prototype.__defineSetter__('updateURL',
-function Script_setUpdateURL(url) {
-   this._updateURL = url;
-});
+function Script_setUpdateURL(url) { this._updateURL = usoFix(url); });
 
 Script.prototype.__defineGetter__('updateIsSecure',
 function Script_getUpdateIsSecure() {
-  if (!this._downloadURL) return null;
-
-  return /^https/.test(this._downloadURL);
+  if (!this.downloadURL) return null;
+  return /^https/.test(this.downloadURL);
 });
 
 Script.prototype.__defineGetter__('_basedirFile',
@@ -243,7 +247,7 @@ Script.prototype.setFilename = function(aBaseName, aFileName) {
   // If this script was created from the "new script" dialog, pretend it
   // has been installed from its final location, so that relative dependency
   // paths can be resolved correctly.
-  if (!this._downloadURL) this._downloadURL = this.fileURL;
+  if (!this.downloadURL) this.downloadURL = this.fileURL;
 };
 
 Script.prototype.fixTimestampsOnInstall = function() {
@@ -254,7 +258,7 @@ Script.prototype.fixTimestampsOnInstall = function() {
 Script.prototype._loadFromConfigNode = function(node) {
   this._filename = node.getAttribute("filename");
   this._basedir = node.getAttribute("basedir") || ".";
-  this._downloadURL = node.getAttribute("installurl") || null;
+  this.downloadURL = node.getAttribute("installurl") || null;
   this.updateURL = node.getAttribute("updateurl") || null;
 
   if (!this.fileExists(this._basedirFile)) return;
@@ -267,7 +271,7 @@ Script.prototype._loadFromConfigNode = function(node) {
     var scope = {};
     Components.utils.import('resource://greasemonkey/parseScript.js', scope);
     var parsedScript = scope.parse(
-        this.textContent, GM_util.uriFromUrl(this._downloadURL));
+        this.textContent, GM_util.uriFromUrl(this.downloadURL));
 
     this._modifiedTime = this.file.lastModifiedTime;
     this._dependhash = GM_util.sha1(parsedScript._rawMeta);
@@ -413,8 +417,8 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
-  if (this._downloadURL) {
-    scriptNode.setAttribute("installurl", this._downloadURL);
+  if (this.downloadURL) {
+    scriptNode.setAttribute("installurl", this.downloadURL);
   }
   if (this.updateURL) {
     scriptNode.setAttribute("updateurl", this.updateURL);
@@ -491,7 +495,7 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(this._downloadURL);
+  var scheme = ioService.extractScheme(this.downloadURL);
   switch (scheme) {
   case 'about':
   case 'chrome':
@@ -563,7 +567,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._description = newScript._description;
   this._runAt = newScript._runAt;
   this._version = newScript._version;
-  this._downloadURL = newScript._downloadURL;
+  this.downloadURL = newScript.downloadURL;
   this.updateURL = newScript.updateURL;
 
   this.showGrantWarning();
@@ -587,7 +591,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
     // Re-download dependencies.
     var scope = {};
     Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
-    var rs = new scope.RemoteScript(this._downloadURL);
+    var rs = new scope.RemoteScript(this.downloadURL);
     newScript._basedir = this._basedir;
     rs.setScript(newScript);
     rs.download(GM_util.hitch(this, function(aSuccess) {
@@ -744,7 +748,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced) {
   var source = req.responseText;
   var scope = {};
   Components.utils.import('resource://greasemonkey/parseScript.js', scope);
-  var newScript = scope.parse(source, this._downloadURL);
+  var newScript = scope.parse(source, this.downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) return aCallback(false);
 
