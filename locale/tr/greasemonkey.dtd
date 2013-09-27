@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Çıkarılanlar (satır başına bir tane)">
 <!ENTITY newscript.fromClipboard "Panodan Betik Kullan">
 <!ENTITY options.editor "Editör">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Varsayılan Düzenleyi Kullan">
 <!ENTITY options.browseForEditor "Düzenleyici Program Bul">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AnonymousStatistics "Anonim İstatistikler">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Greasemonkey geliştirmeleri için anonim kullanım istatistiklerini topla ve gönder.">
 <!ENTITY AlsoUninstallPrefs "Ayrıca ilişkili tercihleri kaldır">
 <!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">

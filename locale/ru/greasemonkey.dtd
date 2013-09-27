@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Редактор">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Глобальные исключения">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Также удалять настройки скриптов">
 <!ENTITY UpdateChecking "Проверка обновлений">

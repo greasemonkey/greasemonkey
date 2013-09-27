@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Εξαιρέσεις (Μια ανά γραμμή)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Επεξεργαστής κειμένου">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Καθολικές Εξαιρέσεις">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Απεγκατάσταση">
 <!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Συγκέντρωση και υποβολή στατιστικών ανώνυμης χρήσης για βελτίωση του Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Απεγκατάσταση και των σχετικών ρυθμίσεων">
 <!ENTITY UpdateChecking "Έλεγχος Ενημέρωσης">

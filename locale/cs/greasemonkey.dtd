@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Vyloučené stránky (každá na jeden řádek)">
 <!ENTITY newscript.fromClipboard "Sestavit skript ze schránky">
 <!ENTITY options.editor "Editor">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Použít výchozí editor">
 <!ENTITY options.browseForEditor "Vybrat program pro editaci">
 <!ENTITY options.globalExcludes "Vyloučené stránky globálně">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Odebrat nepoužité řádky">
 <!ENTITY Uninstall "Odinstalace">
 <!ENTITY AnonymousStatistics "Anonymní statistiky">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Shromažďovat a odesílat anonymní statistiky o používání pro zlepšení Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Odinstalovat i přidružená nastavení">
 <!ENTITY UpdateChecking "Kontrola aktualizací">

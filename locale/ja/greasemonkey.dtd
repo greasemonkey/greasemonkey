@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "実行しないページ (改行で複数指定)">
 <!ENTITY newscript.fromClipboard "クリップボードのスクリプトを使用する">
 <!ENTITY options.editor "エディタ">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "標準のエディタを使用">
 <!ENTITY options.browseForEditor "エディタプログラムを参照">
 <!ENTITY options.globalExcludes "実行しないページ">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "未使用の行を削除">
 <!ENTITY Uninstall "削除">
 <!ENTITY AnonymousStatistics "匿名の統計">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Greasemonkey を改善するために匿名の利用統計を収集し送信する。">
 <!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY UpdateChecking "更新の確認">

@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Exclui (Um por linha)">
 <!ENTITY newscript.fromClipboard "Usar Script da Área de Transferência">
 <!ENTITY options.editor "Editor">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Usar Editor Padrão">
 <!ENTITY options.browseForEditor "Procurar Programa Padrão">
 <!ENTITY options.globalExcludes "Exclusões Globais">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remover linhas sem uso">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AnonymousStatistics "Estatísticas anônimas">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Receba e envie estatísticas anônimas de uso para melhorar o Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Desinstalar também configurações associadas">
 <!ENTITY UpdateChecking "Verificação de Atualizações">

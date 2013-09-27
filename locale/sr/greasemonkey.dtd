@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Изузима (једно по линији)">
 <!ENTITY newscript.fromClipboard "Користи скрипту из оставе">
 <!ENTITY options.editor "Уређивач">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Користи подразумевани уређивач">
 <!ENTITY options.browseForEditor "Потражи уређивач">
 <!ENTITY options.globalExcludes "Општа изузимања">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Уклони">
 <!ENTITY AnonymousStatistics "Анонимна статистика">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Прикупљај и шаљи анонимну статистику о коришћењу ради побољшања додатка Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Уклони и подешавања">
 <!ENTITY UpdateChecking "Проверавање ажурирања">

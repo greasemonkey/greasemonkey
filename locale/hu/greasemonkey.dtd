@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Kizárt oldalak (soronként egy)">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "Szerkesztő">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "Globális kivételek">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Eltávolítás">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Hozzákapcsolódó beállítások eltávolítása">
 <!ENTITY UpdateChecking "Frissítések keresése">

@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "לא כולל (אחד בכל שורה)">
 <!ENTITY newscript.fromClipboard "השתמש בקובץ Script מהלוח">
 <!ENTITY options.editor "עורך">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "אי הכללה כללית">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "הסר">
 <!ENTITY AnonymousStatistics "עיבוד נתונים ללא זיהוי המשתמש">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "אסיפה ומשלוח עיבוד נתונים ללא זיהוי המשתמש לצורך שיפור Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "הסר גם את המאייפנים המשוייכים לקובץ Script משתמש זה">
 <!ENTITY UpdateChecking "בדיקת עדכון">

@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.fromClipboard "Script aus der Zwischenablage verwenden.">
 <!ENTITY options.editor "Editor">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Standard Editor verwenden">
 <!ENTITY options.browseForEditor "Nach Editor Programm suchen">
 <!ENTITY options.globalExcludes "Globale Ausschlüsse">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AnonymousStatistics "Anonyme Statistik">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Sammeln und einreichen von anonymen Nutzungsstatistiken an Greasemonkey.">
 <!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">

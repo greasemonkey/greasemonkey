@@ -6,7 +6,7 @@
 <!ENTITY ExecuteLater "稍后执行">
 <!ENTITY ExecuteSooner "稍早执行">
 <!ENTITY FindUpdate "查找更新">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "强制更新">
 <!ENTITY InstallUpdate "安装更新">
 <!ENTITY MoveDown "下移">
 <!ENTITY MoveDown.accesskey "D">

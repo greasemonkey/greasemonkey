@@ -35,6 +35,7 @@
 <!ENTITY newscript.excludes "不包含（每行一項）">
 <!ENTITY newscript.fromClipboard "Use Script From Clipboard">
 <!ENTITY options.editor "腳本編輯器">
+<!ENTITY options.experimental "Experimental">
 <!ENTITY options.defaultEditor "Use Default Editor">
 <!ENTITY options.browseForEditor "Browse for Editor Program">
 <!ENTITY options.globalExcludes "全域排除">
@@ -42,6 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AnonymousStatistics "匿名統計">
+<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">
 <!ENTITY AlsoUninstallPrefs "同時移除相關偏好設定">
 <!ENTITY UpdateChecking "檢查更新">
