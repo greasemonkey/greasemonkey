@@ -13,6 +13,7 @@ Cu.import('resource://greasemonkey/GM_setClipboard.js');
 Cu.import('resource://greasemonkey/constants.js');
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
+Cu.import("resource://greasemonkey/sync.js");
 Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://greasemonkey/xmlhttprequester.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");

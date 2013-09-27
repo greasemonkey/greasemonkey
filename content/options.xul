@@ -27,26 +27,23 @@
 
 <vbox>
   <groupbox>
+    <caption label="&prefWindow.titleWin;" />
+    <checkbox id="check-uninstall" label="&AlsoUninstallPrefs;" />
+    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
+    <checkbox id="submit-stats" label="&SubmitStats;" />
+  </groupbox>
+
+  <groupbox>
+    <caption label="&options.experimental;" />
+    <checkbox id="check-sync" label="&EnableFirefoxSync;" />
+  </groupbox>
+
+  <groupbox>
     <caption label="&options.editor;" />
     <hbox>
       <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" flex="1"/>
       <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" flex="1"/>
     </hbox>
-  </groupbox>
-
-  <groupbox>
-    <caption label="&Uninstall;" />
-    <checkbox id="check-uninstall" label="&AlsoUninstallPrefs;" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&UpdateChecking;" />
-    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&AnonymousStatistics;" />
-    <checkbox id="submit-stats" label="&SubmitStats;" />
   </groupbox>
 
   <groupbox>

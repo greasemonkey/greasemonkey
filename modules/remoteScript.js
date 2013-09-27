@@ -227,6 +227,7 @@ function RemoteScript(aUrl) {
   this._progressIndex = 0;
   this._scriptFile = null;
   this._scriptMetaCallbacks = [];
+  this._silent = false;
   this._tempDir = GM_util.getTempDir();
   this._uri = GM_util.uriFromUrl(aUrl);
   this._url = aUrl;
@@ -341,10 +342,12 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     this.script._changed('modified', this.script.id);
 
     // Let the user know we're all done.
-    GM_notification(
-        "'" + this.script.name + "' "
-            + stringBundleBrowser.GetStringFromName(this.messageName),
-        this.messageName);
+    if (!this._silent) {
+      GM_notification(
+          "'" + this.script.name + "' "
+              + stringBundleBrowser.GetStringFromName(this.messageName),
+          this.messageName);
+    }
   }
 };
 
@@ -400,6 +403,10 @@ RemoteScript.prototype.setScript = function(aScript, aTempFile) {
     this._baseName = cleanFilename(aScript.name, 'gm-script');
   }
   this._postParseScript();
+};
+
+RemoteScript.prototype.setSilent = function(aVal) {
+  this._silent = !!aVal;
 };
 
 RemoteScript.prototype.showSource = function(aTabBrowser) {

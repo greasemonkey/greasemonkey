@@ -16,6 +16,7 @@ pref("extensions.greasemonkey.stats.lastsubmittime", "Thu, 01 Jan 1970 00:00:00 
 pref("extensions.greasemonkey.stats.optedin", false);
 pref("extensions.greasemonkey.stats.prompted", false);
 pref("extensions.greasemonkey.stats.url", "https://stats.greasespot.net/submit/");
+pref("extensions.greasemonkey.sync.enabled", false);
 pref("extensions.greasemonkey.uninstallPreferences", true);
 pref("extensions.greasemonkey.unmhtIsGreaseable", false);
 pref("extensions.greasemonkey.version", "0.0");

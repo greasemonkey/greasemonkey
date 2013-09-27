@@ -310,7 +310,6 @@ ScriptInstall.prototype.install = function() {
       // Note: This call also takes care of replacing the cached ScriptAddon
       // object with a new one for the updated script.
       rs.install(this._script);
-      rs.script._changed('modified');
 
       this.addon = ScriptAddonFactoryByScript(rs.script);
       AddonManagerPrivate.callInstallListeners(
