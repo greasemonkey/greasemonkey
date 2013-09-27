@@ -118,6 +118,7 @@ ScriptStore.prototype = {
     var scripts = GM_util.getService().config.scripts;
     for (var i = 0, script = null; script = scripts[i]; i++) {
       if (!script.downloadURL) continue;
+      if (script.downloadURL.match(/^file:/)) continue;
       syncIds[syncId(script)] = 1;
     }
     return syncIds;
