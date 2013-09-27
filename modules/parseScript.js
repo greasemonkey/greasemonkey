@@ -33,7 +33,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
   var script = new Script();
 
-  if (aUri) script._downloadURL = aUri.spec;
+  if (aUri) script.downloadURL = aUri.spec;
   if (aUri && aUri.spec) {
     var name = aUri.spec;
     name = name.substring(0, name.indexOf(".user.js"));
@@ -70,8 +70,8 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'downloadURL':
     case 'updateURL':
       try {
-        var uri = GM_util.uriFromUrl(value, aUri || this._downloadURL);
-        script['_' + header] = uri.spec;
+        var uri = GM_util.uriFromUrl(value, aUri);
+        script[header] = uri.spec;
       } catch (e) {
         dump('Failed to parse ' + header + ' "' + value + '":\n' + e + '\n');
       }
@@ -164,8 +164,8 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 }
 
 function setDefaults(script) {
-  if (!script.updateURL && script._downloadURL) {
-    script.updateURL = script._downloadURL;
+  if (!script.updateURL && script.downloadURL) {
+    script.updateURL = script.downloadURL;
   }
   if ('document-start' != script._runAt && 'document-end' != script._runAt) {
     script._runAt = 'document-end';
