@@ -31,6 +31,6 @@ function GM_saveOptions(checkbox) {
       document.getElementById('globalExcludes').pages;
   GM_prefRoot.setValue('newScript.removeUnused',
       !!document.getElementById('newScript-removeUnused').checked);
-  GM_prefRoot.getValue('newScript.template',
+  GM_prefRoot.setValue('newScript.template',
       document.getElementById('newScript-template').value);
 }
