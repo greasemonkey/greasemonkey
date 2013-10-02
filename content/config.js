@@ -256,20 +256,15 @@ Config.prototype._updateVersion = function() {
   Components.utils.import("resource://gre/modules/AddonManager.jsm");
   AddonManager.getAddonByID(this.GM_GUID, GM_util.hitch(this, function(addon) {
     var oldVersion = GM_prefRoot.getValue("version");
-    if ('0.0' == oldVersion) {
-      // In case of pref branch transition, find the existing version there.
-      oldVersion = this._getLegacyPrefMan().getValue("version", "0.0");
-    }
     var newVersion = addon.version;
 
     var versionChecker = Components
         .classes["@mozilla.org/xpcom/version-comparator;1"]
         .getService(Components.interfaces.nsIVersionComparator);
     if (oldVersion != '0.0'
-        && (versionChecker.compare(oldVersion, '1.5') < 0)
-        && (versionChecker.compare(newVersion, '1.5beta1') >= 0)
+      && (versionChecker.compare(oldVersion, '1.13') < 0)
     ) {
-      this._migratePrefs();
+      this._migrateScriptValsToStorage();
     }
 
     // Update the stored current version so we don't do this work again.
@@ -289,24 +284,4 @@ Config.prototype._updateVersion = function() {
       }
     }
   }));
-};
-
-Config.prototype._getLegacyPrefMan = function() {
-  // Supports #1652.
-  var legacyPrefMan = new GM_PrefManager();
-  legacyPrefMan.pref = Components.classes["@mozilla.org/preferences-service;1"]
-     .getService(Components.interfaces.nsIPrefService)
-     .getBranch('greasemonkey.');
-  return legacyPrefMan;
-};
-
-Config.prototype._migratePrefs = function() {
-  // See #1652.  Migrates from "greasemonkey." to "extensions.greasemonkey.".
-  var fromBranch = this._getLegacyPrefMan();
-  var toBranch = GM_prefRoot;
-  var prefNames = fromBranch.listValues();
-  for (var i = 0, prefName = null; prefName = prefNames[i]; i++) {
-    toBranch.setValue(prefName, fromBranch.getValue(prefName));
-    fromBranch.remove(prefName);
-  }
 };
