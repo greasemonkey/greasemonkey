@@ -227,7 +227,7 @@ Config.prototype.updateModifiedScripts = function(aWhen, aSafeWin) {
       var scope = {};
       Components.utils.import('resource://greasemonkey/parseScript.js', scope);
       var parsedScript = scope.parse(
-          script.textContent, GM_util.uriFromUrl(script._downloadURL));
+          script.textContent, GM_util.uriFromUrl(script.downloadURL));
       // TODO: Show PopupNotifications about parse error(s)?
       script.updateFromNewScript(parsedScript, aSafeWin);
     } else {

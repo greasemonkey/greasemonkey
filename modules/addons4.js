@@ -283,7 +283,7 @@ ScriptInstall.prototype.install = function() {
       'onDownloadStarted', this._listeners, this);
   this.state = AddonManager.STATE_DOWNLOADING;
 
-  var rs = new RemoteScript(this._script._downloadURL);
+  var rs = new RemoteScript(this._script.downloadURL);
   rs.messageName = 'script.updated';
   rs.onProgress(this._progressCallback);
   rs.download(GM_util.hitch(this, function(aSuccess, aType) {
