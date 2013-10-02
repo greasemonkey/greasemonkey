@@ -285,3 +285,15 @@ Config.prototype._updateVersion = function() {
     }
   }));
 };
+
+Config.prototype._migrateScriptValsToStorage = function() {
+  for (var i = 0, script; script = this._scripts[i]; i++) {
+    var prefsVals = new GM_ScriptStoragePrefs(script);
+    var storageVals = new GM_ScriptStorage(script);
+    var names = prefsVals.listValues();
+    for (var j = 0, name = null; name = names[j]; j++) {
+      storageVals.setValue(name, prefsVals.getValue(name));
+      prefsVals.deleteValue(name);
+    }
+  };
+}
