@@ -11,6 +11,7 @@ var Cu = Components.utils;
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
 Cu.import('resource://greasemonkey/GM_setClipboard.js');
 Cu.import('resource://greasemonkey/constants.js');
+Cu.import("resource://greasemonkey/miscapis.js");
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/sync.js");
@@ -304,7 +305,6 @@ function startup(aService) {
       .getService(Ci.mozIJSSubScriptLoader);
   loader.loadSubScript("chrome://global/content/XPCNativeWrapper.js");
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
-  loader.loadSubScript("chrome://greasemonkey/content/miscapis.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
   var observerService = Components.classes['@mozilla.org/observer-service;1']

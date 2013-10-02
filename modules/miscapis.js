@@ -1,6 +1,13 @@
-Components.utils.import('resource://greasemonkey/prefmanager.js');
+var Cu = Components.utils;
+Cu.import('resource://greasemonkey/prefmanager.js');
+Cu.import("resource://greasemonkey/util.js");
+
+var EXPORTED_SYMBOLS = [
+    'GM_addStyle', 'GM_console', 'GM_Resources',
+    'GM_ScriptLogger', 'GM_ScriptStorage'];
 
 function GM_ScriptStorage(script) {
+  this._script = script;
   this.prefMan = new GM_PrefManager(script.prefroot);
   this.stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
@@ -18,6 +25,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
   }
 
   this.prefMan.setValue(name, val);
+  this._script.changed('val-set', name);
 };
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
@@ -34,6 +42,7 @@ GM_ScriptStorage.prototype.deleteValue = function(name) {
   }
 
   return this.prefMan.remove(name);
+  this._script.changed('val-del', name);
 };
 
 GM_ScriptStorage.prototype.listValues = function() {

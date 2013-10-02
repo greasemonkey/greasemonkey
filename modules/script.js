@@ -103,8 +103,11 @@ Script.prototype.matchesURL = function(url) {
 };
 
 Script.prototype._changed = function(event, data) {
-  GM_util.getService().config._changed(this, event, data);
+  var dontSave = ('val-set' == event || 'val-del' == event);
+  GM_util.getService().config._changed(this, event, data, dontSave);
 };
+// TODO: Move this method to be public rather than just aliasing it.
+Script.prototype.changed = Script.prototype._changed;
 
 Script.prototype.__defineGetter__('installDate',
 function Script_getInstallDate() { return new Date(this._installTime); });

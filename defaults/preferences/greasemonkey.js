@@ -17,6 +17,8 @@ pref("extensions.greasemonkey.stats.optedin", false);
 pref("extensions.greasemonkey.stats.prompted", false);
 pref("extensions.greasemonkey.stats.url", "https://stats.greasespot.net/submit/");
 pref("extensions.greasemonkey.sync.enabled", false);
+pref("extensions.greasemonkey.sync.values", false);
+pref("extensions.greasemonkey.sync.values_max_size_per_script", 65536);
 pref("extensions.greasemonkey.uninstallPreferences", true);
 pref("extensions.greasemonkey.unmhtIsGreaseable", false);
 pref("extensions.greasemonkey.version", "0.0");

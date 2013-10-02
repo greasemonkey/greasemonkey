@@ -8,6 +8,7 @@ var Cu = Components.utils;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('resource://services-crypto/utils.js');
+Cu.import("resource://greasemonkey/miscapis.js");
 Cu.import('resource://greasemonkey/prefmanager.js');
 Cu.import('resource://greasemonkey/util.js');
 
@@ -63,7 +64,7 @@ ScriptRecord.prototype = {
 };
 gWeave.Utils.deferGetSet(
     ScriptRecord, 'cleartext',
-    ['downloadURL', 'enabled', 'installed']);
+    ['downloadURL', 'enabled', 'installed', 'values', 'valuesTooBig']);
 
 
 function ScriptStore(aName, aEngine) {
@@ -78,18 +79,20 @@ ScriptStore.prototype = {
   },
 
   /// Incoming Sync record, create local version.
-  create: function(record) {
-    if (record.cleartext.installed) {
-      var rs = new RemoteScript(record.cleartext.downloadURL);
+  create: function(aRecord) {
+    if (aRecord.cleartext.installed) {
+      var rs = new RemoteScript(aRecord.cleartext.downloadURL);
       rs.setSilent();
       rs.download(GM_util.hitch(this, function(aSuccess, aType) {
         if (aSuccess && 'dependencies' == aType) {
           rs.install();
-          rs.script.enabled = record.enabled;
+          rs.script.enabled = aRecord.enabled;
+
+          setScriptValuesFromSyncRecord(rs.script, aRecord);
         }
       }));
     } else {
-      var script = scriptForSyncId(record.cleartext.id);
+      var script = scriptForSyncId(aRecord.cleartext.id);
       if (!script) return;
       script.uninstall();
     }
@@ -100,9 +103,32 @@ ScriptStore.prototype = {
     var script = scriptForSyncId(aId);
     if (script) {
       var record = new ScriptRecord();
+      record.cleartext.id = aId;
       record.cleartext.downloadURL = script.downloadURL;
       record.cleartext.enabled = script.enabled;
       record.cleartext.installed = !script.needsUninstall;
+
+      if (GM_prefRoot.getValue('sync.values')) {
+        var storage = new GM_ScriptStorage(script);
+        var totalSize = 0;
+        var maxSize = GM_prefRoot.getValue('sync.values_max_size_per_script');
+        record.cleartext.values = {};
+        record.cleartext.valuesTooBig = false;
+        var names = storage.listValues();
+        for (var i = 0, name = null; name = names[i]; i++) {
+          var val = storage.getValue(name);
+          record.cleartext.values[name] = val;
+          totalSize += name.length;
+          totalSize += val.length || 4;  // 4 for number / bool (no length).
+
+          if (totalSize > maxSize) {
+            record.cleartext.values = [];
+            record.cleartext.valuesTooBig = true;
+            break;
+          }
+        }
+      }
+
       return record;
     } else {
       // Assume this is an uninstalled script.
@@ -129,21 +155,22 @@ ScriptStore.prototype = {
     return !!script;
   },
 
-  remove: function(record) {
-    var script = scriptForSyncId(record.cleartext.id);
+  remove: function(aRecord) {
+    var script = scriptForSyncId(aRecord.cleartext.id);
     if (script) script.uninstall();
   },
 
-  update: function(record) {
-    var script = scriptForSyncId(record.cleartext.id);
+  update: function(aRecord) {
+    var script = scriptForSyncId(aRecord.cleartext.id);
     if (!script) {
-      dump('Could not find script for record ' + record.cleartext + '\n');
+      dump('Could not find script for record ' + aRecord.cleartext + '\n');
       return;
     }
-    if (!record.cleartext.installed) {
+    if (!aRecord.cleartext.installed) {
       script.uninstall();
     } else {
-      script.enabled = record.cleartext.enabled;
+      script.enabled = aRecord.cleartext.enabled;
+      setScriptValuesFromSyncRecord(script, aRecord);
     }
   },
 
@@ -161,14 +188,17 @@ function ScriptTracker(aName, aEngine) {
 ScriptTracker.prototype = {
   __proto__: gWeave.Tracker.prototype,
 
-  notifyEvent: function observer_notifyEvent(aScript, aEvent, aData) {
-    var events = {'install': 1, 'modified': 1, 'edit-enabled': 1};
-    if (aEvent in events) {
+  notifyEvent: function(aScript, aEvent, aData) {
+    if (aEvent in {'install': 1, 'modified': 1, 'edit-enabled': 1}) {
       if (this.addChangedID(syncId(aScript))) {
         this.score = Math.min(100, this.score + 5);
       }
+    } else if (aEvent in {'val-set': 1, 'val-del': 1}) {
+      if (this.addChangedID(syncId(aScript))) {
+        this.score = Math.min(100, this.score + 1);
+      }
     }
-   }
+  }
 };
 
 
@@ -177,7 +207,6 @@ function ScriptEngine() {
 
   this.enabled = GM_prefRoot.getValue('sync.enabled');
   GM_prefRoot.watch('sync.enabled', GM_util.hitch(this, function() {
-    dump('ScriptEngine observed sync enable change.\n');
     this.enabled = GM_prefRoot.getValue('sync.enabled');
   }));
 }
@@ -203,6 +232,19 @@ function scriptForSyncId(aSyncId) {
 function syncId(aScript) {
   // TODO: Salting?  e.g. btoa(CryptoUtils.generateRandomBytes(16));
   return GM_util.sha1(aScript.id);
+}
+
+
+function setScriptValuesFromSyncRecord(aScript, aRecord) {
+  if (GM_prefRoot.getValue('sync.values')
+      && !aRecord.cleartext.valuesTooBig
+  ) {
+    // TODO: Clear any locally set values not in the sync record?
+    var storage = new GM_ScriptStorage(aScript);
+    for (name in aRecord.cleartext.values) {
+      storage.setValue(name, aRecord.cleartext.values[name]);
+    }
+  }
 }
 
 
