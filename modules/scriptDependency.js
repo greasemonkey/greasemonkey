@@ -42,7 +42,7 @@ function ScriptDependency_getDownloadURL() {
 
 ScriptDependency.prototype.__defineGetter__('file',
 function ScriptDependency_getFile() {
-  var file = this._script._basedirFile;
+  var file = this._script.baseDirFile;
   file.append(this._filename);
   return file;
 });

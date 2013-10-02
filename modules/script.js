@@ -208,7 +208,7 @@ function Script_getFilename() { return this._filename; });
 
 Script.prototype.__defineGetter__('file',
 function Script_getFile() {
-  var file = this._basedirFile;
+  var file = this.baseDirFile;
   file.append(this._filename);
   return file;
 });
@@ -224,7 +224,7 @@ function Script_getUpdateIsSecure() {
   return /^https/.test(this.downloadURL);
 });
 
-Script.prototype.__defineGetter__('_basedirFile',
+Script.prototype.__defineGetter__('baseDirFile',
 function Script_getBasedirFile() {
   var file = GM_util.scriptDir();
   file.append(this._basedir);
@@ -264,7 +264,7 @@ Script.prototype._loadFromConfigNode = function(node) {
   this.downloadURL = node.getAttribute("installurl") || null;
   this.updateURL = node.getAttribute("updateurl") || null;
 
-  if (!this.fileExists(this._basedirFile)) return;
+  if (!this.fileExists(this.baseDirFile)) return;
   if (!this.fileExists(this.file)) return;
 
   if (!node.hasAttribute("modified")
@@ -609,7 +609,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       // Get rid of old dependencies' files.
       for (var i = 0, dep = null; dep = this.dependencies[i]; i++) {
         try {
-          if (dep.file.equals(this._basedirFile)) {
+          if (dep.file.equals(this.baseDirFile)) {
             // Bugs like an empty file name can cause "dep.file" to point to
             // the containing directory.  Don't remove that!
             GM_util.logError(
@@ -769,8 +769,8 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced) {
 
 Script.prototype.allFiles = function() {
   var files = [];
-  if (!this._basedirFile.equals(GM_util.scriptDir())) {
-    files.push(this._basedirFile);
+  if (!this.baseDirFile.equals(GM_util.scriptDir())) {
+    files.push(this.baseDirFile);
   }
   files.push(this.file);
   for (var i = 0, r = null; r = this._requires[i]; i++) {
@@ -797,7 +797,7 @@ Script.prototype.allFilesExist = function() {
 Script.prototype.uninstall = function(forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
-  if (this._basedirFile.equals(GM_util.scriptDir())) {
+  if (this.baseDirFile.equals(GM_util.scriptDir())) {
     // if script is in the root, just remove the file
     try {
       this.file.remove(false);
@@ -807,7 +807,7 @@ Script.prototype.uninstall = function(forUpdate) {
   } else {
     // if script has its own dir, remove the dir + contents
     try {
-      this._basedirFile.remove(true);
+      this.baseDirFile.remove(true);
     } catch (e) {
       // Fail silently if it already does not exist.
     }

@@ -308,7 +308,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     while (enumerator.hasMoreElements()) {
       var file = enumerator.getNext().QueryInterface(Ci.nsIFile);
       // TODO: Fix invalid private access.
-      file.moveTo(this.script._basedirFile, null);
+      file.moveTo(this.script.baseDirFile, null);
     }
   } else {
     // Completely install the new script.
