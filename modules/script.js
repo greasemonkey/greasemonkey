@@ -225,7 +225,7 @@ function Script_getUpdateIsSecure() {
 });
 
 Script.prototype.__defineGetter__('baseDirFile',
-function Script_getBasedirFile() {
+function Script_getBaseDirFile() {
   var file = GM_util.scriptDir();
   file.append(this._basedir);
   try {
