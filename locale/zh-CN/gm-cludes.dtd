@@ -8,5 +8,5 @@
 <!ENTITY button.addUserInclude "添加为用户包括">
 <!ENTITY button.edit "编辑...">
 <!ENTITY button.remove "删除">
-<!ENTITY label.grpIncluded "脚本应用到以下网页">
-<!ENTITY label.grpExcluded "排除以下网页">
+<!ENTITY label.grpIncluded "应用到如下页面">
+<!ENTITY label.grpExcluded "排除如下页面">
