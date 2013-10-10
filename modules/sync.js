@@ -64,7 +64,10 @@ ScriptRecord.prototype = {
 };
 gWeave.Utils.deferGetSet(
     ScriptRecord, 'cleartext',
-    ['downloadURL', 'enabled', 'installed', 'values', 'valuesTooBig']);
+    ['downloadURL', 'enabled', 'installed',
+     'userExcludes', 'userIncludes',
+     'values', 'valuesTooBig',
+    ]);
 
 
 function ScriptStore(aName, aEngine) {
@@ -86,8 +89,9 @@ ScriptStore.prototype = {
       rs.download(GM_util.hitch(this, function(aSuccess, aType) {
         if (aSuccess && 'dependencies' == aType) {
           rs.install();
-          rs.script.enabled = aRecord.enabled;
-
+          rs.script.enabled = aRecord.cleartext.enabled;
+          rs.script.userExcludes = aRecord.cleartext.userExcludes;
+          rs.script.userIncludes = aRecord.cleartext.userIncludes;
           setScriptValuesFromSyncRecord(rs.script, aRecord);
         }
       }));
@@ -107,6 +111,8 @@ ScriptStore.prototype = {
       record.cleartext.downloadURL = script.downloadURL;
       record.cleartext.enabled = script.enabled;
       record.cleartext.installed = !script.needsUninstall;
+      record.cleartext.userExcludes = script.userExcludes;
+      record.cleartext.userIncludes = script.userIncludes;
 
       if (GM_prefRoot.getValue('sync.values')) {
         var storage = new GM_ScriptStorage(script);
@@ -170,6 +176,8 @@ ScriptStore.prototype = {
       script.uninstall();
     } else {
       script.enabled = aRecord.cleartext.enabled;
+      script.userExcludes = aRecord.cleartext.userExcludes;
+      script.userIncludes = aRecord.cleartext.userIncludes;
       setScriptValuesFromSyncRecord(script, aRecord);
     }
   },
@@ -193,7 +201,7 @@ ScriptTracker.prototype = {
       if (this.addChangedID(syncId(aScript))) {
         this.score = Math.min(100, this.score + 5);
       }
-    } else if (aEvent in {'val-set': 1, 'val-del': 1}) {
+    } else if (aEvent in {'cludes': 1, 'val-set': 1, 'val-del': 1}) {
       if (this.addChangedID(syncId(aScript))) {
         this.score = Math.min(100, this.score + 1);
       }
