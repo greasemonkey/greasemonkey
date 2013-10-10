@@ -307,7 +307,6 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     var enumerator = this._tempDir.directoryEntries;
     while (enumerator.hasMoreElements()) {
       var file = enumerator.getNext().QueryInterface(Ci.nsIFile);
-      // TODO: Fix invalid private access.
       file.moveTo(this.script.baseDirFile, null);
     }
   } else {
@@ -317,7 +316,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
           stringBundle.GetStringFromName('remotescript.name-unknown'));
     }
 
-    GM_config.install(this.script, aOldScript);
+    GM_config.install(this.script, aOldScript, this._tempDir);
 
     var suffix = 0;
     var file = GM_util.scriptDir();

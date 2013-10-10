@@ -1,4 +1,5 @@
 Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
@@ -127,7 +128,7 @@ Config.prototype._save = function(saveNow) {
   GM_util.writeToFile(domSerializer.serializeToString(doc), this._configFile);
 };
 
-Config.prototype.install = function(script, oldScript) {
+Config.prototype.install = function(script, oldScript, tempDir) {
   var existingIndex = this._find(oldScript || script);
   if (!oldScript) oldScript = this.scripts[existingIndex];
 
@@ -136,6 +137,10 @@ Config.prototype.install = function(script, oldScript) {
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
     script.userIncludes = oldScript.userIncludes;
+
+    // Migrate stored values.
+    var storage = new GM_ScriptStorage(oldScript);
+    storage.dbFile.moveTo(tempDir, storage.dbFileName);
 
     // Uninstall the old script.
     this.uninstall(oldScript, true);

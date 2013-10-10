@@ -20,13 +20,20 @@ function GM_ScriptStorage(script) {
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
+GM_ScriptStorage.prototype.dbFileName = 'values.db';
+
+GM_ScriptStorage.prototype.__defineGetter__('dbFile',
+function GM_ScriptStorage_getDbFile() {
+  var file = this._script.baseDirFile;
+  file.append(this.dbFileName);
+  return file;
+});
+
 
 GM_ScriptStorage.prototype.__defineGetter__('db',
 function GM_ScriptStorage_getDb() {
   if (null == this._db) {
-    var file = this._script.baseDirFile;
-    file.append('values.db');
-    this._db = Services.storage.openDatabase(file);
+    this._db = Services.storage.openDatabase(this.dbFile);
 
     this._db.executeSimpleSQL(
         'CREATE TABLE IF NOT EXISTS scriptvals ('
