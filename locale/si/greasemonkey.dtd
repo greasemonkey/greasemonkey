@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
-<!ENTITY AlsoUninstallPrefs "එසේම ආශ්‍රිත අභිමතද ඉවත් කරන්න">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

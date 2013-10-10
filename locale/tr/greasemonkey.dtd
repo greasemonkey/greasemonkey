@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "Anonim İstatistikler">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Greasemonkey geliştirmeleri için anonim kullanım istatistiklerini topla ve gönder.">
-<!ENTITY AlsoUninstallPrefs "Ayrıca ilişkili tercihleri kaldır">
 <!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">
 <!ENTITY RequireSecureUpdates "Gerekli güvenlik güncellemeleri">
 <!ENTITY greasemonkey.noscriptshere "Bu sayfada çalışan yüklenmiş betikler yok.">

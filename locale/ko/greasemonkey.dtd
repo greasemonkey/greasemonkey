@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
-<!ENTITY AlsoUninstallPrefs "관련된 환경 설정도 삭제">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">

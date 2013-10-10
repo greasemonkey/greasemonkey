@@ -532,18 +532,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   // conflict with another installed script.
   if (newScript.id != this.id) {
     if (!GM_util.getService().config.installIsUpdate(newScript)) {
-      // Migrate preferences.
-      if (this.prefroot != newScript.prefroot) {
-        var prefmanOld = new GM_PrefManager(this.prefroot);
-        var prefmanNew = new GM_PrefManager(newScript.prefroot);
-
-        var names = prefmanOld.listValues();
-        for (var i = 0, name = null; name = names[i]; i++) {
-          prefmanNew.setValue(name, prefmanOld.getValue(name));
-          prefmanOld.remove(name);
-        }
-      }
-
       // Empty cached values.
       this._id = null;
       this._prefroot = null;
@@ -811,11 +799,6 @@ Script.prototype.uninstall = function(forUpdate) {
     } catch (e) {
       // Fail silently if it already does not exist.
     }
-  }
-
-  if (!forUpdate && GM_prefRoot.getValue("uninstallPreferences")) {
-    // Remove saved preferences
-    GM_prefRoot.remove(this.prefroot);
   }
 
   this._changed('uninstall', forUpdate);

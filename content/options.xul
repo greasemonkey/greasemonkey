@@ -28,7 +28,6 @@
 <vbox>
   <groupbox>
     <caption label="&prefWindow.titleWin;" />
-    <checkbox id="check-uninstall" label="&AlsoUninstallPrefs;" />
     <checkbox id="secure-update" label="&RequireSecureUpdates;" />
     <checkbox id="submit-stats" label="&SubmitStats;" />
   </groupbox>

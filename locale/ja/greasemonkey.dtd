@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "匿名の統計">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Greasemonkey を改善するために匿名の利用統計を収集し送信する。">
-<!ENTITY AlsoUninstallPrefs "関連付けられた設定も削除">
 <!ENTITY UpdateChecking "更新の確認">
 <!ENTITY RequireSecureUpdates "安全に更新">
 <!ENTITY greasemonkey.noscriptshere "このページで実行するスクリプトはインストールされていません。">

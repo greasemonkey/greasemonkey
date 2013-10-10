@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "Anonyme Statistik">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Sammeln und einreichen von anonymen Nutzungsstatistiken an Greasemonkey.">
-<!ENTITY AlsoUninstallPrefs "Zugehörige Einstellungen ebenfalls entfernen">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">

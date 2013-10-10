@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "עיבוד נתונים ללא זיהוי המשתמש">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "אסיפה ומשלוח עיבוד נתונים ללא זיהוי המשתמש לצורך שיפור Greasemonkey.">
-<!ENTITY AlsoUninstallPrefs "הסר גם את המאייפנים המשוייכים לקובץ Script משתמש זה">
 <!ENTITY UpdateChecking "בדיקת עדכון">
 <!ENTITY RequireSecureUpdates "דורשת עדכונים מאובטחים">
 <!ENTITY greasemonkey.noscriptshere "לא מותקנים קבצי Script פעילים בדף זה.">

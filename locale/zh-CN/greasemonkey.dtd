@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "匿名统计数据">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "收集和提交匿名的使用统计数据以帮助改善 Greasemonkey。">
-<!ENTITY AlsoUninstallPrefs "同时清除相关的首选项设置">
 <!ENTITY UpdateChecking "检查更新">
 <!ENTITY RequireSecureUpdates "要求安全地更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">

@@ -45,7 +45,6 @@
 <!ENTITY AnonymousStatistics "Ανώνυμα στατιστικά">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
 <!ENTITY SubmitStats "Συγκέντρωση και υποβολή στατιστικών ανώνυμης χρήσης για βελτίωση του Greasemonkey.">
-<!ENTITY AlsoUninstallPrefs "Απεγκατάσταση και των σχετικών ρυθμίσεων">
 <!ENTITY UpdateChecking "Έλεγχος Ενημέρωσης">
 <!ENTITY RequireSecureUpdates "Απαιτούνται ασφαλείς ενημερώσεις">
 <!ENTITY greasemonkey.noscriptshere "Κανένας εγκατεστημένος κώδικας δεν εκτελείτε σε αυτή τη σελίδα.">
