@@ -9,6 +9,7 @@ the work to send data to the server.
 var EXPORTED_SYMBOLS = [];
 
 Components.utils.import('resource://services-common/utils.js');
+Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
@@ -106,17 +107,7 @@ function getStatsObj() {
 
   var scripts = GM_util.getService().config.scripts;
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var valueCount = 0;
-    var valueSize = 0;
-    var scriptPrefMan = new GM_PrefManager(script.prefroot);
-    var scriptPrefNames = scriptPrefMan.listValues();
-    for (var j = 0, prefName = null; prefName = scriptPrefNames[j]; j++) {
-      valueCount++;
-      // Approximate size as JSON representation, that's a likely way they
-      // would really be used.
-      valueSize += prefName.length + JSON.stringify(
-          scriptPrefMan.getValue(prefName)).length;
-    }
+    var valueStats = GM_ScriptStorage(script).getStats();
 
     var explicitGrants = [];
     var imperatives = [];
@@ -155,8 +146,8 @@ function getStatsObj() {
         'sizes': sizes,
         'userExcludeCount': script.userExcludes.length,
         'userIncludeCount': script.userIncludes.length,
-        'valueCount': valueCount,
-        'valueSize': valueSize,
+        'valueCount': valueStats.count,
+        'valueSize': valueStats.size,
         };
     stats.scripts[stats.scripts.length] = scriptStat;
   }

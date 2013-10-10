@@ -14,7 +14,6 @@ var EXPORTED_SYMBOLS = [
 function GM_ScriptStorage(script) {
   this._db = null;
   this._script = script;
-  this.prefMan = new GM_PrefManager(script.prefroot);
   this.stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
@@ -131,6 +130,28 @@ GM_ScriptStorage.prototype.listValues = function() {
   vals.__exposedProps__ = {'length': 'r'};
   return vals;
 };
+
+
+GM_ScriptStorage.prototype.getStats = function() {
+  var stats = {
+      count: undefined,
+      size: undefined,
+      };
+  var stmt = this.db.createStatement(
+      'SELECT COUNT(0) AS count, SUM(LENGTH(value)) AS size FROM scriptvals');
+  try {
+    while (stmt.step()) {
+      stats.count = stmt.row.count;
+      stats.size = stmt.row.size || 0;
+    }
+  } catch (e) {
+    dump('getStats err: ' + uneval(e) + '\n');
+  } finally {
+    stmt.reset();
+  }
+
+  return stats;
+}
 
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //

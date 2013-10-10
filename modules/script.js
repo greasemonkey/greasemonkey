@@ -51,7 +51,6 @@ function Script(configNode) {
   this._modifiedTime = null;
   this._name = 'user-script';
   this._namespace = '';
-  this._prefroot = null;
   this._rawMeta = '';
   this._requires = [];
   this._resources = [];
@@ -127,6 +126,7 @@ function Script_getId() {
   return this._id;
 });
 
+// TODO: Remove this with pref -> db migration code.
 Script.prototype.__defineGetter__('prefroot',
 function Script_getPrefroot() {
   if (!this._prefroot) this._prefroot = ["scriptvals.", this.id, "."].join("");
@@ -534,8 +534,6 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
     if (!GM_util.getService().config.installIsUpdate(newScript)) {
       // Empty cached values.
       this._id = null;
-      this._prefroot = null;
-
       this._name = newScript._name;
       this._namespace = newScript._namespace;
     } else {
