@@ -6,6 +6,7 @@ var Ci = Components.interfaces;
 Components.utils.import("resource://greasemonkey/GM_notification.js");
 Components.utils.import('resource://greasemonkey/addons4.js');
 Components.utils.import('resource://greasemonkey/script.js');
+Components.utils.import('resource://greasemonkey/scriptIcon.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -80,9 +81,12 @@ function filenameFromUri(aUri, aDefault) {
 ////////////////////////// Private Download Listener ///////////////////////////
 
 function DownloadListener(
-    aTryToParse, aProgressCb, aCompletionCallback, aFile, aUri, aRemoteScript) {
+    aTryToParse, aProgressCb, aCompletionCallback, aFile, aUri, aRemoteScript,
+    aErrorsAreFatal) {
   this._completionCallback = aCompletionCallback;
   this._data = [];
+  this._errorsAreFatal = ('undefined' == typeof aErrorsAreFatal)
+      ? true : aErrorsAreFatal;
   this._progressCallback = aProgressCb;
   this._remoteScript = aRemoteScript;
   this._tryToParse = aTryToParse;
@@ -188,7 +192,7 @@ DownloadListener.prototype = {
       }
     }
 
-    if (error) {
+    if (error && this._errorsAreFatal) {
       errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
           + '\n' + this._uri.spec + '\n\n' + errorMessage;
       this._remoteScript.cleanup(errorMessage);
@@ -292,7 +296,9 @@ RemoteScript.prototype.downloadScript = function(aCompletionCallback) {
       this._tempDir, filenameFromUri(this._uri, 'gm_script'));
 
   this._downloadFile(this._uri, this._scriptFile,
-      GM_util.hitch(this, this._downloadScriptCb, aCompletionCallback));
+      GM_util.hitch(this, this._downloadScriptCb, aCompletionCallback),
+      true // aErrorsAreFatal
+      );
 };
 
 RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
@@ -475,8 +481,12 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
 
   function dependencyDownloadComplete(aChannel, aSuccess) {
     if (!aSuccess) {
-      aCompletionCallback(aSuccess, 'dependency');
-      return;
+      if (dependency instanceof ScriptIcon) {
+        // Ignore the failure to download the icon.
+      } else {
+        aCompletionCallback(aSuccess, 'dependency');
+        return;
+      }
     }
     if (dependency.setMimetype) {
       dependency.setMimetype(aChannel.contentType);
@@ -488,12 +498,14 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
   }
 
   this._downloadFile(
-      uri, file, GM_util.hitch(this, dependencyDownloadComplete));
+      uri, file, GM_util.hitch(this, dependencyDownloadComplete),
+      !(dependency instanceof ScriptIcon)  // aErrorsAreFatal
+      );
 };
 
 /** Download a given nsIURI to a given nsIFile, with optional callback. */
 RemoteScript.prototype._downloadFile = function(
-    aUri, aFile, aCompletionCallback) {
+    aUri, aFile, aCompletionCallback, aErrorsAreFatal) {
   aUri = aUri.QueryInterface(Ci.nsIURI);
   aFile = aFile.QueryInterface(Ci.nsIFile);
   aCompletionCallback = aCompletionCallback || function() {};
@@ -519,12 +531,13 @@ RemoteScript.prototype._downloadFile = function(
   var channel = ioService.newChannelFromURI(aUri);
   this._channels.push(channel);
   var dsl = new DownloadListener(
-      0 == this._progressIndex,
+      0 == this._progressIndex,  // aTryToParse
       GM_util.hitch(this, this._downloadFileProgress),
       aCompletionCallback,
       aFile,
       aUri,
-      this
+      this,
+      aErrorsAreFatal
       );
   channel.notificationCallbacks = dsl;
   channel.asyncOpen(dsl, this);
