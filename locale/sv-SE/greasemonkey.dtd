@@ -35,15 +35,15 @@
 <!ENTITY newscript.excludes "Undantag (ett per rad)">
 <!ENTITY newscript.fromClipboard "Använd skript från Urklipp">
 <!ENTITY options.editor "Redigeringsprogram">
-<!ENTITY options.experimental "Experimental">
+<!ENTITY options.experimental "Experimentell">
 <!ENTITY options.defaultEditor "Använd standardredigeringsprogrammet">
 <!ENTITY options.browseForEditor "Bläddra efter redigeringsprogram">
 <!ENTITY options.globalExcludes "Globala undantag">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Ny skriptmall">
+<!ENTITY options.newScript.removeUnused "Ta bort oanvända rader">
 <!ENTITY Uninstall "Avinstallera">
 <!ENTITY AnonymousStatistics "Anonym statistik">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Aktivera Firefox Sync för användarskript">
 <!ENTITY SubmitStats "Samla in och skicka in anonym användningsstatistik för att förbättra Greasemonkey.">
 <!ENTITY UpdateChecking "Uppdateringskontroll">
 <!ENTITY RequireSecureUpdates "Kräv säkra uppdateringar">

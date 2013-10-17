@@ -6,7 +6,7 @@
 <!ENTITY ExecuteLater "Kör senare">
 <!ENTITY ExecuteSooner "Kör tidigare">
 <!ENTITY FindUpdate "Sök efter uppdatering">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "Tvingad sökning efter uppdateringar">
 <!ENTITY InstallUpdate "Installera uppdatering">
 <!ENTITY MoveDown "Flytta nedåt">
 <!ENTITY MoveDown.accesskey "n">
