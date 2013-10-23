@@ -3,6 +3,7 @@ var EXPORTED_SYMBOLS = ['Script'];
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
@@ -222,6 +223,11 @@ Script.prototype.__defineGetter__('updateIsSecure',
 function Script_getUpdateIsSecure() {
   if (!this.downloadURL) return null;
   return /^https/.test(this.downloadURL);
+});
+
+Script.prototype.__defineGetter__('baseDirName',
+function Script_getBaseDirName() {
+  return '' + this._basedir;
 });
 
 Script.prototype.__defineGetter__('baseDirFile',
@@ -784,19 +790,27 @@ Script.prototype.uninstall = function(forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
   if (this.baseDirFile.equals(GM_util.scriptDir())) {
-    // if script is in the root, just remove the file
+    // If script is in the root, just remove the file.
     try {
-      this.file.remove(false);
+      if (this.file.exists()) this.file.remove(false);
     } catch (e) {
-      // Fail silently if it already does not exist.
+      dump('Remove failed: ' + this.file.path + '\n');
     }
-  } else {
-    // if script has its own dir, remove the dir + contents
+  } else if (this.baseDirFile.exists()) {
+    // If script has its own dir, remove the dir + contents.
     try {
       this.baseDirFile.remove(true);
     } catch (e) {
-      // Fail silently if it already does not exist.
+      dump('Remove failed: ' + this.baseDirFile.path + '\n');
     }
+  }
+
+  if (!forUpdate) {
+    var storage = new GM_ScriptStorage(this);
+    var file = storage.dbFile;
+    GM_util.enqueueRemoveFile(file);
+    file.leafName += '-journal';
+    GM_util.enqueueRemoveFile(file);
   }
 
   this._changed('uninstall', forUpdate);

@@ -310,6 +310,9 @@ function startup(aService) {
   var observerService = Components.classes['@mozilla.org/observer-service;1']
      .getService(Components.interfaces.nsIObserverService);
   observerService.addObserver(aService, 'document-element-inserted', false);
+
+  // Import this once, early, so that enqueued deletes can happen.
+  Cu.import("resource://greasemonkey/util/enqueueRemoveFile.js");
 }
 
 /////////////////////////////////// Service ////////////////////////////////////

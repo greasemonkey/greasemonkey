@@ -138,12 +138,6 @@ Config.prototype.install = function(script, oldScript, tempDir) {
     script.userExcludes = oldScript.userExcludes;
     script.userIncludes = oldScript.userIncludes;
 
-    // Migrate stored values.
-    var storage = new GM_ScriptStorage(oldScript);
-    if (storage.dbFile.exists()) {
-      storage.dbFile.moveTo(tempDir, storage.dbFileName);
-    }
-
     // Uninstall the old script.
     this.uninstall(oldScript, true);
   }

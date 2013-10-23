@@ -24,8 +24,20 @@ GM_ScriptStorage.prototype.dbFileName = 'values.db';
 
 GM_ScriptStorage.prototype.__defineGetter__('dbFile',
 function GM_ScriptStorage_getDbFile() {
-  var file = this._script.baseDirFile;
-  file.append(this.dbFileName);
+  // TODO: Remove this before 1.13 is final.
+  // Migrate early beta in-script-dir values DB to beside-script-dir.
+  var legacyDbFile = this._script.baseDirFile;
+  legacyDbFile.append('values.db');
+  if (legacyDbFile.exists()) {
+    try {
+      legacyDbFile.moveTo(GM_util.scriptDir(), this._script.baseDirName + '.db');
+    } catch (e) {
+      dump('Could not migrate legacy db file:\n' + e + '\n');
+    }
+  }
+
+  var file = GM_util.scriptDir();
+  file.append(this._script.baseDirName + '.db');
   return file;
 });
 
