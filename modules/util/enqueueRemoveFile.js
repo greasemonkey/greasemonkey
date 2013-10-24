@@ -22,6 +22,7 @@ function removeEnqueuedPath(aPath) {
   GM_prefRoot.setValue('enqueuedRemovals', JSON.stringify(paths));
 }
 
+/** Try to remove a file identified by path; return true for success. */
 function removePath(aPath, aDoEnqueueFailure) {
   var file = Components.classes["@mozilla.org/file/local;1"]
       .createInstance(Components.interfaces.nsILocalFile);
@@ -35,15 +36,15 @@ function removePath(aPath, aDoEnqueueFailure) {
   if (file.exists()) {
     try {
       file.remove(false);
-      return true;
     } catch (e) {
       if (aDoEnqueueFailure) addEnqueuedPath(aPath);
+      return false;
     }
   }
-  return false;
+
+  return true;
 }
 
-/** Given string data and an nsIFile, write it safely to that file. */
 function enqueueRemoveFile(aFile) {
   removePath(aFile.path, true);
 }
@@ -52,7 +53,7 @@ function enqueueRemoveFile(aFile) {
 (function() {
   var paths = getEnqueuedPaths();
   for (var i = 0, path = null; path = paths[i]; i++) {
-    if (!removePath(path, false)) {
+    if (removePath(path, false)) {
       removeEnqueuedPath(path);
     }
   }
