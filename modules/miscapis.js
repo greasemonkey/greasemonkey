@@ -55,7 +55,7 @@ function GM_ScriptStorage_getDb() {
         );
     this._db.executeSimpleSQL('PRAGMA auto_vaccum = INCREMENTAL;');
     this._db.executeSimpleSQL('PRAGMA incremental_vacuum(10);');
-    this._db.executeSimpleSQL('PRAGMA journal_mode = TRUNCATE;');
+    this._db.executeSimpleSQL('PRAGMA journal_mode = WAL;');
   }
   return this._db;
 });
