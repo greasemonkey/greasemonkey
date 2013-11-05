@@ -731,6 +731,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
   req.open("GET", url, true);
+  req.setRequestHeader('X-Userscript-Update', 'Greasemonkey');
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced);
   req.onerror = GM_util.hitch(null, aCallback, false);
