@@ -9,4 +9,4 @@
 <!ENTITY button.edit "Éditer…">
 <!ENTITY button.remove "Supprimer">
 <!ENTITY label.grpIncluded "Pages autorisées">
-<!ENTITY label.grpExcluded "Pages interdites">
+<!ENTITY label.grpExcluded "Pages exclues">

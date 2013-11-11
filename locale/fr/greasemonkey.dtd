@@ -1,20 +1,20 @@
-<!ENTITY menu.install "Installer un Script Utilisateur…">
+<!ENTITY menu.install "Installer un Script…">
 <!ENTITY menu.install.accesskey "I">
-<!ENTITY menu.show "Voir la Source du Script Utilisateur">
+<!ENTITY menu.show "Voir la source du Script">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Commandes de Script Utilisateur…">
+<!ENTITY menu.commands "Raccourcis du Script…">
 <!ENTITY menu.commands.accesskey "C">
-<!ENTITY menu.new "Nouveau Script Utilisateur…">
+<!ENTITY menu.new "Nouveau Script…">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Gérer les Scripts Utilisateur">
+<!ENTITY menu.manage "Gérer les Scripts">
 <!ENTITY menu.manage.accesskey "G">
 <!ENTITY menu.options "Options de Greasemonkey">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "Sites Web...">
 <!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
-<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
+<!ENTITY menu.websites.greasespot "Blog Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Wiki Greasespot">
+<!ENTITY menu.websites.manual "Manuel de Greasemonkey">
 <!ENTITY menu.websites.userscripts "Userscripts.org">
 <!ENTITY statusbar.enabled "Activé">
 <!ENTITY statusbar.enabled.accesskey "A">
@@ -23,33 +23,33 @@
 <!ENTITY install.matches "matches:">
 <!ENTITY install.butnoton "ne s'exécute pas sur:">
 <!ENTITY install.warning1 "Des scripts malveillants peuvent violer votre vie privée et agir en votre nom à votre insu.">
-<!ENTITY install.warning2 "N'installez que des scripts à partir de sources dont vous avez confiance.">
-<!ENTITY install.showscriptsource "Afficher la Source du Script">
+<!ENTITY install.warning2 "Installez uniquement des scripts à partir de sources auxquelles vous faites confiance.">
+<!ENTITY install.showscriptsource "Afficher la source du Script">
 <!ENTITY install.installbutton "Installer">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Télécharger l'erreur">
 <!ENTITY loading "Téléchargement...">
 <!ENTITY newscript.name "Nom">
 <!ENTITY newscript.namespace "Espace de nom">
 <!ENTITY newscript.description "Description">
 <!ENTITY newscript.includes "Inclus (un par ligne)">
 <!ENTITY newscript.excludes "Exclus (un par ligne)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Utiliser le Script à partir du presse papier">
 <!ENTITY options.editor "Éditeur">
-<!ENTITY options.experimental "Experimental">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.experimental "Expérimental">
+<!ENTITY options.defaultEditor "Utiliser l'éditeur par défaut">
+<!ENTITY options.browseForEditor "Parcourir et choisir un Éditeur">
 <!ENTITY options.globalExcludes "Global Excludes">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Nouveau modèle de script">
+<!ENTITY options.newScript.removeUnused "Supprimer les lignes inutilisées">
 <!ENTITY Uninstall "Désinstaller">
 <!ENTITY AnonymousStatistics "Statistiques anonymes">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Activer Firefox Sync pour les Scripts">
 <!ENTITY SubmitStats "Récolte et envoie de statistiques anonymes destinées à améliorer Greasemonkey">
-<!ENTITY UpdateChecking "Vérifcation des mises à jour">
+<!ENTITY UpdateChecking "Vérification des mises à jour">
 <!ENTITY RequireSecureUpdates "Mises à jour sécurisées nécessaires">
 <!ENTITY greasemonkey.noscriptshere "Aucun script installé n'est exécuté sur cette page.">
-<!ENTITY greasemonkey.youhavenoscripts "Vous avez aucun scripts d'installé">
+<!ENTITY greasemonkey.youhavenoscripts "Vous n'avez aucun script d'installé">
 <!ENTITY greasemonkey.getuserscripts "Obtenir des scripts utilisateur">
 <!ENTITY scriptprefs.title "Greasemonkey User Script Preferences - !!">
-<!ENTITY scriptprefs.usersettings "User Settings">
-<!ENTITY scriptprefs.scriptsettings "Script Settings">
+<!ENTITY scriptprefs.usersettings "Paramètres de l'utilisateur">
+<!ENTITY scriptprefs.scriptsettings "Paramètres du Script">

@@ -1,12 +1,12 @@
 <!ENTITY Edit "Modifier">
 <!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Modifier ce Script Utilisateur">
+<!ENTITY Edit.tooltip "Modifier ce Script">
 <!ENTITY ExecuteFirst "Exécuter en premier">
 <!ENTITY ExecuteLast "Exécuter en dernier">
 <!ENTITY ExecuteLater "Exécuter plus tard">
 <!ENTITY ExecuteSooner "Exécuter plus tôt">
 <!ENTITY FindUpdate "Trouver mises à jour">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "Forcer les mises à jour">
 <!ENTITY InstallUpdate "Installer mises à jour">
 <!ENTITY MoveDown "Descendre">
 <!ENTITY MoveDown.accesskey "D">
