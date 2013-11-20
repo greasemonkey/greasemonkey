@@ -228,35 +228,47 @@ GM_BrowserUI.openOptions = function() {
 GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
   if (!aHref.match(/\.user\.js$/)) return;
   if (aSafeWin.document.contentType.match(/^text\/(x|ht)ml/)) return;
-  var notificationBox = gBrowser.getNotificationBox();
-  notificationBox.appendNotification(
-    GM_BrowserUI.bundle.GetStringFromName('disabledWarning'),
-    "install-userscript",
-    "chrome://greasemonkey/skin/icon16.png",
-    notificationBox.PRIORITY_WARNING_MEDIUM,
-    [{
+
+  // Handle enabled (i.e. show script source button) navigation by default.
+  var msg = GM_BrowserUI.bundle.GetStringFromName('greeting.msg');
+  var buttons = [];
+
+  if (!GM_util.getEnabled()) {
+    // Add options for disabled state.
+    msg = GM_BrowserUI.bundle.GetStringFromName('disabledWarning');
+    buttons.push({
       'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable'),
       'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable.accessKey'),
       'popup': null,
-      'callback': GM_util.hitch(this, function() {
-        GM_util.setEnabled(true);
-      })
-    },{
+      'callback': function() { GM_util.setEnabled(true); }
+    });
+    buttons.push({
       'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall'),
       'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall.accessKey'),
       'popup': null,
-      'callback': GM_util.hitch(this, function() {
+      'callback': function() {
         GM_util.setEnabled(true);
         GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
-      })
-    },{
-      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install'),
-      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
-      'popup': null,
-      'callback': GM_util.hitch(this, function() {
-        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
-      })
-    }]
+      }
+    });
+  }
+
+  buttons.push({
+    'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install'),
+    'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
+    'popup': null,
+    'callback': GM_util.hitch(this, function() {
+      GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
+    })
+  });
+
+  var notificationBox = gBrowser.getNotificationBox();
+  notificationBox.appendNotification(
+    msg,
+    "install-userscript",
+    "chrome://greasemonkey/skin/icon16.png",
+    notificationBox.PRIORITY_WARNING_MEDIUM,
+    buttons
   );
 };
 
