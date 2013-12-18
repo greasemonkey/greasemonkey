@@ -17,7 +17,7 @@ function removeEnqueuedPath(aPath) {
   var paths = getEnqueuedPaths();
   do {
     var i = paths.indexOf(aPath);
-    if (i != -1) paths.slice(i, 1);
+    if (i != -1) paths.splice(i, 1);
   } while (i != -1);
   GM_prefRoot.setValue('enqueuedRemovals', JSON.stringify(paths));
 }
