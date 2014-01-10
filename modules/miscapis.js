@@ -173,7 +173,7 @@ GM_ScriptStorage.prototype.getStats = function() {
   }
 
   return stats;
-}
+};
 
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //

@@ -483,7 +483,7 @@ Script.prototype.info = function() {
     },
     'scriptMetaStr': extractMeta(this.textContent),
     'scriptSource': this.textContent,
-  }
+  };
 };
 
 Script.prototype.isModified = function() {
