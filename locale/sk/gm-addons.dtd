@@ -1,12 +1,12 @@
 <!ENTITY Edit "Upraviť">
 <!ENTITY Edit.accesskey "U">
 <!ENTITY Edit.tooltip "Upraviť tento užívateľský skript">
-<!ENTITY ExecuteFirst "Spustiť prví">
+<!ENTITY ExecuteFirst "Spustiť prvý">
 <!ENTITY ExecuteLast "Spustiť posledný">
 <!ENTITY ExecuteLater "Spustiť neskôr">
 <!ENTITY ExecuteSooner "Spustiť skôr">
 <!ENTITY FindUpdate "Hľadať aktualizáciu">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "Vynútené hľadanie aktualizácií">
 <!ENTITY InstallUpdate "Inštalovať aktualizáciu">
 <!ENTITY MoveDown "Posunúť nižšie">
 <!ENTITY MoveDown.accesskey "n">
