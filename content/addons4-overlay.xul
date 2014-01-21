@@ -28,6 +28,7 @@
   <command id="cmd_userscript_execute_last" />
   <command id="cmd_userscript_showItemPreferences" />
   <command id="cmd_userscript_forcedFindItemUpdates" />
+  <command id="cmd_userscript_showItemAbout"/>
 </commandset>
 
 <menupopup id="addonitem-popup">
@@ -60,6 +61,10 @@
   <!-- Custom forced find updates item. -->
   <menuitem command="cmd_userscript_forcedFindItemUpdates" class="greasemonkey"
     label="&ForcedFindUpdate;"
+  />
+  
+  <menuitem command="cmd_userscript_showItemAbout" class="greasemonkey"
+    label="&cmd.about.label;" accesskey="&cmd.about.accesskey;"
   />
 </menupopup>
 

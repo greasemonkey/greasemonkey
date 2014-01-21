@@ -174,6 +174,20 @@ function init() {
       }
   };
 
+  // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#949
+  gViewController.commands.cmd_userscript_showItemAbout = {
+      isEnabled: addonIsInstalledScript,
+      doCommand: function cmd_userscript_showItemAbout_doCommand(aAddon) {
+        var aboutURL = aAddon.aboutURL;
+        if (aboutURL) {
+          openDialog(aboutURL, "", "chrome,centerscreen,modal", aAddon);
+        } else {
+          openDialog("chrome://mozapps/content/extensions/about.xul",
+          "", "chrome,centerscreen,modal", aAddon);
+		}
+      }
+  };
+
   window.addEventListener('ViewChanged', onViewChanged, false);
   onViewChanged(); // initialize on load as well as when it changes later
 
