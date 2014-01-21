@@ -264,12 +264,28 @@ ScriptAddon.prototype.performUninstall = function() {
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonAuthor
-function ScriptAddonAuthor(name){
-  this.name = name;
+/**
+ * This represents an author of an add-on (e.g. creator or developer)
+ *
+ * @param  aName
+ *         The name of the author
+ * @param  aURL
+ *         The URL of the author's profile page
+ */
+function ScriptAddonAuthor(aName, aURL) {
+  this.name = aName;
+  this.url = aURL;
 }
 
-// Optional attributes
-ScriptAddonAuthor.prototype.url = null;
+ScriptAddonAuthor.prototype = {
+  name: null,
+  url: null,
+
+  // Returns the author's name, defaulting to the empty string
+  toString: function ScriptAddonAuthor_toString() {
+    return this.name || "";
+  }
+}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
