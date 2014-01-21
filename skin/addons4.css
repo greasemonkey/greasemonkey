@@ -5,10 +5,6 @@
   list-style-image: url(chrome://greasemonkey/skin/icon32.png);
 }
 
-.addon.addon-view[type="greasemonkey-user-script"] .details.button-link {
-  display: none !important;
-}
-
 #greasemonkey-sort-bar {
   display: none;
 }
@@ -29,10 +25,6 @@ page.greasemonkey #user-script-list-empty {
 /* Hide the 'restart now' link for user scripts. */
 .greasemonkey #addon-list button[command=cmd_restartApp] {
   display: none;
-}
-
-.addon.addon-view[type="greasemonkey-user-script"] .details.button-link {
-  display: none !important;
 }
 
 /* Do not show native items when view is user scripts. */
