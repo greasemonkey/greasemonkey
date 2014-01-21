@@ -20,6 +20,7 @@
 <script type="application/x-javascript" src="chrome://greasemonkey/content/third-party/mpl-utils.js" />
 
 <commandset id="viewCommandSet">
+  <command id="cmd_userscript_showItemDetails" />
   <command id="cmd_userscript_edit" />
   <command id="cmd_userscript_show" />
   <command id="cmd_userscript_execute_first" />
@@ -32,6 +33,11 @@
 </commandset>
 
 <menupopup id="addonitem-popup">
+  <menuitem command="cmd_userscript_showItemDetails" class="greasemonkey" 
+    label="&cmd.showDetails.label;" accesskey="&cmd.showDetails.accesskey;"
+    default="true"
+  />
+
   <menuitem command="cmd_userscript_edit"
     label="&Edit;" accesskey="&Edit.accesskey;" class="greasemonkey"
   />

@@ -135,6 +135,18 @@ function focus() {
 function init() {
   GM_util.getService().config.addObserver(observer);
 
+  // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#771
+  gViewController.commands.cmd_userscript_showItemDetails = {
+      isEnabled: function cmd_userscript_showItemDetails_isEnabled(aAddon) { 
+        return addonIsInstalledScript(aAddon) && (gViewController.currentViewObj != gDetailView);
+      },
+      doCommand: function cmd_userscript_showItemDetails_doCommand(aAddon, aScrollToPreferences) { 
+        gViewController.loadView("addons://detail/" +
+                                 encodeURIComponent(aAddon.id) +
+                                 (aScrollToPreferences ? "/preferences" : ""));
+      }
+    };
+
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_util.openInEditor(aAddon._script); }
