@@ -39,37 +39,37 @@
   />
 
   <menuitem command="cmd_userscript_edit"
-    label="&Edit;" accesskey="&Edit.accesskey;" class="greasemonkey"
+    label="&Edit;" accesskey="&Edit.accesskey;" class="greasemonkey greasemonkeyNoHide"
   />
   <menuitem command="cmd_userscript_show"
-    label="&Show;" accesskey="&Show.accesskey;" class="greasemonkey"
+    label="&Show;" accesskey="&Show.accesskey;" class="greasemonkey greasemonkeyNoHide"
   />
   <menuseparator class="greasemonkey"/>
   <menuitem command="cmd_userscript_execute_first"
-    label="&ExecuteFirst;" class="greasemonkey"
+    label="&ExecuteFirst;" class="greasemonkey greasemonkeyNoHide"
   />
   <menuitem command="cmd_userscript_execute_sooner"
-    label="&ExecuteSooner;" class="greasemonkey"
+    label="&ExecuteSooner;" class="greasemonkey greasemonkeyNoHide"
   />
   <menuitem command="cmd_userscript_execute_later"
-    label="&ExecuteLater;" class="greasemonkey"
+    label="&ExecuteLater;" class="greasemonkey greasemonkeyNoHide"
   />
   <menuitem command="cmd_userscript_execute_last"
-    label="&ExecuteLast;" class="greasemonkey"
+    label="&ExecuteLast;" class="greasemonkey greasemonkeyNoHide"
   />
 
   <menuseparator class="greasemonkey"/>
 
   <!-- Default find updates item. -->
-  <menuitem command="cmd_findItemUpdates" class="greasemonkey"
+  <menuitem command="cmd_findItemUpdates" class="greasemonkey greasemonkeyNoHide"
     label="&cmd.findUpdates.label;" accesskey="&cmd.findUpdates.accesskey;"
   />
   <!-- Custom forced find updates item. -->
-  <menuitem command="cmd_userscript_forcedFindItemUpdates" class="greasemonkey"
+  <menuitem command="cmd_userscript_forcedFindItemUpdates" class="greasemonkey greasemonkeyNoHide"
     label="&ForcedFindUpdate;"
   />
   
-  <menuitem command="cmd_userscript_showItemAbout" class="greasemonkey"
+  <menuitem command="cmd_userscript_showItemAbout" class="greasemonkey greasemonkeyNoHide"
     label="&cmd.about.label;" accesskey="&cmd.about.accesskey;"
   />
 </menupopup>
