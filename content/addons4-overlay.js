@@ -161,11 +161,17 @@ function init() {
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
     };
   gViewController.commands.cmd_userscript_execute_sooner = {
-      isEnabled: addonExecutesNonFirst,
+      isEnabled: function cmd_userscript_execute_sooner_isEnabled(aAddon) { 
+        return addonExecutesNonFirst(aAddon) && 1 != aAddon.executionIndex;
+      },
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
     };
   gViewController.commands.cmd_userscript_execute_later = {
-      isEnabled: addonExecutesNonLast,
+      isEnabled: function cmd_userscript_execute_later_isEnabled(aAddon) { 
+        return addonExecutesNonLast(aAddon) &&
+          (GM_util.getService().config.scripts.length - 2)
+          != aAddon.executionIndex;
+      },
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 1); }
     };
   gViewController.commands.cmd_userscript_execute_last = {
