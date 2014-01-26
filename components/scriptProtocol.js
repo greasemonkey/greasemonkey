@@ -93,9 +93,4 @@ ScriptProtocol.prototype.newChannel = function(aUri) {
   return new DummyChannel(aUri);
 };
 
-const components = [ScriptProtocol];
-if ("generateNSGetFactory" in XPCOMUtils) {
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory(components); // Gecko 2.0+
-} else {
-  var NSGetModule = XPCOMUtils.generateNSGetModule(components); // Gecko 1.9.x
-}
+var NSGetFactory = XPCOMUtils.generateNSGetFactory([ScriptProtocol]);
