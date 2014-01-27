@@ -123,7 +123,7 @@ ScriptAddon.prototype.__defineGetter__('creator',
 function ScriptAddon_getCreator() {
   var value = parseMetaById(this._script.textContent, 'author');
   if(value) {
-    return new ScriptAddonAuthor(value);
+    return new AddonManagerPrivate.AddonAuthor(value);
   }
   return null;
 });
@@ -260,32 +260,6 @@ ScriptAddon.prototype.performUninstall = function() {
   GM_util.getService().config.uninstall(this._script);
   delete ScriptAddonCache[this.id];
 };
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-// https://developer.mozilla.org/en-US/Add-ons/Add-on_Manager/AddonAuthor
-/**
- * This represents an author of an add-on (e.g. creator or developer)
- *
- * @param  aName
- *         The name of the author
- * @param  aURL
- *         The URL of the author's profile page
- */
-function ScriptAddonAuthor(aName, aURL) {
-  this.name = aName;
-  this.url = aURL;
-}
-
-ScriptAddonAuthor.prototype = {
-  name: null,
-  url: null,
-
-  // Returns the author's name, defaulting to the empty string
-  toString: function ScriptAddonAuthor_toString() {
-    return this.name || "";
-  }
-}
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
