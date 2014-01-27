@@ -137,10 +137,10 @@ function init() {
 
   // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#771
   gViewController.commands.cmd_userscript_showItemDetails = {
-      isEnabled: function cmd_userscript_showItemDetails_isEnabled(aAddon) { 
+      isEnabled: function cmd_userscript_showItemDetails_isEnabled(aAddon) {
         return addonIsInstalledScript(aAddon) && (gViewController.currentViewObj != gDetailView);
       },
-      doCommand: function cmd_userscript_showItemDetails_doCommand(aAddon, aScrollToPreferences) { 
+      doCommand: function cmd_userscript_showItemDetails_doCommand(aAddon, aScrollToPreferences) {
         gViewController.loadView("addons://detail/" +
                                  encodeURIComponent(aAddon.id) +
                                  (aScrollToPreferences ? "/preferences" : ""));
@@ -161,13 +161,13 @@ function init() {
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
     };
   gViewController.commands.cmd_userscript_execute_sooner = {
-      isEnabled: function cmd_userscript_execute_sooner_isEnabled(aAddon) { 
+      isEnabled: function cmd_userscript_execute_sooner_isEnabled(aAddon) {
         return addonExecutesNonFirst(aAddon) && 1 != aAddon.executionIndex;
       },
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
     };
   gViewController.commands.cmd_userscript_execute_later = {
-      isEnabled: function cmd_userscript_execute_later_isEnabled(aAddon) { 
+      isEnabled: function cmd_userscript_execute_later_isEnabled(aAddon) {
         return addonExecutesNonLast(aAddon) &&
           (GM_util.getService().config.scripts.length - 2)
           != aAddon.executionIndex;

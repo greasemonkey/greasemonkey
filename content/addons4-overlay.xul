@@ -33,7 +33,7 @@
 </commandset>
 
 <menupopup id="addonitem-popup">
-  <menuitem command="cmd_userscript_showItemDetails" class="greasemonkey" 
+  <menuitem command="cmd_userscript_showItemDetails" class="greasemonkey"
     label="&cmd.showDetails.label;" accesskey="&cmd.showDetails.accesskey;"
     default="true"
   />
@@ -68,7 +68,7 @@
   <menuitem command="cmd_userscript_forcedFindItemUpdates" class="greasemonkey greasemonkeyNoHide"
     label="&ForcedFindUpdate;"
   />
-  
+
   <menuitem command="cmd_userscript_showItemAbout" class="greasemonkey greasemonkeyNoHide"
     label="&cmd.about.label;" accesskey="&cmd.about.accesskey;"
   />
