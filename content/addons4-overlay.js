@@ -140,11 +140,7 @@ function init() {
       isEnabled: function cmd_userscript_showItemDetails_isEnabled(aAddon) {
         return addonIsInstalledScript(aAddon) && (gViewController.currentViewObj != gDetailView);
       },
-      doCommand: function cmd_userscript_showItemDetails_doCommand(aAddon, aScrollToPreferences) {
-        gViewController.loadView("addons://detail/" +
-                                 encodeURIComponent(aAddon.id) +
-                                 (aScrollToPreferences ? "/preferences" : ""));
-      }
+      doCommand: gViewController.commands.cmd_showItemDetails.doCommand
     };
 
   gViewController.commands.cmd_userscript_edit = {
@@ -195,15 +191,7 @@ function init() {
   // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#949
   gViewController.commands.cmd_userscript_showItemAbout = {
       isEnabled: addonIsInstalledScript,
-      doCommand: function cmd_userscript_showItemAbout_doCommand(aAddon) {
-        var aboutURL = aAddon.aboutURL;
-        if (aboutURL) {
-          openDialog(aboutURL, "", "chrome,centerscreen,modal", aAddon);
-        } else {
-          openDialog("chrome://mozapps/content/extensions/about.xul",
-          "", "chrome,centerscreen,modal", aAddon);
-		}
-      }
+      doCommand: gViewController.commands.cmd_showItemAbout.doCommand
   };
 
   window.addEventListener('ViewChanged', onViewChanged, false);
