@@ -130,11 +130,7 @@ function ScriptAddon_getCreator() {
 
 ScriptAddon.prototype.__defineGetter__('homepageURL',
 function ScriptAddon_getHomepageURL() {
-  var value = parseMetaById(this._script.textContent, 'homepageURL');
-  if(value) {
-    return value;
-  }
-  return null;
+  return parseMetaById(this._script.textContent, 'homepageURL');
 });
 
 ScriptAddon.prototype.__defineGetter__('applyBackgroundUpdates',
