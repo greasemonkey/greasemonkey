@@ -53,7 +53,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
     throw new Error(this.stringBundle.GetStringFromName('error.args.setValue'));
   }
 
-  if (!GM_util.apiLeakCheck("GM_setValue")) {
+  if (!GM_util.apiLeakCheck("GM_setValue", arguments)) {
     return;
   }
 
@@ -72,7 +72,7 @@ GM_ScriptStorage.prototype.setValue = function(name, val) {
 
 
 GM_ScriptStorage.prototype.getValue = function(name, defVal) {
-  if (!GM_util.apiLeakCheck("GM_getValue")) {
+  if (!GM_util.apiLeakCheck("GM_getValue", arguments)) {
     return undefined;
   }
 
@@ -101,7 +101,7 @@ GM_ScriptStorage.prototype.getValue = function(name, defVal) {
 
 
 GM_ScriptStorage.prototype.deleteValue = function(name) {
-  if (!GM_util.apiLeakCheck("GM_deleteValue")) {
+  if (!GM_util.apiLeakCheck("GM_deleteValue", arguments)) {
     return undefined;
   }
 
@@ -119,7 +119,7 @@ GM_ScriptStorage.prototype.deleteValue = function(name) {
 
 
 GM_ScriptStorage.prototype.listValues = function() {
-  if (!GM_util.apiLeakCheck("GM_listValues")) {
+  if (!GM_util.apiLeakCheck("GM_listValues", arguments)) {
     return undefined;
   }
 
@@ -182,7 +182,7 @@ GM_ScriptStoragePrefs.prototype.setValue = function(name, val) {
     throw new Error(this.stringBundle.GetStringFromName('error.args.setValue'));
   }
 
-  if (!GM_util.apiLeakCheck("GM_setValue")) {
+  if (!GM_util.apiLeakCheck("GM_setValue", arguments)) {
     return;
   }
 
@@ -191,7 +191,7 @@ GM_ScriptStoragePrefs.prototype.setValue = function(name, val) {
 };
 
 GM_ScriptStoragePrefs.prototype.getValue = function(name, defVal) {
-  if (!GM_util.apiLeakCheck("GM_getValue")) {
+  if (!GM_util.apiLeakCheck("GM_getValue", arguments)) {
     return undefined;
   }
 
@@ -199,7 +199,7 @@ GM_ScriptStoragePrefs.prototype.getValue = function(name, defVal) {
 };
 
 GM_ScriptStoragePrefs.prototype.deleteValue = function(name) {
-  if (!GM_util.apiLeakCheck("GM_deleteValue")) {
+  if (!GM_util.apiLeakCheck("GM_deleteValue", arguments)) {
     return undefined;
   }
 
@@ -208,7 +208,7 @@ GM_ScriptStoragePrefs.prototype.deleteValue = function(name) {
 };
 
 GM_ScriptStoragePrefs.prototype.listValues = function() {
-  if (!GM_util.apiLeakCheck("GM_listValues")) {
+  if (!GM_util.apiLeakCheck("GM_listValues", arguments)) {
     return undefined;
   }
 
@@ -229,7 +229,7 @@ function GM_Resources(script){
 }
 
 GM_Resources.prototype.getResourceURL = function(aScript, name) {
-  if (!GM_util.apiLeakCheck("GM_getResourceURL")) {
+  if (!GM_util.apiLeakCheck("GM_getResourceURL", arguments)) {
     return undefined;
   }
 
@@ -237,7 +237,7 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
 };
 
 GM_Resources.prototype.getResourceText = function(name) {
-  if (!GM_util.apiLeakCheck("GM_getResourceText")) {
+  if (!GM_util.apiLeakCheck("GM_getResourceText", arguments)) {
     return undefined;
   }
 
