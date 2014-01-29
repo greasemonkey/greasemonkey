@@ -139,7 +139,7 @@ DownloadListener.prototype = {
     var progress;
     if (-1 == aProgressMax || 0 == aProgressMax
         || 0xFFFFFFFFFFFFFFFF == aProgressMax) {
-      progress = 0
+      progress = 0;
     } else {
       progress = aProgress / aProgressMax;
     }
@@ -206,7 +206,7 @@ DownloadListener.prototype = {
   onStatus: function(aRequest, aContext, aStatus, aStatusArg) { },
 
   // nsIInterfaceRequestor
-  getInterface: function(aIID) { return this.QueryInterface(aIID) },
+  getInterface: function(aIID) { return this.QueryInterface(aIID); },
 
   // nsISupports
   QueryInterface: XPCOMUtils.generateQI([
@@ -214,7 +214,7 @@ DownloadListener.prototype = {
       Ci.nsIStreamListener,
       Ci.nsISupports,
       ]),
-}
+};
 
 /////////////////////////////// Public Interface ///////////////////////////////
 
