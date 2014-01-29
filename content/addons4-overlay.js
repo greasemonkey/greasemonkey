@@ -64,9 +64,9 @@ var observer = {
         setEmptyWarningVisible();
         break;
       case 'edit-enabled':
-        addon.userDisabled = !data;
         var item = gListView.getListItemForID(addon.id);
-        item.setAttribute('active', data);
+        item.userDisabled = !data;
+        data && item.onEnabled() || item.onDisabled();
         break;
       case 'modified':
         if (!data) break;
