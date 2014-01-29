@@ -16,6 +16,7 @@
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
 
+    <em:contributor>Alexander Sturm; http://alex.st/</em:contributor>
     <em:contributor>Anthony Lieuallen; http://arantius.com/</em:contributor>
     <em:contributor>Chris Feldmann; http://axlotl.net/</em:contributor>
     <em:contributor>David Schontzler; http://stilleye.com/</em:contributor>
