@@ -19,9 +19,19 @@ var gScriptDirPath = (function() {
 })();
 
 
-function apiLeakCheck(apiName) {
-  var stack = Components.stack;
+function apiLeakCheck(apiName, origArguments) {
+  var argLen = origArguments.length;
+  for (var i = 0; i < argLen; i++) {
+    var arg = origArguments[i];
+    if (arg && arg.wrappedJSObject) {
+      GM_util.logError(new Error(
+          gAccessViolationString.replace('%1', apiName) + ' (Xray)'
+          ));
+      return false;
+    }
+  }
 
+  var stack = Components.stack;
   do {
     // Valid locations for GM API calls are:
     //  * Greasemonkey scripts.

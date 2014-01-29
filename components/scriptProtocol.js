@@ -8,23 +8,13 @@ const ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
 
 
-function ScriptChannel(aUri, aScript) {
+function DummyChannel(aUri, aScript) {
   // nsIRequest
   this.loadFlags = 0;
   this.loadGroup = null;
   this.name = aUri.spec;
-  this.status = 200;
-
+  this.status = 404;
   this.content = '';
-  if (aScript) {
-    this.content = GM_util.getScriptSource(aScript);
-  } else {
-    this.status = 404;
-  }
-
-  if (aUri.spec.match(/\?.*wrapped=1/)) {
-    this.content = GM_util.anonWrap(this.content);
-  }
 
   // nsIChannel
   this.contentCharset = 'utf-8';
@@ -35,23 +25,10 @@ function ScriptChannel(aUri, aScript) {
   this.owner = null;
   this.securityInfo = null;
   this.URI = aUri;
-
-  this.pipe = Cc['@mozilla.org/pipe;1'].createInstance(Ci.nsIPipe);
-  this.pipe.init(true, true, 0, 0, null);
-
-  var inputStreamChannel = Cc['@mozilla.org/network/input-stream-channel;1']
-      .createInstance(Ci.nsIInputStreamChannel);
-  inputStreamChannel.setURI(aUri);
-  inputStreamChannel.contentStream = this.pipe.inputStream;
-  this.channel = inputStreamChannel.QueryInterface(Ci.nsIChannel);
 }
 
 // nsIChannel
-ScriptChannel.prototype.asyncOpen = function(aListener, aContext) {
-  this.channel.asyncOpen(aListener, aContext);
-  this.pipe.outputStream.write(this.content, this.content.length);
-  this.pipe.outputStream.close();
-};
+DummyChannel.prototype.asyncOpen = function(aListener, aContext) { };
 
 
 function ScriptProtocol() {}
@@ -95,31 +72,25 @@ ScriptProtocol.prototype.newURI = function(aSpec, aCharset, aBaseUri) {
 // nsIProtocolHandler
 ScriptProtocol.prototype.newChannel = function(aUri) {
   var m = aUri.spec.match(/greasemonkey-script:([-0-9a-f]+)\/(.*)/);
+
+  // Incomplete URI, send a 404.
+  if (!m) return new DummyChannel(aUri);
+
   var script = GM_util.getService().config.getMatchingScripts(function(script) {
     return script.uuid == m[1];
   })[0];
-  if (aUri.spec.match(/\.user\.js($|\?)/)) {
-    return new ScriptChannel(aUri, script);
-  } else if (script) {
+
+  if (script) {
     for (var i = 0, resource = null; resource = script.resources[i]; i++) {
       if (resource.name == m[2]) {
         return ioService.newChannelFromURI(
             GM_util.getUriFromFile(resource.file));
       }
     }
-  } else {
-    return new ScriptChannel(aUri, script);
   }
-  
-  // Default fall-through case, send a 404.  (By using a script channel
-  // w/out any script object.)(
-  return new ScriptChannel(aUri);
+
+  // Default fall-through case, send a 404.
+  return new DummyChannel(aUri);
 };
 
-
-const components = [ScriptProtocol];
-if ("generateNSGetFactory" in XPCOMUtils) {
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory(components); // Gecko 2.0+
-} else {
-  var NSGetModule = XPCOMUtils.generateNSGetModule(components); // Gecko 1.9.x
-}
+var NSGetFactory = XPCOMUtils.generateNSGetFactory([ScriptProtocol]);

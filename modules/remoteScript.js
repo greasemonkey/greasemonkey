@@ -124,8 +124,15 @@ DownloadListener.prototype = {
     var data = binaryInputStream.readByteArray(aCount);
 
     if (this._tryToParse) {
+      // See #1823.  Strip UTF-8 BOM(s) at the very start of the file.
+      while (data && data.length >= 3
+          && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF
+          ) {
+        data = data.slice(3);
+      }
+
       this._data = this._data.concat(data);
-      if (this._parse(aContext)) this._tryToParse = false;
+      this._tryToParse = !this._parse(aContext);
     } else {
       this._data = null;
     }
@@ -139,7 +146,7 @@ DownloadListener.prototype = {
     var progress;
     if (-1 == aProgressMax || 0 == aProgressMax
         || 0xFFFFFFFFFFFFFFFF == aProgressMax) {
-      progress = 0
+      progress = 0;
     } else {
       progress = aProgress / aProgressMax;
     }
@@ -206,7 +213,7 @@ DownloadListener.prototype = {
   onStatus: function(aRequest, aContext, aStatus, aStatusArg) { },
 
   // nsIInterfaceRequestor
-  getInterface: function(aIID) { return this.QueryInterface(aIID) },
+  getInterface: function(aIID) { return this.QueryInterface(aIID); },
 
   // nsISupports
   QueryInterface: XPCOMUtils.generateQI([
@@ -214,7 +221,7 @@ DownloadListener.prototype = {
       Ci.nsIStreamListener,
       Ci.nsISupports,
       ]),
-}
+};
 
 /////////////////////////////// Public Interface ///////////////////////////////
 
