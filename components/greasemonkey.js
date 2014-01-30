@@ -347,7 +347,6 @@ service.prototype.QueryInterface = XPCOMUtils.generateQI([
       Ci.nsIObserver,
       Ci.nsISupports,
       Ci.nsISupportsWeakReference,
-      Ci.gmIGreasemonkeyService,
       Ci.nsIWindowMediatorListener,
       Ci.nsIContentPolicy
     ]);
@@ -409,7 +408,7 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
   }
 };
 
-//////////////////////////// gmIGreasemonkeyService ////////////////////////////
+///////////////////////////// Greasemonkey Service /////////////////////////////
 
 service.prototype._config = null;
 service.prototype.__defineGetter__('config', function() {
