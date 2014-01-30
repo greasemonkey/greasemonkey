@@ -1,5 +1,3 @@
-interfaces components/gmIGreasemonkeyService.xpt
-
 component  {77bf3650-1cd6-11da-8cd6-0800200c9a66} components/greasemonkey.js
 contract   @greasemonkey.mozdev.org/greasemonkey-service;1 {77bf3650-1cd6-11da-8cd6-0800200c9a66}
 category   profile-after-change @greasemonkey.mozdev.org/greasemonkey-service;1 @greasemonkey.mozdev.org/greasemonkey-service;1
