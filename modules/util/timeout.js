@@ -4,7 +4,7 @@ const EXPORTED_SYMBOLS = ['timeout'];
 
 function timeout(aCallback, aDelay, aType) {
   var type = aType;
-  if ('undefineld' == typeof type) {
+  if ('undefined' == typeof type) {
     type = Components.interfaces.nsITimer.TYPE_ONE_SHOT;
   }
 
