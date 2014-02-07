@@ -18,7 +18,6 @@ var gSyncInitialized = false;
 var gWeave = {};
 Cu.import('resource://services-sync/engines.js', gWeave);
 Cu.import('resource://services-sync/record.js', gWeave);
-Cu.import('resource://services-sync/service.js', gWeave);
 Cu.import('resource://services-sync/status.js', gWeave);
 Cu.import('resource://services-sync/util.js', gWeave);
 
@@ -38,7 +37,9 @@ var SyncServiceObserver = {
 
     // This must be delayed until after the Greasemonkey service is set up.
     Cu.import('resource://greasemonkey/remoteScript.js');
-
+    // Also delay importing the actual Sync service to prevent conflicts with
+    // the master password dialog during browser startup. See #1852.
+    Cu.import('resource://services-sync/service.js', gWeave);
     gWeave.Service.engineManager.register(ScriptEngine);
   },
 
