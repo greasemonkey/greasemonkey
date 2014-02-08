@@ -17,11 +17,20 @@
     <command id="gm_toggle_checked" oncommand="GM_util.setEnabled(!GM_util.getEnabled());"/>
   </commandset>
 
+  <popupset>
+    <tooltip id="greasemonkey-tooltip" onpopupshowing="return GM_util.showTooltip(event, this);">
+      <label class="greasemonkey-tooltip-version" value="Greasemonkey"/>
+      <label class="greasemonkey-tooltip-enabled"/>
+      <label class="greasemonkey-tooltip-total"/>
+      <label class="greasemonkey-tooltip-active"/>
+    </tooltip>
+  </popupset>
+
   <toolbarpalette id='BrowserToolbarPalette'>
     <toolbarbutton id='greasemonkey-tbb' type='menu-button'
       class='toolbarbutton-1 chromeclass-toolbar-additional'
       command="gm_toggle_enabled"
-      label='Greasemonkey' tooltiptext='Greasemonkey'
+      label='Greasemonkey' tooltip='greasemonkey-tooltip'
     >
       <menupopup id="blank" />
     </toolbarbutton>
@@ -53,7 +62,6 @@
       onpopuphiding="GM_hidePopup(event);"
       onclick="GM_popupClicked(event); event.stopPropagation();"
       oncommand="GM_popupClicked(event); event.stopPropagation();"
-      oncontextmenu="event.preventDefault();"
     >
       <menuitem class='gm-enabled-item'
         accesskey="&statusbar.enabled.accesskey;"
