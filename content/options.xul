@@ -25,36 +25,46 @@
 
 <dialogheader title="Greasemonkey" description="&prefWindow.titleWin;"/>
 
-<vbox>
-  <groupbox>
-    <caption label="&prefWindow.titleWin;" />
-    <checkbox id="secure-update" label="&RequireSecureUpdates;" />
-    <checkbox id="submit-stats" label="&SubmitStats;" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&options.experimental;" />
-    <checkbox id="check-sync" label="&EnableFirefoxSync;" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&options.editor;" />
-    <hbox>
-      <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" flex="1"/>
-      <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" flex="1"/>
-    </hbox>
-  </groupbox>
-
-  <groupbox>
-    <caption label="&options.globalExcludes;" />
-    <cludes id="globalExcludes" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&options.newScript.template;" />
-    <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
-    <textbox id="newScript-template" multiline="true" rows="5" />
-  </groupbox>
-</vbox>
+<tabbox>
+  <tabs>
+    <tab label="&greasemonkey.generalsettings;" />
+    <tab label="&scriptprefs.scriptsettings;" />
+  </tabs>
+  <tabpanels>
+    <tabpanel>
+      <vbox>
+        <groupbox>
+          <caption label="&prefWindow.titleWin;" />
+          <checkbox id="secure-update" label="&RequireSecureUpdates;" />
+          <checkbox id="submit-stats" label="&SubmitStats;" />
+        </groupbox>
+        <groupbox>
+          <caption label="&options.experimental;" />
+          <checkbox id="check-sync" label="&EnableFirefoxSync;" />
+        </groupbox>
+        <groupbox>
+          <caption label="&options.editor;" />
+          <hbox>
+            <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" flex="1"/>
+            <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" flex="1"/>
+          </hbox>
+        </groupbox>
+        <groupbox>
+          <caption label="&options.globalExcludes;" />
+          <cludes id="globalExcludes" />
+        </groupbox>
+      </vbox>
+    </tabpanel>
+    <tabpanel>
+      <vbox flex="1">
+        <groupbox>
+          <caption label="&options.newScript.template;" />
+          <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
+          <textbox id="newScript-template" multiline="true" rows="12" />
+        </groupbox>
+      </vbox>
+    </tabpanel>
+  </tabpanels>
+</tabbox>
 
 </dialog>

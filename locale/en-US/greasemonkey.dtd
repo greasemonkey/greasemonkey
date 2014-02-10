@@ -47,6 +47,7 @@
 <!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
 <!ENTITY UpdateChecking "Update Checking">
 <!ENTITY RequireSecureUpdates "Require secure updates">
+<!ENTITY greasemonkey.generalsettings "General Settings">
 <!ENTITY greasemonkey.noscriptshere "No installed scripts run on this page.">
 <!ENTITY greasemonkey.youhavenoscripts "You don't have any user scripts installed">
 <!ENTITY greasemonkey.getuserscripts "Get user scripts">
