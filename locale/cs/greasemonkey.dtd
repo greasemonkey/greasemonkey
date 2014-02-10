@@ -47,6 +47,7 @@
 <!ENTITY SubmitStats "Shromažďovat a odesílat anonymní statistiky o používání pro zlepšení Greasemonkey.">
 <!ENTITY UpdateChecking "Kontrola aktualizací">
 <!ENTITY RequireSecureUpdates "Použít zabezpečené aktualizace">
+<!ENTITY greasemonkey.generalsettings "Obecné nastavení">
 <!ENTITY greasemonkey.noscriptshere "Pro tuto stránku nejsou nainstalovány žádné skripty.">
 <!ENTITY greasemonkey.youhavenoscripts "Nemáte nainstalovány žádné uživatelské skripty">
 <!ENTITY greasemonkey.getuserscripts "Získat uživatelské skripty">
