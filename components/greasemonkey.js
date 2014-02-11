@@ -161,6 +161,13 @@ function createSandbox(
   Components.utils.evalInSandbox(
       'const GM_info = ' + uneval(aScript.info()), sandbox);
 
+  // See #1869 and http://bugzil.la/934509 and http://bugzil.la/969923
+  // Crash bug workaround for Firefox 27.
+  var _orig_sandbox_clearInterval = sandbox.clearInterval;
+  sandbox.clearInterval = GM_util.hitch(null, function(aId) {
+    if (aId) _orig_sandbox_clearInterval.call(sandbox.window, aId);
+  });
+
   return sandbox;
 }
 
