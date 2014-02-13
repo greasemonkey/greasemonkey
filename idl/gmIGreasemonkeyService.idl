@@ -1,7 +1,0 @@
-#include "nsISupports.idl"
-
-[scriptable, uuid(c5826e20-1cc7-11da-8cd6-0800200c9a66)]
-interface gmIGreasemonkeyService : nsISupports
-{
-  void runScripts(in string aRunWhen, in nsISupports aWrappedContentWin);
-};

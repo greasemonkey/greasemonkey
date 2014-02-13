@@ -35,15 +35,15 @@
 <!ENTITY newscript.excludes "Çıkarılanlar (satır başına bir tane)">
 <!ENTITY newscript.fromClipboard "Panodan Betik Kullan">
 <!ENTITY options.editor "Editör">
-<!ENTITY options.experimental "Experimental">
+<!ENTITY options.experimental "Deneysel">
 <!ENTITY options.defaultEditor "Varsayılan Düzenleyi Kullan">
 <!ENTITY options.browseForEditor "Düzenleyici Program Bul">
 <!ENTITY options.globalExcludes "Global Çıkarılanlar">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Yeni betik şablonu">
+<!ENTITY options.newScript.removeUnused "Kullanılmayan satırları sil">
 <!ENTITY Uninstall "Kaldır">
 <!ENTITY AnonymousStatistics "Anonim İstatistikler">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Kullanıcı Betikleri için Firefox Eşitlemeyi Etkinleştir">
 <!ENTITY SubmitStats "Greasemonkey geliştirmeleri için anonim kullanım istatistiklerini topla ve gönder.">
 <!ENTITY UpdateChecking "Güncelleştirme Kontrol Ediliyor">
 <!ENTITY RequireSecureUpdates "Gerekli güvenlik güncellemeleri">

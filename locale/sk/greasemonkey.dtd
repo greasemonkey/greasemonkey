@@ -43,7 +43,7 @@
 <!ENTITY options.newScript.removeUnused "Odstrániť nepoužívané riadky">
 <!ENTITY Uninstall "Odinštalovať">
 <!ENTITY AnonymousStatistics "Anonymné štatistiky">
-<!ENTITY EnableFirefoxSync "Zapnúť Firefox synchronizáciu pre Užívateľské skripty">
+<!ENTITY EnableFirefoxSync "Zapnúť Firefox synchronizáciu pre užívateľské skripty">
 <!ENTITY SubmitStats "Zbierať a posielať anonymné štatistiky používania pre zlepšenie Greasemonkey.">
 <!ENTITY UpdateChecking "Kontrolovanie aktualizácií">
 <!ENTITY RequireSecureUpdates "Požaduje bezpečnostné aktualizácie">
