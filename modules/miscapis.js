@@ -34,15 +34,21 @@ function GM_ScriptStorage_getDb() {
   if (null == this._db) {
     this._db = Services.storage.openDatabase(this.dbFile);
 
+    // The auto_vacuum pragma has to be set before the table is created.
+    this._db.executeSimpleSQL('PRAGMA auto_vacuum = INCREMENTAL;');
+    this._db.executeSimpleSQL('PRAGMA incremental_vacuum(10);');
+    this._db.executeSimpleSQL('PRAGMA journal_mode = WAL;');
+
     this._db.executeSimpleSQL(
         'CREATE TABLE IF NOT EXISTS scriptvals ('
         + 'name TEXT PRIMARY KEY NOT NULL, '
         + 'value TEXT '
         + ')'
         );
-    this._db.executeSimpleSQL('PRAGMA auto_vaccum = INCREMENTAL;');
-    this._db.executeSimpleSQL('PRAGMA incremental_vacuum(10);');
-    this._db.executeSimpleSQL('PRAGMA journal_mode = WAL;');
+
+    // Run vacuum once manually to switch to the correct auto_vacuum mode for
+    // databases that were created with incorrect auto_vacuum. See #1879.
+    this._db.executeSimpleSQL('VACUUM;');
   }
   return this._db;
 });
