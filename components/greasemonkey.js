@@ -111,7 +111,7 @@ function createSandbox(
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    sandbox.GM_addStyle = function(css) { GM_addStyle(aContentWin.document, css)};
+    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
     sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
