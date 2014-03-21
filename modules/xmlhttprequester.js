@@ -102,9 +102,7 @@ function(safeUrl, details, req) {
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
-  if (details.responseType) {
-    req.responseType = details.responseType;
-  }
+
   if (details.timeout) {
     req.timeout = details.timeout;
   }
@@ -179,17 +177,17 @@ function(wrappedContentWin, req, event, details) {
           response: "r",
           responseHeaders: "r",
           responseText: "r",
+          responseXML: "r",
           status: "r",
           statusText: "r",
           total: "r",
           },
       context: details.context || null,
-      // Can't support responseXML because security won't
-      // let the browser call properties on it.
       readyState: req.readyState,
       response: req.response,
       responseHeaders: null,
       responseText: null,
+      responseXML: null,
       status: null,
       statusText: null,
       finalUrl: null
@@ -200,6 +198,13 @@ function(wrappedContentWin, req, event, details) {
     } catch (e) {
       // Some response types don't have .responseText (but do have e.g. blob
       // .response).  Ignore.
+    }
+
+    if (req.responseXML) {
+      // Adopt the XML object into a content-window-scoped document.
+      var xmlDoc = wrappedContentWin.Document();
+      xmlDoc.appendChild(xmlDoc.adoptNode(req.responseXML.documentElement));
+      responseState.responseXML = xmlDoc;
     }
 
     switch (event) {
