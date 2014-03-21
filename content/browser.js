@@ -58,7 +58,7 @@ GM_BrowserUI.chromeLoad = function(e) {
         GM_BrowserUI.checkDisabledScriptNavigation(aEvent, safeWin, href);
         if (href == 'about:blank') {
           // #1696: document-element-inserted doesn't see about:blank
-          svc.contentLoad(aEvent)
+          svc.contentLoad(aEvent);
         }
       }, true);
 
