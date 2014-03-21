@@ -56,7 +56,7 @@ GM_BrowserUI.chromeLoad = function(e) {
         var safeWin = aEvent.target.defaultView;
         var href = safeWin.location.href;
         GM_BrowserUI.checkDisabledScriptNavigation(aEvent, safeWin, href);
-        if (href == 'about:blank') {
+        if (0 == href.indexOf('about:blank')) {
           // #1696: document-element-inserted doesn't see about:blank
           svc.contentLoad(aEvent);
         }
