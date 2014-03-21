@@ -40,6 +40,7 @@ var SyncServiceObserver = {
     // Also delay importing the actual Sync service to prevent conflicts with
     // the master password dialog during browser startup. See #1852.
     Cu.import('resource://services-sync/service.js', gWeave);
+
     gWeave.Service.engineManager.register(ScriptEngine);
   },
 
