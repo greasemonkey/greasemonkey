@@ -16,6 +16,12 @@ function memoize(func, limit) {
 
   return function(a) {
     var args = Array.prototype.slice.call(arguments);
+    args.forEach(function(aVal, aIndex) {
+      if (aVal instanceof Components.interfaces.nsIURI) {
+        // See #1874
+        args[aIndex] = aVal.spec;
+      }
+    });
     var key = uneval(args);
     if (key in cache) return cache[key];
 
