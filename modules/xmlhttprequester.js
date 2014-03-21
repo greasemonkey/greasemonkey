@@ -102,7 +102,9 @@ function(safeUrl, details, req) {
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
-
+  if (details.responseType) {
+    req.responseType = details.responseType;
+  }
   if (details.timeout) {
     req.timeout = details.timeout;
   }
@@ -174,6 +176,7 @@ function(wrappedContentWin, req, event, details) {
           lengthComputable: "r",
           loaded: "r",
           readyState: "r",
+          response: "r",
           responseHeaders: "r",
           responseText: "r",
           status: "r",
@@ -183,13 +186,21 @@ function(wrappedContentWin, req, event, details) {
       context: details.context || null,
       // Can't support responseXML because security won't
       // let the browser call properties on it.
-      responseText: req.responseText,
       readyState: req.readyState,
+      response: req.response,
       responseHeaders: null,
+      responseText: null,
       status: null,
       statusText: null,
       finalUrl: null
     };
+
+    try {
+      responseState.responseText = req.responseText;
+    } catch (e) {
+      // Some response types don't have .responseText (but do have e.g. blob
+      // .response).  Ignore.
+    }
 
     switch (event) {
       case "progress":
