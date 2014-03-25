@@ -94,7 +94,15 @@ function MatchPattern(pattern) {
 
   this._scheme = scheme;
   if (host) {
-    this._hostExpr = GM_convert2RegExp(host.replace(/^\*\./, "*"));
+    // We have to manually create the hostname regexp (instead of using
+    // GM_convert2RegExp) to properly handle *.example.tld, which should match
+    // example.tld and any of its subdomains, but not anotherexample.tld.
+    this._hostExpr = new RegExp("^" +
+        // The only character that's valid in a hostname and needs to be escaped
+        // for regexps is ".".
+        host.replace(/\./g, "\\.")
+        // Then, handle "*.", which by now has been escaped to "*\.".
+            .replace(/\*\\./, "(.*\\.)?") + "$", "i");
   } else {
     // If omitted, then it means "", an alias for localhost.
     this._hostExpr = /^$/;
