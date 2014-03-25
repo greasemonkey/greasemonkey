@@ -95,7 +95,7 @@ function createSandbox(
   }
 
   var sandbox = new Components.utils.Sandbox(
-      aContentWin,
+      [aContentWin],
       {
         'sandboxName': aScript.id,
         'sandboxPrototype': aContentWin,
