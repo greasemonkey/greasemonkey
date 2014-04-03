@@ -317,10 +317,26 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
 
   if (aOnlyDependencies) {
     // Just move the dependencies in.
-    var enumerator = this._tempDir.directoryEntries;
-    while (enumerator.hasMoreElements()) {
-      var file = enumerator.getNext().QueryInterface(Ci.nsIFile);
-      file.moveTo(this.script.baseDirFile, null);
+    for (var i = 0, dep = null; dep = this._dependencies[i]; i++) {
+      // Make sure this is actually a file, not a data URI.
+      if (!dep._filename) continue;
+
+      // Grab a unique file name to ensure we don't overwrite the script in case
+      // it has the same name as one of the dependencies. See #1906.
+      var target = GM_util.getTempFile(this.script.baseDirFile, dep.filename);
+
+      var file = this._tempDir.clone();
+      file.append(dep.filename);
+      file.moveTo(this.script.baseDirFile, target.leafName);
+
+      dep.setFilename(target);
+    }
+
+    // Only delete the temporary directory if it's empty.
+    try {
+      this._tempDir.remove(false);
+    } catch (e) {
+      // silently ignore
     }
   } else {
     // Completely install the new script.
