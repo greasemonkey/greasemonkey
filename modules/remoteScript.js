@@ -491,8 +491,14 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
   this._progressIndex++;
   if (this._progressIndex > this._dependencies.length) {
     this.done = true;
-    this._dispatchCallbacks('progress', 1);
-    return aCompletionCallback(true, 'dependencies');
+    // Always call the callback asynchronously. That way, the caller doesn't
+    // have to take special care of the case where this is called synchronously
+    // when there is nothing to download.
+    GM_util.timeout(GM_util.hitch(this, function() {
+      this._dispatchCallbacks('progress', 1);
+      aCompletionCallback(true, 'dependencies');
+    }), 0);
+    return;
   }
 
   // Because _progressIndex includes the base script at 0, subtract one to
