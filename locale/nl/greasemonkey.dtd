@@ -35,15 +35,15 @@
 <!ENTITY newscript.excludes "Sluit uit (één per regel)">
 <!ENTITY newscript.fromClipboard "Script van klembord gebruiken">
 <!ENTITY options.editor "Tekstverwerker">
-<!ENTITY options.experimental "Experimental">
+<!ENTITY options.experimental "Experimenteel">
 <!ENTITY options.defaultEditor "Standaard bewerkingsprogramma gebruiken">
 <!ENTITY options.browseForEditor "Naar bewerkingsprogramma bladeren">
 <!ENTITY options.globalExcludes "Sluit globaal uit">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Nieuw scriptsjabloon">
+<!ENTITY options.newScript.removeUnused "Ongebruikte regels verwijderen">
 <!ENTITY Uninstall "Deïnstalleren">
 <!ENTITY AnonymousStatistics "Anonieme statistieken">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Firefox Sync voor gebruikersscript activeren">
 <!ENTITY SubmitStats "Verzamel en verstuur anonieme gebruiksstatistieken om Greasemonkey te verbeteren.">
 <!ENTITY UpdateChecking "Updatecontrole">
 <!ENTITY RequireSecureUpdates "Beveiligde updates vereisen">

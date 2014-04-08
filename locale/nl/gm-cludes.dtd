@@ -4,8 +4,8 @@
 <!ENTITY promptForEdit.msg "Verander de URL van onderstaande pagina. U kunt meerdere pagina’s opgeven m.b.v. het wildcard (*)-teken.">
 <!ENTITY promptForEdit.title "Pagina bewerken">
 <!ENTITY button.add "Toevoegen…">
-<!ENTITY button.addUserExclude "Handmatig uitsluiten">
-<!ENTITY button.addUserInclude "Handmatig beïnvloeden">
+<!ENTITY button.addUserExclude "Toevoegen als uitzondering">
+<!ENTITY button.addUserInclude "Toevoegen als opgenomen">
 <!ENTITY button.edit "Bewerken…">
 <!ENTITY button.remove "Verwijderen">
 <!ENTITY label.grpIncluded "Inclusief deze pagina’s">

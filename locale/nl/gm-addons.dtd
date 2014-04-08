@@ -6,7 +6,7 @@
 <!ENTITY ExecuteLater "Later uitvoeren">
 <!ENTITY ExecuteSooner "Eerder uitvoeren">
 <!ENTITY FindUpdate "Update zoeken">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "Geforceerd updates zoeken">
 <!ENTITY InstallUpdate "Update installeren">
 <!ENTITY MoveDown "Omlaag">
 <!ENTITY MoveDown.accesskey "L">
