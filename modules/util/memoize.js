@@ -25,7 +25,7 @@ function memoize(func, limit) {
     var key = uneval(args);
     if (key in cache) return cache[key];
 
-    var result = func.apply(null, args);
+    var result = func.apply(null, arguments);
 
     cache[key] = result;
 
