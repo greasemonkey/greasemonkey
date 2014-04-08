@@ -699,7 +699,11 @@ Script.prototype.showGrantWarning = function () {
 Script.prototype.checkConfig = function() {
   // TODO: Some day, make "none" the default.  Until then: sniff.
   if (0 == this._grants.length) {
-    this.grants = GM_util.sniffGrants(this);
+    if (GM_prefRoot.getValue("sniffGrants")) {
+      this.grants = GM_util.sniffGrants(this);
+    } else {
+      this.grants = ['none'];
+    }
     this._changed('modified');
   }
 
@@ -731,7 +735,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
   req.open("GET", url, true);
-  
+
   // Let the server know we want a user script metadata block
   req.setRequestHeader('Accept', 'text/x-userscript-meta');
   req.onload = GM_util.hitch(
