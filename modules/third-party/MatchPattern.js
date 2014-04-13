@@ -98,11 +98,14 @@ function MatchPattern(pattern) {
     // GM_convert2RegExp) to properly handle *.example.tld, which should match
     // example.tld and any of its subdomains, but not anotherexample.tld.
     this._hostExpr = new RegExp("^" +
-        // The only character that's valid in a hostname and needs to be escaped
-        // for regexps is ".".
-        host.replace(/\./g, "\\.")
-        // Then, handle "*.", which by now has been escaped to "*\.".
-            .replace(/\*\\./, "(.*\\.)?") + "$", "i");
+        // Two characters in the host portion need special treatment:
+        //   - ". should not be treated as a wildcard, so we escape it to \.
+        //   - if the hostname only consists of "*" (i.e. full wildcard),
+        //     replace it with .*
+        host.replace(/\./g, "\\.").replace(/^\*$/, ".*")
+        // Then, handle the special case of "*." (any or no subdomain) for match
+        // patterns. "*." has been escaped to "*\." by the replace above.
+            .replace("*\\.", "(.*\\.)?") + "$", "i");
   } else {
     // If omitted, then it means "", an alias for localhost.
     this._hostExpr = /^$/;
