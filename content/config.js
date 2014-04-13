@@ -77,7 +77,13 @@ Config.prototype._load = function() {
 
   this._scripts = [];
   for (var i=0, node=null; node=nodes.snapshotItem(i); i++) {
-    var script = new Script(node);
+    try {
+      var script = new Script(node);
+    } catch (e) {
+      // If parsing the script node failed, fail gracefully by skipping it.
+      GM_util.logError(e, false, e.fileName, e.lineNumber);
+      continue;
+    }
     if (script.allFilesExist()) {
       this._scripts.push(script);
     } else {
