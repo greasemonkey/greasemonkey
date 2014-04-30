@@ -30,10 +30,6 @@
     <caption label="&prefWindow.titleWin;" />
     <checkbox id="secure-update" label="&RequireSecureUpdates;" />
     <checkbox id="submit-stats" label="&SubmitStats;" />
-  </groupbox>
-
-  <groupbox>
-    <caption label="&options.experimental;" />
     <checkbox id="check-sync" label="&EnableFirefoxSync;" />
   </groupbox>
 
