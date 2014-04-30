@@ -14,6 +14,7 @@
   title="Greasemonkey - &prefWindow.titleWin;"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept,cancel"
+  flex="1"
 
   id="greasemonkey-options-dialog"
   persist="screenX screenY"
@@ -25,7 +26,7 @@
 
 <dialogheader title="Greasemonkey" description="&prefWindow.titleWin;"/>
 
-<vbox>
+<vbox flex="1">
   <groupbox>
     <caption label="&prefWindow.titleWin;" />
     <checkbox id="secure-update" label="&RequireSecureUpdates;" />
@@ -41,15 +42,15 @@
     </hbox>
   </groupbox>
 
-  <groupbox>
+  <groupbox flex="2">
     <caption label="&options.globalExcludes;" />
-    <cludes id="globalExcludes" />
+    <cludes id="globalExcludes" flex="1" />
   </groupbox>
 
-  <groupbox>
+  <groupbox flex="1">
     <caption label="&options.newScript.template;" />
     <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
-    <textbox id="newScript-template" multiline="true" rows="5" />
+    <textbox id="newScript-template" multiline="true" rows="5" flex="1" />
   </groupbox>
 </vbox>
 
