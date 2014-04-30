@@ -58,6 +58,7 @@ function Script(configNode) {
   this._runAt = null;
   this._tempFile = null;
   this._updateURL = null;
+  this._updateMetaStatus = 'unknown';
   this._userExcludes = [];
   this._userIncludes = [];
   this._uuid = [];
@@ -354,9 +355,10 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._name = node.getAttribute("name");
   this._namespace = node.getAttribute("namespace");
   this._description = node.getAttribute("description");
-  this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
-  this.icon.fileURL = node.getAttribute("icon");
   this._enabled = node.getAttribute("enabled") == true.toString();
+  this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
+  this._updateMetaStatus = node.getAttribute("updateMetaStatus") || "unknown";
+  this.icon.fileURL = node.getAttribute("icon");
 };
 
 Script.prototype.toConfigNode = function(doc) {
@@ -423,6 +425,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
   scriptNode.setAttribute("runAt", this._runAt);
+  scriptNode.setAttribute("updateMetaStatus", this._updateMetaStatus);
   scriptNode.setAttribute("uuid", this._uuid);
   scriptNode.setAttribute("version", this._version);
 
@@ -716,20 +719,22 @@ Script.prototype.checkConfig = function() {
 Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   if (this.availableUpdate) return aCallback(true);
 
-  GM_util.checkCoralCache();
+  var uri = GM_util.uriFromUrl(this.updateURL).clone();
 
-  var url = this.updateURL;
-  if (GM_prefRoot.getValue("coralCacheWorks")) {
-    // US.o gets special treatment for being so large.  For *update*, plain http
-    // to work through coral cache.  If an update is found, it gets downloaded
-    // from the downloadURL (not updateURL), which can still be https.
-    var usoMatch = url && url.match(
-        /^(https?:\/\/)userscripts.org\/scripts\/\w+\/(\d+).*\.user\.js/);
-    if (usoMatch) {
-      url = 'http://userscripts.org.nyud.net/scripts/source/'
-          + usoMatch[2] + '.meta.js';
-    }
+  // TODO: Consider restoring Coral cache usage.  We used to only apply it to
+  // us.o; applying globally means it will be inserted for localhost/intranet/
+  // etc. URLs which won't ever work.
+//  GM_util.checkCoralCache();
+//  if (GM_prefRoot.getValue("coralCacheWorks")) {
+//    uri.host += '.nyud.net';
+//  }
+
+  var usedMeta = false;
+  if (this._updateMetaStatus != 'fail') {
+    uri.path = uri.path.replace('.user.js', '.meta.js');
+    usedMeta = true;
   }
+  var url = uri.spec;
 
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -739,20 +744,35 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   // Let the server know we want a user script metadata block
   req.setRequestHeader('Accept', 'text/x-userscript-meta');
   req.onload = GM_util.hitch(
-      this, "checkRemoteVersion", req, aCallback, aForced);
+      this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
   req.onerror = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
-Script.prototype.checkRemoteVersion = function(req, aCallback, aForced) {
-  if (req.status != 200 && req.status != 0) return aCallback(false);
+Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
+  var metaFail = GM_util.hitch(this, function() {
+    this._updateMetaStatus = 'fail';
+    this._changed('modified', null);
+    return this.checkForRemoteUpdate(aCallback, aForced);
+  });
+
+  if (req.status != 200 && req.status != 0) {
+    return ( aMeta ? metaFail() : aCallback(false) );
+  }
 
   var source = req.responseText;
   var scope = {};
   Components.utils.import('resource://greasemonkey/parseScript.js', scope);
   var newScript = scope.parse(source, this.downloadURL);
   var remoteVersion = newScript.version;
-  if (!remoteVersion) return aCallback(false);
+  if (!remoteVersion) {
+    return ( aMeta ? metaFail() : aCallback(false) );
+  }
+
+  if (aMeta && 'ok' != this._updateMetaStatus) {
+    this._updateMetaStatus = 'ok';
+    this._changed('modified', null);
+  }
 
   var versionChecker = Components
       .classes["@mozilla.org/xpcom/version-comparator;1"]

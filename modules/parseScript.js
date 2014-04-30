@@ -62,6 +62,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'name':
     case 'namespace':
     case 'version':
+    case 'updateMetaStatus':
       script['_' + header] = value;
       break;
 

@@ -9,16 +9,18 @@ const XMLHttpRequest = Components.Constructor(
 var gCheckIsRunning = false;
 
 function checkCoralCache() {
-  if (!gCheckIsRunning) {
-    gCheckIsRunning = true;
-    var req = new XMLHttpRequest();
-    req.onerror = GM_util.hitch(null, onError, req);
-    req.onload = GM_util.hitch(null, onLoad, req);
-    req.open('get', 'http://userscripts.org.nyud.net/scripts/source/1.meta.js');
-    req.send();
-  }
+  if (GM_prefRoot.getValue('coralCacheWorks')) return true;
 
-  return GM_prefRoot.getValue('coralCacheWorks');
+  if (gCheckIsRunning) return false;
+
+  gCheckIsRunning = true;
+  var req = new XMLHttpRequest();
+  req.onerror = GM_util.hitch(null, onError, req);
+  req.onload = GM_util.hitch(null, onLoad, req);
+  req.open('get', 'http://www.greasespot.net.nyud.net/');
+  req.send();
+
+  return false;
 }
 
 function onError(aReq, aEvent) {
@@ -28,7 +30,7 @@ function onError(aReq, aEvent) {
 
 function onLoad(aReq, aEvent) {
   if (200 !== aReq.status) return onError();
-  if (-1 == aReq.responseText.indexOf('UserScript')) return onError();
+  if (-1 == aReq.responseText.indexOf('Greasemonkey')) return onError();
 
   GM_prefRoot.setValue('coralCacheWorks', true);
   gCheckIsRunning = false;
