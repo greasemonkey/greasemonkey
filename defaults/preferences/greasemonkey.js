@@ -1,5 +1,6 @@
 pref("extensions.{e4a8a97b-f2ed-450b-b12d-ee082ba24781}.description", "chrome://greasemonkey/locale/greasemonkey.properties");
 pref("extensions.greasemonkey.coralCacheWorks", true);
+pref("extensions.greasemonkey.dataIsGreaseable", false);
 pref("extensions.greasemonkey.enableScriptRefreshing", true);
 pref("extensions.greasemonkey.fileIsGreaseable", false);
 pref("extensions.greasemonkey.globalExcludes", '[]');

@@ -18,6 +18,8 @@ function isGreasemonkeyable(url) {
       if (/^about:blank/.test(url)) return true;
       // Never allow the rest of "about:".  See #1375.
       return false;
+    case "data":
+      return GM_prefRoot.getValue('dataIsGreaseable');
     case "file":
       return GM_prefRoot.getValue('fileIsGreaseable');
     case "unmht":
