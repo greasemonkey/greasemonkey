@@ -109,12 +109,6 @@ function createSandbox(
   sandbox.cloneInto = Cu.cloneInto;
   sandbox.exportFunction = Cu.exportFunction;
 
-  if (GM_util.compareFirefoxVersion("16.0") < 0) {
-    // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
-    // only in older versions.
-    sandbox.alert = alert;
-  }
-
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
     sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
   }
