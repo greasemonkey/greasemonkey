@@ -26,12 +26,6 @@ AddonManager.getAddonByID(GM_GUID, function(addon) {
 });
 
 
-function usoFix(aUrl) {
-  return aUrl && aUrl.replace(
-      'http://userscripts.org/', 'https://userscripts.org/');
-}
-
-
 function Script(configNode) {
   this._observers = [];
 
@@ -148,7 +142,7 @@ function Script_getDescription() { return this._description; });
 Script.prototype.__defineGetter__('downloadURL',
 function Script_getDownloadUrl() { return this._downloadURL; });
 Script.prototype.__defineSetter__('downloadURL',
-function Script_setDownloadUrl(aVal) { this._downloadURL = usoFix(aVal); });
+function Script_setDownloadUrl(aVal) { this._downloadURL = '' + aVal; });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -218,7 +212,7 @@ function Script_getFile() {
 Script.prototype.__defineGetter__('updateURL',
 function Script_getUpdateURL() { return this._updateURL || this.downloadURL; });
 Script.prototype.__defineSetter__('updateURL',
-function Script_setUpdateURL(url) { this._updateURL = usoFix(url); });
+function Script_setUpdateURL(url) { this._updateURL = '' + url; });
 
 Script.prototype.__defineGetter__('updateIsSecure',
 function Script_getUpdateIsSecure() {

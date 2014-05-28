@@ -295,5 +295,5 @@ function unload() {
 function GM_openUserscriptsOrg() {
   var chromeWin = GM_util.getBrowserWindow();
   chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(
-      'http://userscripts.org');
+      'http://wiki.greasespot.net/User_Script_Hosting');
 }
