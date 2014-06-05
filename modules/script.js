@@ -501,7 +501,13 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
 
   var ioService = Components.classes["@mozilla.org/network/io-service;1"]
       .getService(Components.interfaces.nsIIOService);
-  var scheme = ioService.extractScheme(this.downloadURL);
+  try {
+    var scheme = ioService.extractScheme(this.downloadURL);
+  } catch (e) {
+    // Invalid URL, probably an old legacy install.  Do not update.
+    return false;
+  }
+
   switch (scheme) {
   case 'about':
   case 'chrome':
@@ -522,8 +528,6 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
     // Anything not listed: default to not allow.
     return false;
   }
-
-  return true;
 };
 
 Script.prototype.updateFromNewScript = function(newScript, safeWin) {
