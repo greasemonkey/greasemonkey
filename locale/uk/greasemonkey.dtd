@@ -15,7 +15,7 @@
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
 <!ENTITY menu.websites.manual "Greasemonkey Manual">
-<!ENTITY menu.websites.userscripts "Userscripts.org">
+<!ENTITY menu.websites.getuserscripts "Get User Scripts">
 <!ENTITY statusbar.enabled "Увімкнено">
 <!ENTITY statusbar.enabled.accesskey "У">
 <!ENTITY install.title "Встановлення Greasemonkey">

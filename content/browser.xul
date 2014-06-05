@@ -76,7 +76,7 @@
             label="&menu.websites.manual;"
             oncommand="GM_BrowserUI.openTab('http://wiki.greasespot.net/Greasemonkey_Manual');" />
           <menuitem
-            label="&menu.websites.userscripts;"
+            label="&menu.websites.getuserscripts;"
             oncommand="GM_BrowserUI.openTab('http://wiki.greasespot.net/User_Script_Hosting');" />
         </menupopup>
       </menu>
