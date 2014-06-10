@@ -6,7 +6,7 @@
   <Description about="urn:mozilla:install-manifest">
 
     <em:id>{e4a8a97b-f2ed-450b-b12d-ee082ba24781}</em:id>
-    <em:version>2.0beta1</em:version>
+    <em:version>2.0beta2</em:version>
     <em:creator>Aaron Boodman; http://youngpup.net/</em:creator>
     <em:homepageURL>http://www.greasespot.net/</em:homepageURL>
     <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL>
@@ -45,7 +45,7 @@
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-        <em:minVersion>30.*</em:minVersion>
+        <em:minVersion>29.0</em:minVersion>
         <em:maxVersion>32.*</em:maxVersion>
       </Description>
     </em:targetApplication>
