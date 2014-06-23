@@ -17,10 +17,6 @@ function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
 // can't support mimetype because i think it's only used for forcing
 // text/xml and we can't support that
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
-  if (!GM_util.apiLeakCheck("GM_xmlhttpRequest", arguments)) {
-    return;
-  }
-
   try {
     // Validate and parse the (possibly relative) given URL.
     var uri = GM_util.uriFromUrl(details.url, this.originUrl);

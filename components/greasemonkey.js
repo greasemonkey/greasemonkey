@@ -182,11 +182,6 @@ function isTempScript(uri) {
 }
 
 function openInTab(safeContentWin, url, aLoadInBackground) {
-  // Skip the first arg, which is hitched rather than passed in.
-  var extern_args = Array.prototype.slice.call(arguments, 1);
-  if (!GM_util.apiLeakCheck("GM_openInTab", extern_args)) {
-    return undefined;
-  }
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
   // Resolve URL relative to the location of the content window.
@@ -219,12 +214,6 @@ function registerMenuCommand(
     wrappedContentWin, script,
     commandName, commandFunc, accessKey, unused, accessKey2
 ) {
-  // Skip the first two args, which are hitched rather than passed in.
-  var extern_args = Array.prototype.slice.call(arguments, 2);
-  if (!GM_util.apiLeakCheck("GM_registerMenuCommand", extern_args)) {
-    return;
-  }
-
   if (wrappedContentWin.top != wrappedContentWin) {
     // Only register menu commands for the top level window.
     return;
