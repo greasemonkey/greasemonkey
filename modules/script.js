@@ -517,12 +517,10 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   case 'ftp':
   case 'http':
     // These schemes are OK only if the user opts in.
-    if (GM_prefRoot.getValue('requireSecureUpdates')) {
-      return false;
-    }
-    break;
+    return !GM_prefRoot.getValue('requireSecureUpdates');;
   case 'https':
     // HTTPs is always OK.
+    return true;
     break;
   default:
     // Anything not listed: default to not allow.
