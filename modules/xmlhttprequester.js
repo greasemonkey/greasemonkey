@@ -2,10 +2,13 @@ var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.import("resource://greasemonkey/util.js");
 
-function GM_xmlhttpRequester(wrappedContentWin, chromeWindow, originUrl) {
+function GM_xmlhttpRequester(
+    wrappedContentWin, chromeWindow, originUrl, sandbox
+) {
   this.wrappedContentWin = wrappedContentWin;
   this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
+  this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
 }
 
 // this function gets called by user scripts in content security scope to
@@ -160,7 +163,15 @@ function(details, req) {
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
 function(wrappedContentWin, req, event, details) {
-  if (!details["on" + event]) return;
+  // Waive Xrays so that we can read callback function properties ...
+  details = Components.utils.waiveXrays(details);
+  var eventCallback = details["on" + event];
+  if (!eventCallback) return;
+
+  // ... but ensure that the callback came from a script, not content, by
+  // checking that its principal equals that of the sandbox.
+  var callbackPrincipal = Components.utils.getObjectPrincipal(eventCallback);
+  if (!this.sandboxPrincipal.equals(callbackPrincipal)) return;
 
   req.addEventListener(event, function(evt) {
     var responseState = {
@@ -229,6 +240,6 @@ function(wrappedContentWin, req, event, details) {
     // otherwise details[event].apply can point to window.setTimeout, which
     // can be abused to get increased privileges.
     new XPCNativeWrapper(wrappedContentWin, "setTimeout()")
-      .setTimeout(function(){ details["on" + event](responseState); }, 0);
+      .setTimeout(function(){ eventCallback(responseState); }, 0);
   }, false);
 };
