@@ -489,6 +489,19 @@ service.prototype.withAllMenuCommandsForWindowId = function(
   }
 };
 
+service.prototype.activeScripts = function() {
+  var url = GM_util.getBrowserWindow().getBrowser().currentURI.spec;
+  if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
+  var scripts = GM_util.getService().config.getMatchingScripts(function(script) {
+    try {
+      return GM_util.scriptMatchesUrlAndRuns(script, url, 'any');
+    } catch (e) {
+      return false;
+    }
+  });
+  return scripts;
+};
+
 //////////////////////////// Component Registration ////////////////////////////
 
 var NSGetFactory = XPCOMUtils.generateNSGetFactory([service]);
