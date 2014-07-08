@@ -1,5 +1,5 @@
 var EXPORTED_SYMBOLS = [
-    'extractMeta', 'parse', 'gLineSplitRegexp', 'gMetaLineRegexp'];
+    'extractMeta', 'parse', 'parseMetaById', 'gLineSplitRegexp', 'gMetaLineRegexp'];
 
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
@@ -24,6 +24,20 @@ function extractMeta(aSource) {
   var meta = aSource.match(gAllMetaRegexp);
   if (meta) return meta[1].replace(/^\s+/, '');
   return '';
+}
+
+/** Gets meta value by meta id from source of a script. **/
+function parseMetaById(aSource, aId) {
+  var metaLines = extractMeta(aSource).match(gLineSplitRegexp);
+  for (var j = 0, metaLine = null; metaLine = metaLines[j]; j++) {
+    metaLine = metaLine.replace(/\s+$/, '');
+    var match = metaLine.match(gMetaLineRegexp);
+    if (!match) continue;
+    if (aId == match[1] && match[2]) {
+      return match[2];
+    }
+  }
+  return null;
 }
 
 /** Parse the source of a script; produce Script object. */

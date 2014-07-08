@@ -135,6 +135,14 @@ function focus() {
 function init() {
   GM_util.getService().config.addObserver(observer);
 
+  // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#771
+  gViewController.commands.cmd_userscript_showItemDetails = {
+      isEnabled: function cmd_userscript_showItemDetails_isEnabled(aAddon) {
+        return addonIsInstalledScript(aAddon) && (gViewController.currentViewObj != gDetailView);
+      },
+      doCommand: gViewController.commands.cmd_showItemDetails.doCommand
+    };
+
   gViewController.commands.cmd_userscript_edit = {
       isEnabled: addonIsInstalledScript,
       doCommand: function(aAddon) { GM_util.openInEditor(aAddon._script); }
@@ -149,11 +157,17 @@ function init() {
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -9999); }
     };
   gViewController.commands.cmd_userscript_execute_sooner = {
-      isEnabled: addonExecutesNonFirst,
+      isEnabled: function cmd_userscript_execute_sooner_isEnabled(aAddon) {
+        return addonExecutesNonFirst(aAddon) && 1 != aAddon.executionIndex;
+      },
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, -1); }
     };
   gViewController.commands.cmd_userscript_execute_later = {
-      isEnabled: addonExecutesNonLast,
+      isEnabled: function cmd_userscript_execute_later_isEnabled(aAddon) {
+        return addonExecutesNonLast(aAddon) &&
+          (GM_util.getService().config.scripts.length - 2)
+          != aAddon.executionIndex;
+      },
       doCommand: function(aAddon) { reorderScriptExecution(aAddon, 1); }
     };
   gViewController.commands.cmd_userscript_execute_last = {
@@ -172,6 +186,12 @@ function init() {
           aAddon.forceUpdate = false;
         }
       }
+  };
+
+  // http://dxr.mozilla.org/mozilla-central/source/toolkit/mozapps/extensions/content/extensions.js#949
+  gViewController.commands.cmd_userscript_showItemAbout = {
+      isEnabled: addonIsInstalledScript,
+      doCommand: gViewController.commands.cmd_showItemAbout.doCommand
   };
 
   window.addEventListener('ViewChanged', onViewChanged, false);

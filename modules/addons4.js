@@ -21,6 +21,7 @@ Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/remoteScript.js');
 Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import("resource://greasemonkey/parseScript.js");
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -117,6 +118,20 @@ ScriptAddon.prototype.description = null;
 
 // Private and custom attributes.
 ScriptAddon.prototype._script = null;
+
+ScriptAddon.prototype.__defineGetter__('creator',
+function ScriptAddon_getCreator() {
+  var value = parseMetaById(this._script.textContent, 'author');
+  if(value) {
+    return new AddonManagerPrivate.AddonAuthor(value);
+  }
+  return null;
+});
+
+ScriptAddon.prototype.__defineGetter__('homepageURL',
+function ScriptAddon_getHomepageURL() {
+  return parseMetaById(this._script.textContent, 'homepageURL');
+});
 
 ScriptAddon.prototype.__defineGetter__('applyBackgroundUpdates',
 function ScriptAddon_getApplyBackgroundUpdates() {
