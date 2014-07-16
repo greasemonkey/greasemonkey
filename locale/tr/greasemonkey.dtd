@@ -15,7 +15,7 @@
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
 <!ENTITY menu.websites.manual "Greasemonkey Kılavuzu">
-<!ENTITY menu.websites.getuserscripts "Get User Scripts">
+<!ENTITY menu.websites.getuserscripts "Kullanıcı Betikleri Al">
 <!ENTITY statusbar.enabled "Etkin">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey Kurulumu">
