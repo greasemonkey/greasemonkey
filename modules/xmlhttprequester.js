@@ -240,6 +240,6 @@ function(wrappedContentWin, req, event, details) {
     // otherwise details[event].apply can point to window.setTimeout, which
     // can be abused to get increased privileges.
     new XPCNativeWrapper(wrappedContentWin, "setTimeout()")
-      .setTimeout(function(){ eventCallback(responseState); }, 0);
+      .setTimeout(function(){ eventCallback.call(details, responseState); }, 0);
   }, false);
 };
