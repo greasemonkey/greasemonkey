@@ -65,8 +65,14 @@ var observer = {
         break;
       case 'edit-enabled':
         var item = gListView.getListItemForID(addon.id);
+        var callback = data? item.onEnabled : item.onDisabled;
+        if (!callback) {
+          // This observer triggers in the case of an uninstall undo.  But
+          // does not need to -- and can not -- run.  Ignore this case.
+          break;
+        }
         item.userDisabled = !data;
-        data && item.onEnabled() || item.onDisabled();
+        callback.call(item);
         break;
       case 'modified':
         if (!data) break;
