@@ -208,9 +208,10 @@ function(wrappedContentWin, req, event, details) {
     }
 
     if (req.responseXML) {
-      // Adopt the XML object into a content-window-scoped document.
+      // Clone the XML object into a content-window-scoped document.
       var xmlDoc = new wrappedContentWin.Document();
-      xmlDoc.appendChild(xmlDoc.adoptNode(req.responseXML.documentElement));
+      var clone = xmlDoc.importNode(req.responseXML.documentElement, true);
+      xmlDoc.appendChild(clone);
       responseState.responseXML = xmlDoc;
     }
 
