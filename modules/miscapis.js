@@ -37,7 +37,7 @@ function GM_ScriptStorage_getDb() {
     // The auto_vacuum pragma has to be set before the table is created.
     this._db.executeSimpleSQL('PRAGMA auto_vacuum = INCREMENTAL;');
     this._db.executeSimpleSQL('PRAGMA incremental_vacuum(10);');
-    this._db.executeSimpleSQL('PRAGMA journal_mode = WAL;');
+    this._db.executeSimpleSQL('PRAGMA journal_mode = OFF;');
 
     this._db.executeSimpleSQL(
         'CREATE TABLE IF NOT EXISTS scriptvals ('
