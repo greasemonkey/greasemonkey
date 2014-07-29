@@ -24,7 +24,7 @@ window.addEventListener('load', function() {
 
     if (!Scratchpad.initialized) return;
 
-    Scratchpad.selectRange(0, 0);
+    Scratchpad.editor.setCursor({line: 0, ch: 0});
     clearInterval(initializeCheckTimer);
   }
   initializeCheckTimer = setInterval(moveCursorToTop, 20);
