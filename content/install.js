@@ -58,7 +58,7 @@ function onBlur(e) {
 }
 
 function onCancel() {
-  gRemoteScript.cleanup();
+  gRemoteScript.cancel();
   window.close();
 }
 

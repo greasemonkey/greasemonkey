@@ -231,6 +231,7 @@ DownloadListener.prototype = {
 
 function RemoteScript(aUrl) {
   this._baseName = null;
+  this._cancelled = false;
   this._channels = [];
   this._dependencies = [];
   this._metadata = null;
@@ -252,6 +253,11 @@ function RemoteScript(aUrl) {
 
 RemoteScript.prototype.__defineGetter__(
     'url', function() { return new String(this._url); });
+
+RemoteScript.prototype.cancel = function() {
+  this._cancelled = true;
+  this.cleanup();
+};
 
 /** Clean up all temporary files, stop all actions. */
 RemoteScript.prototype.cleanup = function(aErrorMessage) {
@@ -284,7 +290,7 @@ RemoteScript.prototype.download = function(aCompletionCallback) {
   } else {
     this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint) {
       if (aSuccess) this._downloadDependencies(aCompletionCallback);
-      aCompletionCallback(aSuccess, aPoint);
+      aCompletionCallback(this._cancelled || aSuccess, aPoint);
     }));
   }
 };
