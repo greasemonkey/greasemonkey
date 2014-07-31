@@ -48,7 +48,12 @@ gDragDrop.onDrop = function GM_onDrop(aEvent) {
 
   // Pass call through to the original handler, if any non-user-script
   // was part of this drop action.
-  if (droppedNonUserScript) _gDragDrop_onDrop_Orig(aEvent);
+  if (droppedNonUserScript) {
+    _gDragDrop_onDrop_Orig(aEvent);
+  }
+  else {
+    aEvent.preventDefault();
+  }
 };
 
 // Set up an "observer" on the config, to keep the displayed items up to date
