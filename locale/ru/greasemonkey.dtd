@@ -10,12 +10,12 @@
 <!ENTITY menu.manage.accesskey "п">
 <!ENTITY menu.options "Настройки Greasemonkey...">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "Сайт">
 <!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
-<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
-<!ENTITY menu.websites.getuserscripts "Get User Scripts">
+<!ENTITY menu.websites.greasespot "Блог Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Вики Greasespot">
+<!ENTITY menu.websites.manual "Мануал по Greasemonkey">
+<!ENTITY menu.websites.getuserscripts "Получить пользовательские скрипты">
 <!ENTITY statusbar.enabled "Включить Greasemonkey">
 <!ENTITY statusbar.enabled.accesskey "к">
 <!ENTITY install.title "Установка скриптов Greasemonkey">
@@ -26,25 +26,25 @@
 <!ENTITY install.warning2 "Устанавливайте скрипты только из доверенных источников.">
 <!ENTITY install.showscriptsource "Показать код скрипта">
 <!ENTITY install.installbutton "Начать установку">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Ошибка загрузки">
 <!ENTITY loading "Загрузка...">
 <!ENTITY newscript.name "Название">
 <!ENTITY newscript.namespace "Пространство имен">
 <!ENTITY newscript.description "Описание">
 <!ENTITY newscript.includes "Включения (одно на строку)">
 <!ENTITY newscript.excludes "Исключения (одно на строку)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Использовать скрипт из буфера обмена">
 <!ENTITY options.editor "Редактор">
-<!ENTITY options.experimental "Experimental">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.experimental "Экспериментально">
+<!ENTITY options.defaultEditor "Редактор по умолчанию">
+<!ENTITY options.browseForEditor "Выбрать свой редактор">
 <!ENTITY options.globalExcludes "Глобальные исключения">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Новый шаблон скрипта">
+<!ENTITY options.newScript.removeUnused "Удаление неиспользуемых линий">
 <!ENTITY Uninstall "Удаление">
-<!ENTITY AnonymousStatistics "Anonymous Statistics">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
-<!ENTITY SubmitStats "Gather and submit anonymous usage statistics to improve Greasemonkey.">
+<!ENTITY AnonymousStatistics "Анонимная статистика">
+<!ENTITY EnableFirefoxSync "Включить Firefox Sync для пользовательских скриптов">
+<!ENTITY SubmitStats "Собирать и передовать анонимную статистику использования для улучшения Greasemonkey.">
 <!ENTITY UpdateChecking "Проверка обновлений">
 <!ENTITY RequireSecureUpdates "Использовать безопасное обновление">
 <!ENTITY greasemonkey.noscriptshere "Для этой страницы нет скриптов">

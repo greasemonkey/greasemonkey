@@ -5,9 +5,9 @@
 <!ENTITY ExecuteLast "Выполнять последним">
 <!ENTITY ExecuteLater "Выполнять позднее">
 <!ENTITY ExecuteSooner "Выполнять ранее">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "Проверить обновления">
+<!ENTITY ForcedFindUpdate "Принудительно проверить обновления">
+<!ENTITY InstallUpdate "Установить обновление">
 <!ENTITY MoveDown "Переместить ниже">
 <!ENTITY MoveDown.accesskey "и">
 <!ENTITY MoveToBottom "Переместить в конец">
