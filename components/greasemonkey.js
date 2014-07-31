@@ -102,8 +102,12 @@ function createSandbox(
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
       });
-  sandbox.unsafeWindow = aContentWin.wrappedJSObject;
   if (aFirebugConsole) sandbox.console = aFirebugConsole;
+  // Note that because waivers aren't propagated between origins, we need the
+  // unsafeWindow getter to live in the sandbox.  See http://bugzil.la/1043958
+  var unsafeWindowGetter = new sandbox.Function(
+      'return window.wrappedJSObject || window;');
+  Object.defineProperty(sandbox, 'unsafeWindow', {get: unsafeWindowGetter});
 
   // Functions for interaction with unsafeWindow; see: http://goo.gl/C8Au16
   sandbox.createObjectIn = Cu.createObjectIn;
