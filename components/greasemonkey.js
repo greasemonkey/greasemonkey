@@ -24,6 +24,7 @@ var gMaxJSVersion = "ECMAv5";
 
 var gMenuCommands = [];
 var gStartupHasRun = false;
+var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
@@ -355,9 +356,14 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
     return ret;
   }
 
+  // Do not install scripts when the origin URL "is a script".  See #1875
+  if (org.spec.match(gScriptEndingRegexp)) {
+    return ret;
+  }
+
   if ((ct == Ci.nsIContentPolicy.TYPE_DOCUMENT
        || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
-      && cl.spec.match(/\.user\.js$/)
+      && cl.spec.match(gScriptEndingRegexp)
   ) {
     if (!this._ignoreNextScript && !isTempScript(cl)) {
       GM_util.showInstallDialog(cl.spec, ctx, this);
