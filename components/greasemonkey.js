@@ -361,7 +361,7 @@ service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
   }
 
   // Do not install scripts when the origin URL "is a script".  See #1875
-  if (org.spec.match(gScriptEndingRegexp)) {
+  if (org && org.spec.match(gScriptEndingRegexp)) {
     return ret;
   }
 
