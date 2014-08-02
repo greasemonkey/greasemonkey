@@ -199,7 +199,7 @@ function openInTab(safeContentWin, url, aLoadInBackground) {
   var chromeWin = getChromeWinForContentWin(safeContentWin);
   var browser = chromeWin.gBrowser;
   var currentTab = browser.tabs[
-      browser.getBrowserIndexForDocument(safeContentWin.document)];
+      browser.getBrowserIndexForDocument(safeContentWin.top.document)];
   var newTab = browser.loadOneTab(
       uri.spec, {'inBackground': aLoadInBackground});
   var newWin = GM_windowForTab(newTab, browser);
