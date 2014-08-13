@@ -95,7 +95,8 @@ function DownloadListener(
   this._fileOutputStream = Cc["@mozilla.org/network/file-output-stream;1"]
       .createInstance(Ci.nsIFileOutputStream);
   this._fileOutputStream.init(aFile, -1, -1, null);
-  this._fileOutputStream.write('\u00EF\u00BB\u00BF', 3); // UTF-8 BOM
+  if (aUri.spec.match(/\.user\.js$/))
+    this._fileOutputStream.write('\u00EF\u00BB\u00BF', 3); // UTF-8 BOM
   this._binOutputStream = Cc['@mozilla.org/binaryoutputstream;1']
       .createInstance(Ci.nsIBinaryOutputStream);
   this._binOutputStream.setOutputStream(this._fileOutputStream);
