@@ -37,12 +37,12 @@ function init() {
 
   var desc = document.getElementById('scriptDescription');
   desc.appendChild(document.createElementNS(gHtmlNs, 'strong'));
-  desc.firstChild.appendChild(document.createTextNode(gScript.name));
+  desc.firstChild.appendChild(document.createTextNode(gScript.localized.name));
   if (gScript.version) {
     desc.appendChild(document.createTextNode(' ' + gScript.version));
   }
   desc.appendChild(document.createElementNS(gHtmlNs, 'br'));
-  desc.appendChild(document.createTextNode(gScript.description));
+  desc.appendChild(document.createTextNode(gScript.localized.description));
 
   if (gRemoteScript.done) {
     // Download finished before we could open, fake a progress event.

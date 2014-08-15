@@ -14,7 +14,7 @@ var gUserTabEl;
 
 window.addEventListener('load', function() {
   // I wanted "%s" but % is reserved in a DTD and I don't know the literal.
-  document.title = document.title.replace('!!', gScript.name);
+  document.title = document.title.replace('!!', gScript.localized.name);
 
   var gTabboxEl = document.getElementsByTagName('tabbox')[0];
   gUserTabEl = gTabboxEl.tabs.getItemAtIndex(0);

@@ -13,7 +13,7 @@ var gIoService = Components.classes["@mozilla.org/network/io-service;1"]
 var gLineSplitRegexp = /.+/g;
 var gAllMetaRegexp = new RegExp(
     '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
-var gMetaLineRegexp = new RegExp('// @(\\S+)(?:\\s+(.*))?');
+var gMetaLineRegexp = new RegExp('// @([^\\s:]+)(?::([a-zA-Z-]+))?(?:\\s+(.*))?');
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
@@ -55,11 +55,20 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     if (!match) continue;
 
     var header = match[1];
-    var value = match[2] || null;
+    var locale = match[2];
+    var value = match[3] || null;
 
     switch (header) {
     case 'description':
     case 'name':
+      if (locale) {
+        if (!script._locales[locale])
+          script._locales[locale] = {};
+
+        script._locales[locale][header] = value;
+        break;
+      }
+      // fall-through if no locale given
     case 'namespace':
     case 'version':
     case 'updateMetaStatus':

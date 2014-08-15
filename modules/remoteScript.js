@@ -379,7 +379,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     // Let the user know we're all done.
     if (!this._silent) {
       GM_notification(
-          "'" + this.script.name + "' "
+          "'" + this.script.localized.name + "' "
               + stringBundleBrowser.GetStringFromName(this.messageName),
           this.messageName);
     }

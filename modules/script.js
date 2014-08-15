@@ -42,6 +42,10 @@ function Script(configNode) {
   this._id = null;
   this._installTime = null;
   this._includes = [];
+  // All available localized properties.
+  this._locales = {};
+  // The best localized matches for the current browser locale.
+  this._localized = null;
   this._matches = [];
   this._modifiedTime = null;
   this._name = 'user-script';
@@ -138,6 +142,35 @@ function Script_getDependencies() {
 
 Script.prototype.__defineGetter__('description',
 function Script_getDescription() { return this._description; });
+
+Script.prototype.__defineGetter__('localized',
+function Script_getLocalizedDescription() {
+  // We can't simply return this._locales[locale], as the best match for name
+  // and description might be for different locales (e.g. if an exact match is
+  // only provided for one of them).
+  if (!this._localized) {
+    var locales = this._locales;
+    var preferred = GM_util.getPreferredLocale();
+
+    function getBestLocalization(aProp) {
+      var available = Object.keys(locales).filter(function(locale) {
+        return !!locales[locale][aProp];
+      });
+
+      var bestMatch = GM_util.getBestLocaleMatch(preferred, available);
+      if (!bestMatch) return null;
+
+      return locales[bestMatch][aProp];
+    }
+
+    this._localized = {
+      description: getBestLocalization("description") || this._description,
+      name: getBestLocalization("name") || this._name
+    };
+  }
+
+  return this._localized
+});
 
 Script.prototype.__defineGetter__('downloadURL',
 function Script_getDownloadUrl() { return this._downloadURL; });
@@ -342,6 +375,11 @@ Script.prototype._loadFromConfigNode = function(node) {
       scriptResource._charset = childNode.getAttribute("charset");
       this._resources.push(scriptResource);
       break;
+    case "Name":
+    case "Description":
+      var lang = childNode.getAttribute("lang");
+      if (!this._locales[lang]) this._locales[lang] = {};
+      this._locales[lang][childNode.nodeName.toLowerCase()] = childNode.textContent;
     }
   }
 
@@ -363,12 +401,19 @@ Script.prototype.toConfigNode = function(doc) {
     node.appendChild(doc.createTextNode(content));
     scriptNode.appendChild(doc.createTextNode("\n\t\t"));
     scriptNode.appendChild(node);
+
+    return node;
   }
 
   function addArrayNodes(aName, aArray) {
     for (var i = 0, val = null; val = aArray[i]; i++) {
       addNode(aName, val);
     }
+  }
+
+  function addLocaleNode(aName, aLang, aContent) {
+    var node = addNode(aName, aContent);
+    node.setAttribute("lang", lang);
   }
 
   addArrayNodes('Exclude', this._excludes);
@@ -404,6 +449,15 @@ Script.prototype.toConfigNode = function(doc) {
 
     scriptNode.appendChild(doc.createTextNode("\n\t\t"));
     scriptNode.appendChild(resourceNode);
+  }
+
+
+  for (var lang in this._locales) {
+    if (this._locales[lang].name)
+      addLocaleNode("Name", lang, this._locales[lang].name);
+
+    if (this._locales[lang].description)
+      addLocaleNode("Description", lang, this._locales[lang].description);
   }
 
   scriptNode.appendChild(doc.createTextNode("\n\t"));
@@ -470,6 +524,8 @@ Script.prototype.info = function() {
       'excludes': this.excludes,
       // 'icon': ???,
       'includes': this.includes,
+      'localizedDescription': this.localized.description,
+      'localizedName': this.localized.name,
       'matches': matches,
       'name': this.name,
       'namespace': this.namespace,
@@ -559,6 +615,8 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._includes = newScript._includes;
   this._matches = newScript._matches;
   this._description = newScript._description;
+  this._localized = newScript._localized;
+  this._locales = newScript._locales;
   this._runAt = newScript._runAt;
   this._version = newScript._version;
   this.downloadURL = newScript.downloadURL;

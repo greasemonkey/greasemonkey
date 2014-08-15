@@ -91,9 +91,9 @@ function ScriptAddon(aScript) {
 
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.forceUpdate = false;
-  this.name = this._script.name;
+  this.name = this._script.localized.name;
   this.version = this._script.version;
-  this.description = this._script.description;
+  this.description = this._script.localized.decription;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.updateDate = this._script.modifiedDate;
   this.providesUpdatesSecurely = aScript.updateIsSecure;
@@ -255,7 +255,7 @@ function ScriptInstallFactoryByAddon(aAddon) {
 function ScriptInstall(aAddon) {
   var newScript = aAddon._script.availableUpdate;
   this.iconURL = newScript.icon.fileURL;
-  this.name = newScript.name;
+  this.name = newScript.localized.name;
   this.version = newScript.version;
 
   this._script = aAddon._script;

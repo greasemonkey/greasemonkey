@@ -331,7 +331,7 @@ function GM_showPopup(aEvent) {
   function appendScriptAfter(script, point) {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
-    mi.setAttribute("label", script.name);
+    mi.setAttribute("label", script.localized.name);
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
