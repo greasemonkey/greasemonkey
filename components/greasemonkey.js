@@ -474,6 +474,14 @@ service.prototype.ignoreNextScript = function() {
 service.prototype.injectScripts = function(
     scripts, url, wrappedContentWin
 ) {
+  try {
+    wrappedContentWin.QueryInterface(Ci.nsIDOMChromeWindow);
+    // Never ever inject scripts into a chrome context window.
+    return;
+  } catch (e) {
+    // Ignore, it's good if we can't QI to a chrome window.
+  }
+
   var chromeWin = getChromeWinForContentWin(wrappedContentWin);
   var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
