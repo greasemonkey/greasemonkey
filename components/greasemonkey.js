@@ -39,6 +39,8 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
 
+var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
+
 /////////////////////// Component-global Helper Functions //////////////////////
 
 // TODO: Remove this, see #1318.
@@ -442,6 +444,8 @@ service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   // be consistent is to ignore it.  Luckily, the  document.documentURI does
   // _not_ change, so always use it when deciding whether to run scripts.
   var url = aWrappedContentWin.document.documentURI;
+  // But ( #1631 ) ignore user/pass in the URL.
+  url = url.replace(gStripUserPassRegexp, '$1');
 
   if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
