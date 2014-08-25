@@ -25,6 +25,7 @@ AddonManager.getAddonByID(GM_GUID, function(addon) {
   gGreasemonkeyVersion = '' + addon.version;
 });
 
+var gAboutBlankRegexp = /^about:blank/;
 
 function Script(configNode) {
   this._observers = [];
@@ -76,9 +77,7 @@ Script.prototype.matchesURL = function(url) {
 
   function testClude(glob) {
     // Do not run in about:blank unless _specifically_ requested.  See #1298
-    if (-1 !== url.indexOf('about:blank')
-        && -1 == glob.indexOf('about:blank')
-    ) {
+    if (gAboutBlankRegexp.test(url) && !gAboutBlankRegexp.test(glob)) {
       return false;
     }
 
