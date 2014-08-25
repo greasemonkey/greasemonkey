@@ -413,7 +413,7 @@ Script.prototype.toConfigNode = function(doc) {
 
   function addLocaleNode(aName, aLang, aContent) {
     var node = addNode(aName, aContent);
-    node.setAttribute("lang", lang);
+    node.setAttribute("lang", aLang);
   }
 
   addArrayNodes('Exclude', this._excludes);
