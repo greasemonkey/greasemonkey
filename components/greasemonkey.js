@@ -50,20 +50,9 @@ function alert(msg) {
 
 function contentLoad(aEvent) {
   var safeWin = aEvent.target.defaultView;
-  var href = safeWin.location.href;
-
   safeWin.removeEventListener('DOMContentLoaded', contentLoad, true);
   safeWin.removeEventListener('load', contentLoad, true);
-
-  // Make sure we are still on the page that fired this event, see issue #1083.
-  // But ignore differences in formats; see issue #1445 and #1631.
-  var comparisonHref = href.replace(/#.*/, '');
-  var comparsionUri = aEvent.target.documentURI
-      .replace(/#.*/, '')
-      .replace(/\/\/[^\/:]+(:[^\/@]+)?@/, '//');
-  if (comparisonHref == comparsionUri) {
-    GM_util.getService().runScripts('document-end', safeWin);
-  }
+  GM_util.getService().runScripts('document-end', safeWin);
 }
 
 function createSandbox(
@@ -396,12 +385,12 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
       if (!GM_util.getEnabled()) break;
       var doc = aSubject;
       var win = doc && doc.defaultView;
-      if (!doc || !doc.location || !win) break;
-      if (GM_util.isGreasemonkeyable(doc.location.href)) {
-        this.runScripts('document-start', win);
-        win.addEventListener('DOMContentLoaded', contentLoad, true);
-        win.addEventListener('load', contentLoad, true);
-      }
+      if (!doc || !win) break;
+
+      win.addEventListener('DOMContentLoaded', contentLoad, true);
+      win.addEventListener('load', contentLoad, true);
+      this.runScripts('document-start', win);
+
       break;
   }
 };
@@ -446,7 +435,14 @@ service.prototype.contentThawed = function(contentWindowId) {
 };
 
 service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
-  var url = aWrappedContentWin.document.location.href;
+  // See #1970
+  // When content does (e.g.) history.replacestate() in an inline script,
+  // the location.href changes between document-start and document-end time.
+  // But the content can call replacestate() much later, too.  The only way to
+  // be consistent is to ignore it.  Luckily, the  document.documentURI does
+  // _not_ change, so always use it when deciding whether to run scripts.
+  var url = aWrappedContentWin.document.documentURI;
+
   if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
