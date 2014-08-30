@@ -695,7 +695,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       var pendingExec;
       var pendingExecAry = this.pendingExec;
       this.pendingExec = [];
-      while (pendingExec = pendingExecAry.shift()) {
+      while ((pendingExec = pendingExecAry.shift())) {
         if ('document-start update' == pendingExec) {
           GM_util.logError(
               this.id + '\n... script update complete '
