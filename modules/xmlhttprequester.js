@@ -97,10 +97,17 @@ function(safeUrl, details, req) {
 
   var safeUrlTmp = new this.wrappedContentWin.URL(safeUrl);
   var headersArr = new Array();
-  var authorization = {contrains: false, string: "Authorization", method: "Basic", user: "", password: ""};
+  var authorization = {
+      contrains: false,
+      string: "Authorization",
+      method: "Basic",
+      user: "",
+      password: ""
+      };
   var authorizationRegexp = new RegExp("^\\s*" + authorization.method + "\\s*([^\\s]+)\\s*$", "i");
   var authorizationUserPasswordRegexp = new RegExp("^([^:]+):([^:]+)$", "");
-  var authenticationComponent = Components.classes["@mozilla.org/network/http-auth-manager;1"].getService(Components.interfaces.nsIHttpAuthManager);
+  var authenticationComponent = Components.classes["@mozilla.org/network/http-auth-manager;1"]
+      .getService(Components.interfaces.nsIHttpAuthManager);
 
   if (details.headers) {
     var headers = details.headers;
@@ -125,14 +132,30 @@ function(safeUrl, details, req) {
   }
 
   if ((authorization.user || authorization.password) || (details.user || details.password)) {
-    authenticationComponent.setAuthIdentity(safeUrlTmp.protocol, safeUrlTmp.hostname, (safeUrlTmp.port || ""), ((authorization.contrains) ? authorization.method : ""), "", "", "", (authorization.user || details.user || ""), (authorization.password || details.password || ""));
+    authenticationComponent.setAuthIdentity(safeUrlTmp.protocol,
+                                            safeUrlTmp.hostname,
+                                            (safeUrlTmp.port || ""),
+                                            ((authorization.contrains) ? authorization.method : ""),
+                                            "",
+                                            "",
+                                            "",
+                                            (authorization.user || details.user || ""),
+                                            (authorization.password || details.password || ""));
   }
   else {
     var authorizationDomain = {};
     var authorizationUser = {};
     var authorizationPassword = {};
     try {
-      authenticationComponent.getAuthIdentity(safeUrlTmp.protocol, safeUrlTmp.hostname, (safeUrlTmp.port || ""), "", "", "", authorizationDomain, authorizationUser, authorizationPassword);
+      authenticationComponent.getAuthIdentity(safeUrlTmp.protocol,
+                                              safeUrlTmp.hostname,
+                                              (safeUrlTmp.port || ""),
+                                              "",
+                                              "",
+                                              "",
+                                              authorizationDomain,
+                                              authorizationUser,
+                                              authorizationPassword);
       details.user = authorizationUser.value || "";
       details.password = authorizationPassword.value || "";
     }
