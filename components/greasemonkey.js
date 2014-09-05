@@ -57,9 +57,7 @@ function contentLoad(aEvent) {
   GM_util.getService().runScripts('document-end', safeWin);
 }
 
-function createSandbox(
-    aScript, aContentWin, aChromeWin, aFirebugConsole, aUrl
-) {
+function createSandbox(aScript, aContentWin, aChromeWin, aUrl) {
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
@@ -93,7 +91,7 @@ function createSandbox(
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
       });
-  if (aFirebugConsole) sandbox.console = aFirebugConsole;
+
   // Note that because waivers aren't propagated between origins, we need the
   // unsafeWindow getter to live in the sandbox.  See http://bugzil.la/1043958
   var unsafeWindowGetter = new sandbox.Function(
@@ -157,18 +155,6 @@ function createSandbox(
       'const GM_info = ' + uneval(aScript.info()), sandbox);
 
   return sandbox;
-}
-
-function getFirebugConsole(wrappedContentWin, chromeWin) {
-  try {
-    return chromeWin.Firebug
-        && chromeWin.Firebug.getConsoleByGlobal
-        && chromeWin.Firebug.getConsoleByGlobal(wrappedContentWin)
-        || null;
-  } catch (e) {
-    dump('Greasemonkey: Failure Firebug console:\n' + uneval(e) + '\n');
-    return null;
-  }
 }
 
 function isTempScript(uri) {
@@ -483,11 +469,9 @@ service.prototype.injectScripts = function(
   }
 
   var chromeWin = getChromeWinForContentWin(wrappedContentWin);
-  var firebugConsole = getFirebugConsole(wrappedContentWin, chromeWin);
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var sandbox = createSandbox(
-        script, wrappedContentWin, chromeWin, firebugConsole, url);
+    var sandbox = createSandbox(script, wrappedContentWin, chromeWin, url);
     runScriptInSandbox(script, sandbox);
   }
 };
