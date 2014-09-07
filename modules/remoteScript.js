@@ -457,6 +457,14 @@ RemoteScript.prototype.showSource = function(aTabBrowser) {
   var tab = aTabBrowser.loadOneTab(
       ioService.newFileURI(this._scriptFile).spec,
       {'inBackground': false});
+
+  // Ensure any temporary files are deleted after the tab is closed.
+  var cleanup = GM_util.hitch(this, function() {
+    tab.removeEventListener("TabClose", cleanup, false);
+    this.cleanup();
+  });
+  tab.addEventListener("TabClose", cleanup, false);
+
   var notificationBox = aTabBrowser.getNotificationBox();
   notificationBox.appendNotification(
     stringBundleBrowser.GetStringFromName('greeting.msg'),
@@ -469,6 +477,9 @@ RemoteScript.prototype.showSource = function(aTabBrowser) {
       'popup': null,
       'callback': GM_util.hitch(this, function() {
         GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+        // Skip the cleanup handler, as the downloaded files are used in the
+        // installation process.
+        tab.removeEventListener("TabClose", cleanup, false);
         // Timeout puts this after the notification closes itself for the
         // button click, avoiding an error inside that (Firefox) code.
         GM_util.timeout(function() { aTabBrowser.removeTab(tab); }, 0);
