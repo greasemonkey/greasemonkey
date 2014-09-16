@@ -166,7 +166,9 @@ DownloadListener.prototype = {
         return;  // Non-http channel?  Ignore.
       }
       if (this._htmlTypeRegex.test(aRequest.contentType)) {
-        this._completionCallback(aRequest, false, 'script');
+        // Cancel this request immediately and let onStopRequest handle the
+        // cleanup for everything else.
+        aRequest.cancel(Components.results.NS_BINDING_ABORTED);
       }
     }
   },
@@ -205,11 +207,10 @@ DownloadListener.prototype = {
     if (error && this._errorsAreFatal) {
       errorMessage = stringBundle.GetStringFromName('error.downloadingUrl')
           + '\n' + this._uri.spec + '\n\n' + errorMessage;
-      this._remoteScript.cleanup(errorMessage);
     }
 
     this._progressCallback(aRequest, 1);
-    this._completionCallback(aRequest, !error);
+    this._completionCallback(aRequest, !error, errorMessage);
   },
 
   // nsIProgressEventSink
@@ -528,11 +529,12 @@ RemoteScript.prototype._downloadDependencies = function(aCompletionCallback) {
   var file = GM_util.getTempFile(this._tempDir, filenameFromUri(uri));
   dependency.setFilename(file);
 
-  function dependencyDownloadComplete(aChannel, aSuccess) {
+  function dependencyDownloadComplete(aChannel, aSuccess, aErrorMessage) {
     if (!aSuccess) {
       if (dependency instanceof ScriptIcon) {
         // Ignore the failure to download the icon.
       } else {
+        this.cleanup(aErrorMessage);
         aCompletionCallback(aSuccess, 'dependency');
         return;
       }
@@ -601,7 +603,8 @@ RemoteScript.prototype._downloadFileProgress = function(
 };
 
 RemoteScript.prototype._downloadScriptCb = function(
-    aCompletionCallback, aChannel, aSuccess) {
+    aCompletionCallback, aChannel, aSuccess, aErrorMessage) {
+
   if (aSuccess) {
     // At this point downloading the script itself is definitely done.
 
@@ -630,7 +633,7 @@ RemoteScript.prototype._downloadScriptCb = function(
       return aCompletionCallback(false, 'script');
     }
   } else {
-    this.cleanup();
+    this.cleanup(aErrorMessage);
   }
   aCompletionCallback(aSuccess, 'script');
 };
