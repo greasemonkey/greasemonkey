@@ -178,7 +178,7 @@ DownloadListener.prototype = {
     this._binOutputStream.close();
     this._fileOutputStream.close();
 
-    var error = aStatusCode !== 0;
+    var error = !Components.isSuccessCode(aStatusCode);
     var errorMessage = stringBundle.GetStringFromName('error.unknown');
     try {
       var httpChannel = aRequest.QueryInterface(Ci.nsIHttpChannel);
