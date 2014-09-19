@@ -1,6 +1,6 @@
-var EXPORTED_SYMBOLS = [
-    'extractMeta', 'parse', 'gLineSplitRegexp', 'gMetaLineRegexp'];
+var EXPORTED_SYMBOLS = ['parse', 'gLineSplitRegexp', 'gMetaLineRegexp'];
 
+Components.utils.import('resource://greasemonkey/extractMeta.js');
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
 Components.utils.import('resource://greasemonkey/scriptRequire.js');
@@ -11,20 +11,11 @@ Components.utils.import('resource://greasemonkey/util.js');
 var gIoService = Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
 var gLineSplitRegexp = /.+/g;
-var gAllMetaRegexp = new RegExp(
-    '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==', 'm');
 var gMetaLineRegexp = new RegExp('// @([^\\s:]+)(?::([a-zA-Z-]+))?(?:\\s+(.*))?');
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
-
-/** Get just the stuff between ==UserScript== lines. */
-function extractMeta(aSource) {
-  var meta = aSource.match(gAllMetaRegexp);
-  if (meta) return meta[2].replace(/^\s+/, '');
-  return '';
-}
 
 /** Parse the source of a script; produce Script object. */
 function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {

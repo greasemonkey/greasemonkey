@@ -3,6 +3,7 @@ var EXPORTED_SYMBOLS = ['Script'];
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('resource://greasemonkey/extractMeta.js');
 Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
