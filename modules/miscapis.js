@@ -2,12 +2,13 @@ var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 
+Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
 Cu.import('resource://greasemonkey/prefmanager.js');
 Cu.import("resource://greasemonkey/util.js");
 
 
 var EXPORTED_SYMBOLS = [
-    'GM_addStyle', 'GM_console', 'GM_Resources',
+    'GM_addStyle', 'GM_console', 'GM_openInTab', 'GM_Resources',
     'GM_ScriptLogger', 'GM_ScriptStorage', 'GM_ScriptStoragePrefs'];
 
 
@@ -285,4 +286,35 @@ function GM_console(script) {
 }
 
 GM_console.prototype.log = function() {
+};
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function GM_openInTab(safeContentWin, url, aLoadInBackground) {
+  if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
+
+  // Resolve URL relative to the location of the content window.
+  var baseUri = Services.io.newURI(safeContentWin.location.href, null, null);
+  var uri = Services.io.newURI(url, null, baseUri);
+
+  // Get the chrome window currently corresponding to the content window, as
+  // this might have changed since the script was injected (e.g. by moving
+  // the tab to a different window).
+  var chromeWin = getChromeWinForContentWin(safeContentWin);
+  var browser = chromeWin.gBrowser;
+  var currentTab = browser.tabs[
+      browser.getBrowserIndexForDocument(safeContentWin.top.document)];
+  var newTab = browser.loadOneTab(
+      uri.spec, {'inBackground': aLoadInBackground});
+  var newWin = GM_windowForTab(newTab, browser);
+
+  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
+      .getService(Ci.nsIPrefService)
+      .getBranch("browser.tabs.")
+      .getBoolPref("insertRelatedAfterCurrent");
+  if (afterCurrent) {
+    browser.moveTabTo(newTab, currentTab._tPos + 1);
+  }
+
+  return newWin;
 };

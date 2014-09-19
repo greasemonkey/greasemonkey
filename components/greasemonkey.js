@@ -143,7 +143,7 @@ function createSandbox(aScript, aContentWin, aChromeWin, aUrl) {
   }
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
     sandbox.GM_openInTab = GM_util.hitch(
-        null, openInTab, aContentWin);
+        null, GM_openInTab, aContentWin);
   }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
@@ -162,35 +162,6 @@ function isTempScript(uri) {
   var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
   return gTmpDir.contains(file, true);
 }
-
-function openInTab(safeContentWin, url, aLoadInBackground) {
-  if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
-
-  // Resolve URL relative to the location of the content window.
-  var baseUri = gIoService.newURI(safeContentWin.location.href, null, null);
-  var uri = gIoService.newURI(url, null, baseUri);
-
-  // Get the chrome window currently corresponding to the content window, as
-  // this might have changed since the script was injected (e.g. by moving
-  // the tab to a different window).
-  var chromeWin = getChromeWinForContentWin(safeContentWin);
-  var browser = chromeWin.gBrowser;
-  var currentTab = browser.tabs[
-      browser.getBrowserIndexForDocument(safeContentWin.top.document)];
-  var newTab = browser.loadOneTab(
-      uri.spec, {'inBackground': aLoadInBackground});
-  var newWin = GM_windowForTab(newTab, browser);
-
-  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
-      .getService(Ci.nsIPrefService)
-      .getBranch("browser.tabs.")
-      .getBoolPref("insertRelatedAfterCurrent");
-  if (afterCurrent) {
-    browser.moveTabTo(newTab, currentTab._tPos + 1);
-  }
-
-  return newWin;
-};
 
 function registerMenuCommand(
     wrappedContentWin, script,
