@@ -9,9 +9,7 @@ var Ci = Components.interfaces;
 var Cu = Components.utils;
 
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
-Cu.import('resource://greasemonkey/constants.js');
 Cu.import("resource://greasemonkey/menucommand.js");
-Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
 Cu.import("resource://greasemonkey/sandbox.js");
 Cu.import("resource://greasemonkey/sync.js");
@@ -25,8 +23,6 @@ var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
     .getService(Ci.nsIFileProtocolHandler);
-var gIoService = Cc["@mozilla.org/network/io-service;1"]
-    .getService(Ci.nsIIOService);
 var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
