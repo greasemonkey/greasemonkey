@@ -2,11 +2,8 @@ var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.import("resource://greasemonkey/util.js");
 
-function GM_xmlhttpRequester(
-    wrappedContentWin, chromeWindow, originUrl, sandbox
-) {
+function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
-  this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
   this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
 }
@@ -38,7 +35,8 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-        var req = new this.chromeWindow.XMLHttpRequest();
+        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+            .createInstance(Components.interfaces.nsIXMLHttpRequest);
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:

@@ -57,7 +57,7 @@ function contentLoad(aEvent) {
   GM_util.getService().runScripts('document-end', safeWin);
 }
 
-function createSandbox(aScript, aContentWin, aChromeWin, aUrl) {
+function createSandbox(aScript, aContentWin, aUrl) {
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
@@ -147,7 +147,7 @@ function createSandbox(aScript, aContentWin, aChromeWin, aUrl) {
   }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
-        new GM_xmlhttpRequester(aContentWin, aChromeWin, aUrl, sandbox),
+        new GM_xmlhttpRequester(aContentWin, aUrl, sandbox),
         'contentStartRequest');
   }
 
@@ -442,7 +442,7 @@ service.prototype.injectScripts = function(
   var chromeWin = getChromeWinForContentWin(wrappedContentWin);
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var sandbox = createSandbox(script, wrappedContentWin, chromeWin, url);
+    var sandbox = createSandbox(script, wrappedContentWin, url);
     runScriptInSandbox(script, sandbox);
   }
 };
