@@ -11,6 +11,7 @@ var Cu = Components.utils;
 Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
 Cu.import('resource://greasemonkey/GM_setClipboard.js');
 Cu.import('resource://greasemonkey/constants.js');
+Cu.import("resource://greasemonkey/menucommand.js");
 Cu.import("resource://greasemonkey/miscapis.js");
 Cu.import("resource://greasemonkey/parseScript.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
@@ -22,7 +23,6 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
 
-var gMenuCommands = [];
 var gStartupHasRun = false;
 var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
@@ -162,40 +162,6 @@ function isTempScript(uri) {
   var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
   return gTmpDir.contains(file, true);
 }
-
-function registerMenuCommand(
-    wrappedContentWin, script,
-    commandName, commandFunc, accessKey, unused, accessKey2
-) {
-  if (wrappedContentWin.top != wrappedContentWin) {
-    // Only register menu commands for the top level window.
-    return;
-  }
-
-  // Legacy support: if all five parameters were specified, (from when two
-  // were for accelerators) use the last one as the access key.
-  if ('undefined' != typeof accessKey2) {
-    accessKey = accessKey2;
-  }
-
-  if (accessKey
-      && (("string" != typeof accessKey) || (accessKey.length != 1))
-  ) {
-    throw new Error(
-        gStringBundle.GetStringFromName('error.menu-invalid-accesskey')
-            .replace('%1', commandName)
-        );
-  }
-
-  var command = {
-      name: commandName,
-      accessKey: accessKey,
-      commandFunc: commandFunc,
-      contentWindow: wrappedContentWin,
-      contentWindowId: GM_util.windowId(wrappedContentWin),
-      frozen: false};
-  gMenuCommands.push(command);
-};
 
 function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
@@ -370,26 +336,23 @@ service.prototype.__defineGetter__('config', function() {
 });
 
 service.prototype.contentDestroyed = function(aContentWindowId) {
-  this.withAllMenuCommandsForWindowId(null, function(index, command) {
-    if (GM_util.windowIsClosed(command.contentWindow)
-        // This content destroyed message matches the command's window id.
-        || (aContentWindowId && (command.contentWindowId == aContentWindowId))
-    ) {
-      // If the window is closed, remove the reference to it.
-      gMenuCommands.splice(index, 1);
-    }
+  removeMatchingMenuCommands(null, function(index, command) {
+    // Remove the reference if either the window is closed, ...
+    return (GM_util.windowIsClosed(command.contentWindow)
+        // ... or the content destroyed message matches the command's window id.
+        || (aContentWindowId && (command.contentWindowId == aContentWindowId)));
   }, true);  // Don't forget the aForced=true passed here!
 };
 
 service.prototype.contentFrozen = function(contentWindowId) {
   if (!contentWindowId) return;
-  this.withAllMenuCommandsForWindowId(contentWindowId,
+  withAllMenuCommandsForWindowId(contentWindowId,
       function(index, command) { command.frozen = true; });
 };
 
 service.prototype.contentThawed = function(contentWindowId) {
   if (!contentWindowId) return;
-  this.withAllMenuCommandsForWindowId(contentWindowId,
+  withAllMenuCommandsForWindowId(contentWindowId,
       function(index, command) { command.frozen = false; });
 };
 
@@ -444,21 +407,6 @@ service.prototype.injectScripts = function(
   for (var i = 0, script = null; script = scripts[i]; i++) {
     var sandbox = createSandbox(script, wrappedContentWin, url);
     runScriptInSandbox(script, sandbox);
-  }
-};
-
-service.prototype.withAllMenuCommandsForWindowId = function(
-    aContentWindowId, aCallback, aForce
-) {
-  if(!aContentWindowId && !aForce) return;
-
-  var l = gMenuCommands.length - 1;
-  for (var i = l, command = null; command = gMenuCommands[i]; i--) {
-    if (aForce
-        || (command.contentWindowId == aContentWindowId)
-    ) {
-      aCallback(i, command);
-    }
   }
 };
 

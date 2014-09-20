@@ -27,7 +27,11 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   var windowId = GM_util.windowId(gBrowser.contentWindow);
 
   if (windowId) {
-    GM_BrowserUI.gmSvc.withAllMenuCommandsForWindowId(
+    // Avoid polluting the global namespace with the exports of this module.
+    var scope = {};
+    Components.utils.import('resource://greasemonkey/menucommand.js', scope);
+
+    scope.withAllMenuCommandsForWindowId(
         windowId,
         function(index, command) {
           if (command.frozen) return;
