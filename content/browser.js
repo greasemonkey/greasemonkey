@@ -88,16 +88,16 @@ GM_BrowserUI.chromeLoad = function(e) {
 
 GM_BrowserUI.pagehide = function(aEvent) {
   var windowId = GM_util.windowIdForEvent(aEvent);
-  if (aEvent.persisted) {
-    GM_BrowserUI.gmSvc.contentFrozen(windowId);
-  } else {
-    GM_BrowserUI.gmSvc.contentDestroyed(windowId);
-  }
+  if (!windowId) return;
+
+  GM_MenuCommander.onPageHide(windowId, aEvent.persisted);
 };
 
 GM_BrowserUI.pageshow = function(aEvent) {
   var windowId = GM_util.windowIdForEvent(aEvent);
-  GM_BrowserUI.gmSvc.contentThawed(windowId);
+  if (!windowId) return;
+
+  GM_MenuCommander.onPageShow(windowId);
 };
 
 // nsIObserve

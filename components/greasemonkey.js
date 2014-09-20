@@ -335,27 +335,6 @@ service.prototype.__defineGetter__('config', function() {
   return this._config;
 });
 
-service.prototype.contentDestroyed = function(aContentWindowId) {
-  removeMatchingMenuCommands(null, function(index, command) {
-    // Remove the reference if either the window is closed, ...
-    return (GM_util.windowIsClosed(command.contentWindow)
-        // ... or the content destroyed message matches the command's window id.
-        || (aContentWindowId && (command.contentWindowId == aContentWindowId)));
-  }, true);  // Don't forget the aForced=true passed here!
-};
-
-service.prototype.contentFrozen = function(contentWindowId) {
-  if (!contentWindowId) return;
-  withAllMenuCommandsForWindowId(contentWindowId,
-      function(index, command) { command.frozen = true; });
-};
-
-service.prototype.contentThawed = function(contentWindowId) {
-  if (!contentWindowId) return;
-  withAllMenuCommandsForWindowId(contentWindowId,
-      function(index, command) { command.frozen = false; });
-};
-
 service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
   // See #1970
   // When content does (e.g.) history.replacestate() in an inline script,
