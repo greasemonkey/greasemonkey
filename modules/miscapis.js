@@ -300,6 +300,8 @@ function GM_openInTab(safeContentWin, url, aLoadInBackground) {
   // Get the chrome window currently corresponding to the content window, as
   // this might have changed since the script was injected (e.g. by moving
   // the tab to a different window).
+  // TODO: sendAsyncMessage("...", {url}), look for browser containing message.target,
+  //       add tab to that browser
   var chromeWin = getChromeWinForContentWin(safeContentWin);
   var browser = chromeWin.gBrowser;
   var currentTab = browser.tabs[

@@ -34,6 +34,7 @@ function createSandbox(aScript, aContentWin, aUrl) {
           'wantXrays': false,
         });
     // GM_info is always provided.
+    // TODO: lazy getter? XPCOMUtils.defineLazyGetter
     Components.utils.evalInSandbox(
         'const GM_info = ' + uneval(aScript.info()), contentSandbox);
     // Alias unsafeWindow for compatibility.
@@ -116,6 +117,7 @@ function createSandbox(aScript, aContentWin, aUrl) {
         'contentStartRequest');
   }
 
+  // TODO: lazy getter?
   Components.utils.evalInSandbox(
       'const GM_info = ' + uneval(aScript.info()), sandbox);
 
