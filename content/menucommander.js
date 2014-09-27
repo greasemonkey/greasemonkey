@@ -105,24 +105,14 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
 };
 
 GM_MenuCommander.withAllMenuCommandsForWindowId = function(
-    aContentWindowId, aCallback, aForce) {
+    aContentWindowId, aCallback) {
+  if (!aContentWindowId) return;
 
-  var targetWindowIds = null;
-  if (aForce) {
-    targetWindowIds = Object.keys(GM_MenuCommander.menuCommands);
-  } else if (aContentWindowId) {
-    targetWindowIds = [aContentWindowId];
-  } else {
-    return;
-  }
+  var commands = GM_MenuCommander.menuCommands[aContentWindowId];
+  if (!commands) return;
 
-  for each (var windowId in targetWindowIds) {
-   var commands = GM_MenuCommander.menuCommands[windowId];
-   if (!commands) return;
-
-    var l = commands.length - 1;
-    for (var i = l, command = null; command = commands[i]; i--) {
-      aCallback(i, command);
-    }
+  var l = commands.length - 1;
+  for (var i = l, command = null; command = commands[i]; i--) {
+    aCallback(i, command);
   }
 };
