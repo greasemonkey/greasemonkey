@@ -11,6 +11,11 @@ function GM_BrowserUI() {};
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
+
+  var messageManager = Components.classes["@mozilla.org/globalmessagemanager;1"]
+      .getService(Components.interfaces.nsIMessageListenerManager);
+  messageManager.addMessageListener('greasemonkey:open-in-tab',
+      GM_BrowserUI.openInTab);
 };
 
 /**
@@ -52,9 +57,28 @@ GM_BrowserUI.chromeLoad = function(e) {
   Components.utils.import('resource://greasemonkey/stats.js');
 };
 
+/**
+ * Opens the specified URL in a new tab.
+ */
 GM_BrowserUI.openTab = function(url) {
   gBrowser.selectedTab = gBrowser.addTab(url);
 };
+
+/**
+ * Handles tab opening for a GM_openInTab API call.
+ */
+GM_BrowserUI.openInTab = function(aMessage) {
+  var browser = aMessage.target;
+  var tabBrowser = browser.getTabBrowser();
+
+  var newTab = tabBrowser.loadOneTab(aMessage.data.url, {
+    'inBackground': aMessage.data.inBackground,
+    'relatedToCurrent': true
+  });
+
+  // TODO: obviously can't return a window here...
+  return /* tabBrowser.getBrowserForTab(newTab).contentWindow */ null;
+}
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.

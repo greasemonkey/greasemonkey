@@ -34,6 +34,15 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
   }
 }
 
+ScriptRunner.prototype.openInTab = function(aUrl, aInBackground) {
+  var response = sendSyncMessage('greasemonkey:open-in-tab', {
+    inBackground: aInBackground,
+    url: aUrl
+  });
+
+  return response ? response[0] : null;
+}
+
 ScriptRunner.prototype.registeredMenuCommand = function(aCommand) {
   var length = this.menuCommands.push(aCommand);
 

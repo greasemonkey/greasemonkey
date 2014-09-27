@@ -290,33 +290,12 @@ GM_console.prototype.log = function() {
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function GM_openInTab(safeContentWin, url, aLoadInBackground) {
+function GM_openInTab(aScriptRunner, aUrl, aLoadInBackground) {
   if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
 
   // Resolve URL relative to the location of the content window.
-  var baseUri = Services.io.newURI(safeContentWin.location.href, null, null);
-  var uri = Services.io.newURI(url, null, baseUri);
+  var baseUri = Services.io.newURI(aScriptRunner.window.location.href, null, null);
+  var uri = Services.io.newURI(aUrl, null, baseUri);
 
-  // Get the chrome window currently corresponding to the content window, as
-  // this might have changed since the script was injected (e.g. by moving
-  // the tab to a different window).
-  // TODO: sendAsyncMessage("...", {url}), look for browser containing message.target,
-  //       add tab to that browser
-  var chromeWin = getChromeWinForContentWin(safeContentWin);
-  var browser = chromeWin.gBrowser;
-  var currentTab = browser.tabs[
-      browser.getBrowserIndexForDocument(safeContentWin.top.document)];
-  var newTab = browser.loadOneTab(
-      uri.spec, {'inBackground': aLoadInBackground});
-  var newWin = browser.getBrowserForTab(newTab).contentWindow;
-
-  var afterCurrent = Components.classes["@mozilla.org/preferences-service;1"]
-      .getService(Components.interfaces.nsIPrefService)
-      .getBranch("browser.tabs.")
-      .getBoolPref("insertRelatedAfterCurrent");
-  if (afterCurrent) {
-    browser.moveTabTo(newTab, currentTab._tPos + 1);
-  }
-
-  return newWin;
+  return aScriptRunner.openInTab(uri.spec, !!aLoadInBackground);
 };

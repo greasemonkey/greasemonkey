@@ -111,7 +111,7 @@ function createSandbox(aScript, aScriptRunner) {
   }
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
     sandbox.GM_openInTab = GM_util.hitch(
-        null, GM_openInTab, contentWin);
+        null, GM_openInTab, aScriptRunner);
   }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
