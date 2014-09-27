@@ -12,8 +12,9 @@ Cu.import('resource://greasemonkey/util.js');
 var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 var gScriptRunners = {};
 
-function ScriptRunner(aWindow) {
+function ScriptRunner(aWindow, aUrl) {
   this.window = aWindow;
+  this.url = aUrl;
 }
 
 ScriptRunner.prototype.injectScripts = function(aScripts) {
@@ -26,7 +27,7 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
   }
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
-    var sandbox = createSandbox(script, this.window);
+    var sandbox = createSandbox(script, this.window, this.url);
     runScriptInSandbox(script, sandbox);
   }
 }
@@ -86,7 +87,7 @@ var observer = {
       // Update the window in case it changed, see the comment in observe().
       gScriptRunners[windowId].window = aWrappedContentWin;
     } else {
-      gScriptRunners[windowId] = new ScriptRunner(aWrappedContentWin);
+      gScriptRunners[windowId] = new ScriptRunner(aWrappedContentWin, url);
     }
 
     var response = sendSyncMessage('greasemonkey:scripts-for-url', {
