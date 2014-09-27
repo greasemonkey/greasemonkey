@@ -8,19 +8,6 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 function GM_BrowserUI() {};
 
-/**
- * nsISupports.QueryInterface
- */
-GM_BrowserUI.QueryInterface = function(aIID) {
-  if (!aIID.equals(Components.interfaces.nsISupports) &&
-      !aIID.equals(Components.interfaces.nsIObserver) &&
-      !aIID.equals(Components.interfaces.nsISupportsWeakReference))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-
-  return GM_BrowserUI;
-};
-
-
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
@@ -58,16 +45,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
-  var observerService = Components.classes["@mozilla.org/observer-service;1"]
-     .getService(Components.interfaces.nsIObserverService);
-  observerService.addObserver(GM_BrowserUI, "install-userscript", true);
-  observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
-
-  // we use this to determine if we are the active window sometimes
-  GM_BrowserUI.winWat = Components
-      .classes["@mozilla.org/embedcomp/window-watcher;1"]
-      .getService(Components.interfaces.nsIWindowWatcher);
-
   GM_BrowserUI.gmSvc = GM_util.getService();
   // Reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what.
@@ -94,22 +71,6 @@ GM_BrowserUI.pageshow = function(aEvent) {
   if (!windowId) return;
 
   GM_MenuCommander.onPageShow(windowId);
-};
-
-// nsIObserve
-GM_BrowserUI.observe = function(subject, topic, data) {
-  if (topic == "install-userscript") {
-    if (window == GM_BrowserUI.winWat.activeWindow) {
-      GM_BrowserUI.installCurrentScript();
-    }
-  } else if (topic == "dom-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(GM_util.windowId(subject));
-  } else if (topic == "inner-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(
-        subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);
-  } else {
-    throw new Error("Unexpected topic received: {" + topic + "}");
-  }
 };
 
 GM_BrowserUI.openTab = function(url) {
