@@ -1,17 +1,62 @@
 Components.utils.import('resource://greasemonkey/util.js');
 
-var GM_MenuCommander = {};
+var GM_MenuCommander = {
+  menuCommands: {}
+};
 
-// Mix in menucommand.js so we don't pollute the global scope
-Components.utils.import('resource://greasemonkey/menucommand.js',
-    GM_MenuCommander);
+GM_MenuCommander.initialize = function() {
+  var messageManager = Components.classes["@mozilla.org/globalmessagemanager;1"]
+      .getService(Components.interfaces.nsIMessageListenerManager);
+
+  messageManager.addMessageListener('greasemonkey:menu-command-registered',
+      GM_MenuCommander.menuCommandRegistered);
+  messageManager.addMessageListener('greasemonkey:clear-menu-commands',
+      GM_MenuCommander.clearMenuCommands);
+  messageManager.addMessageListener('greasemonkey:toggle-menu-commands',
+      GM_MenuCommander.toggleMenuCommands);
+}
+
+GM_MenuCommander.menuCommandRegistered = function(aMessage) {
+  var windowId = aMessage.data.windowId;
+
+  if (!GM_MenuCommander.menuCommands[windowId]) {
+    GM_MenuCommander.menuCommands[windowId] = [];
+  }
+
+  var command = aMessage.data;
+  command.browser = aMessage.target;
+  GM_MenuCommander.menuCommands[windowId].push(command);
+}
+
+GM_MenuCommander.clearMenuCommands = function(aMessage) {
+  var windowId = aMessage.data.windowId;
+  if (!windowId) return;
+
+  delete GM_MenuCommander.menuCommands[windowId];
+}
+
+GM_MenuCommander.toggleMenuCommands = function(aMessage) {
+  var frozen = aMessage.data.frozen;
+  var windowId = aMessage.data.windowId;
+
+  GM_MenuCommander.withAllMenuCommandsForWindowId(windowId, function(command) {
+    command.frozen = frozen;
+  });
+}
+
+GM_MenuCommander.commandClicked = function(aCommand) {
+  aCommand.browser.messageManager.sendAsyncMessage("greasemonkey:menu-command-clicked", {
+    index: aCommand.index,
+    windowId: aCommand.windowId
+  });
+}
 
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
   menuItem.setAttribute("label", command.name);
-  if ('function' == typeof command.commandFunc) {
-    menuItem.addEventListener("command", command.commandFunc, true);
-  }
+  menuItem.addEventListener("command", function() {
+    GM_MenuCommander.commandClicked(command);
+  }, false);
 
   if (command.accessKey) {
       menuItem.setAttribute("accesskey", command.accessKey);
@@ -25,16 +70,7 @@ GM_MenuCommander.onPageHide = function(aWindowId, aPersisted) {
     GM_MenuCommander.withAllMenuCommandsForWindowId(aWindowId,
         function(index, command) { command.frozen = true; });
   } else {
-    GM_MenuCommander.removeMatchingMenuCommands(
-      null,
-      function(index, command) {
-        return (
-            // Remove the reference if either the window is closed, ...
-            GM_util.windowIsClosed(command.contentWindow)
-            // ... or the window id of the destroyed page matches.
-            || (aWindowId && command.contentWindowId == aWindowId));
-      },
-      true);  // Don't forget the aForced=true passed here!
+    delete GM_MenuCommander.menuCommands[aWindowId];
   }
 }
 
@@ -66,4 +102,27 @@ GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   }
 
   aMenuPopup.parentNode.disabled = !haveCommands;
+};
+
+GM_MenuCommander.withAllMenuCommandsForWindowId = function(
+    aContentWindowId, aCallback, aForce) {
+
+  var targetWindowIds = null;
+  if (aForce) {
+    targetWindowIds = Object.keys(GM_MenuCommander.menuCommands);
+  } else if (aContentWindowId) {
+    targetWindowIds = [aContentWindowId];
+  } else {
+    return;
+  }
+
+  for each (var windowId in targetWindowIds) {
+   var commands = GM_MenuCommander.menuCommands[windowId];
+   if (!commands) return;
+
+    var l = commands.length - 1;
+    for (var i = l, command = null; command = commands[i]; i--) {
+      aCallback(i, command);
+    }
+  }
 };

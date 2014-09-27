@@ -73,6 +73,9 @@ GM_BrowserUI.chromeLoad = function(e) {
   // initialization routines will run, no matter what.
   GM_BrowserUI.gmSvc.config;
 
+  // Initialize the chrome side handling of menu commands.
+  GM_MenuCommander.initialize();
+
   GM_BrowserUI.showToolbarButton();
 
   // Make sure this is imported at least once, so its internal timer starts.

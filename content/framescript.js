@@ -13,7 +13,9 @@ var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 var gScriptRunners = {};
 
 function ScriptRunner(aWindow, aUrl) {
+  this.menuCommands = [];
   this.window = aWindow;
+  this.windowId = GM_util.windowId(this.window);
   this.url = aUrl;
 }
 
@@ -27,9 +29,21 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
   }
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
-    var sandbox = createSandbox(script, this.window, this.url);
+    var sandbox = createSandbox(script, this);
     runScriptInSandbox(script, sandbox);
   }
+}
+
+ScriptRunner.prototype.registeredMenuCommand = function(aCommand) {
+  var length = this.menuCommands.push(aCommand);
+
+  sendAsyncMessage("greasemonkey:menu-command-registered", {
+    accessKey: aCommand.accessKey,
+    frozen: aCommand.frozen,
+    index: length - 1,
+    name: aCommand.name,
+    windowId: aCommand.contentWindowId
+  });
 }
 
 var observer = {
@@ -66,6 +80,40 @@ var observer = {
 
     var contentWin = aEvent.target.defaultView;
     this.runScripts('document-end', contentWin);
+  },
+
+  pagehide: function(aEvent) {
+    var contentWin = aEvent.target.defaultView;
+    var windowId = GM_util.windowId(contentWin);
+    if (!windowId || !gScriptRunners[windowId]) return;
+
+    // Small optimization: only send a notification if there's a menu command
+    // for this window.
+    if (!gScriptRunners[windowId].menuCommands.length) return;
+
+    if (aEvent.persisted) {
+      sendAsyncMessage("greasemonkey:toggle-menu-commands", {
+        frozen: true,
+        windowId: windowId
+      });
+    } else {
+      sendAsyncMessage("greasemonkey:clear-menu-commands", {
+        windowId: windowId
+      });
+    }
+  },
+
+  pageshow: function(aEvent) {
+    var contentWin = aEvent.target.defaultView;
+    var windowId = GM_util.windowId(contentWin);
+    if (!windowId || !gScriptRunners[windowId]) return;
+
+    if (!gScriptRunners[windowId].menuCommands.length) return;
+
+    sendAsyncMessage("greasemonkey:toggle-menu-commands", {
+      frozen: false,
+      windowId: windowId
+    });
   },
 
   runScripts: function(aRunWhen, aWrappedContentWin) {
@@ -109,6 +157,18 @@ var observer = {
     gScriptRunners[windowId].injectScripts([script]);
   },
 
+  runMenuCommand: function(aMessage) {
+    var windowId = aMessage.data.windowId;
+    if (!gScriptRunners[windowId]) return;
+
+    var index = aMessage.data.index;
+    var command = gScriptRunners[windowId].menuCommands[index];
+    if (!command || !command.commandFunc) return;
+
+    // Ensure |this| is set to the sandbox object inside the command function.
+    command.commandFunc.call(null);
+  },
+
   createScriptFromObject: function(aObject) {
     var script = Object.create(IPCScript.prototype);
     // TODO: better way for this? Object.create needs property descriptors.
@@ -126,6 +186,10 @@ observerService.addObserver(observer, 'inner-window-destroyed', false);
 
 addEventListener("DOMContentLoaded", observer.contentLoad.bind(observer));
 addEventListener("load", observer.contentLoad.bind(observer));
+addEventListener("pagehide", observer.pagehide.bind(observer));
+addEventListener("pageshow", observer.pageshow.bind(observer));
 
 addMessageListener("greasemonkey:inject-script",
     observer.runDelayedScript.bind(observer));
+addMessageListener("greasemonkey:menu-command-clicked",
+    observer.runMenuCommand.bind(observer));

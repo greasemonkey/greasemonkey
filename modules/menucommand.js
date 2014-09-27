@@ -1,5 +1,4 @@
-var EXPORTED_SYMBOLS = ['registerMenuCommand', 'removeMatchingMenuCommands',
-    'withAllMenuCommandsForWindowId'];
+var EXPORTED_SYMBOLS = ['registerMenuCommand'];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('resource://greasemonkey/util.js');
@@ -9,10 +8,10 @@ var gStringBundle = Services.strings.createBundle(
     "chrome://greasemonkey/locale/greasemonkey.properties");
 
 function registerMenuCommand(
-    wrappedContentWin, script,
+    scriptRunner,
     commandName, commandFunc, accessKey, unused, accessKey2
 ) {
-  if (wrappedContentWin.top != wrappedContentWin) {
+  if (scriptRunner.window.top != scriptRunner.window) {
     // Only register menu commands for the top level window.
     return;
   }
@@ -33,30 +32,12 @@ function registerMenuCommand(
   }
 
   var command = {
-      name: commandName,
-      accessKey: accessKey,
-      commandFunc: commandFunc,
-      contentWindow: wrappedContentWin,
-      contentWindowId: GM_util.windowId(wrappedContentWin),
-      frozen: false};
-  gMenuCommands.push(command);
+    name: commandName,
+    accessKey: accessKey,
+    commandFunc: commandFunc,
+    contentWindowId: scriptRunner.windowId,
+    frozen: false
+  };
+
+  scriptRunner.registeredMenuCommand(command);
 };
-
-function withAllMenuCommandsForWindowId(aContentWindowId, aCallback, aForce) {
-  if(!aContentWindowId && !aForce) return;
-
-  var l = gMenuCommands.length - 1;
-  for (var i = l, command = null; command = gMenuCommands[i]; i--) {
-    if (aForce || command.contentWindowId == aContentWindowId) {
-      aCallback(i, command);
-    }
-  }
-};
-
-function removeMatchingMenuCommands(aContentWindowId, aCallback, aForce) {
-  withAllMenuCommandsForWindowId(aContentWindowId, function(index, command) {
-    if (aCallback(index, command)) {
-      gMenuCommands.splice(index, 1);
-    }
-  }, aForce)
-}
