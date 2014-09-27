@@ -306,10 +306,10 @@ function GM_openInTab(safeContentWin, url, aLoadInBackground) {
       browser.getBrowserIndexForDocument(safeContentWin.top.document)];
   var newTab = browser.loadOneTab(
       uri.spec, {'inBackground': aLoadInBackground});
-  var newWin = GM_windowForTab(newTab, browser);
+  var newWin = browser.getBrowserForTab(newTab).contentWindow;
 
-  var afterCurrent = Cc["@mozilla.org/preferences-service;1"]
-      .getService(Ci.nsIPrefService)
+  var afterCurrent = Components.classes["@mozilla.org/preferences-service;1"]
+      .getService(Components.interfaces.nsIPrefService)
       .getBranch("browser.tabs.")
       .getBoolPref("insertRelatedAfterCurrent");
   if (afterCurrent) {

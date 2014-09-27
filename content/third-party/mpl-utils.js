@@ -55,14 +55,3 @@ function GM_openFolder(aFile) {
     }
   }
 }
-
-function GM_windowForTab(aTab, aBrowser) {
-  var browser = aBrowser || gBrowser;
-  // Source:
-  // http://mxr.mozilla.org/mozilla-central/source/browser/base/content/browser.js#4448
-  return browser
-    .getBrowserForTab(aTab)
-    .docShell
-    .QueryInterface(Ci.nsIInterfaceRequestor)
-    .getInterface(Ci.nsIDOMWindow);
-}
