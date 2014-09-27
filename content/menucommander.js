@@ -65,20 +65,6 @@ GM_MenuCommander.createMenuItem = function(command) {
   return menuItem;
 };
 
-GM_MenuCommander.onPageHide = function(aWindowId, aPersisted) {
-  if (aPersisted) {
-    GM_MenuCommander.withAllMenuCommandsForWindowId(aWindowId,
-        function(index, command) { command.frozen = true; });
-  } else {
-    delete GM_MenuCommander.menuCommands[aWindowId];
-  }
-}
-
-GM_MenuCommander.onPageShow = function(aWindowId) {
-  GM_MenuCommander.withAllMenuCommandsForWindowId(aWindowId,
-      function(index, command) { command.frozen = false; });
-}
-
 GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
   // Asynchronously.  See #1632.
   GM_util.timeout(function() { GM_util.emptyEl(aMenuPopup); }, 0);

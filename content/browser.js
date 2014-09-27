@@ -28,13 +28,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
-  gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
-
-  var sidebar = document.getElementById("sidebar");
-  sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
-  sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
-
   document.getElementById('content').addEventListener(
       'DOMContentLoaded', function(aEvent) {
         var safeWin = aEvent.target.defaultView;
@@ -57,20 +50,6 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Make sure this is imported at least once, so its internal timer starts.
   Components.utils.import('resource://greasemonkey/stats.js');
-};
-
-GM_BrowserUI.pagehide = function(aEvent) {
-  var windowId = GM_util.windowIdForEvent(aEvent);
-  if (!windowId) return;
-
-  GM_MenuCommander.onPageHide(windowId, aEvent.persisted);
-};
-
-GM_BrowserUI.pageshow = function(aEvent) {
-  var windowId = GM_util.windowIdForEvent(aEvent);
-  if (!windowId) return;
-
-  GM_MenuCommander.onPageShow(windowId);
 };
 
 GM_BrowserUI.openTab = function(url) {
