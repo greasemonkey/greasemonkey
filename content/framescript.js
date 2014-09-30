@@ -66,6 +66,10 @@ var observer = {
 
         if (!doc || !win) break;
 
+        // Listen for load event (which unlike DOMContentLoaded can't be done
+        // globally), as some documents (e.g. images) don't fire DCL.
+        win.addEventListener("load", contentLoad, true);
+
         // TODO:
         // Sometimes we get this notification twice with different windows but
         // identical documentURI/location.href. In one of those cases, the call
@@ -85,9 +89,10 @@ var observer = {
   },
 
   contentLoad: function(aEvent) {
-    if (!GM_util.getEnabled()) return;
-
     var contentWin = aEvent.target.defaultView;
+    contentWin.removeEventListener("load", contentLoad, true);
+
+    if (!GM_util.getEnabled()) return;
     this.runScripts('document-end', contentWin);
   },
 
@@ -193,8 +198,10 @@ var observerService = Cc['@mozilla.org/observer-service;1']
 observerService.addObserver(observer, 'document-element-inserted', false);
 observerService.addObserver(observer, 'inner-window-destroyed', false);
 
-addEventListener("DOMContentLoaded", observer.contentLoad.bind(observer));
-addEventListener("load", observer.contentLoad.bind(observer));
+// Used for DOMContentLoaded here and load in observer.observe.
+var contentLoad = observer.contentLoad.bind(observer);
+addEventListener("DOMContentLoaded", contentLoad, true);
+
 addEventListener("pagehide", observer.pagehide.bind(observer));
 addEventListener("pageshow", observer.pageshow.bind(observer));
 
