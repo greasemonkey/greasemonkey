@@ -109,18 +109,6 @@ function getStatsObj() {
   for (var i = 0, script = null; script = scripts[i]; i++) {
     var valueStats = GM_ScriptStorage(script).getStats();
 
-    var explicitGrants = [];
-    var imperatives = [];
-    var metaLines = extractMeta(script.textContent).match(gLineSplitRegexp);
-    for (var j = 0, metaLine = null; metaLine = metaLines[j]; j++) {
-      var m = gMetaLineRegexp.exec(metaLine);
-      if (!m) continue;
-      imperatives[imperatives.length] = m[1];
-      if ('grant' == m[1]) {
-        explicitGrants[explicitGrants.length] = m[2];
-      }
-    }
-
     var downloadUri = GM_util.uriFromUrl(script.downloadURL);
     var domain = null;
     try {
@@ -135,10 +123,7 @@ function getStatsObj() {
 
     var scriptStat = {
         'enabled': script.enabled,
-        'explicitGrants': explicitGrants,
         'id': script.id,
-        'imperatives': imperatives,
-        'implicitGrants': script.grants,
         'installScheme': downloadUri.scheme,
         'installDomain': domain,
         'installTime': script.installDate.toISOString(),

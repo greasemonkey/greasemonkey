@@ -1,0 +1,85 @@
+// PEG grammar for parsing user script metadata
+// http://pegjs.majda.cz/online
+
+/*
+Test value:
+
+// ==UserScript==
+// @name      Metadata Test
+// @name:de   Auf deutsch bitte!
+// @namespace test
+// @description Test value including all metas.
+// @version   1.2.3
+// @icon      http://example.com/favicon.ico
+// @include   http://example.com/*
+// @match     http://example.net/*
+// @exclude   http://example.com/foo
+// @run-at    document-start
+// @grant     none
+// @downloadURL http://example.org/foo.user.js
+// @updateURL http://example.org/foo.meta.js
+// @require   http://example.net/library.js
+// @resource  css http://example.net/library.css
+// ==/UserScript==
+
+*/
+
+/*
+// Uncomment to parse an entire metadata block.
+// I.E for testing/development.
+meta =
+  "// ==UserScript==\n"
+  lines:line*
+  "// ==/UserScript==" ("\n"?)
+  { return lines; }
+*/
+
+line =
+    "// @"
+    meta:(keyword1 / keyword2 / keywordLocale)
+    "\n"?
+    { return meta; }
+
+whitespace = [ \t\n]+
+non_whitespace =
+    val:[^ \t\n]+ { return val.join('');}
+non_newline =
+    val:[^\n]+ { return val.join('');}
+
+keyword1 =
+    keyword:(
+        "downloadURL" /
+        "exclude" /
+        "grant" /
+        "icon" /
+        "include" /
+        "installURL" /
+        "match" /
+        "namespace" /
+        "require" /
+        "run-at" /
+        "updateURL" /
+        "version"
+        )
+    whitespace
+    value:non_newline
+    { return {keyword:keyword, value:value}; }
+
+keyword2 =
+    keyword:("resource")
+    whitespace
+    value1:non_whitespace
+    whitespace
+    value2:non_newline
+    { return {keyword:keyword, value1:value1, value2:value2}; }
+
+keywordLocale
+  = keyword:(
+        "description" /
+        "name"
+        )
+    locale:$(":" [a-zA-Z-]+)?
+    whitespace
+    value:non_newline
+    { return {keyword:keyword, locale:locale, value:value}; }
+

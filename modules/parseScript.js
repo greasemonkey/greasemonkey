@@ -1,6 +1,5 @@
-var EXPORTED_SYMBOLS = ['parse', 'gLineSplitRegexp', 'gMetaLineRegexp'];
+var EXPORTED_SYMBOLS = ['extractMeta', 'parse'];
 
-Components.utils.import('resource://greasemonkey/extractMeta.js');
 Components.utils.import('resource://greasemonkey/script.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
 Components.utils.import('resource://greasemonkey/scriptRequire.js');
@@ -10,16 +9,26 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 var gIoService = Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
-var gLineSplitRegexp = /.+/g;
-var gMetaLineRegexp = new RegExp('// @([^\\s:]+)(?::([a-zA-Z-]+))?(?:\\s+(.*))?');
+var gAllMetaRegexp = new RegExp(
+    '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==',
+    'm');
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
+
+/** Get just the stuff between ==UserScript== lines. */
+function extractMeta(aSource) {
+  var meta = aSource.match(gAllMetaRegexp);
+  if (meta) return meta[2].replace(/^\s+/, '');
+  return '';
+}
+
+
 /** Parse the source of a script; produce Script object. */
 function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
-  var meta = extractMeta(aSource).match(gLineSplitRegexp);
+  var meta = extractMeta(aSource).match(/.+/g);
   if (aFailWhenMissing && !meta && !aNoMetaOk) return null;
 
   var script = new Script();
@@ -39,123 +48,119 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
   }
 
   var resourceNames = {};
-  if (meta) for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {
-    metaLine = metaLine.replace(/\s+$/, '');
+  for (var i = 0, metaLine = ''; metaLine = meta[i]; i++) {
+    try {
+      var data = GM_util.parseMetaLine(metaLine.replace(/\s+$/, ''));
+    } catch (e) {
+      // Ignore invalid/unsupported meta lines.
+      continue;
+    }
 
-    var match = metaLine.match(gMetaLineRegexp);
-    if (!match) continue;
-
-    var header = match[1];
-    var locale = match[2];
-    var value = match[3] || null;
-
-    switch (header) {
+    switch (data.keyword) {
     case 'description':
     case 'name':
-      if (locale) {
-        if (!script._locales[locale])
-          script._locales[locale] = {};
+      var locale = data.locale.replace(/^:/, '');
 
-        script._locales[locale][header] = value;
-        break;
+      if (locale) {
+        if (!script._locales[locale]) {
+          script._locales[locale] = {};
+        }
+        script._locales[locale][keyword] = data.value;
       }
-      // fall-through if no locale given
+
+      script['_' + data.keyword] = data.value;
+
+      break;
+
+    case 'resource':
+      var name = data.value1;
+      var url = data.value2;
+
+      resourceNames[name] = true;
+
+      try {
+        var resUri = GM_util.uriFromUrl(url, aUri);
+        var scriptResource = new ScriptResource(script);
+        scriptResource._name = name;
+        scriptResource._downloadURL = resUri.spec;
+        script._resources.push(scriptResource);
+        script._rawMeta += data.keyword + '\0'
+            + name + '\0'
+            + resUri.spec + '\0';
+      } catch (e) {
+        script.parseErrors.push(
+            gStringBundle.GetStringFromName('parse.resource-failed')
+                .replace('%1', name).replace('%2', url)
+            );
+      }
+
+      break;
+
     case 'namespace':
     case 'version':
-    case 'updateMetaStatus':
-      script['_' + header] = value;
+      script['_' + data.keyword] = data.value;
+      break;
+    case 'exclude':
+      script._excludes.push(data.value);
+      break;
+    case 'grant':
+      script._grants.push(data.value);
+      break;
+    case 'include':
+      script._includes.push(data.value);
+      break;
+    case 'run-at':
+      script._runAt = data.value;
       break;
 
     case 'installURL':
-      header = 'downloadURL';
+      data.keyword = 'downloadURL';
     case 'downloadURL':
     case 'updateURL':
       try {
-        var uri = GM_util.uriFromUrl(value, aUri);
-        script[header] = uri.spec;
+        var uri = GM_util.uriFromUrl(data.value, aUri);
+        script[data.keyword] = uri.spec;
       } catch (e) {
-        dump('Failed to parse ' + header + ' "' + value + '":\n' + e + '\n');
+        dump('Failed to parse ' + data.keyword
+            + ' "' + data.value + '":\n' + e + '\n');
       }
       break;
 
-    case 'exclude':
-      script._excludes.push(value);
-      break;
-    case 'grant':
-      script._grants.push(value);
-      break;
     case 'icon':
       try {
-        script.icon.setMetaVal(value);
-        script._rawMeta += header + '\0' + value + '\0';
+        script.icon.setMetaVal(data.value);
+        script._rawMeta += data.keyword + '\0' + data.value + '\0';
       } catch (e) {
         script.parseErrors.push(e.message);
       }
       break;
-    case 'include':
-      script._includes.push(value);
-      break;
+
     case 'match':
       try {
-        var match = new MatchPattern(value);
+        var match = new MatchPattern(data.value);
         script._matches.push(match);
       } catch (e) {
         script.parseErrors.push(
             gStringBundle.GetStringFromName('parse.ignoring-match')
-                .replace('%1', value).replace('%2', e)
+                .replace('%1', data.value).replace('%2', e)
             );
       }
       break;
+
     case 'require':
       try {
-        var reqUri = GM_util.uriFromUrl(value, aUri);
+        var reqUri = GM_util.uriFromUrl(data.value, aUri);
         var scriptRequire = new ScriptRequire(script);
         scriptRequire._downloadURL = reqUri.spec;
         script._requires.push(scriptRequire);
-        script._rawMeta += header + '\0' + value + '\0';
+        script._rawMeta += data.keyword + '\0' + data.value + '\0';
       } catch (e) {
+        dump('require err:'+e+'\n');
         script.parseErrors.push(
             gStringBundle.GetStringFromName('parse.require-failed')
-                .replace('%1', value)
+                .replace('%1', data.value)
             );
       }
-      break;
-    case 'resource':
-      var res = value.match(/(\S+)\s+(.*)/);
-      if (res === null) {
-        script.parseErrors.push(
-            gStringBundle.GetStringFromName('parse.resource-syntax')
-                .replace('%1', value)
-            );
-        break;
-      }
-
-      var resName = res[1];
-      if (resourceNames[resName]) {
-        script.parseErrors.push(
-            gStringBundle.GetStringFromName('parse.resource-duplicate')
-                .replace('%1', resName)
-            );
-        break;
-      }
-      resourceNames[resName] = true;
-
-      try {
-        var resUri = GM_util.uriFromUrl(res[2], aUri);
-        var scriptResource = new ScriptResource(script);
-        scriptResource._name = resName;
-        scriptResource._downloadURL = resUri.spec;
-        script._resources.push(scriptResource);
-        script._rawMeta += header + '\0' + resName + '\0' + resUri.spec + '\0';
-      } catch (e) {
-        script.parseErrors.push(
-            gStringBundle.GetStringFromName('parse.resource-failed')
-                .replace('%1', resName).replace('%2', res[2])
-            );
-      }
-      break;
-    case 'run-at':
-      script._runAt = value;
       break;
     }
   }
@@ -163,6 +168,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
   setDefaults(script);
   return script;
 }
+
 
 function setDefaults(script) {
   if (!script.updateURL && script.downloadURL) {
