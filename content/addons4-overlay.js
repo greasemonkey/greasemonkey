@@ -217,6 +217,8 @@ function onSortersClicked(aEvent) {
 };
 
 function applySort() {
+  if (userScriptViewId != gViewController.currentViewId) return;
+
   // Find checked button.
   var buttons = document.getElementById('greasemonkey-sort-bar')
     .getElementsByTagName('button');
