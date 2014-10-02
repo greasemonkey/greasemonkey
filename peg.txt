@@ -46,10 +46,8 @@ line =
     { return meta; }
 
 whitespace = [ \t\n]+
-non_whitespace =
-    val:[^ \t\n]+ { return val.join('');}
-non_newline =
-    val:[^\n]+ { return val.join('');}
+non_whitespace = $[^ \t\n]+
+non_newline = $[^\n]+
 
 keyword0 =
     keyword:(
