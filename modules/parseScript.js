@@ -81,6 +81,12 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
       var name = data.value1;
       var url = data.value2;
 
+      if (name in resourceNames) {
+        script.parseErrors.push(
+            gStringBundle.GetStringFromName('parse.resource-duplicate')
+                .replace('%1', resName));
+        break;
+      }
       resourceNames[name] = true;
 
       try {
