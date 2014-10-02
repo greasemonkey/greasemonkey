@@ -219,12 +219,11 @@ service.prototype.injectScripts = function(
 
   var winIsTop = true;
   try {
-    wrappedContentWin.QueryInterface(Ci.nsIDOMWindowInternal);
+    wrappedContentWin.QueryInterface(Ci.nsIDOMWindow);
     if (wrappedContentWin.frameElement) winIsTop = false;
   } catch (e) {
     // Ignore non-DOM-windows.
-    dump('Could not QI  wrappedContentWin to nsIDOMWindowInternal at\n'
-        + url + ' ?!\n');
+    dump('Could not QI wrappedContentWin to nsIDOMWindow at\n' + url + ' ?!\n');
   }
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
