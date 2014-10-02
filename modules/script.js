@@ -149,20 +149,20 @@ function Script_getLocalizedDescription() {
   // We can't simply return this._locales[locale], as the best match for name
   // and description might be for different locales (e.g. if an exact match is
   // only provided for one of them).
+  function getBestLocalization(aProp) {
+    var available = Object.keys(locales).filter(function(locale) {
+      return !!locales[locale][aProp];
+    });
+
+    var bestMatch = GM_util.getBestLocaleMatch(preferred, available);
+    if (!bestMatch) return null;
+
+    return locales[bestMatch][aProp];
+  }
+
   if (!this._localized) {
     var locales = this._locales;
     var preferred = GM_util.getPreferredLocale();
-
-    function getBestLocalization(aProp) {
-      var available = Object.keys(locales).filter(function(locale) {
-        return !!locales[locale][aProp];
-      });
-
-      var bestMatch = GM_util.getBestLocaleMatch(preferred, available);
-      if (!bestMatch) return null;
-
-      return locales[bestMatch][aProp];
-    }
 
     this._localized = {
       description: getBestLocalization("description") || this._description,
@@ -703,7 +703,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
       var pendingExec;
       var pendingExecAry = this.pendingExec;
       this.pendingExec = [];
-      while (pendingExec = pendingExecAry.shift()) {
+      while ((pendingExec = pendingExecAry.shift())) {
         if ('document-start update' == pendingExec) {
           GM_util.logError(
               this.id + '\n... script update complete '
