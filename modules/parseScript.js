@@ -69,7 +69,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
         if (!script._locales[locale]) {
           script._locales[locale] = {};
         }
-        script._locales[locale][keyword] = data.value;
+        script._locales[locale][data.keyword] = data.value;
       }
 
       script['_' + data.keyword] = data.value;
