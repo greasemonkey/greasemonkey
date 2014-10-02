@@ -217,9 +217,18 @@ service.prototype.injectScripts = function(
     // Ignore, it's good if we can't QI to a chrome window.
   }
 
-  var chromeWin = getChromeWinForContentWin(wrappedContentWin);
+  var winIsTop = true;
+  try {
+    wrappedContentWin.QueryInterface(Ci.nsIDOMWindowInternal);
+    if (wrappedContentWin.frameElement) winIsTop = false;
+  } catch (e) {
+    // Ignore non-DOM-windows.
+    dump('Could not QI  wrappedContentWin to nsIDOMWindowInternal at\n'
+        + url + ' ?!\n');
+  }
 
   for (var i = 0, script = null; script = scripts[i]; i++) {
+    if (script.noframes && !winIsTop) continue;
     var sandbox = createSandbox(script, wrappedContentWin, url);
     runScriptInSandbox(script, sandbox);
   }

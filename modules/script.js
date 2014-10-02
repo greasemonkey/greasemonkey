@@ -52,6 +52,7 @@ function Script(configNode) {
   this._modifiedTime = null;
   this._name = 'user-script';
   this._namespace = '';
+  this._noframes = false;
   this._rawMeta = '';
   this._requires = [];
   this._resources = [];
@@ -169,7 +170,7 @@ function Script_getLocalizedDescription() {
     };
   }
 
-  return this._localized
+  return this._localized;
 });
 
 Script.prototype.__defineGetter__('downloadURL',
@@ -185,6 +186,9 @@ function Script_getVersion() { return this._version; });
 
 Script.prototype.__defineGetter__('icon',
 function Script_getIcon() { return this._icon; });
+
+Script.prototype.__defineGetter__('noframes',
+function Script_getNoframes() { return this._noframes; });
 
 Script.prototype.__defineGetter__('enabled',
 function Script_getEnabled() { return this._enabled; });
@@ -387,7 +391,8 @@ Script.prototype._loadFromConfigNode = function(node) {
   this._name = node.getAttribute("name");
   this._namespace = node.getAttribute("namespace");
   this._description = node.getAttribute("description");
-  this._enabled = node.getAttribute("enabled") == true.toString();
+  this._enabled = node.getAttribute("enabled") == 'true';
+  this._noframes = node.getAttribute("noframes") == 'true';
   this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
   this._updateMetaStatus = node.getAttribute("updateMetaStatus") || "unknown";
   this.icon.fileURL = node.getAttribute("icon");
@@ -467,6 +472,7 @@ Script.prototype.toConfigNode = function(doc) {
   scriptNode.setAttribute("dependhash", this._dependhash);
   scriptNode.setAttribute("description", this._description);
   scriptNode.setAttribute("enabled", this._enabled);
+  scriptNode.setAttribute("noframes", this._noframes);
   scriptNode.setAttribute("filename", this._filename);
   scriptNode.setAttribute("installTime", this._installTime);
   scriptNode.setAttribute("modified", this._modifiedTime);
@@ -617,6 +623,7 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
   this._description = newScript._description;
   this._localized = newScript._localized;
   this._locales = newScript._locales;
+  this._noframes = newScript._noframes;
   this._runAt = newScript._runAt;
   this._version = newScript._version;
   this.downloadURL = newScript.downloadURL;

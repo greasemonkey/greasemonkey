@@ -57,6 +57,11 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     }
 
     switch (data.keyword) {
+    case 'noframes':
+      dump('parser set no frames\n');
+      script._noframes = true;
+      break;
+
     case 'description':
     case 'name':
       var locale = data.locale.replace(/^:/, '');
