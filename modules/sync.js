@@ -86,6 +86,17 @@ ScriptStore.prototype = {
   /// Incoming Sync record, create local version.
   create: function(aRecord) {
     if (aRecord.cleartext.installed) {
+      var url = aRecord.cleartext.downloadURL;
+      if (!url) {
+        dump('Ignoring incoming sync record with empty downloadURL!\n');
+        return;
+      }
+      if (!GM_util.uriFromUrl(url)) {
+        dump('Ignoring incoming sync record with bad downloadURL:\b'
+            + url + '\n');
+        return;
+      }
+
       var rs = new RemoteScript(aRecord.cleartext.downloadURL);
       rs.setSilent();
       rs.download(GM_util.hitch(this, function(aSuccess, aType) {
@@ -258,4 +269,4 @@ function setScriptValuesFromSyncRecord(aScript, aRecord) {
 }
 
 
-SyncServiceObserver.init()
+SyncServiceObserver.init();
