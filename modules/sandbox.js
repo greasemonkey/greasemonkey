@@ -1,6 +1,8 @@
 const EXPORTED_SYMBOLS = ['createSandbox', 'runScriptInSandbox'];
 
-let {utils: Cu, interfaces: Ci, classes: Cc} = Components;
+var Cu = Components.utils;
+var Ci = Components.interfaces;
+var Cc = Components.classes;
 
 Cu.import('resource://greasemonkey/GM_setClipboard.js');
 Cu.import("resource://greasemonkey/menucommand.js");
