@@ -20,6 +20,7 @@ Test value:
 // @updateURL http://example.org/foo.meta.js
 // @require   http://example.net/library.js
 // @resource  css http://example.net/library.css
+// @noframes
 // ==/UserScript==
 
 */
@@ -36,7 +37,11 @@ meta =
 
 line =
     "// @"
-    meta:(keyword1 / keyword2 / keywordLocale)
+    meta:(
+        keyword0 /
+        keyword1 /
+        keyword2 /
+        keywordLocale)
     "\n"?
     { return meta; }
 
@@ -45,6 +50,12 @@ non_whitespace =
     val:[^ \t\n]+ { return val.join('');}
 non_newline =
     val:[^\n]+ { return val.join('');}
+
+keyword0 =
+    keyword:(
+        "noframes"
+        )
+    { return {keyword:keyword}; }
 
 keyword1 =
     keyword:(
