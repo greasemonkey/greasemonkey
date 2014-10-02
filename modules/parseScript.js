@@ -63,7 +63,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
     case 'description':
     case 'name':
-      var locale = data.locale.replace(/^:/, '');
+      var locale = data.locale;
 
       if (locale) {
         if (!script._locales[locale]) {

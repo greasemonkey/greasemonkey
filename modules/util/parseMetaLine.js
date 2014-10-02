@@ -86,7 +86,8 @@ function parseMetaLine(input) {
       peg$c50 = { type: "literal", value: ":", description: "\":\"" },
       peg$c51 = /^[a-zA-Z\-]/,
       peg$c52 = { type: "class", value: "[a-zA-Z\\-]", description: "[a-zA-Z\\-]" },
-      peg$c53 = function(keyword, locale, value) { return {keyword:keyword, locale:locale, value:value}; },
+      peg$c53 = function(localeValue) { return localeValue },
+      peg$c54 = function(keyword, locale, value) { return {keyword:keyword, locale:locale, value:value}; },
 
       peg$currPos          = 0,
       peg$reportedPos      = 0,
@@ -627,15 +628,15 @@ function parseMetaLine(input) {
     }
     if (s1 !== peg$FAILED) {
       s2 = peg$currPos;
-      s3 = peg$currPos;
       if (input.charCodeAt(peg$currPos) === 58) {
-        s4 = peg$c49;
+        s3 = peg$c49;
         peg$currPos++;
       } else {
-        s4 = peg$FAILED;
+        s3 = peg$FAILED;
         if (peg$silentFails === 0) { peg$fail(peg$c50); }
       }
-      if (s4 !== peg$FAILED) {
+      if (s3 !== peg$FAILED) {
+        s4 = peg$currPos;
         s5 = [];
         if (peg$c51.test(input.charAt(peg$currPos))) {
           s6 = input.charAt(peg$currPos);
@@ -659,30 +660,31 @@ function parseMetaLine(input) {
           s5 = peg$c0;
         }
         if (s5 !== peg$FAILED) {
-          s4 = [s4, s5];
-          s3 = s4;
+          s5 = input.substring(s4, peg$currPos);
+        }
+        s4 = s5;
+        if (s4 !== peg$FAILED) {
+          peg$reportedPos = s2;
+          s3 = peg$c53(s4);
+          s2 = s3;
         } else {
-          peg$currPos = s3;
-          s3 = peg$c0;
+          peg$currPos = s2;
+          s2 = peg$c0;
         }
       } else {
-        peg$currPos = s3;
-        s3 = peg$c0;
+        peg$currPos = s2;
+        s2 = peg$c0;
       }
-      if (s3 === peg$FAILED) {
-        s3 = peg$c3;
+      if (s2 === peg$FAILED) {
+        s2 = peg$c3;
       }
-      if (s3 !== peg$FAILED) {
-        s3 = input.substring(s2, peg$currPos);
-      }
-      s2 = s3;
       if (s2 !== peg$FAILED) {
         s3 = peg$parsewhitespace();
         if (s3 !== peg$FAILED) {
           s4 = peg$parsenon_newline();
           if (s4 !== peg$FAILED) {
             peg$reportedPos = s0;
-            s1 = peg$c53(s1, s2, s4);
+            s1 = peg$c54(s1, s2, s4);
             s0 = s1;
           } else {
             peg$currPos = s0;

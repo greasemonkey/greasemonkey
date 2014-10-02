@@ -87,7 +87,7 @@ keywordLocale
         "description" /
         "name"
         )
-    locale:$(":" [a-zA-Z-]+)?
+    locale:(":" localeValue:$[a-zA-Z-]+ { return localeValue })?
     whitespace
     value:non_newline
     { return {keyword:keyword, locale:locale, value:value}; }
