@@ -92,7 +92,7 @@ ScriptStore.prototype = {
         return;
       }
       if (!GM_util.uriFromUrl(url)) {
-        dump('Ignoring incoming sync record with bad downloadURL:\b'
+        dump('Ignoring incoming sync record with bad downloadURL:\n'
             + url + '\n');
         return;
       }
