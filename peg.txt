@@ -46,10 +46,8 @@ line =
     { return meta; }
 
 whitespace = [ \t\n]+
-non_whitespace =
-    val:[^ \t\n]+ { return val.join('');}
-non_newline =
-    val:[^\n]+ { return val.join('');}
+non_whitespace = $[^ \t\n]+
+non_newline = $[^\n]+
 
 keyword0 =
     keyword:(
@@ -89,7 +87,7 @@ keywordLocale
         "description" /
         "name"
         )
-    locale:$(":" [a-zA-Z-]+)?
+    locale:(":" localeValue:$[a-zA-Z-]+ { return localeValue })?
     whitespace
     value:non_newline
     { return {keyword:keyword, locale:locale, value:value}; }
