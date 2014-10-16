@@ -99,6 +99,9 @@ function(safeUrl, details, req) {
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
   }
+  if (details.responseType) {
+    req.responseType = details.responseType;
+  }
 
   if (details.timeout) {
     req.timeout = details.timeout;
@@ -205,10 +208,16 @@ function(wrappedContentWin, req, event, details) {
       // .response).  Ignore.
     }
 
-    if (req.responseXML) {
+    var responseXML = null;
+    try {
+      responseXML = req.responseXML;
+    } catch (e) {
+      // Ignore failure.  At least in responseType blob case, this access fails.
+    }
+    if (responseXML) {
       // Clone the XML object into a content-window-scoped document.
       var xmlDoc = new wrappedContentWin.Document();
-      var clone = xmlDoc.importNode(req.responseXML.documentElement, true);
+      var clone = xmlDoc.importNode(responseXML.documentElement, true);
       xmlDoc.appendChild(clone);
       responseState.responseXML = xmlDoc;
     }
