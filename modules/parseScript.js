@@ -58,7 +58,6 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
     switch (data.keyword) {
     case 'noframes':
-      dump('parser set no frames\n');
       script._noframes = true;
       break;
 
