@@ -1,4 +1,9 @@
-let {utils: Cu, interfaces: Ci, classes: Cc} = Components;
+// The frame script for Electrolysis (e10s) compatible injection.
+//   See: https://developer.mozilla.org/en-US/Firefox/Multiprocess_Firefox
+
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 
