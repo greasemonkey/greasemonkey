@@ -15,7 +15,7 @@
 <!ENTITY menu.websites.greasespot "Greasespot Blog">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
 <!ENTITY menu.websites.manual "Greasemonkey Handbuch">
-<!ENTITY menu.websites.getuserscripts "Get User Scripts">
+<!ENTITY menu.websites.getuserscripts "Benutzerskripte holen">
 <!ENTITY statusbar.enabled "Greasemonkey aktivieren">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Greasemonkey-Installation">
@@ -35,15 +35,15 @@
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.fromClipboard "Script aus der Zwischenablage verwenden.">
 <!ENTITY options.editor "Editor">
-<!ENTITY options.experimental "Experimental">
+<!ENTITY options.experimental "Experimentell">
 <!ENTITY options.defaultEditor "Standard Editor verwenden">
 <!ENTITY options.browseForEditor "Nach Editor Programm suchen">
 <!ENTITY options.globalExcludes "Globale Ausschlüsse">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Neue Skriptvorlage">
+<!ENTITY options.newScript.removeUnused "Unbenutzte Zeilen entfernen">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AnonymousStatistics "Anonyme Statistik">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Firefox Sync für Benutzerskripte aktivieren">
 <!ENTITY SubmitStats "Sammeln und einreichen von anonymen Nutzungsstatistiken an Greasemonkey.">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
