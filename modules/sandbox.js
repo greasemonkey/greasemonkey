@@ -24,18 +24,22 @@ function alert(msg) {
       .alert(null, "Greasemonkey alert", msg);
 }
 
-function createSandbox(aScript, aContentWin, aUrl) {
+function createSandbox(aScript, aScriptRunner) {
+  var contentWin = aScriptRunner.window;
+  var url = aScriptRunner.url;
+
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
     var contentSandbox = new Components.utils.Sandbox(
-        aContentWin,
+        contentWin,
         {
           'sandboxName': aScript.id,
-          'sandboxPrototype': aContentWin,
+          'sandboxPrototype': contentWin,
           'wantXrays': false,
         });
     // GM_info is always provided.
+    // TODO: lazy getter? XPCOMUtils.defineLazyGetter
     Components.utils.evalInSandbox(
         'const GM_info = ' + uneval(aScript.info()), contentSandbox);
     // Alias unsafeWindow for compatibility.
@@ -52,10 +56,10 @@ function createSandbox(aScript, aContentWin, aUrl) {
   }
 
   var sandbox = new Components.utils.Sandbox(
-      [aContentWin],
+      [contentWin],
       {
         'sandboxName': aScript.id,
-        'sandboxPrototype': aContentWin,
+        'sandboxPrototype': contentWin,
         'wantXrays': true,
       });
 
@@ -71,14 +75,13 @@ function createSandbox(aScript, aContentWin, aUrl) {
   sandbox.exportFunction = Cu.exportFunction;
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
+    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, contentWin.document);
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
     sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
   }
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
-    var gmrmc = GM_util.hitch(
-        null, registerMenuCommand, aContentWin, aScript);
+    var gmrmc = GM_util.hitch(null, registerMenuCommand, aScriptRunner);
     sandbox.GM_registerMenuCommand = gmrmc;
   }
 
@@ -110,14 +113,15 @@ function createSandbox(aScript, aContentWin, aUrl) {
   }
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
     sandbox.GM_openInTab = GM_util.hitch(
-        null, GM_openInTab, aContentWin);
+        null, GM_openInTab, aScriptRunner);
   }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
-        new GM_xmlhttpRequester(aContentWin, aUrl, sandbox),
+        new GM_xmlhttpRequester(contentWin, aScriptRunner.url, sandbox),
         'contentStartRequest');
   }
 
+  // TODO: lazy getter?
   Components.utils.evalInSandbox(
       'const GM_info = ' + uneval(aScript.info()), sandbox);
 

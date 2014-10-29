@@ -8,10 +8,9 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
+Cu.import("resource://greasemonkey/ipcscript.js");
 Cu.import("resource://greasemonkey/menucommand.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
-Cu.import("resource://greasemonkey/sandbox.js");
 Cu.import("resource://greasemonkey/sync.js");
 Cu.import("resource://greasemonkey/util.js");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -27,16 +26,7 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
 
-var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
-
 /////////////////////// Component-global Helper Functions //////////////////////
-
-function contentLoad(aEvent) {
-  var safeWin = aEvent.target.defaultView;
-  safeWin.removeEventListener('DOMContentLoaded', contentLoad, true);
-  safeWin.removeEventListener('load', contentLoad, true);
-  GM_util.getService().runScripts('document-end', safeWin);
-}
 
 function isTempScript(uri) {
   if (uri.scheme != "file") return false;
@@ -58,6 +48,13 @@ function startup(aService) {
      .getService(Components.interfaces.nsIObserverService);
   observerService.addObserver(aService, 'document-element-inserted', false);
 
+  var messageManager = Cc["@mozilla.org/globalmessagemanager;1"]
+      .getService(Ci.nsIMessageListenerManager);
+
+  messageManager.addMessageListener('greasemonkey:scripts-for-url',
+      aService.getScriptsForUrl.bind(aService));
+  messageManager.loadFrameScript("chrome://greasemonkey/content/framescript.js", true);
+
   // Import this once, early, so that enqueued deletes can happen.
   Cu.import("resource://greasemonkey/util/enqueueRemoveFile.js");
 }
@@ -65,7 +62,6 @@ function startup(aService) {
 /////////////////////////////////// Service ////////////////////////////////////
 
 function service() {
-  this.contentLoad = contentLoad;
   this.filename = Components.stack.filename;
   this.wrappedJSObject = this;
 }
@@ -142,17 +138,6 @@ service.prototype.observe = function(aSubject, aTopic, aData) {
     case 'profile-after-change':
       startup(this);
       break;
-    case 'document-element-inserted':
-      if (!GM_util.getEnabled()) break;
-      var doc = aSubject;
-      var win = doc && doc.defaultView;
-      if (!doc || !win) break;
-
-      win.addEventListener('DOMContentLoaded', contentLoad, true);
-      win.addEventListener('load', contentLoad, true);
-      this.runScripts('document-start', win);
-
-      break;
   }
 };
 
@@ -171,66 +156,37 @@ service.prototype.__defineGetter__('config', function() {
   return this._config;
 });
 
-service.prototype.runScripts = function(aRunWhen, aWrappedContentWin) {
-  // See #1970
-  // When content does (e.g.) history.replacestate() in an inline script,
-  // the location.href changes between document-start and document-end time.
-  // But the content can call replacestate() much later, too.  The only way to
-  // be consistent is to ignore it.  Luckily, the  document.documentURI does
-  // _not_ change, so always use it when deciding whether to run scripts.
-  var url = aWrappedContentWin.document.documentURI;
-  // But ( #1631 ) ignore user/pass in the URL.
-  url = url.replace(gStripUserPassRegexp, '$1');
+service.prototype.getScriptsForUrl = function(aMessage) {
+  var url = aMessage.data.url;
+  var when = aMessage.data.when;
+  var windowId = aMessage.data.windowId;
+  var browser = aMessage.target;
 
-  if (!GM_util.getEnabled() || !GM_util.isGreasemonkeyable(url)) return;
+  if (!GM_util.getEnabled() || !url) return [];
+  if (!GM_util.isGreasemonkeyable(url)) return [];
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
-    this._config.updateModifiedScripts(aRunWhen, aWrappedContentWin);
+    this.config.updateModifiedScripts(when, url, windowId, browser);
   }
 
   var scripts = this.config.getMatchingScripts(function(script) {
     try {
-      return GM_util.scriptMatchesUrlAndRuns(script, url, aRunWhen);
+      return GM_util.scriptMatchesUrlAndRuns(script, url, when);
     } catch (e) {
       GM_util.logError(e, false, e.fileName, e.lineNumber);
       // See #1692; Prevent failures like that from being so severe.
       return false;
     }
+  }).map(function(script) {
+    // Make the script serializable so it can be sent to the frame script.
+    return new IPCScript(script);
   });
-  if (scripts.length > 0) {
-    this.injectScripts(scripts, url, aWrappedContentWin);
-  }
-};
+
+  return scripts;
+}
 
 service.prototype.ignoreNextScript = function() {
   this._ignoreNextScript = true;
-};
-
-service.prototype.injectScripts = function(
-    scripts, url, wrappedContentWin
-) {
-  try {
-    wrappedContentWin.QueryInterface(Ci.nsIDOMChromeWindow);
-    // Never ever inject scripts into a chrome context window.
-    return;
-  } catch (e) {
-    // Ignore, it's good if we can't QI to a chrome window.
-  }
-
-  var winIsTop = true;
-  try {
-    wrappedContentWin.QueryInterface(Ci.nsIDOMWindow);
-    if (wrappedContentWin.frameElement) winIsTop = false;
-  } catch (e) {
-    // Ignore non-DOM-windows.
-    dump('Could not QI wrappedContentWin to nsIDOMWindow at\n' + url + ' ?!\n');
-  }
-
-  for (var i = 0, script = null; script = scripts[i]; i++) {
-    if (script.noframes && !winIsTop) continue;
-    var sandbox = createSandbox(script, wrappedContentWin, url);
-    runScriptInSandbox(script, sandbox);
-  }
 };
 
 //////////////////////////// Component Registration ////////////////////////////

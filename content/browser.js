@@ -8,22 +8,14 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 function GM_BrowserUI() {};
 
-/**
- * nsISupports.QueryInterface
- */
-GM_BrowserUI.QueryInterface = function(aIID) {
-  if (!aIID.equals(Components.interfaces.nsISupports) &&
-      !aIID.equals(Components.interfaces.nsIObserver) &&
-      !aIID.equals(Components.interfaces.nsISupportsWeakReference))
-    throw Components.results.NS_ERROR_NO_INTERFACE;
-
-  return GM_BrowserUI;
-};
-
-
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
+
+  var messageManager = Components.classes["@mozilla.org/globalmessagemanager;1"]
+      .getService(Components.interfaces.nsIMessageListenerManager);
+  messageManager.addMessageListener('greasemonkey:open-in-tab',
+      GM_BrowserUI.openInTab);
 };
 
 /**
@@ -41,44 +33,23 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
 
-  gBrowser.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
-  gBrowser.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
-
-  var sidebar = document.getElementById("sidebar");
-  var svc = GM_util.getService();
-  sidebar.addEventListener(
-      "DOMContentLoaded", GM_util.hitch(svc, svc.contentLoad), true);
-  sidebar.addEventListener("pagehide", GM_BrowserUI.pagehide, true);
-  sidebar.addEventListener("pageshow", GM_BrowserUI.pageshow, true);
-
   document.getElementById('content').addEventListener(
       'DOMContentLoaded', function(aEvent) {
         var safeWin = aEvent.target.defaultView;
         var href = safeWin.location.href;
         GM_BrowserUI.checkDisabledScriptNavigation(aEvent, safeWin, href);
-        if (0 == href.indexOf('about:blank')) {
-          // #1696: document-element-inserted doesn't see about:blank
-          svc.contentLoad(aEvent);
-        }
       }, true);
 
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
 
-  var observerService = Components.classes["@mozilla.org/observer-service;1"]
-     .getService(Components.interfaces.nsIObserverService);
-  observerService.addObserver(GM_BrowserUI, "install-userscript", true);
-  observerService.addObserver(GM_BrowserUI, "inner-window-destroyed", true);
-
-  // we use this to determine if we are the active window sometimes
-  GM_BrowserUI.winWat = Components
-      .classes["@mozilla.org/embedcomp/window-watcher;1"]
-      .getService(Components.interfaces.nsIWindowWatcher);
-
   GM_BrowserUI.gmSvc = GM_util.getService();
   // Reference this once, so that the getter is called at least once, and the
   // initialization routines will run, no matter what.
   GM_BrowserUI.gmSvc.config;
+
+  // Initialize the chrome side handling of menu commands.
+  GM_MenuCommander.initialize();
 
   GM_BrowserUI.showToolbarButton();
 
@@ -86,39 +57,28 @@ GM_BrowserUI.chromeLoad = function(e) {
   Components.utils.import('resource://greasemonkey/stats.js');
 };
 
-GM_BrowserUI.pagehide = function(aEvent) {
-  var windowId = GM_util.windowIdForEvent(aEvent);
-  if (!windowId) return;
-
-  GM_MenuCommander.onPageHide(windowId, aEvent.persisted);
-};
-
-GM_BrowserUI.pageshow = function(aEvent) {
-  var windowId = GM_util.windowIdForEvent(aEvent);
-  if (!windowId) return;
-
-  GM_MenuCommander.onPageShow(windowId);
-};
-
-// nsIObserve
-GM_BrowserUI.observe = function(subject, topic, data) {
-  if (topic == "install-userscript") {
-    if (window == GM_BrowserUI.winWat.activeWindow) {
-      GM_BrowserUI.installCurrentScript();
-    }
-  } else if (topic == "dom-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(GM_util.windowId(subject));
-  } else if (topic == "inner-window-destroyed") {
-    GM_BrowserUI.gmSvc.contentDestroyed(
-        subject.QueryInterface(Components.interfaces.nsISupportsPRUint64).data);
-  } else {
-    throw new Error("Unexpected topic received: {" + topic + "}");
-  }
-};
-
+/**
+ * Opens the specified URL in a new tab.
+ */
 GM_BrowserUI.openTab = function(url) {
   gBrowser.selectedTab = gBrowser.addTab(url);
 };
+
+/**
+ * Handles tab opening for a GM_openInTab API call.
+ */
+GM_BrowserUI.openInTab = function(aMessage) {
+  var browser = aMessage.target;
+  var tabBrowser = browser.getTabBrowser();
+
+  var newTab = tabBrowser.loadOneTab(aMessage.data.url, {
+    'inBackground': aMessage.data.inBackground,
+    'relatedToCurrent': true
+  });
+
+  // TODO: obviously can't return a window here...
+  return /* tabBrowser.getBrowserForTab(newTab).contentWindow */ null;
+}
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.

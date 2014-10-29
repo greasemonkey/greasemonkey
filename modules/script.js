@@ -4,6 +4,7 @@ Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/extractMeta.js');
+Components.utils.import('resource://greasemonkey/ipcscript.js');
 Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import("resource://greasemonkey/parseScript.js");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
@@ -590,7 +591,7 @@ Script.prototype.isRemoteUpdateAllowed = function(aForced) {
   }
 };
 
-Script.prototype.updateFromNewScript = function(newScript, safeWin) {
+Script.prototype.updateFromNewScript = function(newScript, url, windowId, browser) {
   // Keep a _copy_ of the old script ID, so we can eventually pass it up
   // to the Add-ons manager UI, to update this script's old entry.
   var oldScriptId = '' + this.id;
@@ -643,8 +644,12 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
           this.id + "\nNot running at document-start; waiting for update ...",
           true);
       this.pendingExec.push('document-start update');
-    } else {
-      if (safeWin) this.pendingExec.push({'safeWin': safeWin});
+    } else if (windowId) {
+      this.pendingExec.push({
+        'browser': browser,
+        'url': url,
+        'windowId': windowId
+      });
     }
 
     // Re-download dependencies.
@@ -711,11 +716,17 @@ Script.prototype.updateFromNewScript = function(newScript, safeWin) {
               true);
           continue;
         }
-        if (pendingExec.safeWin.closed) continue;
-        var url = pendingExec.safeWin.location.href;
-        var shouldRun = GM_util.scriptMatchesUrlAndRuns(this, url, this.runAt);
+
+        var shouldRun = GM_util.scriptMatchesUrlAndRuns(
+            this, pendingExec.url, this.runAt);
+
         if (shouldRun) {
-          GM_util.getService().injectScripts([this], url, pendingExec.safeWin);
+          pendingExec.browser.messageManager.sendAsyncMessage(
+              "greasemonkey:inject-script",
+              {
+                windowId: pendingExec.windowId,
+                script: new IPCScript(this)
+              });
         }
       }
 
