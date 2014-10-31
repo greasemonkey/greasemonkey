@@ -24,18 +24,15 @@ function alert(msg) {
       .alert(null, "Greasemonkey alert", msg);
 }
 
-function createSandbox(aScript, aScriptRunner) {
-  var contentWin = aScriptRunner.window;
-  var url = aScriptRunner.url;
-
+function createSandbox(aScript, aUrl, aWindow) {
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
     var contentSandbox = new Components.utils.Sandbox(
-        contentWin,
+        aWindow,
         {
           'sandboxName': aScript.id,
-          'sandboxPrototype': contentWin,
+          'sandboxPrototype': aWindow,
           'wantXrays': false,
         });
     // GM_info is always provided.
@@ -56,10 +53,10 @@ function createSandbox(aScript, aScriptRunner) {
   }
 
   var sandbox = new Components.utils.Sandbox(
-      [contentWin],
+      [aWindow],
       {
         'sandboxName': aScript.id,
-        'sandboxPrototype': contentWin,
+        'sandboxPrototype': aWindow,
         'wantXrays': true,
       });
 
@@ -75,15 +72,16 @@ function createSandbox(aScript, aScriptRunner) {
   sandbox.exportFunction = Cu.exportFunction;
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, contentWin.document);
+    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aWindow.document);
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
     sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
   }
-  if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
-    var gmrmc = GM_util.hitch(null, registerMenuCommand, aScriptRunner);
-    sandbox.GM_registerMenuCommand = gmrmc;
-  }
+  // TODO: Fix.
+//  if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
+//    var gmrmc = GM_util.hitch(null, registerMenuCommand, aScriptRunner);
+//    sandbox.GM_registerMenuCommand = gmrmc;
+//  }
 
   var scriptStorage = new GM_ScriptStorage(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
@@ -111,13 +109,14 @@ function createSandbox(aScript, aScriptRunner) {
   if (GM_util.inArray(aScript.grants, 'GM_listValues')) {
     sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
   }
-  if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
-    sandbox.GM_openInTab = GM_util.hitch(
-        null, GM_openInTab, aScriptRunner);
-  }
+  // TODO: Fix.
+//  if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
+//    sandbox.GM_openInTab = GM_util.hitch(
+//        null, GM_openInTab, aScriptRunner);
+//  }
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
-        new GM_xmlhttpRequester(contentWin, aScriptRunner.url, sandbox),
+        new GM_xmlhttpRequester(aWindow, aUrl, sandbox),
         'contentStartRequest');
   }
 
