@@ -1,5 +1,6 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
+Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("resource://greasemonkey/util.js");
 
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
@@ -95,6 +96,12 @@ function(safeUrl, details, req) {
 
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
+
+  if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin))
+    req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_ANONYMOUS
+                          |  Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE
+                          |  Components.interfaces.nsIRequest.INHIBIT_PERSISTENT_CACHING;
+  }
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
