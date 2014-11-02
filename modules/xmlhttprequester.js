@@ -97,7 +97,7 @@ function(safeUrl, details, req) {
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
 
-  if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin))
+  if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin)) {
     req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_ANONYMOUS
                           |  Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE
                           |  Components.interfaces.nsIRequest.INHIBIT_PERSISTENT_CACHING;
