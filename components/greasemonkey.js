@@ -183,7 +183,7 @@ service.prototype.getScriptsForUrl = function(aMessage) {
   });
 
   return scripts;
-}
+};
 
 service.prototype.ignoreNextScript = function() {
   this._ignoreNextScript = true;
