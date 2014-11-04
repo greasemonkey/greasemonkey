@@ -40,11 +40,12 @@ ContentObserver.prototype.createScriptFromObject = function(aObject) {
 
 
 ContentObserver.prototype.contentLoad = function(aEvent) {
-  // Now that we've seen any first load event, stop listening for any more.
-  aEvent.target.removeEventListener("DOMContentLoaded", gContentLoad, true);
-  aEvent.target.removeEventListener("load", gContentLoad, true);
-
   var contentWin = aEvent.target.defaultView;
+
+  // Now that we've seen any first load event, stop listening for any more.
+  contentWin.removeEventListener("DOMContentLoaded", gContentLoad, true);
+  contentWin.removeEventListener("load", gContentLoad, true);
+
   this.runScripts('document-end', contentWin);
 };
 
@@ -62,6 +63,16 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
 
       var win = doc && doc.defaultView;
       if (!doc || !win) break;
+
+      // Work around double-import bug.  This module seems to get imported
+      // twice, though we'd expect once.  One observes broken events, the other
+      // works.
+      try {
+        this.contentFrameMessageManager(win);
+      } catch (e) {
+        dump('ignoring observe of win with no contentFrameMessageManager\n');
+        return;
+      }
 
       // Listen for whichever kind of load event arrives first.
       win.addEventListener("DOMContentLoaded", gContentLoad, true);
