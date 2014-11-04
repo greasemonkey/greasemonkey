@@ -177,7 +177,7 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
   }
   */
 
-  var response = this.windowMessageManager(aContentWin).sendSyncMessage(
+  var response = this.contentFrameMessageManager(aContentWin).sendSyncMessage(
     'greasemonkey:scripts-for-url', {
       'url': url,
       'when': aRunWhen,
@@ -210,10 +210,11 @@ ContentObserver.prototype.windowIsTop = function(aContentWin) {
   return true;
 };
 
-ContentObserver.prototype.windowMessageManager = function(aContentWin) {
+ContentObserver.prototype.contentFrameMessageManager = function(aContentWin) {
   return aContentWin.QueryInterface(Ci.nsIInterfaceRequestor)
       .getInterface(Ci.nsIWebNavigation)
-      .QueryInterface(Ci.nsIDocShell)
+      .QueryInterface(Ci.nsIDocShellTreeItem)
+      .rootTreeItem
       .QueryInterface(Ci.nsIInterfaceRequestor)
       .getInterface(Ci.nsIContentFrameMessageManager);
 };
