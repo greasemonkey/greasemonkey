@@ -235,6 +235,7 @@ ContentObserver.prototype.contentFrameMessageManager = function(aContentWin) {
 // Since observers are process-global, create this observer singleton in the
 // process-global JSM scope.
 var contentObserver = new ContentObserver();
+dump('ADD OBSERVER\n');
 Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
 
 // This single global function reference can easily be both attached as
