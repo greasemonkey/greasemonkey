@@ -5,10 +5,14 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-
+(function() {
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 // For every frame/process, make sure the content observer is running.
+
+var rti = docShell.QueryInterface(Ci.nsIDocShellTreeItem).rootTreeItem;
+if (rti.itemType != Ci.nsIDocShellTreeItem.typeContent)
+  return;
 
 Cu.import('resource://greasemonkey/contentObserver.js');
 
@@ -21,3 +25,4 @@ addMessageListener("greasemonkey:inject-script",
     contentObserver.runDelayedScript.bind(contentObserver));
 addMessageListener("greasemonkey:menu-command-clicked",
     contentObserver.runMenuCommand.bind(contentObserver));
+})();
