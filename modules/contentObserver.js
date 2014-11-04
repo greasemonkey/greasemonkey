@@ -17,7 +17,74 @@ Cu.import('resource://greasemonkey/util.js');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
+var gScriptRunners = {};
 var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function ScriptRunner(aWindow, aUrl) {
+  this.menuCommands = [];
+  this.window = aWindow;
+  this.windowId = GM_util.windowId(this.window);
+  this.url = aUrl;
+}
+
+ScriptRunner.prototype.injectScripts = function(aScripts) {
+  try {
+    this.window.QueryInterface(Ci.nsIDOMChromeWindow);
+    // Never ever inject scripts into a chrome context window.
+    return;
+  } catch(e) {
+    // Ignore, it's good if we can't QI to a chrome window.
+  }
+
+  var winIsTop = this.windowIsTop(this.window);
+
+  for (var i = 0, script = null; script = aScripts[i]; i++) {
+    if (script.noframes && !winIsTop) continue;
+    var sandbox = createSandbox(script, this);
+    runScriptInSandbox(script, sandbox);
+  }
+}
+
+ScriptRunner.prototype.openInTab = function(aUrl, aInBackground) {
+  var mm = GM_util.messageManagerForWin(this.window);
+  var response = mm.sendSyncMessage('greasemonkey:open-in-tab', {
+    inBackground: aInBackground,
+    url: aUrl
+  });
+
+  return response ? response[0] : null;
+};
+
+
+ScriptRunner.prototype.registeredMenuCommand = function(aCommand) {
+  var length = this.menuCommands.push(aCommand);
+
+  var mm = GM_util.messageManagerForWin(this.window);
+  mm.sendAsyncMessage("greasemonkey:menu-command-registered", {
+    accessKey: aCommand.accessKey,
+    frozen: aCommand.frozen,
+    index: length - 1,
+    name: aCommand.name,
+    windowId: aCommand.contentWindowId
+  });
+};
+
+ScriptRunner.prototype.windowIsTop = function(aContentWin) {
+  try {
+    aContentWin.QueryInterface(Ci.nsIDOMWindow);
+    if (aContentWin.frameElement) return false;
+  } catch (e) {
+    var url = 'unknown';
+    try {
+      url = aContentWin.location.href;
+    } catch (e) { }
+    // Ignore non-DOM-windows.
+    dump('Could not QI this.window to nsIDOMWindow at\n' + url + ' ?!\n');
+  }
+  return true;
+};
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -68,7 +135,7 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
       // twice, though we'd expect once.  One observes broken events, the other
       // works.
       try {
-        this.contentFrameMessageManager(win);
+        GM_util.messageManagerForWin(win);
       } catch (e) {
         dump('ignoring observe of win with no contentFrameMessageManager\n');
         return;
@@ -78,12 +145,6 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
       win.addEventListener("DOMContentLoaded", gContentLoad, true);
       win.addEventListener("load", gContentLoad, true);
 
-      // TODO:
-      // Sometimes we get this notification twice with different windows but
-      // identical documentURI/location.href. In one of those cases, the call
-      // to sendSyncMessage will throw, and I can't find a way to detect which
-      // notification is the correct one. if (win !== content) would also
-      // exclude iframes.
       this.runScripts('document-start', win);
       break;
     default:
@@ -95,8 +156,7 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
 ContentObserver.prototype.pagehide = function(aEvent) {
   var contentWin = aEvent.target.defaultView;
   var windowId = GM_util.windowId(contentWin);
-  // TODO: Fix.
-  /*
+
   if (!windowId || !gScriptRunners[windowId]) return;
 
   // Small optimization: only send a notification if there's a menu command
@@ -104,33 +164,33 @@ ContentObserver.prototype.pagehide = function(aEvent) {
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
   if (aEvent.persisted) {
-    sendAsyncMessage("greasemonkey:toggle-menu-commands", {
+    var mm = GM_util.messageManagerForWin(contentWin);
+    mm.sendAsyncMessage("greasemonkey:toggle-menu-commands", {
       frozen: true,
       windowId: windowId
     });
   } else {
-    sendAsyncMessage("greasemonkey:clear-menu-commands", {
+    var mm = GM_util.messageManagerForWin(contentWin);
+    mm.sendAsyncMessage("greasemonkey:clear-menu-commands", {
       windowId: windowId
     });
   }
-  */
 };
 
 
 ContentObserver.prototype.pageshow = function(aEvent) {
   var contentWin = aEvent.target.defaultView;
   var windowId = GM_util.windowId(contentWin);
-  // TODO: Fix.
-  /*
+
   if (!windowId || !gScriptRunners[windowId]) return;
 
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
-  sendAsyncMessage("greasemonkey:toggle-menu-commands", {
+  var mm = GM_util.messageManagerForWin(contentWin);
+  mm.sendAsyncMessage("greasemonkey:toggle-menu-commands", {
     frozen: false,
     windowId: windowId
   });
-  */
 };
 
 
@@ -157,14 +217,6 @@ ContentObserver.prototype.runMenuCommand = function(aMessage) {
 
 
 ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
-  try {
-    this.window.QueryInterface(Ci.nsIDOMChromeWindow);
-    // Never ever inject scripts into a chrome context window.
-    return;
-  } catch(e) {
-    // Ignore, it's good if we can't QI to a chrome window.
-  }
-
   // See #1970
   // When content does (e.g.) history.replacestate() in an inline script,
   // the location.href changes between document-start and document-end time.
@@ -178,17 +230,17 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
   if (!GM_util.isGreasemonkeyable(url)) return;
 
   var windowId = GM_util.windowId(aContentWin);
-  // TODO: Fix.
-  /*
-  if (gScriptRunners[windowId]) {
-    // Update the window in case it changed, see the comment in observe().
-    gScriptRunners[windowId].window = aContentWin;
-  } else {
+  if (!gScriptRunners[windowId]) {
     gScriptRunners[windowId] = new ScriptRunner(aContentWin, url);
+  } else if (gScriptRunners[windowId].window !== aContentWin) {
+    // Sanity check, shouldn't be necessary.
+    // TODO: remove
+    dump("Script runner window changed for " + url + " at " + aRunWhen + "\n");
+    gScriptRunners[windowId].window = aContentWin;
   }
-  */
 
-  var response = this.contentFrameMessageManager(aContentWin).sendSyncMessage(
+  var mm = GM_util.messageManagerForWin(aContentWin);
+  var response = mm.sendSyncMessage(
     'greasemonkey:scripts-for-url', {
       'url': url,
       'when': aRunWhen,
@@ -197,37 +249,7 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
   if (!response || !response[0]) return;
 
   var scripts = response[0].map(this.createScriptFromObject);
-  var winIsTop = this.windowIsTop(aContentWin);
-  for (var i = 0, script = null; script = scripts[i]; i++) {
-    if (script.noframes && !winIsTop) continue;
-    var sandbox = createSandbox(script, url, aContentWin);
-    runScriptInSandbox(script, sandbox);
-  }
-};
-
-
-ContentObserver.prototype.windowIsTop = function(aContentWin) {
-  try {
-    aContentWin.QueryInterface(Ci.nsIDOMWindow);
-    if (aContentWin.frameElement) return false;
-  } catch (e) {
-    var url = 'unknown';
-    try {
-      url = aContentWin.location.href;
-    } catch (e) { }
-    // Ignore non-DOM-windows.
-    dump('Could not QI this.window to nsIDOMWindow at\n' + url + ' ?!\n');
-  }
-  return true;
-};
-
-ContentObserver.prototype.contentFrameMessageManager = function(aContentWin) {
-  return aContentWin.QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIWebNavigation)
-      .QueryInterface(Ci.nsIDocShellTreeItem)
-      .rootTreeItem
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIContentFrameMessageManager);
+  gScriptRunners[windowId].injectScripts(scripts);
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -235,7 +257,6 @@ ContentObserver.prototype.contentFrameMessageManager = function(aContentWin) {
 // Since observers are process-global, create this observer singleton in the
 // process-global JSM scope.
 var contentObserver = new ContentObserver();
-dump('ADD OBSERVER\n');
 Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
 
 // This single global function reference can easily be both attached as
