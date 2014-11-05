@@ -131,16 +131,6 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
       var win = doc && doc.defaultView;
       if (!doc || !win) break;
 
-      // Work around double-import bug.  This module seems to get imported
-      // twice, though we'd expect once.  One observes broken events, the other
-      // works.
-      try {
-        GM_util.messageManagerForWin(win);
-      } catch (e) {
-        dump('ignoring observe of win with no contentFrameMessageManager\n');
-        return;
-      }
-
       // Listen for whichever kind of load event arrives first.
       win.addEventListener("DOMContentLoaded", gContentLoad, true);
       win.addEventListener("load", gContentLoad, true);

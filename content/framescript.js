@@ -5,24 +5,16 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-(function() {
-// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
-
-// For every frame/process, make sure the content observer is running.
-
+// For every *content* frame/process, make sure the content observer is running.
 var rti = docShell.QueryInterface(Ci.nsIDocShellTreeItem).rootTreeItem;
-if (rti.itemType != Ci.nsIDocShellTreeItem.typeContent)
-  return;
+if (rti.itemType == Ci.nsIDocShellTreeItem.typeContent) {
+  Cu.import('resource://greasemonkey/contentObserver.js');
 
-Cu.import('resource://greasemonkey/contentObserver.js');
+  addEventListener("pagehide", contentObserver.pagehide.bind(contentObserver));
+  addEventListener("pageshow", contentObserver.pageshow.bind(contentObserver));
 
-// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
-
-addEventListener("pagehide", contentObserver.pagehide.bind(contentObserver));
-addEventListener("pageshow", contentObserver.pageshow.bind(contentObserver));
-
-addMessageListener("greasemonkey:inject-script",
-    contentObserver.runDelayedScript.bind(contentObserver));
-addMessageListener("greasemonkey:menu-command-clicked",
-    contentObserver.runMenuCommand.bind(contentObserver));
-})();
+  addMessageListener("greasemonkey:inject-script",
+      contentObserver.runDelayedScript.bind(contentObserver));
+  addMessageListener("greasemonkey:menu-command-clicked",
+      contentObserver.runMenuCommand.bind(contentObserver));
+}
