@@ -244,7 +244,8 @@ GM_ScriptLogger.prototype.consoleService = Components
 
 GM_ScriptLogger.prototype.log = function(message) {
   // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIConsoleService#logStringMessage() - wstring / wide string
-  message = message.replace(/\0/g, '');
+  if ('string' == typeof message || message instanceof String)
+    message = message.replace(/\0/g, '');
   this.consoleService.logStringMessage(this.prefix + '\n' + message);
 };
 
