@@ -271,15 +271,6 @@ Config.prototype._updateVersion = function() {
     var oldVersion = GM_prefRoot.getValue("version");
     var newVersion = addon.version;
 
-    var versionChecker = Components
-        .classes["@mozilla.org/xpcom/version-comparator;1"]
-        .getService(Components.interfaces.nsIVersionComparator);
-    if (oldVersion != '0.0'
-      && (versionChecker.compare(oldVersion, '1.13') < 0)
-    ) {
-      this._migrateScriptValsToStorage();
-    }
-
     // Update the stored current version so we don't do this work again.
     GM_prefRoot.setValue("version", newVersion);
 
@@ -297,16 +288,4 @@ Config.prototype._updateVersion = function() {
       }
     }
   }));
-};
-
-Config.prototype._migrateScriptValsToStorage = function() {
-  for (var i = 0, script; script = this._scripts[i]; i++) {
-    var prefsVals = new GM_ScriptStoragePrefs(script);
-    var storageVals = new GM_ScriptStorage(script);
-    var names = prefsVals.listValues();
-    for (var j = 0, name = null; name = names[j]; j++) {
-      storageVals.setValue(name, prefsVals.getValue(name));
-      prefsVals.deleteValue(name);
-    }
-  };
 };

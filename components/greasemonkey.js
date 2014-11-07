@@ -11,8 +11,10 @@ var Cu = Components.utils;
 Cu.import("resource://greasemonkey/ipcscript.js");
 Cu.import("resource://greasemonkey/menucommand.js");
 Cu.import("resource://greasemonkey/prefmanager.js");
+Cu.import("resource://greasemonkey/storageBack.js");
 Cu.import("resource://greasemonkey/sync.js");
 Cu.import("resource://greasemonkey/util.js");
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 
@@ -34,6 +36,10 @@ function isTempScript(uri) {
   return gTmpDir.contains(file, true);
 }
 
+function shutdown(aService) {
+  aService.closeAllScriptValStores();
+}
+
 function startup(aService) {
   if (gStartupHasRun) return;
   gStartupHasRun = true;
@@ -47,9 +53,23 @@ function startup(aService) {
   var messageManager = Cc["@mozilla.org/globalmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
 
-  messageManager.addMessageListener('greasemonkey:scripts-for-url',
-      aService.getScriptsForUrl.bind(aService));
-  messageManager.loadFrameScript("chrome://greasemonkey/content/framescript.js", true);
+  messageManager.addMessageListener(
+      'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
+
+  var scriptValHandler = aService.handleScriptValMsg.bind(aService);
+  messageManager.addMessageListener(
+    'greasemonkey:scriptVal-delete', scriptValHandler);
+  messageManager.addMessageListener(
+    'greasemonkey:scriptVal-get', scriptValHandler);
+  messageManager.addMessageListener(
+    'greasemonkey:scriptVal-list', scriptValHandler);
+  messageManager.addMessageListener(
+    'greasemonkey:scriptVal-set', scriptValHandler);
+
+  messageManager.loadFrameScript(
+      "chrome://greasemonkey/content/framescript.js", true);
+
+  Services.obs.addObserver(aService, 'quit-application', false);
 
   // Import this once, early, so that enqueued deletes can happen.
   Cu.import("resource://greasemonkey/util/enqueueRemoveFile.js");
@@ -59,6 +79,7 @@ function startup(aService) {
 
 function service() {
   this.filename = Components.stack.filename;
+  this.scriptValStores = {};
   this.wrappedJSObject = this;
 }
 
@@ -68,11 +89,7 @@ service.prototype.classDescription = DESCRIPTION;
 service.prototype.classID = CLASSID;
 service.prototype.contractID = CONTRACTID;
 service.prototype._xpcom_categories = [{
-      category: "app-startup",
-      entry: DESCRIPTION,
-      value: CONTRACTID,
-      service: true
-    },{
+      // TODO: Fix.  Move to frame script?!
       category: "content-policy",
       entry: CONTRACTID,
       value: CONTRACTID,
@@ -130,9 +147,11 @@ service.prototype.shouldProcess = function(ct, cl, org, ctx, mt, ext) {
 
 service.prototype.observe = function(aSubject, aTopic, aData) {
   switch (aTopic) {
-    case 'app-startup':
     case 'profile-after-change':
       startup(this);
+      break;
+    case 'quit-application':
+      shutdown(this);
       break;
   }
 };
@@ -151,6 +170,13 @@ service.prototype.__defineGetter__('config', function() {
   }
   return this._config;
 });
+
+service.prototype.closeAllScriptValStores = function() {
+  for (var scriptId in this.scriptValStores) {
+    var scriptValStore = this.scriptValStores[scriptId];
+    scriptValStore.close();
+  }
+};
 
 service.prototype.getScriptsForUrl = function(aMessage) {
   var url = aMessage.data.url;
@@ -179,6 +205,34 @@ service.prototype.getScriptsForUrl = function(aMessage) {
   });
 
   return scripts;
+};
+
+service.prototype.getStoreByScriptId = function(aScriptId) {
+  if ('undefined' == typeof this.scriptValStores[aScriptId]) {
+    var script = this.config.getScriptById(aScriptId);
+    this.scriptValStores[aScriptId] = new GM_ScriptStorageBack(script);
+  }
+  return this.scriptValStores[aScriptId];
+};
+
+service.prototype.handleScriptValMsg = function(aMessage) {
+  var d = aMessage.data;
+  var scriptStore = this.getStoreByScriptId(d.scriptId);
+  switch (aMessage.name) {
+  case 'greasemonkey:scriptVal-delete':
+    return scriptStore.deleteValue(d.name);
+  case 'greasemonkey:scriptVal-get':
+    return scriptStore.getValue(d.name);
+  case 'greasemonkey:scriptVal-list':
+    return scriptStore.listValues();
+  case 'greasemonkey:scriptVal-set':
+    return scriptStore.setValue(d.name, d.val);
+  default:
+    dump(
+        'Greasemonkey service handleScriptValMsg(): '
+        + 'Unknown message name "' + aMessage.name + '".\n');
+    break;
+  }
 };
 
 service.prototype.ignoreNextScript = function() {

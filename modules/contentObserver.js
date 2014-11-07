@@ -29,7 +29,7 @@ function ScriptRunner(aWindow, aUrl) {
   this.url = aUrl;
 }
 
-ScriptRunner.prototype.injectScripts = function(aScripts) {
+ScriptRunner.prototype.injectScripts = function(aScripts, aMessageManager) {
   try {
     this.window.QueryInterface(Ci.nsIDOMChromeWindow);
     // Never ever inject scripts into a chrome context window.
@@ -42,7 +42,7 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
     if (script.noframes && !winIsTop) continue;
-    var sandbox = createSandbox(script, this);
+    var sandbox = createSandbox(script, this, aMessageManager);
     runScriptInSandbox(script, sandbox);
   }
 };
@@ -153,14 +153,13 @@ ContentObserver.prototype.pagehide = function(aEvent) {
   // for this window.
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
+  var mm = GM_util.messageManagerForWin(contentWin);
   if (aEvent.persisted) {
-    var mm = GM_util.messageManagerForWin(contentWin);
     mm.sendAsyncMessage("greasemonkey:toggle-menu-commands", {
       frozen: true,
       windowId: windowId
     });
   } else {
-    var mm = GM_util.messageManagerForWin(contentWin);
     mm.sendAsyncMessage("greasemonkey:clear-menu-commands", {
       windowId: windowId
     });
@@ -186,10 +185,13 @@ ContentObserver.prototype.pageshow = function(aEvent) {
 
 ContentObserver.prototype.runDelayedScript = function(aMessage) {
   var windowId = aMessage.data.windowId;
-  if (!gScriptRunners[windowId]) return;
+  var scriptRunner = gScriptRunners[windowId];
+  if (!scriptRunner) return;
 
   var script = this.createScriptFromObject(aMessage.data.script);
-  gScriptRunners[windowId].injectScripts([script]);
+  scriptRunner.injectScripts(
+      [script],
+      GM_util.messageManagerForWin(scriptRunner.window));
 };
 
 
@@ -219,14 +221,16 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
 
   if (!GM_util.isGreasemonkeyable(url)) return;
 
+  var scriptRunner = gScriptRunners[windowId];
   var windowId = GM_util.windowId(aContentWin);
-  if (!gScriptRunners[windowId]) {
-    gScriptRunners[windowId] = new ScriptRunner(aContentWin, url);
-  } else if (gScriptRunners[windowId].window !== aContentWin) {
+  if (!scriptRunner) {
+    scriptRunner = new ScriptRunner(aContentWin, url);
+    gScriptRunners[windowId] = scriptRunner;
+  } else if (scriptRunner.window !== aContentWin) {
     // Sanity check, shouldn't be necessary.
     // TODO: remove
     dump("Script runner window changed for " + url + " at " + aRunWhen + "\n");
-    gScriptRunners[windowId].window = aContentWin;
+    scriptRunner.window = aContentWin;
   }
 
   var mm = GM_util.messageManagerForWin(aContentWin);
@@ -239,7 +243,8 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
   if (!response || !response[0]) return;
 
   var scripts = response[0].map(this.createScriptFromObject);
-  gScriptRunners[windowId].injectScripts(scripts);
+  scriptRunner.injectScripts(
+      scripts, GM_util.messageManagerForWin(aContentWin));
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
