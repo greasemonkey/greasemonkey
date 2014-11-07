@@ -44,10 +44,6 @@ function startup(aService) {
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  var observerService = Components.classes['@mozilla.org/observer-service;1']
-     .getService(Components.interfaces.nsIObserverService);
-  observerService.addObserver(aService, 'document-element-inserted', false);
-
   var messageManager = Cc["@mozilla.org/globalmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
 
