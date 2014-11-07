@@ -45,7 +45,7 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
     var sandbox = createSandbox(script, this);
     runScriptInSandbox(script, sandbox);
   }
-}
+};
 
 ScriptRunner.prototype.openInTab = function(aUrl, aInBackground) {
   var mm = GM_util.messageManagerForWin(this.window);
