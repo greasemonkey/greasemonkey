@@ -10,6 +10,7 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('resource://services-crypto/utils.js');
 Cu.import("resource://greasemonkey/miscapis.js");
 Cu.import('resource://greasemonkey/prefmanager.js');
+Cu.import("resource://greasemonkey/storageBack.js");
 Cu.import('resource://greasemonkey/util.js');
 
 
@@ -128,7 +129,7 @@ ScriptStore.prototype = {
       record.cleartext.userIncludes = script.userIncludes;
 
       if (GM_prefRoot.getValue('sync.values')) {
-        var storage = new GM_ScriptStorage(script);
+        var storage = new GM_ScriptStorageBack(script);
         var totalSize = 0;
         var maxSize = GM_prefRoot.getValue('sync.values_max_size_per_script');
         record.cleartext.values = {};
@@ -261,7 +262,7 @@ function setScriptValuesFromSyncRecord(aScript, aRecord) {
       && !aRecord.cleartext.valuesTooBig
   ) {
     // TODO: Clear any locally set values not in the sync record?
-    var storage = new GM_ScriptStorage(aScript);
+    var storage = new GM_ScriptStorageBack(aScript);
     for (name in aRecord.cleartext.values) {
       storage.setValue(name, aRecord.cleartext.values[name]);
     }

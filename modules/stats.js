@@ -12,6 +12,7 @@ Components.utils.import('resource://services-common/utils.js');
 Components.utils.import('resource://greasemonkey/miscapis.js');
 Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import("resource://greasemonkey/storageBack.js");
 Components.utils.import('resource://greasemonkey/util.js');
 
 var gPrefMan = new GM_PrefManager();
@@ -24,11 +25,11 @@ var gTldService = Components
     .getService(Components.interfaces.nsIEffectiveTLDService);
 
 // Check once, soon.
-GM_util.timeout(check, 1000 * 10) // ms = 10 seconds
+GM_util.timeout(check, 1000 * 10); // ms = 10 seconds
 // And forever, as long as the browser stays open.
 GM_util.timeout(
     check, 1000 * 60 * 60,  // ms = 1 hour
-    Components.interfaces.nsITimer.TYPE_REPEATING_PRECISE_CAN_SKIP)
+    Components.interfaces.nsITimer.TYPE_REPEATING_PRECISE_CAN_SKIP);
 
 
 function check() {
@@ -107,7 +108,7 @@ function getStatsObj() {
 
   var scripts = GM_util.getService().config.scripts;
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var valueStats = GM_ScriptStorage(script).getStats();
+    var valueStats = GM_ScriptStorageBack(script).getStats();
 
     var downloadUri = GM_util.uriFromUrl(script.downloadURL);
     var domain = null;

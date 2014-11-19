@@ -11,6 +11,7 @@ Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/scriptIcon.js');
 Components.utils.import('resource://greasemonkey/scriptRequire.js');
 Components.utils.import('resource://greasemonkey/scriptResource.js');
+Components.utils.import("resource://greasemonkey/storageBack.js");
 Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
 Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
 Components.utils.import('resource://greasemonkey/util.js');
@@ -905,7 +906,7 @@ Script.prototype.uninstall = function(forUpdate) {
   }
 
   if (!forUpdate) {
-    var storage = new GM_ScriptStorage(this);
+    var storage = new GM_ScriptStorageBack(this);
     var file = storage.dbFile;
     GM_util.enqueueRemoveFile(file);
     file.leafName += '-journal';
