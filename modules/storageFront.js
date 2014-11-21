@@ -81,11 +81,7 @@ GM_ScriptStorageFront.prototype.listValues = function() {
   var value = this._messageManager.sendSyncMessage(
       'greasemonkey:scriptVal-list',
       {scriptId: this._script.id});
-  value = value.length && value[0] || [];
-  // See #1637.
-  var vals = Array.prototype.slice.call(value);
-  vals.__exposedProps__ = {'length': 'r'};
-  return vals;
+  return JSON.stringify(value.length && value[0] || []);
 };
 
 
