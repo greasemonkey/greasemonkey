@@ -17,8 +17,19 @@ Cu.import('resource://greasemonkey/util.js');
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 var gScope = this;
+var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 var gScriptRunners = {};
 var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+
+function isTempScript(uri) {
+  // RAGE FACE can't do files in frames!!!
+//  if (uri.scheme != "file") return false;
+//  var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
+//  return gTmpDir.contains(file, true);
+  return false;
+}
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -86,6 +97,7 @@ ScriptRunner.prototype.windowIsTop = function(aContentWin) {
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function ContentObserver() {
+  this._ignoreNextScript = false;
 }
 
 
@@ -93,13 +105,33 @@ ContentObserver.prototype.QueryInterface = XPCOMUtils.generateQI([
     Ci.nsIObserver]);
 
 
-ContentObserver.prototype.createScriptFromObject = function(aObject) {
-  var script = Object.create(IPCScript.prototype);
-  // TODO: better way for this? Object.create needs property descriptors.
-  for (var key in aObject) {
-    script[key] = aObject[key];
+ContentObserver.prototype.checkHttpEvent = function(aChannel) {
+  var uri = aChannel.URI;
+
+  if (!GM_util.getEnabled()) return;
+
+  // Don't interrupt the "view-source:" scheme (which is triggered if the link
+  // in the error console is clicked), nor the "greasemonkey-script:" scheme.
+  if ('view-source' == uri.scheme) return;
+  if ('greasemonkey-script' == uri.scheme) return;
+
+  // Do not install scripts when the origin URL "is a script".  See #1875
+  if (aChannel.referer && aChannel.referer.spec.match(gScriptEndingRegexp)) {
+    return;
   }
-  return script;
+
+  if (uri.spec.match(gScriptEndingRegexp)
+      && !this._ignoreNextScript
+      && !isTempScript(uri)
+  ) {
+    this._ignoreNextScript = true;
+    aChannel.cancel(Components.results.NS_BINDING_ABORTED);
+    dump('TODO SHOW INSTALL DIALOG HERE\n');
+    dump(uri.spec+'\n');
+    sendAsyncMessage('greasemonkey:script-install', {
+      'url': uri.spec,
+    });
+  }
 };
 
 
@@ -111,6 +143,16 @@ ContentObserver.prototype.contentLoad = function(aEvent) {
   contentWin.removeEventListener('load', gContentLoad, true);
 
   this.runScripts('document-end', contentWin);
+};
+
+
+ContentObserver.prototype.createScriptFromObject = function(aObject) {
+  var script = Object.create(IPCScript.prototype);
+  // TODO: better way for this? Object.create needs property descriptors.
+  for (var key in aObject) {
+    script[key] = aObject[key];
+  }
+  return script;
 };
 
 
@@ -134,6 +176,10 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
       win.addEventListener('load', gContentLoad, true);
 
       this.runScripts('document-start', win);
+      break;
+    case 'http-on-modify-request':
+      aSubject.QueryInterface(Components.interfaces.nsIHttpChannel);
+      this.checkHttpEvent(aSubject);
       break;
     default:
       dump('Content frame observed unknown topic: ' + aTopic + '\n');
@@ -241,20 +287,29 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-// Create a singleton object within this frame, attach observer/listeners to it.
 var contentObserver = new ContentObserver();
-
-// This global function reference can easily be both attached as an event
-// listener, and then removed again.
 var gContentLoad = contentObserver.contentLoad.bind(contentObserver);
 
 addEventListener('pagehide', contentObserver.pagehide.bind(contentObserver));
 addEventListener('pageshow', contentObserver.pageshow.bind(contentObserver));
+
 addMessageListener('greasemonkey:inject-script',
     contentObserver.runDelayedScript.bind(contentObserver));
 addMessageListener('greasemonkey:menu-command-clicked',
     contentObserver.runMenuCommand.bind(contentObserver));
+
 Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
+try {
+  Services.obs.addObserver(contentObserver, 'http-on-modify-request', false);
+} catch (e) {
+  // Ignore; this will sometimes fail on some weird frames that happen to
+  // be loading about:blank. (WHY?!?!?!?)
+}
 addEventListener('unload', function() {
   Services.obs.removeObserver(contentObserver, 'document-element-inserted');
+  try {
+    Services.obs.removeObserver(contentObserver, 'http-on-modify-request');
+  } catch (e) {
+    // Ignore, in case we ignored failure to add above.
+  }
 }, false);

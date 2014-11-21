@@ -7,7 +7,7 @@ var gWindowWatcher = Components
     .classes["@mozilla.org/embedcomp/window-watcher;1"]
     .getService(Components.interfaces.nsIWindowWatcher);
 
-function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
+function showInstallDialog(aUrlOrRemoteScript, aBrowser) {
   var rs = null;
   if ('string' == typeof aUrlOrRemoteScript) {
     rs = new RemoteScript(aUrlOrRemoteScript);
@@ -40,7 +40,7 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aService) {
   rs.download(function(aSuccess, aType) {
     if (!aSuccess && 'script' == aType) {
       // Failure downloading script; browse to it.
-      aService.ignoreNextScript();
+//      aService.ignoreNextScript();
       aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
     }
   });

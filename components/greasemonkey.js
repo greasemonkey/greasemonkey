@@ -19,7 +19,6 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 
 var gStartupHasRun = false;
-var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
@@ -30,11 +29,6 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
-function isTempScript(uri) {
-  if (uri.scheme != "file") return false;
-  var file = gFileProtocolHandler.getFileFromURLSpec(uri.spec);
-  return gTmpDir.contains(file, true);
-}
 
 function shutdown(aService) {
   aService.closeAllScriptValStores();
@@ -53,6 +47,8 @@ function startup(aService) {
   var messageManager = Cc["@mozilla.org/globalmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
 
+  messageManager.addMessageListener(
+      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
   messageManager.addMessageListener(
       'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
 
@@ -88,60 +84,7 @@ function service() {
 service.prototype.classDescription = DESCRIPTION;
 service.prototype.classID = CLASSID;
 service.prototype.contractID = CONTRACTID;
-service.prototype._xpcom_categories = [{
-      // TODO: Fix.  Move to frame script?!
-      category: "content-policy",
-      entry: CONTRACTID,
-      value: CONTRACTID,
-      service: true
-    }];
-service.prototype.QueryInterface = XPCOMUtils.generateQI([
-      Ci.nsIObserver,
-      Ci.nsISupports,
-      Ci.nsISupportsWeakReference,
-      Ci.nsIWindowMediatorListener,
-      Ci.nsIContentPolicy
-    ]);
-
-/////////////////////////////// nsIContentPolicy ///////////////////////////////
-
-service.prototype.shouldLoad = function(ct, cl, org, ctx, mt, ext) {
-  var ret = Ci.nsIContentPolicy.ACCEPT;
-
-  // Don't intercept anything when GM is not enabled.
-  if (!GM_util.getEnabled()) {
-    return ret;
-  }
-
-  // Don't interrupt the "view-source:" scheme (which is triggered if the link
-  // in the error console is clicked), nor the "greasemonkey-script:" scheme.
-  if ("view-source" == cl.scheme || "greasemonkey-script" == cl.scheme) {
-    return ret;
-  }
-
-  // Do not install scripts when the origin URL "is a script".  See #1875
-  if (org && org.spec.match(gScriptEndingRegexp)) {
-    return ret;
-  }
-
-  if ((ct == Ci.nsIContentPolicy.TYPE_DOCUMENT
-       || ct == Ci.nsIContentPolicy.TYPE_SUBDOCUMENT)
-      && cl.spec.match(gScriptEndingRegexp)
-  ) {
-    if (!this._ignoreNextScript && !isTempScript(cl)) {
-      GM_util.showInstallDialog(cl.spec, ctx, this);
-      ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-    }
-
-    this._ignoreNextScript = false;
-  }
-
-  return ret;
-};
-
-service.prototype.shouldProcess = function(ct, cl, org, ctx, mt, ext) {
-  return Ci.nsIContentPolicy.ACCEPT;
-};
+service.prototype.QueryInterface = XPCOMUtils.generateQI([Ci.nsIObserver]);
 
 ///////////////////////////////// nsIObserver //////////////////////////////////
 
@@ -235,8 +178,9 @@ service.prototype.handleScriptValMsg = function(aMessage) {
   }
 };
 
-service.prototype.ignoreNextScript = function() {
-  this._ignoreNextScript = true;
+service.prototype.scriptInstall = function(aMessage) {
+  dump('>>> component scriptInstall ... '+aMessage.data+'\n');
+  GM_util.showInstallDialog(aMessage.data.url, aMessage.target);
 };
 
 //////////////////////////// Component Registration ////////////////////////////
