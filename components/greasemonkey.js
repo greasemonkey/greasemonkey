@@ -51,6 +51,8 @@ function startup(aService) {
       'greasemonkey:script-install', aService.scriptInstall.bind(aService));
   messageManager.addMessageListener(
       'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
+  messageManager.addMessageListener(
+    'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
   var scriptValHandler = aService.handleScriptValMsg.bind(aService);
   messageManager.addMessageListener(
@@ -179,8 +181,16 @@ service.prototype.handleScriptValMsg = function(aMessage) {
 };
 
 service.prototype.scriptInstall = function(aMessage) {
-  dump('>>> component scriptInstall ... '+aMessage.data+'\n');
   GM_util.showInstallDialog(aMessage.data.url, aMessage.target);
+};
+
+service.prototype.urlIsTempFile = function(aMessage) {
+  try {
+    var file = gFileProtocolHandler.getFileFromURLSpec(aMessage.data.url);
+  } catch (e) {
+    return false;
+  }
+  return gTmpDir.contains(file);
 };
 
 //////////////////////////// Component Registration ////////////////////////////

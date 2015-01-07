@@ -9,6 +9,7 @@ Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 Cu.import('resource://greasemonkey/GM_setClipboard.js');
+Cu.import('resource://greasemonkey/installPolicy.js');
 Cu.import('resource://greasemonkey/ipcscript.js');
 Cu.import('resource://greasemonkey/miscapis.js');
 Cu.import('resource://greasemonkey/sandbox.js');
@@ -17,7 +18,6 @@ Cu.import('resource://greasemonkey/util.js');
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 var gScope = this;
-var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 var gScriptRunners = {};
 var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 
@@ -97,42 +97,11 @@ ScriptRunner.prototype.windowIsTop = function(aContentWin) {
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function ContentObserver() {
-  this._ignoreNextScript = false;
 }
 
 
 ContentObserver.prototype.QueryInterface = XPCOMUtils.generateQI([
     Ci.nsIObserver]);
-
-
-ContentObserver.prototype.checkHttpEvent = function(aChannel) {
-  var uri = aChannel.URI;
-
-  if (!GM_util.getEnabled()) return;
-
-  // Don't interrupt the "view-source:" scheme (which is triggered if the link
-  // in the error console is clicked), nor the "greasemonkey-script:" scheme.
-  if ('view-source' == uri.scheme) return;
-  if ('greasemonkey-script' == uri.scheme) return;
-
-  // Do not install scripts when the origin URL "is a script".  See #1875
-  if (aChannel.referer && aChannel.referer.spec.match(gScriptEndingRegexp)) {
-    return;
-  }
-
-  if (uri.spec.match(gScriptEndingRegexp)
-      && !this._ignoreNextScript
-      && !isTempScript(uri)
-  ) {
-    this._ignoreNextScript = true;
-    aChannel.cancel(Components.results.NS_BINDING_ABORTED);
-    dump('TODO SHOW INSTALL DIALOG HERE\n');
-    dump(uri.spec+'\n');
-    sendAsyncMessage('greasemonkey:script-install', {
-      'url': uri.spec,
-    });
-  }
-};
 
 
 ContentObserver.prototype.contentLoad = function(aEvent) {
@@ -156,6 +125,14 @@ ContentObserver.prototype.createScriptFromObject = function(aObject) {
 };
 
 
+ContentObserver.prototype.loadFailedScript = function(aMessage) {
+  ignoreNextScript();
+  docShell.loadURI(
+      GM_util.uriFromUrl(aMessage.data.url),
+      /* loadInfo */ null, /* aLoadFlags */ null, /* firstParty */ true);
+};
+
+
 ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
   if (!GM_util.getEnabled()) return;
 
@@ -176,10 +153,6 @@ ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
       win.addEventListener('load', gContentLoad, true);
 
       this.runScripts('document-start', win);
-      break;
-    case 'http-on-modify-request':
-      aSubject.QueryInterface(Components.interfaces.nsIHttpChannel);
-      this.checkHttpEvent(aSubject);
       break;
     default:
       dump('Content frame observed unknown topic: ' + aTopic + '\n');
@@ -295,21 +268,17 @@ addEventListener('pageshow', contentObserver.pageshow.bind(contentObserver));
 
 addMessageListener('greasemonkey:inject-script',
     contentObserver.runDelayedScript.bind(contentObserver));
+addMessageListener('greasemonkey:load-failed-script',
+  contentObserver.loadFailedScript.bind(contentObserver));
 addMessageListener('greasemonkey:menu-command-clicked',
     contentObserver.runMenuCommand.bind(contentObserver));
 
 Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
-try {
-  Services.obs.addObserver(contentObserver, 'http-on-modify-request', false);
-} catch (e) {
-  // Ignore; this will sometimes fail on some weird frames that happen to
-  // be loading about:blank. (WHY?!?!?!?)
-}
 addEventListener('unload', function() {
   Services.obs.removeObserver(contentObserver, 'document-element-inserted');
-  try {
-    Services.obs.removeObserver(contentObserver, 'http-on-modify-request');
-  } catch (e) {
-    // Ignore, in case we ignored failure to add above.
-  }
 }, false);
+
+(function() {
+  var tmpDir = sendSyncMessage('greasemonkey:temp-dir-path');
+  initInstallPolicy(tmpDir[0]);
+})();

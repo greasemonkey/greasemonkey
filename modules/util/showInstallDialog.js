@@ -39,9 +39,9 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser) {
 
   rs.download(function(aSuccess, aType) {
     if (!aSuccess && 'script' == aType) {
-      // Failure downloading script; browse to it.
-//      aService.ignoreNextScript();
-      aBrowser.loadURI(rs.url, /* aReferrer */ null, /* aCharset */ null);
+      aBrowser.messageManager.sendAsyncMessage(
+          'greasemonkey:load-failed-script',
+          {'url': rs.url});
     }
   });
 }
