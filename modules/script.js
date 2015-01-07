@@ -160,12 +160,13 @@ function Script_getLocalizedDescription() {
         GM_util.getPreferredLocale(), available);
     if (!bestMatch) return null;
 
-    return aLocales[bestMatch][aProp] || this._description;
+    return aLocales[bestMatch][aProp];
   }
 
   if (!this._localized) {
     this._localized = {
-      description: getBestLocalization(this._locales, "description"),
+      description: getBestLocalization(this._locales, "description")
+          || this._description,
       name: getBestLocalization("name") || this._name
     };
   }
