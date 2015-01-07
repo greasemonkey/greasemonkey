@@ -151,23 +151,21 @@ function Script_getLocalizedDescription() {
   // We can't simply return this._locales[locale], as the best match for name
   // and description might be for different locales (e.g. if an exact match is
   // only provided for one of them).
-  function getBestLocalization(aProp) {
-    var available = Object.keys(locales).filter(function(locale) {
-      return !!locales[locale][aProp];
+  function getBestLocalization(aLocales, aProp) {
+    var available = Object.keys(aLocales).filter(function(locale) {
+      return !!aLocales[locale][aProp];
     });
 
-    var bestMatch = GM_util.getBestLocaleMatch(preferred, available);
+    var bestMatch = GM_util.getBestLocaleMatch(
+        GM_util.getPreferredLocale(), available);
     if (!bestMatch) return null;
 
-    return locales[bestMatch][aProp];
+    return aLocales[bestMatch][aProp] || this._description;
   }
 
   if (!this._localized) {
-    var locales = this._locales;
-    var preferred = GM_util.getPreferredLocale();
-
     this._localized = {
-      description: getBestLocalization("description") || this._description,
+      description: getBestLocalization(this._locales, "description"),
       name: getBestLocalization("name") || this._name
     };
   }
