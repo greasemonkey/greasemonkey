@@ -1,3 +1,4 @@
+Components.utils.import("resource://greasemonkey/extractMeta.js");
 Components.utils.import('resource://greasemonkey/parseScript.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
