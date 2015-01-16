@@ -55,8 +55,6 @@ var InstallPolicy = {
 
   QueryInterface: XPCOMUtils.generateQI([
       Ci.nsIContentPolicy,
-//      Ci.nsIObserver,
-//      Ci.nsIChannelEventSink,
       Ci.nsIFactory,
       Ci.nsISupportsWeakReference
       ]),
