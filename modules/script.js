@@ -167,7 +167,7 @@ function Script_getLocalizedDescription() {
     this._localized = {
       description: getBestLocalization(this._locales, "description")
           || this._description,
-      name: getBestLocalization("name") || this._name
+      name: getBestLocalization(this._locales, "name") || this._name
     };
   }
 
