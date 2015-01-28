@@ -31,7 +31,8 @@ function IPCScript(aScript) {
     return {
       'name': res.name,
       'mimetype': res.mimetype,
-      'textContent': res.textContent
+      'textContent': res.textContent,
+      'url': GM_util.getUriFromFile(res.file).spec
     };
   });
 };

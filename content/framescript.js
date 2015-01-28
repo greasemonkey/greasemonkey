@@ -13,6 +13,7 @@ Cu.import('resource://greasemonkey/installPolicy.js');
 Cu.import('resource://greasemonkey/ipcscript.js');
 Cu.import('resource://greasemonkey/miscapis.js');
 Cu.import('resource://greasemonkey/sandbox.js');
+Cu.import('resource://greasemonkey/scriptProtocol.js');
 Cu.import('resource://greasemonkey/util.js');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -281,4 +282,5 @@ addEventListener('unload', function() {
 (function() {
   var tmpDir = sendSyncMessage('greasemonkey:temp-dir-path');
   initInstallPolicy(tmpDir[0]);
+  initScriptProtocol();
 })();

@@ -11,6 +11,7 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 Cu.import('resource://greasemonkey/util.js');
 
+var gHaveDoneInit = false;
 var gIgnoreNextScript = false;
 var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
@@ -21,6 +22,8 @@ function ignoreNextScript() {
 }
 
 function initInstallPolicy(aTmpPath) {
+  if (gHaveDoneInit) return;
+  gHaveDoneInit = true;
   InstallPolicy.init(aTmpPath);
 }
 

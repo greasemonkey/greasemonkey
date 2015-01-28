@@ -44,27 +44,34 @@ function startup(aService) {
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  var messageManager = Cc["@mozilla.org/globalmessagemanager;1"]
+  var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
 
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
       'greasemonkey:script-install', aService.scriptInstall.bind(aService));
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
       'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
+      'greasemonkey:scripts-for-uuid',
+      aService.getScriptsForUuid.bind(aService));
+  parentMessageManager.addMessageListener(
     'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
   var scriptValHandler = aService.handleScriptValMsg.bind(aService);
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
     'greasemonkey:scriptVal-delete', scriptValHandler);
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
     'greasemonkey:scriptVal-get', scriptValHandler);
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
     'greasemonkey:scriptVal-list', scriptValHandler);
-  messageManager.addMessageListener(
+  parentMessageManager.addMessageListener(
     'greasemonkey:scriptVal-set', scriptValHandler);
 
-  messageManager.loadFrameScript(
+  // Yes, we have to load the frame script once here in the parent scope.
+  // Why?  Who knows!?
+  var globalMessageManager = Cc["@mozilla.org/globalmessagemanager;1"]
+      .getService(Ci.nsIMessageListenerManager);
+  globalMessageManager.loadFrameScript(
       "chrome://greasemonkey/content/framescript.js", true);
 
   Services.obs.addObserver(aService, 'quit-application', false);
@@ -149,6 +156,17 @@ service.prototype.getScriptsForUrl = function(aMessage) {
     return new IPCScript(script);
   });
 
+  return scripts;
+};
+
+service.prototype.getScriptsForUuid = function(aMessage) {
+  var uuid = aMessage.data.uuid;
+  var scripts = this.config.getMatchingScripts(
+      function(script) { return script.uuid == uuid; }
+  ).map(function(script) {
+    // Make the script serializable so it can be sent to the frame script.
+    return new IPCScript(script);
+  });
   return scripts;
 };
 
