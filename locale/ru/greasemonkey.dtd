@@ -44,7 +44,7 @@
 <!ENTITY Uninstall "Удаление">
 <!ENTITY AnonymousStatistics "Анонимная статистика">
 <!ENTITY EnableFirefoxSync "Включить Firefox Sync для пользовательских скриптов">
-<!ENTITY SubmitStats "Собирать и передовать анонимную статистику использования для улучшения Greasemonkey.">
+<!ENTITY SubmitStats "Собирать и передавать анонимную статистику использования для улучшения Greasemonkey.">
 <!ENTITY UpdateChecking "Проверка обновлений">
 <!ENTITY RequireSecureUpdates "Использовать безопасное обновление">
 <!ENTITY greasemonkey.noscriptshere "Для этой страницы нет скриптов">
