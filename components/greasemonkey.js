@@ -44,35 +44,38 @@ function startup(aService) {
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
+  // Most incoming messages go to the "global" message manager.
+  var globalMessageManager = Cc["@mozilla.org/globalmessagemanager;1"]
+      .getService(Ci.nsIMessageListenerManager);
+  globalMessageManager.addMessageListener(
+      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
+  globalMessageManager.addMessageListener(
+      'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
+  globalMessageManager.addMessageListener(
+      'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
+
+  var scriptValHandler = aService.handleScriptValMsg.bind(aService);
+  globalMessageManager.addMessageListener(
+      'greasemonkey:scriptVal-delete', scriptValHandler);
+  globalMessageManager.addMessageListener(
+      'greasemonkey:scriptVal-get', scriptValHandler);
+  globalMessageManager.addMessageListener(
+      'greasemonkey:scriptVal-list', scriptValHandler);
+  globalMessageManager.addMessageListener(
+      'greasemonkey:scriptVal-set', scriptValHandler);
+
+  // This particular message must be listened for by the "parent" and not
+  // by "global".  Why?!?!?
   var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
-
-  parentMessageManager.addMessageListener(
-      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
-  parentMessageManager.addMessageListener(
-      'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
   parentMessageManager.addMessageListener(
       'greasemonkey:scripts-for-uuid',
       aService.getScriptsForUuid.bind(aService));
-  parentMessageManager.addMessageListener(
-    'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
-
-  var scriptValHandler = aService.handleScriptValMsg.bind(aService);
-  parentMessageManager.addMessageListener(
-    'greasemonkey:scriptVal-delete', scriptValHandler);
-  parentMessageManager.addMessageListener(
-    'greasemonkey:scriptVal-get', scriptValHandler);
-  parentMessageManager.addMessageListener(
-    'greasemonkey:scriptVal-list', scriptValHandler);
-  parentMessageManager.addMessageListener(
-    'greasemonkey:scriptVal-set', scriptValHandler);
 
   // Yes, we have to load the frame script once here in the parent scope.
   // Why?  Who knows!?
-  var globalMessageManager = Cc["@mozilla.org/globalmessagemanager;1"]
-      .getService(Ci.nsIMessageListenerManager);
   globalMessageManager.loadFrameScript(
-      "chrome://greasemonkey/content/framescript.js", true);
+      'chrome://greasemonkey/content/framescript.js', true);
 
   Services.obs.addObserver(aService, 'quit-application', false);
 
