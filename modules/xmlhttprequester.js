@@ -5,7 +5,10 @@ Components.utils.import("resource://greasemonkey/util.js");
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
-  this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
+  // Firefox < 29 does not support getObjectPrincipal in a scriptable context.
+  // Older Greasemonkey didn't use this, so if the browser doesn't support it,
+  // this shouldn't be less secure (for that browser).
+  this.sandboxPrincipal = 'function' == typeof Components.utils.getObjectPrincipal ? Components.utils.getObjectPrincipal(sandbox) : null;
 }
 
 // this function gets called by user scripts in content security scope to
@@ -169,10 +172,13 @@ function(wrappedContentWin, req, event, details) {
   var eventCallback = details["on" + event];
   if (!eventCallback) return;
 
-  // ... but ensure that the callback came from a script, not content, by
-  // checking that its principal equals that of the sandbox.
-  var callbackPrincipal = Components.utils.getObjectPrincipal(eventCallback);
-  if (!this.sandboxPrincipal.equals(callbackPrincipal)) return;
+  // Firefox < 29 hack; see above.
+  if ('function' == typeof Components.utils.getObjectPrincipal) {
+    // ... but ensure that the callback came from a script, not content, by
+    // checking that its principal equals that of the sandbox.
+    var callbackPrincipal = Components.utils.getObjectPrincipal(eventCallback);
+    if (!this.sandboxPrincipal.equals(callbackPrincipal)) return;
+  }
 
   req.addEventListener(event, function(evt) {
     var responseState = {
