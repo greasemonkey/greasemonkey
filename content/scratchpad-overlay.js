@@ -24,7 +24,14 @@ window.addEventListener('load', function() {
 
     if (!Scratchpad.initialized) return;
 
-    Scratchpad.editor.setCursor({line: 0, ch: 0});
+    if ('function' == typeof Scratchpad.editor.setCursor) {
+      // Firefox >= 28
+      Scratchpad.editor.setCursor({line: 0, ch: 0});
+    } else {
+      // Firefox <= 27
+      Scratchpad.editor.setCaretPosition(0, 0);
+    }
+
     clearInterval(initializeCheckTimer);
   }
   initializeCheckTimer = setInterval(moveCursorToTop, 20);
