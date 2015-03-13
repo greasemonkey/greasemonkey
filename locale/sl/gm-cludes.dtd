@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Spodaj vnesite nov URL. Več strani lahko navedete z nadomestnim znakom (*).">
+<!ENTITY promptForNewPage.title "Dodaj stran">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Spremenite URL spodnje strani. Več strani lahko navedete z nadomestnim znakom (*).">
+<!ENTITY promptForEdit.title "Uredi stran">
+<!ENTITY button.add "Dodaj ...">
+<!ENTITY button.addUserExclude "Dodaj kot uporabniško izključeno">
+<!ENTITY button.addUserInclude "Dodaj kot uporabniško vključeno">
+<!ENTITY button.edit "Uredi ...">
+<!ENTITY button.remove "Odstrani">
+<!ENTITY label.grpIncluded "Vključene strani">
+<!ENTITY label.grpExcluded "Izključene strani">

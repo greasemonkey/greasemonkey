@@ -1,28 +1,28 @@
-<!ENTITY Edit "editar">
+<!ENTITY Edit "Editar">
 <!ENTITY Edit.accesskey "E">
-<!ENTITY Edit.tooltip "Edit this User Script">
-<!ENTITY ExecuteFirst "ejecutar primero">
-<!ENTITY ExecuteLast "ejecutar al final">
-<!ENTITY ExecuteLater "ejecutar despues">
-<!ENTITY ExecuteSooner "ejecutar pronto">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
-<!ENTITY InstallUpdate "Install Update">
-<!ENTITY MoveDown "mover hacia abajo">
-<!ENTITY MoveDown.accesskey "D">
-<!ENTITY MoveToBottom "mover el boton">
-<!ENTITY MoveToBottom.accesskey "B">
-<!ENTITY MoveToTop "Move To Top">
-<!ENTITY MoveToTop.accesskey "T">
-<!ENTITY MoveUp "mover hacia arriba">
-<!ENTITY MoveUp.accesskey "U">
-<!ENTITY NewScript "crear nuevo script">
-<!ENTITY NewScript.accesskey "C">
-<!ENTITY Show "mostrat el contenido del folder">
-<!ENTITY Show.accesskey "S">
-<!ENTITY Sort.ByStatus "Sort by status">
-<!ENTITY Sort.Status "Status">
-<!ENTITY Sort.ByName "Sort by name">
-<!ENTITY Sort.Name "Name">
-<!ENTITY Sort.ByExecution "Sort by execution order">
-<!ENTITY Sort.Execution "Execution Order">
+<!ENTITY Edit.tooltip "Editar este script de usuario">
+<!ENTITY ExecuteFirst "Ejecutar en primer lugar">
+<!ENTITY ExecuteLast "Ejecutar en último lugar">
+<!ENTITY ExecuteLater "Ejecutar después">
+<!ENTITY ExecuteSooner "Ejecutar antes">
+<!ENTITY FindUpdate "Buscar actualizaciones">
+<!ENTITY ForcedFindUpdate "Obligar a buscar actualizaciones">
+<!ENTITY InstallUpdate "Instalar actualizaciones">
+<!ENTITY MoveDown "Bajar">
+<!ENTITY MoveDown.accesskey "B">
+<!ENTITY MoveToBottom "Bajar abajo del todo">
+<!ENTITY MoveToBottom.accesskey "J">
+<!ENTITY MoveToTop "Subir arriba del todo">
+<!ENTITY MoveToTop.accesskey "R">
+<!ENTITY MoveUp "Subir">
+<!ENTITY MoveUp.accesskey "S">
+<!ENTITY NewScript "Crear un nuevo script">
+<!ENTITY NewScript.accesskey "N">
+<!ENTITY Show "Abrir la carpeta que lo contiene">
+<!ENTITY Show.accesskey "A">
+<!ENTITY Sort.ByStatus "Ordenar por estado">
+<!ENTITY Sort.Status "Estado">
+<!ENTITY Sort.ByName "Ordenar por nombre">
+<!ENTITY Sort.Name "Nombre">
+<!ENTITY Sort.ByExecution "Ordenar por orden de ejecución">
+<!ENTITY Sort.Execution "Orden de ejecución">

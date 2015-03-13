@@ -1,0 +1,55 @@
+<!ENTITY menu.install "Namesti uporabniški skript ...">
+<!ENTITY menu.install.accesskey "N">
+<!ENTITY menu.show "Pokaži vir uporabniškega skripta">
+<!ENTITY menu.show.accesskey "P">
+<!ENTITY menu.commands "Ukazi uporabniškega skripta ...">
+<!ENTITY menu.commands.accesskey "U">
+<!ENTITY menu.new "Nov uporabniški skript ...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Upravljaj z uporabniškimi skripti ...">
+<!ENTITY menu.manage.accesskey "r">
+<!ENTITY menu.options "Možnosti Greasemonkey ...">
+<!ENTITY menu.options.accesskey "M">
+<!ENTITY menu.websites "Spletne strani ...">
+<!ENTITY menu.websites.accesskey "S">
+<!ENTITY menu.websites.greasespot "Blog Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Wiki Greasespot">
+<!ENTITY menu.websites.manual "Priročnik Greasemonkey">
+<!ENTITY menu.websites.getuserscripts "Dobi uporabniške skripte">
+<!ENTITY statusbar.enabled "Omogočeno">
+<!ENTITY statusbar.enabled.accesskey "O">
+<!ENTITY install.title "Namestitev dodatka Greasemonkey">
+<!ENTITY install.runson "Se izvaja na:">
+<!ENTITY install.matches "Se ujema s/z:">
+<!ENTITY install.butnoton "Se ne izvaja na:">
+<!ENTITY install.warning1 "Zlonamerni skripti lahko kršijo vašo zasebnost in delujejo v vašem imenu brez vaše vednosti.">
+<!ENTITY install.warning2 "Nameščajte samo skripte iz virov, ki jim zaupate.">
+<!ENTITY install.showscriptsource "Prikaži vir skripta">
+<!ENTITY install.installbutton "Namesti">
+<!ENTITY install.downloadError "Napaka pri prenosu">
+<!ENTITY loading "Prenašanje ...">
+<!ENTITY newscript.name "Ime">
+<!ENTITY newscript.namespace "Imenski prostor">
+<!ENTITY newscript.description "Opis">
+<!ENTITY newscript.includes "Vključuje (enega na vrstico)">
+<!ENTITY newscript.excludes "Izključuje (enega na vrstico)">
+<!ENTITY newscript.fromClipboard "Uporabi skript iz odložišča">
+<!ENTITY options.editor "Urejevalnik">
+<!ENTITY options.experimental "Preskusno">
+<!ENTITY options.defaultEditor "Uporabi privzeti urejevalnik">
+<!ENTITY options.browseForEditor "Brskaj za urejevalniškim programom">
+<!ENTITY options.globalExcludes "Splošne izključitve">
+<!ENTITY options.newScript.template "Nova predloga skripta">
+<!ENTITY options.newScript.removeUnused "Odstrani neuporabljene vrstice">
+<!ENTITY Uninstall "Odstrani">
+<!ENTITY AnonymousStatistics "Anonimna statistika">
+<!ENTITY EnableFirefoxSync "Omogoči Firefox Sync za uporabniške skripte">
+<!ENTITY SubmitStats "Zbiraj in pošlji anonimno statistiko o uporabi za izboljšanje dodatka Greasemonkey.">
+<!ENTITY UpdateChecking "Preverjanje za posodobitve">
+<!ENTITY RequireSecureUpdates "Zahtevaj varne posodobitve">
+<!ENTITY greasemonkey.noscriptshere "Na tej strani se ne izvaja noben nameščen skript.">
+<!ENTITY greasemonkey.youhavenoscripts "Nimate nameščenega nobenega uporabniškega skripta.">
+<!ENTITY greasemonkey.getuserscripts "Dobi uporabniške skripte">
+<!ENTITY scriptprefs.title "Nastavitve uporabniških skriptov Greasemonkey - !!">
+<!ENTITY scriptprefs.usersettings "Uporabniške nastavitve">
+<!ENTITY scriptprefs.scriptsettings "Nastavitve skripta">

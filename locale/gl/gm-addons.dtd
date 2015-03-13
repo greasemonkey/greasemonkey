@@ -6,20 +6,20 @@
 <!ENTITY ExecuteLater "Executar máis tarde">
 <!ENTITY ExecuteSooner "Executar antes">
 <!ENTITY FindUpdate "Buscar actualizacións">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
+<!ENTITY ForcedFindUpdate "Forzouse a busca de actualizacións">
 <!ENTITY InstallUpdate "Instalar actualizacións">
 <!ENTITY MoveDown "Mover abaixo">
-<!ENTITY MoveDown.accesskey "D">
+<!ENTITY MoveDown.accesskey "B">
 <!ENTITY MoveToBottom "Mover ao fondo">
-<!ENTITY MoveToBottom.accesskey "B">
+<!ENTITY MoveToBottom.accesskey "F">
 <!ENTITY MoveToTop "Mover á cima">
 <!ENTITY MoveToTop.accesskey "T">
 <!ENTITY MoveUp "Mover arriba">
-<!ENTITY MoveUp.accesskey "U">
+<!ENTITY MoveUp.accesskey "A">
 <!ENTITY NewScript "Crear un novo script">
 <!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "Mostrar o cartafol">
-<!ENTITY Show.accesskey "S">
+<!ENTITY Show.accesskey "M">
 <!ENTITY Sort.ByStatus "Ordenar polo estado">
 <!ENTITY Sort.Status "Estado">
 <!ENTITY Sort.ByName "Ordenar polo nome">

@@ -1,0 +1,55 @@
+<!ENTITY menu.install "Инсталиране на потребителски скрипт...">
+<!ENTITY menu.install.accesskey "И">
+<!ENTITY menu.show "Преглед на изходния код на потребителския скрипт">
+<!ENTITY menu.show.accesskey "П">
+<!ENTITY menu.commands "Команди за потребителския скрипт...">
+<!ENTITY menu.commands.accesskey "К">
+<!ENTITY menu.new "Нов потребителски скрипт">
+<!ENTITY menu.new.accesskey "Н">
+<!ENTITY menu.manage "Управление на потребителските скриптове...">
+<!ENTITY menu.manage.accesskey "У">
+<!ENTITY menu.options "Настройки на Greasemonkey...">
+<!ENTITY menu.options.accesskey "Т">
+<!ENTITY menu.websites "Уеб сайтове...">
+<!ENTITY menu.websites.accesskey "Б">
+<!ENTITY menu.websites.greasespot "Greasespot Блог">
+<!ENTITY menu.websites.greasespotwiki "Greasespot Уики">
+<!ENTITY menu.websites.manual "Ръководство на Greasemonkey">
+<!ENTITY menu.websites.getuserscripts "Получаване на потребителски скриптове">
+<!ENTITY statusbar.enabled "Включен">
+<!ENTITY statusbar.enabled.accesskey "В">
+<!ENTITY install.title "Инсталация на Greasemonkey">
+<!ENTITY install.runson "работи на:">
+<!ENTITY install.matches "отговаря на:">
+<!ENTITY install.butnoton "не работи на:">
+<!ENTITY install.warning1 "Зловредните скриптове могат да получат достъп до Вашата лична информация и да се представят за Вас без Ваше знание. ">
+<!ENTITY install.warning2 "Трябва да инсталирате скриптове само от източници, на които вярвате.">
+<!ENTITY install.showscriptsource "Показване на изходния код на скрипта">
+<!ENTITY install.installbutton "Инсталиране">
+<!ENTITY install.downloadError "Грешка при изтегляне">
+<!ENTITY loading "Изтегляне...">
+<!ENTITY newscript.name "Име">
+<!ENTITY newscript.namespace "Пространство от имена">
+<!ENTITY newscript.description "Описание">
+<!ENTITY newscript.includes "Включени (по един на ред)">
+<!ENTITY newscript.excludes "Изключени (по един на ред)">
+<!ENTITY newscript.fromClipboard "Използване на скрипта от клипборда">
+<!ENTITY options.editor "Редактор">
+<!ENTITY options.experimental "Ескпериментално">
+<!ENTITY options.defaultEditor "Редактор по подразбиране">
+<!ENTITY options.browseForEditor "Разглеждане">
+<!ENTITY options.globalExcludes "Глобално изключени">
+<!ENTITY options.newScript.template "Нов шаблон за скрипт">
+<!ENTITY options.newScript.removeUnused "Премахване на неизползваните редове">
+<!ENTITY Uninstall "Деинсталиране">
+<!ENTITY AnonymousStatistics "Анонимна статистика">
+<!ENTITY EnableFirefoxSync "Включване на Firefox синхронизиране за потребителските скриптове">
+<!ENTITY SubmitStats "Събиране и изпращане на анонимни данни за употребата с цел подобряване на Greasemonkey.">
+<!ENTITY UpdateChecking "Проверка за актуализации">
+<!ENTITY RequireSecureUpdates "Изискване на актуализации по сигурността">
+<!ENTITY greasemonkey.noscriptshere "Няма инсталирани скриптове, които да се изпълняват на тази страница.">
+<!ENTITY greasemonkey.youhavenoscripts "Нямате инсталирани потребителски скриптове">
+<!ENTITY greasemonkey.getuserscripts "Получаване на потребителски скриптове">
+<!ENTITY scriptprefs.title "Настройки на потребителските скриптове на Greasemonkey – !!">
+<!ENTITY scriptprefs.usersettings "Потребителски настройки">
+<!ENTITY scriptprefs.scriptsettings "Настройки на скрипта">

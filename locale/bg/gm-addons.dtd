@@ -1,0 +1,28 @@
+<!ENTITY Edit "Редактиране">
+<!ENTITY Edit.accesskey "Р">
+<!ENTITY Edit.tooltip "Редактиране на този потребителски скрипт">
+<!ENTITY ExecuteFirst "Изпълни първо">
+<!ENTITY ExecuteLast "Изпълни последно">
+<!ENTITY ExecuteLater "Изпълни по-късно">
+<!ENTITY ExecuteSooner "Изпълни по-скоро">
+<!ENTITY FindUpdate "Търсене на актуализация">
+<!ENTITY ForcedFindUpdate "Принудително търсене на актуализации">
+<!ENTITY InstallUpdate "Инсталиране на актуализацията">
+<!ENTITY MoveDown "Преместване надолу">
+<!ENTITY MoveDown.accesskey "Д">
+<!ENTITY MoveToBottom "Преместване накрая">
+<!ENTITY MoveToBottom.accesskey "К">
+<!ENTITY MoveToTop "Преместване в началото">
+<!ENTITY MoveToTop.accesskey "Н">
+<!ENTITY MoveUp "Преместване нагоре">
+<!ENTITY MoveUp.accesskey "Г">
+<!ENTITY NewScript "Създаване на нов скрипт">
+<!ENTITY NewScript.accesskey "С">
+<!ENTITY Show "Показване на съдържащата папка">
+<!ENTITY Show.accesskey "П">
+<!ENTITY Sort.ByStatus "Подреждане по състояние">
+<!ENTITY Sort.Status "Състояние">
+<!ENTITY Sort.ByName "Подреждане по име">
+<!ENTITY Sort.Name "Име">
+<!ENTITY Sort.ByExecution "Подреждане по ред на изпълнение">
+<!ENTITY Sort.Execution "Ред на изпълнение">

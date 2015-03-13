@@ -1,0 +1,12 @@
+<!ENTITY promptForNewPage.msg "Въведете нов адрес по-долу. Можете да зададете повече страници, като използвате символа (*).">
+<!ENTITY promptForNewPage.title "Добавяне на страница">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Променете адреса на страницата по-долу. Можете да зададете повече страници, като използвате символа (*).">
+<!ENTITY promptForEdit.title "Редактиране на страницата">
+<!ENTITY button.add "Добавяне...">
+<!ENTITY button.addUserExclude "Доб. като потр. изкл.">
+<!ENTITY button.addUserInclude "Доб. като потр. вкл.">
+<!ENTITY button.edit "Редактиране...">
+<!ENTITY button.remove "Премахване">
+<!ENTITY label.grpIncluded "Включени страници">
+<!ENTITY label.grpExcluded "Изключени страници">

@@ -1,0 +1,28 @@
+<!ENTITY Edit "Uredi">
+<!ENTITY Edit.accesskey "U">
+<!ENTITY Edit.tooltip "Uredi ta uporabniški skript">
+<!ENTITY ExecuteFirst "Izvedi najprej">
+<!ENTITY ExecuteLast "Izvedi zadnje">
+<!ENTITY ExecuteLater "Izvedi kasneje">
+<!ENTITY ExecuteSooner "Izvedi prej">
+<!ENTITY FindUpdate "Najdi posodobitev">
+<!ENTITY ForcedFindUpdate "Prisiljeno iskanje posodobitev">
+<!ENTITY InstallUpdate "Namesti posodobitev">
+<!ENTITY MoveDown "Premakni dol">
+<!ENTITY MoveDown.accesskey "d">
+<!ENTITY MoveToBottom "Premakni na dno">
+<!ENTITY MoveToBottom.accesskey "o">
+<!ENTITY MoveToTop "Premakni na vrh">
+<!ENTITY MoveToTop.accesskey "v">
+<!ENTITY MoveUp "Premakni gor">
+<!ENTITY MoveUp.accesskey "r">
+<!ENTITY NewScript "Ustvari uporabniški skript">
+<!ENTITY NewScript.accesskey "U">
+<!ENTITY Show "Prikaži vsebujočo mapo">
+<!ENTITY Show.accesskey "P">
+<!ENTITY Sort.ByStatus "Razvrsti po stanju">
+<!ENTITY Sort.Status "Stanje">
+<!ENTITY Sort.ByName "Razvrsti po imenu">
+<!ENTITY Sort.Name "Ime">
+<!ENTITY Sort.ByExecution "Razvrsti po vrstnem redu izvajanja">
+<!ENTITY Sort.Execution "Vrstni red izvajanja">
