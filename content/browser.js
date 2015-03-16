@@ -11,10 +11,7 @@ function GM_BrowserUI() {};
 GM_BrowserUI.init = function() {
   window.addEventListener("load", GM_BrowserUI.chromeLoad, false);
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
-
-  var messageManager = Components.classes["@mozilla.org/globalmessagemanager;1"]
-      .getService(Components.interfaces.nsIMessageListenerManager);
-  messageManager.addMessageListener('greasemonkey:open-in-tab',
+  window.messageManager.addMessageListener('greasemonkey:open-in-tab',
       GM_BrowserUI.openInTab);
 };
 
