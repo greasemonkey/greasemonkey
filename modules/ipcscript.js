@@ -14,6 +14,7 @@ function IPCScript(aScript) {
   this.matches = aScript.matches.map(function(m) { return m.pattern });
   this.name = aScript.name;
   this.namespace = aScript.namespace;
+  this.noframes = aScript.noframes;
   this.runAt = aScript.runAt;
   this.textContent = aScript.textContent;
   this.uuid = aScript.uuid;
@@ -71,6 +72,7 @@ IPCScript.prototype.info = function() {
       'matches': this.matches,
       'name': this.name,
       'namespace': this.namespace,
+      'noframes': this.noframes,
       // 'requires': ??? source URL?
       'resources': resources,
       'run-at': this.runAt,
