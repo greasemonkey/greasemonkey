@@ -60,8 +60,15 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
         }
         script._locales[locale][data.keyword] = data.value;
       }
-
-      script['_' + data.keyword] = data.value;
+      else {
+        if ((data.keyword == 'description')
+            && (script['_' + data.keyword] == ''))
+            script['_' + data.keyword] = data.value;
+        if ((data.keyword == 'name')
+            && ((script['_' + data.keyword] == 'user-script')
+            || (script['_' + data.keyword] == name)))
+            script['_' + data.keyword] = data.value;
+      }
 
       break;
 
