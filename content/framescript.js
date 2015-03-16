@@ -105,6 +105,14 @@ ContentObserver.prototype.QueryInterface = XPCOMUtils.generateQI([
     Ci.nsIObserver]);
 
 
+ContentObserver.prototype.blankLoad = function(aEvent) {
+  var contentWin = aEvent.target.defaultView;
+  if (contentWin.location.href.match(/^about:blank/)) {
+    // #1696: document-element-inserted doesn't see about:blank
+    this.runScripts('document-end', contentWin);
+  }
+};
+
 ContentObserver.prototype.contentLoad = function(aEvent) {
   var contentWin = aEvent.target.defaultView;
 
@@ -263,6 +271,9 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
 
 var contentObserver = new ContentObserver();
 var gContentLoad = contentObserver.contentLoad.bind(contentObserver);
+
+addEventListener(
+    'DOMContentLoaded', contentObserver.blankLoad.bind(contentObserver));
 
 addEventListener('pagehide', contentObserver.pagehide.bind(contentObserver));
 addEventListener('pageshow', contentObserver.pageshow.bind(contentObserver));
