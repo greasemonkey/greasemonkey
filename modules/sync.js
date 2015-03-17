@@ -137,6 +137,12 @@ ScriptStore.prototype = {
         var names = storage.listValues();
         for (var i = 0, name = null; name = names[i]; i++) {
           var val = storage.getValue(name);
+          try {
+            val = JSON.parse(val);
+          } catch (e) {
+            dump('JSON parse error? ' + uneval(e) + '\n');
+            continue;
+          }
           record.cleartext.values[name] = val;
           totalSize += name.length;
           totalSize += val.length || 4;  // 4 for number / bool (no length).
