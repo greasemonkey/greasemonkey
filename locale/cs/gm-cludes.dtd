@@ -9,4 +9,5 @@
 <!ENTITY button.edit "Upravit...">
 <!ENTITY button.remove "Odstranit">
 <!ENTITY label.grpIncluded "Zahrnuté stránky">
+<!ENTITY label.grpMatched "Zahrnuté stránky /match/">
 <!ENTITY label.grpExcluded "Vyloučené stránky">
