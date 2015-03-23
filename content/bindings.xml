@@ -11,6 +11,13 @@
     </content>
     <implementation>
       <constructor>
+        Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+
+        this._stringBundle = Components
+            .classes["@mozilla.org/intl/stringbundle;1"]
+            .getService(Components.interfaces.nsIStringBundleService)
+            .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
         this._box = document.getAnonymousElementByAttribute(
             this, 'id', 'listbox');
 
@@ -53,7 +60,20 @@
       <method name="addPage">
         <parameter name="page" />
         <body>
-          if (page) this._pages.push(page);
+          if (page) {
+            if ((this == document.getElementById('user-matches'))
+             || (this == document.getElementById('script-matches'))) {
+              try {
+                var match = new MatchPattern(page);
+                this._pages.push(page);
+              } catch (e) {
+                alert(this._stringBundle.GetStringFromName('parse.ignoring-match')
+                                .replace('%1', page).replace('%2', e));
+              }
+            } else {
+              this._pages.push(page);
+            }
+          }
           this._fillListbox();
         </body>
       </method>
@@ -141,7 +161,7 @@
       </method>
     </implementation>
   </binding>
-  <binding id="clude-editor-readonly-in"
+  <binding id="clude-editor-readonly-include"
     extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
   >
     <content>
@@ -154,7 +174,20 @@
       </xul:hbox>
     </content>
   </binding>
-  <binding id="clude-editor-readonly-ex"
+  <binding id="clude-editor-readonly-match"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
+  >
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox id="vboxUserCludeMatch">
+          <xul:button id="btnUserClude" label="&button.addUserExclude;"
+              oncommand="_addUserClude('Exclude')" disabled="true" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+  </binding>
+  <binding id="clude-editor-readonly-exclude"
     extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
   >
     <content>
