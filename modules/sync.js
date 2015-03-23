@@ -68,7 +68,7 @@ ScriptRecord.prototype = {
 gWeave.Utils.deferGetSet(
     ScriptRecord, 'cleartext',
     ['downloadURL', 'enabled', 'installed',
-     'userExcludes', 'userIncludes',
+     'userExcludes', 'userMatches', 'userIncludes',
      'values', 'valuesTooBig',
     ]);
 
@@ -105,6 +105,7 @@ ScriptStore.prototype = {
           rs.install();
           rs.script.enabled = aRecord.cleartext.enabled;
           rs.script.userExcludes = aRecord.cleartext.userExcludes;
+          rs.script.userMatches = aRecord.cleartext.userMatches;
           rs.script.userIncludes = aRecord.cleartext.userIncludes;
           setScriptValuesFromSyncRecord(rs.script, aRecord);
         }
@@ -126,6 +127,7 @@ ScriptStore.prototype = {
       record.cleartext.enabled = script.enabled;
       record.cleartext.installed = !script.needsUninstall;
       record.cleartext.userExcludes = script.userExcludes;
+      record.cleartext.userMatches = script.userMatches;
       record.cleartext.userIncludes = script.userIncludes;
 
       if (GM_prefRoot.getValue('sync.values')) {
@@ -137,12 +139,6 @@ ScriptStore.prototype = {
         var names = storage.listValues();
         for (var i = 0, name = null; name = names[i]; i++) {
           var val = storage.getValue(name);
-          try {
-            val = JSON.parse(val);
-          } catch (e) {
-            dump('JSON parse error? ' + uneval(e) + '\n');
-            continue;
-          }
           record.cleartext.values[name] = val;
           totalSize += name.length;
           totalSize += val.length || 4;  // 4 for number / bool (no length).
@@ -197,6 +193,7 @@ ScriptStore.prototype = {
     } else {
       script.enabled = aRecord.cleartext.enabled;
       script.userExcludes = aRecord.cleartext.userExcludes;
+      script.userMatches = aRecord.cleartext.userMatches;
       script.userIncludes = aRecord.cleartext.userIncludes;
       setScriptValuesFromSyncRecord(script, aRecord);
     }
