@@ -29,19 +29,31 @@
   <tabpanels>
     <tabpanel>
       <vbox flex="1">
-        <label value="&label.grpIncluded;" />
-        <cludes id="user-includes"/>
-        <label value="&label.grpExcluded;" />
-        <cludes id="user-excludes" />
+        <vbox flex="1" class="include">
+          <label value="&label.grpIncluded;" />
+          <cludes id="user-includes"/>
+        </vbox>
+        <vbox flex="1" class="match">
+          <label value="&label.grpMatched;" />
+          <cludes id="user-matches"/>
+        </vbox>
+        <vbox flex="1" class="exclude">
+          <label value="&label.grpExcluded;" />
+          <cludes id="user-excludes" />
+        </vbox>
       </vbox>
     </tabpanel>
     <tabpanel>
       <vbox flex="1">
-        <vbox flex="1" class="in">
+        <vbox flex="1" class="include">
           <label value="&label.grpIncluded;" />
           <cludes id="script-includes" class="readonly" />
         </vbox>
-        <vbox flex="1" class="ex">
+        <vbox flex="1" class="match">
+          <label value="&label.grpMatched;" />
+          <cludes id="script-matches" class="readonly" />
+        </vbox>
+        <vbox flex="1" class="exclude">
           <label value="&label.grpExcluded;" />
           <cludes id="script-excludes" class="readonly" />
         </vbox>
