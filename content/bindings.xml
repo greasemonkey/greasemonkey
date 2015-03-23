@@ -141,7 +141,7 @@
       </method>
     </implementation>
   </binding>
-  <binding id="clude-editor-readonly-in"
+  <binding id="clude-editor-readonly-include"
     extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
   >
     <content>
@@ -154,7 +154,20 @@
       </xul:hbox>
     </content>
   </binding>
-  <binding id="clude-editor-readonly-ex"
+  <binding id="clude-editor-readonly-match"
+    extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
+  >
+    <content>
+      <xul:hbox flex="1">
+        <xul:listbox flex="1" id="listbox" />
+        <xul:vbox id="vboxUserCludeMatch">
+          <xul:button id="btnUserClude" label="&button.addUserExclude;"
+              oncommand="_addUserClude('Exclude')" disabled="true" />
+        </xul:vbox>
+      </xul:hbox>
+    </content>
+  </binding>
+  <binding id="clude-editor-readonly-exclude"
     extends="chrome://greasemonkey/content/bindings.xml#clude-editor-readonly"
   >
     <content>

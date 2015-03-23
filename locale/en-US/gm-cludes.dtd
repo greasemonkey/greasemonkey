@@ -9,4 +9,5 @@
 <!ENTITY button.edit "Edit...">
 <!ENTITY button.remove "Remove">
 <!ENTITY label.grpIncluded "Included Pages">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Excluded Pages">
