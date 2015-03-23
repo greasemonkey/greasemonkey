@@ -63,6 +63,7 @@ function Script(configNode) {
   this._updateURL = null;
   this._updateMetaStatus = 'unknown';
   this._userExcludes = [];
+  this._userMatches = [];
   this._userIncludes = [];
   this._uuid = [];
   this._version = null;
@@ -97,7 +98,7 @@ Script.prototype.matchesURL = function(url) {
 
   // Allow based on user cludes.
   if (this._userExcludes.some(testClude)) return false;
-  if (this._userIncludes.some(testClude)) return true;
+  if (this._userIncludes.some(testClude) || this._userMatches.some(testMatch)) return true;
 
   // Finally allow based on script cludes and matches.
   if (this._excludes.some(testClude)) return false;
@@ -219,6 +220,27 @@ Script.prototype.__defineGetter__('userIncludes',
 function Script_getUserIncludes() { return this._userIncludes.concat(); });
 Script.prototype.__defineSetter__('userIncludes',
 function Script_setUserIncludes(includes) { this._userIncludes = includes.concat(); });
+
+Script.prototype.__defineGetter__('userMatches',
+function Script_getUserMatches() { return this._userMatches.concat(); });
+Script.prototype.__defineSetter__('userMatches',
+function Script_setUserMatches(matches) {
+  var matches_MatchPattern = new Array();
+
+  for (var i = 0; i < matches.length; i++) {
+    var match = matches[i];
+    try {
+      var match_MatchPattern = new MatchPattern(match);
+      matches_MatchPattern.push(match_MatchPattern);
+    } catch (e) {
+      GM_util.logError(stringBundle.GetStringFromName('parse.ignoring-match')
+                          .replace('%1', match).replace('%2', e));
+    }
+  }
+  matches = matches_MatchPattern;
+
+  this._userMatches = matches.concat();
+});
 
 Script.prototype.__defineGetter__('userExcludes',
 function Script_getUserExcludes() { return this._userExcludes.concat(); });
@@ -361,6 +383,9 @@ Script.prototype._loadFromConfigNode = function(node) {
     case "UserInclude":
       this._userIncludes.push(childNode.textContent);
       break;
+    case "UserMatch":
+      this._userMatches.push(new MatchPattern(childNode.textContent));
+      break;
     case "UserExclude":
       this._userExcludes.push(childNode.textContent);
       break;
@@ -426,6 +451,9 @@ Script.prototype.toConfigNode = function(doc) {
   addArrayNodes('Grant', this._grants);
   addArrayNodes('Include', this._includes);
   addArrayNodes('UserExclude', this._userExcludes);
+  for (var j = 0; j < this._userMatches.length; j++) {
+    addNode('UserMatch', this._userMatches[j].pattern);
+  }
   addArrayNodes('UserInclude', this._userIncludes);
 
   for (var j = 0; j < this._matches.length; j++) {
