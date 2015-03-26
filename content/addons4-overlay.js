@@ -5,9 +5,15 @@
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
 Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var userScriptViewId = 'addons://list/greasemonkey-user-script';
+
+var sortByValueDef = 'uiState,name';
+var sortByCheckStateReverse = '!';
+var sortByCheckStateValueAscending = '2';
+var sortByCheckStateValueDescending = '1';
 
 window.addEventListener('focus', focus, false);
 window.addEventListener('load', init, false);
@@ -193,6 +199,41 @@ function init() {
   applySort();
 };
 
+function getSortBy(buttons) {
+
+  var sortBy = GM_prefRoot.getValue('sortBy', sortByValueDef);
+  var sortByValue = sortBy.replace(sortByCheckStateReverse, '');
+  var sortByCheckStateAscending = 
+      !(sortByCheckStateReverse == sortBy.substring(0, 1));
+    
+  // Remove checkState from all buttons.
+  for (var i = 0, el = null; el = buttons[i]; i++) {
+    el.removeAttribute('checkState');
+  }
+
+  for (var i = 0, button = null; button = buttons[i]; i++) {
+    if (button.getAttribute('sortBy') == sortByValue) {
+      button.setAttribute('checkState',
+      (sortByCheckStateAscending ? sortByCheckStateValueAscending
+                                 : sortByCheckStateValueDescending));
+      break;
+    }
+  }
+
+  return button;
+
+}
+
+function setSortBy(button) {
+
+  var ascending = sortByCheckStateValueDescending
+                  != button.getAttribute('checkState');
+
+  GM_prefRoot.setValue('sortBy',
+      (!ascending ? sortByCheckStateReverse : '') + button.getAttribute('sortBy'));
+
+}
+
 function onSortersClicked(aEvent) {
   if ('button' != aEvent.target.tagName) return;
   var button = aEvent.target;
@@ -207,11 +248,13 @@ function onSortersClicked(aEvent) {
   }
 
   // Toggle state of this button.
-  if ('2' == checkState) {
-    button.setAttribute('checkState', '1');
+  if (sortByCheckStateValueAscending == checkState) {
+    button.setAttribute('checkState', sortByCheckStateValueDescending);
   } else {
-    button.setAttribute('checkState', '2');
+    button.setAttribute('checkState', sortByCheckStateValueAscending);
   }
+
+  setSortBy(button);
 
   applySort();
 };
@@ -219,15 +262,20 @@ function onSortersClicked(aEvent) {
 function applySort() {
   if (userScriptViewId != gViewController.currentViewId) return;
 
-  // Find checked button.
   var buttons = document.getElementById('greasemonkey-sort-bar')
     .getElementsByTagName('button');
+
+  var button = getSortBy(buttons);
+
+  // Find checked button.
   for (var i = 0, button = null; button = buttons[i]; i++) {
     if (button.hasAttribute('checkState')) break;
   }
 
-  var ascending = '1' != button.getAttribute('checkState');
+  var ascending = sortByCheckStateValueDescending != button.getAttribute('checkState');
   var sortBy = button.getAttribute('sortBy').split(',');
+
+  setSortBy(button);
 
   var list = document.getElementById('addon-list');
   var elements = Array.slice(list.childNodes, 0);
