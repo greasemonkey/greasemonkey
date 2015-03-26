@@ -12,6 +12,7 @@ pref("extensions.greasemonkey.logChrome", false);
 pref("extensions.greasemonkey.requireSecureUpdates", true);
 pref("extensions.greasemonkey.showGrantsWarning", true);
 pref("extensions.greasemonkey.sniffGrants", false);
+pref("extensions.greasemonkey.sortBy", "uiState,name");
 pref("extensions.greasemonkey.stats.id", "");
 pref("extensions.greasemonkey.stats.interval", 604800000);  // ms = 1 week
 pref("extensions.greasemonkey.stats.lastsubmittime", "Thu, 01 Jan 1970 00:00:00 GMT");
