@@ -13,7 +13,7 @@ Cu.import('resource://greasemonkey/util.js');
 
 var gHaveDoneInit = false;
 var gIgnoreNextScript = false;
-var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
+var gScriptEndingRegexp = new RegExp('\\.user\\.js($|\\?)');
 
 ////////////////////////////////////////////////////////////////////////////////
 
