@@ -230,7 +230,7 @@ function setSortBy(button) {
                   != button.getAttribute('checkState');
 
   GM_prefRoot.setValue('sortBy',
-      (!ascending ? sortByCheckStateReverse : '') + button.getAttribute('sortBy'));
+   (!ascending ? sortByCheckStateReverse : '') + button.getAttribute('sortBy'));
 
 }
 
@@ -272,7 +272,8 @@ function applySort() {
     if (button.hasAttribute('checkState')) break;
   }
 
-  var ascending = sortByCheckStateValueDescending != button.getAttribute('checkState');
+  var ascending = sortByCheckStateValueDescending
+                  != button.getAttribute('checkState');
   var sortBy = button.getAttribute('sortBy').split(',');
 
   setSortBy(button);
