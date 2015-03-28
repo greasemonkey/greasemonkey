@@ -102,7 +102,8 @@ function(safeUrl, details, req) {
       !details.synchronous, details.user || "", details.password || "");
 
   if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin)) {
-    var channel = req.channel.QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
+    var channel = req.channel
+        .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);
   }
 
