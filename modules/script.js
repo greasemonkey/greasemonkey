@@ -1,6 +1,5 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
-Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://greasemonkey/GM_notification.js');
 Components.utils.import('resource://greasemonkey/constants.js');
 Components.utils.import('resource://greasemonkey/extractMeta.js');
@@ -525,24 +524,25 @@ Script.prototype.info = function() {
   return {
     'uuid': this.uuid,
     'version': gGreasemonkeyVersion,
+    'scriptMetaStr': extractMeta(this.textContent),
+    'scriptSource': this.textContent,
     'scriptWillUpdate': this.isRemoteUpdateAllowed(),
     'script': {
       'description': this.description,
       'excludes': this.excludes,
-      // 'icon': ???,
+      // 'icon': ??? source URL?,
       'includes': this.includes,
       'localizedDescription': this.localized.description,
       'localizedName': this.localized.name,
       'matches': matches,
       'name': this.name,
       'namespace': this.namespace,
-      // 'requires': ???,
+      'noframes': this.noframes,
+      // 'requires': ??? source URL?,
       'resources': resources,
       'run-at': this.runAt,
       'version': this.version,
     },
-    'scriptMetaStr': extractMeta(this.textContent),
-    'scriptSource': this.textContent,
   };
 };
 
@@ -725,7 +725,7 @@ Script.prototype.updateFromNewScript = function(newScript, url, windowId, browse
               "greasemonkey:inject-script",
               {
                 windowId: pendingExec.windowId,
-                script: new IPCScript(this)
+                script: new IPCScript(this, gGreasemonkeyVersion)
               });
         }
       }
