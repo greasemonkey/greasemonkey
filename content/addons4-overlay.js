@@ -4,8 +4,8 @@
 (function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 Components.utils.import("resource://greasemonkey/addons4.js");
-Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
 Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
 var userScriptViewId = 'addons://list/greasemonkey-user-script';
