@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sh util.sh
+
 # Set up variables
 if [ "official" = "$1" ]; then
     # For official builds, use the version in install.rdf.
