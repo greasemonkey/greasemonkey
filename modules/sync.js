@@ -176,6 +176,10 @@ ScriptStore.prototype = {
     return syncIds;
   },
 
+  isAddonSyncable: function(aAddon) {
+    return true;
+  },
+
   itemExists: function(aId) {
     var script = scriptForSyncId(aId);
     return !!script;
