@@ -47,6 +47,7 @@ GM_ScriptStorageFront.prototype.setValue = function(name, val) {
     throw new Error(this.stringBundle.GetStringFromName('error.args.setValue'));
   }
 
+  if ('undefined' == typeof val) val = null;
   this._messageManager.sendSyncMessage(
       'greasemonkey:scriptVal-set',
       {scriptId: this._script.id, name: name, val: val});
@@ -59,6 +60,7 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
       {scriptId: this._script.id, name: name});
   value = value.length && value[0];
 
+  if ('undefined' == typeof defVal) defVal = null;
   if (value === undefined || value === null) return defVal;
 
   try {
