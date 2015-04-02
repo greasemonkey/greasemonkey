@@ -580,6 +580,7 @@ RemoteScript.prototype._downloadFile = function(
   }
 
   var channel = ioService.newChannelFromURI(aUri);
+  channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
   this._channels.push(channel);
   var dsl = new DownloadListener(
       0 == this._progressIndex,  // aTryToParse
