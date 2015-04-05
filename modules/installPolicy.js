@@ -115,7 +115,6 @@ var InstallPolicy = {
   },
 
   shouldProcess: function() {
-    dump('>>> installPolicy shouldProcess() ...\n');
     return Ci.nsIContentPolicy.ACCEPT;
   },
 
