@@ -76,6 +76,7 @@ ScriptRunner.prototype.registeredMenuCommand = function(aCommand) {
     frozen: aCommand.frozen,
     index: length - 1,
     name: aCommand.name,
+    scriptName: aCommand.scriptName,
     windowId: aCommand.contentWindowId
   });
 };
