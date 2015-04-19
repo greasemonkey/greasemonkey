@@ -83,8 +83,7 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
-   var gmrmc = GM_util.hitch(null, registerMenuCommand, aScriptRunner);
-   sandbox.GM_registerMenuCommand = gmrmc;
+    sandbox.GM_registerMenuCommand = GM_util.hitch(null, registerMenuCommand, aScriptRunner, aScript);
   }
 
   var scriptStorage = new GM_ScriptStorageFront(aScript, aMessageManager);
