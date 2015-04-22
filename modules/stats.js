@@ -131,6 +131,7 @@ function getStatsObj() {
         'modifiedTime': script.modifiedDate.toISOString(),
         'sizes': sizes,
         'userExcludeCount': script.userExcludes.length,
+        'userMatchCount': script.userMatches.length,
         'userIncludeCount': script.userIncludes.length,
         'valueCount': valueStats.count,
         'valueSize': valueStats.size,

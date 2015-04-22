@@ -142,6 +142,7 @@ Config.prototype.install = function(script, oldScript, tempDir) {
     // Save the old script's state.
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
+    script.userMatches = oldScript.userMatches;
     script.userIncludes = oldScript.userIncludes;
 
     // Uninstall the old script.
