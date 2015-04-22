@@ -7,7 +7,7 @@ var gWindowWatcher = Components
     .classes["@mozilla.org/embedcomp/window-watcher;1"]
     .getService(Components.interfaces.nsIWindowWatcher);
 
-function showInstallDialog(aUrlOrRemoteScript, aBrowser) {
+function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRefererUrl) {
   var rs = null;
   if ('string' == typeof aUrlOrRemoteScript) {
     rs = new RemoteScript(aUrlOrRemoteScript);
@@ -41,7 +41,7 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser) {
     if (!aSuccess && 'script' == aType) {
       aBrowser.messageManager.sendAsyncMessage(
           'greasemonkey:load-failed-script',
-          {'url': rs.url});
+          {'referer': aRefererUrl, 'url': rs.url});
     }
   });
 }

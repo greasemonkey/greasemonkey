@@ -138,7 +138,7 @@ GM_BrowserUI.refreshStatus = function() {
 
 // Not used directly, kept for GreaseFire.  See #1507.
 GM_BrowserUI.startInstallScript = function(aUri) {
-  GM_util.showInstallDialog(aUri.spec, gBrowser, GM_util.getService());
+  GM_util.showInstallDialog(aUri.spec, gBrowser);
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
@@ -205,7 +205,7 @@ GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
       'popup': null,
       'callback': function() {
         GM_util.setEnabled(true);
-        GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
+        GM_util.showInstallDialog(aHref, gBrowser);
       }
     });
   }
@@ -215,7 +215,7 @@ GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
     'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
     'popup': null,
     'callback': GM_util.hitch(this, function() {
-      GM_util.showInstallDialog(aHref, gBrowser, GM_util.getService());
+      GM_util.showInstallDialog(aHref, gBrowser);
     })
   });
 

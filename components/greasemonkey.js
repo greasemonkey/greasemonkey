@@ -194,7 +194,8 @@ service.prototype.handleScriptValMsg = function(aMessage) {
 };
 
 service.prototype.scriptInstall = function(aMessage) {
-  GM_util.showInstallDialog(aMessage.data.url, aMessage.target);
+  GM_util.showInstallDialog(
+      aMessage.data.url, aMessage.target, aMessage.data.referer);
 };
 
 service.prototype.urlIsTempFile = function(aMessage) {
