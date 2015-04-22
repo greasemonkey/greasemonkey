@@ -291,7 +291,6 @@ addEventListener('unload', function() {
 }, false);
 
 (function() {
-  var tmpDir = sendSyncMessage('greasemonkey:temp-dir-path');
-  initInstallPolicy(tmpDir[0]);
+  initInstallPolicy();
   initScriptProtocol();
 })();

@@ -22,10 +22,10 @@ function ignoreNextScript() {
   gIgnoreNextScript = true;
 }
 
-function initInstallPolicy(aTmpPath) {
+function initInstallPolicy() {
   if (gHaveDoneInit) return;
   gHaveDoneInit = true;
-  InstallPolicy.init(aTmpPath);
+  InstallPolicy.init();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ var InstallPolicy = {
   _classID: Components.ID('c03c575c-e87e-4a0f-b88d-8be090116a0c'),
   _contractID: '@greasemonkey.mozdev.org/greasemonkey-install-policy;1',
 
-  init: function(aTmpPath) {
+  init: function() {
     try {
       var registrar = Components.manager.QueryInterface(Ci.nsIComponentRegistrar);
       registrar.registerFactory(
@@ -53,8 +53,6 @@ var InstallPolicy = {
         .getService(Ci.nsICategoryManager);
     catMan.addCategoryEntry(
         'content-policy', this._contractID, this._contractID, false, true);
-
-    this._tmpPath = aTmpPath;
   },
 
   QueryInterface: XPCOMUtils.generateQI([
