@@ -54,7 +54,7 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
     if (script.noframes && !winIsTop) continue;
-    var sandbox = createSandbox(script, this, gScope);
+    var sandbox = createSandbox(script, this);
     runScriptInSandbox(script, sandbox);
   }
 };
