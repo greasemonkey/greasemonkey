@@ -1,11 +1,16 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
+Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("resource://greasemonkey/util.js");
 
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
   this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
+  this.stringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
 // this function gets called by user scripts in content security scope to
@@ -95,6 +100,12 @@ function(safeUrl, details, req) {
 
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
+
+  if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin)) {
+    var channel = req.channel
+        .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
+    channel.setPrivate(true);
+  }
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
