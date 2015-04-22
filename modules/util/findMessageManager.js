@@ -18,7 +18,11 @@ function findMessageManager(aContext) {
         .QueryInterface(Ci.nsIDocShellTreeItem).rootTreeItem;
   }
 
-  return docShell
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIContentFrameMessageManager);
+  try {
+    return docShell
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIContentFrameMessageManager);
+  } catch (e) {
+    return null;
+  }
 };

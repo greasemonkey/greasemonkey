@@ -92,7 +92,6 @@ var InstallPolicy = {
       return ret;
     }
 
-
     var tmpResult = Services.cpmm.sendSyncMessage(
         'greasemonkey:url-is-temp-file', {'url': aContentURI.spec});
     if (tmpResult.length && tmpResult[0]) {
@@ -100,15 +99,20 @@ var InstallPolicy = {
     }
 
     if (!gIgnoreNextScript) {
-      ret = Ci.nsIContentPolicy.REJECT_REQUEST;
       var windowMm = GM_util.findMessageManager(aContext);
-      windowMm.sendAsyncMessage('greasemonkey:script-install', {
-        'referer': aOriginURI.spec,
-        'url': aContentURI.spec,
-      });
+      if (!windowMm) {
+        dump('ERROR ignoring script ' + aContentURI.spec + ' because no content'
+            + ' message manager could be located from ' + aContext + '\n');
+      } else {
+        ret = Ci.nsIContentPolicy.REJECT_REQUEST;
+        windowMm.sendAsyncMessage('greasemonkey:script-install', {
+          'referer': aOriginURI.spec,
+          'url': aContentURI.spec,
+        });
+      }
     }
-    gIgnoreNextScript = false;
 
+    gIgnoreNextScript = false;
     return ret;
   },
 

@@ -135,10 +135,17 @@ ContentObserver.prototype.createScriptFromObject = function(aObject) {
 
 
 ContentObserver.prototype.loadFailedScript = function(aMessage) {
+  var url = aMessage.data.url;
+  var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
+  var referer = aMessage.data.referer
+      && GM_util.uriFromUrl(aMessage.data.referer);
+  var postData = null;
+  var headers = null;
+
+  var webNav = docShell.QueryInterface(Ci.nsIWebNavigation);
+
   ignoreNextScript();
-  docShell.loadURI(
-      GM_util.uriFromUrl(aMessage.data.url),
-      /* loadInfo */ null, /* aLoadFlags */ null, /* firstParty */ true);
+  webNav.loadURI(url, loadFlags, referer, postData, headers);
 };
 
 
