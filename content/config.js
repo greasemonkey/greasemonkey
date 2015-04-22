@@ -288,5 +288,23 @@ Config.prototype._updateVersion = function() {
         chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 100, url);
       }
     }
+
+    if ('3.2' == newVersion && oldVersion != newVersion) {
+      const tmp_dir = Components
+          .classes['@mozilla.org/file/directory_service;1']
+          .getService(Components.interfaces.nsIProperties)
+          .get('TmpD', Components.interfaces.nsIFile);
+      // #2069 Clean up stray temp directories.
+      for (var i = 1; ; i++) {
+        var file = tmp_dir.clone();
+        file.append('gm-temp' + i);
+        if (file.exists()) {
+          dump('Removing temp dir: ' + file.path + '\n');
+          file.remove(true);
+        } else {
+          break;
+        }
+      }
+    }
   }));
 };
