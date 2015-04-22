@@ -3,14 +3,16 @@ var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("resource://greasemonkey/util.js");
 
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
+
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
   this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
-  this.stringBundle = Components
-    .classes["@mozilla.org/intl/stringbundle;1"]
-    .getService(Components.interfaces.nsIStringBundleService)
-    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 }
 
 // this function gets called by user scripts in content security scope to
@@ -29,7 +31,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   } catch (e) {
     // A malformed URL won't be parsed properly.
     throw new Error(
-        this.stringBundle.GetStringFromName('error.invalidUrl')
+        gStringBundle.GetStringFromName('error.invalidUrl')
             .replace('%1', name)
         );
   }
@@ -46,7 +48,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
       break;
     default:
       throw new Error(
-          this.stringBundle.GetStringFromName('error.disallowedScheme')
+          gStringBundle.GetStringFromName('error.disallowedScheme')
               .replace('%1', details.url)
           );
   }
