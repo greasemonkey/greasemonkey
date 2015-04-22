@@ -44,40 +44,32 @@ function startup(aService) {
   loader.loadSubScript("chrome://greasemonkey/content/config.js");
   loader.loadSubScript("chrome://greasemonkey/content/third-party/mpl-utils.js");
 
-  // Most incoming messages go to the "global" message manager.
-  var globalMessageManager = Cc["@mozilla.org/globalmessagemanager;1"]
+  var globalMm = Cc["@mozilla.org/globalmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
-  globalMessageManager.addMessageListener(
-      'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
-  globalMessageManager.addMessageListener(
-      'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
-  var scriptValHandler = aService.handleScriptValMsg.bind(aService);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:scriptVal-delete', scriptValHandler);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:scriptVal-get', scriptValHandler);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:scriptVal-list', scriptValHandler);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:scriptVal-set', scriptValHandler);
+  var s = aService;
+  var g = 'greasemonkey:';
 
-  // This particular message must be listened for by the "parent" and not
-  // by "global".  Why?!?!?
-  var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
-      .getService(Ci.nsIMessageListenerManager);
-  parentMessageManager.addMessageListener(
-      'greasemonkey:scripts-for-uuid',
-      aService.getScriptsForUuid.bind(aService));
+  globalMm.addMessageListener(
+      g + 'script-install', s.scriptInstall.bind(s));
 
-  // Yes, we have to load the frame script once here in the parent scope.
-  // Why?  Who knows!?
-  globalMessageManager.loadFrameScript(
-      'chrome://greasemonkey/content/framescript.js', true);
+  Services.ppmm.addMessageListener(
+      g + 'scripts-for-url', s.getScriptsForUrl.bind(s));
+  Services.ppmm.addMessageListener(
+    g + 'scripts-for-uuid', s.getScriptsForUuid.bind(s));
+  Services.ppmm.addMessageListener(
+      g + 'url-is-temp-file', s.urlIsTempFile.bind(s));
+
+  var scriptValHandler = s.handleScriptValMsg.bind(s);
+  Services.ppmm.addMessageListener(g + 'scriptVal-delete', scriptValHandler);
+  Services.ppmm.addMessageListener(g + 'scriptVal-get', scriptValHandler);
+  Services.ppmm.addMessageListener(g + 'scriptVal-list', scriptValHandler);
+  Services.ppmm.addMessageListener(g + 'scriptVal-set', scriptValHandler);
 
   Services.obs.addObserver(aService, 'quit-application', false);
+
+  Services.mm.loadFrameScript(
+      'chrome://greasemonkey/content/framescript.js', true);
 
   // Import this once, early, so that enqueued deletes can happen.
   Cu.import("resource://greasemonkey/util/enqueueRemoveFile.js");

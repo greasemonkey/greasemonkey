@@ -14,9 +14,8 @@ var EXPORTED_SYMBOLS = ['GM_ScriptStorageFront'];
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function GM_ScriptStorageFront(aScript, aMessageManager) {
+function GM_ScriptStorageFront(aScript) {
   this._db = null;
-  this._messageManager = aMessageManager;
   this._script = aScript;
   this.stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
@@ -48,14 +47,14 @@ GM_ScriptStorageFront.prototype.setValue = function(name, val) {
   }
 
   if ('undefined' == typeof val) val = null;
-  this._messageManager.sendSyncMessage(
+  Services.cpmm.sendSyncMessage(
       'greasemonkey:scriptVal-set',
       {scriptId: this._script.id, name: name, val: val});
 };
 
 
 GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
-  var value = this._messageManager.sendSyncMessage(
+  var value = Services.cpmm.sendSyncMessage(
       'greasemonkey:scriptVal-get',
       {scriptId: this._script.id, name: name});
   value = value.length && value[0];
@@ -73,14 +72,14 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
 
 
 GM_ScriptStorageFront.prototype.deleteValue = function(name) {
-  this._messageManager.sendSyncMessage(
+  Services.cpmm.sendSyncMessage(
       'greasemonkey:scriptVal-delete',
       {scriptId: this._script.id, name: name});
 };
 
 
 GM_ScriptStorageFront.prototype.listValues = function() {
-  var value = this._messageManager.sendSyncMessage(
+  var value = Services.cpmm.sendSyncMessage(
       'greasemonkey:scriptVal-list',
       {scriptId: this._script.id});
   return JSON.stringify(value.length && value[0] || []);

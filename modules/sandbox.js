@@ -25,7 +25,7 @@ function alert(msg) {
       .alert(null, "Greasemonkey alert", msg);
 }
 
-function createSandbox(aScript, aScriptRunner, aMessageManager) {
+function createSandbox(aScript, aScriptRunner) {
   var contentWin = aScriptRunner.window;
   var url = aScriptRunner.url;
 
@@ -87,7 +87,7 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
    sandbox.GM_registerMenuCommand = gmrmc;
   }
 
-  var scriptStorage = new GM_ScriptStorageFront(aScript, aMessageManager);
+  var scriptStorage = new GM_ScriptStorageFront(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
     sandbox.GM_deleteValue = GM_util.hitch(scriptStorage, 'deleteValue');
   }

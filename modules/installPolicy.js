@@ -7,6 +7,7 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
+Cu.import("resource://gre/modules/Services.jsm");
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 Cu.import('resource://greasemonkey/util.js');
@@ -93,19 +94,18 @@ var InstallPolicy = {
       return ret;
     }
 
-    var messageManager = GM_util.findMessageManager(aContext);
 
-    var tmpResult = messageManager
-        .sendSyncMessage('greasemonkey:url-is-temp-file', {
-          'url': aContentURI.spec,
-        });
+    var tmpResult = Services.cpmm.sendSyncMessage(
+        'greasemonkey:url-is-temp-file', {'url': aContentURI.spec});
     if (tmpResult.length && tmpResult[0]) {
       return ret;
     }
 
     if (!gIgnoreNextScript) {
       ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-      messageManager.sendAsyncMessage('greasemonkey:script-install', {
+      var windowMm = GM_util.findMessageManager(aContext);
+      windowMm.sendAsyncMessage('greasemonkey:script-install', {
+        'referer': aOriginURI.spec,
         'url': aContentURI.spec,
       });
     }

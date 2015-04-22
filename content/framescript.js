@@ -180,12 +180,12 @@ ContentObserver.prototype.pagehide = function(aEvent) {
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
   if (aEvent.persisted) {
-    sendAsyncMessage('greasemonkey:toggle-menu-commands', {
+    Services.cpmm.sendAsyncMessage('greasemonkey:toggle-menu-commands', {
       frozen: true,
       windowId: windowId
     });
   } else {
-    sendAsyncMessage('greasemonkey:clear-menu-commands', {
+    Services.cpmm.sendAsyncMessage('greasemonkey:clear-menu-commands', {
       windowId: windowId
     });
   }
@@ -200,7 +200,7 @@ ContentObserver.prototype.pageshow = function(aEvent) {
 
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
-  sendAsyncMessage('greasemonkey:toggle-menu-commands', {
+  Services.cpmm.sendAsyncMessage('greasemonkey:toggle-menu-commands', {
     frozen: false,
     windowId: windowId
   });
@@ -255,7 +255,7 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
     scriptRunner.window = aContentWin;
   }
 
-  var response = sendSyncMessage(
+  var response = Services.cpmm.sendSyncMessage(
     'greasemonkey:scripts-for-url', {
       'url': url,
       'when': aRunWhen,
