@@ -13,7 +13,7 @@ var EXPORTED_SYMBOLS = [
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function GM_Resources(script){
+function GM_Resources(script) {
   this.script = script;
   this.stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]

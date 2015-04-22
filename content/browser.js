@@ -75,7 +75,7 @@ GM_BrowserUI.openInTab = function(aMessage) {
 
   // TODO: obviously can't return a window here...
   return /* tabBrowser.getBrowserForTab(newTab).contentWindow */ null;
-}
+};
 
 /**
  * The browser XUL has unloaded. Destroy references/watchers/listeners.
@@ -336,12 +336,13 @@ function GM_showPopup(aEvent) {
   scriptsSepEl.collapsed = !(runsOnTop.length && runsFramed.length);
   noScriptsEl.collapsed = !!(runsOnTop.length || runsFramed.length);
 
+  var point;
   if (runsFramed.length) {
-    var point = scriptsFramedEl;
+    point = scriptsFramedEl;
     runsFramed.forEach(
         function(script) { point = appendScriptAfter(script, point); });
   }
-  var point = scriptsTopEl;
+  point = scriptsTopEl;
   runsOnTop.forEach(
       function(script) { point = appendScriptAfter(script, point); });
 

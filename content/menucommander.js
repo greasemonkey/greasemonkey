@@ -14,7 +14,7 @@ GM_MenuCommander.initialize = function() {
       GM_MenuCommander.clearMenuCommands);
   messageManager.addMessageListener('greasemonkey:toggle-menu-commands',
       GM_MenuCommander.toggleMenuCommands);
-}
+};
 
 GM_MenuCommander.menuCommandRegistered = function(aMessage) {
   var windowId = aMessage.data.windowId;
@@ -26,14 +26,14 @@ GM_MenuCommander.menuCommandRegistered = function(aMessage) {
   var command = aMessage.data;
   command.browser = aMessage.target;
   GM_MenuCommander.menuCommands[windowId].push(command);
-}
+};
 
 GM_MenuCommander.clearMenuCommands = function(aMessage) {
   var windowId = aMessage.data.windowId;
   if (!windowId) return;
 
   delete GM_MenuCommander.menuCommands[windowId];
-}
+};
 
 GM_MenuCommander.toggleMenuCommands = function(aMessage) {
   var frozen = aMessage.data.frozen;
@@ -42,14 +42,14 @@ GM_MenuCommander.toggleMenuCommands = function(aMessage) {
   GM_MenuCommander.withAllMenuCommandsForWindowId(windowId, function(command) {
     command.frozen = frozen;
   });
-}
+};
 
 GM_MenuCommander.commandClicked = function(aCommand) {
   aCommand.browser.messageManager.sendAsyncMessage("greasemonkey:menu-command-clicked", {
     index: aCommand.index,
     windowId: aCommand.windowId
   });
-}
+};
 
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
@@ -68,7 +68,7 @@ GM_MenuCommander.createMenuItem = function(command) {
 GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
   // Asynchronously.  See #1632.
   GM_util.timeout(function() { GM_util.emptyEl(aMenuPopup); }, 0);
-}
+};
 
 GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
   // Add menu items for commands for the active window.

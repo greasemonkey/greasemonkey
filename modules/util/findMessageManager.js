@@ -21,4 +21,4 @@ function findMessageManager(aContext) {
   return docShell
       .QueryInterface(Ci.nsIInterfaceRequestor)
       .getInterface(Ci.nsIContentFrameMessageManager);
-}
+};
