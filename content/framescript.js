@@ -256,8 +256,8 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
 
   if (!GM_util.isGreasemonkeyable(url)) return;
 
-  var scriptRunner = gScriptRunners[windowId];
   var windowId = GM_util.windowId(aContentWin);
+  var scriptRunner = gScriptRunners[windowId];
   if (!scriptRunner) {
     scriptRunner = new ScriptRunner(aContentWin, url);
     gScriptRunners[windowId] = scriptRunner;
