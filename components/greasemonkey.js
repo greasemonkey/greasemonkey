@@ -27,6 +27,13 @@ var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
 
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+var gGreasemonkeyVersion = 'unknown';
+Cu.import("resource://gre/modules/AddonManager.jsm");
+AddonManager.getAddonByID(GM_GUID, function(addon) {
+  gGreasemonkeyVersion = '' + addon.version;
+});
+
 /////////////////////// Component-global Helper Functions //////////////////////
 
 
@@ -156,7 +163,7 @@ service.prototype.getScriptsForUrl = function(aMessage) {
     }
   }).map(function(script) {
     // Make the script serializable so it can be sent to the frame script.
-    return new IPCScript(script);
+    return new IPCScript(script, gGreasemonkeyVersion);
   });
 
   return scripts;
@@ -168,7 +175,7 @@ service.prototype.getScriptsForUuid = function(aMessage) {
       function(script) { return script.uuid == uuid; }
   ).map(function(script) {
     // Make the script serializable so it can be sent to the frame script.
-    return new IPCScript(script);
+    return new IPCScript(script, gGreasemonkeyVersion);
   });
   return scripts;
 };

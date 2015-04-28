@@ -3,7 +3,8 @@ var EXPORTED_SYMBOLS = ['IPCScript'];
 Components.utils.import("resource://greasemonkey/extractMeta.js");
 Components.utils.import("resource://greasemonkey/util.js");
 
-function IPCScript(aScript) {
+function IPCScript(aScript, addonVersion) {
+  this.addonVersion = addonVersion;
   this.description = aScript.description;
   this.excludes = aScript.excludes;
   this.fileURL = aScript.fileURL;
@@ -58,12 +59,12 @@ IPCScript.prototype.info = function() {
 
   return {
     'uuid': this.uuid,
-    'version': "unknown", // TODO
+    'version': this.addonVersion,
     'scriptMetaStr': this.metaStr,
     'scriptSource': this.textContent,
     'scriptWillUpdate': this.willUpdate,
     'script': {
-      'description': this.desciption,
+      'description': this.description,
       'excludes': this.excludes,
       // 'icon': ??? source URL?
       'includes': this.includes,
