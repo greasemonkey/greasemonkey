@@ -54,7 +54,7 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
     if (script.noframes && !winIsTop) continue;
-    var sandbox = createSandbox(script, this);
+    var sandbox = createSandbox(script, this, gScope);
     runScriptInSandbox(script, sandbox);
   }
 };
@@ -193,12 +193,12 @@ ContentObserver.prototype.pagehide = function(aEvent) {
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
   if (aEvent.persisted) {
-    Services.cpmm.sendAsyncMessage('greasemonkey:toggle-menu-commands', {
+    sendAsyncMessage('greasemonkey:toggle-menu-commands', {
       frozen: true,
       windowId: windowId
     });
   } else {
-    Services.cpmm.sendAsyncMessage('greasemonkey:clear-menu-commands', {
+    sendAsyncMessage('greasemonkey:clear-menu-commands', {
       windowId: windowId
     });
   }
@@ -213,7 +213,7 @@ ContentObserver.prototype.pageshow = function(aEvent) {
 
   if (!gScriptRunners[windowId].menuCommands.length) return;
 
-  Services.cpmm.sendAsyncMessage('greasemonkey:toggle-menu-commands', {
+  sendAsyncMessage('greasemonkey:toggle-menu-commands', {
     frozen: false,
     windowId: windowId
   });
@@ -268,7 +268,7 @@ ContentObserver.prototype.runScripts = function(aRunWhen, aContentWin) {
     scriptRunner.window = aContentWin;
   }
 
-  var response = Services.cpmm.sendSyncMessage(
+  var response = sendSyncMessage(
     'greasemonkey:scripts-for-url', {
       'url': url,
       'when': aRunWhen,

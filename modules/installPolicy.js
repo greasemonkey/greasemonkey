@@ -7,7 +7,6 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-Cu.import("resource://gre/modules/Services.jsm");
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 Cu.import('resource://greasemonkey/util.js');
@@ -92,20 +91,21 @@ var InstallPolicy = {
       return ret;
     }
 
-    var tmpResult = Services.cpmm.sendSyncMessage(
+    var messageManager = GM_util.findMessageManager(aContext);
+
+    var tmpResult = messageManager.sendSyncMessage(
         'greasemonkey:url-is-temp-file', {'url': aContentURI.spec});
     if (tmpResult.length && tmpResult[0]) {
       return ret;
     }
 
     if (!gIgnoreNextScript) {
-      var windowMm = GM_util.findMessageManager(aContext);
-      if (!windowMm) {
+      if (!messageManager) {
         dump('ERROR ignoring script ' + aContentURI.spec + ' because no content'
             + ' message manager could be located from ' + aContext + '\n');
       } else {
         ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-        windowMm.sendAsyncMessage('greasemonkey:script-install', {
+        messageManager.sendAsyncMessage('greasemonkey:script-install', {
           'referer': aOriginURI.spec,
           'url': aContentURI.spec,
         });

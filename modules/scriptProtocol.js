@@ -1,14 +1,10 @@
 var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import('resource://greasemonkey/util.js');
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-
-Cu.import('resource://greasemonkey/util.js');
-
 const schemeName = 'greasemonkey-script';
 const ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
@@ -116,7 +112,9 @@ var ScriptProtocol = {
     // Incomplete URI, send a 404.
     if (!m) return dummy;
 
-    var response = Services.cpmm.sendSyncMessage(
+    var mm = Cc["@mozilla.org/childprocessmessagemanager;1"]
+        .getService(Ci.nsISyncMessageSender);
+    var response = mm.sendSyncMessage(
       'greasemonkey:scripts-for-uuid', {'uuid': m[1]});
     // We expect exactly one response, listing exactly one script.
     if (response.length != 1) return dummy;
