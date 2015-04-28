@@ -60,11 +60,17 @@ ScriptRunner.prototype.injectScripts = function(aScripts) {
 };
 
 ScriptRunner.prototype.openInTab = function(aUrl, aInBackground) {
-  var response = sendSyncMessage('greasemonkey:open-in-tab', {
-    inBackground: aInBackground,
-    url: aUrl
+  var loadInBackground = ('undefined' == typeof aInBackground)
+      ? null : !!aInBackground;
+
+  // Resolve URL relative to the location of the content window.
+  var baseUri = Services.io.newURI(this.window.location.href, null, null);
+  var uri = Services.io.newURI(aUrl, null, baseUri);
+
+  sendAsyncMessage('greasemonkey:open-in-tab', {
+    inBackground: loadInBackground,
+    url: uri.spec,
   });
-  return response ? response[0] : null;
 };
 
 

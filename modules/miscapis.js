@@ -105,15 +105,3 @@ function GM_console(script) {
 
 GM_console.prototype.log = function() {
 };
-
-// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
-
-function GM_openInTab(aScriptRunner, aUrl, aLoadInBackground) {
-  if ('undefined' == typeof aLoadInBackground) aLoadInBackground = null;
-
-  // Resolve URL relative to the location of the content window.
-  var baseUri = Services.io.newURI(aScriptRunner.window.location.href, null, null);
-  var uri = Services.io.newURI(aUrl, null, baseUri);
-
-  return aScriptRunner.openInTab(uri.spec, !!aLoadInBackground);
-};

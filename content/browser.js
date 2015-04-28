@@ -1,3 +1,4 @@
+Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import('resource://greasemonkey/util.js');
 
@@ -67,14 +68,23 @@ GM_BrowserUI.openTab = function(url) {
 GM_BrowserUI.openInTab = function(aMessage) {
   var browser = aMessage.target;
   var tabBrowser = browser.getTabBrowser();
+  var scriptTab = tabBrowser.getTabForBrowser(browser);
+  var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
+  var newTab = tabBrowser.addTab(
+      aMessage.data.url,
+      {
+          'ownerTab': scriptTab,
+          'relatedToCurrent': scriptTabIsCurrentTab,
+      });
 
-  var newTab = tabBrowser.loadOneTab(aMessage.data.url, {
-    'inBackground': aMessage.data.inBackground,
-    'relatedToCurrent': true
-  });
+  var getBool = Services.prefs.getBoolPref;
 
-  // TODO: obviously can't return a window here...
-  return /* tabBrowser.getBrowserForTab(newTab).contentWindow */ null;
+  var prefBg = getBool('browser.tabs.loadInBackground');
+  prefBg |= aMessage.data.inBackground;
+  if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
+
+  var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
+  if (prefRel) tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
 };
 
 /**
