@@ -8,8 +8,7 @@ Cu.import("resource://greasemonkey/util.js");
 
 
 var EXPORTED_SYMBOLS = [
-    'GM_addStyle', 'GM_console', 'GM_openInTab', 'GM_Resources',
-    'GM_ScriptLogger'];
+    'GM_addStyle', 'GM_console', 'GM_Resources', 'GM_ScriptLogger'];
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
