@@ -93,7 +93,7 @@ function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
   var setupRequestEvent = GM_util.hitch(
-      this, 'setupRequestEvent', this.wrappedContentWin, this.sandbox);
+      this, 'setupRequestEvent', this.wrappedContentWin);
 
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
@@ -192,7 +192,7 @@ function(details, req) {
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
-function(wrappedContentWin, sandbox, req, event, details) {
+function(wrappedContentWin, req, event, details) {
   // Waive Xrays so that we can read callback function properties ...
   details = Components.utils.waiveXrays(details);
   var eventCallback = details["on" + event];
@@ -257,7 +257,7 @@ function(wrappedContentWin, sandbox, req, event, details) {
         break;
     }
 
-    responseState = sandbox.cloneInto({
+    responseState = Components.utils.cloneInto({
       context: responseState.context,
       finalUrl: responseState.finalUrl,
       lengthComputable: responseState.lengthComputable,
@@ -270,7 +270,7 @@ function(wrappedContentWin, sandbox, req, event, details) {
       status: responseState.status,
       statusText: responseState.statusText,
       total: responseState.total
-    }, sandbox, {cloneFunctions: true, wrapReflectors: true});
+    }, wrappedContentWin, {cloneFunctions: true, wrapReflectors: true});
 
     if (GM_util.windowIsClosed(wrappedContentWin)) {
       return;
