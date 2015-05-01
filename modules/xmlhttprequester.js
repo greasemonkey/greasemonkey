@@ -73,7 +73,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     rv.statusText = req.statusText;
   }
   
-  rv = this.sandbox.cloneInto({
+  rv = Components.utils.cloneInto({
     abort: rv.abort.bind(rv),
     finalUrl: rv.finalUrl,
     readyState: rv.readyState,
