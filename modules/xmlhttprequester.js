@@ -88,8 +88,8 @@ function(safeUrl, details, req) {
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
   setupRequestEvent(req, "load", details);
-  setupRequestEvent(req, "loadstart", details);
   setupRequestEvent(req, "loadend", details);
+  setupRequestEvent(req, "loadstart", details);
   setupRequestEvent(req, "progress", details);
   setupRequestEvent(req, "readystatechange", details);
   setupRequestEvent(req, "timeout", details);
