@@ -53,6 +53,96 @@ GM_BrowserUI.chromeLoad = function(e) {
 
   // Make sure this is imported at least once, so its internal timer starts.
   Components.utils.import('resource://greasemonkey/stats.js');
+
+  // MenuCommands Panel
+  (function(){
+    var panel = document.getElementById('mc-panel');
+    var entry = document.getElementById('mc-entry');
+    var list = document.getElementById('mc-list');
+    var commands;
+
+    var clearList = function() {
+      while(list.itemCount > 0) {
+        list.removeItemAt(0);
+      }
+    }
+
+    var fillList = function(filter) {
+      for (var i = commands.length - 1; i >= 0; i--) {
+        if (filter) {
+          if (commands[i].name.toUpperCase().indexOf(filter.toUpperCase()) >= 0) {
+            list.appendItem(commands[i].name, i);
+          }
+        } else {
+          list.appendItem(commands[i].name, i);
+        }
+      }
+      list.selectItem(list.getItemAtIndex(0));
+      list.scrollToIndex(0);
+    }
+
+    var mcShortcut = function(evt) {
+      if (evt.ctrlKey && evt.shiftKey && evt.keyCode === 32) {
+        mcShow();
+      }
+    }
+
+    var mcShow = function() {
+      commands = GM_MenuCommander.menuCommands[GM_util.windowId(getBrowser().contentWindow)];
+
+      clearList();
+      fillList();
+
+      panel.openPopup(document.getElementById('content').selectedBrowser, '', 170,20,false,false);
+      entry.select();
+      entry.focus();
+    }
+
+    var mcCall = function() {
+      if (list.selectedItem === null) {
+        return;
+      }
+      var idx = list.selectedItem.value;
+
+      entry.value = list.selectedItem.label;
+      commands[idx].browser.messageManager.sendAsyncMessage("greasemonkey:menu-command-clicked", {
+        index: commands[idx].index,
+        windowId: commands[idx].windowId
+      });
+
+      panel.hidePopup();
+    }
+
+    var mcAutocomplete = function(evt) {
+      if (evt.keyCode === 13) {
+        mcCall();
+        evt.preventDefault();
+        return;
+      }
+
+      if (evt.keyCode === 38) {
+        if (list.selectedIndex > 0) {
+          list.selectItem(list.getItemAtIndex(list.selectedIndex-1));
+        }
+        evt.preventDefault();
+        return;
+      }
+
+      if (evt.keyCode === 40) {
+        if (list.selectedIndex < list.itemCount-1) {
+          list.selectItem(list.getItemAtIndex(list.selectedIndex+1));
+        }
+        evt.preventDefault();
+        return;
+      }
+
+      clearList();
+      fillList(evt.target.value);
+    }
+
+    document.addEventListener('keyup', mcShortcut, false);
+    entry.addEventListener('keyup', mcAutocomplete, false);
+  })();
 };
 
 /**
