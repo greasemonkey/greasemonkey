@@ -88,6 +88,8 @@ function(safeUrl, details, req) {
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
   setupRequestEvent(req, "load", details);
+  setupRequestEvent(req, "loadstart", details);
+  setupRequestEvent(req, "loadend", details);
   setupRequestEvent(req, "progress", details);
   setupRequestEvent(req, "readystatechange", details);
   setupRequestEvent(req, "timeout", details);
@@ -95,7 +97,9 @@ function(safeUrl, details, req) {
     setupRequestEvent(req.upload, "abort", details.upload);
     setupRequestEvent(req.upload, "error", details.upload);
     setupRequestEvent(req.upload, "load", details.upload);
+    setupRequestEvent(req.upload, "loadend", details.upload);
     setupRequestEvent(req.upload, "progress", details.upload);
+    setupRequestEvent(req.upload, "timeout", details.upload);
   }
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
