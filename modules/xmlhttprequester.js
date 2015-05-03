@@ -68,7 +68,12 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     rv.finalUrl = req.finalUrl;
     rv.readyState = req.readyState;
     rv.responseHeaders = req.getAllResponseHeaders();
-    rv.responseText = req.responseText;
+    try {
+      rv.responseText = req.responseText;
+    } catch (e) {
+      // Some response types don't have .responseText (but do have e.g. blob
+      // .response).  Ignore.
+    }
     rv.status = req.status;
     rv.statusText = req.statusText;
   }
