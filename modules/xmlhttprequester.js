@@ -12,6 +12,7 @@ var gStringBundle = Components
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
+  this.sandbox = sandbox;
   this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
 }
 
@@ -54,17 +55,15 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   }
 
   var rv = {
-    __exposedProps__: {
-        finalUrl: "r",
-        readyState: "r",
-        responseHeaders: "r",
-        responseText: "r",
-        status: "r",
-        statusText: "r",
-        abort: "r"
-        },
-    abort: function () { return req.abort(); }
-  };
+    abort: function () { return req.abort(); },
+    finalUrl: null,
+    readyState: null,
+    responseHeaders: null,
+    responseText: null,
+    status: null,
+    statusText: null
+  }
+
   if (!!details.synchronous) {
     rv.finalUrl = req.finalUrl;
     rv.readyState = req.readyState;
@@ -73,6 +72,17 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     rv.status = req.status;
     rv.statusText = req.statusText;
   }
+  
+  rv = Components.utils.cloneInto({
+    abort: rv.abort.bind(rv),
+    finalUrl: rv.finalUrl,
+    readyState: rv.readyState,
+    responseHeaders: rv.responseHeaders,
+    responseText: rv.responseText,
+    status: rv.status,
+    statusText: rv.statusText
+  }, this.sandbox, {cloneFunctions: true});
+
   return rv;
 };
 
@@ -83,11 +93,13 @@ function(safeUrl, details, req) {
   this.setupReferer(details, req);
 
   var setupRequestEvent = GM_util.hitch(
-      this, 'setupRequestEvent', this.wrappedContentWin);
+      this, 'setupRequestEvent', this.wrappedContentWin, this.sandbox);
 
   setupRequestEvent(req, "abort", details);
   setupRequestEvent(req, "error", details);
   setupRequestEvent(req, "load", details);
+  setupRequestEvent(req, "loadend", details);
+  setupRequestEvent(req, "loadstart", details);
   setupRequestEvent(req, "progress", details);
   setupRequestEvent(req, "readystatechange", details);
   setupRequestEvent(req, "timeout", details);
@@ -95,7 +107,9 @@ function(safeUrl, details, req) {
     setupRequestEvent(req.upload, "abort", details.upload);
     setupRequestEvent(req.upload, "error", details.upload);
     setupRequestEvent(req.upload, "load", details.upload);
+    setupRequestEvent(req.upload, "loadend", details.upload);
     setupRequestEvent(req.upload, "progress", details.upload);
+    setupRequestEvent(req.upload, "timeout", details.upload);
   }
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
@@ -182,7 +196,7 @@ function(details, req) {
 // method by the same name which is a property of 'details' in the content
 // window's security context.
 GM_xmlhttpRequester.prototype.setupRequestEvent =
-function(wrappedContentWin, req, event, details) {
+function(wrappedContentWin, sandbox, req, event, details) {
   // Waive Xrays so that we can read callback function properties ...
   details = Components.utils.waiveXrays(details);
   var eventCallback = details["on" + event];
@@ -195,21 +209,10 @@ function(wrappedContentWin, req, event, details) {
 
   req.addEventListener(event, function(evt) {
     var responseState = {
-      __exposedProps__: {
-          context: "r",
-          finalUrl: "r",
-          lengthComputable: "r",
-          loaded: "r",
-          readyState: "r",
-          response: "r",
-          responseHeaders: "r",
-          responseText: "r",
-          responseXML: "r",
-          status: "r",
-          statusText: "r",
-          total: "r",
-          },
       context: details.context || null,
+      finalUrl: null,
+      lengthComputable: null,
+      loaded: null,
       readyState: req.readyState,
       response: req.response,
       responseHeaders: null,
@@ -217,7 +220,7 @@ function(wrappedContentWin, req, event, details) {
       responseXML: null,
       status: null,
       statusText: null,
-      finalUrl: null
+      total: null
     };
 
     try {
@@ -257,6 +260,21 @@ function(wrappedContentWin, req, event, details) {
         responseState.finalUrl = req.channel.URI.spec;
         break;
     }
+
+    responseState = Components.utils.cloneInto({
+      context: responseState.context,
+      finalUrl: responseState.finalUrl,
+      lengthComputable: responseState.lengthComputable,
+      loaded: responseState.loaded,
+      readyState: responseState.readyState,
+      response: responseState.response,
+      responseHeaders: responseState.responseHeaders,
+      responseText: responseState.responseText,
+      responseXML: responseState.responseXML,
+      status: responseState.status,
+      statusText: responseState.statusText,
+      total: responseState.total
+      }, sandbox, {cloneFunctions: true, wrapReflectors: true});
 
     if (GM_util.windowIsClosed(wrappedContentWin)) {
       return;
