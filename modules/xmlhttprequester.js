@@ -33,7 +33,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     // A malformed URL won't be parsed properly.
     throw new Error(
         gStringBundle.GetStringFromName('error.invalidUrl')
-            .replace('%1', name)
+            .replace('%1', details.url)
         );
   }
 
@@ -279,7 +279,7 @@ function(wrappedContentWin, sandbox, req, event, details) {
       status: responseState.status,
       statusText: responseState.statusText,
       total: responseState.total
-      }, sandbox, {cloneFunctions: true, wrapReflectors: true});
+    }, sandbox, {cloneFunctions: true, wrapReflectors: true});
 
     if (GM_util.windowIsClosed(wrappedContentWin)) {
       return;
