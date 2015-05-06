@@ -5,6 +5,7 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const Cr = Components.results;
 const schemeName = 'greasemonkey-script';
 const ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
