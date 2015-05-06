@@ -51,6 +51,6 @@ function GM_setClipboard(aData, aType) {
   default:
     throw new Error(
         gStringBundle.GetStringFromName('setClipboard.unsupportedType')
-            .replace('%1', value));
+            .replace('%1', aType));
   }
 }
