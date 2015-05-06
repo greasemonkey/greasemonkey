@@ -8,7 +8,7 @@ var gStringBundle = Services.strings.createBundle(
     "chrome://greasemonkey/locale/greasemonkey.properties");
 
 function registerMenuCommand(
-    scriptRunner,
+    scriptRunner, script,
     commandName, commandFunc, accessKey, unused, accessKey2
 ) {
   if (scriptRunner.window.top != scriptRunner.window) {
@@ -33,6 +33,7 @@ function registerMenuCommand(
 
   var command = {
     name: commandName,
+    scriptName: script.localized.name,
     accessKey: accessKey,
     commandFunc: commandFunc,
     contentWindowId: scriptRunner.windowId,

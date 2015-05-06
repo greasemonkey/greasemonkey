@@ -54,6 +54,7 @@ GM_MenuCommander.commandClicked = function(aCommand) {
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
   menuItem.setAttribute("label", command.name);
+  menuItem.setAttribute("tooltiptext", command.scriptName);
   menuItem.addEventListener("command", function() {
     GM_MenuCommander.commandClicked(command);
   }, false);
