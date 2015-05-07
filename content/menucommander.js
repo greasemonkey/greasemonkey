@@ -39,7 +39,7 @@ GM_MenuCommander.toggleMenuCommands = function(aMessage) {
   var frozen = aMessage.data.frozen;
   var windowId = aMessage.data.windowId;
 
-  GM_MenuCommander.withAllMenuCommandsForWindowId(windowId, function(command) {
+  GM_MenuCommander.withAllMenuCommandsForWindowId(windowId, function(index, command) {
     command.frozen = frozen;
   });
 };
