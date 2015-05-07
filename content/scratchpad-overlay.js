@@ -28,7 +28,7 @@ window.addEventListener('load', function() {
       // Firefox >= 28
       Scratchpad.editor.setCursor({line: 0, ch: 0});
     } else {
-      // Firefox <= 27
+      // Firefox <= 27; i.e. PaleMoon
       Scratchpad.editor.setCaretPosition(0, 0);
     }
 
