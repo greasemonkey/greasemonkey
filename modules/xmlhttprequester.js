@@ -126,7 +126,15 @@ function(safeUrl, details, req) {
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
 
-  if (PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin)) {
+  var isPrivate = true;
+  if (PrivateBrowsingUtils.isContentWindowPrivate) {
+    // Firefox >= 35
+    isPrivate = PrivateBrowsingUtils.isContentWindowPrivate(this.wrappedContentWin);
+  } else {
+    // Firefox <= 34; i.e. PaleMoon
+    isPrivate = PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin);
+  }
+  if (isPrivate) {
     var channel = req.channel
         .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);
