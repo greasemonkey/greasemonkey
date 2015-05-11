@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Editează pagina">
 <!ENTITY button.add "Adaugă...">
 <!ENTITY button.addUserExclude "Adaugă ca excludere utilizator">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Adaugă ca includere utilizator">
 <!ENTITY button.edit "Editează...">
 <!ENTITY button.remove "Elimină">
 <!ENTITY label.grpIncluded "Pagini incluse">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Pagini excluse">

@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Oldal szerkesztése">
 <!ENTITY button.add "Hozzáadás…">
 <!ENTITY button.addUserExclude "Hozzáadás felhasználói kivételként">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Hozzáadás">
 <!ENTITY button.edit "Szerkesztés…">
 <!ENTITY button.remove "Eltávolítás">
 <!ENTITY label.grpIncluded "Tartalmazott oldalak">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Kizárt oldalak">

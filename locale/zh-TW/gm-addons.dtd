@@ -5,9 +5,9 @@
 <!ENTITY ExecuteLast "最後執行">
 <!ENTITY ExecuteLater "較晚執行">
 <!ENTITY ExecuteSooner "較早執行">
-<!ENTITY FindUpdate "Find Update">
-<!ENTITY ForcedFindUpdate "Forced Find Updates">
-<!ENTITY InstallUpdate "Install Update">
+<!ENTITY FindUpdate "尋找更新">
+<!ENTITY ForcedFindUpdate "強迫尋找更新">
+<!ENTITY InstallUpdate "安裝更新">
 <!ENTITY MoveDown "下移">
 <!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "移到最下面">

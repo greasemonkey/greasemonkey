@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Уреди страницу">
 <!ENTITY button.add "Додај...">
 <!ENTITY button.addUserExclude "Додај за изузимање">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Додај за обухватање">
 <!ENTITY button.edit "Уреди...">
 <!ENTITY button.remove "Уклони">
 <!ENTITY label.grpIncluded "Обухваћене странице">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Изузете странице">

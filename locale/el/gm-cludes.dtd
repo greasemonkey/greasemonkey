@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Επεξεργασία Σελίδας">
 <!ENTITY button.add "Προσθήκη...">
 <!ENTITY button.addUserExclude "Προσθήκη ως εξαίρεση χρήστη">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Προσθήκη ως ενσωμάτωση χρήστη">
 <!ENTITY button.edit "Επεξεργασία...">
 <!ENTITY button.remove "Απομάκρυνση">
 <!ENTITY label.grpIncluded "Ενσωματωμένες Σελίδες">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Εξαιρούμενες Σελίδες">

@@ -2,7 +2,7 @@
 <!ENTITY menu.install.accesskey "I">
 <!ENTITY menu.show "Ver el código fuente del script de usuario">
 <!ENTITY menu.show.accesskey "V">
-<!ENTITY menu.commands "Comandos de los scripts de usuario...">
+<!ENTITY menu.commands "Acciones de los scripts de usuario...">
 <!ENTITY menu.commands.accesskey "C">
 <!ENTITY menu.new "Nuevo script de usuario...">
 <!ENTITY menu.new.accesskey "N">
@@ -15,7 +15,7 @@
 <!ENTITY menu.websites.greasespot "Blog Greasespot">
 <!ENTITY menu.websites.greasespotwiki "Wiki de Greasespot">
 <!ENTITY menu.websites.manual "Manual de Greasemonkey">
-<!ENTITY menu.websites.getuserscripts "Conseguir scripts de usuario">
+<!ENTITY menu.websites.getuserscripts "Obtener scripts de usuario">
 <!ENTITY statusbar.enabled "Activado">
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Instalación de Greasemonkey">

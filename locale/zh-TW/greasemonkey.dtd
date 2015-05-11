@@ -10,12 +10,12 @@
 <!ENTITY menu.manage.accesskey "M">
 <!ENTITY menu.options "Greasemonkey 選項…">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
+<!ENTITY menu.websites "網站…">
 <!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
+<!ENTITY menu.websites.greasespot "Greasespot 部落格">
 <!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
-<!ENTITY menu.websites.getuserscripts "Get User Scripts">
+<!ENTITY menu.websites.manual "Greasemonkey 說明書">
+<!ENTITY menu.websites.getuserscripts "下載使用者腳本">
 <!ENTITY statusbar.enabled "已啟用">
 <!ENTITY statusbar.enabled.accesskey "E">
 <!ENTITY install.title "Greasemonkey 安裝">
@@ -26,24 +26,24 @@
 <!ENTITY install.warning2 "您應該只安裝來自可信任來源的使用者腳本。">
 <!ENTITY install.showscriptsource "顯示腳本來源">
 <!ENTITY install.installbutton "安裝">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "下載錯誤">
 <!ENTITY loading "下載中…">
 <!ENTITY newscript.name "名稱">
 <!ENTITY newscript.namespace "命名空間">
 <!ENTITY newscript.description "說明">
 <!ENTITY newscript.includes "包含（每行一項）">
 <!ENTITY newscript.excludes "不包含（每行一項）">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "使用剪貼簿中的腳本">
 <!ENTITY options.editor "腳本編輯器">
-<!ENTITY options.experimental "Experimental">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.experimental "實驗中">
+<!ENTITY options.defaultEditor "使用預設編輯器">
+<!ENTITY options.browseForEditor "瀏覽編輯程式">
 <!ENTITY options.globalExcludes "全域排除">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "新腳本範本">
+<!ENTITY options.newScript.removeUnused "移除未使用的行">
 <!ENTITY Uninstall "腳本移除設定">
 <!ENTITY AnonymousStatistics "匿名統計">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "使用 Firefox Sync 來同步使用者腳本">
 <!ENTITY SubmitStats "收集並送出匿名統計資訊以幫助改進 Greasemonkey。">
 <!ENTITY UpdateChecking "檢查更新">
 <!ENTITY RequireSecureUpdates "要求透過安全通道更新">

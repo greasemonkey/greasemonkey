@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Pagina bewerken">
 <!ENTITY button.add "Toevoegen…">
 <!ENTITY button.addUserExclude "Toevoegen als uitzondering">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Toevoegen als opgenomen">
 <!ENTITY button.edit "Bewerken…">
 <!ENTITY button.remove "Verwijderen">
 <!ENTITY label.grpIncluded "Inclusief deze pagina’s">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Exclusief deze pagina’s">

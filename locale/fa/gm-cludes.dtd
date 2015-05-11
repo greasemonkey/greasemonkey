@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "ویرایش صفحه">
 <!ENTITY button.add "اضافه کردن...">
 <!ENTITY button.addUserExclude "افزودن مستثنا به عنوان کاربر">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "افزودن &quot;شامل&quot; به عنوان کاربر">
 <!ENTITY button.edit "ویرایش...">
 <!ENTITY button.remove "پاک کردن">
 <!ENTITY label.grpIncluded "صفحه های شامل شده">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "صفحه های مستثنا شده">

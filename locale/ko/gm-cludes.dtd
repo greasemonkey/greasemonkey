@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "페이지 수정">
 <!ENTITY button.add "추가...">
 <!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "수정...">
 <!ENTITY button.remove "삭제">
 <!ENTITY label.grpIncluded "동작할 페이지">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "동작하지 않을 페이지">

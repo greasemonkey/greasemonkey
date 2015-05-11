@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Edytuj stronę">
 <!ENTITY button.add "Dodaj">
 <!ENTITY button.addUserExclude "Dodaj do wykluczonych">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Dodaj do dozwolonych">
 <!ENTITY button.edit "Edytuj">
 <!ENTITY button.remove "Usuń">
 <!ENTITY label.grpIncluded "Witryny, na których skrypt jest uruchamiany">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Witryny, na których skrypt nie jest uruchamiany">

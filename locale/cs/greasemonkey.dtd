@@ -20,7 +20,7 @@
 <!ENTITY statusbar.enabled.accesskey "P">
 <!ENTITY install.title "Instalace Greasemonkey">
 <!ENTITY install.runson "spouští se na:">
-<!ENTITY install.matches "spouští se na / matches:">
+<!ENTITY install.matches "spouští se na /match/:">
 <!ENTITY install.butnoton "nespouští se na:">
 <!ENTITY install.warning1 "Podvodné skripty mohou narušit vaše soukromí a jednat vaším jménem bez vašeho vědomí.">
 <!ENTITY install.warning2 "Měli byste instalovat skripty pouze ze zdrojů, kterým věříte.">

@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "ערוך דף">
 <!ENTITY button.add "הוסף...">
 <!ENTITY button.addUserExclude "הוסף סקריפט משתמש כלא כלול">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "הוסף סקריפט  משתמש ככלול">
 <!ENTITY button.edit "ערוך...">
 <!ENTITY button.remove "הסר">
 <!ENTITY label.grpIncluded "כלול דפים">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "אל תכלול דפים">

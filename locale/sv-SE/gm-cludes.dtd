@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Redigera sida">
 <!ENTITY button.add "Lägg till…">
 <!ENTITY button.addUserExclude "Lägg till som användarundantag">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Lägg till som användarinkludering">
 <!ENTITY button.edit "Redigera…">
 <!ENTITY button.remove "Ta bort">
 <!ENTITY label.grpIncluded "Inkluderade sidor">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Undantagna sidor">

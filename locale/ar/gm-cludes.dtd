@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "تعديل الصفحة">
 <!ENTITY button.add "أضف..">
 <!ENTITY button.addUserExclude "إضافة كمستخدم مستبعد">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "إضافة كمستخدم مستثنى">
 <!ENTITY button.edit "عدٌل..">
 <!ENTITY button.remove "أحذف">
 <!ENTITY label.grpIncluded "يشمل صفحات">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "لايشمل صفحات">

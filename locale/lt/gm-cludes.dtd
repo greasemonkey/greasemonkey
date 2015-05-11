@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Keisti puslapį">
 <!ENTITY button.add "Pridėti...">
 <!ENTITY button.addUserExclude "Pridėti kaip naudotojo nerodomą">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Pridėti kaip naudotojo įterpiamą">
 <!ENTITY button.edit "Keisti...">
 <!ENTITY button.remove "Pašalinti">
 <!ENTITY label.grpIncluded "Puslapiai kuriuose vykdoma">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Puslapiai kuriuose nevykdoma">

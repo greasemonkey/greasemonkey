@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Rediger side">
 <!ENTITY button.add "Tilføj...">
 <!ENTITY button.addUserExclude "Tilføj som brugerekskludering">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Tilføj som brugerinkludering">
 <!ENTITY button.edit "Rediger...">
 <!ENTITY button.remove "Fjern">
 <!ENTITY label.grpIncluded "Inkluderede sider">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Ekskluderede sider">

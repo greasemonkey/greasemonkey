@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "ページの編集">
 <!ENTITY button.add "追加...">
 <!ENTITY button.addUserExclude "実行しないページとして追加">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "実行するページとして追加">
 <!ENTITY button.edit "編集...">
 <!ENTITY button.remove "削除">
 <!ENTITY label.grpIncluded "ユーザスクリプトを実行するページ">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "ユーザスクリプトを実行しないページ">

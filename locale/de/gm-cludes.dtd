@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Seite bearbeiten">
 <!ENTITY button.add "Hinzufügen...">
 <!ENTITY button.addUserExclude "Auf dieser Seite nicht anwenden">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Auf dieser Seite dennoch anwenden">
 <!ENTITY button.edit "Bearbeiten…">
 <!ENTITY button.remove "Entfernen">
 <!ENTITY label.grpIncluded "Auf diese Seiten anwenden:">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Nicht auf diese Seiten anwenden:">

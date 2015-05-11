@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Редагувати сторінку">
 <!ENTITY button.add "Додати...">
 <!ENTITY button.addUserExclude "Додати як користувацький виняток">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Додати як користувацьке включення">
 <!ENTITY button.edit "Редагувати...">
 <!ENTITY button.remove "Вилучити">
 <!ENTITY label.grpIncluded "Охоплені сторінки">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Сторінки-винятки">

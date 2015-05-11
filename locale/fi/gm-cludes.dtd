@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Muokkaa sivua">
 <!ENTITY button.add "Lisää...">
 <!ENTITY button.addUserExclude "Add as user exclude">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Add as user include">
 <!ENTITY button.edit "Muokkaa...">
 <!ENTITY button.remove "Poista">
 <!ENTITY label.grpIncluded "Käytä sivuilla">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Pois lukien sivut">

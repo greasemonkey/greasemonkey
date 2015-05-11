@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Editar sitio">
 <!ENTITY button.add "Agregar...">
 <!ENTITY button.addUserExclude "Agregar como exclude">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Agregar como include">
 <!ENTITY button.edit "Editar...">
 <!ENTITY button.remove "Eliminar">
 <!ENTITY label.grpIncluded "Sitios incluidos">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Sitios excluidos">

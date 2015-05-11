@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Справка страницы">
 <!ENTITY button.add "Добавить">
 <!ENTITY button.addUserExclude "Добавить в исключенные">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Добавить во включенные">
 <!ENTITY button.edit "Правка">
 <!ENTITY button.remove "Удалить">
 <!ENTITY label.grpIncluded "Включенные страницы">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Исключенные страницы">

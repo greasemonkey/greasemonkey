@@ -5,8 +5,10 @@
 <!ENTITY promptForEdit.title "Sayfa Düzenle">
 <!ENTITY button.add "Ekle...">
 <!ENTITY button.addUserExclude "Bir kullanıcı ekle">
+<!ENTITY button.addUserMatch "Add as user match">
 <!ENTITY button.addUserInclude "Bir kullanıcı ekle">
 <!ENTITY button.edit "Düzenle...">
 <!ENTITY button.remove "Kaldır">
 <!ENTITY label.grpIncluded "Dahil Sayfalar">
+<!ENTITY label.grpMatched "Matched Pages">
 <!ENTITY label.grpExcluded "Hariç Sayfalar">
