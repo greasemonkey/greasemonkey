@@ -40,6 +40,7 @@
 
 var EXPORTED_SYMBOLS = ['MatchPattern'];
 
+Components.utils.import('resource://greasemonkey/prefmanager.js');
 Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
 Components.utils.import("resource://greasemonkey/util.js");
 
@@ -52,6 +53,12 @@ var getString = (function() {
       'chrome://greasemonkey/locale/greasemonkey.properties')
       .GetStringFromName;
 })();
+
+var tldHostRegExp = /^([^\/]+)\.tld$/;
+
+var eTldService = Components
+    .classes["@mozilla.org/network/effective-tld-service;1"]
+    .getService(Components.interfaces.nsIEffectiveTLDService);
 
 // For the format of "pattern", see:
 //   http://code.google.com/chrome/extensions/match_patterns.html
@@ -93,24 +100,8 @@ function MatchPattern(pattern) {
   }
 
   this._scheme = scheme;
-  if (host) {
-    // We have to manually create the hostname regexp (instead of using
-    // GM_convert2RegExp) to properly handle *.example.tld, which should match
-    // example.tld and any of its subdomains, but not anotherexample.tld.
-    this._hostExpr = new RegExp("^" +
-        // Two characters in the host portion need special treatment:
-        //   - ". should not be treated as a wildcard, so we escape it to \.
-        //   - if the hostname only consists of "*" (i.e. full wildcard),
-        //     replace it with .*
-        host.replace(/\./g, "\\.").replace(/^\*$/, ".*")
-        // Then, handle the special case of "*." (any or no subdomain) for match
-        // patterns. "*." has been escaped to "*\." by the replace above.
-            .replace("*\\.", "(.*\\.)?") + "$", "i");
-  } else {
-    // If omitted, then it means "", an alias for localhost.
-    this._hostExpr = /^$/;
-  }
-  this._pathExpr = GM_convert2RegExp(path, false, true);
+  this._host = host;
+  this._path = path;
 }
 
 MatchPattern.prototype.__defineGetter__('pattern',
@@ -129,6 +120,57 @@ MatchPattern.prototype.doMatch = function(uriSpec) {
   if (!this._wildScheme && this._scheme != matchURI.scheme) {
     return false;
   }
+
+  if (this._host) {
+    if (this._host.match(tldHostRegExp)) {
+      var tldBase = null;
+      try {
+        tldBase = eTldService.getPublicSuffix(matchURI);
+      } catch (e) {
+        // There are expected failure modes, i.e. bare hostname -- like
+        // http://localhost/ -- has no TLD.
+      }
+      if (tldBase) {
+        var tldWhitelist = false;
+        var tldWhitelistEnabled = GM_prefRoot
+                                  .getValue('tldWhitelist.match.enabled');
+        if (tldWhitelistEnabled) {
+          var tldWhitelistValue = GM_prefRoot
+                                  .getValue('tldWhitelist.match');
+          var tlds = tldWhitelistValue.split(',');
+          for (var i = 0, count = tlds.length; i < count; i++) {
+            var tld = tlds[i].trim();
+            if ((tld != '') && (tld == tldBase)) {
+              tldWhitelist = true;
+              break;
+            }
+          }
+        }
+        if (!tldWhitelistEnabled || (tldWhitelistEnabled && tldWhitelist)) {
+          this._host = this._host.replace(tldHostRegExp, '$1.' + tldBase);
+        } else {
+          // dump('Not found in TLD whitelist (@match) for ' + tldBase);
+        }
+      }
+    }
+    // We have to manually create the hostname regexp (instead of using
+    // GM_convert2RegExp) to properly handle *.example.tld, which should match
+    // example.tld and any of its subdomains, but not anotherexample.tld.
+    this._hostExpr = new RegExp("^" +
+        // Two characters in the host portion need special treatment:
+        //   - ". should not be treated as a wildcard, so we escape it to \.
+        //   - if the hostname only consists of "*" (i.e. full wildcard),
+        //     replace it with .*
+        this._host.replace(/\./g, "\\.").replace(/^\*$/, ".*")
+        // Then, handle the special case of "*." (any or no subdomain) for match
+        // patterns. "*." has been escaped to "*\." by the replace above.
+            .replace("*\\.", "(.*\\.)?") + "$", "i");
+  } else {
+    // If omitted, then it means "", an alias for localhost.
+    this._hostExpr = /^$/;
+  }
+  this._pathExpr = GM_convert2RegExp(this._path, false, true);
+
   return this._hostExpr.test(matchURI.host)
       && this._pathExpr.test(matchURI.path);
 };

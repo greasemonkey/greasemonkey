@@ -48,6 +48,12 @@
   </groupbox>
 
   <groupbox flex="1">
+    <caption label="&options.tldWhitelist.match;" />
+    <checkbox id="check-tldWhitelist-match" label="&options.tldWhitelist.match.enabled;" />
+    <textbox id="tldWhitelist-match" multiline="true" rows="3" flex="1" />
+  </groupbox>
+
+  <groupbox flex="1">
     <caption label="&options.newScript.template;" />
     <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
     <textbox id="newScript-template" multiline="true" rows="5" flex="1" />

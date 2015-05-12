@@ -2,6 +2,10 @@ cludes {
   min-width: 500px;
 }
 
+#tldWhitelist-match {
+  font-family: monospace;
+}
+
 #newScript-template {
   font-family: monospace;
 }

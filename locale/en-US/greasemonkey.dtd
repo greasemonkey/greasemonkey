@@ -41,6 +41,8 @@
 <!ENTITY options.globalExcludes "Global Excludes">
 <!ENTITY options.newScript.template "New script template">
 <!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.tldWhitelist.match.enabled "Enabled">
+<!ENTITY options.tldWhitelist.match "TLD whitelist (@match) - comma separated values">
 <!ENTITY Uninstall "Uninstall">
 <!ENTITY AnonymousStatistics "Anonymous Statistics">
 <!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
