@@ -6,6 +6,8 @@ pref("extensions.greasemonkey.fileIsGreaseable", false);
 pref("extensions.greasemonkey.globalExcludes", '[]');
 pref("extensions.greasemonkey.newScript.removeUnused", true);
 pref("extensions.greasemonkey.newScript.template", '// ==UserScript==\n// @name        %name%\n// @namespace   %namespace%\n// @description %description%\n// @include     %include%\n// @exclude     %exclude%\n// @version     1\n// @grant       none\n// ==/UserScript==');
+pref("extensions.greasemonkey.tldWhitelist.match.enabled", true);
+pref("extensions.greasemonkey.tldWhitelist.match", '');
 pref("extensions.greasemonkey.haveInsertedToolbarbutton", false);
 pref("extensions.greasemonkey.installDelay", 5);
 pref("extensions.greasemonkey.logChrome", false);
@@ -27,6 +29,8 @@ pref("services.sync.prefs.sync.extensions.greasemonkey.enableScriptRefreshing", 
 pref("services.sync.prefs.sync.extensions.greasemonkey.globalExcludes", true);
 pref("services.sync.prefs.sync.extensions.greasemonkey.newScript.removeUnused", true);
 pref("services.sync.prefs.sync.extensions.greasemonkey.newScript.template", true);
+pref("services.sync.prefs.sync.extensions.greasemonkey.tldWhitelist.match.enabled", true);
+pref("services.sync.prefs.sync.extensions.greasemonkey.tldWhitelist.match", true);
 pref("services.sync.prefs.sync.extensions.greasemonkey.requireSecureUpdates", true);
 pref("services.sync.prefs.sync.extensions.greasemonkey.showGrantsWarning", true);
 pref("services.sync.prefs.sync.extensions.greasemonkey.stats.optedin", true);
