@@ -41,6 +41,8 @@
 <!ENTITY options.globalExcludes "Vyloučené stránky globálně">
 <!ENTITY options.newScript.template "Nový skript - šablona">
 <!ENTITY options.newScript.removeUnused "Odebrat nepoužité řádky">
+<!ENTITY options.tldWhitelist.match.enabled "Zapnuto">
+<!ENTITY options.tldWhitelist.match "TLD whitelist (@match) - hodnoty oddělené čárkou">
 <!ENTITY Uninstall "Odinstalace">
 <!ENTITY AnonymousStatistics "Anonymní statistiky">
 <!ENTITY EnableFirefoxSync "Povolit Firefox Sync pro uživatelské skripty">
