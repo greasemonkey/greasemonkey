@@ -68,9 +68,8 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
     value = JSON.parse(value);
     // JSON (JavaScript Object Notation) is not designed for serializing
     // DOM Nodes. But maybe in the future...
-    value = Components.utils.cloneInto(value,
-            this._sandbox, { wrapReflectors: true });
-    return value;
+    return Components.utils.cloneInto(value,
+           this._sandbox, { wrapReflectors: true });
   } catch (e) {
     dump('JSON parse error? ' + uneval(e) + '\n');
     return defVal;
