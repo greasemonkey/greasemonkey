@@ -2,8 +2,11 @@ var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.import("resource://greasemonkey/util.js");
 
-function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
+function GM_xmlhttpRequester(
+    wrappedContentWin, chromeWindow, originUrl, sandbox
+) {
   this.wrappedContentWin = wrappedContentWin;
+  this.chromeWindow = chromeWindow;
   this.originUrl = originUrl;
   this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
 }
@@ -35,8 +38,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+        var req = new this.chromeWindow.XMLHttpRequest();
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
@@ -96,12 +98,12 @@ function(safeUrl, details, req) {
   var safeUrlTmp = new this.wrappedContentWin.URL(safeUrl);
   var headersArr = new Array();
   var authorization = {
-      contrains: false,
-      string: "Authorization",
-      method: "Basic",
-      user: "",
-      password: ""
-      };
+    contrains: false,
+    string: 'Authorization',
+    method: 'Basic',
+    user: '',
+    password: ''
+  };
   var authorizationRegexp =
       new RegExp("^\\s*" + authorization.method + "\\s*([^\\s]+)\\s*$", "i");
   var authorizationUserPasswordRegexp = new RegExp("^([^:]+):([^:]+)$", "");
@@ -137,35 +139,34 @@ function(safeUrl, details, req) {
    || (details.user || details.password)) {
     authenticationComponent.setAuthIdentity(safeUrlTmp.protocol,
                                             safeUrlTmp.hostname,
-                                            (safeUrlTmp.port || ""),
+                                            (safeUrlTmp.port || ''),
                                             ((authorization.contrains)
-                                            ? authorization.method : ""),
-                                            "",
-                                            "",
-                                            "",
+                                            ? authorization.method : ''),
+                                            '',
+                                            '',
+                                            '',
                                             (authorization.user
-                                            || details.user || ""),
+                                            || details.user || ''),
                                             (authorization.password
-                                            || details.password || ""));
-  }
-  else {
+                                            || details.password || ''));
+  } else {
     var authorizationDomain = {};
     var authorizationUser = {};
     var authorizationPassword = {};
     try {
       authenticationComponent.getAuthIdentity(safeUrlTmp.protocol,
                                               safeUrlTmp.hostname,
-                                              (safeUrlTmp.port || ""),
-                                              "",
-                                              "",
-                                              "",
+                                              (safeUrlTmp.port || ''),
+                                              '',
+                                              '',
+                                              '',
                                               authorizationDomain,
                                               authorizationUser,
                                               authorizationPassword);
-      details.user = authorizationUser.value || "";
-      details.password = authorizationPassword.value || "";
-    }
-    catch(e) {
+      details.user = authorizationUser.value || '';
+      details.password = authorizationPassword.value || '';
+    } catch(e) {
+      // Ignore.
     }
   }
 
@@ -174,9 +175,6 @@ function(safeUrl, details, req) {
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
-  }
-  if (details.responseType) {
-    req.responseType = details.responseType;
   }
 
   if (details.timeout) {
@@ -206,7 +204,7 @@ function(safeUrl, details, req) {
 };
 
 // sets the "Referer" HTTP header for this GM_XHR request.
-// Firefox does not let chrome JS set the "Referer" HTTP header via XHR
+// Firefox does not let chrome JS set the "Referer" HTTP heade via XHR
 // directly. However, we can still set it indirectly via an
 // http-on-modify-request observer.
 GM_xmlhttpRequester.prototype.setupReferer =
@@ -221,18 +219,12 @@ function(details, req) {
 
       var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
       if (channel == req.channel) {
-        dump('setting referer ' + details.headers.Referer + '\n');
         var httpChannel = subject.QueryInterface(
             Components.interfaces.nsIHttpChannel);
         httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
       }
     };
-
-  // This fails under e10s.  Ignore for now (Mar 13, 2015).
-  // TODO: Make it work!
-  try {
-    observerService.addObserver(requestObserver, "http-on-modify-request", false);
-  } catch (e) { }
+  observerService.addObserver(requestObserver, "http-on-modify-request", false);
 };
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
@@ -284,16 +276,10 @@ function(wrappedContentWin, req, event, details) {
       // .response).  Ignore.
     }
 
-    var responseXML = null;
-    try {
-      responseXML = req.responseXML;
-    } catch (e) {
-      // Ignore failure.  At least in responseType blob case, this access fails.
-    }
-    if (responseXML) {
+    if (req.responseXML) {
       // Clone the XML object into a content-window-scoped document.
       var xmlDoc = new wrappedContentWin.Document();
-      var clone = xmlDoc.importNode(responseXML.documentElement, true);
+      var clone = xmlDoc.importNode(req.responseXML.documentElement, true);
       xmlDoc.appendChild(clone);
       responseState.responseXML = xmlDoc;
     }
