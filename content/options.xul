@@ -30,6 +30,12 @@
   <groupbox>
     <caption label="&prefWindow.titleWin;" />
     <checkbox id="secure-update" label="&RequireSecureUpdates;" />
+    <checkbox id="timeout-update" label="&RequireTimeoutUpdates;" />
+    <hbox id="timeout-update-box">
+    <label id="timeout-update-value-label" value="&TimeoutUpdatesUnits;" />
+    <textbox id="timeout-update-value" type="number" min="1" max="60"
+             increment="1" size="2" />
+    </hbox>
     <checkbox id="submit-stats" label="&SubmitStats;" />
     <checkbox id="check-sync" label="&EnableFirefoxSync;" />
   </groupbox>
