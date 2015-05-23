@@ -839,6 +839,16 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
+  if (GM_prefRoot.getValue('requireTimeoutUpdates')) {
+    var timeoutUpdatesInSeconds = GM_prefRoot.getValue(
+                                  'timeoutUpdatesInSeconds');
+    timeoutUpdatesInSeconds = isNaN(parseInt(timeoutUpdatesInSeconds, 10))
+                              ? 3 : parseInt(timeoutUpdatesInSeconds, 10);
+    timeoutUpdatesInSeconds = timeoutUpdatesInSeconds >= 1
+                              && timeoutUpdatesInSeconds <= 60
+                              ? timeoutUpdatesInSeconds : 3;
+    req.timeout = timeoutUpdatesInSeconds * 1000;
+  }
   req.open("GET", url, true);
 
   // Let the server know we want a user script metadata block
@@ -846,6 +856,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
   req.onerror = GM_util.hitch(null, aCallback, false);
+  req.ontimeout = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
