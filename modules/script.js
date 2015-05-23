@@ -839,6 +839,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
   req.onerror = GM_util.hitch(null, aCallback, false);
+  req.ontimeout = GM_util.hitch(null, aCallback, false);
   req.send(null);
 };
 
