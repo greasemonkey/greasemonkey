@@ -831,6 +831,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
+  req.timeout = 45;
   req.open("GET", url, true);
 
   // Let the server know we want a user script metadata block
