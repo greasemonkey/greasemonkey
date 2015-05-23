@@ -14,9 +14,10 @@ var EXPORTED_SYMBOLS = ['GM_ScriptStorageFront'];
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function GM_ScriptStorageFront(aScript, aMessageManager) {
+function GM_ScriptStorageFront(aScript, aMessageManager, aSandbox) {
   this._db = null;
   this._messageManager = aMessageManager;
+  this._sandbox = aSandbox;
   this._script = aScript;
   this.stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
@@ -64,7 +65,11 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
   if (value === undefined || value === null) return defVal;
 
   try {
-    return JSON.parse(value);
+    value = JSON.parse(value);
+    // JSON (JavaScript Object Notation) is not designed for serializing
+    // DOM Nodes. But maybe in the future...
+    return Components.utils.cloneInto(value,
+           this._sandbox, { wrapReflectors: true });
   } catch (e) {
     dump('JSON parse error? ' + uneval(e) + '\n');
     return defVal;

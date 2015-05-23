@@ -86,7 +86,7 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
     sandbox.GM_registerMenuCommand = GM_util.hitch(null, registerMenuCommand, aScriptRunner, aScript);
   }
 
-  var scriptStorage = new GM_ScriptStorageFront(aScript, aMessageManager);
+  var scriptStorage = new GM_ScriptStorageFront(aScript, aMessageManager, sandbox);
   if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
     sandbox.GM_deleteValue = GM_util.hitch(scriptStorage, 'deleteValue');
   }
