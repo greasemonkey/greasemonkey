@@ -22,9 +22,10 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
   var script = new Script();
 
+  var name = null;
   if (aUri) script.downloadURL = aUri.spec;
   if (aUri && aUri.spec) {
-    var name = aUri.spec;
+    name = aUri.spec;
     name = name.substring(0, name.indexOf(".user.js"));
     name = name.substring(name.lastIndexOf("/") + 1);
     script._name = name;
