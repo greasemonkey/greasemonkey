@@ -3,9 +3,19 @@ Components.utils.import('resource://greasemonkey/util.js');
 
 function GM_loadOptions() {
   document.getElementById('check-sync')
-  .checked = GM_prefRoot.getValue('sync.enabled');
+      .checked = GM_prefRoot.getValue('sync.enabled');
   document.getElementById('secure-update')
       .checked = GM_prefRoot.getValue('requireSecureUpdates');
+  document.getElementById('timeout-update')
+      .checked = GM_prefRoot.getValue('requireTimeoutUpdates');
+  var timeoutUpdatesInSeconds = GM_prefRoot.getValue('timeoutUpdatesInSeconds');
+  timeoutUpdatesInSeconds = isNaN(parseInt(timeoutUpdatesInSeconds, 10))
+                            ? 3 : parseInt(timeoutUpdatesInSeconds, 10);
+  timeoutUpdatesInSeconds = timeoutUpdatesInSeconds >= 1
+                            && timeoutUpdatesInSeconds <= 60
+                            ? timeoutUpdatesInSeconds : 3;
+  document.getElementById('timeout-update-value')
+      .value = timeoutUpdatesInSeconds;
   document.getElementById('submit-stats')
       .checked = GM_prefRoot.getValue('stats.optedin');
   document.getElementById('globalExcludes')
@@ -21,6 +31,10 @@ function GM_saveOptions(checkbox) {
       !!document.getElementById('check-sync').checked);
   GM_prefRoot.setValue('requireSecureUpdates',
       !!document.getElementById('secure-update').checked);
+  GM_prefRoot.setValue('requireTimeoutUpdates',
+      !!document.getElementById('timeout-update').checked);
+  GM_prefRoot.setValue('timeoutUpdatesInSeconds',
+      parseInt(document.getElementById('timeout-update-value').value, 10));
   GM_prefRoot.setValue('stats.optedin',
       !!document.getElementById('submit-stats').checked);
   GM_util.getService().config.globalExcludes =
