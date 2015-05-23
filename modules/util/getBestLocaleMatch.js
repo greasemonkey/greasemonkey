@@ -13,7 +13,8 @@ const EXPORTED_SYMBOLS = ['getBestLocaleMatch'];
 function getBestLocaleMatch(aPreferred, aAvailable) {
   var preferredLang = aPreferred.split("-")[0];
 
-  var langMatch, partialMatch = null;
+  var langMatch = null;
+  var partialMatch = null;
   for (var i = 0, current; current = aAvailable[i]; i++) {
     // Both lang and country match
     if (current == aPreferred)
