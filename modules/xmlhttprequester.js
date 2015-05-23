@@ -13,7 +13,7 @@ function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
   this.sandbox = sandbox;
-  // Firefox < 29 (i.e. PaleMoon) does not support getObjectPrincipal in a 
+  // Firefox < 29 (i.e. PaleMoon) does not support getObjectPrincipal in a
   // scriptable context.  Greasemonkey users on this platform otherwise would
   // use an older version without this check, so skipping is no worse.
   this.sandboxPrincipal = 'function' == typeof Components.utils.getObjectPrincipal
@@ -81,7 +81,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     rv.status = req.status;
     rv.statusText = req.statusText;
   }
-  
+
   rv = Components.utils.cloneInto({
     abort: rv.abort.bind(rv),
     finalUrl: rv.finalUrl,
@@ -138,12 +138,12 @@ function(safeUrl, details, req) {
   }
   if (isPrivate) {
     channel = req.channel
-              .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
+        .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);
   }
 
   channel = req.channel
-            .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
+      .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
   channel.forceAllowThirdPartyCookie = true;
 
   if (details.overrideMimeType) {
