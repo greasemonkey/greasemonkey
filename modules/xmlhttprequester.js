@@ -126,6 +126,8 @@ function(safeUrl, details, req) {
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
 
+  var channel;
+
   var isPrivate = true;
   if (PrivateBrowsingUtils.isContentWindowPrivate) {
     // Firefox >= 35
@@ -135,10 +137,14 @@ function(safeUrl, details, req) {
     isPrivate = PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin);
   }
   if (isPrivate) {
-    var channel = req.channel
-        .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
+    channel = req.channel
+              .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);
   }
+
+  channel = req.channel
+            .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
+  channel.forceAllowThirdPartyCookie = true;
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
