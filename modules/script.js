@@ -821,14 +821,6 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
 
   var uri = GM_util.uriFromUrl(this.updateURL).clone();
 
-  // TODO: Consider restoring Coral cache usage.  We used to only apply it to
-  // us.o; applying globally means it will be inserted for localhost/intranet/
-  // etc. URLs which won't ever work.
-//  GM_util.checkCoralCache();
-//  if (GM_prefRoot.getValue("coralCacheWorks")) {
-//    uri.host += '.nyud.net';
-//  }
-
   var usedMeta = false;
   if (this._updateMetaStatus != 'fail') {
     uri.path = uri.path.replace('.user.js', '.meta.js');

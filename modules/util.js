@@ -25,7 +25,6 @@ var GM_util = {};
 // Do not edit below this line.  Use `util.sh` to auto-populate.
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'alert', 'resource://greasemonkey/util/alert.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'anonWrap', 'resource://greasemonkey/util/anonWrap.js');
-XPCOMUtils.defineLazyModuleGetter(GM_util, 'checkCoralCache', 'resource://greasemonkey/util/checkCoralCache.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'compareFirefoxVersion', 'resource://greasemonkey/util/compareFirefoxVersion.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'emptyEl', 'resource://greasemonkey/util/emptyEl.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'enqueueRemoveFile', 'resource://greasemonkey/util/enqueueRemoveFile.js');
@@ -61,7 +60,7 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'sniffGrants', 'resource://greasemonk
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'timeout', 'resource://greasemonkey/util/timeout.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uriFromUrl', 'resource://greasemonkey/util/uriFromUrl.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uuid', 'resource://greasemonkey/util/uuid.js');
-XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'resource://greasemonkey/util/windowIdForEvent.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowId', 'resource://greasemonkey/util/windowId.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'resource://greasemonkey/util/windowIdForEvent.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsClosed', 'resource://greasemonkey/util/windowIsClosed.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'writeToFile', 'resource://greasemonkey/util/writeToFile.js');
