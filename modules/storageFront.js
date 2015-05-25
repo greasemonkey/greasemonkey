@@ -66,8 +66,27 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
 
   try {
     value = JSON.parse(value);
-    return Components.utils.cloneInto(
-        value, this._sandbox, { wrapReflectors: true });
+    // Firefox < 30 (i.e. PaleMoon) does not support cloneInto
+    if ('function' == typeof Components.utils.cloneInto) {
+      value = Components.utils.cloneInto(
+              value, this._sandbox, {wrapReflectors: true});
+    } else {
+      var exposedProps = '__exposedProps__';
+      if ('object' == typeof value) {
+        if (!(exposedProps in value)) {
+          value[exposedProps] = {};
+        }
+        for (prop in value) {
+          if (hasOwnProperty.call(value, prop)) {
+            if (prop === exposedProps) {
+              continue;
+            }
+            value[exposedProps][prop] = 'r';
+          }
+        }
+      }
+    }
+    return value;
   } catch (e) {
     dump('JSON parse error? ' + uneval(e) + '\n');
     return defVal;
