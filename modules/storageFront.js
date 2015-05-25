@@ -77,7 +77,7 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
           value[exposedProps] = {};
         }
         for (prop in value) {
-          if (hasOwnProperty.call(value, prop)) {
+          if (Object.prototype.hasOwnProperty.call(value, prop)) {
             if (prop === exposedProps) {
               continue;
             }
