@@ -14,6 +14,7 @@ Cu.import('resource://greasemonkey/ipcscript.js');
 Cu.import('resource://greasemonkey/miscapis.js');
 Cu.import('resource://greasemonkey/sandbox.js');
 Cu.import('resource://greasemonkey/scriptProtocol.js');
+Cu.import('resource://greasemonkey/third-party/getChromeWinForContentWin.js');
 Cu.import('resource://greasemonkey/util.js');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -67,9 +68,23 @@ ScriptRunner.prototype.openInTab = function(aUrl, aInBackground) {
   var baseUri = Services.io.newURI(this.window.location.href, null, null);
   var uri = Services.io.newURI(aUrl, null, baseUri);
 
+  var tabIndex = null;
+  try {
+    var chromeWin = getChromeWinForContentWin(this.window);
+    var tabBrowser = chromeWin.gBrowser;
+    // Firefox < 35 (i.e. PaleMoon) does not support getTabForBrowser
+    if (!tabBrowser.getTabForBrowser) {
+      tabIndex = tabBrowser.getBrowserIndexForDocument(this.window.top.document);
+    }
+  } catch (e) {
+    // [e10s on]
+    // Ignore.
+  }
+
   sendAsyncMessage('greasemonkey:open-in-tab', {
     inBackground: loadInBackground,
-    url: uri.spec,
+    tabIndex: tabIndex,
+    url: uri.spec
   });
 };
 
