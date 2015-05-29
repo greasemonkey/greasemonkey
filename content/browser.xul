@@ -109,6 +109,14 @@
     </menupopup>
   </menu>
 
+  <popupset id="mainPopupSet">
+    <panel id="mc-panel" noautohide="false" noautofocus="true" position="topcenter topright">
+      <textbox id="mc-entry"/>
+      <listbox id="mc-list">
+      </listbox>
+    </panel>
+  </popupset>
+
   <stringbundleset id="stringbundleset">
   <stringbundle id="gm-browser-bundle" src="chrome://greasemonkey/locale/gm-browser.properties" />
   </stringbundleset>
