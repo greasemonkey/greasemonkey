@@ -1,7 +1,7 @@
-Components.utils.import("resource://greasemonkey/extractMeta.js");
-Components.utils.import('resource://greasemonkey/parseScript.js');
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import("chrome://greasemonkey-modules/content/extractMeta.js");
+Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 /////////////////////////////// global variables ///////////////////////////////
 
@@ -39,7 +39,7 @@ function doInstall() {
 
   // Create a script object with parsed metadata, and ...
   var scope = {};
-  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
   var script = scope.parse(scriptSrc);
   // ... make sure entered details will not ruin an existing file.
   if (config.installIsUpdate(script)) {

@@ -1,12 +1,12 @@
 var EXPORTED_SYMBOLS = ['parse'];
 
-Components.utils.import('resource://greasemonkey/extractMeta.js');
-Components.utils.import('resource://greasemonkey/script.js');
-Components.utils.import('resource://greasemonkey/scriptIcon.js');
-Components.utils.import('resource://greasemonkey/scriptRequire.js');
-Components.utils.import('resource://greasemonkey/scriptResource.js');
-Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/extractMeta.js');
+Components.utils.import('chrome://greasemonkey-modules/content/script.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptIcon.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptRequire.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptResource.js');
+Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var gIoService = Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);

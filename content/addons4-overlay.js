@@ -3,9 +3,9 @@
 // opposed to addons4.jsm which is responsible for what the API does handle.)
 (function private_scope() {
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
-Components.utils.import("resource://greasemonkey/addons4.js");
-Components.utils.import('resource://greasemonkey/third-party/droppedUrls.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import("chrome://greasemonkey-modules/content/addons4.js");
+Components.utils.import('chrome://greasemonkey-modules/content/third-party/droppedUrls.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var userScriptViewId = 'addons://list/greasemonkey-user-script';
 

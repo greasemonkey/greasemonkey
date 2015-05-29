@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['ScriptIcon'];
 
-Components.utils.import('resource://greasemonkey/scriptDependency.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptDependency.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]

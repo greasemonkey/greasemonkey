@@ -40,8 +40,8 @@
 
 var EXPORTED_SYMBOLS = ['MatchPattern'];
 
-Components.utils.import("resource://greasemonkey/third-party/convert2RegExp.js");
-Components.utils.import("resource://greasemonkey/util.js");
+Components.utils.import("chrome://greasemonkey-modules/content/third-party/convert2RegExp.js");
+Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 var validSchemes = ['http', 'https', 'ftp', 'file'];
 var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;

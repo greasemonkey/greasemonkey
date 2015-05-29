@@ -3,11 +3,11 @@ var EXPORTED_SYMBOLS = ['cleanFilename', 'RemoteScript'];
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 
-Components.utils.import("resource://greasemonkey/GM_notification.js");
-Components.utils.import('resource://greasemonkey/addons4.js');
-Components.utils.import('resource://greasemonkey/script.js');
-Components.utils.import('resource://greasemonkey/scriptIcon.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import("chrome://greasemonkey-modules/content/GM_notification.js");
+Components.utils.import('chrome://greasemonkey-modules/content/addons4.js');
+Components.utils.import('chrome://greasemonkey-modules/content/script.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptIcon.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -407,7 +407,7 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
   if (this.script) return true;
 
   var scope = {};
-  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
   var script = scope.parse(aSource, this._uri, true, aFatal);
   if (!script || script.parseErrors.length) {
     if (aFatal) {

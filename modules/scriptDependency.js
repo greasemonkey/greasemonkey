@@ -1,6 +1,6 @@
 var EXPORTED_SYMBOLS = ['ScriptDependency'];
 
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 /** Base implementation for Icon, Require, Resource. */
 function ScriptDependency(aScript) {

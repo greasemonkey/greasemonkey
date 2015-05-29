@@ -5,9 +5,9 @@ var Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://greasemonkey/third-party/getChromeWinForContentWin.js");
-Cu.import('resource://greasemonkey/prefmanager.js');
-Cu.import("resource://greasemonkey/util.js");
+Cu.import("chrome://greasemonkey-modules/content/third-party/getChromeWinForContentWin.js");
+Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Cu.import("chrome://greasemonkey-modules/content/util.js");
 
 
 var EXPORTED_SYMBOLS = ['GM_ScriptStorageFront'];

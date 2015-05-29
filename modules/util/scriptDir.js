@@ -1,5 +1,5 @@
-Components.utils.import('resource://greasemonkey/constants.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 const EXPORTED_SYMBOLS = ['scriptDir'];
 

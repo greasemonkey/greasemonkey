@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
-Components.utils.import("resource://greasemonkey/util.js");
+Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]

@@ -8,12 +8,12 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-Cu.import("resource://greasemonkey/ipcscript.js");
-Cu.import("resource://greasemonkey/menucommand.js");
-Cu.import("resource://greasemonkey/prefmanager.js");
-Cu.import("resource://greasemonkey/storageBack.js");
-Cu.import("resource://greasemonkey/sync.js");
-Cu.import("resource://greasemonkey/util.js");
+Cu.import("chrome://greasemonkey-modules/content/ipcscript.js");
+Cu.import("chrome://greasemonkey-modules/content/menucommand.js");
+Cu.import("chrome://greasemonkey-modules/content/prefmanager.js");
+Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
+Cu.import("chrome://greasemonkey-modules/content/sync.js");
+Cu.import("chrome://greasemonkey-modules/content/util.js");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -87,7 +87,7 @@ function startup(aService) {
   Services.obs.addObserver(aService, 'quit-application', false);
 
   // Import this once, early, so that enqueued deletes can happen.
-  Cu.import("resource://greasemonkey/util/enqueueRemoveFile.js");
+  Cu.import("chrome://greasemonkey-modules/content/util/enqueueRemoveFile.js");
 }
 
 /////////////////////////////////// Service ////////////////////////////////////

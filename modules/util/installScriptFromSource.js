@@ -1,7 +1,7 @@
-Components.utils.import('resource://greasemonkey/GM_notification.js');
-Components.utils.import('resource://greasemonkey/parseScript.js');
-Components.utils.import('resource://greasemonkey/remoteScript.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/GM_notification.js');
+Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js');
+Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var EXPORTED_SYMBOLS = ['installScriptFromSource'];
 

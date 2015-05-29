@@ -1,6 +1,6 @@
 Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 const EXPORTED_SYMBOLS = ['openInEditor'];
 

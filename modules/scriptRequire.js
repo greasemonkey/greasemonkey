@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['ScriptRequire'];
 
-Components.utils.import('resource://greasemonkey/scriptDependency.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptDependency.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 ScriptRequire.prototype = new ScriptDependency();
 ScriptRequire.prototype.constructor = ScriptRequire;

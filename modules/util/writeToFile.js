@@ -1,5 +1,5 @@
 Components.utils.import('resource://gre/modules/NetUtil.jsm');
-Components.utils.import('resource://greasemonkey/constants.js');
+Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
 
 const EXPORTED_SYMBOLS = ['writeToFile'];
 

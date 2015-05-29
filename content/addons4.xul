@@ -6,7 +6,7 @@
 <script type="application/x-javascript"><![CDATA[
 window.addEventListener('load', function() {
 var addons = {};
-Components.utils.import("resource://greasemonkey/addons4.js", addons);
+Components.utils.import("chrome://greasemonkey-modules/content/addons4.js", addons);
 addons.GM_addonsStartup();
 }, true);
 

@@ -1,4 +1,4 @@
-Components.utils.import('resource://greasemonkey/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 
 const EXPORTED_SYMBOLS = ['enqueueRemoveFile'];
 

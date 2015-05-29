@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['registerMenuCommand'];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var gMenuCommands = [];
 var gStringBundle = Services.strings.createBundle(

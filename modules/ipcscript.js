@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['IPCScript'];
 
-Components.utils.import("resource://greasemonkey/extractMeta.js");
-Components.utils.import("resource://greasemonkey/util.js");
+Components.utils.import("chrome://greasemonkey-modules/content/extractMeta.js");
+Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 function IPCScript(aScript, addonVersion) {
   this.addonVersion = addonVersion;

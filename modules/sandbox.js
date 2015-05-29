@@ -4,12 +4,12 @@ var Cu = Components.utils;
 var Ci = Components.interfaces;
 var Cc = Components.classes;
 
-Cu.import('resource://greasemonkey/GM_setClipboard.js');
-Cu.import("resource://greasemonkey/menucommand.js");
-Cu.import("resource://greasemonkey/miscapis.js");
-Cu.import("resource://greasemonkey/storageFront.js");
-Cu.import("resource://greasemonkey/util.js");
-Cu.import("resource://greasemonkey/xmlhttprequester.js");
+Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
+Cu.import("chrome://greasemonkey-modules/content/menucommand.js");
+Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
+Cu.import("chrome://greasemonkey-modules/content/storageFront.js");
+Cu.import("chrome://greasemonkey-modules/content/util.js");
+Cu.import("chrome://greasemonkey-modules/content/xmlhttprequester.js");
 
 var gStringBundle = Cc["@mozilla.org/intl/stringbundle;1"]
     .getService(Ci.nsIStringBundleService)

@@ -1,6 +1,6 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 // this file is the JavaScript backing for the UI wrangling which happens in
 // browser.xul. It also initializes the Greasemonkey singleton which contains
@@ -52,7 +52,7 @@ GM_BrowserUI.chromeLoad = function(e) {
   GM_BrowserUI.showToolbarButton();
 
   // Make sure this is imported at least once, so its internal timer starts.
-  Components.utils.import('resource://greasemonkey/stats.js');
+  Components.utils.import('chrome://greasemonkey-modules/content/stats.js');
 };
 
 /**
@@ -156,7 +156,7 @@ GM_BrowserUI.viewContextItemClicked = function() {
   if (!uri) return;
 
   var scope = {};
-  Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+  Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js', scope);
   var rs = new scope.RemoteScript(uri.spec);
   rs.downloadScript(function(aSuccess) {
     if (aSuccess) {

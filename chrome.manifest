@@ -8,7 +8,7 @@ skin       greasemonkey classic/1.0 skin/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/browser.xul
 style      chrome://global/content/customizeToolbar.xul chrome://greasemonkey/skin/browser.css
 
-resource   greasemonkey modules/
+content    greasemonkey-modules modules/
 overlay	   chrome://browser/content/browser.xul chrome://greasemonkey/content/addons4.xul
 overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul
 

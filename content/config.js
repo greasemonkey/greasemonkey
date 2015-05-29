@@ -1,9 +1,9 @@
-Components.utils.import('resource://greasemonkey/constants.js');
-Components.utils.import('resource://greasemonkey/miscapis.js');
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import('resource://greasemonkey/script.js');
-Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
+Components.utils.import('chrome://greasemonkey-modules/content/miscapis.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/script.js');
+Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 function Config() {
   this._saveTimer = null;
@@ -235,7 +235,7 @@ Config.prototype.updateModifiedScripts = function(
   for (var i = 0, script; script = scripts[i]; i++) {
     if (0 == script.pendingExec.length) {
       var scope = {};
-      Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+      Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script.downloadURL));
       // TODO: Show PopupNotifications about parse error(s)?

@@ -1,19 +1,19 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
-Components.utils.import('resource://greasemonkey/GM_notification.js');
-Components.utils.import('resource://greasemonkey/constants.js');
-Components.utils.import('resource://greasemonkey/extractMeta.js');
-Components.utils.import('resource://greasemonkey/ipcscript.js');
-Components.utils.import('resource://greasemonkey/miscapis.js');
-Components.utils.import("resource://greasemonkey/parseScript.js");
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import('resource://greasemonkey/scriptIcon.js');
-Components.utils.import('resource://greasemonkey/scriptRequire.js');
-Components.utils.import('resource://greasemonkey/scriptResource.js');
-Components.utils.import("resource://greasemonkey/storageBack.js");
-Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
-Components.utils.import('resource://greasemonkey/third-party/convert2RegExp.js');
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/GM_notification.js');
+Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
+Components.utils.import('chrome://greasemonkey-modules/content/extractMeta.js');
+Components.utils.import('chrome://greasemonkey-modules/content/ipcscript.js');
+Components.utils.import('chrome://greasemonkey-modules/content/miscapis.js');
+Components.utils.import("chrome://greasemonkey-modules/content/parseScript.js");
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptIcon.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptRequire.js');
+Components.utils.import('chrome://greasemonkey-modules/content/scriptResource.js');
+Components.utils.import("chrome://greasemonkey-modules/content/storageBack.js");
+Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
+Components.utils.import('chrome://greasemonkey-modules/content/third-party/convert2RegExp.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
@@ -332,7 +332,7 @@ Script.prototype._loadFromConfigNode = function(node) {
       || !node.hasAttribute("version")
   ) {
     var scope = {};
-    Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+    Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
     var parsedScript = scope.parse(
         this.textContent, GM_util.uriFromUrl(this.downloadURL));
 
@@ -682,7 +682,7 @@ Script.prototype.updateFromNewScript = function(newScript, url, windowId, browse
 
     // Re-download dependencies.
     var scope = {};
-    Components.utils.import('resource://greasemonkey/remoteScript.js', scope);
+    Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js', scope);
     var rs = new scope.RemoteScript(this.downloadURL);
     newScript._basedir = this._basedir;
     rs.setScript(newScript);
@@ -856,7 +856,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
 
   var source = req.responseText;
   var scope = {};
-  Components.utils.import('resource://greasemonkey/parseScript.js', scope);
+  Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
   var newScript = scope.parse(source, this.downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) {

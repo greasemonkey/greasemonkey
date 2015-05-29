@@ -9,11 +9,11 @@ the work to send data to the server.
 var EXPORTED_SYMBOLS = [];
 
 Components.utils.import('resource://services-common/utils.js');
-Components.utils.import('resource://greasemonkey/miscapis.js');
-Components.utils.import('resource://greasemonkey/parseScript.js');
-Components.utils.import('resource://greasemonkey/prefmanager.js');
-Components.utils.import("resource://greasemonkey/storageBack.js");
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/miscapis.js');
+Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js');
+Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Components.utils.import("chrome://greasemonkey-modules/content/storageBack.js");
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var gPrefMan = new GM_PrefManager();
 var gStringBundle = Components

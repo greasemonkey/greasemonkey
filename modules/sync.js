@@ -8,10 +8,10 @@ var Cu = Components.utils;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('resource://services-crypto/utils.js');
-Cu.import("resource://greasemonkey/miscapis.js");
-Cu.import('resource://greasemonkey/prefmanager.js');
-Cu.import("resource://greasemonkey/storageBack.js");
-Cu.import('resource://greasemonkey/util.js');
+Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
+Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
+Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 
 var gSyncInitialized = false;
@@ -37,7 +37,7 @@ var SyncServiceObserver = {
     gSyncInitialized = true;
 
     // This must be delayed until after the Greasemonkey service is set up.
-    Cu.import('resource://greasemonkey/remoteScript.js');
+    Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
     // Also delay importing the actual Sync service to prevent conflicts with
     // the master password dialog during browser startup. See #1852.
     Cu.import('resource://services-sync/service.js', gWeave);

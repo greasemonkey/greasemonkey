@@ -8,7 +8,7 @@ window.addEventListener('load', function() {
   if (!args.filename) return;
   if (!args.filename.match(/\.user\.js$/)) return;
 
-  Components.utils.import('resource://greasemonkey/util.js');
+  Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
   // If we're opening a user script:
   // Put the cursor at the top.  Workaround for #1708 ; remove when

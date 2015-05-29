@@ -8,13 +8,13 @@ var Cu = Components.utils;
 Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
-Cu.import('resource://greasemonkey/GM_setClipboard.js');
-Cu.import('resource://greasemonkey/installPolicy.js');
-Cu.import('resource://greasemonkey/ipcscript.js');
-Cu.import('resource://greasemonkey/miscapis.js');
-Cu.import('resource://greasemonkey/sandbox.js');
-Cu.import('resource://greasemonkey/scriptProtocol.js');
-Cu.import('resource://greasemonkey/util.js');
+Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
+Cu.import('chrome://greasemonkey-modules/content/installPolicy.js');
+Cu.import('chrome://greasemonkey-modules/content/ipcscript.js');
+Cu.import('chrome://greasemonkey-modules/content/miscapis.js');
+Cu.import('chrome://greasemonkey-modules/content/sandbox.js');
+Cu.import('chrome://greasemonkey-modules/content/scriptProtocol.js');
+Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 

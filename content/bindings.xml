@@ -11,7 +11,7 @@
     </content>
     <implementation>
       <constructor>
-        Components.utils.import('resource://greasemonkey/third-party/MatchPattern.js');
+        Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
 
         this._stringBundle = Components
             .classes["@mozilla.org/intl/stringbundle;1"]

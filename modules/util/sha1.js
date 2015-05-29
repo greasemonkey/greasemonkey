@@ -1,4 +1,4 @@
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 const EXPORTED_SYMBOLS = ['sha1'];
 

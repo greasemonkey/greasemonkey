@@ -1,7 +1,7 @@
 var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
