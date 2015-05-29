@@ -68,7 +68,13 @@ GM_BrowserUI.openTab = function(url) {
 GM_BrowserUI.openInTab = function(aMessage) {
   var browser = aMessage.target;
   var tabBrowser = browser.getTabBrowser();
-  var scriptTab = tabBrowser.getTabForBrowser(browser);
+  var scriptTab;
+  // Firefox < 35 (i.e. PaleMoon) does not support getTabForBrowser
+  if (tabBrowser.getTabForBrowser) { 
+    scriptTab = tabBrowser.getTabForBrowser(browser);
+  } else {
+    scriptTab = tabBrowser.tabs[aMessage.data.tabIndex];
+  }
   var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
   var newTab = tabBrowser.addTab(
       aMessage.data.url,
