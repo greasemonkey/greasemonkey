@@ -1,5 +1,6 @@
 var EXPORTED_SYMBOLS = [];
 
+(function initSync() {
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
@@ -16,12 +17,18 @@ Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 var gSyncInitialized = false;
 
-var gWeave = {};
-Cu.import('resource://services-sync/engines.js', gWeave);
-Cu.import('resource://services-sync/record.js', gWeave);
-Cu.import('resource://services-sync/status.js', gWeave);
-Cu.import('resource://services-sync/util.js', gWeave);
-
+try {
+  // The files we're trying to import below don't exist in Firefox builds
+  // without sync service, causing the import to throw.
+  var gWeave = {};
+  Cu.import('resource://services-sync/engines.js', gWeave);
+  Cu.import('resource://services-sync/record.js', gWeave);
+  Cu.import('resource://services-sync/status.js', gWeave);
+  Cu.import('resource://services-sync/util.js', gWeave);
+} catch (e) {
+  // If there's no sync service, it doesn't make sense to continue.
+  return;
+}
 
 var SyncServiceObserver = {
   init: function() {
@@ -284,3 +291,4 @@ function setScriptValuesFromSyncRecord(aScript, aRecord) {
 
 
 SyncServiceObserver.init();
+})();
