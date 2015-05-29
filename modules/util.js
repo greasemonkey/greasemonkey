@@ -60,7 +60,7 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'sniffGrants', 'resource://greasemonk
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'timeout', 'resource://greasemonkey/util/timeout.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uriFromUrl', 'resource://greasemonkey/util/uriFromUrl.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uuid', 'resource://greasemonkey/util/uuid.js');
-XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowId', 'resource://greasemonkey/util/windowId.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'resource://greasemonkey/util/windowIdForEvent.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowId', 'resource://greasemonkey/util/windowId.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsClosed', 'resource://greasemonkey/util/windowIsClosed.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'writeToFile', 'resource://greasemonkey/util/writeToFile.js');
