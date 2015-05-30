@@ -58,14 +58,36 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
           );
   }
 
-  var rv = {
-    abort: function () { return req.abort(); },
-    finalUrl: null,
-    readyState: null,
-    responseHeaders: null,
-    responseText: null,
-    status: null,
-    statusText: null
+  // Firefox < 30 (i.e. PaleMoon) does not support cloneInto
+  if ('function' == typeof Components.utils.cloneInto) {
+    var rv = {
+      abort: function () { return req.abort(); },
+      finalUrl: null,
+      readyState: null,
+      responseHeaders: null,
+      responseText: null,
+      status: null,
+      statusText: null
+    };
+  } else {
+    var rv = {
+      __exposedProps__: {
+        abort: "r",
+        finalUrl: "r",
+        readyState: "r",
+        responseHeaders: "r",
+        responseText: "r",
+        status: "r",
+        statusText: "r"
+      },
+      abort: function () { return req.abort(); },
+      finalUrl: null,
+      readyState: null,
+      responseHeaders: null,
+      responseText: null,
+      status: null,
+      statusText: null
+    };
   }
 
   if (!!details.synchronous) {
@@ -82,15 +104,18 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     rv.statusText = req.statusText;
   }
 
-  rv = Components.utils.cloneInto({
-    abort: rv.abort.bind(rv),
-    finalUrl: rv.finalUrl,
-    readyState: rv.readyState,
-    responseHeaders: rv.responseHeaders,
-    responseText: rv.responseText,
-    status: rv.status,
-    statusText: rv.statusText
-  }, this.sandbox, {cloneFunctions: true});
+  // Firefox < 30 (i.e. PaleMoon) does not support cloneInto
+  if ('function' == typeof Components.utils.cloneInto) {
+    rv = Components.utils.cloneInto({
+      abort: rv.abort.bind(rv),
+      finalUrl: rv.finalUrl,
+      readyState: rv.readyState,
+      responseHeaders: rv.responseHeaders,
+      responseText: rv.responseText,
+      status: rv.status,
+      statusText: rv.statusText
+    }, this.sandbox, {cloneFunctions: true});
+  }
 
   return rv;
 };
@@ -234,20 +259,52 @@ function(wrappedContentWin, sandbox, req, event, details) {
   }
 
   req.addEventListener(event, function(evt) {
-    var responseState = {
-      context: details.context || null,
-      finalUrl: null,
-      lengthComputable: null,
-      loaded: null,
-      readyState: req.readyState,
-      response: req.response,
-      responseHeaders: null,
-      responseText: null,
-      responseXML: null,
-      status: null,
-      statusText: null,
-      total: null
-    };
+    // Firefox < 30 (i.e. PaleMoon) does not support cloneInto
+    if ('function' == typeof Components.utils.cloneInto) {
+      var responseState = {
+        context: details.context || null,
+        finalUrl: null,
+        lengthComputable: null,
+        loaded: null,
+        readyState: req.readyState,
+        response: req.response,
+        responseHeaders: null,
+        responseText: null,
+        responseXML: null,
+        status: null,
+        statusText: null,
+        total: null
+      };
+    } else {
+      var responseState = {
+        __exposedProps__: {
+          context: "r",
+          finalUrl: "r",
+          lengthComputable: "r",
+          loaded: "r",
+          readyState: "r",
+          response: "r",
+          responseHeaders: "r",
+          responseText: "r",
+          responseXML: "rw",
+          status: "r",
+          statusText: "r",
+          total: "r"
+        },
+        context: details.context || null,
+        finalUrl: null,
+        lengthComputable: null,
+        loaded: null,
+        readyState: req.readyState,
+        response: req.response,
+        responseHeaders: null,
+        responseText: null,
+        responseXML: null,
+        status: null,
+        statusText: null,
+        total: null
+      };
+    }
 
     try {
       responseState.responseText = req.responseText;
@@ -268,6 +325,8 @@ function(wrappedContentWin, sandbox, req, event, details) {
       var clone = xmlDoc.importNode(responseXML.documentElement, true);
       xmlDoc.appendChild(clone);
       responseState.responseXML = xmlDoc;
+    } else {
+      responseState.responseXML = "";
     }
 
     switch (event) {
@@ -287,20 +346,23 @@ function(wrappedContentWin, sandbox, req, event, details) {
         break;
     }
 
-    responseState = Components.utils.cloneInto({
-      context: responseState.context,
-      finalUrl: responseState.finalUrl,
-      lengthComputable: responseState.lengthComputable,
-      loaded: responseState.loaded,
-      readyState: responseState.readyState,
-      response: responseState.response,
-      responseHeaders: responseState.responseHeaders,
-      responseText: responseState.responseText,
-      responseXML: responseState.responseXML,
-      status: responseState.status,
-      statusText: responseState.statusText,
-      total: responseState.total
-    }, sandbox, {cloneFunctions: true, wrapReflectors: true});
+    // Firefox < 30 (i.e. PaleMoon) does not support cloneInto
+    if ('function' == typeof Components.utils.cloneInto) {
+      responseState = Components.utils.cloneInto({
+        context: responseState.context,
+        finalUrl: responseState.finalUrl,
+        lengthComputable: responseState.lengthComputable,
+        loaded: responseState.loaded,
+        readyState: responseState.readyState,
+        response: responseState.response,
+        responseHeaders: responseState.responseHeaders,
+        responseText: responseState.responseText,
+        responseXML: responseState.responseXML,
+        status: responseState.status,
+        statusText: responseState.statusText,
+        total: responseState.total
+      }, sandbox, {cloneFunctions: true, wrapReflectors: true});
+    }
 
     if (GM_util.windowIsClosed(wrappedContentWin)) {
       return;
