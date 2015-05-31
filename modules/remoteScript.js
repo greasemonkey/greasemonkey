@@ -477,7 +477,7 @@ RemoteScript.prototype.showSource = function(aTabBrowser) {
       'accessKey': stringBundleBrowser.GetStringFromName('greeting.btnAccess'),
       'popup': null,
       'callback': GM_util.hitch(this, function() {
-        GM_util.showInstallDialog(this, aTabBrowser, GM_util.getService());
+        GM_util.showInstallDialog(this, aTabBrowser);
         // Skip the cleanup handler, as the downloaded files are used in the
         // installation process.
         tab.removeEventListener("TabClose", cleanup, false);
