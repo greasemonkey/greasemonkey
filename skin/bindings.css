@@ -1,6 +1,9 @@
 cludes {
   -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor-editable');
 }
+#resizer {
+  display: none;
+}
 .include cludes.readonly {
   -moz-binding: url('chrome://greasemonkey/content/bindings.xml#clude-editor-readonly-include');
 }
