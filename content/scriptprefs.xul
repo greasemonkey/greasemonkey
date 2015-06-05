@@ -25,17 +25,18 @@
   <tabs>
     <tab label="&scriptprefs.usersettings;" />
     <tab label="&scriptprefs.scriptsettings;" />
+    <resizer dir="right" />
   </tabs>
   <tabpanels>
     <tabpanel>
       <vbox flex="1">
         <vbox flex="1" class="include">
           <label value="&label.grpIncluded;" />
-          <cludes id="user-includes"/>
+          <cludes id="user-includes" />
         </vbox>
         <vbox flex="1" class="match">
           <label value="&label.grpMatched;" />
-          <cludes id="user-matches"/>
+          <cludes id="user-matches" />
         </vbox>
         <vbox flex="1" class="exclude">
           <label value="&label.grpExcluded;" />
