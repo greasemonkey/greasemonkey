@@ -97,7 +97,7 @@
       </method>
     </implementation>
     <handlers>
-      <handler event="select" action="this._onSelect();"/>
+      <handler event="select" action="this._onSelect();" />
     </handlers>
   </binding>
   <binding id="clude-editor-editable"
@@ -105,13 +105,14 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" />
+        <xul:listbox flex="1" id="listbox" rows="8" />
         <xul:vbox>
-          <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage()" />
-          <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage()"
+          <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage();" />
+          <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage();"
             disabled="true" />
-          <xul:button id="btnDel" label="&button.remove;" oncommand="_onRemovePage()"
+          <xul:button id="btnDel" label="&button.remove;" oncommand="_onRemovePage();"
             disabled="true" />
+          <xul:resizer id="resizer" dir="right" />
           <xul:spacer flex="1" />
         </xul:vbox>
       </xul:hbox>
@@ -124,6 +125,8 @@
             this, 'id', 'btnEdit');
         this._btnDel = document.getAnonymousElementByAttribute(
             this, 'id', 'btnDel');
+        if (this == document.getElementById('globalExcludes'))
+          document.getElementById('resizer').style.display = 'block';
       </constructor>
 
       <method name="_onSelect">
@@ -166,10 +169,10 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" />
+        <xul:listbox flex="1" id="listbox" rows="8" />
         <xul:vbox>
           <xul:button id="btnUserClude" label="&button.addUserExclude;"
-              oncommand="_addUserClude('Exclude')" disabled="true" />
+              oncommand="_addUserClude('Exclude');" disabled="true" />
         </xul:vbox>
       </xul:hbox>
     </content>
@@ -179,10 +182,10 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" />
+        <xul:listbox flex="1" id="listbox" rows="8" />
         <xul:vbox id="vboxUserCludeMatch">
           <xul:button id="btnUserClude" label="&button.addUserExclude;"
-              oncommand="_addUserClude('Exclude')" disabled="true" />
+              oncommand="_addUserClude('Exclude');" disabled="true" />
         </xul:vbox>
       </xul:hbox>
     </content>
@@ -192,10 +195,10 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" />
+        <xul:listbox flex="1" id="listbox" rows="8" />
         <xul:vbox>
           <xul:button id="btnUserClude" label="&button.addUserInclude;"
-              oncommand="_addUserClude('Include')" disabled="true" />
+              oncommand="_addUserClude('Include');" disabled="true" />
         </xul:vbox>
       </xul:hbox>
     </content>
