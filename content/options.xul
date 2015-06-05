@@ -18,13 +18,13 @@
 
   id="greasemonkey-options-dialog"
   persist="screenX screenY"
-  onload="GM_loadOptions()"
-  ondialogaccept="GM_saveOptions()"
-  ondialogcancel="close()"
+  onload="GM_loadOptions();"
+  ondialogaccept="GM_saveOptions();"
+  ondialogcancel="close();"
 >
 <script type="application/x-javascript" src="chrome://greasemonkey/content/options.js" />
 
-<dialogheader title="Greasemonkey" description="&prefWindow.titleWin;"/>
+<dialogheader title="Greasemonkey" description="&prefWindow.titleWin;" />
 
 <vbox flex="1">
   <groupbox>
@@ -37,8 +37,8 @@
   <groupbox>
     <caption label="&options.editor;" />
     <hbox>
-      <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" flex="1"/>
-      <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" flex="1"/>
+      <button oncommand="GM_util.setEditor(1)" label="&options.defaultEditor;" />
+      <button oncommand="GM_util.setEditor(0)" label="&options.browseForEditor;" />
     </hbox>
   </groupbox>
 
@@ -50,7 +50,7 @@
   <groupbox flex="1">
     <caption label="&options.newScript.template;" />
     <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
-    <textbox id="newScript-template" multiline="true" rows="5" flex="1" />
+    <textbox id="newScript-template" multiline="true" rows="5" wrap="off" flex="1" />
   </groupbox>
 </vbox>
 
