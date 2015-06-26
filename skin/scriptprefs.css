@@ -1,3 +1,9 @@
 cludes {
   min-width: 500px;
 }
+
+@media (max-height: 1080px) {
+  cludes {
+    max-height: 150px;
+  }
+}
