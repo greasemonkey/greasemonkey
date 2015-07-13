@@ -2,7 +2,7 @@ Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var EXPORTED_SYMBOLS = ['windowId'];
 
-function windowId(win) {
+function windowId(win, which) {
   try {
     // Do not operate on chrome windows.
     win.QueryInterface(Components.interfaces.nsIDOMChromeWindow);
@@ -25,7 +25,11 @@ function windowId(win) {
       .getInterface(Components.interfaces.nsIDOMWindowUtils);
   var windowId;
   try {
-    windowId = domWindowUtils.currentInnerWindowID;
+    if ('outer' == which) {
+      windowId = domWindowUtils.outerWindowID;
+    } else if (!which || 'inner' == which) {
+      windowId = domWindowUtils.currentInnerWindowID;
+    }
   } catch (e) { }
   if ('undefined' == typeof windowId) {
     // Firefox <4.0 does not provide this, use the document instead.

@@ -91,15 +91,18 @@ function createScriptFromObject(aObject) {
 
 
 function injectDelayedScript(aMessage) {
-  // TODO: Make this work again.
   var windowId = aMessage.data.windowId;
   var windowMediator = Components
       .classes['@mozilla.org/appshell/window-mediator;1']
       .getService(Components.interfaces.nsIWindowMediator);
   var win = windowMediator.getOuterWindowWithId(windowId);
 
-  console.log('injectDelayedScript; windowId='+windowId+'; win='+win+'\n');
-//  injectScripts([script], win);
+  if (!win) {
+    dump('Couldn\'t find window with (outer?) ID ' + windowId + '!\n');
+  } else {
+     var script = createScriptFromObject(aMessage.data.script);
+    injectScripts([script], win);
+  }
 };
 
 
@@ -142,13 +145,11 @@ function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
   if (!GM_util.isGreasemonkeyable(url)) return;
 
-  var windowId = GM_util.windowId(aContentWin);
-
   var response = sendSyncMessage(
     'greasemonkey:scripts-for-url', {
       'url': url,
       'when': aRunWhen,
-      'windowId': windowId
+      'windowId': GM_util.windowId(aContentWin, 'outer'),
     });
   if (!response || !response[0]) return;
 
