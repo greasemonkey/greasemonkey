@@ -32,5 +32,5 @@ function memoize(func, limit) {
     if (keylist.push(key) > limit) delete cache[keylist.shift()];
 
     return result;
-  }
+  };
 }

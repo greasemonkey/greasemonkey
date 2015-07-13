@@ -27,7 +27,7 @@ window.addEventListener("load", function window_load() {
       content.selectedBrowser.contentWindow.location.href;
   }
 
-  gClipText = getClipText()
+  gClipText = getClipText();
   document.documentElement.getButton('extra2').collapsed =
       !(gClipText && extractMeta(gClipText));
 }, false);
@@ -121,7 +121,7 @@ function createScriptSource() {
     } else {
       var re = new RegExp('(.+)' + replaceKey);
       var m = source.match(re);
-      source = source.replace(replaceKey, replaceVal.join('\n' + m[1]))
+      source = source.replace(replaceKey, replaceVal.join('\n' + m[1]));
     }
   }
 

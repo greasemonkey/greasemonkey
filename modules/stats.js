@@ -114,7 +114,7 @@ function getStatsObj() {
     var domain = null;
     try {
       // Ignore errors here; i.e. invalid/empty URLs.
-      domain = gTldService.getBaseDomain(downloadUri)
+      domain = gTldService.getBaseDomain(downloadUri);
     } catch (e) { }
 
     var sizes = [script.textContent.length];

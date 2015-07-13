@@ -66,7 +66,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     responseText: null,
     status: null,
     statusText: null
-  }
+  };
 
   if (!!details.synchronous) {
     rv.finalUrl = req.finalUrl;

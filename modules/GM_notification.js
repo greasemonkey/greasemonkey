@@ -25,7 +25,7 @@ function GM_notification(
       'label': gStringBundle.GetStringFromName('notification.ok.label'),
       'accessKey': gStringBundle.GetStringFromName('notification.ok.accesskey'),
       'callback': function() { },
-      }
+      };
   var muteAction = {
       'label': gStringBundle.GetStringFromName('notification.neveragain.label'),
       'accessKey': gStringBundle.GetStringFromName('notification.neveragain.accesskey'),

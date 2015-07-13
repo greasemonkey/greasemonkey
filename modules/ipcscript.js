@@ -12,7 +12,7 @@ function IPCScript(aScript, addonVersion) {
   this.id = aScript.id;
   this.includes = aScript.includes;
   this.localized = aScript.localized;
-  this.matches = aScript.matches.map(function(m) { return m.pattern });
+  this.matches = aScript.matches.map(function(m) { return m.pattern; });
   this.name = aScript.name;
   this.namespace = aScript.namespace;
   this.noframes = aScript.noframes;
@@ -26,7 +26,7 @@ function IPCScript(aScript, addonVersion) {
     return {
       'fileURL': req.fileURL,
       'textContent': req.textContent
-    }
+    };
   });
 
   this.resources = aScript.resources.map(function(res) {
@@ -79,5 +79,5 @@ IPCScript.prototype.info = function() {
       'run-at': this.runAt,
       'version': this.version
     }
-  }
+  };
 };
