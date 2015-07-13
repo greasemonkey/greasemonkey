@@ -750,7 +750,7 @@ Script.prototype.updateFromNewScript = function(newScript, url, windowId, browse
 
         if (shouldRun) {
           pendingExec.browser.messageManager.sendAsyncMessage(
-              "greasemonkey:inject-script",
+              "greasemonkey:inject-delayed-script",
               {
                 windowId: pendingExec.windowId,
                 script: new IPCScript(this, gGreasemonkeyVersion)

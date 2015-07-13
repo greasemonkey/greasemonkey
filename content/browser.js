@@ -357,22 +357,17 @@ function GM_showPopup(aEvent) {
       function(script) { point = appendScriptAfter(script, point); });
 
   // Propagate to commands sub-menu.
-  var commandsPopup = popup.querySelector(
-      'menupopup.greasemonkey-user-script-commands-popup');
-  GM_MenuCommander.onPopupShowing(commandsPopup);
+  GM_MenuCommander.onPopupShowing(aEvent);
 }
 
 /**
  * Clean up the menu after it hides to prevent memory leaks
  */
 function GM_hidePopup(aEvent) {
-  var popup = aEvent.target;
   // Only handle the actual monkey menu event.
   if (aEvent.currentTarget != aEvent.target) return;
   // Propagate to commands sub-menu.
-  var commandsPopup = popup.querySelector(
-      'menupopup.greasemonkey-user-script-commands-popup');
-  GM_MenuCommander.onPopupHiding(commandsPopup);
+  GM_MenuCommander.onPopupHiding();
 }
 
 // Short-term workaround for #1406: Tab Mix Plus breaks opening links in

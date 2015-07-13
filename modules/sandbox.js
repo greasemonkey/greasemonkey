@@ -4,6 +4,7 @@ var Cu = Components.utils;
 var Ci = Components.interfaces;
 var Cc = Components.classes;
 
+Cu.import('chrome://greasemonkey-modules/content/GM_openInTab.js');
 Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
 Cu.import("chrome://greasemonkey-modules/content/menucommand.js");
 Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
@@ -14,29 +15,22 @@ Cu.import("chrome://greasemonkey-modules/content/xmlhttprequester.js");
 var gStringBundle = Cc["@mozilla.org/intl/stringbundle;1"]
     .getService(Ci.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+var gInvalidAccesskeyErrorStr = gStringBundle
+    .GetStringFromName('error.menu-invalid-accesskey');
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
 
-// TODO: Remove this, see #1318.
-function alert(msg) {
-  Cc["@mozilla.org/embedcomp/prompt-service;1"]
-      .getService(Ci.nsIPromptService)
-      .alert(null, "Greasemonkey alert", msg);
-}
 
-function createSandbox(aScript, aScriptRunner, aMessageManager) {
-  var contentWin = aScriptRunner.window;
-  var url = aScriptRunner.url;
-
+function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
     var contentSandbox = new Components.utils.Sandbox(
-        contentWin,
+        aContentWin,
         {
           'sandboxName': aScript.id,
-          'sandboxPrototype': contentWin,
+          'sandboxPrototype': aContentWin,
           'wantXrays': false,
         });
     // GM_info is always provided.
@@ -47,20 +41,14 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
     Components.utils.evalInSandbox(
         'const unsafeWindow = window;', contentSandbox);
 
-    if (GM_util.compareFirefoxVersion("16.0") < 0) {
-      // See #1350.  The upstream bug was fixed in Firefox 16; apply workaround
-      // only in older versions.
-      contentSandbox.alert = alert;
-    }
-
     return contentSandbox;
   }
 
   var sandbox = new Components.utils.Sandbox(
-      [contentWin],
+      [aContentWin],
       {
         'sandboxName': aScript.id,
-        'sandboxPrototype': contentWin,
+        'sandboxPrototype': aContentWin,
         'wantXrays': true,
       });
 
@@ -76,17 +64,21 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
   sandbox.exportFunction = Cu.exportFunction;
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, contentWin.document);
+    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
     sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
-    sandbox.GM_registerMenuCommand = GM_util.hitch(null, registerMenuCommand, aScriptRunner, aScript);
+    Components.utils.evalInSandbox(MenuCommandSandbox.toSource(), sandbox);
+    sandbox.MenuCommandSandbox(
+        aScript.id, aScript.name, MenuCommandRespond, aFrameScope,
+        gInvalidAccesskeyErrorStr);
+    Components.utils.evalInSandbox('delete MenuCommandSandbox;', sandbox);
   }
 
-  var scriptStorage = new GM_ScriptStorageFront(aScript, aMessageManager, sandbox);
+  var scriptStorage = new GM_ScriptStorageFront(aScript, aFrameScope, sandbox);
   if (GM_util.inArray(aScript.grants, 'GM_deleteValue')) {
     sandbox.GM_deleteValue = GM_util.hitch(scriptStorage, 'deleteValue');
   }
@@ -119,12 +111,12 @@ function createSandbox(aScript, aScriptRunner, aMessageManager) {
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {
-    sandbox.GM_openInTab = GM_util.hitch(aScriptRunner, 'openInTab');
+    sandbox.GM_openInTab = GM_util.hitch(null, GM_openInTab, aFrameScope, aUrl);
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_xmlhttpRequest')) {
     sandbox.GM_xmlhttpRequest = GM_util.hitch(
-        new GM_xmlhttpRequester(contentWin, url, sandbox),
+        new GM_xmlhttpRequester(aContentWin, aUrl, sandbox),
         'contentStartRequest');
   }
 

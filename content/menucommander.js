@@ -1,55 +1,28 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var GM_MenuCommander = {
-  menuCommands: {}
+  popup: null,
+  cookieShowing: null,
+  menuCommands: {},
+  messageCookie: 1,
 };
+
 
 GM_MenuCommander.initialize = function() {
-  var messageManager = Components.classes["@mozilla.org/globalmessagemanager;1"]
+  var ppmm = Components
+      .classes["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Components.interfaces.nsIMessageListenerManager);
-
-  messageManager.addMessageListener('greasemonkey:menu-command-registered',
-      GM_MenuCommander.menuCommandRegistered);
-  messageManager.addMessageListener('greasemonkey:clear-menu-commands',
-      GM_MenuCommander.clearMenuCommands);
-  messageManager.addMessageListener('greasemonkey:toggle-menu-commands',
-      GM_MenuCommander.toggleMenuCommands);
+  ppmm.addMessageListener('greasemonkey:menu-command-response',
+      GM_MenuCommander.messageMenuCommandResponse);
 };
 
-GM_MenuCommander.menuCommandRegistered = function(aMessage) {
-  var windowId = aMessage.data.windowId;
-
-  if (!GM_MenuCommander.menuCommands[windowId]) {
-    GM_MenuCommander.menuCommands[windowId] = [];
-  }
-
-  var command = aMessage.data;
-  command.browser = aMessage.target;
-  GM_MenuCommander.menuCommands[windowId].push(command);
-};
-
-GM_MenuCommander.clearMenuCommands = function(aMessage) {
-  var windowId = aMessage.data.windowId;
-  if (!windowId) return;
-
-  delete GM_MenuCommander.menuCommands[windowId];
-};
-
-GM_MenuCommander.toggleMenuCommands = function(aMessage) {
-  var frozen = aMessage.data.frozen;
-  var windowId = aMessage.data.windowId;
-
-  GM_MenuCommander.withAllMenuCommandsForWindowId(windowId, function(index, command) {
-    command.frozen = frozen;
-  });
-};
 
 GM_MenuCommander.commandClicked = function(aCommand) {
-  aCommand.browser.messageManager.sendAsyncMessage("greasemonkey:menu-command-clicked", {
-    index: aCommand.index,
-    windowId: aCommand.windowId
-  });
+  gBrowser.selectedBrowser.messageManager.sendAsyncMessage(
+      'greasemonkey:menu-command-run',
+      {'cookie': aCommand.cookie});
 };
+
 
 GM_MenuCommander.createMenuItem = function(command) {
   var menuItem = document.createElement("menuitem");
@@ -66,40 +39,37 @@ GM_MenuCommander.createMenuItem = function(command) {
   return menuItem;
 };
 
-GM_MenuCommander.onPopupHiding = function(aMenuPopup) {
+
+GM_MenuCommander.messageMenuCommandResponse = function(aMessage) {
+  if (aMessage.data.cookie != GM_MenuCommander.cookieShowing) return;
+
+  for (i in aMessage.data.commands) {
+    var command = aMessage.data.commands[i];
+    var menuItem = GM_MenuCommander.createMenuItem(command);
+    GM_MenuCommander.popup.appendChild(menuItem);
+  }
+};
+
+
+GM_MenuCommander.onPopupHiding = function() {
   // Asynchronously.  See #1632.
-  GM_util.timeout(function() { GM_util.emptyEl(aMenuPopup); }, 0);
+  GM_util.timeout(function() { GM_util.emptyEl(GM_MenuCommander.popup); }, 0);
 };
 
-GM_MenuCommander.onPopupShowing = function(aMenuPopup) {
-  // Add menu items for commands for the active window.
-  var haveCommands = false;
-  var windowId = GM_util.windowId(gBrowser.contentWindow);
 
-  if (windowId) {
-    GM_MenuCommander.withAllMenuCommandsForWindowId(
-        windowId,
-        function(index, command) {
-          if (command.frozen) return;
-          aMenuPopup.insertBefore(
-              GM_MenuCommander.createMenuItem(command),
-              aMenuPopup.firstChild);
-          haveCommands = true;
-        });
+GM_MenuCommander.onPopupShowing = function(aEvent) {
+  if (!GM_MenuCommander.popup) {
+    GM_MenuCommander.popup = aEvent.target.querySelector(
+        'menupopup.greasemonkey-user-script-commands-popup');
   }
 
-  aMenuPopup.parentNode.disabled = !haveCommands;
-};
+  GM_MenuCommander.messageCookie++;
+  GM_MenuCommander.cookieShowing = GM_MenuCommander.messageCookie;
 
-GM_MenuCommander.withAllMenuCommandsForWindowId = function(
-    aContentWindowId, aCallback) {
-  if (!aContentWindowId) return;
-
-  var commands = GM_MenuCommander.menuCommands[aContentWindowId];
-  if (!commands) return;
-
-  var l = commands.length - 1;
-  for (var i = l, command = null; command = commands[i]; i--) {
-    aCallback(i, command);
-  }
+  // Start empty ...
+  GM_util.emptyEl(GM_MenuCommander.popup);
+  // ... ask the selected browser to fill up our menu.
+  gBrowser.selectedBrowser.messageManager.sendAsyncMessage(
+      'greasemonkey:menu-command-list',
+      {'cookie': GM_MenuCommander.cookieShowing});
 };
