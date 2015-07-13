@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['hitch'];
+var EXPORTED_SYMBOLS = ['hitch'];
 
 function hitch(obj, method) {
   if (obj && method && ('string' == typeof method)) {

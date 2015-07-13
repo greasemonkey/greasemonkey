@@ -1,6 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['windowIdForEvent'];
+var EXPORTED_SYMBOLS = ['windowIdForEvent'];
 
 function windowIdForEvent(aEvent) {
   var doc = aEvent.originalTarget;

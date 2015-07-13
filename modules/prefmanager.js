@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['GM_PrefManager', 'GM_prefRoot'];
+var EXPORTED_SYMBOLS = ['GM_PrefManager', 'GM_prefRoot'];
 
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]

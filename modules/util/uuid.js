@@ -1,6 +1,6 @@
-const EXPORTED_SYMBOLS = ['uuid'];
+var EXPORTED_SYMBOLS = ['uuid'];
 
-const uuidGenerator = Components
+var uuidGenerator = Components
     .classes["@mozilla.org/uuid-generator;1"]
     .getService(Components.interfaces.nsIUUIDGenerator);
 

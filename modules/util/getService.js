@@ -1,6 +1,6 @@
-const EXPORTED_SYMBOLS = ['getService'];
+var EXPORTED_SYMBOLS = ['getService'];
 
-const GM_SERVICE = Components
+var GM_SERVICE = Components
     .classes["@greasemonkey.mozdev.org/greasemonkey-service;1"]
     .getService()
     .wrappedJSObject;

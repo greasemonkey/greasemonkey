@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['findMessageManager'];
+var EXPORTED_SYMBOLS = ['findMessageManager'];
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;

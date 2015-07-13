@@ -42,9 +42,9 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-const EXPORTED_SYMBOLS = ["getChromeWinForContentWin"];
+var EXPORTED_SYMBOLS = ["getChromeWinForContentWin"];
 
-const Ci = Components.interfaces;
+var Ci = Components.interfaces;
 
 function getChromeWinForContentWin(aContentWin) {
   return aContentWin

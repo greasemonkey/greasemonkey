@@ -1,6 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 
-const EXPORTED_SYMBOLS = ['enqueueRemoveFile'];
+var EXPORTED_SYMBOLS = ['enqueueRemoveFile'];
 
 
 function addEnqueuedPath(aPath) {

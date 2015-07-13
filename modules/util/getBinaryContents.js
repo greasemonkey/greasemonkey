@@ -1,8 +1,8 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['getBinaryContents'];
+var EXPORTED_SYMBOLS = ['getBinaryContents'];
 
-const ioService = Components.classes["@mozilla.org/network/io-service;1"]
+var ioService = Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
 
 function getBinaryContents(file) {

@@ -1,6 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['windowId'];
+var EXPORTED_SYMBOLS = ['windowId'];
 
 function windowId(win) {
   try {

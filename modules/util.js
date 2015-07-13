@@ -1,6 +1,6 @@
-const EXPORTED_SYMBOLS = ['GM_util'];
+var EXPORTED_SYMBOLS = ['GM_util'];
 
-const Cu = Components.utils;
+var Cu = Components.utils;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
 /*

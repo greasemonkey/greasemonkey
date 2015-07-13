@@ -1,13 +1,13 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['getContents'];
+var EXPORTED_SYMBOLS = ['getContents'];
 
-const ioService=Components.classes["@mozilla.org/network/io-service;1"]
+var ioService=Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
-const scriptableStream=Components
+var scriptableStream=Components
     .classes["@mozilla.org/scriptableinputstream;1"]
     .getService(Components.interfaces.nsIScriptableInputStream);
-const unicodeConverter = Components
+var unicodeConverter = Components
     .classes["@mozilla.org/intl/scriptableunicodeconverter"]
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 

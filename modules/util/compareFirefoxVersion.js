@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['compareFirefoxVersion'];
+var EXPORTED_SYMBOLS = ['compareFirefoxVersion'];
 
 function compareFirefoxVersion(aTarget) {
   var appInfo = Components.classes["@mozilla.org/xre/app-info;1"]

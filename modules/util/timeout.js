@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['timeout'];
+var EXPORTED_SYMBOLS = ['timeout'];
 
 function timeout(aCallback, aDelay) {
   // Create the timer object.

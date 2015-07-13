@@ -1,6 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['sha1'];
+var EXPORTED_SYMBOLS = ['sha1'];
 
 function sha1(unicode) {
   var unicodeConverter = Components

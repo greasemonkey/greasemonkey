@@ -1,9 +1,9 @@
 Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['scriptDir'];
+var EXPORTED_SYMBOLS = ['scriptDir'];
 
-const SCRIPT_DIR = Components
+var SCRIPT_DIR = Components
     .classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("ProfD", Components.interfaces.nsIFile);

@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['scriptMatchesUrlAndRuns'];
+var EXPORTED_SYMBOLS = ['scriptMatchesUrlAndRuns'];
 
 function scriptMatchesUrlAndRuns(script, url, when) {
   return !script.pendingExec.length

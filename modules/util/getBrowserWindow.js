@@ -1,6 +1,6 @@
-const EXPORTED_SYMBOLS = ['getBrowserWindow'];
+var EXPORTED_SYMBOLS = ['getBrowserWindow'];
 
-const windowMediator = Components
+var windowMediator = Components
    .classes['@mozilla.org/appshell/window-mediator;1']
    .getService(Components.interfaces.nsIWindowMediator);
 

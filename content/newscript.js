@@ -5,7 +5,7 @@ Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 /////////////////////////////// global variables ///////////////////////////////
 
-const gClipboard = Components.classes["@mozilla.org/widget/clipboard;1"]
+var gClipboard = Components.classes["@mozilla.org/widget/clipboard;1"]
     .getService(Components.interfaces.nsIClipboard);
 var gClipText = null;
 var bundle = null;

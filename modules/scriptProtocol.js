@@ -3,11 +3,11 @@ var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const schemeName = 'greasemonkey-script';
-const ioService = Cc['@mozilla.org/network/io-service;1']
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var Cr = Components.results;
+var schemeName = 'greasemonkey-script';
+var ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
 
 

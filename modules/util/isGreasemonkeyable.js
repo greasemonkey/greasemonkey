@@ -1,8 +1,8 @@
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 
-const EXPORTED_SYMBOLS = ['isGreasemonkeyable'];
+var EXPORTED_SYMBOLS = ['isGreasemonkeyable'];
 
-const ioService = Components.classes["@mozilla.org/network/io-service;1"]
+var ioService = Components.classes["@mozilla.org/network/io-service;1"]
     .getService(Components.interfaces.nsIIOService);
 
 function isGreasemonkeyable(url) {

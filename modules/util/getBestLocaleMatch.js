@@ -1,7 +1,7 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['getBestLocaleMatch'];
+var EXPORTED_SYMBOLS = ['getBestLocaleMatch'];
 
 // This function tries to find the best matching locale.
 // Locales should be given in the form "lang[-COUNTRY]".

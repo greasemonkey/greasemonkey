@@ -1,9 +1,9 @@
 Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
 
-const EXPORTED_SYMBOLS = ['getTempDir'];
+var EXPORTED_SYMBOLS = ['getTempDir'];
 
-const DIRECTORY_TYPE = Components.interfaces.nsIFile.DIRECTORY_TYPE;
-const TMP_DIR = Components.classes["@mozilla.org/file/directory_service;1"]
+var DIRECTORY_TYPE = Components.interfaces.nsIFile.DIRECTORY_TYPE;
+var TMP_DIR = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
 

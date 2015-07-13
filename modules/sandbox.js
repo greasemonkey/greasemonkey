@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['createSandbox', 'runScriptInSandbox'];
+var EXPORTED_SYMBOLS = ['createSandbox', 'runScriptInSandbox'];
 
 var Cu = Components.utils;
 var Ci = Components.interfaces;
@@ -152,7 +152,7 @@ function runScriptInSandbox(script, sandbox) {
             e.lineNumber
             );
         Components.utils.evalInSandbox(
-            GM_util.anonWrap(code), sandbox, gMaxJSVersion, fileName, 1);
+            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, fileName, 1);
       } else {
         // Otherwise raise.
         throw e;

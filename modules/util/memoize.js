@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['memoize'];
+var EXPORTED_SYMBOLS = ['memoize'];
 
 // Decorate a function with a memoization wrapper, with a limited-size cache
 // to reduce peak memory utilization.  Simple usage:

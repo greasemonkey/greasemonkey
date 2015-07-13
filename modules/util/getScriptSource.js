@@ -1,4 +1,4 @@
-const EXPORTED_SYMBOLS = ['getScriptSource'];
+var EXPORTED_SYMBOLS = ['getScriptSource'];
 
 /** Given a script, return its entire source as a plain string. */
 function getScriptSource(aScript) {

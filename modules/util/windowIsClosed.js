@@ -1,6 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['windowIsClosed'];
+var EXPORTED_SYMBOLS = ['windowIsClosed'];
 
 var Cu = Components.utils;
 

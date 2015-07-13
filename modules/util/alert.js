@@ -1,7 +1,7 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['alert'];
-const promptService = Components
+var EXPORTED_SYMBOLS = ['alert'];
+var promptService = Components
     .classes["@mozilla.org/embedcomp/prompt-service;1"]
     .getService(Components.interfaces.nsIPromptService);
 

@@ -1,8 +1,8 @@
-const EXPORTED_SYMBOLS = ['sniffGrants'];
+var EXPORTED_SYMBOLS = ['sniffGrants'];
 
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const APIS = [
+var APIS = [
     'GM_addStyle',
     'GM_deleteValue',
     'GM_getResourceText',

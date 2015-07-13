@@ -2,9 +2,9 @@ Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['openInEditor'];
+var EXPORTED_SYMBOLS = ['openInEditor'];
 
-const COULD_NOT_LAUNCH = (function() {
+var COULD_NOT_LAUNCH = (function() {
   var stringBundle = Components
       .classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService)

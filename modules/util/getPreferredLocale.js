@@ -1,7 +1,7 @@
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['getPreferredLocale'];
+var EXPORTED_SYMBOLS = ['getPreferredLocale'];
 
 var preferredLocale = (function() {
   var matchOS = Services.prefs.getBoolPref("intl.locale.matchOS");

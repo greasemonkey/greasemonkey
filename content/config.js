@@ -290,7 +290,7 @@ Config.prototype._updateVersion = function() {
     }
 
     if ('3.2' == newVersion && oldVersion != newVersion) {
-      const tmp_dir = Components
+      var tmp_dir = Components
           .classes['@mozilla.org/file/directory_service;1']
           .getService(Components.interfaces.nsIProperties)
           .get('TmpD', Components.interfaces.nsIFile);

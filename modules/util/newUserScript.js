@@ -1,8 +1,8 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-const EXPORTED_SYMBOLS = ['newUserScript'];
+var EXPORTED_SYMBOLS = ['newUserScript'];
 
-const gWindowWatcher = Components
+var gWindowWatcher = Components
     .classes["@mozilla.org/embedcomp/window-watcher;1"]
     .getService(Components.interfaces.nsIWindowWatcher);
 

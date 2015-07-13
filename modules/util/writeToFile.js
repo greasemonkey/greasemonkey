@@ -1,13 +1,13 @@
 Components.utils.import('resource://gre/modules/NetUtil.jsm');
 Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
 
-const EXPORTED_SYMBOLS = ['writeToFile'];
+var EXPORTED_SYMBOLS = ['writeToFile'];
 
-const NORMAL_FILE_TYPE = Components.interfaces.nsIFile.NORMAL_FILE_TYPE;
+var NORMAL_FILE_TYPE = Components.interfaces.nsIFile.NORMAL_FILE_TYPE;
 //                   PR_WRONLY PR_CREATE_FILE PR_TRUNCATE
-const STREAM_FLAGS = 0x02      | 0x08         | 0x20;
+var STREAM_FLAGS = 0x02      | 0x08         | 0x20;
 
-const converter = Components
+var converter = Components
     .classes["@mozilla.org/intl/scriptableunicodeconverter"]
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
 converter.charset = "UTF-8";

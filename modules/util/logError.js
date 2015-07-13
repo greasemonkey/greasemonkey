@@ -1,6 +1,6 @@
-const EXPORTED_SYMBOLS = ['logError'];
+var EXPORTED_SYMBOLS = ['logError'];
 
-const consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
     .getService(Components.interfaces.nsIConsoleService);
 
 function logError(e, opt_warn, fileName, lineNumber) {
