@@ -24,37 +24,31 @@ var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function ContentObserver() {
-}
+var contentObserver = {
+  observe: function (aSubject, aTopic, aData) {
+    if (!GM_util.getEnabled()) return;
 
+    switch (aTopic) {
+      case 'document-element-inserted':
+        if (!GM_util.getEnabled()) return;
 
-ContentObserver.prototype.QueryInterface = XPCOMUtils.generateQI([
-    Ci.nsIObserver]);
+        var doc = aSubject;
+        var win = doc && doc.defaultView;
+        if (!doc || !win) return;
+        if (win.top !== content) return;
 
+        var url = doc.documentURI;
+        if (!GM_util.isGreasemonkeyable(url)) return;
 
-ContentObserver.prototype.observe = function(aSubject, aTopic, aData) {
-  if (!GM_util.getEnabled()) return;
+        // Listen for whichever kind of load event arrives first.
+        win.addEventListener('DOMContentLoaded', contentLoad, true);
+        win.addEventListener('load', contentLoad, true);
 
-  switch (aTopic) {
-    case 'document-element-inserted':
-      if (!GM_util.getEnabled()) return;
-
-      var doc = aSubject;
-      var win = doc && doc.defaultView;
-      if (!doc || !win) return;
-      if (win.top !== content) return;
-
-      var url = doc.documentURI;
-      if (!GM_util.isGreasemonkeyable(url)) return;
-
-      // Listen for whichever kind of load event arrives first.
-      win.addEventListener('DOMContentLoaded', contentLoad, true);
-      win.addEventListener('load', contentLoad, true);
-
-      runScripts('document-start', win);
-      break;
-    default:
-      dump('Content frame observed unknown topic: ' + aTopic + '\n');
+        runScripts('document-start', win);
+        break;
+      default:
+        dump('Content frame observed unknown topic: ' + aTopic + '\n');
+    }
   }
 };
 
@@ -199,7 +193,6 @@ addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
   MenuCommandRun(content, aMessage);
 });
 
-var contentObserver = new ContentObserver();
 Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
 addEventListener('unload', function() {
   Services.obs.removeObserver(contentObserver, 'document-element-inserted');
