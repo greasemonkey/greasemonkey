@@ -15,47 +15,49 @@
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   buttons="accept,cancel"
+  id="greasemonkey-script-preferences"
   title="&scriptprefs.title;"
   ondialogaccept="return onDialogAccept();"
+  persist="width height"
 >
 
 <script type="application/x-javascript" src="chrome://greasemonkey/content/scriptprefs.js" />
 
-<tabbox>
+<tabbox flex="1">
   <tabs>
     <tab label="&scriptprefs.usersettings;" />
     <tab label="&scriptprefs.scriptsettings;" />
   </tabs>
-  <tabpanels>
-    <tabpanel>
+  <tabpanels flex="1">
+    <tabpanel flex="1">
       <vbox flex="1">
         <vbox flex="1" class="include">
           <label value="&label.grpIncluded;" />
-          <cludes id="user-includes"/>
+          <cludes flex="1" id="user-includes"/>
         </vbox>
         <vbox flex="1" class="match">
           <label value="&label.grpMatched;" />
-          <cludes id="user-matches"/>
+          <cludes flex="1" id="user-matches"/>
         </vbox>
         <vbox flex="1" class="exclude">
           <label value="&label.grpExcluded;" />
-          <cludes id="user-excludes" />
+          <cludes flex="1" id="user-excludes" />
         </vbox>
       </vbox>
     </tabpanel>
-    <tabpanel>
+    <tabpanel flex="1">
       <vbox flex="1">
         <vbox flex="1" class="include">
           <label value="&label.grpIncluded;" />
-          <cludes id="script-includes" class="readonly" />
+          <cludes flex="1" id="script-includes" class="readonly"/>
         </vbox>
         <vbox flex="1" class="match">
           <label value="&label.grpMatched;" />
-          <cludes id="script-matches" class="readonly" />
+          <cludes flex="1" id="script-matches" class="readonly"/>
         </vbox>
         <vbox flex="1" class="exclude">
           <label value="&label.grpExcluded;" />
-          <cludes id="script-excludes" class="readonly" />
+          <cludes flex="1" id="script-excludes" class="readonly"/>
         </vbox>
       </vbox>
     </tabpanel>

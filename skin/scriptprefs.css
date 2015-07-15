@@ -1,3 +1,8 @@
 cludes {
+  /*
+  XUL flex will expand to an appropriate height.
+  Just don't start too tall.  (See #2191)
+  */
+  height: 0;
   min-width: 500px;
 }
