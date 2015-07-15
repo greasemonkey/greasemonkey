@@ -32,7 +32,8 @@ function MenuCommandRespond(aCookie, aData) {
 // from the parent, pass it into the sandbox.
 function MenuCommandRun(aContent, aMessage) {
   var e = new aContent.CustomEvent(
-      'greasemonkey-menu-command-run', {'detail': aMessage.data.cookie});
+      'greasemonkey-menu-command-run',
+      {'detail': JSON.stringify(aMessage.data)});
   aContent.dispatchEvent(e);
 }
 
@@ -40,7 +41,7 @@ function MenuCommandRun(aContent, aMessage) {
 // This function is injected into the sandbox, in a private scope wrapper, BY
 // SOURCE.  Data and sensitive references are wrapped up inside its closure.
 function MenuCommandSandbox(
-    aScriptId, aScriptName, aCommandResponder, aFrameScope,
+    aScriptUuid, aScriptName, aCommandResponder, aFrameScope,
     aInvalidAccesskeyErrorStr) {
   // 1) Internally to this function's private scope, maintain a set of
   // registered menu commands.
@@ -52,7 +53,9 @@ function MenuCommandSandbox(
   }, true);
   // 3) Respond to requests to run those registered commands.
   addEventListener('greasemonkey-menu-command-run', function(e) {
-    var command = commands[e.detail];
+    var detail = JSON.parse(e.detail);
+    if (aScriptUuid != detail.scriptUuid) return;
+    var command = commands[detail.cookie];
     if (!command) {
       throw new Error('Could not run requested menu command!');
     } else {
@@ -77,8 +80,8 @@ function MenuCommandSandbox(
     var command = {
       cookie: ++commandCookie,
       name: commandName,
-      scriptId: aScriptId,
       scriptName: aScriptName,
+      scriptUuid: aScriptUuid,
       accessKey: accessKey,
       commandFunc: commandFunc,
     };

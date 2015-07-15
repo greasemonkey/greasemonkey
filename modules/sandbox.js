@@ -73,7 +73,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
   if (GM_util.inArray(aScript.grants, 'GM_registerMenuCommand')) {
     Components.utils.evalInSandbox(MenuCommandSandbox.toSource(), sandbox);
     sandbox.MenuCommandSandbox(
-        aScript.id, aScript.name, MenuCommandRespond, aFrameScope,
+        aScript.uuid, aScript.name, MenuCommandRespond, aFrameScope,
         gInvalidAccesskeyErrorStr);
     Components.utils.evalInSandbox('delete MenuCommandSandbox;', sandbox);
   }

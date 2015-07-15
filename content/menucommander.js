@@ -20,7 +20,7 @@ GM_MenuCommander.initialize = function() {
 GM_MenuCommander.commandClicked = function(aCommand) {
   gBrowser.selectedBrowser.messageManager.sendAsyncMessage(
       'greasemonkey:menu-command-run',
-      {'cookie': aCommand.cookie});
+      {'cookie': aCommand.cookie, 'scriptUuid': aCommand.scriptUuid});
 };
 
 
