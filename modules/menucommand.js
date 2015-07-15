@@ -41,8 +41,7 @@ function MenuCommandRun(aContent, aMessage) {
 // This function is injected into the sandbox, in a private scope wrapper, BY
 // SOURCE.  Data and sensitive references are wrapped up inside its closure.
 function MenuCommandSandbox(
-    aScriptUuid, aScriptName, aCommandResponder, aFrameScope,
-    aInvalidAccesskeyErrorStr) {
+    aScriptUuid, aScriptName, aCommandResponder, aInvalidAccesskeyErrorStr) {
   // 1) Internally to this function's private scope, maintain a set of
   // registered menu commands.
   var commands = {};
