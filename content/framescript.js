@@ -94,7 +94,7 @@ function injectDelayedScript(aMessage) {
   if (!win) {
     dump('Couldn\'t find window with (outer?) ID ' + windowId + '!\n');
   } else {
-     var script = createScriptFromObject(aMessage.data.script);
+    var script = createScriptFromObject(aMessage.data.script);
     injectScripts([script], win);
   }
 };
