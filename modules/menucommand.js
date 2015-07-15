@@ -58,7 +58,7 @@ function MenuCommandSandbox(
     if (!command) {
       throw new Error('Could not run requested menu command!');
     } else {
-      command.commandFunc();
+      command.commandFunc.call();
     }
   }, true);
   // 4) Export the "register a command" API function to the sandbox scope.
