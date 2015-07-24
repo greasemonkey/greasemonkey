@@ -46,7 +46,7 @@
 <!ENTITY EnableFirefoxSync "使 Firefox Sync 支持同步用户脚本">
 <!ENTITY SubmitStats "收集和提交匿名的使用统计数据以帮助改善 Greasemonkey。">
 <!ENTITY UpdateChecking "检查更新">
-<!ENTITY RequireSecureUpdates "要求安全地更新（HTTPS）">
+<!ENTITY RequireSecureUpdates "需要安全更新（HTTPS）">
 <!ENTITY greasemonkey.noscriptshere "在此页面上没有已安装的脚本运行。">
 <!ENTITY greasemonkey.youhavenoscripts "您还没有安装任何用户脚本">
 <!ENTITY greasemonkey.getuserscripts "获取用户脚本">

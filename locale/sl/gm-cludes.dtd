@@ -5,10 +5,10 @@
 <!ENTITY promptForEdit.title "Uredi stran">
 <!ENTITY button.add "Dodaj ...">
 <!ENTITY button.addUserExclude "Dodaj kot uporabniško izključeno">
-<!ENTITY button.addUserMatch "Add as user match">
+<!ENTITY button.addUserMatch "Dodaj kot uporabniško ujemano">
 <!ENTITY button.addUserInclude "Dodaj kot uporabniško vključeno">
 <!ENTITY button.edit "Uredi ...">
 <!ENTITY button.remove "Odstrani">
 <!ENTITY label.grpIncluded "Vključene strani">
-<!ENTITY label.grpMatched "Matched Pages">
+<!ENTITY label.grpMatched "Ujemajoče se strani">
 <!ENTITY label.grpExcluded "Izključene strani">

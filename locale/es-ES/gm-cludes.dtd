@@ -4,11 +4,11 @@
 <!ENTITY promptForEdit.msg "Modifica aquí debajo la dirección. Puedes indicar varias páginas web con el asterisco (*).">
 <!ENTITY promptForEdit.title "Editar la página web">
 <!ENTITY button.add "Añadir...">
-<!ENTITY button.addUserExclude "Poner como excluido por el usuario">
-<!ENTITY button.addUserMatch "Add as user match">
-<!ENTITY button.addUserInclude "Poner como incluido por el usuario">
+<!ENTITY button.addUserExclude "Poner como @exclude del usuario">
+<!ENTITY button.addUserMatch "Poner como @match del usuario">
+<!ENTITY button.addUserInclude "Poner como @include del usuario">
 <!ENTITY button.edit "Editar...">
 <!ENTITY button.remove "Eliminar">
-<!ENTITY label.grpIncluded "Páginas web incluidas">
-<!ENTITY label.grpMatched "Matched Pages">
-<!ENTITY label.grpExcluded "Páginas web excluidas">
+<!ENTITY label.grpIncluded "Páginas web incluidas (reglas @include)">
+<!ENTITY label.grpMatched "Páginas web incluidas estrictamente (reglas @match)">
+<!ENTITY label.grpExcluded "Páginas web excluidas (reglas @exclude)">
