@@ -43,6 +43,7 @@ GM_MenuCommander.createMenuItem = function(command) {
 GM_MenuCommander.messageMenuCommandResponse = function(aMessage) {
   if (aMessage.data.cookie != GM_MenuCommander.cookieShowing) return;
 
+  GM_MenuCommander.popup.parentNode.disabled = false;
   for (i in aMessage.data.commands) {
     var command = aMessage.data.commands[i];
     var menuItem = GM_MenuCommander.createMenuItem(command);
@@ -66,7 +67,8 @@ GM_MenuCommander.onPopupShowing = function(aEvent) {
   GM_MenuCommander.messageCookie++;
   GM_MenuCommander.cookieShowing = GM_MenuCommander.messageCookie;
 
-  // Start empty ...
+  // Start disabled and empty ...
+  GM_MenuCommander.popup.parentNode.disabled = true;
   GM_util.emptyEl(GM_MenuCommander.popup);
   // ... ask the selected browser to fill up our menu.
   gBrowser.selectedBrowser.messageManager.sendAsyncMessage(
