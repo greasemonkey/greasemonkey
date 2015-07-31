@@ -1,9 +1,10 @@
 var EXPORTED_SYMBOLS = [];
 
-(function initSync() {
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
+
+(function initSync() {
 
 
 Cu.import('resource://gre/modules/Services.jsm');
@@ -208,10 +209,10 @@ ScriptStore.prototype = {
     if (!aRecord.cleartext.installed) {
       script.uninstall();
     } else {
-      script.enabled = aRecord.cleartext.enabled;
-      script.userExcludes = aRecord.cleartext.userExcludes;
-      script.userMatches = aRecord.cleartext.userMatches;
-      script.userIncludes = aRecord.cleartext.userIncludes;
+      script.enabled = !!aRecord.cleartext.enabled;
+      script.userExcludes = aRecord.cleartext.userExcludes || [];
+      script.userMatches = aRecord.cleartext.userMatches || [];
+      script.userIncludes = aRecord.cleartext.userIncludes || [];
       setScriptValuesFromSyncRecord(script, aRecord);
     }
   },
