@@ -273,7 +273,6 @@ function scriptForSyncId(aSyncId) {
 
 // The sync ID for a given script.
 function syncId(aScript) {
-  // TODO: Salting?  e.g. btoa(CryptoUtils.generateRandomBytes(16));
   return GM_util.sha1(aScript.id);
 }
 
