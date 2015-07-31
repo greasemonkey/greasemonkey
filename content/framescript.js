@@ -58,6 +58,7 @@ function blankLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
   if (contentWin.location.href.match(/^about:blank/)) {
     // #1696: document-element-inserted doesn't see about:blank
+    runScripts('document-start', contentWin);
     runScripts('document-end', contentWin);
   }
 }
