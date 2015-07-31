@@ -30,8 +30,6 @@ var contentObserver = {
 
     switch (aTopic) {
       case 'document-element-inserted':
-        if (!GM_util.getEnabled()) return;
-
         var doc = aSubject;
         var win = doc && doc.defaultView;
         if (!doc || !win) return;
