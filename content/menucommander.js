@@ -43,8 +43,8 @@ GM_MenuCommander.createMenuItem = function(command) {
 GM_MenuCommander.messageMenuCommandResponse = function(aMessage) {
   if (aMessage.data.cookie != GM_MenuCommander.cookieShowing) return;
 
-  for (i in aMessage.data.commands) {
-    var command = aMessage.data.commands[i];
+  for (i in aMessage.objects.commands) {
+    var command = aMessage.objects.commands[i];
     var menuItem = GM_MenuCommander.createMenuItem(command);
     GM_MenuCommander.popup.appendChild(menuItem);
   }
