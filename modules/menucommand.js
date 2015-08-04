@@ -40,7 +40,8 @@ function MenuCommandRespond(aCookie, aData) {
       .getService(Ci.nsIMessageSender);
   cpmm.sendAsyncMessage(
       'greasemonkey:menu-command-response',
-      {'commands': aData, 'cookie': aCookie});
+      {'cookie': aCookie},
+      {'commands': aData});
 }
 
 
