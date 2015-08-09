@@ -80,7 +80,9 @@ GM_BrowserUI.openInTab = function(aMessage) {
   var getBool = Services.prefs.getBoolPref;
 
   var prefBg = getBool('browser.tabs.loadInBackground');
-  prefBg |= aMessage.data.inBackground;
+  prefBg = (aMessage.data.inBackground === null)
+           ? prefBg
+           : aMessage.data.inBackground;
   if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
 
   var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
