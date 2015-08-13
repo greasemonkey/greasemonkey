@@ -15,7 +15,7 @@ function GM_openInTab(aFrame, aBaseUrl, aUrl, aInBackground) {
   var baseUri = Services.io.newURI(aBaseUrl, null, null);
   var uri = Services.io.newURI(aUrl, null, baseUri);
 
-  aFrame.sendAsyncMessage('greasemonkey:open-in-tab', {
+  aFrame.sendRpcMessage('greasemonkey:open-in-tab', {
     inBackground: loadInBackground,
     url: uri.spec,
   });
