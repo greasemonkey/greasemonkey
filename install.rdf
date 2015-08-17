@@ -12,6 +12,7 @@
     <em:optionsURL>chrome://greasemonkey/content/options.xul</em:optionsURL>
     <em:iconURL>chrome://greasemonkey/skin/icon32.png</em:iconURL>
     <em:type>2</em:type>
+    <em:multiprocessCompatible>true</em:multiprocessCompatible>
 
     <em:name>Greasemonkey</em:name>
     <em:description>A User Script Manager for Firefox</em:description>
