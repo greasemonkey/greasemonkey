@@ -29,6 +29,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
     var contentSandbox = new Components.utils.Sandbox(
         aContentWin,
         {
+          'sameZoneAs': aContentWin,
           'sandboxName': aScript.id,
           'sandboxPrototype': aContentWin,
           'wantXrays': false,
@@ -47,6 +48,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
   var sandbox = new Components.utils.Sandbox(
       [aContentWin],
       {
+        'sameZoneAs': aContentWin,
         'sandboxName': aScript.id,
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
