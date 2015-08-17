@@ -5,7 +5,6 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
 
-Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
@@ -15,6 +14,7 @@ Cu.import('chrome://greasemonkey-modules/content/menucommand.js');
 Cu.import('chrome://greasemonkey-modules/content/miscapis.js');
 Cu.import('chrome://greasemonkey-modules/content/sandbox.js');
 Cu.import('chrome://greasemonkey-modules/content/scriptProtocol.js');
+Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -24,30 +24,19 @@ var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-var contentObserver = {
-  observe: function (aSubject, aTopic, aData) {
+function contentObserver(win) {
     if (!GM_util.getEnabled()) return;
 
-    switch (aTopic) {
-      case 'document-element-inserted':
-        var doc = aSubject;
-        var win = doc && doc.defaultView;
-        if (!doc || !win) return;
-        if (win.top !== content) return;
+    var doc = win.document;
+    var url = doc.documentURI;
+    if (!GM_util.isGreasemonkeyable(url)) return;
 
-        var url = doc.documentURI;
-        if (!GM_util.isGreasemonkeyable(url)) return;
+    // Listen for whichever kind of load event arrives first.
+    win.addEventListener('DOMContentLoaded', contentLoad, true);
+    win.addEventListener('load', contentLoad, true);
 
-        // Listen for whichever kind of load event arrives first.
-        win.addEventListener('DOMContentLoaded', contentLoad, true);
-        win.addEventListener('load', contentLoad, true);
-
-        runScripts('document-start', win);
-        break;
-      default:
-        dump('Content frame observed unknown topic: ' + aTopic + '\n');
-    }
-  }
+    runScripts('document-start', win);
+  
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -179,9 +168,19 @@ function windowIsTop(aContentWin) {
   return true;
 };
 
+function windowCreated() {
+  OnNewDocument(content, contentObserver);
+}
+
+
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 addEventListener('DOMContentLoaded', blankLoad);
+addEventListener('DOMWindowCreated', windowCreated);
+
+if(content) windowCreated();
+
+
 
 addMessageListener('greasemonkey:inject-delayed-script', injectDelayedScript);
 addMessageListener('greasemonkey:load-failed-script', loadFailedScript);
@@ -192,10 +191,6 @@ addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
   MenuCommandRun(content, aMessage);
 });
 
-Services.obs.addObserver(contentObserver, 'document-element-inserted', false);
-addEventListener('unload', function() {
-  Services.obs.removeObserver(contentObserver, 'document-element-inserted');
-}, false);
 
 (function() {
   initInstallPolicy();
