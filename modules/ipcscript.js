@@ -1,6 +1,5 @@
 var EXPORTED_SYMBOLS = ['IPCScript'];
 
-Components.utils.import("chrome://greasemonkey-modules/content/extractMeta.js");
 Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 function IPCScript(aScript, addonVersion) {
@@ -17,15 +16,13 @@ function IPCScript(aScript, addonVersion) {
   this.namespace = aScript.namespace;
   this.noframes = aScript.noframes;
   this.runAt = aScript.runAt;
-  this.textContent = aScript.textContent;
   this.uuid = aScript.uuid;
   this.version = aScript.version;
   this.willUpdate = aScript.isRemoteUpdateAllowed();
 
   this.requires = aScript.requires.map(function(req) {
     return {
-      'fileURL': req.fileURL,
-      'textContent': req.textContent
+      'fileURL': req.fileURL
     };
   });
 
@@ -33,20 +30,10 @@ function IPCScript(aScript, addonVersion) {
     return {
       'name': res.name,
       'mimetype': res.mimetype,
-      'textContent': res.textContent,
       'url': GM_util.getUriFromFile(res.file).spec
     };
   });
 };
-
-IPCScript.prototype.__defineGetter__('metaStr',
-function IPCScript_getMetaStr() {
-  if (!this._metaStr) {
-    this._metaStr = extractMeta(this.textContent);
-  }
-
-  return this._metaStr;
-});
 
 IPCScript.prototype.info = function() {
   var resources = {};
@@ -60,8 +47,6 @@ IPCScript.prototype.info = function() {
   return {
     'uuid': this.uuid,
     'version': this.addonVersion,
-    'scriptMetaStr': this.metaStr,
-    'scriptSource': this.textContent,
     'scriptWillUpdate': this.willUpdate,
     'script': {
       'description': this.description,

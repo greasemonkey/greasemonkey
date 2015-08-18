@@ -11,12 +11,15 @@ Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
 Cu.import("chrome://greasemonkey-modules/content/storageFront.js");
 Cu.import("chrome://greasemonkey-modules/content/util.js");
 Cu.import("chrome://greasemonkey-modules/content/xmlhttprequester.js");
+Cu.import("chrome://greasemonkey-modules/content/extractMeta.js");
 
 var gStringBundle = Cc["@mozilla.org/intl/stringbundle;1"]
     .getService(Ci.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 var gInvalidAccesskeyErrorStr = gStringBundle
     .GetStringFromName('error.menu-invalid-accesskey');
+var subLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+    .getService(Components.interfaces.mozIJSSubScriptLoader);
 
 // Only a particular set of strings are allowed.  See: http://goo.gl/ex2LJ
 var gMaxJSVersion = "ECMAv5";
@@ -35,9 +38,8 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
           'wantXrays': false,
         });
     // GM_info is always provided.
-    // TODO: lazy getter? XPCOMUtils.defineLazyGetter
-    Components.utils.evalInSandbox(
-        'const GM_info = ' + uneval(aScript.info()), contentSandbox);
+    injectGMInfo(aScript, contentSandbox);
+
     // Alias unsafeWindow for compatibility.
     Components.utils.evalInSandbox(
         'const unsafeWindow = window;', contentSandbox);
@@ -124,19 +126,70 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'contentStartRequest');
   }
 
-  // TODO: lazy getter?
-  Components.utils.evalInSandbox(
-      'const GM_info = ' + uneval(aScript.info()), sandbox);
+  injectGMInfo(aScript, sandbox);
 
   return sandbox;
 }
 
 
+
+function injectGMInfo(aScript, sandbox) {
+  var rawInfo = aScript.info();
+  var scriptURL = aScript.fileURL;
+
+  // TODO: also delay top level clone via lazy getter? XPCOMUtils.defineLazyGetter
+  sandbox.GM_info = Cu.cloneInto(rawInfo, sandbox);
+  
+  var waivedInfo = Components.utils.waiveXrays(sandbox.GM_info);
+  
+  var fileCache = new Map();
+
+  // lazy getters for heavyweight strings that aren't sent down through IPC
+  Object.defineProperty(waivedInfo,
+    "scriptSource",
+    { get: Cu.exportFunction(
+      function() {
+        var content = fileCache.get("scriptSource");
+        if(content === undefined) {
+          content = GM_util.fileXHR(scriptURL, "application/javascript");
+          fileCache.set("scriptSource", content);
+        }
+        return content;
+      }, sandbox)
+    }
+  );
+  
+  // meta depends on content, so we need a lazy one here too
+  Object.defineProperty(waivedInfo,
+    'scriptMetaStr',
+    {get: Cu.exportFunction(
+      function() {
+        var meta = fileCache.get("meta");
+        if(meta === undefined) {
+          meta = extractMeta(this.scriptSource);
+          fileCache.set("meta", meta);
+        }
+        return meta;
+      }, sandbox)
+    }
+  );
+
+}
+
+function uriToString(uri) {
+  var channel = NetUtil.newChannel({ uri: NetUtil.newURI(uri, "UTF-8"), loadUsingSystemPrincipal: true});
+  var stream = channel.open();
+
+  var count = stream.available();
+  var data = NetUtil.readInputStreamToString(stream, count, { charset : "utf-8" });
+  return data;
+}
+
 function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
-  function evalWithWrapper(code, fileName) {
+  function evalWithWrapper(uri) {
     try {
-      Components.utils.evalInSandbox(code, sandbox, gMaxJSVersion, fileName, 1);
+    	subLoader.loadSubScript(uri, sandbox, "UTF-8");
     } catch (e) {
       if ("return not in function" == e.message) {
         // See #1592; we never anon wrap anymore, unless forced to by a return
@@ -147,8 +200,11 @@ function runScriptInSandbox(script, sandbox) {
             fileName,
             e.lineNumber
             );
+        
+        var code = GM_util.fileXHR(uri, "application/javascript");
+        
         Components.utils.evalInSandbox(
-            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, fileName, 1);
+            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, uri, 1);
       } else {
         // Otherwise raise.
         throw e;
@@ -157,12 +213,12 @@ function runScriptInSandbox(script, sandbox) {
   }
 
   // Eval the code, with a try/catch to report errors cleanly.
-  function evalWithCatch(code, fileName) {
+  function evalWithCatch(uri) {
     try {
-      evalWithWrapper(code, fileName);
+      evalWithWrapper(uri);
     } catch (e) {
       // Log it properly.
-      GM_util.logError(e, false, fileName, e.lineNumber);
+      GM_util.logError(e, false, e.fileName, e.lineNumber);
       // Stop the script, in the case of requires, as if it was one big script.
       return false;
     }
@@ -170,9 +226,9 @@ function runScriptInSandbox(script, sandbox) {
   }
 
   for (var i = 0, require = null; require = script.requires[i]; i++) {
-    if (!evalWithCatch(require.textContent, require.fileURL)) {
+    if (!evalWithCatch(require.fileURL)) {
       return;
     }
   }
-  evalWithCatch(script.textContent, script.fileURL);
+  evalWithCatch(script.fileURL);
 }

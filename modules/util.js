@@ -27,6 +27,7 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'alert', 'chrome://greasemonkey-modul
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'compareFirefoxVersion', 'chrome://greasemonkey-modules/content/util/compareFirefoxVersion.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'emptyEl', 'chrome://greasemonkey-modules/content/util/emptyEl.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'enqueueRemoveFile', 'chrome://greasemonkey-modules/content/util/enqueueRemoveFile.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'fileXHR', 'chrome://greasemonkey-modules/content/util/fileXHR.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'findMessageManager', 'chrome://greasemonkey-modules/content/util/findMessageManager.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'getBestLocaleMatch', 'chrome://greasemonkey-modules/content/util/getBestLocaleMatch.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'getBinaryContents', 'chrome://greasemonkey-modules/content/util/getBinaryContents.js');
