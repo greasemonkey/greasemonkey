@@ -70,21 +70,23 @@ GM_BrowserUI.openInTab = function(aMessage) {
   var tabBrowser = browser.getTabBrowser();
   var scriptTab = tabBrowser.getTabForBrowser(browser);
   var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
-  var newTab = tabBrowser.addTab(
-      aMessage.data.url,
-      {
-          'ownerTab': scriptTab,
-          'relatedToCurrent': scriptTabIsCurrentTab,
-      });
+  GM_util.timeout(function() {
+    var newTab = tabBrowser.addTab(
+        aMessage.data.url,
+        {
+            'ownerTab': scriptTab,
+            'relatedToCurrent': scriptTabIsCurrentTab,
+        });
 
-  var getBool = Services.prefs.getBoolPref;
+    var getBool = Services.prefs.getBoolPref;
 
-  var prefBg = getBool('browser.tabs.loadInBackground');
-  prefBg |= aMessage.data.inBackground;
-  if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
+    var prefBg = getBool('browser.tabs.loadInBackground');
+    prefBg |= aMessage.data.inBackground;
+    if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
 
-  var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
-  if (prefRel) tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+    var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
+    if (prefRel) tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+  }, 0);
 };
 
 /**
