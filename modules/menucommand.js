@@ -62,6 +62,7 @@ function MenuCommandSandbox(
   // 1) Internally to this function's private scope, maintain a set of
   // registered menu commands.
   var commands = {};
+  var commandFuncs = {};
   var commandCookie = 0;
   // 2) Respond to requests to list those registered commands.
   addEventListener(
@@ -79,11 +80,11 @@ function MenuCommandSandbox(
         if (aScriptUuid != detail.scriptUuid) return;
         // This event is for this script; stop propagating to other scripts.
         e.stopImmediatePropagation();
-        var command = commands[detail.cookie];
-        if (!command) {
+        var commandFunc = commandFuncs[detail.cookie];
+        if (!commandFunc) {
           throw new Error('Could not run requested menu command!');
         } else {
-          command.commandFunc.call();
+          commandFunc.call();
         }
       }, true);
   // 4) Export the "register a command" API function to the sandbox scope.
@@ -107,8 +108,8 @@ function MenuCommandSandbox(
       scriptName: aScriptName,
       scriptUuid: aScriptUuid,
       accessKey: accessKey,
-      commandFunc: commandFunc,
     };
     commands[command.cookie] = command;
+    commandFuncs[command.cookie] = commandFunc;
   };
 }
