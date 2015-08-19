@@ -136,7 +136,9 @@ Config.prototype._save = function(saveNow) {
 
 Config.prototype.install = function(script, oldScript, tempDir) {
   var existingIndex = this._find(oldScript || script);
-  if (!oldScript) oldScript = this.scripts[existingIndex];
+  if (!oldScript && (existingIndex > -1)) {
+    oldScript = this.scripts[existingIndex];
+  }
 
   if (oldScript) {
     // Save the old script's state.
@@ -169,8 +171,10 @@ Config.prototype.uninstall = function(script, forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
   var idx = this._find(script);
-  this._scripts.splice(idx, 1);
-  script.uninstall(forUpdate);
+  if (idx > -1) {
+    this._scripts.splice(idx, 1);
+    script.uninstall(forUpdate);
+  }
 };
 
 /**
