@@ -25,18 +25,17 @@ var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function contentObserver(win) {
-    if (!GM_util.getEnabled()) return;
+  if (!GM_util.getEnabled()) return;
 
-    var doc = win.document;
-    var url = doc.documentURI;
-    if (!GM_util.isGreasemonkeyable(url)) return;
+  var doc = win.document;
+  var url = doc.documentURI;
+  if (!GM_util.isGreasemonkeyable(url)) return;
 
-    // Listen for whichever kind of load event arrives first.
-    win.addEventListener('DOMContentLoaded', contentLoad, true);
-    win.addEventListener('load', contentLoad, true);
+  // Listen for whichever kind of load event arrives first.
+  win.addEventListener('DOMContentLoaded', contentLoad, true);
+  win.addEventListener('load', contentLoad, true);
 
-    runScripts('document-start', win);
-  
+  runScripts('document-start', win);
 };
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
@@ -168,19 +167,17 @@ function windowIsTop(aContentWin) {
   return true;
 };
 
-function windowCreated() {
-  OnNewDocument(content, contentObserver);
-}
 
+function windowCreated() {
+  onNewDocument(content, contentObserver);
+}
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 addEventListener('DOMContentLoaded', blankLoad);
 addEventListener('DOMWindowCreated', windowCreated);
 
-if(content) windowCreated();
-
-
+if (content) windowCreated();
 
 addMessageListener('greasemonkey:inject-delayed-script', injectDelayedScript);
 addMessageListener('greasemonkey:load-failed-script', loadFailedScript);
@@ -192,7 +189,5 @@ addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
 });
 
 
-(function() {
-  initInstallPolicy();
-  initScriptProtocol();
-})();
+initInstallPolicy();
+initScriptProtocol();

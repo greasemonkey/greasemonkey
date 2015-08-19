@@ -22,13 +22,13 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
   var script = new Script();
 
-  var name = null;
+  var scriptName = null;
   if (aUri) script.downloadURL = aUri.spec;
   if (aUri && aUri.spec) {
-    name = aUri.spec;
-    name = name.substring(0, name.indexOf(".user.js"));
-    name = name.substring(name.lastIndexOf("/") + 1);
-    script._name = name;
+    scriptName = aUri.spec;
+    scriptName = scriptName.substring(0, scriptName.indexOf(".user.js"));
+    scriptName = scriptName.substring(scriptName.lastIndexOf("/") + 1);
+    script._name = scriptName;
   }
   if (aUri) script._namespace = aUri.host;
 
@@ -67,7 +67,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
             script['_' + data.keyword] = data.value;
         if ((data.keyword == 'name')
             && ((script['_' + data.keyword] == 'user-script')
-            || (script['_' + data.keyword] == name)))
+            || (script['_' + data.keyword] == scriptName)))
             script['_' + data.keyword] = data.value;
       }
 

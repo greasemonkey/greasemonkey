@@ -261,18 +261,16 @@ function onSortersClicked(aEvent) {
 function applySort() {
   if (userScriptViewId != gViewController.currentViewId) return;
 
-  var buttons = document.getElementById('greasemonkey-sort-bar')
-    .getElementsByTagName('button');
-
-  var button = getSortBy(buttons);
-
   // Find checked button.
+  var buttons = document.getElementById('greasemonkey-sort-bar')
+      .getElementsByTagName('button');
+  getSortBy(buttons);
   for (var i = 0, button = null; button = buttons[i]; i++) {
     if (button.hasAttribute('checkState')) break;
   }
 
   var ascending = sortByCheckStateValueDescending
-                  != button.getAttribute('checkState');
+      != button.getAttribute('checkState');
   var sortBy = button.getAttribute('sortBy').split(',');
 
   setSortBy(button);

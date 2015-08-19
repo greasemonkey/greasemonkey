@@ -36,7 +36,7 @@ function GM_setClipboard(aData, aType) {
     trans.setTransferData(FLAVOR_HTML, strVal, (aData.length * 2));
 
     // Add a text/unicode flavor (html converted to plain text).
-    var strVal = Cc['@mozilla.org/supports-string;1']
+    strVal = Cc['@mozilla.org/supports-string;1']
         .createInstance(Ci.nsISupportsString);
     var converter = Cc['@mozilla.org/feed-textconstruct;1']
         .createInstance(Ci.nsIFeedTextConstruct);
