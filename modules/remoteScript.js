@@ -447,46 +447,45 @@ RemoteScript.prototype.setSilent = function(aVal) {
   this._silent = !!aVal;
 };
 
-RemoteScript.prototype.showSource = function(aTabBrowser) {
-  // Turn standard browser into tab browser, if necessary.
-  if (aTabBrowser.getTabBrowser) aTabBrowser = aTabBrowser.getTabBrowser();
-
+RemoteScript.prototype.showSource = function(aBrowser) {
   if (this._progress[0] < 1) {
     throw new Error('Script is not loaded!');
   }
 
-  var tab = aTabBrowser.loadOneTab(
-      ioService.newFileURI(this._scriptFile).spec,
-      {'inBackground': false});
+  var tabBrowser = aBrowser.getTabBrowser();
+  var tab = tabBrowser.addTab(ioService.newFileURI(this._scriptFile).spec);
+  tabBrowser.selectedTab = tab;
 
   // Ensure any temporary files are deleted after the tab is closed.
-  var cleanup = GM_util.hitch(this, function() {
-    tab.removeEventListener("TabClose", cleanup, false);
-    this.cleanup();
-  });
+  var cleanup = GM_util.hitch(this, 'cleanup');
   tab.addEventListener("TabClose", cleanup, false);
 
-  var notificationBox = aTabBrowser.getNotificationBox();
-  notificationBox.appendNotification(
-    stringBundleBrowser.GetStringFromName('greeting.msg'),
-    "install-userscript",
-    "chrome://greasemonkey/skin/icon16.png",
-    notificationBox.PRIORITY_WARNING_MEDIUM,
-    [{
+  var buttons = [{
       'label': stringBundleBrowser.GetStringFromName('greeting.btn'),
       'accessKey': stringBundleBrowser.GetStringFromName('greeting.btnAccess'),
       'popup': null,
       'callback': GM_util.hitch(this, function() {
-        GM_util.showInstallDialog(this, aTabBrowser);
+        GM_util.showInstallDialog(this, tabBrowser);
         // Skip the cleanup handler, as the downloaded files are used in the
         // installation process.
         tab.removeEventListener("TabClose", cleanup, false);
         // Timeout puts this after the notification closes itself for the
         // button click, avoiding an error inside that (Firefox) code.
-        GM_util.timeout(function() { aTabBrowser.removeTab(tab); }, 0);
+        GM_util.timeout(function() { tabBrowser.removeTab(tab); }, 0);
       })
-    }]
-  );
+    }];
+  function addNotification() {
+    tab.removeEventListener('load', addNotification, true);
+    var notificationBox = tabBrowser.getNotificationBox();
+    notificationBox.appendNotification(
+      stringBundleBrowser.GetStringFromName('greeting.msg'),
+      "install-userscript",
+      "chrome://greasemonkey/skin/icon16.png",
+      notificationBox.PRIORITY_WARNING_MEDIUM,
+      buttons
+    );
+  }
+  tab.addEventListener('load', addNotification, true);
 };
 
 RemoteScript.prototype.toString = function() {

@@ -58,8 +58,6 @@ function startup(aService) {
       'greasemonkey:script-install', aService.scriptInstall.bind(aService));
   globalMessageManager.addMessageListener(
       'greasemonkey:scripts-for-url', aService.getScriptsForUrl.bind(aService));
-  globalMessageManager.addMessageListener(
-      'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
   var scriptValHandler = aService.handleScriptValMsg.bind(aService);
   globalMessageManager.addMessageListener(
@@ -71,13 +69,13 @@ function startup(aService) {
   globalMessageManager.addMessageListener(
       'greasemonkey:scriptVal-set', scriptValHandler);
 
-  // This particular message must be listened for by the "parent" and not
-  // by "global".  Why?!?!?
   var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
   parentMessageManager.addMessageListener(
       'greasemonkey:scripts-for-uuid',
       aService.getScriptsForUuid.bind(aService));
+  parentMessageManager.addMessageListener(
+      'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
   // Yes, we have to load the frame script once here in the parent scope.
   // Why?  Who knows!?
