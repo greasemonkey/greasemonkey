@@ -116,7 +116,7 @@ function(safeUrl, details, req) {
 
     for (var prop in headers) {
       if (Object.prototype.hasOwnProperty.call(headers, prop)) {
-        headersArr.push({prop: prop, value: headers[prop]});
+        headersArr.push({"prop": prop, "value": headers[prop]});
         if (prop.toString().toLowerCase()
             == authorization.string.toLowerCase()) {
           var authorizationValue = headers[prop].match(authorizationRegexp);
