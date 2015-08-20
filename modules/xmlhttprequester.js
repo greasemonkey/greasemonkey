@@ -167,7 +167,7 @@ function(safeUrl, details, req) {
           authorizationPassword);
       details.user = authorizationUser.value || "";
       details.password = authorizationPassword.value || "";
-    } catch(e) {
+    } catch (e) {
       // Ignore.
     }
   }
