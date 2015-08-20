@@ -79,12 +79,19 @@ GM_BrowserUI.openInTab = function(aMessage) {
 
   var getBool = Services.prefs.getBoolPref;
 
-  var prefBg = getBool('browser.tabs.loadInBackground');
-  prefBg |= aMessage.data.inBackground;
+  var prefBg = (aMessage.data.inBackground === null)
+      ? getBool("browser.tabs.loadInBackground")
+      : aMessage.data.inBackground;
   if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
 
-  var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
-  if (prefRel) tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+  var prefRel = (aMessage.data.afterCurrent === null)
+      ? getBool("browser.tabs.insertRelatedAfterCurrent")
+      : aMessage.data.afterCurrent;
+  if (prefRel) {
+    tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+  } else {
+    tabBrowser.moveTabTo(newTab, tabBrowser.browsers.length);  
+  }
 };
 
 /**
