@@ -99,10 +99,10 @@ function(safeUrl, details, req) {
   var headersArr = new Array();
   var authorization = {
     contrains: false,
-    string: 'Authorization',
-    method: 'Basic',
-    user: '',
-    password: ''
+    string: "Authorization",
+    method: "Basic",
+    user: "",
+    password: ""
   };
   var authorizationRegexp =
       new RegExp("^\\s*" + authorization.method + "\\s*([^\\s]+)\\s*$", "i");
@@ -118,7 +118,7 @@ function(safeUrl, details, req) {
       if (Object.prototype.hasOwnProperty.call(headers, prop)) {
         headersArr.push({prop: prop, value: headers[prop]});
         if (prop.toString().toLowerCase()
-         == authorization.string.toLowerCase()) {
+            == authorization.string.toLowerCase()) {
           var authorizationValue = headers[prop].match(authorizationRegexp);
           if (authorizationValue) {
             authorizationValue = atob(authorizationValue[1]);
@@ -136,35 +136,37 @@ function(safeUrl, details, req) {
   }
 
   if ((authorization.user || authorization.password)
-   || (details.user || details.password)) {
-    authenticationComponent.setAuthIdentity(safeUrlTmp.protocol,
-                                            safeUrlTmp.hostname,
-                                            (safeUrlTmp.port || ''),
-                                            ((authorization.contrains)
-                                            ? authorization.method : ''),
-                                            '',
-                                            '',
-                                            '',
-                                            (authorization.user
-                                            || details.user || ''),
-                                            (authorization.password
-                                            || details.password || ''));
+      || (details.user || details.password)) {
+    authenticationComponent.setAuthIdentity(
+        safeUrlTmp.protocol,
+        safeUrlTmp.hostname,
+        (safeUrlTmp.port || ""),
+        ((authorization.contrains)
+          ? authorization.method : ""),
+        "",
+        "",
+        "",
+        (authorization.user
+          || details.user || ""),
+        (authorization.password
+          || details.password || ""));
   } else {
     var authorizationDomain = {};
     var authorizationUser = {};
     var authorizationPassword = {};
     try {
-      authenticationComponent.getAuthIdentity(safeUrlTmp.protocol,
-                                              safeUrlTmp.hostname,
-                                              (safeUrlTmp.port || ''),
-                                              '',
-                                              '',
-                                              '',
-                                              authorizationDomain,
-                                              authorizationUser,
-                                              authorizationPassword);
-      details.user = authorizationUser.value || '';
-      details.password = authorizationPassword.value || '';
+      authenticationComponent.getAuthIdentity(
+          safeUrlTmp.protocol,
+          safeUrlTmp.hostname,
+          (safeUrlTmp.port || ""),
+          "",
+          "",
+          "",
+          authorizationDomain,
+          authorizationUser,
+          authorizationPassword);
+      details.user = authorizationUser.value || "";
+      details.password = authorizationPassword.value || "";
     } catch(e) {
       // Ignore.
     }
