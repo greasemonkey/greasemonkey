@@ -266,15 +266,26 @@ function GM_popupClicked(aEvent) {
  * When a menu pops up, fill its contents with the list of scripts.
  */
 function GM_showPopup(aEvent) {
-  function urlsOfAllFrames(contentWindow) {
-    var urls = [contentWindow.location.href];
-    function collect(contentWindow) {
-      urls = urls.concat(urlsOfAllFrames(contentWindow));
-    }
-    Array.prototype.slice.call(contentWindow.frames).forEach(collect);
-    return urls;
+  // Make sure this event was triggered by opening the actual monkey menu,
+  // not one of its submenus.
+  if (aEvent.currentTarget != aEvent.target) return;
+  
+  var mm = getBrowser().mCurrentBrowser.frameLoader.messageManager; 
+  
+  var callback = function(message) {
+    mm.removeMessageListener("greasemonkey:frame-urls", callback);
+    
+    var urls = message.data.urls;
+    asyncShowPopup(aEvent, urls);
   }
+  
+  mm.addMessageListener("greasemonkey:frame-urls", callback)
+  mm.sendAsyncMessage("greasemonkey:frame-urls", {});
+  
+}
 
+function asyncShowPopup(aEvent, urls) {
+  
   function uniq(a) {
     var seen = {}, list = [], item;
     for (var i = 0; i < a.length; i++) {
@@ -306,9 +317,7 @@ function GM_showPopup(aEvent) {
     return mi;
   }
 
-  // Make sure this event was triggered by opening the actual monkey menu,
-  // not one of its submenus.
-  if (aEvent.currentTarget != aEvent.target) return;
+
 
   var popup = aEvent.target;
   var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
@@ -327,7 +336,6 @@ function GM_showPopup(aEvent) {
   removeMenuitemsAfter(scriptsFramedEl);
   removeMenuitemsAfter(scriptsTopEl);
 
-  var urls = uniq( urlsOfAllFrames( getBrowser().contentWindow ));
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
   var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
 
