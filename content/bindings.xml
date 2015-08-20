@@ -105,7 +105,7 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" rows="8" />
+        <xul:listbox flex="1" id="listbox" />
         <xul:vbox>
           <xul:button id="btnAdd" label="&button.add;" oncommand="_onAddPage();" />
           <xul:button id="btnEdit" label="&button.edit;" oncommand="_onEditPage();"
@@ -125,8 +125,9 @@
             this, 'id', 'btnEdit');
         this._btnDel = document.getAnonymousElementByAttribute(
             this, 'id', 'btnDel');
-        if (this == document.getElementById('globalExcludes'))
+        if (this == document.getElementById('globalExcludes')) {
           document.getElementById('resizer').style.display = 'block';
+        }
       </constructor>
 
       <method name="_onSelect">
@@ -169,7 +170,7 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" rows="8" />
+        <xul:listbox flex="1" id="listbox" />
         <xul:vbox>
           <xul:button id="btnUserClude" label="&button.addUserExclude;"
               oncommand="_addUserClude('Exclude');" disabled="true" />
@@ -182,7 +183,7 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" rows="8" />
+        <xul:listbox flex="1" id="listbox" />
         <xul:vbox id="vboxUserCludeMatch">
           <xul:button id="btnUserClude" label="&button.addUserExclude;"
               oncommand="_addUserClude('Exclude');" disabled="true" />
@@ -195,7 +196,7 @@
   >
     <content>
       <xul:hbox flex="1">
-        <xul:listbox flex="1" id="listbox" rows="8" />
+        <xul:listbox flex="1" id="listbox" />
         <xul:vbox>
           <xul:button id="btnUserClude" label="&button.addUserInclude;"
               oncommand="_addUserClude('Include');" disabled="true" />
