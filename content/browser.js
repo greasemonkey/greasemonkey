@@ -90,7 +90,7 @@ GM_BrowserUI.openInTab = function(aMessage) {
   if (prefRel) {
     tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
   } else {
-    tabBrowser.moveTabTo(newTab, tabBrowser.browsers.length);  
+    tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);  
   }
 };
 
