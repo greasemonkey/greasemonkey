@@ -70,7 +70,10 @@ GM_BrowserUI.openInTab = function(aMessage) {
   var tabBrowser = browser.getTabBrowser();
   var scriptTab = tabBrowser.getTabForBrowser(browser);
   var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
-  GM_util.timeout(function() {
+  // See #2107 and #2234
+  // Tabs created by GM_openInTab don't end up in the "last closed tabs lists" when closed
+  // Tabs opened with GM_openInTab can not be closed
+  GM_util.timeout(function () {
     var newTab = tabBrowser.addTab(
         aMessage.data.url,
         {
