@@ -1,6 +1,6 @@
 const EXPORTED_SYMBOLS = ['scriptMatchesUrlAndRuns'];
 
-Components.utils.import('resource://greasemonkey/util.js');
+Components.utils.import("resource://greasemonkey/util.js");
 
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
