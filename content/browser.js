@@ -158,7 +158,7 @@ GM_BrowserUI.contextMenuShowing = function() {
         var pnItemNSStyleDisplay = pnItemNS.ownerDocument.defaultView
             .getComputedStyle(pnItemNS, null).getPropertyValue("display");
         if ((pnItemNSStyleDisplay.toLowerCase() != "none")
-         && !pnItemNS.hidden) {
+            && !pnItemNS.hidden) {
           if (pnItemNS.tagName.toLowerCase() == "menuseparator") {
             contextSep.hidden = true;
           }
