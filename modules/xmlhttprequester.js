@@ -98,11 +98,11 @@ function(safeUrl, details, req) {
   var safeUrlTmp = new this.wrappedContentWin.URL(safeUrl);
   var headersArr = new Array();
   var authorization = {
-    contrains: false,
-    string: "Authorization",
-    method: "Basic",
-    user: "",
-    password: ""
+    "contrains": false,
+    "string": "Authorization",
+    "method": "Basic",
+    "user": "",
+    "password": ""
   };
   var authorizationRegexp =
       new RegExp("^\\s*" + authorization.method + "\\s*([^\\s]+)\\s*$", "i");
