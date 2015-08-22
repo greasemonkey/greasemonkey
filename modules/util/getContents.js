@@ -1,3 +1,4 @@
+Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var EXPORTED_SYMBOLS = ['getContents'];
@@ -18,7 +19,16 @@ function getContents(aFile, aCharset, aFatal) {
   }
   unicodeConverter.charset = aCharset || 'UTF-8';
 
-  var channel = ioService.newChannelFromURI(GM_util.getUriFromFile(aFile));
+  var channel = null;
+  if (ioService.newChannelFromURI2) {
+    channel = ioService.newChannelFromURI2(
+        GM_util.getUriFromFile(aFile), null,
+        Services.scriptSecurityManager.getSystemPrincipal(), null,
+        Components.interfaces.nsILoadInfo.SEC_NORMAL,
+        Components.interfaces.nsIContentPolicy.TYPE_OTHER);
+  } else {
+    channel = ioService.newChannelFromURI(GM_util.getUriFromFile(aFile));
+  }
   try {
     var input = channel.open();
   } catch (e) {
