@@ -146,17 +146,22 @@ GM_BrowserUI.contextMenuShowing = function() {
     contextSep.hidden =
     !GM_BrowserUI.getUserScriptLinkUnderPointer();
 
-  for (var pnItemIndex = 0, pnItemLength = contextSep.parentNode.childNodes.length; pnItemIndex < pnItemLength; pnItemIndex++) {
+  for (var pnItemIndex = 0,
+      pnItemLength = contextSep.parentNode.childNodes.length;
+      pnItemIndex < pnItemLength; pnItemIndex++) {
     var pnItem = contextSep.parentNode.childNodes[pnItemIndex];
 
     if (pnItem.id == contextSepId) {
       var pnItemNS = pnItem.nextElementSibling;
 
       while (pnItemNS) {
-        var pnItemNSStyleDisplay = pnItemNS.ownerDocument.defaultView.getComputedStyle(pnItemNS, null).getPropertyValue("display");
-        if ((pnItemNSStyleDisplay.toLowerCase() != "none") && !pnItemNS.hidden) {
-          if (pnItemNS.tagName.toLowerCase() == "menuseparator")
+        var pnItemNSStyleDisplay = pnItemNS.ownerDocument.defaultView
+            .getComputedStyle(pnItemNS, null).getPropertyValue("display");
+        if ((pnItemNSStyleDisplay.toLowerCase() != "none")
+         && !pnItemNS.hidden) {
+          if (pnItemNS.tagName.toLowerCase() == "menuseparator") {
             contextSep.hidden = true;
+          }
           break;
         }
         pnItemNS = pnItemNS.nextElementSibling;
