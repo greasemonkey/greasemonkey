@@ -20,10 +20,10 @@ var gStringBundle = Components
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
 var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
-var gGreasemonkeyVersion = 'unknown';
+var gGreasemonkeyVersion = "unknown";
 Components.utils.import("resource://gre/modules/AddonManager.jsm");
 AddonManager.getAddonByID(GM_GUID, function(addon) {
-  gGreasemonkeyVersion = '' + addon.version;
+  gGreasemonkeyVersion = "" + addon.version;
 });
 
 /** Get just the stuff between ==UserScript== lines. */
@@ -166,8 +166,8 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'minFFVer':
       if ((null !== value) && (GM_util.compareFirefoxVersion(value) < 0)) {
         script.parseErrors.push(
-          gStringBundle.GetStringFromName('parse.ff-failed')
-            .replace('%1', value)
+            gStringBundle.GetStringFromName('parse.ff-failed')
+                .replace('%1', value)
         );
       }
       script._minFFVer = value;
@@ -176,10 +176,11 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
       var versionChecker = Components
           .classes["@mozilla.org/xpcom/version-comparator;1"]
           .getService(Components.interfaces.nsIVersionComparator);
-      if ((null !== value) && (versionChecker.compare(gGreasemonkeyVersion, value) < 0)) {
+      if ((null !== value)
+          && (versionChecker.compare(gGreasemonkeyVersion, value) < 0)) {
         script.parseErrors.push(
-          gStringBundle.GetStringFromName('parse.gm-failed')
-            .replace('%1', value)
+            gStringBundle.GetStringFromName('parse.gm-failed')
+                .replace('%1', value)
         );
       }
       script._minGMVer = value;
