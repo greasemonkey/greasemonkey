@@ -52,6 +52,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'sandboxName': aScript.id,
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
+        'wantExportHelpers': true
       });
 
   // Note that because waivers aren't propagated between origins, we need the
@@ -60,10 +61,6 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
       'return window.wrappedJSObject || window;');
   Object.defineProperty(sandbox, 'unsafeWindow', {get: unsafeWindowGetter});
 
-  // Functions for interaction with unsafeWindow; see: http://goo.gl/C8Au16
-  sandbox.createObjectIn = Cu.createObjectIn;
-  sandbox.cloneInto = Cu.cloneInto;
-  sandbox.exportFunction = Cu.exportFunction;
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
     sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
