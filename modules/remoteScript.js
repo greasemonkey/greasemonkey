@@ -452,7 +452,14 @@ RemoteScript.prototype.showSource = function(aBrowser) {
     throw new Error('Script is not loaded!');
   }
 
-  var tabBrowser = aBrowser.getTabBrowser();
+  var tabBrowser = null;
+  try {
+    // The "new script" dialog
+    tabBrowser = aBrowser.getTabBrowser();
+  } catch (e) {
+    // The context menu
+    tabBrowser = aBrowser.ownerDocument.defaultView.gBrowser;
+  }
   var tab = tabBrowser.addTab(ioService.newFileURI(this._scriptFile).spec);
   tabBrowser.selectedTab = tab;
 

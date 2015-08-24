@@ -104,7 +104,7 @@ GM_BrowserUI.contextMenuShowing = function() {
   var contextItem = document.getElementById("greasemonkey-view-userscript");
   var contextSep = document.getElementById("greasemonkey-install-sep");
 
-  var culprit = document.popupNode;
+  var culprit = gContextMenu.target || document.popupNode;
 
   while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
      culprit = culprit.parentNode;
@@ -117,7 +117,7 @@ GM_BrowserUI.contextMenuShowing = function() {
 
 
 GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
-  var culprit = document.popupNode;
+  var culprit = gContextMenu.target || document.popupNode;
 
   while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
      culprit = culprit.parentNode;
