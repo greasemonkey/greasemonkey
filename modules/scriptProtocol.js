@@ -8,8 +8,6 @@ var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cr = Components.results;
 var schemeName = 'greasemonkey-script';
-var ioService = Cc['@mozilla.org/network/io-service;1']
-    .getService(Ci.nsIIOService);
 
 
 var gHaveDoneInit = false;
@@ -148,15 +146,7 @@ var ScriptProtocol = {
           // In parent scope we have the raw script, with file intact.
           uri = GM_util.getUriFromFile(resource.file);
         }
-        var channel = null;
-        if (ioService.newChannelFromURI2) {
-          channel = ioService.newChannelFromURI2(
-              uri, null, Services.scriptSecurityManager.getSystemPrincipal(),
-              null, Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
-        } else {
-          channel = ioService.newChannelFromURI(uri);
-        }
-        return channel;
+        return GM_util.channelFromUri(uri);
       }
     }
 

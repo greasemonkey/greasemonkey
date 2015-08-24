@@ -1,16 +1,15 @@
+var EXPORTED_SYMBOLS = ['getContents'];
+
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-var EXPORTED_SYMBOLS = ['getContents'];
-
-var ioService=Components.classes["@mozilla.org/network/io-service;1"]
-    .getService(Components.interfaces.nsIIOService);
 var scriptableStream=Components
     .classes["@mozilla.org/scriptableinputstream;1"]
     .getService(Components.interfaces.nsIScriptableInputStream);
 var unicodeConverter = Components
     .classes["@mozilla.org/intl/scriptableunicodeconverter"]
     .createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
+
 
 function getContents(aFile, aCharset, aFatal) {
   if (!aFile.isFile()) {
@@ -19,16 +18,7 @@ function getContents(aFile, aCharset, aFatal) {
   }
   unicodeConverter.charset = aCharset || 'UTF-8';
 
-  var channel = null;
-  if (ioService.newChannelFromURI2) {
-    channel = ioService.newChannelFromURI2(
-        GM_util.getUriFromFile(aFile), null,
-        Services.scriptSecurityManager.getSystemPrincipal(), null,
-        Components.interfaces.nsILoadInfo.SEC_NORMAL,
-        Components.interfaces.nsIContentPolicy.TYPE_OTHER);
-  } else {
-    channel = ioService.newChannelFromURI(GM_util.getUriFromFile(aFile));
-  }
+  var channel = GM_util.channelFromUri(GM_util.getUriFromFile(aFile));
   try {
     var input = channel.open();
   } catch (e) {
