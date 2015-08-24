@@ -74,7 +74,8 @@ function startup(aService) {
   parentMessageManager.addMessageListener(
       'greasemonkey:scripts-for-uuid',
       aService.getScriptsForUuid.bind(aService));
-  parentMessageManager.addMessageListener(
+  var mm = Services.ppmm ? Services.ppmm : globalMessageManager;
+  mm.addMessageListener(
       'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
   // Yes, we have to load the frame script once here in the parent scope.
