@@ -1,6 +1,7 @@
 var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var Cc = Components.classes;
@@ -147,7 +148,15 @@ var ScriptProtocol = {
           // In parent scope we have the raw script, with file intact.
           uri = GM_util.getUriFromFile(resource.file);
         }
-        return ioService.newChannelFromURI(uri);
+        var channel = null;
+        if (ioService.newChannelFromURI2) {
+          channel = ioService.newChannelFromURI2(
+              uri, null, Services.scriptSecurityManager.getSystemPrincipal(),
+              null, Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
+        } else {
+          channel = ioService.newChannelFromURI(uri);
+        }
+        return channel;
       }
     }
 

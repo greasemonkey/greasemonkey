@@ -10,6 +10,7 @@ Components.utils.import('chrome://greasemonkey-modules/content/scriptIcon.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+Components.utils.import("resource://gre/modules/Services.jsm");
 
 var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
@@ -585,7 +586,14 @@ RemoteScript.prototype._downloadFile = function(
     }
   }
 
-  var channel = ioService.newChannelFromURI(aUri);
+  var channel = null;
+  if (ioService.newChannelFromURI2) {
+    channel = ioService.newChannelFromURI2(
+        aUri, null, Services.scriptSecurityManager.getSystemPrincipal(),
+        null, Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
+  } else {
+    channel = ioService.newChannelFromURI(aUri);
+  }
   channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
   this._channels.push(channel);
   var dsl = new DownloadListener(
