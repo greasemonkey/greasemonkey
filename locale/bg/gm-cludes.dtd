@@ -5,10 +5,10 @@
 <!ENTITY promptForEdit.title "Редактиране на страницата">
 <!ENTITY button.add "Добавяне...">
 <!ENTITY button.addUserExclude "Доб. като потр. изкл.">
-<!ENTITY button.addUserMatch "Add as user match">
+<!ENTITY button.addUserMatch "Добавяне на потребителски шаблон">
 <!ENTITY button.addUserInclude "Доб. като потр. вкл.">
 <!ENTITY button.edit "Редактиране...">
 <!ENTITY button.remove "Премахване">
 <!ENTITY label.grpIncluded "Включени страници">
-<!ENTITY label.grpMatched "Matched Pages">
+<!ENTITY label.grpMatched "Съответстващи страници">
 <!ENTITY label.grpExcluded "Изключени страници">
