@@ -12,8 +12,8 @@ Components.utils.import('chrome://greasemonkey-modules/content/scriptRequire.js'
 Components.utils.import('chrome://greasemonkey-modules/content/scriptResource.js');
 Components.utils.import("chrome://greasemonkey-modules/content/storageBack.js");
 Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
-Components.utils.import('chrome://greasemonkey-modules/content/third-party/convert2RegExp.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
+Components.utils.import('chrome://greasemonkey-modules/content/abstractScript.js');
 
 var stringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
@@ -26,8 +26,6 @@ Components.utils.import("resource://gre/modules/AddonManager.jsm");
 AddonManager.getAddonByID(GM_GUID, function(addon) {
   gGreasemonkeyVersion = '' + addon.version;
 });
-
-var gAboutBlankRegexp = /^about:blank/;
 
 function Script(configNode) {
   this._observers = [];
@@ -76,33 +74,16 @@ function Script(configNode) {
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
-Script.prototype.matchesURL = function(url) {
-  var uri = GM_util.uriFromUrl(url);
-
-  function testClude(glob) {
-    // Do not run in about:blank unless _specifically_ requested.  See #1298
-    if (gAboutBlankRegexp.test(url) && !gAboutBlankRegexp.test(glob)) {
-      return false;
-    }
-
-    return GM_convert2RegExp(glob, uri).test(url);
+// inheritance magic
+Script.prototype = Object.create(AbstractScript.prototype, {
+  constructor: {
+    value: Script 
   }
-  function testMatch(matchPattern) {
-    return matchPattern.doMatch(url);
-  }
+});
 
-  // Flat deny if URL is not greaseable, or matches global excludes.
-  if (!GM_util.isGreasemonkeyable(url)) return false;
-  if (GM_util.getService().config._globalExcludes.some(testClude)) return false;
-
-  // Allow based on user cludes.
-  if (this._userExcludes.some(testClude)) return false;
-  if (this._userIncludes.some(testClude) || this._userMatches.some(testMatch)) return true;
-
-  // Finally allow based on script cludes and matches.
-  if (this._excludes.some(testClude)) return false;
-  return (this._includes.some(testClude) || this._matches.some(testMatch));
-};
+Object.defineProperty(Script.prototype, "globalExcludes", {
+  get: function(){return GM_util.getService().config._globalExcludes;}
+})
 
 Script.prototype._changed = function(event, data) {
   var dontSave = ('val-set' == event || 'val-del' == event);
