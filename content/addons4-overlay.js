@@ -15,6 +15,13 @@ var sortByCheckStateReverse = '!';
 var sortByCheckStateValueAscending = '2';
 var sortByCheckStateValueDescending = '1';
 
+// Firefox >= 40
+// http://bugzil.la/1161183
+var gAddonItemTooltip = document.getElementById("addonitem-tooltip");
+if (gAddonItemTooltip) {
+  gAddonItemTooltip.style.display = "none";
+}
+
 window.addEventListener('focus', focus, false);
 window.addEventListener('load', init, false);
 window.addEventListener('unload', unload, false);
@@ -24,15 +31,19 @@ var stringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/gm-addons.properties");
 
+
 // Patch the default createItem() to add our custom property.
 var _createItemOrig = createItem;
 createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
   if (SCRIPT_ADDON_TYPE == aObj.type) {
-   // Save a reference to this richlistitem on the Addon object, so we can
-   // fix the 'executionIndex' attribute if/when it changes.
-   aObj.richlistitem = item;
-   setRichlistitemExecutionIndex(aObj);
+    // Save a reference to this richlistitem on the Addon object, so we can
+    // fix the 'executionIndex' attribute if/when it changes.
+    aObj.richlistitem = item;
+    setRichlistitemExecutionIndex(aObj);
+    if (gAddonItemTooltip && aObj.version) {
+      aObj.name = aObj.nameOrig + "  " + aObj.version;
+    }
   }
   return item;
 };
