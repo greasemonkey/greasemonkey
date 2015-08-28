@@ -75,7 +75,7 @@ ScriptRecord.prototype = {
 };
 gWeave.Utils.deferGetSet(
     ScriptRecord, 'cleartext',
-    ['downloadURL', 'enabled', 'installed',
+    ['id', 'downloadURL', 'enabled', 'installed',
      'userExcludes', 'userMatches', 'userIncludes',
      'values', 'valuesTooBig',
     ]);
@@ -127,9 +127,13 @@ ScriptStore.prototype = {
   /// New local item, create sync record.
   createRecord: function(aId, aCollection) {
     var script = scriptForSyncId(aId);
-    if (script) {
-      var record = new ScriptRecord();
-      record.cleartext.id = aId;
+    var record = new ScriptRecord();
+    record.cleartext.id = aId;
+    if (!script) {
+      // Assume this script was not found because it was uninstalled.
+      record.cleartext.enabled = false;
+      record.cleartext.installed = false;
+    } else {
       record.cleartext.downloadURL = script.downloadURL;
       record.cleartext.enabled = script.enabled;
       record.cleartext.installed = !script.needsUninstall;
@@ -163,15 +167,8 @@ ScriptStore.prototype = {
           }
         }
       }
-
-      return record;
-    } else {
-      // Assume this is an uninstalled script.
-      var record = new ScriptRecord();
-      record.cleartext.enabled = false;
-      record.cleartext.installed = false;
-      return record;
     }
+    return record;
   },
 
   getAllIDs: function() {
@@ -231,7 +228,8 @@ ScriptTracker.prototype = {
   __proto__: gWeave.Tracker.prototype,
 
   notifyEvent: function(aScript, aEvent, aData) {
-    if (aEvent in {'install': 1, 'modified': 1, 'edit-enabled': 1}) {
+    if (aEvent in {
+        'install': 1, 'uninstall': 1, 'modified': 1, 'edit-enabled': 1}) {
       if (this.addChangedID(syncId(aScript))) {
         this.score = Math.min(100, this.score + 5);
       }
