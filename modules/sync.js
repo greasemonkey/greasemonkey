@@ -120,8 +120,7 @@ ScriptStore.prototype = {
       }));
     } else {
       var script = scriptForSyncId(aRecord.cleartext.id);
-      if (!script) return;
-      script.uninstall();
+      if (script) GM_util.getService().config.uninstall(script);
     }
   },
 
@@ -197,7 +196,7 @@ ScriptStore.prototype = {
 
   remove: function(aRecord) {
     var script = scriptForSyncId(aRecord.cleartext.id);
-    if (script) script.uninstall();
+    if (script) GM_util.getService().config.uninstall(this._script);
   },
 
   update: function(aRecord) {
@@ -207,7 +206,7 @@ ScriptStore.prototype = {
       return;
     }
     if (!aRecord.cleartext.installed) {
-      script.uninstall();
+      GM_util.getService().config.uninstall(script);
     } else {
       script.enabled = !!aRecord.cleartext.enabled;
       script.userExcludes = aRecord.cleartext.userExcludes || [];

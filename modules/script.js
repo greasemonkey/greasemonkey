@@ -907,6 +907,7 @@ Script.prototype.allFilesExist = function() {
   return this.allFiles().every(this.fileExists);
 };
 
+/// Don't call this!  Call Config.uninstall(), which calls this.
 Script.prototype.uninstall = function(forUpdate) {
   if ('undefined' == typeof(forUpdate)) forUpdate = false;
 
