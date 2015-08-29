@@ -70,28 +70,33 @@ GM_BrowserUI.openInTab = function(aMessage) {
   var tabBrowser = browser.getTabBrowser();
   var scriptTab = tabBrowser.getTabForBrowser(browser);
   var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
-  var newTab = tabBrowser.addTab(
-      aMessage.data.url,
-      {
-          'ownerTab': scriptTab,
-          'relatedToCurrent': scriptTabIsCurrentTab,
-      });
+  // See #2107 and #2234
+  // Tabs created by GM_openInTab don't end up in the "last closed tabs lists" when closed
+  // Tabs opened with GM_openInTab can not be closed
+  GM_util.timeout(function () {
+    var newTab = tabBrowser.addTab(
+        aMessage.data.url,
+        {
+            'ownerTab': scriptTab,
+            'relatedToCurrent': scriptTabIsCurrentTab,
+        });
 
-  var getBool = Services.prefs.getBoolPref;
+    var getBool = Services.prefs.getBoolPref;
 
-  var prefBg = (aMessage.data.inBackground === null)
-      ? getBool("browser.tabs.loadInBackground")
-      : aMessage.data.inBackground;
-  if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
+    var prefBg = (aMessage.data.inBackground === null)
+        ? getBool("browser.tabs.loadInBackground")
+        : aMessage.data.inBackground;
+    if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
 
-  var prefRel = (aMessage.data.afterCurrent === null)
-      ? getBool("browser.tabs.insertRelatedAfterCurrent")
-      : aMessage.data.afterCurrent;
-  if (prefRel) {
-    tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
-  } else {
-    tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);  
-  }
+    var prefRel = (aMessage.data.afterCurrent === null)
+        ? getBool("browser.tabs.insertRelatedAfterCurrent")
+        : aMessage.data.afterCurrent;
+    if (prefRel) {
+      tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+    } else {
+      tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);  
+    }
+  }, 0);
 };
 
 /**
