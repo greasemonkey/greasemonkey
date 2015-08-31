@@ -267,7 +267,6 @@ function GM_popupClicked(aEvent) {
   closeMenus(aEvent.target);
 }
 
-
 /**
  * When a menu pops up, fill its contents with the list of scripts.
  */
@@ -275,23 +274,22 @@ function GM_showPopup(aEvent) {
   // Make sure this event was triggered by opening the actual monkey menu,
   // not one of its submenus.
   if (aEvent.currentTarget != aEvent.target) return;
-  
-  var mm = getBrowser().mCurrentBrowser.frameLoader.messageManager; 
-  
-  var callback = function(message) {
+
+  var mm = getBrowser().mCurrentBrowser.frameLoader.messageManager;
+
+  var callback = null;
+  callback = function(message) {
     mm.removeMessageListener("greasemonkey:frame-urls", callback);
-    
+
     var urls = message.data.urls;
     asyncShowPopup(aEvent, urls);
-  }
-  
-  mm.addMessageListener("greasemonkey:frame-urls", callback)
+  };
+
+  mm.addMessageListener("greasemonkey:frame-urls", callback);
   mm.sendAsyncMessage("greasemonkey:frame-urls", {});
-  
 }
 
 function asyncShowPopup(aEvent, urls) {
-  
   function uniq(a) {
     var seen = {}, list = [], item;
     for (var i = 0; i < a.length; i++) {
@@ -322,8 +320,6 @@ function asyncShowPopup(aEvent, urls) {
     point.parentNode.insertBefore(mi, point.nextSibling);
     return mi;
   }
-
-
 
   var popup = aEvent.target;
   var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
