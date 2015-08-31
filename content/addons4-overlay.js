@@ -199,7 +199,6 @@ function init() {
 };
 
 function getSortBy(buttons) {
-
   var sortBy = GM_prefRoot.getValue('sortBy', sortByValueDef);
   var sortByValue = sortBy.replace(sortByCheckStateReverse, '');
   var sortByCheckStateAscending =
@@ -220,17 +219,14 @@ function getSortBy(buttons) {
   }
 
   return button;
-
 }
 
 function setSortBy(button) {
-
   var ascending = sortByCheckStateValueDescending
                   != button.getAttribute('checkState');
 
   GM_prefRoot.setValue('sortBy',
    (!ascending ? sortByCheckStateReverse : '') + button.getAttribute('sortBy'));
-
 }
 
 function onSortersClicked(aEvent) {
