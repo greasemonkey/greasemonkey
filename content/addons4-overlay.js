@@ -69,6 +69,10 @@ var observer = {
 
     var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
+      case 'uninstall':
+        gListView.removeItem(addon);
+        setEmptyWarningVisible();
+        break;
       case 'install':
         gListView.addItem(addon);
         setEmptyWarningVisible();
