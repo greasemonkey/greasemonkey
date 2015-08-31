@@ -70,28 +70,27 @@ GM_BrowserUI.openInTab = function(aMessage) {
   var tabBrowser = browser.getTabBrowser();
   var scriptTab = tabBrowser.getTabForBrowser(browser);
   var scriptTabIsCurrentTab = scriptTab == tabBrowser.mCurrentTab;
-  var newTab = tabBrowser.addTab(
-      aMessage.data.url,
-      {
-          'ownerTab': scriptTab,
-          'relatedToCurrent': scriptTabIsCurrentTab,
-      });
+  // Work around a race condition in Firefox code with E10S disabled.
+  // See #2107 and #2234
+  // Todo: Remove timeout when http://bugzil.la/1200334 is resolved.
+  GM_util.timeout(function () {
+    var newTab = tabBrowser.addTab(
+        aMessage.data.url,
+        {
+            'ownerTab': scriptTab,
+            'relatedToCurrent': scriptTabIsCurrentTab,
+        });
 
-  var getBool = Services.prefs.getBoolPref;
+    var getBool = Services.prefs.getBoolPref;
 
-  var prefBg = (aMessage.data.inBackground === null)
-      ? getBool("browser.tabs.loadInBackground")
-      : aMessage.data.inBackground;
-  if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
+    var prefBg = (aMessage.data.inBackground === null)
+        ? getBool("browser.tabs.loadInBackground")
+        : aMessage.data.inBackground;
+    if (scriptTabIsCurrentTab && !prefBg) tabBrowser.selectedTab = newTab;
 
-  var prefRel = (aMessage.data.afterCurrent === null)
-      ? getBool("browser.tabs.insertRelatedAfterCurrent")
-      : aMessage.data.afterCurrent;
-  if (prefRel) {
-    tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
-  } else {
-    tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);  
-  }
+    var prefRel = getBool('browser.tabs.insertRelatedAfterCurrent');
+    if (prefRel) tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
+  }, 0);
 };
 
 /**
