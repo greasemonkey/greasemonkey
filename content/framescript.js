@@ -125,6 +125,13 @@ function loadFailedScript(aMessage) {
 }
 
 
+function newScriptLoadStart(aMessage) {
+  aMessage.target.sendAsyncMessage("greasemonkey:newscript-load-end", {
+    "href": content.location.href
+  });
+}
+
+
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
   if (!GM_util.isGreasemonkeyable(url)) return;
@@ -184,6 +191,7 @@ if (content) windowCreated();
 
 addMessageListener('greasemonkey:inject-delayed-script', injectDelayedScript);
 addMessageListener('greasemonkey:load-failed-script', loadFailedScript);
+addMessageListener('greasemonkey:newscript-load-start', newScriptLoadStart);
 addMessageListener('greasemonkey:menu-command-list', function(aMessage) {
   MenuCommandListRequest(content, aMessage);
 });

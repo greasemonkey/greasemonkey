@@ -23,8 +23,16 @@ window.addEventListener("load", function window_load() {
   // default the includes with the current page's url
   var content = window.opener.document.getElementById("content");
   if (content) {
-    document.getElementById("include").value =
-      content.selectedBrowser.contentWindow.location.href;
+    var callback = function (aMessage) {
+      window.opener.messageManager
+          .removeMessageListener("greasemonkey:newscript-load-end", callback);
+      document.getElementById("include").value = aMessage.data.href;
+    };
+
+    window.opener.messageManager
+        .addMessageListener("greasemonkey:newscript-load-end", callback);
+    content.selectedBrowser.messageManager
+        .sendAsyncMessage("greasemonkey:newscript-load-start", {});
   }
 
   gClipText = getClipText();
