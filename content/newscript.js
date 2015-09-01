@@ -23,7 +23,8 @@ window.addEventListener("load", function window_load() {
   // default the includes with the current page's url
   var content = window.opener.document.getElementById("content");
   if (content) {
-    var callback = function (aMessage) {
+    var callback = null;
+    callback = function (aMessage) {
       window.opener.messageManager
           .removeMessageListener("greasemonkey:newscript-load-end", callback);
       document.getElementById("include").value = aMessage.data.href;
