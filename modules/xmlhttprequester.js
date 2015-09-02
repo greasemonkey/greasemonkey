@@ -1,5 +1,6 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
+Components.utils.importGlobalProperties(["Blob"]);
 Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
@@ -178,8 +179,13 @@ function(safeUrl, details, req) {
   }
 
   var body = details.data ? details.data : null;
-  if (details.binary) {
-    req.sendAsBinary(body);
+  if (details.binary && (body !== null)) {
+    var bodyLength = body.length;
+    var bodyData = new Uint8Array(bodyLength);
+    for (var i = 0; i < bodyLength; i++) {
+      bodyData[i] = body.charCodeAt(i) & 0xff;
+    }
+    req.send(new Blob([bodyData]));
   } else {
     req.send(body);
   }
