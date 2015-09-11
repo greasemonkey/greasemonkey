@@ -92,6 +92,7 @@ function ScriptAddon(aScript) {
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.forceUpdate = false;
   this.name = this._script.localized.name;
+  this.nameOrig = this.name;
   this.version = this._script.version;
   this.description = this._script.localized.description;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
