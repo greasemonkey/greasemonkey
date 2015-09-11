@@ -39,7 +39,7 @@
 <!ENTITY options.defaultEditor "Utilizar editor predefinido">
 <!ENTITY options.browseForEditor "Escolher um programa para editar">
 <!ENTITY options.globalExcludes "Exclusões globais">
-<!ENTITY options.newScript.template "Novo modelo de script">
+<!ENTITY options.newScript.template "Modelo de novo script">
 <!ENTITY options.newScript.removeUnused "Remover linhas não utilizadas.">
 <!ENTITY Uninstall "Desinstalar">
 <!ENTITY AnonymousStatistics "Estatísticas anónimas">
