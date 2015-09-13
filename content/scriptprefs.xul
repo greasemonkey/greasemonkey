@@ -25,7 +25,7 @@
   <tabs>
     <tab label="&scriptprefs.usersettings;" />
     <tab label="&scriptprefs.scriptsettings;" />
-    <resizer dir="right" />
+    <resizer id="resizer" dir="right" />
   </tabs>
   <tabpanels>
     <tabpanel>

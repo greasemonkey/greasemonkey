@@ -125,8 +125,10 @@
             this, 'id', 'btnEdit');
         this._btnDel = document.getAnonymousElementByAttribute(
             this, 'id', 'btnDel');
-        if (this == document.getElementById('globalExcludes')) {
-          document.getElementById('resizer').style.display = 'block';
+        if (navigator.appVersion.indexOf("Win") != -1) {
+          if (this == document.getElementById("globalExcludes")) {
+            document.getElementById("resizer").style.display = "block";
+          }
         }
       </constructor>
 

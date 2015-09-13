@@ -54,6 +54,10 @@ window.addEventListener('load', function() {
     gTabboxEl.selectedTab = gUserTabEl;
   };
   gUserExcludesEl.pages = gScript.userExcludes;
+
+  if (navigator.appVersion.indexOf("Win") != -1) {
+    document.getElementById("resizer").style.display = "block";
+  }
 }, false);
 
 function onDialogAccept() {

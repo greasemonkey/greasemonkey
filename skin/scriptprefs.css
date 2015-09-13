@@ -1,3 +1,6 @@
 cludes {
   min-width: 500px;
 }
+#resizer {
+  display: none;
+}
