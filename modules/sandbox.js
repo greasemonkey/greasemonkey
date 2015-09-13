@@ -143,36 +143,35 @@ function injectGMInfo(aScript, sandbox) {
   var waivedInfo = Components.utils.waiveXrays(sandbox.GM_info);
   
   var fileCache = new Map();
+  
+
+  function getScriptSource() {
+    var content = fileCache.get("scriptSource");
+    if (content === undefined) {
+      content = GM_util.fileXHR(scriptURL, "application/javascript");
+      fileCache.set("scriptSource", content);
+    }
+    return content;
+  }
+
+  function getMeta() {
+    var meta = fileCache.get("meta");
+    if (meta === undefined) {
+      meta = extractMeta(getScriptSource());
+      fileCache.set("meta", meta);
+    }
+    return meta;
+  }
 
   // lazy getters for heavyweight strings that aren't sent down through IPC
-  Object.defineProperty(waivedInfo,
-    "scriptSource",
-    { get: Cu.exportFunction(
-      function() {
-        var content = fileCache.get("scriptSource");
-        if(content === undefined) {
-          content = GM_util.fileXHR(scriptURL, "application/javascript");
-          fileCache.set("scriptSource", content);
-        }
-        return content;
-      }, sandbox)
-    }
-  );
-  
+  Object.defineProperty(waivedInfo, "scriptSource", {
+    get: Cu.exportFunction(getScriptSource, sandbox)
+  });
+
   // meta depends on content, so we need a lazy one here too
-  Object.defineProperty(waivedInfo,
-    'scriptMetaStr',
-    {get: Cu.exportFunction(
-      function() {
-        var meta = fileCache.get("meta");
-        if(meta === undefined) {
-          meta = extractMeta(this.scriptSource);
-          fileCache.set("meta", meta);
-        }
-        return meta;
-      }, sandbox)
-    }
-  );
+  Object.defineProperty(waivedInfo, 'scriptMetaStr', {
+    get: Cu.exportFunction(getMeta, sandbox)
+  });
 
 }
 
