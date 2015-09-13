@@ -27,6 +27,7 @@ function setEditor(aScratchpad) {
     filePicker.init(
         GM_util.getBrowserWindow(), EDITOR_PROMPT, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApps);
+    filePicker.appendFilter("*.cmd", "*.cmd");
 
     var editor = GM_util.getEditor();
     if (editor) {
