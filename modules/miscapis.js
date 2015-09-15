@@ -24,8 +24,13 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
   return ['greasemonkey-script:', aScript.uuid, '/', name].join('');
 };
 
+
 GM_Resources.prototype.getResourceText = function(name) {
-  return this._getDep(name).textContent;
+  var dep = this._getDep(name)
+  if(dep.textContent !== undefined)
+    return dep.textContent;
+  // lazy resources in IPC scripts
+  return GM_util.fileXHR(dep.url, "text/plain");
 };
 
 GM_Resources.prototype._getDep = function(name) {

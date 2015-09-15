@@ -192,27 +192,13 @@ function(safeUrl, details, req) {
 GM_xmlhttpRequester.prototype.setupReferer =
 function(details, req) {
   if (!details.headers || !details.headers.Referer) return;
-
-  var observerService = Components.classes["@mozilla.org/observer-service;1"]
-      .getService(Components.interfaces.nsIObserverService);
-  var requestObserver = {};
-  requestObserver.observe = function(subject, topic, data) {
-      observerService.removeObserver(requestObserver, "http-on-modify-request");
-
-      var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
-      if (channel == req.channel) {
-        dump('setting referer ' + details.headers.Referer + '\n');
-        var httpChannel = subject.QueryInterface(
-            Components.interfaces.nsIHttpChannel);
-        httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
-      }
-    };
-
-  // This fails under e10s.  Ignore for now (Mar 13, 2015).
-  // TODO: Make it work!
-  try {
-    observerService.addObserver(requestObserver, "http-on-modify-request", false);
-  } catch (e) { }
+  
+  var channel = req.channel;
+  
+  if(!(channel  instanceof Components.interfaces.nsIWritablePropertyBag))
+    return;
+  
+  channel.setProperty("greasemonkey:referer-override", details.headers.Referer);  
 };
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
