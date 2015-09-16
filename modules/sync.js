@@ -193,7 +193,7 @@ ScriptStore.prototype = {
 
   remove: function(aRecord) {
     var script = scriptForSyncId(aRecord.cleartext.id);
-    if (script) GM_util.getService().config.uninstall(this._script);
+    if (script) GM_util.getService().config.uninstall(script);
   },
 
   update: function(aRecord) {
