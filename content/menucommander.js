@@ -43,11 +43,13 @@ GM_MenuCommander.createMenuItem = function(command) {
 GM_MenuCommander.messageMenuCommandResponse = function(aMessage) {
   if (aMessage.data.cookie != GM_MenuCommander.cookieShowing) return;
 
-  GM_MenuCommander.popup.parentNode.disabled = false;
   for (i in aMessage.data.commands) {
     var command = aMessage.data.commands[i];
     var menuItem = GM_MenuCommander.createMenuItem(command);
     GM_MenuCommander.popup.appendChild(menuItem);
+  }
+  if (GM_MenuCommander.popup.firstChild) {
+    GM_MenuCommander.popup.parentNode.disabled = false;
   }
 };
 
@@ -58,11 +60,9 @@ GM_MenuCommander.onPopupHiding = function() {
 };
 
 
-GM_MenuCommander.onPopupShowing = function(aEvent) {
-  if (!GM_MenuCommander.popup) {
-    GM_MenuCommander.popup = aEvent.target.querySelector(
-        'menupopup.greasemonkey-user-script-commands-popup');
-  }
+GM_MenuCommander.onPopupShowing = function(aEventTarget) {
+  GM_MenuCommander.popup = aEventTarget.querySelector(
+      'menupopup.greasemonkey-user-script-commands-popup');
 
   GM_MenuCommander.messageCookie++;
   GM_MenuCommander.cookieShowing = GM_MenuCommander.messageCookie;
