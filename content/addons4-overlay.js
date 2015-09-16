@@ -70,7 +70,12 @@ var observer = {
     var addon = ScriptAddonFactoryByScript(script);
     switch (event) {
       case 'uninstall':
-        gListView.removeItem(addon);
+        if (!data) {
+          // In this observer context, `data` is a boolean, true means the
+          // uninstall happened "for update".  If it was _not_ for update,
+          // remove this item from the UI.
+          gListView.removeItem(addon);
+        }
         setEmptyWarningVisible();
         break;
       case 'install':
