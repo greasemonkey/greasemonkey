@@ -76,11 +76,9 @@ var observer = {
           // remove this item from the UI.
           gListView.removeItem(addon);
         }
-        setEmptyWarningVisible();
         break;
       case 'install':
         gListView.addItem(addon);
-        setEmptyWarningVisible();
         break;
       case 'edit-enabled':
         var item = gListView.getListItemForID(addon.id);
@@ -105,6 +103,7 @@ var observer = {
         oldItem.parentNode.replaceChild(item, oldItem);
         break;
     }
+    setEmptyWarningVisible();
   }
 };
 
