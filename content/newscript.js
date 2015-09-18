@@ -21,7 +21,7 @@ window.addEventListener("load", function window_load() {
       GM_prefRoot.getValue("newscript_namespace", "");
 
   // default the includes with the current page's url
-  var content = window.opener.document.getElementById("content");
+  var content = window.opener.gBrowser;
   if (content) {
     var callback = null;
     callback = function (aMessage) {
