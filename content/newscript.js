@@ -21,10 +21,20 @@ window.addEventListener("load", function window_load() {
       GM_prefRoot.getValue("newscript_namespace", "");
 
   // default the includes with the current page's url
-  var content = window.opener.document.getElementById("content");
+  var content = window.opener.gBrowser;
   if (content) {
-    document.getElementById("include").value =
-      content.selectedBrowser.contentWindow.location.href;
+    var callback = null;
+    callback = function (aMessage) {
+      window.opener.messageManager
+          .removeMessageListener("greasemonkey:newscript-load-end", callback);
+      document.getElementById("include").value = aMessage.data.href;
+    };
+
+    window.opener.messageManager
+        .addMessageListener("greasemonkey:newscript-load-end", callback);
+
+    content.selectedBrowser.messageManager
+        .sendAsyncMessage("greasemonkey:newscript-load-start", {});
   }
 
   gClipText = getClipText();

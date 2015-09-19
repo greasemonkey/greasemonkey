@@ -125,6 +125,28 @@ function loadFailedScript(aMessage) {
 }
 
 
+function contextMenuStart(aMessage) {
+  var culprit = aMessage.objects.culprit;
+
+  while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
+    culprit = culprit.parentNode;
+  }
+
+  var href = culprit.href;
+
+  aMessage.target.sendAsyncMessage("greasemonkey:context-menu-end", {
+    "href": href
+  });
+}
+
+
+function newScriptLoadStart(aMessage) {
+  aMessage.target.sendAsyncMessage("greasemonkey:newscript-load-end", {
+    "href": content.location.href
+  });
+}
+
+
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
   if (!GM_util.isGreasemonkeyable(url)) return;
@@ -190,6 +212,8 @@ addMessageListener('greasemonkey:menu-command-list', function(aMessage) {
 addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
   MenuCommandRun(content, aMessage);
 });
+addMessageListener("greasemonkey:context-menu-start", contextMenuStart);
+addMessageListener("greasemonkey:newscript-load-start", newScriptLoadStart);
 
 
 initInstallPolicy();
