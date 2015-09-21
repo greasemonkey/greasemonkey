@@ -14,15 +14,19 @@ GM_BrowserUI.init = function() {
   window.addEventListener("unload", GM_BrowserUI.chromeUnload, false);
   window.messageManager.addMessageListener('greasemonkey:open-in-tab',
       GM_BrowserUI.openInTab);
+  window.messageManager.addMessageListener("greasemonkey:DOMContentLoaded",
+      function (aMessage) {
+        var contentType = aMessage.data.contentType;
+        var href = aMessage.data.href;
+        GM_BrowserUI.checkDisabledScriptNavigation(contentType, href);
+      });
 };
 
 /**
  * The browser XUL has loaded. Find the elements we need and set up our
  * listeners and wrapper objects.
  */
-GM_BrowserUI.chromeLoad = function(e) {
-  // Store DOM element references in this object, also for use elsewhere.
-  GM_BrowserUI.tabBrowser = document.getElementById("content");
+GM_BrowserUI.chromeLoad = function(aEvent) {
   GM_BrowserUI.bundle = Components.classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService)
       .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
@@ -30,13 +34,6 @@ GM_BrowserUI.chromeLoad = function(e) {
   // Update visual status when enabled state changes.
   GM_prefRoot.watch("enabled", GM_BrowserUI.refreshStatus);
   GM_BrowserUI.refreshStatus();
-
-  document.getElementById('content').addEventListener(
-      'DOMContentLoaded', function(aEvent) {
-        var safeWin = aEvent.target.defaultView;
-        var href = safeWin.location.href;
-        GM_BrowserUI.checkDisabledScriptNavigation(aEvent, safeWin, href);
-      }, true);
 
   document.getElementById("contentAreaContextMenu")
     .addEventListener("popupshowing", GM_BrowserUI.contextMenuShowing, false);
@@ -204,9 +201,9 @@ GM_BrowserUI.openOptions = function() {
   openDialog('chrome://greasemonkey/content/options.xul', null, 'modal');
 };
 
-GM_BrowserUI.checkDisabledScriptNavigation = function(aEvent, aSafeWin, aHref) {
+GM_BrowserUI.checkDisabledScriptNavigation = function(aContentType, aHref) {
   if (!aHref.match(/\.user\.js$/)) return;
-  if (aSafeWin.document.contentType.match(/^text\/(x|ht)ml/)) return;
+  if (aContentType.match(/^text\/(x|ht)ml/)) return;
 
   // Handle enabled (i.e. show script source button) navigation by default.
   var msg = GM_BrowserUI.bundle.GetStringFromName('greeting.msg');
