@@ -1,4 +1,9 @@
-Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+try {
+  // See http://bugzil.la/912121
+  Components.utils.import("resource:///modules/devtools/client/scratchpad/scratchpad-manager.jsm");
+} catch (e) {
+  Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+}
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
