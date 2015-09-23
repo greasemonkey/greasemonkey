@@ -10,9 +10,7 @@ Cu.import('chrome://greasemonkey-modules/content/third-party/convert2RegExp.js')
 Cu.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
-function AbstractScript() {
-
-}
+function AbstractScript() { }
 
 Object.defineProperty(AbstractScript.prototype, "globalExcludes", {
   get: function() {

@@ -76,16 +76,15 @@ function Script(configNode) {
   if (configNode) this._loadFromConfigNode(configNode);
 }
 
-// inheritance magic
 Script.prototype = Object.create(AbstractScript.prototype, {
   constructor: {
-    value: Script 
+    value: Script
   }
 });
 
 Object.defineProperty(Script.prototype, "globalExcludes", {
-  get: function(){return GM_util.getService().config._globalExcludes;}
-})
+  get: function(){ return GM_util.getService().config._globalExcludes; }
+});
 
 Script.prototype._changed = function(event, data) {
   var dontSave = ('val-set' == event || 'val-del' == event);

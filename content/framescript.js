@@ -146,9 +146,9 @@ function newScriptLoadStart(aMessage) {
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
   if (!GM_util.isGreasemonkeyable(url)) return;
-  
-  var scripts = IPCScript.scriptsForUrl(url, aRunWhen, GM_util.windowId(aContentWin, 'outer'));
 
+  var scripts = IPCScript.scriptsForUrl(
+      url, aRunWhen, GM_util.windowId(aContentWin, 'outer'));
   injectScripts(scripts, aContentWin);
 }
 

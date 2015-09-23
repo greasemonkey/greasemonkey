@@ -136,16 +136,16 @@ function injectGMInfo(aScript, sandbox) {
 
   // TODO: also delay top level clone via lazy getter? XPCOMUtils.defineLazyGetter
   sandbox.GM_info = Cu.cloneInto(rawInfo, sandbox);
-  
+
   var waivedInfo = Components.utils.waiveXrays(sandbox.GM_info);
-  
+
   var fileCache = new Map();
-  
+
 
   function getScriptSource() {
     var content = fileCache.get("scriptSource");
     if (content === undefined) {
-      content = GM_util.fileXHR(scriptURL, "application/javascript");
+      content = GM_util.fileXhr(scriptURL, "application/javascript");
       fileCache.set("scriptSource", content);
     }
     return content;
@@ -172,20 +172,12 @@ function injectGMInfo(aScript, sandbox) {
 
 }
 
-function uriToString(uri) {
-  var channel = NetUtil.newChannel({ uri: NetUtil.newURI(uri, "UTF-8"), loadUsingSystemPrincipal: true});
-  var stream = channel.open();
-
-  var count = stream.available();
-  var data = NetUtil.readInputStreamToString(stream, count, { charset : "utf-8" });
-  return data;
-}
 
 function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
-  function evalWithWrapper(uri) {
+  function evalWithWrapper(url) {
     try {
-    	subLoader.loadSubScript(uri, sandbox, "UTF-8");
+      subLoader.loadSubScript(url, sandbox, "UTF-8");
     } catch (e) {
       if ("return not in function" == e.message) {
         // See #1592; we never anon wrap anymore, unless forced to by a return
@@ -196,11 +188,10 @@ function runScriptInSandbox(script, sandbox) {
             fileName,
             e.lineNumber
             );
-        
-        var code = GM_util.fileXHR(uri, "application/javascript");
-        
+
+        var code = GM_util.fileXhr(url, "application/javascript");
         Components.utils.evalInSandbox(
-            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, uri, 1);
+            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, url, 1);
       } else {
         // Otherwise raise.
         throw e;
@@ -209,9 +200,9 @@ function runScriptInSandbox(script, sandbox) {
   }
 
   // Eval the code, with a try/catch to report errors cleanly.
-  function evalWithCatch(uri) {
+  function evalWithCatch(url) {
     try {
-      evalWithWrapper(uri);
+      evalWithWrapper(url);
     } catch (e) {
       // Log it properly.
       GM_util.logError(e, false, e.fileName, e.lineNumber);
@@ -227,4 +218,18 @@ function runScriptInSandbox(script, sandbox) {
     }
   }
   evalWithCatch(script.fileURL);
+}
+
+
+function urlToString(url) {
+  var channel = NetUtil.newChannel({
+      uri: NetUtil.newURI(url, "UTF-8"),
+      loadUsingSystemPrincipal: true,
+  });
+  var stream = channel.open();
+
+  var count = stream.available();
+  var data = NetUtil.readInputStreamToString(
+      stream, count, { charset : "utf-8" });
+  return data;
 }

@@ -31,9 +31,7 @@ var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
 var gGreasemonkeyVersion = 'unknown';
 Cu.import("resource://gre/modules/AddonManager.jsm");
 
-
 /////////////////////// Component-global Helper Functions //////////////////////
-
 
 function shutdown(aService) {
   aService.closeAllScriptValStores();
@@ -81,24 +79,23 @@ function startup(aService) {
   // Why?  Who knows!?
   globalMessageManager.loadFrameScript(
       'chrome://greasemonkey/content/framescript.js', true);
-  
 
-  
-  // beam down initial set of scripts
+  // Beam down initial set of scripts.
   aService.broadcastScriptUpdates();
-  
-  // notification is async
-  // send the scripts again once we have our version
+
+  // Notification is async; send the scripts again once we have our version.
   AddonManager.getAddonByID(GM_GUID, function(addon) {
     gGreasemonkeyVersion = '' + addon.version;
     aService.broadcastScriptUpdates();
   });
-  
-  // beam down on updates
+
+  // Beam down on updates.
   aService.config.addObserver({notifyEvent: function(script, event, data) {
-    if(["modified", "install", "move", "edit-enabled", "uninstall"].some(function(e) {return e == event;})) {
-      aService.broadcastScriptUpdates();
-    }
+    if (["modified", "install", "move", "edit-enabled", "uninstall"]
+        .some(function(e) {return e == event;})
+      ) {
+        aService.broadcastScriptUpdates();
+      }
   }});
 
   Services.obs.addObserver(aService, 'quit-application', false);
@@ -152,34 +149,26 @@ service.prototype.__defineGetter__('config', function() {
 
 service.prototype.scriptUpdateData = function() {
   var ipcScripts = this.config.scripts.map(function(script) {
-    return new IPCScript(script, gGreasemonkeyVersion);        
+    return new IPCScript(script, gGreasemonkeyVersion);
   });
-  
   var excludes = this.config._globalExcludes;
-  
-  var data = { scripts: ipcScripts, globalExcludes: excludes};
-  
-  return data;
-}
+  return {scripts: ipcScripts, globalExcludes: excludes};
+};
 
 service.prototype.broadcastScriptUpdates = function() {
-  
-  var data = this.scriptUpdateData();
-  
   var ppmm = Cc["@mozilla.org/parentprocessmessagemanager;1"]
-    .getService(Ci.nsIMessageListenerManager);
-  
-  
-  // check if initialProcessData is supported
-  // child will use sync message if not
-  if(ppmm.initialProcessData) {
-    // for new processes
+      .getService(Ci.nsIMessageListenerManager);
+
+  // Check if initialProcessData is supported, else child will use sync message.
+  var data = this.scriptUpdateData();
+  if (ppmm.initialProcessData) {
+    // For new processes.
     ppmm.initialProcessData["greasemonkey:scripts-update"] = data;
+  } else {
+    // For existing ones.
+    ppmm.broadcastAsyncMessage("greasemonkey:scripts-update", data);
   }
-  
-  // for existing ones
-  ppmm.broadcastAsyncMessage("greasemonkey:scripts-update", data);
-}
+};
 
 service.prototype.closeAllScriptValStores = function() {
   for (var scriptId in this.scriptValStores) {
@@ -189,15 +178,14 @@ service.prototype.closeAllScriptValStores = function() {
 };
 
 service.prototype.scriptRefresh = function(url, windowId, browser) {
-
-  if (!GM_util.getEnabled() || !url) return [];
+  if (!GM_util.getEnabled()) return [];
+  if (!url) return [];
   if (!GM_util.isGreasemonkeyable(url)) return [];
 
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
     this.config.updateModifiedScripts("document-start", url, windowId, browser);
     this.config.updateModifiedScripts("document-end", url, windowId, browser);
   }
-
 };
 
 service.prototype.getScriptsForUuid = function(aMessage) {

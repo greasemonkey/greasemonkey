@@ -2,13 +2,13 @@
 
 // frame scripts, including all their functions, block scopes etc. are instantiated for each tab
 // having a single per-process script has a lower footprint for stateless things.
-// avoid keeping references to frame scripts or their content, this could leak frames! 
+// avoid keeping references to frame scripts or their content, this could leak frames!
 
 const EXPORTED_SYMBOLS = ['addFrame'];
 
- 
+
 function addFrame(frameMM) {
-  frameMM.addMessageListener("greasemonkey:frame-urls", urlTree)
+  frameMM.addMessageListener("greasemonkey:frame-urls", urlTree);
 }
 
 
