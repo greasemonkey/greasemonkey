@@ -23,15 +23,14 @@ window.addEventListener("load", function window_load() {
   // default the includes with the current page's url
   var content = window.opener.gBrowser;
   if (content) {
-    var callback = null;
-    callback = function (aMessage) {
-      window.opener.messageManager
-          .removeMessageListener("greasemonkey:newscript-load-end", callback);
+    var messageHandler = null;
+    messageHandler = function (aMessage) {
+      window.opener.messageManager.removeMessageListener(
+          "greasemonkey:newscript-load-end", messageHandler);
       document.getElementById("include").value = aMessage.data.href;
     };
-
     window.opener.messageManager
-        .addMessageListener("greasemonkey:newscript-load-end", callback);
+        .addMessageListener("greasemonkey:newscript-load-end", messageHandler);
 
     content.selectedBrowser.messageManager
         .sendAsyncMessage("greasemonkey:newscript-load-start", {});

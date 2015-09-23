@@ -132,18 +132,14 @@ function contextMenuStart(aMessage) {
     culprit = culprit.parentNode;
   }
 
-  var href = culprit.href;
-
-  aMessage.target.sendAsyncMessage("greasemonkey:context-menu-end", {
-    "href": href
-  });
+  aMessage.target.sendAsyncMessage(
+      "greasemonkey:context-menu-end", {"href": culprit.href});
 }
 
 
 function newScriptLoadStart(aMessage) {
-  aMessage.target.sendAsyncMessage("greasemonkey:newscript-load-end", {
-    "href": content.location.href
-  });
+  aMessage.target.sendAsyncMessage(
+      "greasemonkey:newscript-load-end", {"href": content.location.href});
 }
 
 

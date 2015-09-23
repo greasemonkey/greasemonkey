@@ -94,7 +94,7 @@ GM_BrowserUI.openInTab = function(aMessage) {
     if (prefRel) {
       tabBrowser.moveTabTo(newTab, scriptTab._tPos + 1);
     } else {
-      tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);  
+      tabBrowser.moveTabTo(newTab, tabBrowser.tabs.length - 1);
     }
   }, 0);
 };
@@ -111,62 +111,36 @@ GM_BrowserUI.chromeUnload = function() {
  * to show our context items.
  */
 GM_BrowserUI.contextMenuShowing = function() {
-  GM_BrowserUI.getUserScriptLinkUnderPointer(1)
+  GM_BrowserUI.getUserScriptUrlUnderPointer(function(aUrl) {
+    var contextItem = document.getElementById("greasemonkey-view-userscript");
+    var contextSep = document.getElementById("greasemonkey-install-sep");
+    contextItem.hidden = contextSep.hidden = !aUrl;
+  });
 };
 
-
-GM_BrowserUI.getUserScriptLinkUnderPointer = function(what) {
+GM_BrowserUI.getUserScriptUrlUnderPointer = function(callback) {
   var culprit = gContextMenu.target || document.popupNode;
+  if (!culprit) {
+    callback(null);
+    return;
+  }
 
   var mm = gBrowser.selectedBrowser.messageManager;
-
-  var callback = null;
-  callback = function (aMessage) {
-    mm.removeMessageListener("greasemonkey:context-menu-end", callback);
+  var messageHandler;
+  messageHandler = function (aMessage) {
+    mm.removeMessageListener("greasemonkey:context-menu-end", messageHandler);
 
     var href = aMessage.data.href;
-
-    var result = null;
-    if (culprit && href &&
-        href.match(/\.user\.js(\?|$)/i)) {
-      var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
-          .getService(Components.interfaces.nsIIOService);
-      var uri = ioSvc.newURI(href, null, null);
-      result = uri;
-    }
-
-    switch (what) {
-      case 1:
-        var contextItem = document
-            .getElementById("greasemonkey-view-userscript");
-        var contextSep = document.getElementById("greasemonkey-install-sep");
-
-        contextItem.hidden = contextSep.hidden = !result;
-        break;
-      case 2:
-        if (result) {
-          var scope = {};
-          Components.utils.import(
-              "chrome://greasemonkey-modules/content/remoteScript.js", scope);
-          var rs = new scope.RemoteScript(result.spec);
-          rs.downloadScript(function (aSuccess) {
-            if (aSuccess) {
-              rs.showSource(gBrowser);
-            } else {
-              alert(rs.errorMessage);
-            }
-          });
-        }
-        break;
+    if (href && href.match(/\.user\.js(\?|$)/i)) {
+      callback(href);
+    } else {
+      callback(null);
     }
   };
+  mm.addMessageListener("greasemonkey:context-menu-end", messageHandler);
 
-  mm.addMessageListener("greasemonkey:context-menu-end", callback);
-
-  gBrowser.selectedBrowser.messageManager
-      .sendAsyncMessage("greasemonkey:context-menu-start", {}, {
-        "culprit": culprit
-      });
+  mm.sendAsyncMessage(
+      "greasemonkey:context-menu-start", {}, {"culprit": culprit});
 };
 
 GM_BrowserUI.refreshStatus = function() {
@@ -188,7 +162,21 @@ GM_BrowserUI.startInstallScript = function(aUri) {
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
-  GM_BrowserUI.getUserScriptLinkUnderPointer(2);
+  GM_BrowserUI.getUserScriptUrlUnderPointer(function(aUrl) {
+    if (!aUrl) return;
+
+    var scope = {};
+    Components.utils.import(
+        "chrome://greasemonkey-modules/content/remoteScript.js", scope);
+    var rs = new scope.RemoteScript(aUrl);
+    rs.downloadScript(function (aSuccess) {
+      if (aSuccess) {
+        rs.showSource(gBrowser);
+      } else {
+        alert(rs.errorMessage);
+      }
+    });
+  });
 };
 
 GM_BrowserUI.showToolbarButton = function() {
