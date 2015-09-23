@@ -99,8 +99,6 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
 // that it can access other domains without security warning
 GM_xmlhttpRequester.prototype.chromeStartRequest =
 function(safeUrl, details, req) {
-  this.setupReferer(details, req);
-
   var setupRequestEvent = GM_util.hitch(
       this, 'setupRequestEvent', this.wrappedContentWin, this.sandbox);
 
@@ -183,36 +181,6 @@ function(safeUrl, details, req) {
   } else {
     req.send(body);
   }
-};
-
-// sets the "Referer" HTTP header for this GM_XHR request.
-// Firefox does not let chrome JS set the "Referer" HTTP header via XHR
-// directly. However, we can still set it indirectly via an
-// http-on-modify-request observer.
-GM_xmlhttpRequester.prototype.setupReferer =
-function(details, req) {
-  if (!details.headers || !details.headers.Referer) return;
-
-  var observerService = Components.classes["@mozilla.org/observer-service;1"]
-      .getService(Components.interfaces.nsIObserverService);
-  var requestObserver = {};
-  requestObserver.observe = function(subject, topic, data) {
-      observerService.removeObserver(requestObserver, "http-on-modify-request");
-
-      var channel = subject.QueryInterface(Components.interfaces.nsIChannel);
-      if (channel == req.channel) {
-        dump('setting referer ' + details.headers.Referer + '\n');
-        var httpChannel = subject.QueryInterface(
-            Components.interfaces.nsIHttpChannel);
-        httpChannel.setRequestHeader("Referer", details.headers.Referer, false);
-      }
-    };
-
-  // This fails under e10s.  Ignore for now (Mar 13, 2015).
-  // TODO: Make it work!
-  try {
-    observerService.addObserver(requestObserver, "http-on-modify-request", false);
-  } catch (e) { }
 };
 
 // arranges for the specified 'event' on xmlhttprequest 'req' to call the
