@@ -61,7 +61,7 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
       {scriptId: this._script.id, name: name});
   value = value.length && value[0];
 
-  if ('undefined' == typeof defVal) defVal = null;
+  if ('undefined' == typeof defVal) defVal = undefined;
   if (value === undefined || value === null) return defVal;
 
   try {
