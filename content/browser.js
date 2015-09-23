@@ -111,38 +111,62 @@ GM_BrowserUI.chromeUnload = function() {
  * to show our context items.
  */
 GM_BrowserUI.contextMenuShowing = function() {
-  var contextItem = document.getElementById("greasemonkey-view-userscript");
-  var contextSep = document.getElementById("greasemonkey-install-sep");
-
-  var culprit = gContextMenu.target || document.popupNode;
-
-  while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
-     culprit = culprit.parentNode;
-  }
-
-  contextItem.hidden =
-    contextSep.hidden =
-    !GM_BrowserUI.getUserScriptLinkUnderPointer();
+  GM_BrowserUI.getUserScriptLinkUnderPointer(1)
 };
 
 
-GM_BrowserUI.getUserScriptLinkUnderPointer = function() {
+GM_BrowserUI.getUserScriptLinkUnderPointer = function(what) {
   var culprit = gContextMenu.target || document.popupNode;
 
-  while (culprit && culprit.tagName && culprit.tagName.toLowerCase() != "a") {
-     culprit = culprit.parentNode;
-  }
+  var mm = gBrowser.selectedBrowser.messageManager;
 
-  if (!culprit || !culprit.href ||
-      !culprit.href.match(/\.user\.js(\?|$)/i)) {
-    return null;
-  }
+  var callback = null;
+  callback = function (aMessage) {
+    mm.removeMessageListener("greasemonkey:context-menu-end", callback);
 
-  var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
-  var uri = ioSvc.newURI(culprit.href, null, null);
+    var href = aMessage.data.href;
 
-  return uri;
+    var result = null;
+    if (culprit && href &&
+        href.match(/\.user\.js(\?|$)/i)) {
+      var ioSvc = Components.classes["@mozilla.org/network/io-service;1"]
+          .getService(Components.interfaces.nsIIOService);
+      var uri = ioSvc.newURI(href, null, null);
+      result = uri;
+    }
+
+    switch (what) {
+      case 1:
+        var contextItem = document
+            .getElementById("greasemonkey-view-userscript");
+        var contextSep = document.getElementById("greasemonkey-install-sep");
+
+        contextItem.hidden = contextSep.hidden = !result;
+        break;
+      case 2:
+        if (result) {
+          var scope = {};
+          Components.utils.import(
+              "chrome://greasemonkey-modules/content/remoteScript.js", scope);
+          var rs = new scope.RemoteScript(result.spec);
+          rs.downloadScript(function (aSuccess) {
+            if (aSuccess) {
+              rs.showSource(gBrowser);
+            } else {
+              alert(rs.errorMessage);
+            }
+          });
+        }
+        break;
+    }
+  };
+
+  mm.addMessageListener("greasemonkey:context-menu-end", callback);
+
+  gBrowser.selectedBrowser.messageManager
+      .sendAsyncMessage("greasemonkey:context-menu-start", {}, {
+        "culprit": culprit
+      });
 };
 
 GM_BrowserUI.refreshStatus = function() {
@@ -164,19 +188,7 @@ GM_BrowserUI.startInstallScript = function(aUri) {
 };
 
 GM_BrowserUI.viewContextItemClicked = function() {
-  var uri = GM_BrowserUI.getUserScriptLinkUnderPointer();
-  if (!uri) return;
-
-  var scope = {};
-  Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js', scope);
-  var rs = new scope.RemoteScript(uri.spec);
-  rs.downloadScript(function(aSuccess) {
-    if (aSuccess) {
-      rs.showSource(gBrowser);
-    } else {
-      alert(rs.errorMessage);
-    }
-  });
+  GM_BrowserUI.getUserScriptLinkUnderPointer(2);
 };
 
 GM_BrowserUI.showToolbarButton = function() {
