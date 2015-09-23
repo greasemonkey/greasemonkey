@@ -16,6 +16,7 @@ Cu.import("chrome://greasemonkey-modules/content/sync.js");
 Cu.import("chrome://greasemonkey-modules/content/util.js");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("chrome://greasemonkey-modules/content/refererSetter.js", {});
 
 
 var gStartupHasRun = false;
