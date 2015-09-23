@@ -108,7 +108,7 @@ function getStatsObj() {
 
   var scripts = GM_util.getService().config.scripts;
   for (var i = 0, script = null; script = scripts[i]; i++) {
-    var valueStats = GM_ScriptStorageBack(script).getStats();
+    var valueStats = new GM_ScriptStorageBack(script).getStats();
 
     var downloadUri = GM_util.uriFromUrl(script.downloadURL);
     var domain = null;
