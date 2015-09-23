@@ -89,28 +89,34 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddon(aScript) {
   this._script = aScript;
 
-  this.id = aScript.id + SCRIPT_ID_SUFFIX;
-  this.forceUpdate = false;
-  this.name = this._script.localized.name;
-  this.version = this._script.version;
+  this.creator = {
+      name: this._script.author,
+      url: this._script.homepageURL,
+  };
   this.description = this._script.localized.description;
+  this.forceUpdate = false;
+  this.homepageURL = this._script.homepageURL;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
-  this.updateDate = this._script.modifiedDate;
+  this.id = aScript.id + SCRIPT_ID_SUFFIX;
+  this.name = this._script.localized.name;
   this.providesUpdatesSecurely = aScript.updateIsSecure;
+  this.updateDate = this._script.modifiedDate;
+  this.version = this._script.version;
 }
 
 // Required attributes.
-ScriptAddon.prototype.id = null;
-ScriptAddon.prototype.version = null;
-ScriptAddon.prototype.type = SCRIPT_ADDON_TYPE;
-ScriptAddon.prototype.isCompatible = true;
-ScriptAddon.prototype.blocklistState = 0;
 ScriptAddon.prototype.appDisabled = false;
-ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
-ScriptAddon.prototype.name = null;
+ScriptAddon.prototype.blocklistState = 0;
 ScriptAddon.prototype.creator = null;
-ScriptAddon.prototype.pendingOperations = 0;
+ScriptAddon.prototype.id = null;
+ScriptAddon.prototype.isCompatible = true;
+ScriptAddon.prototype.homepageURL = null;
+ScriptAddon.prototype.name = null;
 ScriptAddon.prototype.operationsRequiringRestart = AddonManager.OP_NEEDS_RESTART_NONE;
+ScriptAddon.prototype.pendingOperations = 0;
+ScriptAddon.prototype.scope = AddonManager.SCOPE_PROFILE;
+ScriptAddon.prototype.type = SCRIPT_ADDON_TYPE;
+ScriptAddon.prototype.version = null;
 
 // Optional attributes
 ScriptAddon.prototype.description = null;

@@ -103,6 +103,8 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
 
       break;
 
+    case 'author':
+      script[data.keyword] = data.value;
     case 'namespace':
     case 'version':
       script['_' + data.keyword] = data.value;
@@ -123,6 +125,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
     case 'installURL':
       data.keyword = 'downloadURL';
     case 'downloadURL':
+    case 'homepageURL':
     case 'updateURL':
       try {
         var uri = GM_util.uriFromUrl(data.value, aUri);

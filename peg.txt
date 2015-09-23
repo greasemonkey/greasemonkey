@@ -57,9 +57,11 @@ keyword0 =
 
 keyword1 =
     keyword:(
+        "author" /
         "downloadURL" /
         "exclude" /
         "grant" /
+        "homepageURL" /
         "icon" /
         "include" /
         "installURL" /

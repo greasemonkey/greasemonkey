@@ -32,6 +32,7 @@ var gAboutBlankRegexp = /^about:blank/;
 function Script(configNode) {
   this._observers = [];
 
+  this._author = null;
   this._basedir = null;
   this._dependFail = false;
   this._dependhash = null;
@@ -41,6 +42,7 @@ function Script(configNode) {
   this._excludes = [];
   this._filename = null;
   this._grants = [];
+  this._homepageURL = null;
   this._icon = new ScriptIcon(this);
   this._id = null;
   this._installTime = null;
@@ -111,6 +113,12 @@ Script.prototype._changed = function(event, data) {
 // TODO: Move this method to be public rather than just aliasing it.
 Script.prototype.changed = Script.prototype._changed;
 
+
+Script.prototype.__defineGetter__('author',
+function Script_getAuthor() { return this._author; });
+Script.prototype.__defineSetter__('author',
+function Script_setAuthor(aVal) { this._author = '' + aVal; });
+
 Script.prototype.__defineGetter__('installDate',
 function Script_getInstallDate() { return new Date(this._installTime); });
 
@@ -178,6 +186,11 @@ Script.prototype.__defineGetter__('downloadURL',
 function Script_getDownloadUrl() { return this._downloadURL; });
 Script.prototype.__defineSetter__('downloadURL',
 function Script_setDownloadUrl(aVal) { this._downloadURL = '' + aVal; });
+
+Script.prototype.__defineGetter__('homepageURL',
+function Script_getHomepageUrl() { return this._homepageURL; });
+Script.prototype.__defineSetter__('homepageURL',
+function Script_setHomepageUrl(aVal) { this._homepageURL = '' + aVal; });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -321,7 +334,9 @@ Script.prototype.fixTimestampsOnInstall = function() {
 Script.prototype._loadFromConfigNode = function(node) {
   this._filename = node.getAttribute("filename");
   this._basedir = node.getAttribute("basedir") || ".";
+  this.author = node.getAttribute("author") || null;
   this.downloadURL = node.getAttribute("installurl") || null;
+  this.homepageURL = node.getAttribute("homepageurl") || null;
   this.updateURL = node.getAttribute("updateurl") || null;
 
   if (!this.fileExists(this.baseDirFile)) return;
@@ -413,10 +428,11 @@ Script.prototype._loadFromConfigNode = function(node) {
   }
 
   this.checkConfig();
-  this._name = node.getAttribute("name");
-  this._namespace = node.getAttribute("namespace");
+  this.author = node.getAttribute("author") || "";
   this._description = node.getAttribute("description");
   this._enabled = node.getAttribute("enabled") == 'true';
+  this._name = node.getAttribute("name");
+  this._namespace = node.getAttribute("namespace");
   this._noframes = node.getAttribute("noframes") == 'true';
   this._runAt = node.getAttribute("runAt") || "document-end"; // legacy default
   this._updateMetaStatus = node.getAttribute("updateMetaStatus") || "unknown";
@@ -495,17 +511,18 @@ Script.prototype.toConfigNode = function(doc) {
 
   scriptNode.appendChild(doc.createTextNode("\n\t"));
 
+  scriptNode.setAttribute("author", this._author);
   scriptNode.setAttribute("basedir", this._basedir);
   scriptNode.setAttribute("checkRemoteUpdates", this.checkRemoteUpdates);
   scriptNode.setAttribute("dependhash", this._dependhash);
   scriptNode.setAttribute("description", this._description);
   scriptNode.setAttribute("enabled", this._enabled);
-  scriptNode.setAttribute("noframes", this._noframes);
   scriptNode.setAttribute("filename", this._filename);
   scriptNode.setAttribute("installTime", this._installTime);
   scriptNode.setAttribute("modified", this._modifiedTime);
   scriptNode.setAttribute("name", this._name);
   scriptNode.setAttribute("namespace", this._namespace);
+  scriptNode.setAttribute("noframes", this._noframes);
   scriptNode.setAttribute("runAt", this._runAt);
   scriptNode.setAttribute("updateMetaStatus", this._updateMetaStatus);
   scriptNode.setAttribute("uuid", this._uuid);
@@ -513,6 +530,9 @@ Script.prototype.toConfigNode = function(doc) {
 
   if (this.downloadURL) {
     scriptNode.setAttribute("installurl", this.downloadURL);
+  }
+  if (this.homepageURL) {
+    scriptNode.setAttribute("homepageurl", this.homepageURL);
   }
   if (this.updateURL) {
     scriptNode.setAttribute("updateurl", this.updateURL);
