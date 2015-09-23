@@ -15,7 +15,7 @@ overlay    about:addons chrome://greasemonkey/content/addons4-overlay.xul
 overlay    chrome://greasemonkey/content/install.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
-overlay    chrome://browser/content/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion<23.0
-overlay    chrome://browser/content/devtools/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion>=23.0
+overlay    chrome://browser/content/devtools/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion<44.0a1
+overlay    chrome://devtools/content/scratchpad/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion>=44.0a1
 
 locale     greasemonkey en-US locale/en-US/
