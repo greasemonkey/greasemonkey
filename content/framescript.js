@@ -146,16 +146,9 @@ function newScriptLoadStart(aMessage) {
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
   if (!GM_util.isGreasemonkeyable(url)) return;
+  
+  var scripts = IPCScript.scriptsForUrl(url, aRunWhen, GM_util.windowId(aContentWin, 'outer'));
 
-  var response = sendSyncMessage(
-    'greasemonkey:scripts-for-url', {
-      'url': url,
-      'when': aRunWhen,
-      'windowId': GM_util.windowId(aContentWin, 'outer'),
-    });
-  if (!response || !response[0]) return;
-
-  var scripts = response[0].map(createScriptFromObject);
   injectScripts(scripts, aContentWin);
 }
 
