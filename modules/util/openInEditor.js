@@ -1,8 +1,14 @@
-Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+var EXPORTED_SYMBOLS = ['openInEditor'];
+
+try {
+  Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+} catch (e) {
+  // Moved in Firefox 44; see: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
+  Components.utils.import("resource:///modules/devtools/client/scratchpad/scratchpad-manager.jsm");
+}
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
-var EXPORTED_SYMBOLS = ['openInEditor'];
 
 var COULD_NOT_LAUNCH = (function() {
   var stringBundle = Components
@@ -11,6 +17,7 @@ var COULD_NOT_LAUNCH = (function() {
       .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
   return stringBundle.GetStringFromName("editor.could_not_launch");
 })();
+
 
 function openInEditor(script) {
   var editor = GM_util.getEditor();
