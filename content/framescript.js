@@ -45,7 +45,7 @@ function contentObserver(win) {
 
 function blankLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
-  if (contentWin.location.href.match(/^about:blank/)) {
+  if (contentWin.location.href.match(/^about:(blank|reader)/)) {
     // #1696: document-element-inserted doesn't see about:blank
     runScripts('document-start', contentWin);
     runScripts('document-end', contentWin);

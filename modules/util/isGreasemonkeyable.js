@@ -14,8 +14,8 @@ function isGreasemonkeyable(url) {
     case "ftp":
       return true;
     case "about":
-      // Always allow "about:blank".
-      if (/^about:blank/.test(url)) return true;
+      // Always allow "about:blank" and "about:reader".
+      if (/^about:(blank|reader)/.test(url)) return true;
       // Never allow the rest of "about:".  See #1375.
       return false;
     case "data":
