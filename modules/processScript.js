@@ -1,8 +1,9 @@
 'use strict';
 
-// frame scripts, including all their functions, block scopes etc. are instantiated for each tab
-// having a single per-process script has a lower footprint for stateless things.
-// avoid keeping references to frame scripts or their content, this could leak frames!
+// Frame scripts, including all their functions, block scopes etc. are
+// instantiated for each tab.  Having a single per-process script has a lower
+// footprint for stateless things.  Avoid keeping references to frame scripts
+// or their content, this could leak frames!
 
 const EXPORTED_SYMBOLS = ['addFrame'];
 
@@ -20,6 +21,7 @@ function urlsOfAllFrames(contentWindow) {
   Array.from(contentWindow.frames).forEach(collect);
   return urls;
 }
+
 
 function urlTree(message) {
   var frameMM = message.target;

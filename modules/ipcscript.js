@@ -57,16 +57,16 @@ IPCScript.prototype = Object.create(AbstractScript.prototype, {
 
 
 IPCScript.scriptsForUrl = function(url, when, windowId) {
-    return scripts.filter(function(script) {
-      try {
-        return GM_util.scriptMatchesUrlAndRuns(script, url, when);
-      } catch (e) {
-        console.log(e);
-        GM_util.logError(e, false, e.fileName, e.lineNumber);
-        // See #1692; Prevent failures like that from being so severe.
-        return false;
-      }
-   });
+  var result = scripts.filter(function(script) {
+    try {
+      return GM_util.scriptMatchesUrlAndRuns(script, url, when);
+    } catch (e) {
+      // See #1692; Prevent failures like that from being so severe.
+      GM_util.logError(e, false, e.fileName, e.lineNumber);
+      return false;
+    }
+  });
+  return result;
 };
 
 
@@ -108,6 +108,7 @@ var scripts = [];
 const cpmm = Components.classes["@mozilla.org/childprocessmessagemanager;1"]
     .getService(Components.interfaces.nsISyncMessageSender);
 
+
 function objectToScript(obj) {
   var script = Object.create(IPCScript.prototype);
   Object.keys(obj).forEach(function(k) {
@@ -117,6 +118,7 @@ function objectToScript(obj) {
   return script;
 }
 
+
 function updateData(data) {
   if (!data) return;
   var newScripts = data.scripts.map(objectToScript);
@@ -124,6 +126,7 @@ function updateData(data) {
   scripts = newScripts;
   IPCScript.prototype.globalExcludes = data.globalExcludes;
 }
+
 
 if (cpmm.initialProcessData) {
   updateData(cpmm.initialProcessData["greasemonkey:scripts-update"]);
@@ -133,6 +136,6 @@ if (cpmm.initialProcessData) {
   updateData(results[0]);
 }
 
-cpmm.addMessageListener("greasemonkey:scripts-update", function(message) {
-  updateData(message.data);
+cpmm.addMessageListener("greasemonkey:scripts-update", function(aMessage) {
+  updateData(aMessage.data);
 });

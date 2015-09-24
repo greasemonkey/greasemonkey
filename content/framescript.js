@@ -17,8 +17,9 @@ Cu.import('chrome://greasemonkey-modules/content/scriptProtocol.js');
 Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
-// register with process script. no need to import all the vars into the local scope
-Cu.import('chrome://greasemonkey-modules/content/processScript.js', {}).addFrame(this);
+// Register with process script. Don't import all the vars into the local scope.
+Cu.import('chrome://greasemonkey-modules/content/processScript.js', {}
+    ).addFrame(this);
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
