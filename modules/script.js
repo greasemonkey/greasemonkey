@@ -117,7 +117,7 @@ Script.prototype.changed = Script.prototype._changed;
 Script.prototype.__defineGetter__('author',
 function Script_getAuthor() { return this._author; });
 Script.prototype.__defineSetter__('author',
-function Script_setAuthor(aVal) { this._author = '' + aVal; });
+function Script_setAuthor(aVal) { this._author = aVal ? '' + aVal : ''; });
 
 Script.prototype.__defineGetter__('installDate',
 function Script_getInstallDate() { return new Date(this._installTime); });
@@ -185,12 +185,12 @@ function Script_getLocalizedDescription() {
 Script.prototype.__defineGetter__('downloadURL',
 function Script_getDownloadUrl() { return this._downloadURL; });
 Script.prototype.__defineSetter__('downloadURL',
-function Script_setDownloadUrl(aVal) { this._downloadURL = '' + aVal; });
+function Script_setDownloadUrl(aVal) { this._downloadURL = aVal ? '' + aVal : ''; });
 
 Script.prototype.__defineGetter__('homepageURL',
 function Script_getHomepageUrl() { return this._homepageURL; });
 Script.prototype.__defineSetter__('homepageURL',
-function Script_setHomepageUrl(aVal) { this._homepageURL = '' + aVal; });
+function Script_setHomepageUrl(aVal) { this._homepageURL = aVal ? '' + aVal : ''; });
 
 Script.prototype.__defineGetter__('uuid',
 function Script_getUuid() { return this._uuid; });
@@ -511,7 +511,7 @@ Script.prototype.toConfigNode = function(doc) {
 
   scriptNode.appendChild(doc.createTextNode("\n\t"));
 
-  scriptNode.setAttribute("author", this._author);
+  this._author && scriptNode.setAttribute("author", this._author);
   scriptNode.setAttribute("basedir", this._basedir);
   scriptNode.setAttribute("checkRemoteUpdates", this.checkRemoteUpdates);
   scriptNode.setAttribute("dependhash", this._dependhash);
