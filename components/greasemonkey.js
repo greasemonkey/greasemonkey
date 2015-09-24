@@ -98,6 +98,8 @@ function startup(aService) {
       }
   }});
 
+  Cu.import("chrome://greasemonkey-modules/content/requestObserver.js", {});
+
   Services.obs.addObserver(aService, 'quit-application', false);
 
   // Import this once, early, so that enqueued deletes can happen.
