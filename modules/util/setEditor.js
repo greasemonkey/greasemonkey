@@ -1,5 +1,6 @@
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
+Components.utils.import("resource://gre/modules/Services.jsm");
 
 var EXPORTED_SYMBOLS = ['setEditor'];
 
@@ -27,7 +28,11 @@ function setEditor(aScratchpad) {
     filePicker.init(
         GM_util.getBrowserWindow(), EDITOR_PROMPT, nsIFilePicker.modeOpen);
     filePicker.appendFilters(nsIFilePicker.filterApps);
-
+    if (Services.appShell.hiddenDOMWindow.navigator.platform
+        .indexOf("Win") != -1) {
+      filePicker.appendFilter("*.cmd", "*.cmd");
+    }
+    
     var editor = GM_util.getEditor();
     if (editor) {
       filePicker.defaultString = editor.leafName;

@@ -89,10 +89,12 @@ function ScriptAddonFactoryById(aId) {
 function ScriptAddon(aScript) {
   this._script = aScript;
 
-  this.creator = {
+  if (this._script.author) {
+    this.creator = {
       name: this._script.author,
       url: this._script.homepageURL,
-  };
+    };
+  }
   this.description = this._script.localized.description;
   this.forceUpdate = false;
   this.homepageURL = this._script.homepageURL;

@@ -283,19 +283,22 @@ function GM_showPopup(aEvent) {
 
   var mm = getBrowser().mCurrentBrowser.frameLoader.messageManager;
 
+  // See #2276
+  var aEventTarget = aEvent.target;
+
   var callback = null;
   callback = function(message) {
     mm.removeMessageListener("greasemonkey:frame-urls", callback);
 
     var urls = message.data.urls;
-    asyncShowPopup(aEvent, urls);
+    asyncShowPopup(aEventTarget, urls);
   };
 
   mm.addMessageListener("greasemonkey:frame-urls", callback);
   mm.sendAsyncMessage("greasemonkey:frame-urls", {});
 }
 
-function asyncShowPopup(aEvent, urls) {
+function asyncShowPopup(aEventTarget, urls) {
   function uniq(a) {
     var seen = {}, list = [], item;
     for (var i = 0; i < a.length; i++) {
@@ -327,7 +330,7 @@ function asyncShowPopup(aEvent, urls) {
     return mi;
   }
 
-  var popup = aEvent.target;
+  var popup = aEventTarget;
   var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
   var scriptsTopEl = popup.getElementsByClassName("scripts-top-point")[0];
   var scriptsSepEl = popup.getElementsByClassName("scripts-sep")[0];
@@ -344,6 +347,7 @@ function asyncShowPopup(aEvent, urls) {
   removeMenuitemsAfter(scriptsFramedEl);
   removeMenuitemsAfter(scriptsTopEl);
 
+  urls = uniq(urls);
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
   var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
 
@@ -373,7 +377,7 @@ function asyncShowPopup(aEvent, urls) {
       function(script) { point = appendScriptAfter(script, point); });
 
   // Propagate to commands sub-menu.
-  GM_MenuCommander.onPopupShowing(aEvent);
+  GM_MenuCommander.onPopupShowing(aEventTarget);
 }
 
 /**
