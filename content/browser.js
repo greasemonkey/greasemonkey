@@ -344,6 +344,7 @@ function asyncShowPopup(aEvent, urls) {
   removeMenuitemsAfter(scriptsFramedEl);
   removeMenuitemsAfter(scriptsTopEl);
 
+  urls = uniq(urls);
   var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
   var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
 
