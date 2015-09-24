@@ -157,17 +157,17 @@ service.prototype.scriptUpdateData = function() {
 
 service.prototype.broadcastScriptUpdates = function() {
   var ppmm = Cc["@mozilla.org/parentprocessmessagemanager;1"]
-      .getService(Ci.nsIMessageListenerManager);
+      .getService(Ci.nsIMessageBroadcaster);
 
   // Check if initialProcessData is supported, else child will use sync message.
   var data = this.scriptUpdateData();
   if (ppmm.initialProcessData) {
-    // For new processes.
+    // Initial data for any new processes.
     ppmm.initialProcessData["greasemonkey:scripts-update"] = data;
-  } else {
-    // For existing ones.
-    ppmm.broadcastAsyncMessage("greasemonkey:scripts-update", data);
   }
+
+  // Updates for existing ones.
+  ppmm.broadcastAsyncMessage("greasemonkey:scripts-update", data);
 };
 
 service.prototype.closeAllScriptValStores = function() {
