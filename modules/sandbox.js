@@ -185,7 +185,7 @@ function runScriptInSandbox(script, sandbox) {
         GM_util.logError(
             gStringBundle.GetStringFromName('return-not-in-func-deprecated'),
             true, // is a warning
-            fileName,
+            e.fileName,
             e.lineNumber
             );
 
