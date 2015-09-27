@@ -124,7 +124,11 @@ function updateData(data) {
   var newScripts = data.scripts.map(objectToScript);
   Object.freeze(newScripts);
   scripts = newScripts;
-  IPCScript.prototype.globalExcludes = data.globalExcludes;
+  Object.defineProperty(IPCScript.prototype, "globalExcludes", {
+    get: function () { return data.globalExcludes; },
+    configurable: true,
+    enumerable: true
+  });
 }
 
 

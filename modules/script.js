@@ -217,16 +217,16 @@ Script.prototype.__defineGetter__('userMatches',
 function Script_getUserMatches() { return this._userMatches.concat(); });
 Script.prototype.__defineSetter__('userMatches',
 function Script_setUserMatches(matches) {
-  var matches_MatchPattern = new Array();
+  var matches_MatchPattern = [];
 
-  for (var i = 0; i < matches.length; i++) {
+  for (var i = 0, count = matches.length; i < count; i++) {
     var match = matches[i];
     try {
       var match_MatchPattern = new MatchPattern(match);
       matches_MatchPattern.push(match_MatchPattern);
     } catch (e) {
       GM_util.logError(stringBundle.GetStringFromName('parse.ignoring-match')
-                          .replace('%1', match).replace('%2', e));
+          .replace('%1', match).replace('%2', e));
     }
   }
   matches = matches_MatchPattern;
@@ -241,6 +241,24 @@ function Script_setUserExcludes(excludes) { this._userExcludes = excludes.concat
 
 Script.prototype.__defineGetter__('matches',
 function Script_getMatches() { return this._matches.concat(); });
+Script.prototype.__defineSetter__('matches',
+function Script_setMatches(matches) {
+  var matches_MatchPattern = [];
+
+  for (var i = 0, count = matches.length; i < count; i++) {
+    var match = matches[i];
+    try {
+      var match_MatchPattern = new MatchPattern(match);
+      matches_MatchPattern.push(match_MatchPattern);
+    } catch (e) {
+      GM_util.logError(stringBundle.GetStringFromName('parse.ignoring-match')
+          .replace('%1', match).replace('%2', e));
+    }
+  }
+  matches = matches_MatchPattern;
+
+  this._matches = matches.concat();
+});
 
 Script.prototype.__defineGetter__('requires',
 function Script_getRequires() { return this._requires.concat(); });

@@ -57,11 +57,11 @@ window.addEventListener('load', function() {
 }, false);
 
 function onDialogAccept() {
-  gScript.includes = gScriptIncludesEl.pages;
+  // gScript.includes = gScriptIncludesEl.pages;
   gScript.userIncludes = gUserIncludesEl.pages;
-  gScript.matches = gScriptMatchesEl.pages;
+  // gScript.matches = gScriptMatchesEl.pages;
   gScript.userMatches = gUserMatchesEl.pages;
-  gScript.excludes = gScriptExcludesEl.pages;
+  // gScript.excludes = gScriptExcludesEl.pages;
   gScript.userExcludes = gUserExcludesEl.pages;
   GM_util.getService().config._changed(gScript, "cludes");
 }
