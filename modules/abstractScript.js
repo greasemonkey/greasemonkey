@@ -1,14 +1,15 @@
 'use strict';
 
-const EXPORTED_SYMBOLS = ['AbstractScript'];
+var EXPORTED_SYMBOLS = ['AbstractScript'];
 
-const gAboutBlankRegexp = /^about:blank/;
+var gAboutBlankRegexp = /^about:blank/;
 
-const Cu = Components.utils;
+var Cu = Components.utils;
 
 Cu.import('chrome://greasemonkey-modules/content/third-party/convert2RegExp.js');
 Cu.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
+
 
 function AbstractScript() { }
 

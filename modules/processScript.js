@@ -5,7 +5,7 @@
 // footprint for stateless things.  Avoid keeping references to frame scripts
 // or their content, this could leak frames!
 
-const EXPORTED_SYMBOLS = ['addFrame'];
+var EXPORTED_SYMBOLS = ['addFrame'];
 
 
 function addFrame(frameMM) {

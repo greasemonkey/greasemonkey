@@ -1,12 +1,13 @@
 'use strict';
 
-const EXPORTED_SYMBOLS = [];
+var EXPORTED_SYMBOLS = [];
 
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 Components.utils.import("chrome://greasemonkey-modules/content/prefmanager.js");
 
-const types = Components.interfaces.nsIContentPolicy
+var types = Components.interfaces.nsIContentPolicy;
+
 
 function checkScriptRefresh(channel) {
   // .loadInfo is part of nsiChannel -> implicit QI needed

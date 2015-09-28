@@ -105,7 +105,7 @@ IPCScript.prototype.info = function() {
 
 var scripts = [];
 
-const cpmm = Components.classes["@mozilla.org/childprocessmessagemanager;1"]
+var cpmm = Components.classes["@mozilla.org/childprocessmessagemanager;1"]
     .getService(Components.interfaces.nsISyncMessageSender);
 
 
