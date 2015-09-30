@@ -38,12 +38,6 @@ window.addEventListener('load', function() {
   for (var i = 0; i < gScript.matches.length; i++) {
     gScriptMatchesEl.addPage(gScript.matches[i].pattern);
   }
-  /*
-  gScriptMatchesEl.onAddUserExclude = function(url) {
-    gUserExcludeEl.addPage(url);
-    gTabboxEl.selectedTab = gUserTabEl;
-  };
-  */
   for (var i = 0; i < gScript.userMatches.length; i++) {
     gUserMatchesEl.addPage(gScript.userMatches[i].pattern);
   }
@@ -57,11 +51,8 @@ window.addEventListener('load', function() {
 }, false);
 
 function onDialogAccept() {
-  // gScript.includes = gScriptIncludesEl.pages;
   gScript.userIncludes = gUserIncludesEl.pages;
-  // gScript.matches = gScriptMatchesEl.pages;
   gScript.userMatches = gUserMatchesEl.pages;
-  // gScript.excludes = gScriptExcludesEl.pages;
   gScript.userExcludes = gUserExcludesEl.pages;
   GM_util.getService().config._changed(gScript, "cludes");
 }
