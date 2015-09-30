@@ -284,15 +284,14 @@ Config.prototype._updateVersion = function() {
     if ("0.0" == oldVersion) {
       // This is the first launch.  Show the welcome screen.
       var chromeWin = GM_util.getBrowserWindow();
-      // If we found it, use it to open a welcome tab.
-      if (chromeWin && chromeWin.gBrowser) {
+      if (chromeWin && chromeWin.gBrowser) chromeWin.setTimeout(function() {
         var url = 'http://www.greasespot.net/p/welcome.html'
             + '?utm_source=xpi&utm_medium=xpi&utm_campaign=welcome'
             + '&utm_content=' + newVersion;
         // the setTimeout makes sure we do not execute too early -- sometimes
         // the window isn't quite ready to add a tab yet
-        chromeWin.setTimeout(chromeWin.GM_BrowserUI.openTab, 100, url);
-      }
+        chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(url);
+      }, 1000);
     }
 
     if (newVersion.match(/^3\.5/) && oldVersion != newVersion) {
