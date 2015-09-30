@@ -44,13 +44,20 @@ function contentObserver(win) {
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-function blankLoad(aEvent) {
+function browserLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
-  if (contentWin.location.href.match(/^about:(blank|reader)/)) {
+  var href = contentWin.location.href;
+
+  if (href.match(/^about:(blank|reader)/)) {
     // #1696: document-element-inserted doesn't see about:blank
     runScripts('document-start', contentWin);
     runScripts('document-end', contentWin);
   }
+
+  gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
+    "contentType": contentWin.document.contentType,
+    "href": href
+  });
 }
 
 
@@ -189,7 +196,7 @@ function windowCreated() {
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
-addEventListener('DOMContentLoaded', blankLoad);
+addEventListener('DOMContentLoaded', browserLoad);
 addEventListener('DOMWindowCreated', windowCreated);
 
 if (content) windowCreated();
