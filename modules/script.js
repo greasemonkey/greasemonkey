@@ -663,17 +663,19 @@ Script.prototype.updateFromNewScript = function(newScript, url, windowId, browse
 
   // Copy new values.
   //  NOTE: User 'cludes are _not_ copied!  They should remain as-is.
+  this._author = newScript._author;
+  this._description = newScript._description;
   this._excludes = newScript._excludes;
   this._grants = newScript._grants;
   this._includes = newScript._includes;
-  this._matches = newScript._matches;
-  this._description = newScript._description;
-  this._localized = newScript._localized;
   this._locales = newScript._locales;
+  this._localized = newScript._localized;
+  this._matches = newScript._matches;
   this._noframes = newScript._noframes;
   this._runAt = newScript._runAt;
   this._version = newScript._version;
   this.downloadURL = newScript.downloadURL;
+  this.homepageURL = newScript.homepageURL;
   this.updateURL = newScript.updateURL;
 
   this.showGrantWarning();

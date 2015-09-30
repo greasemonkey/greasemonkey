@@ -1,9 +1,11 @@
-Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
-Components.utils.import('chrome://greasemonkey-modules/content/miscapis.js');
-Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
-Components.utils.import('chrome://greasemonkey-modules/content/script.js');
-Components.utils.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
-Components.utils.import('chrome://greasemonkey-modules/content/util.js');
+var Cu = Components.utils;
+
+Cu.import('chrome://greasemonkey-modules/content/constants.js');
+Cu.import('chrome://greasemonkey-modules/content/miscapis.js');
+Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Cu.import('chrome://greasemonkey-modules/content/script.js');
+Cu.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
+Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 function Config() {
   this._saveTimer = null;
@@ -239,7 +241,7 @@ Config.prototype.updateModifiedScripts = function(
   for (var i = 0, script; script = scripts[i]; i++) {
     if (0 == script.pendingExec.length) {
       var scope = {};
-      Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
+      Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script.downloadURL));
       // TODO: Show PopupNotifications about parse error(s)?
@@ -271,7 +273,7 @@ Config.prototype.getScriptById = function(scriptId) {
  * any necessary upgrades.
  */
 Config.prototype._updateVersion = function() {
-  Components.utils.import("resource://gre/modules/AddonManager.jsm");
+  Cu.import("resource://gre/modules/AddonManager.jsm");
   AddonManager.getAddonByID(this.GM_GUID, GM_util.hitch(this, function(addon) {
     var oldVersion = GM_prefRoot.getValue("version");
     var newVersion = addon.version;
@@ -293,21 +295,14 @@ Config.prototype._updateVersion = function() {
       }
     }
 
-    if ('3.2' == newVersion && oldVersion != newVersion) {
-      var tmp_dir = Components
-          .classes['@mozilla.org/file/directory_service;1']
-          .getService(Components.interfaces.nsIProperties)
-          .get('TmpD', Components.interfaces.nsIFile);
-      // #2069 Clean up stray temp directories.
-      for (var i = 1; ; i++) {
-        var file = tmp_dir.clone();
-        file.append('gm-temp' + i);
-        if (file.exists()) {
-          dump('Removing temp dir: ' + file.path + '\n');
-          file.remove(true);
-        } else {
-          break;
-        }
+    if (newVersion.match(/^3\.5/) && oldVersion != newVersion) {
+      // #1944 Re-scan config to load new metadata values.
+      var scope = {};
+      Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
+      for (var i = 0, script = null; script = this._scripts[i]; i++) {
+        var parsedScript = scope.parse(
+            script.textContent, GM_util.uriFromUrl(script.downloadURL));
+        script.updateFromNewScript(parsedScript);
       }
     }
   }));
