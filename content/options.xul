@@ -50,7 +50,7 @@
   <groupbox flex="1">
     <caption label="&options.newScript.template;" />
     <checkbox id="newScript-removeUnused" label="&options.newScript.removeUnused;" />
-    <textbox id="newScript-template" multiline="true" rows="5" flex="1" />
+    <textbox id="newScript-template" multiline="true" rows="5" flex="1" wrap="off" />
   </groupbox>
 </vbox>
 
