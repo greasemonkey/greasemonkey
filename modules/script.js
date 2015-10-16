@@ -789,6 +789,10 @@ Script.prototype.showGrantWarning = function () {
   }
   var getString = stringBundle.GetStringFromName;
   var chromeWin = GM_util.getBrowserWindow();
+  if (!chromeWin) {
+    // Ignore, this is probably a startup issue like #2294.
+    return;
+  }
 
   function muteWarnings() {
     GM_prefRoot.setValue('showGrantsWarning', false);

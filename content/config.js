@@ -301,7 +301,11 @@ Config.prototype._updateVersion = function() {
       for (var i = 0, script = null; script = this._scripts[i]; i++) {
         var parsedScript = scope.parse(
             script.textContent, GM_util.uriFromUrl(script.downloadURL));
-        script.updateFromNewScript(parsedScript);
+        try {
+          script.updateFromNewScript(parsedScript);
+        } catch (e) {
+          // Ignore.
+        }
       }
     }
   }));
