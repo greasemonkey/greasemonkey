@@ -1,10 +1,17 @@
 var EXPORTED_SYMBOLS = ['openInEditor'];
 
 try {
-  Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+  Components.utils.import("resource://devtools/client/scratchpad/scratchpad-manager.jsm");
 } catch (e) {
-  // Moved in Firefox 44; see: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
-  Components.utils.import("resource:///modules/devtools/client/scratchpad/scratchpad-manager.jsm");
+  try {
+    // Moved in Firefox 44
+    // See: http://hg.mozilla.org/mozilla-central/rev/397c69fa1677
+    Components.utils.import("resource:///modules/devtools/client/scratchpad/scratchpad-manager.jsm");
+  } catch (e) {
+    // Moved in Firefox 44
+    // See: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
+    Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+  }
 }
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
