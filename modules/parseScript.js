@@ -184,7 +184,7 @@ function setDefaults(script) {
   if (!script.updateURL && script.downloadURL) {
     script.updateURL = script.downloadURL;
   }
-  if ('document-start' != script._runAt && 'document-end' != script._runAt) {
+  if (!script._runAt || !script._runAt.match(/^document-(end|idle|start)$/)) {
     script._runAt = 'document-end';
   }
   if (script._includes.length == 0 && script._matches.length == 0) {

@@ -52,6 +52,7 @@ function browserLoad(aEvent) {
     // #1696: document-element-inserted doesn't see about:blank
     runScripts('document-start', contentWin);
     runScripts('document-end', contentWin);
+    runScripts('document-idle', contentWin);
   }
 
   gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
@@ -69,6 +70,7 @@ function contentLoad(aEvent) {
   contentWin.removeEventListener('load', contentLoad, true);
 
   runScripts('document-end', contentWin);
+  GM_util.timeout(function() { runScripts('document-idle', contentWin); }, 50);
 }
 
 
