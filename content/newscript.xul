@@ -35,14 +35,16 @@
     <textbox id="include"
       multiline="true"
       rows="4"
-      cols="60" />
+      cols="60"
+      wrap="off" />
     <separator class="thin" />
 
     <label value="&newscript.excludes;" control="exclude" />
     <textbox id="exclude"
       multiline="true"
       rows="4"
-      cols="60" />
+      cols="60"
+      wrap="off" />
     <separator class="thin" />
   </vbox>
 
