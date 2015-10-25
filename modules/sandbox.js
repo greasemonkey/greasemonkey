@@ -219,17 +219,3 @@ function runScriptInSandbox(script, sandbox) {
   }
   evalWithCatch(script.fileURL);
 }
-
-
-function urlToString(url) {
-  var channel = NetUtil.newChannel({
-      uri: NetUtil.newURI(url, "UTF-8"),
-      loadUsingSystemPrincipal: true,
-  });
-  var stream = channel.open();
-
-  var count = stream.available();
-  var data = NetUtil.readInputStreamToString(
-      stream, count, { charset : "utf-8" });
-  return data;
-}
