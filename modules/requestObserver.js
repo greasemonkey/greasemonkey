@@ -14,8 +14,11 @@ function checkScriptRefresh(channel) {
   if (!(channel instanceof Components.interfaces.nsIChannel)) return;
   if (!channel.loadInfo) return;
 
-  var type = channel.loadInfo.contentPolicyType;
-  
+  // See http://bugzil.la/1182571
+  var type = channel.loadInfo.externalContentPolicyType
+      ? channel.loadInfo.externalContentPolicyType
+      : channel.loadInfo.contentPolicyType;
+
   // only check for updated scripts when tabs/iframes are loaded 
   if (type != types.TYPE_DOCUMENT && type != types.TYPE_SUBDOCUMENT) return;
 
