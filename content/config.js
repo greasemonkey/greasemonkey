@@ -253,7 +253,9 @@ Config.prototype.updateModifiedScripts = function(
       if (!parsedScript || parsedScript.parseErrors.length) {
         var msg = "(" + script.localized.name + ") "
             + gStringBundle.GetStringFromName("error.parsingScript")
-            + "\n" + parsedScript.parseErrors;
+            + "\n" + (parsedScript
+                ? parsedScript.parseErrors
+                : gStringBundle.GetStringFromName("error.unknown"));
         var chromeWin = GM_util.getBrowserWindow();
         if (chromeWin && chromeWin.gBrowser) {
           var buttons = [];
