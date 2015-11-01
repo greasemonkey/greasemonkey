@@ -7,6 +7,12 @@ Cu.import('chrome://greasemonkey-modules/content/script.js');
 Cu.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
+
 function Config() {
   this._saveTimer = null;
   this._scripts = null;
@@ -244,7 +250,31 @@ Config.prototype.updateModifiedScripts = function(
       Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script.downloadURL));
-      // TODO: Show PopupNotifications about parse error(s)?
+      if (!parsedScript || parsedScript.parseErrors.length) {
+        var chromeWin = GM_util.getBrowserWindow();
+        if (chromeWin && chromeWin.gBrowser) {
+          var msg = "(" + script.localized.name + ") "
+              + gStringBundle.GetStringFromName("error.parsingScript")
+              + "\n" + parsedScript.parseErrors;
+          var buttons = [];
+          buttons.push({
+            "label": gStringBundle.GetStringFromName("notification.ok.label"),
+            "accessKey": gStringBundle
+                .GetStringFromName("notification.ok.accesskey"),
+            "popup": null,
+            "callback": function () {}
+          });
+          var notificationBox = chromeWin.gBrowser.getNotificationBox();
+          notificationBox.appendNotification(
+            msg,
+            "parse-userscript",
+            "chrome://greasemonkey/skin/icon16.png",
+            notificationBox.PRIORITY_WARNING_MEDIUM,
+            buttons
+          );
+          GM_util.logError(msg, true, script.fileURL, null);
+        }
+      }
       script.updateFromNewScript(parsedScript, aUrl, aWindowId, aBrowser);
     } else {
       // We are already downloading dependencies for this script
