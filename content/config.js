@@ -251,11 +251,11 @@ Config.prototype.updateModifiedScripts = function(
       var parsedScript = scope.parse(
           script.textContent, GM_util.uriFromUrl(script.downloadURL));
       if (!parsedScript || parsedScript.parseErrors.length) {
+        var msg = "(" + script.localized.name + ") "
+            + gStringBundle.GetStringFromName("error.parsingScript")
+            + "\n" + parsedScript.parseErrors;
         var chromeWin = GM_util.getBrowserWindow();
         if (chromeWin && chromeWin.gBrowser) {
-          var msg = "(" + script.localized.name + ") "
-              + gStringBundle.GetStringFromName("error.parsingScript")
-              + "\n" + parsedScript.parseErrors;
           var buttons = [];
           buttons.push({
             "label": gStringBundle.GetStringFromName("notification.ok.label"),
@@ -272,8 +272,8 @@ Config.prototype.updateModifiedScripts = function(
             notificationBox.PRIORITY_WARNING_MEDIUM,
             buttons
           );
-          GM_util.logError(msg, true, script.fileURL, null);
         }
+        GM_util.logError(msg, true, script.fileURL, null);
       }
       script.updateFromNewScript(parsedScript, aUrl, aWindowId, aBrowser);
     } else {
