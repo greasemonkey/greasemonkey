@@ -35,12 +35,16 @@ window.addEventListener('load', function() {
   };
   gUserIncludesEl.pages = gScript.userIncludes;
 
-  for (var i = 0; i < gScript.matches.length; i++) {
-    gScriptMatchesEl.addPage(gScript.matches[i].pattern);
+  var matchesPattern = [];
+  for (var i = 0, count = gScript.matches.length; i < count; i++) {
+    matchesPattern.push(gScript.matches[i].pattern);
   }
-  for (var i = 0; i < gScript.userMatches.length; i++) {
-    gUserMatchesEl.addPage(gScript.userMatches[i].pattern);
+  gScriptMatchesEl.pages = matchesPattern;
+  var userMatchesPattern = [];
+  for (var i = 0, count = gScript.userMatches.length; i < count; i++) {
+    userMatchesPattern.push(gScript.userMatches[i].pattern);
   }
+  gUserMatchesEl.pages = userMatchesPattern;
 
   gScriptExcludesEl.pages = gScript.excludes;
   gScriptExcludesEl.onAddUserInclude = function(url) {
