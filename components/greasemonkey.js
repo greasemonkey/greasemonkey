@@ -187,6 +187,7 @@ service.prototype.scriptRefresh = function(url, windowId, browser) {
   if (GM_prefRoot.getValue('enableScriptRefreshing')) {
     this.config.updateModifiedScripts("document-start", url, windowId, browser);
     this.config.updateModifiedScripts("document-end", url, windowId, browser);
+    this.config.updateModifiedScripts("document-idle", url, windowId, browser);
   }
 };
 

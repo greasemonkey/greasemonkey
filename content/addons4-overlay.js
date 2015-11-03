@@ -154,6 +154,7 @@ function focus() {
   var config = GM_util.getService().config;
   config.updateModifiedScripts('document-start', null);
   config.updateModifiedScripts('document-end', null);
+  config.updateModifiedScripts('document-idle', null);
 }
 
 function init() {
