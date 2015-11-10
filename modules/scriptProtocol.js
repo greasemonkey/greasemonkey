@@ -146,7 +146,14 @@ var ScriptProtocol = {
           // In parent scope we have the raw script, with file intact.
           uri = GM_util.getUriFromFile(resource.file);
         }
-        return GM_util.channelFromUri(uri);
+
+        // Get the channel for the file URI, but set its originalURI to the
+        // greasemonkey-script: protocol URI, to ensure it can still be loaded
+        // in unprivileged contexts (bug #2326).
+        var channel = GM_util.channelFromUri(uri);
+        channel.originalURI = aUri;
+
+        return channel;
       }
     }
 
