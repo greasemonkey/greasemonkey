@@ -44,10 +44,12 @@ function IPCScript(aScript, addonVersion) {
     return {
       'name': res.name,
       'mimetype': res.mimetype,
-      'url': GM_util.getUriFromFile(res.file).spec
+      'file_url': GM_util.getUriFromFile(res.file).spec,
+      'gm_url': ['greasemonkey-script:', aScript.uuid, '/', res.name].join(''),
     };
   });
 };
+
 
 IPCScript.prototype = Object.create(AbstractScript.prototype, {
   constructor: {
@@ -74,9 +76,10 @@ IPCScript.prototype.info = function() {
   var resources = {};
   for (var i = 0, r = null; r = this.resources[i]; i++) {
     resources[r.name] = {
-        'name': r.name,
-        'mimetype': r.mimetype,
-        };
+      'name': r.name,
+      'mimetype': r.mimetype,
+      'url': r.gm_url,
+    };
   }
 
   return {

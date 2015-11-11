@@ -28,7 +28,7 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
 GM_Resources.prototype.getResourceText = function(name) {
   var dep = this._getDep(name);
   if (dep.textContent !== undefined) return dep.textContent;
-  return GM_util.fileXhr(dep.url, "text/plain");
+  return GM_util.fileXhr(dep.file_url, "text/plain");
 };
 
 GM_Resources.prototype._getDep = function(name) {

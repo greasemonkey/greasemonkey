@@ -129,7 +129,6 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
 }
 
 
-
 function injectGMInfo(aScript, sandbox) {
   var rawInfo = aScript.info();
   var scriptURL = aScript.fileURL;
@@ -138,9 +137,7 @@ function injectGMInfo(aScript, sandbox) {
   sandbox.GM_info = Cu.cloneInto(rawInfo, sandbox);
 
   var waivedInfo = Components.utils.waiveXrays(sandbox.GM_info);
-
   var fileCache = new Map();
-
 
   function getScriptSource() {
     var content = fileCache.get("scriptSource");
@@ -169,7 +166,6 @@ function injectGMInfo(aScript, sandbox) {
   Object.defineProperty(waivedInfo, 'scriptMetaStr', {
     get: Cu.exportFunction(getMeta, sandbox)
   });
-
 }
 
 
