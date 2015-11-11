@@ -265,7 +265,11 @@ RemoteScript.prototype.cancel = function() {
 
 /** Clean up all temporary files, stop all actions. */
 RemoteScript.prototype.cleanup = function(aErrorMessage) {
-  this.errorMessage = aErrorMessage || null;
+  this.errorMessage = null;
+  // See #2327
+  if (aErrorMessage && ("object" != typeof aErrorMessage)) {
+    this.errorMessage = aErrorMessage;
+  }
   this.done = true;
 
   this._channels.forEach(function(aChannel) {

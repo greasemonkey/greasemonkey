@@ -86,7 +86,7 @@ function onProgress(aRemoteScript, aEventType, aData) {
 
     document.getElementById('loading').style.display = 'none';
     if (gRemoteScript.errorMessage) {
-      document.documentElement.getButton('extra1').disabled = true;
+      gShowScriptButton.disabled = true;
       document.getElementById('dialogContentBox').style.display = 'none';
       document.getElementById('errorContentBox').style.display = '-moz-box';
       document.getElementById('errorMessage')
