@@ -121,6 +121,11 @@ function objectToScript(obj) {
   return script;
 }
 
+IPCScript.getByUuid = function (id) {
+  return scripts.find(function(e) {
+    return e.uuid == id
+  })  
+}
 
 function updateData(data) {
   if (!data) return;

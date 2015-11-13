@@ -65,9 +65,7 @@ function startup(aService) {
 
   var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
-  parentMessageManager.addMessageListener(
-      'greasemonkey:scripts-for-uuid',
-      aService.getScriptsForUuid.bind(aService));
+
   parentMessageManager.addMessageListener("greasemonkey:scripts-update", function(message) {
     return aService.scriptUpdateData();
   });
@@ -189,17 +187,6 @@ service.prototype.scriptRefresh = function(url, windowId, browser) {
     this.config.updateModifiedScripts("document-end", url, windowId, browser);
     this.config.updateModifiedScripts("document-idle", url, windowId, browser);
   }
-};
-
-service.prototype.getScriptsForUuid = function(aMessage) {
-  var uuid = aMessage.data.uuid;
-  var scripts = this.config.getMatchingScripts(
-      function(script) { return script.uuid == uuid; }
-  ).map(function(script) {
-    // Make the script serializable so it can be sent to the frame script.
-    return new IPCScript(script, gGreasemonkeyVersion);
-  });
-  return scripts;
 };
 
 service.prototype.getStoreByScriptId = function(aScriptId) {

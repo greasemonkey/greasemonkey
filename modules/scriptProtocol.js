@@ -3,6 +3,7 @@ var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
+Components.utils.import("chrome://greasemonkey-modules/content/ipcscript.js");;
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -112,40 +113,14 @@ var ScriptProtocol = {
     // Incomplete URI, send a 404.
     if (!m) return dummy;
 
-    var script = null;
-    // If we're serving (e.g.) a favicon image, this request can be coming
-    // from the parent process!
-    var runtime = Cc["@mozilla.org/xre/app-info;1"]
-        .getService(Ci.nsIXULRuntime);
-    if (runtime.processType == Ci.nsIXULRuntime.PROCESS_TYPE_DEFAULT) {
-      var scripts = GM_util.getService().config.getMatchingScripts(
-          function(script) { return script.uuid == m[1]; }
-      );
-      script = scripts && scripts.length && scripts[0];
-    } else {
-      var mm = Cc["@mozilla.org/childprocessmessagemanager;1"]
-          .getService(Ci.nsISyncMessageSender);
-      var response = mm.sendSyncMessage(
-          'greasemonkey:scripts-for-uuid', {'uuid': m[1]});
-      // We expect exactly one response, listing exactly one script.
-      if (response.length != 1) return dummy;
-      if (response[0].length != 1) return dummy;
-      script = response[0][0];
-    }
-
+    var script = IPCScript.getByUuid(m[1]);
+    
     // Fail fast if we couldn't find the script.
     if (!script) return dummy;
 
     for (var i = 0, resource = null; resource = script.resources[i]; i++) {
       if (resource.name == m[2]) {
-        var uri = null;
-        if (resource.url) {
-          // In child scope, IPCScript gives us the URL to the file.
-          uri = GM_util.uriFromUrl(resource.url);
-        } else {
-          // In parent scope we have the raw script, with file intact.
-          uri = GM_util.getUriFromFile(resource.file);
-        }
+        var uri = GM_util.uriFromUrl(resource.file_url);
 
         // Get the channel for the file URI, but set its originalURI to the
         // greasemonkey-script: protocol URI, to ensure it can still be loaded
