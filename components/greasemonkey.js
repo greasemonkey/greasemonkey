@@ -112,6 +112,8 @@ function service() {
   this.filename = Components.stack.filename;
   this.scriptValStores = {};
   this.wrappedJSObject = this;
+  this.ppmm = Cc["@mozilla.org/parentprocessmessagemanager;1"]
+    .getService(Ci.nsIMessageListenerManager);
 }
 
 ////////////////////////////////// Constants ///////////////////////////////////
@@ -158,8 +160,7 @@ service.prototype.scriptUpdateData = function() {
 };
 
 service.prototype.broadcastScriptUpdates = function() {
-  var ppmm = Cc["@mozilla.org/parentprocessmessagemanager;1"]
-      .getService(Ci.nsIMessageBroadcaster);
+  var ppmm = this.ppmm;
 
   // Check if initialProcessData is supported, else child will use sync message.
   var data = this.scriptUpdateData();
@@ -210,18 +211,49 @@ service.prototype.getStoreByScriptId = function(aScriptId) {
   return this.scriptValStores[aScriptId];
 };
 
+var remoteCacheTracker = new Set();
+
+
+service.prototype.remoteCached = function(key) {
+  if (remoteCacheTracker.size > 1024) {
+    this.ppmm.broadcastAsyncMessage("greasemonkey:value-invalidate", {
+      keys: Array.from(remoteCacheTracker)
+    });
+    remoteCacheTracker.clear();
+  }
+  remoteCacheTracker.add(key);
+};
+
+service.prototype.invalidateRemoteValueCaches = function(key) {
+  if(!remoteCacheTracker.has(key))
+    return;
+  
+  remoteCacheTracker['delete'](key);
+  this.ppmm.broadcastAsyncMessage("greasemonkey:value-invalidate", {
+    keys: [key]
+  });
+};
+
 service.prototype.handleScriptValMsg = function(aMessage) {
   var d = aMessage.data;
+  var cacheKey = d.cacheKey;
   var scriptStore = this.getStoreByScriptId(d.scriptId);
   switch (aMessage.name) {
   case 'greasemonkey:scriptVal-delete':
-    return scriptStore.deleteValue(d.name);
+    scriptStore.deleteValue(d.name);
+    this.invalidateRemoteValueCaches(cacheKey);
+    return;
+  case 'greasemonkey:scriptVal-set':
+    scriptStore.setValue(d.name, d.val);
+    this.invalidateRemoteValueCaches(cacheKey);
+    return 
   case 'greasemonkey:scriptVal-get':
+    if(d.willCache) {
+      this.remoteCached(cacheKey);
+    }
     return scriptStore.getValue(d.name);
   case 'greasemonkey:scriptVal-list':
     return scriptStore.listValues();
-  case 'greasemonkey:scriptVal-set':
-    return scriptStore.setValue(d.name, d.val);
   default:
     dump(
         'Greasemonkey service handleScriptValMsg(): '
