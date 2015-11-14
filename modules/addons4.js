@@ -101,6 +101,7 @@ function ScriptAddon(aScript) {
   this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
   this.name = this._script.localized.name;
+  this.namespace = this._script.namespace;
   this.providesUpdatesSecurely = aScript.updateIsSecure;
   this.updateDate = this._script.modifiedDate;
   this.version = this._script.version;

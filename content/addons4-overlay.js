@@ -29,10 +29,11 @@ var _createItemOrig = createItem;
 createItem = function GM_createItem(aObj, aIsInstall, aIsRemote) {
   var item = _createItemOrig(aObj, aIsInstall, aIsRemote);
   if (SCRIPT_ADDON_TYPE == aObj.type) {
-   // Save a reference to this richlistitem on the Addon object, so we can
-   // fix the 'executionIndex' attribute if/when it changes.
-   aObj.richlistitem = item;
-   setRichlistitemExecutionIndex(aObj);
+    // Save a reference to this richlistitem on the Addon object, so we can
+    // fix attributes if/when it changes.
+    aObj.richlistitem = item;
+    setRichlistitemNamespace(aObj);
+    setRichlistitemExecutionIndex(aObj);
   }
   return item;
 };
@@ -331,6 +332,10 @@ function setRichlistitemExecutionIndex(aAddon) {
   aAddon.richlistitem.setAttribute('executionIndex',
       // String format with leading zeros, so it will sort properly.
       ('0000' + aAddon.executionIndex).substr(-5));
+};
+
+function setRichlistitemNamespace(aAddon) {
+  aAddon.richlistitem.setAttribute("namespace", aAddon.namespace);
 };
 
 function unload() {

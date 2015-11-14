@@ -24,5 +24,7 @@
 <!ENTITY Sort.Status "Stav">
 <!ENTITY Sort.ByName "Řadit podle názvu">
 <!ENTITY Sort.Name "Název">
+<!ENTITY Sort.ByNamespace "Řadit podle jmenného prostoru">
+<!ENTITY Sort.Namespace "Jmenný prostor">
 <!ENTITY Sort.ByExecution "Řadit podle pořadí spouštění">
 <!ENTITY Sort.Execution "Pořadí spouštění">

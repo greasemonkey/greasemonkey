@@ -78,6 +78,8 @@
         checkState="2"/>
     <button label="&Sort.Name;" tooltiptext="&Sort.ByName;"
         class="sorter" sortBy="name"/>
+    <button label="&Sort.Namespace;" tooltiptext="&Sort.ByNamespace;"
+        class="sorter" sortBy="namespace"/>
     <button label="&Sort.Execution;" tooltiptext="&Sort.ByExecution;"
         class="sorter" sortBy="executionIndex"/>
   </hbox>
