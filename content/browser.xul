@@ -32,9 +32,11 @@
       accesskey="&menu.show.accesskey;"
       label="&menu.show;"
       insertbefore="context-openlink"
-      oncommand="GM_BrowserUI.viewContextItemClicked(event);" />
+      oncommand="GM_BrowserUI.viewContextItemClicked(event);"
+      hidden="true" />
     <menuseparator id="greasemonkey-install-sep"
-      insertbefore="context-openlink" />
+      insertbefore="context-openlink"
+      hidden="true" />
   </popup>
 
   <menupopup id="menu_ToolsPopup">
