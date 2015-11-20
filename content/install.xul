@@ -31,10 +31,10 @@
       style="margin-bottom:1em" />
     <vbox id="itemBox"
       flex="1"
-      style="padding:0; overflow:auto; -moz-appearance:textfield; margin:2px 4px"
+      style="overflow: auto; -moz-appearance: textfield; padding: 0; margin: 2px 4px;"
     >
       <vbox
-        style="background:InfoBackground; color: InfoText; border-bottom:1px black dotted; padding:0.5em; margin:0; margin-bottom:0.5em"
+        style="color: #222; border-bottom: 1px black dotted; padding:0.5em; margin: 0; margin-right: 4px;"
       >
         <description id="scriptDescription"
           style="margin:0" />
