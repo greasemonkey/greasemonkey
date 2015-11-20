@@ -1,7 +1,7 @@
 // This module is responsible for observing HTTP traffic, detecting when a user
 // script is loaded (e.g. a link to one is clicked), and launching the install
 // dialog instead.
-var EXPORTED_SYMBOLS = ['ignoreNextScript', 'initInstallPolicy'];
+var EXPORTED_SYMBOLS = ['passNextScript', 'initInstallPolicy'];
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -14,13 +14,14 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 var gHaveDoneInit = false;
-var gIgnoreNextScript = false;
+var gBlockNextScript = false;
+var gPassNextScript = false;
 var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
 ////////////////////////////////////////////////////////////////////////////////
 
-function ignoreNextScript() {
-  gIgnoreNextScript = true;
+function passNextScript() {
+  gPassNextScript = true;
 }
 
 function initInstallPolicy() {
@@ -65,58 +66,75 @@ var InstallPolicy = {
 /////////////////////////////// nsIContentPolicy ///////////////////////////////
 
   shouldLoad: function(aContentType, aContentURI, aOriginURI, aContext) {
-    var ret = Ci.nsIContentPolicy.ACCEPT;
-
-    // Don't intercept anything when GM is not enabled.
-    if (!GM_util.getEnabled()) {
-      return ret;
-    }
+    var ACCEPT = Ci.nsIContentPolicy.ACCEPT;
+    var REJECT = Ci.nsIContentPolicy.REJECT_REQUEST;
 
     // Don't interrupt the "view-source:" scheme (which is triggered if the link
     // in the error console is clicked), nor the "greasemonkey-script:" scheme.
+    // Never break chrome.
     if ("view-source" == aContentURI.scheme
+        || "chrome" == aContentURI.scheme
         || "greasemonkey-script" == aContentURI.scheme) {
-      return ret;
+      return ACCEPT;
+    }
+    // Ignore everything that isn't a top-level document navigation.
+    if (aContentType != Ci.nsIContentPolicy.TYPE_DOCUMENT) {
+      return ACCEPT;
+    }
+    // Don't intercept anything when GM is not enabled.
+    if (!GM_util.getEnabled()) {
+      return ACCEPT;
     }
 
     // Do not install scripts when the origin URL "is a script".  See #1875
     if (aOriginURI && aOriginURI.spec.match(gScriptEndingRegexp)) {
-      return ret;
-    }
-
-    if (aContentType != Ci.nsIContentPolicy.TYPE_DOCUMENT
-        && aContentType != Ci.nsIContentPolicy.TYPE_SUBDOCUMENT) {
-      return ret;
+      return ACCEPT;
     }
 
     if (!aContentURI.spec.match(gScriptEndingRegexp)) {
-      return ret;
+      return ACCEPT;
     }
 
+    if (gPassNextScript) {
+      // E.g. Detected HTML content so forced re-navigation.
+      gPassNextScript = false;
+      return ACCEPT;
+    }
+
+    // TODO: Remove this when e10s is always enabled.
+    // See #2292
+    // Recent Firefoxen with e10s on, when opening a file:/// .user.js will
+    // trigger the install policy twice.  Block the second one.
+    if (gBlockNextScript) {
+      gBlockNextScript = false;
+      return REJECT;
+    }
+    if (!Services.appinfo.browserTabsRemoteAutostart
+        && aContentURI.scheme == 'file') {
+      gBlockNextScript = true;
+    }
+
+    // Ignore temporary files, e.g. "Show script source".
     var messageManager = GM_util.findMessageManager(aContext);
     var cpmm = Services.cpmm ? Services.cpmm : messageManager;
-
-    var tmpResult = cpmm.sendSyncMessage(
+    var tmpResult = cpmm && cpmm.sendSyncMessage(
         'greasemonkey:url-is-temp-file', {'url': aContentURI.spec});
     if (tmpResult.length && tmpResult[0]) {
-      return ret;
+      return ACCEPT;
     }
 
-    if (!gIgnoreNextScript) {
-      if (!messageManager) {
-        dump('ERROR ignoring script ' + aContentURI.spec + ' because no content'
-            + ' message manager could be located from ' + aContext + '\n');
-      } else {
-        ret = Ci.nsIContentPolicy.REJECT_REQUEST;
-        messageManager.sendAsyncMessage('greasemonkey:script-install', {
-          'referer': aOriginURI ? aOriginURI.spec : null,
-          'url': aContentURI.spec,
-        });
-      }
+    if (!messageManager) {
+      dump('ERROR ignoring script ' + aContentURI.spec + ' because no content'
+        + ' message manager could be located from ' + aContext + '\n');
+      return ACCEPT;
     }
 
-    gIgnoreNextScript = false;
-    return ret;
+    messageManager.sendAsyncMessage('greasemonkey:script-install', {
+      'referer': aOriginURI ? aOriginURI.spec : null,
+      'url': aContentURI.spec,
+    });
+
+    return REJECT;
   },
 
   shouldProcess: function() {

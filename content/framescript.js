@@ -130,7 +130,7 @@ function loadFailedScript(aMessage) {
 
   var webNav = docShell.QueryInterface(Ci.nsIWebNavigation);
 
-  ignoreNextScript();
+  passNextScript();
   webNav.loadURI(url, loadFlags, referer, postData, headers);
 }
 
