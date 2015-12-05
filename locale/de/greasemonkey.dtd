@@ -1,4 +1,4 @@
-<!ENTITY menu.install "Benutzerskript installieren…">
+<!ENTITY menu.install "Benutzerskript installieren...">
 <!ENTITY menu.install.accesskey "s">
 <!ENTITY menu.show "Benutzerskript-Quelle anzeigen">
 <!ENTITY menu.show.accesskey "Q">
@@ -6,9 +6,9 @@
 <!ENTITY menu.commands.accesskey "B">
 <!ENTITY menu.new "Neues Benutzerskript">
 <!ENTITY menu.new.accesskey "N">
-<!ENTITY menu.manage "Benutzerskripte verwalten…">
+<!ENTITY menu.manage "Benutzerskripte verwalten...">
 <!ENTITY menu.manage.accesskey "v">
-<!ENTITY menu.options "Greasemonkey-Einstellungen…">
+<!ENTITY menu.options "Greasemonkey-Einstellungen...">
 <!ENTITY menu.options.accesskey "O">
 <!ENTITY menu.websites "Webseiten...">
 <!ENTITY menu.websites.accesskey "W">
@@ -27,29 +27,29 @@
 <!ENTITY install.showscriptsource "Skript-Quelltext anzeigen">
 <!ENTITY install.installbutton "Installieren">
 <!ENTITY install.downloadError "Download Fehler">
-<!ENTITY loading "Wird heruntergeladen…">
+<!ENTITY loading "Wird heruntergeladen...">
 <!ENTITY newscript.name "Name:">
 <!ENTITY newscript.namespace "Namensraum:">
 <!ENTITY newscript.description "Beschreibung:">
 <!ENTITY newscript.includes "Auf diese Seiten anwenden (zeilenweise angeben):">
 <!ENTITY newscript.excludes "Nicht auf diese Seiten anwenden (zeilenweise angeben):">
-<!ENTITY newscript.fromClipboard "Script aus der Zwischenablage verwenden.">
+<!ENTITY newscript.fromClipboard "Skript aus der Zwischenablage verwenden.">
 <!ENTITY options.editor "Editor">
 <!ENTITY options.experimental "Experimentell">
-<!ENTITY options.defaultEditor "Standard Editor verwenden">
-<!ENTITY options.browseForEditor "Nach Editor Programm suchen">
+<!ENTITY options.defaultEditor "Standard-Editor verwenden">
+<!ENTITY options.browseForEditor "Nach Editor-Programm suchen">
 <!ENTITY options.globalExcludes "Globale Ausschlüsse">
 <!ENTITY options.newScript.template "Neue Skriptvorlage">
 <!ENTITY options.newScript.removeUnused "Unbenutzte Zeilen entfernen">
 <!ENTITY Uninstall "Deinstallieren">
 <!ENTITY AnonymousStatistics "Anonyme Statistik">
 <!ENTITY EnableFirefoxSync "Firefox Sync für Benutzerskripte aktivieren">
-<!ENTITY SubmitStats "Sammeln und einreichen von anonymen Nutzungsstatistiken an Greasemonkey.">
+<!ENTITY SubmitStats "Sammeln und Einreichen von anonymen Nutzungsstatistiken an Greasemonkey.">
 <!ENTITY UpdateChecking "Auf Aktualisierungen überprüfen">
 <!ENTITY RequireSecureUpdates "Sicherheitsupdate erforderlich">
 <!ENTITY greasemonkey.noscriptshere "Es werden keine installierten Skripte auf dieser Seite ausgeführt.">
 <!ENTITY greasemonkey.youhavenoscripts "Sie haben noch keine Benutzerskripte installiert">
 <!ENTITY greasemonkey.getuserscripts "Benutzerskripte hinzufügen…">
 <!ENTITY scriptprefs.title "Greasemonkey - Benutzerskript-Einstellungen - !!">
-<!ENTITY scriptprefs.usersettings "Benutzereinstellungen">
+<!ENTITY scriptprefs.usersettings "Benutzer-Einstellungen">
 <!ENTITY scriptprefs.scriptsettings "Skript-Einstellungen">
