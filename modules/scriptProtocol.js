@@ -139,9 +139,9 @@ var ScriptProtocol = {
     for (var i = 0, resource = null; resource = script.resources[i]; i++) {
       if (resource.name == m[2]) {
         var uri = null;
-        if (resource.url) {
+        if (resource.file_url) {
           // In child scope, IPCScript gives us the URL to the file.
-          uri = GM_util.uriFromUrl(resource.url);
+          uri = GM_util.uriFromUrl(resource.file_url);
         } else {
           // In parent scope we have the raw script, with file intact.
           uri = GM_util.getUriFromFile(resource.file);
