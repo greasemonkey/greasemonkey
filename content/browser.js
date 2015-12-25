@@ -145,6 +145,7 @@ GM_BrowserUI.contextMenuShowing = function() {
     contextSep.hidden =
     !GM_BrowserUI.getUserScriptLinkUnderPointer();
 
+  // See #1914
   if (contextSep.nextElementSibling) {
     var contextSepNES = contextSep.nextElementSibling;
     while (contextSepNES) {
