@@ -133,8 +133,7 @@ GM_BrowserUI.chromeUnload = function() {
  */
 GM_BrowserUI.contextMenuShowing = function() {
   var contextItem = document.getElementById("greasemonkey-view-userscript");
-  var contextSepId = "greasemonkey-install-sep";
-  var contextSep = document.getElementById(contextSepId);
+  var contextSep = document.getElementById("greasemonkey-install-sep");
 
   var culprit = document.popupNode;
 
@@ -146,27 +145,19 @@ GM_BrowserUI.contextMenuShowing = function() {
     contextSep.hidden =
     !GM_BrowserUI.getUserScriptLinkUnderPointer();
 
-  for (var pnItemIndex = 0,
-      pnItemLength = contextSep.parentNode.childNodes.length;
-      pnItemIndex < pnItemLength; pnItemIndex++) {
-    var pnItem = contextSep.parentNode.childNodes[pnItemIndex];
-
-    if (pnItem.id == contextSepId) {
-      var pnItemNS = pnItem.nextElementSibling;
-
-      while (pnItemNS) {
-        var pnItemNSStyleDisplay = pnItemNS.ownerDocument.defaultView
-            .getComputedStyle(pnItemNS, null).getPropertyValue("display");
-        if ((pnItemNSStyleDisplay.toLowerCase() != "none")
-            && !pnItemNS.hidden) {
-          if (pnItemNS.tagName.toLowerCase() == "menuseparator") {
-            contextSep.hidden = true;
-          }
-          break;
+  if (contextSep.nextElementSibling) {
+    var contextSepNES = contextSep.nextElementSibling;
+    while (contextSepNES) {
+      var contextSepNESStyleDisplay = contextSepNES.ownerDocument.defaultView
+          .getComputedStyle(contextSepNES, null).getPropertyValue("display");
+      if ((contextSepNESStyleDisplay.toLowerCase() != "none")
+          && !contextSepNES.hidden) {
+        if (contextSepNES.tagName.toLowerCase() == "menuseparator") {
+          contextSep.hidden = true;
         }
-        pnItemNS = pnItemNS.nextElementSibling;
+        break;
       }
-      break;
+      contextSepNES = contextSepNES.nextElementSibling;
     }
   }
 };
