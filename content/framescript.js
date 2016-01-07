@@ -26,6 +26,9 @@ Cu.import('chrome://greasemonkey-modules/content/processScript.js', {}
 var gScope = this;
 var gStripUserPassRegexp = new RegExp('(://)([^:/]+)(:[^@/]+)?@');
 
+var cpmm = Cc["@mozilla.org/childprocessmessagemanager;1"]
+    .getService(Ci.nsISyncMessageSender);
+
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function contentObserver(win) {
@@ -55,10 +58,14 @@ function browserLoad(aEvent) {
     runScripts('document-idle', contentWin);
   }
 
-  gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
-    "contentType": contentWin.document.contentType,
-    "href": href
-  });
+  var tmpResult = cpmm.sendSyncMessage(
+      "greasemonkey:url-is-temp-file", {"url": href});
+  if (!tmpResult.length || !tmpResult[0]) {
+    gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
+      "contentType": contentWin.document.contentType,
+      "href": href
+    });
+  }
 }
 
 
