@@ -312,6 +312,7 @@ ScriptInstall.prototype.install = function() {
       }
 
       this.state = AddonManager.STATE_INSTALLING;
+      this.addon = ScriptAddonFactoryByScript(rs.script);
       AddonManagerPrivate.callInstallListeners(
           'onInstallStarted', this._listeners, this);
 
