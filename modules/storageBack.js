@@ -127,10 +127,7 @@ GM_ScriptStorageBack.prototype.listValues = function() {
     stmt.reset();
   }
 
-  // See #1637.
-  var vals = Array.prototype.slice.call(valueNames);
-  vals.__exposedProps__ = {'length': 'r'};
-  return vals;
+  return valueNames;
 };
 
 
