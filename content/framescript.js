@@ -48,6 +48,16 @@ function browserLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
   var href = contentWin.location.href;
 
+  // See #2229
+  var response = gScope.sendSyncMessage("greasemonkey:is-window-visible", {});
+  var isWindowVisible = true;
+  if (response.length) {
+    isWindowVisible = response[0];
+  }
+  if (!isWindowVisible) {
+    return;
+  }
+
   if (href.match(/^about:(blank|reader)/)) {
     // #1696: document-element-inserted doesn't see about:blank
     runScripts('document-start', contentWin);

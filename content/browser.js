@@ -20,6 +20,22 @@ GM_BrowserUI.init = function() {
         var href = aMessage.data.href;
         GM_BrowserUI.checkDisabledScriptNavigation(contentType, href);
       });
+  window.messageManager.addMessageListener("greasemonkey:is-window-visible",
+      function (aMessage) {
+        var browser = aMessage.target;
+        var contentWin = browser.ownerDocument.defaultView;
+
+        var winUtils = contentWin
+            .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+            .getInterface(Components.interfaces.nsIDOMWindowUtils);
+
+        // always is true (sendSyncMessage)
+        if (winUtils && winUtils.isParentWindowMainWidgetVisible) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 };
 
 /**
