@@ -202,45 +202,37 @@ GM_BrowserUI.openOptions = function() {
 };
 
 GM_BrowserUI.checkDisabledScriptNavigation = function(aContentType, aHref) {
+  if (GM_util.getEnabled()) return;
   if (!aHref.match(/\.user\.js$/)) return;
   if (aContentType.match(/^text\/(x|ht)ml/)) return;
 
-  // Handle enabled (i.e. show script source button) navigation by default.
-  var msg = GM_BrowserUI.bundle.GetStringFromName('greeting.msg');
-  var buttons = [];
-
-  if (!GM_util.getEnabled()) {
-    // Add options for disabled state.
-    msg = GM_BrowserUI.bundle.GetStringFromName('disabledWarning');
-    buttons.push({
-      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable'),
-      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable.accessKey'),
-      'popup': null,
-      'callback': function() { GM_util.setEnabled(true); }
-    });
-    buttons.push({
-      'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall'),
-      'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall.accessKey'),
-      'popup': null,
-      'callback': function() {
-        GM_util.setEnabled(true);
-        GM_util.showInstallDialog(aHref, gBrowser);
-      }
-    });
-  }
-
-  buttons.push({
+  var buttons = [{
+    'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable'),
+    'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enable.accessKey'),
+    'popup': null,
+    'callback': function() {
+      GM_util.setEnabled(true);
+    }
+  },{
+    'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall'),
+    'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.enableAndInstall.accessKey'),
+    'popup': null,
+    'callback': function() {
+      GM_util.setEnabled(true);
+      GM_util.showInstallDialog(aHref, gBrowser);
+    }
+  },{
     'label': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install'),
     'accessKey': GM_BrowserUI.bundle.GetStringFromName('disabledWarning.install.accessKey'),
     'popup': null,
-    'callback': GM_util.hitch(this, function() {
+    'callback': function() {
       GM_util.showInstallDialog(aHref, gBrowser);
-    })
-  });
+    }
+  }];
 
   var notificationBox = gBrowser.getNotificationBox();
   notificationBox.appendNotification(
-    msg,
+    GM_BrowserUI.bundle.GetStringFromName('greeting.msg'),
     "install-userscript",
     "chrome://greasemonkey/skin/icon16.png",
     notificationBox.PRIORITY_WARNING_MEDIUM,
