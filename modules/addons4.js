@@ -100,11 +100,14 @@ function ScriptAddon(aScript) {
   this.homepageURL = this._script.homepageURL;
   this.iconURL = this._script.icon && this._script.icon.fileURL;
   this.id = aScript.id + SCRIPT_ID_SUFFIX;
-  this.isCompatible = this._script.isRemoteUpdateAllowed(false);
   this.name = this._script.localized.name;
   this.providesUpdatesSecurely = aScript.updateIsSecure;
   this.updateDate = this._script.modifiedDate;
   this.version = this._script.version;
+
+  // This, combined with CSS to hide the incorrect "incompatible" text message
+  // causes a visible indication on scripts which will not be updated.
+  this.isCompatible = this._script.isRemoteUpdateAllowed(false);
 }
 
 // Required attributes.
