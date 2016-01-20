@@ -413,7 +413,7 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
 
   var scope = {};
   Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
-  var script = scope.parse(aSource, this._uri, true, aFatal);
+  var script = scope.parse(aSource, this._uri, aFatal);
   if (!script || script.parseErrors.length) {
     if (aFatal) {
       this.cleanup(

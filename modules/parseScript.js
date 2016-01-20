@@ -16,9 +16,9 @@ var gStringBundle = Components
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
 /** Parse the source of a script; produce Script object. */
-function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
+function parse(aSource, aUri, aFailWhenMissing) {
   var meta = extractMeta(aSource).match(/.+/g);
-  if (aFailWhenMissing && !meta && !aNoMetaOk) return null;
+  if (aFailWhenMissing && !meta) return null;
 
   var script = new Script();
 
@@ -32,7 +32,7 @@ function parse(aSource, aUri, aFailWhenMissing, aNoMetaOk) {
   }
   if (aUri) script._namespace = aUri.host;
 
-  if (!meta && aNoMetaOk) {
+  if (!meta) {
     setDefaults(script);
     return script;
   }
