@@ -1,8 +1,14 @@
 #category-greasemonkey-user-script > .category-icon,
-.addon[type=greasemonkey-user-script] .icon,
-#detail-view[type=greasemonkey-user-script] #detail-icon
+.addon[type="greasemonkey-user-script"] .icon,
+#detail-view[type="greasemonkey-user-script"] #detail-icon
 {
   list-style-image: url(chrome://greasemonkey/skin/icon32.png);
+}
+
+.addon[type="greasemonkey-user-script"] .warning,
+#detail-view[type="greasemonkey-user-script"] .warning
+{
+  display: none;
 }
 
 #greasemonkey-sort-bar {
@@ -23,7 +29,7 @@ page.greasemonkey #user-script-list-empty {
 }
 
 /* Hide the 'restart now' link for user scripts. */
-.greasemonkey #addon-list button[command=cmd_restartApp] {
+.greasemonkey #addon-list button[command="cmd_restartApp"] {
   display: none;
 }
 
