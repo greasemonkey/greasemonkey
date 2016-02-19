@@ -1,7 +1,8 @@
-// This module is responsible for observing HTTP traffic, detecting when a user
-// script is loaded (e.g. a link to one is clicked), and launching the install
-// dialog instead.
-var EXPORTED_SYMBOLS = ['passNextScript', 'initInstallPolicy'];
+// This module is responsible for detecting user scripts that are loaded by
+// some means OTHER than HTTP (which the http-on-modify-request observer
+// handles), i.e. local files.
+
+var EXPORTED_SYMBOLS = [];
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -14,21 +15,11 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 var gHaveDoneInit = false;
-var gBlockNextScript = false;
-var gPassNextScript = false;
 var gScriptEndingRegexp = new RegExp('\\.user\\.js$');
 
-////////////////////////////////////////////////////////////////////////////////
-
-function passNextScript() {
-  gPassNextScript = true;
-}
-
-function initInstallPolicy() {
-  if (gHaveDoneInit) return;
-  gHaveDoneInit = true;
-  InstallPolicy.init();
-}
+XPCOMUtils.defineLazyServiceGetter(
+    this, 'cpmm',
+    '@mozilla.org/childprocessmessagemanager;1', 'nsIMessageSender');
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -69,70 +60,31 @@ var InstallPolicy = {
     var ACCEPT = Ci.nsIContentPolicy.ACCEPT;
     var REJECT = Ci.nsIContentPolicy.REJECT_REQUEST;
 
-    // Don't interrupt the "view-source:" scheme (which is triggered if the link
-    // in the error console is clicked), nor the "greasemonkey-script:" scheme.
-    // Never break chrome.
-    if ("view-source" == aContentURI.scheme
-        || "chrome" == aContentURI.scheme
-        || "greasemonkey-script" == aContentURI.scheme) {
+    // Ignore everything that isn't a file:// .
+    if ('file' != aContentURI.scheme) {
       return ACCEPT;
     }
     // Ignore everything that isn't a top-level document navigation.
     if (aContentType != Ci.nsIContentPolicy.TYPE_DOCUMENT) {
       return ACCEPT;
     }
-    // Don't intercept anything when GM is not enabled.
+    // Ignore everything when GM is not enabled.
     if (!GM_util.getEnabled()) {
       return ACCEPT;
     }
-
-    // Do not install scripts when the origin URL "is a script".  See #1875
-    if (aOriginURI && aOriginURI.spec.match(gScriptEndingRegexp)) {
-      return ACCEPT;
-    }
-
+    // Ignore everything that isn't a user script.
     if (!aContentURI.spec.match(gScriptEndingRegexp)) {
       return ACCEPT;
     }
-
-    if (gPassNextScript) {
-      // E.g. Detected HTML content so forced re-navigation.
-      gPassNextScript = false;
-      return ACCEPT;
-    }
-
-    // TODO: Remove this when e10s is always enabled.
-    // See #2292
-    // Recent Firefoxen with e10s on, when opening a file:/// .user.js will
-    // trigger the install policy twice.  Block the second one.
-    if (gBlockNextScript) {
-      gBlockNextScript = false;
-      return REJECT;
-    }
-    if (!Services.appinfo.browserTabsRemoteAutostart
-        && aContentURI.scheme == 'file') {
-      gBlockNextScript = true;
-    }
-
     // Ignore temporary files, e.g. "Show script source".
-    var messageManager = GM_util.findMessageManager(aContext);
-    var cpmm = Services.cpmm ? Services.cpmm : messageManager;
-    var tmpResult = cpmm && cpmm.sendSyncMessage(
+    var tmpResult = cpmm.sendSyncMessage(
         'greasemonkey:url-is-temp-file', {'url': aContentURI.spec});
     if (tmpResult.length && tmpResult[0]) {
       return ACCEPT;
     }
 
-    if (!messageManager) {
-      dump('ERROR ignoring script ' + aContentURI.spec + ' because no content'
-        + ' message manager could be located from ' + aContext + '\n');
-      return ACCEPT;
-    }
-
-    messageManager.sendAsyncMessage('greasemonkey:script-install', {
-      'referer': aOriginURI ? aOriginURI.spec : null,
-      'url': aContentURI.spec,
-    });
+    cpmm.sendAsyncMessage(
+        'greasemonkey:script-install', {'url': aContentURI.spec});
 
     return REJECT;
   },
@@ -149,5 +101,11 @@ var InstallPolicy = {
     }
     return this.QueryInterface(iid);
   },
-
 };
+
+////////////////////////////////////////////////////////////////////////////////
+
+if (!gHaveDoneInit) {
+  gHaveDoneInit = true;
+  InstallPolicy.init();
+}

@@ -7,19 +7,17 @@ var Cu = Components.utils;
 
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
+Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
-Cu.import('chrome://greasemonkey-modules/content/installPolicy.js');
 Cu.import('chrome://greasemonkey-modules/content/ipcscript.js');
 Cu.import('chrome://greasemonkey-modules/content/menucommand.js');
 Cu.import('chrome://greasemonkey-modules/content/miscapis.js');
 Cu.import('chrome://greasemonkey-modules/content/sandbox.js');
 Cu.import('chrome://greasemonkey-modules/content/scriptProtocol.js');
-Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
-// Register with process script. Don't import all the vars into the local scope.
-Cu.import('chrome://greasemonkey-modules/content/processScript.js', {}
-    ).addFrame(this);
+Cu.import('chrome://greasemonkey-modules/content/processScript.js', {})
+    .addFrame(this);
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -120,21 +118,6 @@ function injectScripts(aScripts, aContentWin) {
 }
 
 
-function loadFailedScript(aMessage) {
-  var url = aMessage.data.url;
-  var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
-  var referer = aMessage.data.referer
-      && GM_util.uriFromUrl(aMessage.data.referer);
-  var postData = null;
-  var headers = null;
-
-  var webNav = docShell.QueryInterface(Ci.nsIWebNavigation);
-
-  passNextScript();
-  webNav.loadURI(url, loadFlags, referer, postData, headers);
-}
-
-
 function contextMenuStart(aMessage) {
   var culprit = aMessage.objects.culprit;
 
@@ -204,7 +187,6 @@ addEventListener('DOMWindowCreated', windowCreated);
 if (content) windowCreated();
 
 addMessageListener('greasemonkey:inject-delayed-script', injectDelayedScript);
-addMessageListener('greasemonkey:load-failed-script', loadFailedScript);
 addMessageListener('greasemonkey:menu-command-list', function(aMessage) {
   MenuCommandListRequest(content, aMessage);
 });
@@ -214,6 +196,4 @@ addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
 addMessageListener("greasemonkey:context-menu-start", contextMenuStart);
 addMessageListener("greasemonkey:newscript-load-start", newScriptLoadStart);
 
-
-initInstallPolicy();
 initScriptProtocol();

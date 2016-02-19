@@ -3,10 +3,16 @@
 var DESCRIPTION = "GM_GreasemonkeyService";
 var CONTRACTID = "@greasemonkey.mozdev.org/greasemonkey-service;1";
 var CLASSID = Components.ID("{77bf3650-1cd6-11da-8cd6-0800200c9a66}");
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
+
+Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/AddonManager.jsm");
 
 Cu.import("chrome://greasemonkey-modules/content/ipcscript.js");
 Cu.import("chrome://greasemonkey-modules/content/menucommand.js");
@@ -14,22 +20,16 @@ Cu.import("chrome://greasemonkey-modules/content/prefmanager.js");
 Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
 Cu.import("chrome://greasemonkey-modules/content/sync.js");
 Cu.import("chrome://greasemonkey-modules/content/util.js");
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 
-
-var gStartupHasRun = false;
 
 var gFileProtocolHandler = Components
     .classes["@mozilla.org/network/protocol;1?name=file"]
     .getService(Ci.nsIFileProtocolHandler);
+var gGreasemonkeyVersion = 'unknown';
+var gStartupHasRun = false;
 var gTmpDir = Components.classes["@mozilla.org/file/directory_service;1"]
     .getService(Components.interfaces.nsIProperties)
     .get("TmpD", Components.interfaces.nsIFile);
-
-var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
-var gGreasemonkeyVersion = 'unknown';
-Cu.import("resource://gre/modules/AddonManager.jsm");
 
 /////////////////////// Component-global Helper Functions //////////////////////
 
@@ -50,8 +50,6 @@ function startup(aService) {
   // Most incoming messages go to the "global" message manager.
   var globalMessageManager = Cc["@mozilla.org/globalmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
-  globalMessageManager.addMessageListener(
-      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
 
   var scriptValHandler = aService.handleScriptValMsg.bind(aService);
   globalMessageManager.addMessageListener(
@@ -63,20 +61,22 @@ function startup(aService) {
   globalMessageManager.addMessageListener(
       'greasemonkey:scriptVal-set', scriptValHandler);
 
+  // Others go to the "parent" message manager.
   var parentMessageManager = Cc["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Ci.nsIMessageListenerManager);
   parentMessageManager.addMessageListener(
       'greasemonkey:scripts-for-uuid',
       aService.getScriptsForUuid.bind(aService));
-  parentMessageManager.addMessageListener("greasemonkey:scripts-update", function(message) {
-    return aService.scriptUpdateData();
-  });
-  var mm = Services.ppmm ? Services.ppmm : globalMessageManager;
-  mm.addMessageListener(
+  parentMessageManager.addMessageListener(
+      'greasemonkey:scripts-update', function(message) {
+        return aService.scriptUpdateData();
+      });
+  parentMessageManager.addMessageListener(
+      'greasemonkey:script-install', aService.scriptInstall.bind(aService));
+  parentMessageManager.addMessageListener(
       'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
-  // Yes, we have to load the frame script once here in the parent scope.
-  // Why?  Who knows!?
+  // Yes, we have to load the frame script once here in the parent scope. Why!?
   globalMessageManager.loadFrameScript(
       'chrome://greasemonkey/content/framescript.js', true);
 
@@ -231,8 +231,7 @@ service.prototype.handleScriptValMsg = function(aMessage) {
 };
 
 service.prototype.scriptInstall = function(aMessage) {
-  GM_util.showInstallDialog(
-      aMessage.data.url, aMessage.target, aMessage.data.referer);
+  GM_util.showInstallDialog(aMessage.data.url);
 };
 
 service.prototype.urlIsTempFile = function(aMessage) {
