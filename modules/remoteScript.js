@@ -417,10 +417,12 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
   Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
   var script = scope.parse(aSource, this._uri, aFatal);
   if (!script || script.parseErrors.length) {
-    if (aFatal) {
+    if (!aFatal) {
       this.cleanup(
           stringBundle.GetStringFromName('error.parsingScript')
-          + '\n' + script.parseErrors);
+          + '\n' + (script
+              ? script.parseErrors
+              : stringBundle.GetStringFromName("error.unknown")));
     }
     return false;
   }
