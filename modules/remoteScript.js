@@ -115,7 +115,7 @@ DownloadListener.prototype = {
     try {
       source = converter.convertFromByteArray(this._data, this._data.length);
     } catch (e) { }
-    return this._remoteScript.parseScript(source, false);
+    return this._remoteScript.parseScript(source, true);
   },
 
   // nsIStreamListener
@@ -656,7 +656,7 @@ RemoteScript.prototype._parseScriptFile = function() {
   if (!source) return null;
   var script = null;
   try {
-    this.parseScript(source, true);
+    this.parseScript(source, false);
   } catch (e) {
     dump('RemoteScript._parseScriptFile: ' + e + '\n');
   }
