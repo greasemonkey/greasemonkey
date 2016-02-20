@@ -9,6 +9,8 @@ var gStringBundle = Components
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
 
+Components.utils.importGlobalProperties(['XMLHttpRequest']);
+
 
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
@@ -48,8 +50,8 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+        var req = new XMLHttpRequest(
+            details.mozAnon ? {'mozAnon': true} : {});
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:

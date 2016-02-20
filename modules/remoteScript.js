@@ -2,15 +2,17 @@ var EXPORTED_SYMBOLS = ['cleanFilename', 'RemoteScript'];
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
+var Cu = Components.utils;
 
-Components.utils.import("chrome://greasemonkey-modules/content/GM_notification.js");
-Components.utils.import('chrome://greasemonkey-modules/content/addons4.js');
-Components.utils.import('chrome://greasemonkey-modules/content/script.js');
-Components.utils.import('chrome://greasemonkey-modules/content/scriptIcon.js');
-Components.utils.import('chrome://greasemonkey-modules/content/util.js');
+Cu.import("chrome://greasemonkey-modules/content/GM_notification.js");
+Cu.import('chrome://greasemonkey-modules/content/addons4.js');
+Cu.import('chrome://greasemonkey-modules/content/script.js');
+Cu.import('chrome://greasemonkey-modules/content/scriptIcon.js');
+Cu.import('chrome://greasemonkey-modules/content/util.js');
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-Components.utils.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/NetUtil.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
@@ -412,13 +414,15 @@ RemoteScript.prototype.parseScript = function(aSource, aFatal) {
   if (this.script) return true;
 
   var scope = {};
-  Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
+  Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
   var script = scope.parse(aSource, this._uri, aFatal);
   if (!script || script.parseErrors.length) {
-    if (aFatal) {
+    if (!aFatal) {
       this.cleanup(
           stringBundle.GetStringFromName('error.parsingScript')
-          + '\n' + script.parseErrors);
+          + '\n' + (script
+              ? script.parseErrors
+              : stringBundle.GetStringFromName("error.unknown")));
     }
     return false;
   }
@@ -590,8 +594,13 @@ RemoteScript.prototype._downloadFile = function(
     }
   }
 
-  var channel = GM_util.channelFromUri(aUri);
-  channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
+  // Construct a channel with a policy type that the HTTP observer is
+  // designed to ignore, so it won't intercept this network call.
+  var channel = NetUtil.newChannel({
+    'uri': aUri,
+    'contentPolicyType': Ci.nsIContentPolicy.TYPE_OBJECT_SUBREQUEST,
+    'loadUsingSystemPrincipal': true,
+  });
   this._channels.push(channel);
   var dsl = new DownloadListener(
       0 == this._progressIndex,  // aTryToParse

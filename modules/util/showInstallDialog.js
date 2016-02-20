@@ -1,13 +1,17 @@
 var EXPORTED_SYMBOLS = ['showInstallDialog'];
 
-Components.utils.import('chrome://greasemonkey-modules/content/util.js');
-Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js');
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var Cu = Components.utils;
 
-var gWindowWatcher = Components
-    .classes["@mozilla.org/embedcomp/window-watcher;1"]
-    .getService(Components.interfaces.nsIWindowWatcher);
+Cu.import('chrome://greasemonkey-modules/content/util.js');
+Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
 
-function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRefererUrl) {
+var gWindowWatcher = Cc["@mozilla.org/embedcomp/window-watcher;1"]
+    .getService(Ci.nsIWindowWatcher);
+
+
+function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
   var rs = null;
   if ('string' == typeof aUrlOrRemoteScript) {
     rs = new RemoteScript(aUrlOrRemoteScript);
@@ -15,18 +19,19 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRefererUrl) {
     rs = aUrlOrRemoteScript;
   }
 
+  var browser = aBrowser || GM_util.getBrowserWindow().gBrowser;
   var params = null;
   function openDialog(aScript) {
-    params = [rs, aBrowser, aScript];
+    params = [rs, browser, aScript];
     params.wrappedJSObject = params;
     // Don't set "modal" param, or this blocks.  Even though we'd prefer the
     // sort of behavior that gives us.
     gWindowWatcher.openWindow(
-      /* aParent */ null,
-      'chrome://greasemonkey/content/install.xul',
-      /* aName */ null,
-      'chrome,centerscreen,dialog,titlebar,resizable',
-      params);
+        /* aParent */ null,
+        'chrome://greasemonkey/content/install.xul',
+        /* aName */ null,
+        'chrome,centerscreen,dialog,titlebar,resizable',
+        params);
   }
 
   if (rs.script) {
@@ -38,10 +43,17 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRefererUrl) {
   }
 
   rs.download(function(aSuccess, aType) {
-    if (!aSuccess && 'script' == aType) {
-      aBrowser.messageManager.sendAsyncMessage(
-          'greasemonkey:load-failed-script',
-          {'referer': aRefererUrl, 'url': rs.url});
+    if (aRequest && 'script' == aType) {
+      if (aSuccess) {
+        aRequest.cancel(Components.results.NS_BINDING_ABORTED);
+        var browser = aRequest
+            .QueryInterface(Ci.nsIHttpChannel)
+            .notificationCallbacks.getInterface(Ci.nsILoadContext)
+            .topFrameElement;
+        browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
+      } else {
+        aRequest.resume();
+      }
     }
   });
 }

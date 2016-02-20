@@ -7,6 +7,10 @@
 
 var EXPORTED_SYMBOLS = ['addFrame'];
 
+// Each (child) process needs to handle navigation to `.user.js` via file://.
+Components.utils.import("chrome://greasemonkey-modules/content/installPolicy.js");
+
+// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function addFrame(frameMM) {
   frameMM.addMessageListener("greasemonkey:frame-urls", urlTree);
