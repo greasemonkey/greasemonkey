@@ -108,6 +108,7 @@ function injectScripts(aScripts, aContentWin) {
   }
 
   var url = urlForWin(aContentWin);
+  if (!url) return;
   var winIsTop = windowIsTop(aContentWin);
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
@@ -138,6 +139,7 @@ function newScriptLoadStart(aMessage) {
 
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
+  if (!url) return;
   if (!GM_util.isGreasemonkeyable(url)) return;
 
   var scripts = IPCScript.scriptsForUrl(
@@ -147,6 +149,9 @@ function runScripts(aRunWhen, aContentWin) {
 
 
 function urlForWin(aContentWin) {
+  if (GM_util.windowIsClosed(aContentWin)) {
+    return false;
+  }
   // See #1970
   // When content does (e.g.) history.replacestate() in an inline script,
   // the location.href changes between document-start and document-end time.
