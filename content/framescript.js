@@ -149,15 +149,15 @@ function runScripts(aRunWhen, aContentWin) {
 
 
 function urlForWin(aContentWin) {
+  if (GM_util.windowIsClosed(aContentWin)) {
+    return false;
+  }
   // See #1970
   // When content does (e.g.) history.replacestate() in an inline script,
   // the location.href changes between document-start and document-end time.
   // But the content can call replacestate() much later, too.  The only way to
   // be consistent is to ignore it.  Luckily, the  document.documentURI does
   // _not_ change, so always use it when deciding whether to run scripts.
-  if (GM_util.windowIsClosed(aContentWin)) {
-    return false;
-  }
   var url = aContentWin.document.documentURI;
   // But ( #1631 ) ignore user/pass in the URL.
   return url.replace(gStripUserPassRegexp, '$1');
