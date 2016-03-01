@@ -108,6 +108,7 @@ function injectScripts(aScripts, aContentWin) {
   }
 
   var url = urlForWin(aContentWin);
+  if (!url) return;
   var winIsTop = windowIsTop(aContentWin);
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
@@ -138,6 +139,7 @@ function newScriptLoadStart(aMessage) {
 
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
+  if (!url) return;
   if (!GM_util.isGreasemonkeyable(url)) return;
 
   var scripts = IPCScript.scriptsForUrl(
@@ -153,6 +155,9 @@ function urlForWin(aContentWin) {
   // But the content can call replacestate() much later, too.  The only way to
   // be consistent is to ignore it.  Luckily, the  document.documentURI does
   // _not_ change, so always use it when deciding whether to run scripts.
+  if (GM_util.windowIsClosed(aContentWin)) {
+    return false;
+  }
   var url = aContentWin.document.documentURI;
   // But ( #1631 ) ignore user/pass in the URL.
   return url.replace(gStripUserPassRegexp, '$1');
