@@ -6,22 +6,10 @@ var Cu = Components.utils;
 
 (function initSync() {
 
-
-Cu.import('resource://gre/modules/Services.jsm');
-Cu.import('resource://gre/modules/XPCOMUtils.jsm');
-Cu.import('resource://services-crypto/utils.js');
-Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
-Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
-Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
-Cu.import('chrome://greasemonkey-modules/content/util.js');
-
-
-var gSyncInitialized = false;
-
+var gWeave = {};
 try {
   // The files we're trying to import below don't exist in Firefox builds
   // without sync service, causing the import to throw.
-  var gWeave = {};
   Cu.import('resource://services-sync/engines.js', gWeave);
   Cu.import('resource://services-sync/record.js', gWeave);
   Cu.import('resource://services-sync/status.js', gWeave);
@@ -30,6 +18,20 @@ try {
   // If there's no sync service, it doesn't make sense to continue.
   return;
 }
+
+
+Cu.import('resource://gre/modules/Services.jsm');
+Cu.import('resource://gre/modules/XPCOMUtils.jsm');
+Cu.import('resource://services-crypto/utils.js');
+
+Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
+Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
+Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
+Cu.import('chrome://greasemonkey-modules/content/util.js');
+
+
+var gSyncInitialized = false;
 
 var SyncServiceObserver = {
   init: function() {
@@ -44,9 +46,7 @@ var SyncServiceObserver = {
     if (gSyncInitialized) return;
     gSyncInitialized = true;
 
-    // This must be delayed until after the Greasemonkey service is set up.
-    Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
-    // Also delay importing the actual Sync service to prevent conflicts with
+    // Delay importing the actual Sync service to prevent conflicts with
     // the master password dialog during browser startup. See #1852.
     Cu.import('resource://services-sync/service.js', gWeave);
 
@@ -57,6 +57,7 @@ var SyncServiceObserver = {
     switch (aTopic) {
     case 'weave:service:ready':
       this.initEngine();
+      Services.obs.removeObserver(this, 'weave:service:ready');
       break;
     }
   },

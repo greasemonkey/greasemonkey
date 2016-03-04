@@ -14,7 +14,6 @@ Cu.import("resource://gre/modules/NetUtil.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-var GM_config = GM_util.getService().config;
 var ioService = Cc['@mozilla.org/network/io-service;1']
     .getService(Ci.nsIIOService);
 
@@ -362,7 +361,7 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
           stringBundle.GetStringFromName('remotescript.name-unknown'));
     }
 
-    GM_config.install(this.script, aOldScript, this._tempDir);
+    GM_util.getService().config.install(this.script, aOldScript, this._tempDir);
 
     var suffix = 0;
     var file = GM_util.scriptDir();
