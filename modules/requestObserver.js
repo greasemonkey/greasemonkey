@@ -9,7 +9,6 @@ var Cr = Components.results;
 
 Cu.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("chrome://greasemonkey-modules/content/util.js");
 Cu.import("chrome://greasemonkey-modules/content/prefmanager.js");
 
