@@ -20,7 +20,6 @@ try {
 }
 
 
-Cu.import('resource://gre/modules/Services.jsm');
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('resource://services-crypto/utils.js');
 
@@ -38,7 +37,9 @@ var SyncServiceObserver = {
     if (gWeave.Status.ready) {
       this.initEngine();
     } else {
-      Services.obs.addObserver(this, 'weave:service:ready', true);
+      // See #2335 -- The 'weave:service:ready' observer has been identified
+      // as unreliable (e10s?).  Manually poll instead.
+      GM_util.timeout(GM_util.hitch(SyncServiceObserver, 'init'), 1000);
     }
   },
 
@@ -53,17 +54,7 @@ var SyncServiceObserver = {
     gWeave.Service.engineManager.register(ScriptEngine);
   },
 
-  observe: function(aSubject, aTopic, aData) {
-    switch (aTopic) {
-    case 'weave:service:ready':
-      this.initEngine();
-      Services.obs.removeObserver(this, 'weave:service:ready');
-      break;
-    }
-  },
-
-  QueryInterface: XPCOMUtils.generateQI(
-      [Ci.nsIObserver, Ci.nsISupportsWeakReference]),
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
 };
 
 
