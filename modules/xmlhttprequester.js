@@ -51,7 +51,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "https":
     case "ftp":
         var req = new XMLHttpRequest(
-            details.mozAnon ? {'mozAnon': true} : {});
+            (details.mozAnon || details.anonymous) ? {'mozAnon': true} : {});
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
