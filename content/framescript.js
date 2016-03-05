@@ -46,6 +46,7 @@ function browserLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
   var href = contentWin.location.href;
 
+  // See #1820, #2371, #2195
   if ((href == "about:blank")
       || (href.match(/^about:reader/))) {
     // #1696: document-element-inserted doesn't see about:blank
