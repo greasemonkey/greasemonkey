@@ -104,7 +104,7 @@
 
       <menuseparator />
       <menuseparator class="scripts-top-point" collapsed="true" />
-      <menuseparator class="scripts-sep" />
+      <menuseparator class="scripts-sep" collapsed="true" />
       <menuseparator class="scripts-framed-point" collapsed="true" />
       <menuseparator collapsed="true" />
       <menuitem class="no-scripts" label="&greasemonkey.noscriptshere;" disabled="true" />
