@@ -25,10 +25,11 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
 };
 
 
-GM_Resources.prototype.getResourceText = function(name) {
+GM_Resources.prototype.getResourceText = function(sandbox, name, responseType) {
   var dep = this._getDep(name);
   if (dep.textContent !== undefined) return dep.textContent;
-  return GM_util.fileXhr(dep.file_url, "text/plain");
+  return Cu.cloneInto(GM_util.fileXhr(
+      dep.file_url, "text/plain", responseType ? responseType : null), sandbox);
 };
 
 GM_Resources.prototype._getDep = function(name) {
