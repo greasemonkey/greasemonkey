@@ -29,7 +29,7 @@ GM_Resources.prototype.getResourceText = function(sandbox, name, responseType) {
   var dep = this._getDep(name);
   if (dep.textContent !== undefined) return dep.textContent;
   return Cu.cloneInto(GM_util.fileXhr(
-      dep.file_url, "text/plain", responseType ? responseType : null), sandbox);
+      dep.file_url, "text/plain", responseType), sandbox);
 };
 
 GM_Resources.prototype._getDep = function(name) {
