@@ -25,3 +25,22 @@ toolbar[iconsize="small"] #greasemonkey-tbb {
 {
   list-style-image: url("chrome://greasemonkey/skin/icon32.png");
 }
+
+.greasemonkey-tooltip-version {
+  font-weight: bold;
+}
+.greasemonkey-tooltip-total {
+  border-top: 1px gray dotted;
+  margin-top: 5px;
+  padding-top: 5px;
+}
+.greasemonkey-tooltip-total,
+.greasemonkey-tooltip-active
+{
+  display: none;
+}
+.greasemonkey-tooltip-isActive .greasemonkey-tooltip-total,
+.greasemonkey-tooltip-isActive .greasemonkey-tooltip-active
+{
+  display: -moz-box;
+}

@@ -17,11 +17,21 @@
     <command id="gm_toggle_checked" oncommand="GM_util.setEnabled(!GM_util.getEnabled()); GM_BrowserUI.refreshStatus();"/>
   </commandset>
 
+  <popupset>
+    <tooltip id="greasemonkey-tooltip" onpopupshowing="GM_showTooltip(event);">
+      <label class="greasemonkey-tooltip-version" value="Greasemonkey" />
+      <label class="greasemonkey-tooltip-enabled" />
+      <label class="greasemonkey-tooltip-total" />
+      <label class="greasemonkey-tooltip-active" />
+      <label class="greasemonkey-tooltip-active" />
+    </tooltip>
+  </popupset>
+
   <toolbarpalette id='BrowserToolbarPalette'>
     <toolbarbutton id='greasemonkey-tbb' type='menu-button'
       class='toolbarbutton-1 chromeclass-toolbar-additional'
       command="gm_toggle_enabled"
-      label='Greasemonkey' tooltiptext='Greasemonkey'
+      label='Greasemonkey' tooltip='greasemonkey-tooltip'
     >
       <menupopup id="blank" />
     </toolbarbutton>
