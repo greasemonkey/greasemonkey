@@ -413,7 +413,6 @@ function GM_getEnabled() {
 
 function GM_showTooltip(aEvent) {
   function setTooltip(aUrls) {
-
     var urls = getScripts.uniq(aUrls);
     var runsOnTop = getScripts.scriptsMatching( [urls.shift()] ); // first url = top window
     var runsFramed = getScripts.scriptsMatching( urls ); // remainder are all its subframes
