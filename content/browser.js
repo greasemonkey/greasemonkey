@@ -380,13 +380,13 @@ function asyncShowPopup(aEventTarget, urls) {
   if (runsFramed.length) {
     point = scriptsFramedEl;
     runsFramed.forEach(
-        function(script) {
+        function (script) {
           point = getScripts.appendScriptAfter(script, point);
         });
   }
   point = scriptsTopEl;
   runsOnTop.forEach(
-      function(script) {
+      function (script) {
         point = getScripts.appendScriptAfter(script, point);
       });
 
@@ -412,7 +412,7 @@ function GM_getEnabled() {
 }
 
 function GM_showTooltip(aEvent) {
-  function setToolTip(aUrls) {
+  function setTooltip(aUrls) {
 
     var urls = getScripts.uniq(aUrls);
     var runsOnTop = getScripts.scriptsMatching( [urls.shift()] ); // first url = top window
@@ -457,14 +457,14 @@ function GM_showTooltip(aEvent) {
       var point;
       if (runsFramed.length) {
         runsFramed.forEach(
-            function(script) {
+            function (script) {
               runsFramedEnable = runsFramedEnable + ((getScripts
                   .appendScriptAfter(script, point, true)
                   .getAttribute("checked") == "true") ? 1 : 0);
         });
       }
       runsOnTop.forEach(
-          function(script) {
+          function (script) {
             runsOnTopEnable = runsOnTopEnable + ((getScripts
                 .appendScriptAfter(script, point, true)
                 .getAttribute("checked") == "true") ? 1 : 0);
@@ -497,7 +497,7 @@ function GM_showTooltip(aEvent) {
     mm.removeMessageListener("greasemonkey:frame-urls", callback);
 
     var urls = aMessage.data.urls;
-    setToolTip(urls);
+    setTooltip(urls);
   };
 
   mm.addMessageListener("greasemonkey:frame-urls", callback);
