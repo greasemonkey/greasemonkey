@@ -1,9 +1,9 @@
 Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-var EXPORTED_SYMBOLS = ["isPrivate"];
+var EXPORTED_SYMBOLS = ["windowIsPrivate"];
 
 
-function isPrivate(aContentWin) {
+function windowIsPrivate(aContentWin) {
   var isPrivate = true;
   if (PrivateBrowsingUtils.isContentWindowPrivate) {
     // Firefox >= 35

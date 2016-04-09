@@ -133,7 +133,7 @@ function injectGMInfo(aScript, sandbox, aContentWin) {
   var rawInfo = aScript.info();
   var scriptURL = aScript.fileURL;
 
-  rawInfo.isIncognito = GM_util.isPrivate(aContentWin);
+  rawInfo.isIncognito = GM_util.windowIsPrivate(aContentWin);
   rawInfo.isPrivate = rawInfo.isIncognito;
   
   // TODO: also delay top level clone via lazy getter? XPCOMUtils.defineLazyGetter

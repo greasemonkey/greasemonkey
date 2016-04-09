@@ -128,7 +128,7 @@ function(safeUrl, details, req) {
 
   var channel;
 
-  if (GM_util.isPrivate(this.wrappedContentWin)) {
+  if (GM_util.windowIsPrivate(this.wrappedContentWin)) {
     channel = req.channel
         .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);
