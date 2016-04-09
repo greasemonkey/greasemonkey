@@ -38,7 +38,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
           'wantXrays': false,
         });
     // GM_info is always provided.
-    injectGMInfo(aScript, contentSandbox);
+    injectGMInfo(aScript, contentSandbox, aContentWin);
 
     // Alias unsafeWindow for compatibility.
     Components.utils.evalInSandbox(
@@ -123,16 +123,19 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'contentStartRequest');
   }
 
-  injectGMInfo(aScript, sandbox);
+  injectGMInfo(aScript, sandbox, aContentWin);
 
   return sandbox;
 }
 
 
-function injectGMInfo(aScript, sandbox) {
+function injectGMInfo(aScript, sandbox, aContentWin) {
   var rawInfo = aScript.info();
   var scriptURL = aScript.fileURL;
 
+  rawInfo.script.isIncognito = GM_util.isPrivate(aContentWin);
+  rawInfo.script.isPrivate = rawInfo.script.isIncognito;
+  
   // TODO: also delay top level clone via lazy getter? XPCOMUtils.defineLazyGetter
   sandbox.GM_info = Cu.cloneInto(rawInfo, sandbox);
 

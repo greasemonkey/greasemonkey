@@ -1,7 +1,6 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.importGlobalProperties(["Blob"]);
-Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 var gStringBundle = Components
@@ -129,15 +128,7 @@ function(safeUrl, details, req) {
 
   var channel;
 
-  var isPrivate = true;
-  if (PrivateBrowsingUtils.isContentWindowPrivate) {
-    // Firefox >= 35
-    isPrivate = PrivateBrowsingUtils.isContentWindowPrivate(this.wrappedContentWin);
-  } else {
-    // Firefox <= 34; i.e. PaleMoon
-    isPrivate = PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin);
-  }
-  if (isPrivate) {
+  if (GM_util.isPrivate(this.wrappedContentWin)) {
     channel = req.channel
         .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);

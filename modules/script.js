@@ -45,6 +45,7 @@ function Script(configNode) {
   this._id = null;
   this._installTime = null;
   this._includes = [];
+  this._isPrivate = 'unknown';
   // All available localized properties.
   this._locales = {};
   // The best localized matches for the current browser locale.
@@ -314,6 +315,9 @@ function Script_getFileURL() { return GM_util.getUriFromFile(this.file).spec; })
 Script.prototype.__defineGetter__('textContent',
 function Script_getTextContent() { return GM_util.getContents(this.file); });
 
+Script.prototype.__defineGetter__('isPrivate',
+function Script_getIsPrivate() { return this._isPrivate; });
+
 Script.prototype.setFilename = function(aBaseName, aFileName) {
   this._basedir = aBaseName;
   this._filename = aFileName;
@@ -578,6 +582,8 @@ Script.prototype.info = function() {
       'excludes': this.excludes,
       // 'icon': ??? source URL?,
       'includes': this.includes,
+      'isIncognito': this.isPrivate,
+      'isPrivate': this.isPrivate,
       'localizedDescription': this.localized.description,
       'localizedName': this.localized.name,
       'matches': matches,

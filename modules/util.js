@@ -45,6 +45,7 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'hitch', 'chrome://greasemonkey-modul
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'inArray', 'chrome://greasemonkey-modules/content/util/inArray.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'installScriptFromSource', 'chrome://greasemonkey-modules/content/util/installScriptFromSource.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'isGreasemonkeyable', 'chrome://greasemonkey-modules/content/util/isGreasemonkeyable.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'isPrivate', 'chrome://greasemonkey-modules/content/util/isPrivate.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'logError', 'chrome://greasemonkey-modules/content/util/logError.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'memoize', 'chrome://greasemonkey-modules/content/util/memoize.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'newUserScript', 'chrome://greasemonkey-modules/content/util/newUserScript.js');
