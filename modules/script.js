@@ -574,6 +574,8 @@ Script.prototype.info = function() {
   return {
     'uuid': this.uuid,
     'version': gGreasemonkeyVersion,
+    'isIncognito': this.isPrivate,
+    'isPrivate': this.isPrivate,
     'scriptMetaStr': extractMeta(this.textContent),
     'scriptSource': this.textContent,
     'scriptWillUpdate': this.isRemoteUpdateAllowed(),
@@ -582,8 +584,6 @@ Script.prototype.info = function() {
       'excludes': this.excludes,
       // 'icon': ??? source URL?,
       'includes': this.includes,
-      'isIncognito': this.isPrivate,
-      'isPrivate': this.isPrivate,
       'localizedDescription': this.localized.description,
       'localizedName': this.localized.name,
       'matches': matches,
