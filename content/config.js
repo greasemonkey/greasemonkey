@@ -267,13 +267,14 @@ Config.prototype.updateModifiedScripts = function(
             "callback": function () {}
           });
           var notificationBox = chromeWin.gBrowser.getNotificationBox();
-          notificationBox.appendNotification(
+          var notification = notificationBox.appendNotification(
             msg,
             "parse-userscript",
             "chrome://greasemonkey/skin/icon16.png",
             notificationBox.PRIORITY_WARNING_MEDIUM,
             buttons
           );
+          notification.persistence = -1;
         }
         GM_util.logError(msg, true, script.fileURL, null);
       }

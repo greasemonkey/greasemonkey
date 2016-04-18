@@ -489,18 +489,16 @@ RemoteScript.prototype.showSource = function(aBrowser) {
         GM_util.timeout(function() { tabBrowser.removeTab(tab); }, 0);
       })
     }];
-  function addNotification() {
-    tab.removeEventListener('load', addNotification, true);
-    var notificationBox = tabBrowser.getNotificationBox();
-    notificationBox.appendNotification(
+  // See #2348
+  var notificationBox = tabBrowser.getNotificationBox();
+  var notification = notificationBox.appendNotification(
       stringBundleBrowser.GetStringFromName('greeting.msg'),
       "install-userscript",
       "chrome://greasemonkey/skin/icon16.png",
       notificationBox.PRIORITY_WARNING_MEDIUM,
       buttons
     );
-  }
-  tab.addEventListener('load', addNotification, true);
+  notification.persistence = -1;
 };
 
 RemoteScript.prototype.toString = function() {
