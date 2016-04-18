@@ -63,4 +63,5 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'uuid', 'chrome://greasemonkey-module
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'chrome://greasemonkey-modules/content/util/windowIdForEvent.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowId', 'chrome://greasemonkey-modules/content/util/windowId.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsClosed', 'chrome://greasemonkey-modules/content/util/windowIsClosed.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsPrivate', 'chrome://greasemonkey-modules/content/util/windowIsPrivate.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'writeToFile', 'chrome://greasemonkey-modules/content/util/writeToFile.js');
