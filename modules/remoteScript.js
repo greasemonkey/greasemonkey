@@ -195,7 +195,7 @@ DownloadListener.prototype = {
         // no-op; if it got this far, aStatus is accurate.
       } catch (e) {
         dump('aRequest is neither http nor file channel: ' + aRequest + '\n');
-        for (i in Ci) {
+        for (var i in Ci) {
           try {
             aRequest.QueryInterface(Ci[i]);
             dump('it is a: ' + i + '\n');
