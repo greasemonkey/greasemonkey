@@ -231,13 +231,14 @@ GM_BrowserUI.checkDisabledScriptNavigation = function(aContentType, aHref) {
   }];
 
   var notificationBox = gBrowser.getNotificationBox();
-  notificationBox.appendNotification(
+  var notification = notificationBox.appendNotification(
     GM_BrowserUI.bundle.GetStringFromName('greeting.msg'),
     "install-userscript",
     "chrome://greasemonkey/skin/icon16.png",
     notificationBox.PRIORITY_WARNING_MEDIUM,
     buttons
   );
+  notification.persistence = -1;
 };
 
 GM_BrowserUI.init();

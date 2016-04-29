@@ -153,7 +153,7 @@ function promptUser() {
   var browser = win.gBrowser;
 
   var notificationBox = browser.getNotificationBox();
-  notificationBox.appendNotification(
+  var notification = notificationBox.appendNotification(
     gStringBundle.GetStringFromName('stats-prompt.msg'),
     "greasemonkey-stats-opt-in",
     "chrome://greasemonkey/skin/icon16.png",
@@ -177,4 +177,5 @@ function promptUser() {
       }
     }]
   );
+  notification.persistence = -1;
 }

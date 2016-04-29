@@ -45,7 +45,7 @@ gDragDrop.onDrop = function GM_onDrop(aEvent) {
   var droppedNonUserScript = false;
   for (var i = urls.length - 1, url = null; url = urls[i]; i--) {
     if (url.match(/\.user\.js$/)) {
-      GM_util.showInstallDialog(url, GM_util.getBrowserWindow().gBrowser);
+      GM_util.showInstallDialog(url);
     } else {
       droppedNonUserScript = true;
     }

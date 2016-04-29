@@ -1,13 +1,14 @@
 var EXPORTED_SYMBOLS = ['GM_xmlhttpRequester'];
 
 Components.utils.importGlobalProperties(["Blob"]);
-Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+
+Components.utils.importGlobalProperties(['XMLHttpRequest']);
 
 
 function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
@@ -48,8 +49,8 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     case "http":
     case "https":
     case "ftp":
-        var req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+        var req = new XMLHttpRequest(
+            (details.mozAnon || details.anonymous) ? {'mozAnon': true} : {});
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
@@ -127,15 +128,7 @@ function(safeUrl, details, req) {
 
   var channel;
 
-  var isPrivate = true;
-  if (PrivateBrowsingUtils.isContentWindowPrivate) {
-    // Firefox >= 35
-    isPrivate = PrivateBrowsingUtils.isContentWindowPrivate(this.wrappedContentWin);
-  } else {
-    // Firefox <= 34; i.e. PaleMoon
-    isPrivate = PrivateBrowsingUtils.isWindowPrivate(this.wrappedContentWin);
-  }
-  if (isPrivate) {
+  if (GM_util.windowIsPrivate(this.wrappedContentWin)) {
     channel = req.channel
         .QueryInterface(Components.interfaces.nsIPrivateBrowsingChannel);
     channel.setPrivate(true);

@@ -7,19 +7,17 @@ var Cu = Components.utils;
 
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
+Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
-Cu.import('chrome://greasemonkey-modules/content/installPolicy.js');
 Cu.import('chrome://greasemonkey-modules/content/ipcscript.js');
 Cu.import('chrome://greasemonkey-modules/content/menucommand.js');
 Cu.import('chrome://greasemonkey-modules/content/miscapis.js');
 Cu.import('chrome://greasemonkey-modules/content/sandbox.js');
 Cu.import('chrome://greasemonkey-modules/content/scriptProtocol.js');
-Cu.import('chrome://greasemonkey-modules/content/documentObserver.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
-// Register with process script. Don't import all the vars into the local scope.
-Cu.import('chrome://greasemonkey-modules/content/processScript.js', {}
-    ).addFrame(this);
+Cu.import('chrome://greasemonkey-modules/content/processScript.js', {})
+    .addFrame(this);
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -48,7 +46,9 @@ function browserLoad(aEvent) {
   var contentWin = aEvent.target.defaultView;
   var href = contentWin.location.href;
 
-  if (href.match(/^about:(blank|reader)/)) {
+  // See #1820, #2371, #2195
+  if ((href == "about:blank")
+      || (href.match(/^about:reader/))) {
     // #1696: document-element-inserted doesn't see about:blank
     runScripts('document-start', contentWin);
     runScripts('document-end', contentWin);
@@ -110,6 +110,7 @@ function injectScripts(aScripts, aContentWin) {
   }
 
   var url = urlForWin(aContentWin);
+  if (!url) return;
   var winIsTop = windowIsTop(aContentWin);
 
   for (var i = 0, script = null; script = aScripts[i]; i++) {
@@ -117,21 +118,6 @@ function injectScripts(aScripts, aContentWin) {
     var sandbox = createSandbox(script, aContentWin, url, gScope);
     runScriptInSandbox(script, sandbox);
   }
-}
-
-
-function loadFailedScript(aMessage) {
-  var url = aMessage.data.url;
-  var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
-  var referer = aMessage.data.referer
-      && GM_util.uriFromUrl(aMessage.data.referer);
-  var postData = null;
-  var headers = null;
-
-  var webNav = docShell.QueryInterface(Ci.nsIWebNavigation);
-
-  passNextScript();
-  webNav.loadURI(url, loadFlags, referer, postData, headers);
 }
 
 
@@ -155,6 +141,7 @@ function newScriptLoadStart(aMessage) {
 
 function runScripts(aRunWhen, aContentWin) {
   var url = urlForWin(aContentWin);
+  if (!url) return;
   if (!GM_util.isGreasemonkeyable(url)) return;
 
   var scripts = IPCScript.scriptsForUrl(
@@ -164,6 +151,9 @@ function runScripts(aRunWhen, aContentWin) {
 
 
 function urlForWin(aContentWin) {
+  if (GM_util.windowIsClosed(aContentWin)) {
+    return false;
+  }
   // See #1970
   // When content does (e.g.) history.replacestate() in an inline script,
   // the location.href changes between document-start and document-end time.
@@ -204,7 +194,6 @@ addEventListener('DOMWindowCreated', windowCreated);
 if (content) windowCreated();
 
 addMessageListener('greasemonkey:inject-delayed-script', injectDelayedScript);
-addMessageListener('greasemonkey:load-failed-script', loadFailedScript);
 addMessageListener('greasemonkey:menu-command-list', function(aMessage) {
   MenuCommandListRequest(content, aMessage);
 });
@@ -214,6 +203,4 @@ addMessageListener('greasemonkey:menu-command-run', function(aMessage) {
 addMessageListener("greasemonkey:context-menu-start", contextMenuStart);
 addMessageListener("greasemonkey:newscript-load-start", newScriptLoadStart);
 
-
-initInstallPolicy();
 initScriptProtocol();

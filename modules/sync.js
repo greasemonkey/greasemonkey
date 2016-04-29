@@ -6,22 +6,10 @@ var Cu = Components.utils;
 
 (function initSync() {
 
-
-Cu.import('resource://gre/modules/Services.jsm');
-Cu.import('resource://gre/modules/XPCOMUtils.jsm');
-Cu.import('resource://services-crypto/utils.js');
-Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
-Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
-Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
-Cu.import('chrome://greasemonkey-modules/content/util.js');
-
-
-var gSyncInitialized = false;
-
+var gWeave = {};
 try {
   // The files we're trying to import below don't exist in Firefox builds
   // without sync service, causing the import to throw.
-  var gWeave = {};
   Cu.import('resource://services-sync/engines.js', gWeave);
   Cu.import('resource://services-sync/record.js', gWeave);
   Cu.import('resource://services-sync/status.js', gWeave);
@@ -31,12 +19,27 @@ try {
   return;
 }
 
+
+Cu.import('resource://gre/modules/XPCOMUtils.jsm');
+Cu.import('resource://services-crypto/utils.js');
+
+Cu.import("chrome://greasemonkey-modules/content/miscapis.js");
+Cu.import('chrome://greasemonkey-modules/content/prefmanager.js');
+Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
+Cu.import("chrome://greasemonkey-modules/content/storageBack.js");
+Cu.import('chrome://greasemonkey-modules/content/util.js');
+
+
+var gSyncInitialized = false;
+
 var SyncServiceObserver = {
   init: function() {
     if (gWeave.Status.ready) {
       this.initEngine();
     } else {
-      Services.obs.addObserver(this, 'weave:service:ready', true);
+      // See #2335 -- The 'weave:service:ready' observer has been identified
+      // as unreliable (e10s?).  Manually poll instead.
+      GM_util.timeout(GM_util.hitch(SyncServiceObserver, 'init'), 1000);
     }
   },
 
@@ -44,25 +47,14 @@ var SyncServiceObserver = {
     if (gSyncInitialized) return;
     gSyncInitialized = true;
 
-    // This must be delayed until after the Greasemonkey service is set up.
-    Cu.import('chrome://greasemonkey-modules/content/remoteScript.js');
-    // Also delay importing the actual Sync service to prevent conflicts with
+    // Delay importing the actual Sync service to prevent conflicts with
     // the master password dialog during browser startup. See #1852.
     Cu.import('resource://services-sync/service.js', gWeave);
 
     gWeave.Service.engineManager.register(ScriptEngine);
   },
 
-  observe: function(aSubject, aTopic, aData) {
-    switch (aTopic) {
-    case 'weave:service:ready':
-      this.initEngine();
-      break;
-    }
-  },
-
-  QueryInterface: XPCOMUtils.generateQI(
-      [Ci.nsIObserver, Ci.nsISupportsWeakReference]),
+  QueryInterface: XPCOMUtils.generateQI([Ci.nsISupportsWeakReference]),
 };
 
 
