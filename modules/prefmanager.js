@@ -127,6 +127,7 @@ GM_PrefManager.prototype.remove = function(prefName) {
  * call a function whenever the named preference subtree changes
  */
 GM_PrefManager.prototype.watch = function(prefName, watcher) {
+  if (this.observers[watcher]) return;
   // construct an observer
   var observer = {
     observe: function(subject, topic, prefName) { watcher(prefName); }
