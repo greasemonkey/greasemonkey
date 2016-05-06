@@ -16,6 +16,13 @@ GM_MenuCommander.initialize = function() {
       GM_MenuCommander.messageMenuCommandResponse);
 };
 
+GM_MenuCommander.uninitialize = function() {
+  var ppmm = Components
+      .classes["@mozilla.org/parentprocessmessagemanager;1"]
+      .getService(Components.interfaces.nsIMessageListenerManager);
+  ppmm.removeMessageListener('greasemonkey:menu-command-response',
+      GM_MenuCommander.messageMenuCommandResponse);
+};
 
 GM_MenuCommander.commandClicked = function(aCommand) {
   gBrowser.selectedBrowser.messageManager.sendAsyncMessage(

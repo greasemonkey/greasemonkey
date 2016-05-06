@@ -101,6 +101,7 @@ GM_BrowserUI.openInTab = function(aMessage) {
  */
 GM_BrowserUI.chromeUnload = function() {
   GM_prefRoot.unwatch("enabled", GM_BrowserUI.refreshStatus);
+  GM_MenuCommander.uninitialize();
 };
 
 /**
