@@ -366,7 +366,9 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
     var suffix = 0;
     var file = GM_util.scriptDir();
     file.append(this._baseName);
-    while (file.exists()) {
+    // See #2400
+    while (file.exists() || (file.leafName.substr(
+        file.leafName.length - 3).toLowerCase() == ".db")) {
       suffix++;
       file = GM_util.scriptDir();
       file.append(this._baseName + '-' + suffix);
