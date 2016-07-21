@@ -598,6 +598,8 @@ RemoteScript.prototype._downloadFile = function(
     'contentPolicyType': Ci.nsIContentPolicy.TYPE_OBJECT_SUBREQUEST,
     'loadUsingSystemPrincipal': true,
   });
+  // Infinite loading web page (*.user.js, e.g. MIME type: text/html)
+  channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
   this._channels.push(channel);
   var dsl = new DownloadListener(
       0 == this._progressIndex,  // aTryToParse
