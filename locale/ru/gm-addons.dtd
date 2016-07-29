@@ -1,5 +1,5 @@
 <!ENTITY Edit "Изменить">
-<!ENTITY Edit.accesskey "з">
+<!ENTITY Edit.accesskey "E">
 <!ENTITY Edit.tooltip "Редактировать этот скрипт">
 <!ENTITY ExecuteFirst "Выполнять первым">
 <!ENTITY ExecuteLast "Выполнять последним">
@@ -9,17 +9,17 @@
 <!ENTITY ForcedFindUpdate "Принудительно проверить обновления">
 <!ENTITY InstallUpdate "Установить обновление">
 <!ENTITY MoveDown "Переместить ниже">
-<!ENTITY MoveDown.accesskey "и">
+<!ENTITY MoveDown.accesskey "D">
 <!ENTITY MoveToBottom "Переместить в конец">
-<!ENTITY MoveToBottom.accesskey "ц">
+<!ENTITY MoveToBottom.accesskey "B">
 <!ENTITY MoveToTop "Переместить в начало">
-<!ENTITY MoveToTop.accesskey "о">
+<!ENTITY MoveToTop.accesskey "T">
 <!ENTITY MoveUp "Переместить выше">
-<!ENTITY MoveUp.accesskey "ы">
+<!ENTITY MoveUp.accesskey "U">
 <!ENTITY NewScript "Создать новый скрипт">
-<!ENTITY NewScript.accesskey "ь">
+<!ENTITY NewScript.accesskey "C">
 <!ENTITY Show "Показать содержащую папку">
-<!ENTITY Show.accesskey "ж">
+<!ENTITY Show.accesskey "S">
 <!ENTITY Sort.ByStatus "Сортировать по статусу">
 <!ENTITY Sort.Status "Статус">
 <!ENTITY Sort.ByName "Сортировать по имени">
