@@ -72,6 +72,10 @@ function startup(aService) {
         return aService.scriptUpdateData();
       });
   parentMessageManager.addMessageListener(
+      'greasemonkey:broadcast-script-updates', function (message) {
+        return aService.broadcastScriptUpdates();
+      });
+  parentMessageManager.addMessageListener(
       'greasemonkey:script-install', aService.scriptInstall.bind(aService));
   parentMessageManager.addMessageListener(
       'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
