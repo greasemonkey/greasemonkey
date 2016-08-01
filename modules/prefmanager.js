@@ -17,7 +17,7 @@ function GM_PrefManager(startPoint) {
      .getService(Components.interfaces.nsIPrefService)
      .getBranch(startPoint);
 
-  this.observers = {};
+  this.observers = new Map();
 };
 
 GM_PrefManager.prototype.MIN_INT_32 = -0x80000000;
@@ -133,7 +133,7 @@ GM_PrefManager.prototype.watch = function(prefName, watcher) {
   };
 
   // store the observer in case we need to remove it later
-  this.observers[watcher] = observer;
+  this.observers.set(watcher,observer);
 
   this.pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal)
       .addObserver(prefName, observer, false);
@@ -143,9 +143,11 @@ GM_PrefManager.prototype.watch = function(prefName, watcher) {
  * stop watching
  */
 GM_PrefManager.prototype.unwatch = function(prefName, watcher) {
-  if (this.observers[watcher]) {
+  var obs = this.observers.get(watcher) 
+  if (obs) {
+    this.observers.delete(watcher);
     this.pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal)
-        .removeObserver(prefName, this.observers[watcher]);
+        .removeObserver(prefName, obs);
   }
 };
 

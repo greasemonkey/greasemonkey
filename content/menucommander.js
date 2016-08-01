@@ -9,12 +9,17 @@ var GM_MenuCommander = {
 
 
 GM_MenuCommander.initialize = function() {
-  var ppmm = Components
+  this.ppmm = Components
       .classes["@mozilla.org/parentprocessmessagemanager;1"]
       .getService(Components.interfaces.nsIMessageListenerManager);
-  ppmm.addMessageListener('greasemonkey:menu-command-response',
+  this.ppmm.addMessageListener('greasemonkey:menu-command-response',
       GM_MenuCommander.messageMenuCommandResponse);
 };
+
+GM_MenuCommander.unload = function() {
+  this.ppmm.removeMessageListener('greasemonkey:menu-command-response',
+      GM_MenuCommander.messageMenuCommandResponse);
+}
 
 
 GM_MenuCommander.commandClicked = function(aCommand) {
