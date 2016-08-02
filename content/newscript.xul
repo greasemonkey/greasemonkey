@@ -18,7 +18,7 @@
 
   <script type="application/x-javascript" src="chrome://greasemonkey/content/newscript.js" />
 
-  <vbox>
+  <vbox flex="1">
     <label value="&newscript.name;" control="name" />
     <textbox id="name" />
     <separator class="thin" />
@@ -36,7 +36,8 @@
       multiline="true"
       rows="4"
       cols="60"
-      wrap="off" />
+      wrap="off"
+      flex="1" />
     <separator class="thin" />
 
     <label value="&newscript.excludes;" control="exclude" />
@@ -44,7 +45,8 @@
       multiline="true"
       rows="4"
       cols="60"
-      wrap="off" />
+      wrap="off"
+      flex="1" />
     <separator class="thin" />
   </vbox>
 
