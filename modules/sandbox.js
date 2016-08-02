@@ -126,6 +126,14 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'contentStartRequest');
   }
 
+  // See #2129
+  Object.getOwnPropertyNames(sandbox).forEach(function (prop) {
+    if (prop.indexOf("GM_") == 0) {
+      sandbox[prop] = Cu.cloneInto(
+          sandbox[prop], sandbox, {cloneFunctions: true, wrapReflectors: true});
+    }
+  });
+
   injectGMInfo(aScript, sandbox, aContentWin);
 
   return sandbox;
