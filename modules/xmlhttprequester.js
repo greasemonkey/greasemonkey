@@ -31,6 +31,9 @@ function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
 // can't support mimetype because i think it's only used for forcing
 // text/xml and we can't support that
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
+  if (!details) {
+    throw new Error(gStringBundle.GetStringFromName('error.xhrNoDetails'));
+  }
   try {
     // Validate and parse the (possibly relative) given URL.
     var uri = GM_util.uriFromUrl(details.url, this.originUrl);
