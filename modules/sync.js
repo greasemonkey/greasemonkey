@@ -272,7 +272,7 @@ function setScriptValuesFromSyncRecord(aScript, aRecord) {
   ) {
     // TODO: Clear any locally set values not in the sync record?
     var storage = new GM_ScriptStorageBack(aScript);
-    for (name in aRecord.cleartext.values) {
+    for (var name in aRecord.cleartext.values) {
       storage.setValue(name, aRecord.cleartext.values[name]);
     }
   }
