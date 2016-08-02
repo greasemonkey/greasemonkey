@@ -65,7 +65,8 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
 
 
   if (GM_util.inArray(aScript.grants, 'GM_addStyle')) {
-    sandbox.GM_addStyle = GM_util.hitch(null, GM_addStyle, aContentWin.document);
+    sandbox.GM_addStyle = GM_util.hitch(
+        null, GM_addStyle, aContentWin.document);
   }
   if (GM_util.inArray(aScript.grants, 'GM_log')) {
     sandbox.GM_log = GM_util.hitch(new GM_ScriptLogger(aScript), 'log');
@@ -98,10 +99,12 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
 
   var scriptResources = new GM_Resources(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_getResourceURL')) {
-    sandbox.GM_getResourceURL = GM_util.hitch(scriptResources, 'getResourceURL', aScript);
+    sandbox.GM_getResourceURL = GM_util.hitch(
+        scriptResources, 'getResourceURL', aScript);
   }
   if (GM_util.inArray(aScript.grants, 'GM_getResourceText')) {
-    sandbox.GM_getResourceText = GM_util.hitch(scriptResources, 'getResourceText');
+    sandbox.GM_getResourceText = GM_util.hitch(
+        scriptResources, 'getResourceText', sandbox);
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_listValues')) {
