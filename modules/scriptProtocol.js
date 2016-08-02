@@ -2,8 +2,8 @@ var EXPORTED_SYMBOLS = ['initScriptProtocol'];
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
+Components.utils.import("chrome://greasemonkey-modules/content/ipcscript.js");
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
-Components.utils.import("chrome://greasemonkey-modules/content/ipcscript.js");;
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
@@ -114,7 +114,7 @@ var ScriptProtocol = {
     if (!m) return dummy;
 
     var script = IPCScript.getByUuid(m[1]);
-    
+
     // Fail fast if we couldn't find the script.
     if (!script) return dummy;
 
