@@ -600,6 +600,10 @@ RemoteScript.prototype._downloadFile = function(
     'contentPolicyType': Ci.nsIContentPolicy.TYPE_OBJECT_SUBREQUEST,
     'loadUsingSystemPrincipal': true,
   });
+  // When cache is used (*.user.js, e.g. MIME type: text/html):
+  // 1. It creates temporary folder ("gm-temp-...") - permanently (see #2069)
+  // 2. Infinite loading web page
+  channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
   this._channels.push(channel);
   var dsl = new DownloadListener(
       0 == this._progressIndex,  // aTryToParse
