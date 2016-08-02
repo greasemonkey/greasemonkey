@@ -40,7 +40,9 @@ function GM_ScriptStorageBack_getDb() {
     // The auto_vacuum pragma has to be set before the table is created.
     this._db.executeSimpleSQL('PRAGMA auto_vacuum = INCREMENTAL;');
     this._db.executeSimpleSQL('PRAGMA incremental_vacuum(10);');
-    this._db.executeSimpleSQL('PRAGMA journal_mode = WAL;');
+    this._db.executeSimpleSQL('PRAGMA journal_mode = MEMORY;');
+    this._db.executeSimpleSQL('PRAGMA synchronous = OFF;');
+    this._db.executeSimpleSQL('PRAGMA temp_store = MEMORY;');
     this._db.executeSimpleSQL('PRAGMA wal_autocheckpoint = 10;');
 
     this._db.executeSimpleSQL(
