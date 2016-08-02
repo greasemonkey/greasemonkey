@@ -2,6 +2,19 @@ Components.utils.import("resource://gre/modules/Services.jsm");
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
+var gStringBundle = Components
+    .classes["@mozilla.org/intl/stringbundle;1"]
+    .getService(Components.interfaces.nsIStringBundleService)
+    .createBundle("chrome://greasemonkey/locale/gm-browser.properties");
+
+var GM_GUID = "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}";
+var gGreasemonkeyVersion = "unknown";
+Components.utils.import("resource://gre/modules/AddonManager.jsm");
+AddonManager.getAddonByID(GM_GUID, function (addon) {
+  gGreasemonkeyVersion = "" + addon.version;
+});
+
+
 // this file is the JavaScript backing for the UI wrangling which happens in
 // browser.xul. It also initializes the Greasemonkey singleton which contains
 // all the main injection logic, though that should probably be a proper XPCOM
@@ -289,7 +302,7 @@ function GM_showPopup(aEvent) {
   mm.sendAsyncMessage("greasemonkey:frame-urls", {});
 }
 
-function asyncShowPopup(aEventTarget, urls) {
+function getScripts() {
   function uniq(a) {
     var seen = {}, list = [], item;
     for (var i = 0; i < a.length; i++) {
@@ -299,6 +312,7 @@ function asyncShowPopup(aEventTarget, urls) {
     }
     return list;
   }
+  getScripts.uniq = uniq;
 
   function scriptsMatching(urls) {
     function testMatchURLs(script) {
@@ -309,18 +323,25 @@ function asyncShowPopup(aEventTarget, urls) {
     }
     return GM_util.getService().config.getMatchingScripts(testMatchURLs);
   }
+  getScripts.scriptsMatching = scriptsMatching;
 
-  function appendScriptAfter(script, point) {
+  function appendScriptAfter(script, point, noInsert) {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.localized.name);
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
-    point.parentNode.insertBefore(mi, point.nextSibling);
+    if (!noInsert) {
+      point.parentNode.insertBefore(mi, point.nextSibling);
+    }
     return mi;
   }
+  getScripts.appendScriptAfter = appendScriptAfter;
+}
+getScripts();
 
+function asyncShowPopup(aEventTarget, urls) {
   var popup = aEventTarget;
   var scriptsFramedEl = popup.getElementsByClassName("scripts-framed-point")[0];
   var scriptsTopEl = popup.getElementsByClassName("scripts-top-point")[0];
@@ -338,9 +359,9 @@ function asyncShowPopup(aEventTarget, urls) {
   removeMenuitemsAfter(scriptsFramedEl);
   removeMenuitemsAfter(scriptsTopEl);
 
-  urls = uniq(urls);
-  var runsOnTop = scriptsMatching( [urls.shift()] ); // first url = top window
-  var runsFramed = scriptsMatching( urls ); // remainder are all its subframes
+  urls = getScripts.uniq(urls);
+  var runsOnTop = getScripts.scriptsMatching( [urls.shift()] ); // first url = top window
+  var runsFramed = getScripts.scriptsMatching( urls ); // remainder are all its subframes
 
   // drop all runsFramed scripts already present in runsOnTop
   for (var i = 0; i < runsOnTop.length; i++) {
@@ -361,11 +382,15 @@ function asyncShowPopup(aEventTarget, urls) {
   if (runsFramed.length) {
     point = scriptsFramedEl;
     runsFramed.forEach(
-        function(script) { point = appendScriptAfter(script, point); });
+        function (script) {
+          point = getScripts.appendScriptAfter(script, point);
+        });
   }
   point = scriptsTopEl;
   runsOnTop.forEach(
-      function(script) { point = appendScriptAfter(script, point); });
+      function (script) {
+        point = getScripts.appendScriptAfter(script, point);
+      });
 
   // Propagate to commands sub-menu.
   GM_MenuCommander.onPopupShowing(aEventTarget);
@@ -386,4 +411,96 @@ function GM_hidePopup(aEvent) {
 // existance of GM_BrowserUI instead of it.
 function GM_getEnabled() {
   return GM_util.getEnabled();
+}
+
+function GM_showTooltip(aEvent) {
+  function setTooltip(aUrls) {
+    var urls = getScripts.uniq(aUrls);
+    var runsOnTop = getScripts.scriptsMatching( [urls.shift()] ); // first url = top window
+    var runsFramed = getScripts.scriptsMatching( urls ); // remainder are all its subframes
+
+    var versionElm = aEvent.target
+        .getElementsByClassName("greasemonkey-tooltip-version")[0];
+    versionElm.setAttribute("value",
+        gStringBundle.GetStringFromName("tooltip.greasemonkeyVersion")
+            .replace("%1", gGreasemonkeyVersion)
+    );
+
+    var enabled = GM_util.getEnabled();
+    var enabledElm = aEvent.target
+        .getElementsByClassName("greasemonkey-tooltip-enabled")[0];
+    enabledElm.setAttribute("value", enabled
+        ? gStringBundle.GetStringFromName("tooltip.enabled")
+        : gStringBundle.GetStringFromName("tooltip.disabled")
+    );
+
+    if (enabled) {
+      aEvent.target.classList.add("greasemonkey-tooltip-isActive");
+
+      var total = 0;
+      var totalEnable = 0;
+      GM_util.getService().config.scripts.forEach(function (script) {
+        total++;
+        totalEnable = totalEnable + (script.enabled ? 1 : 0);
+      });
+
+      var total = totalEnable + "/" + total;
+      var totalElm = aEvent.target
+          .getElementsByClassName("greasemonkey-tooltip-total")[0];
+      totalElm.setAttribute("value",
+          gStringBundle.GetStringFromName("tooltip.total")
+              .replace("%1", total)
+      );
+
+      var runsOnTopEnable = 0;
+      var runsFramedEnable = 0;
+
+      var point;
+      if (runsFramed.length) {
+        runsFramed.forEach(
+            function (script) {
+              runsFramedEnable = runsFramedEnable + ((getScripts
+                  .appendScriptAfter(script, point, true)
+                  .getAttribute("checked") == "true") ? 1 : 0);
+        });
+      }
+      runsOnTop.forEach(
+          function (script) {
+            runsOnTopEnable = runsOnTopEnable + ((getScripts
+                .appendScriptAfter(script, point, true)
+                .getAttribute("checked") == "true") ? 1 : 0);
+      });
+
+      var activeFrames = runsFramedEnable + "/" + runsFramed.length;
+      var activeFramesElm = aEvent.target
+          .getElementsByClassName("greasemonkey-tooltip-active")[1];
+      activeFramesElm.setAttribute("value",
+          gStringBundle.GetStringFromName("tooltip.activeFrames")
+              .replace("%1", activeFrames)
+      );
+      var activeTop = runsOnTopEnable + "/" + runsOnTop.length;
+      var activeTopElm = aEvent.target
+          .getElementsByClassName("greasemonkey-tooltip-active")[0];
+      activeTopElm.setAttribute("value",
+          gStringBundle.GetStringFromName("tooltip.activeTop")
+              .replace("%1", activeTop)
+      );
+    } else {
+      aEvent.target.classList.remove("greasemonkey-tooltip-isActive");
+    }
+  }
+
+  var mm = aEvent.target.ownerDocument.defaultView
+      .gBrowser.mCurrentBrowser.frameLoader.messageManager;
+
+  var callback = null;
+  callback = function (aMessage) {
+    mm.removeMessageListener("greasemonkey:frame-urls", callback);
+
+    var urls = aMessage.data.urls;
+    setTooltip(urls);
+  };
+
+  mm.addMessageListener("greasemonkey:frame-urls", callback);
+  mm.sendAsyncMessage("greasemonkey:frame-urls", {});
 }
