@@ -46,16 +46,14 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
     if (aRequest && 'script' == aType) {
       if (aSuccess) {
         aRequest.cancel(Components.results.NS_BINDING_ABORTED);
+        var browser = aRequest
+            .QueryInterface(Ci.nsIHttpChannel)
+            .notificationCallbacks.getInterface(Ci.nsILoadContext)
+            .topFrameElement;
+        browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
       } else {
-        aRequest.cancel(Components.results.NS_BINDING_FAILED);
+        aRequest.resume();
       }
-      var browser = aRequest
-          .QueryInterface(Ci.nsIHttpChannel)
-          .notificationCallbacks.getInterface(Ci.nsILoadContext)
-          .topFrameElement;
-      browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
-    } else {
-      aRequest.resume();
     }
   });
 }
