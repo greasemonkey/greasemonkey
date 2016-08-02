@@ -1,5 +1,9 @@
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
+var ppmm = Components
+    .classes["@mozilla.org/parentprocessmessagemanager;1"]
+    .getService(Components.interfaces.nsIMessageListenerManager);
+
 var GM_MenuCommander = {
   popup: null,
   cookieShowing: null,
@@ -9,20 +13,16 @@ var GM_MenuCommander = {
 
 
 GM_MenuCommander.initialize = function() {
-  var ppmm = Components
-      .classes["@mozilla.org/parentprocessmessagemanager;1"]
-      .getService(Components.interfaces.nsIMessageListenerManager);
   ppmm.addMessageListener('greasemonkey:menu-command-response',
       GM_MenuCommander.messageMenuCommandResponse);
 };
 
+
 GM_MenuCommander.uninitialize = function() {
-  var ppmm = Components
-      .classes["@mozilla.org/parentprocessmessagemanager;1"]
-      .getService(Components.interfaces.nsIMessageListenerManager);
   ppmm.removeMessageListener('greasemonkey:menu-command-response',
       GM_MenuCommander.messageMenuCommandResponse);
 };
+
 
 GM_MenuCommander.commandClicked = function(aCommand) {
   gBrowser.selectedBrowser.messageManager.sendAsyncMessage(
