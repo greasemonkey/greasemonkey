@@ -32,7 +32,8 @@ function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
 // text/xml and we can't support that
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   if (!details) {
-    throw new Error(gStringBundle.GetStringFromName('error.xhrNoDetails'));
+    throw new this.wrappedContentWin.Error(
+        gStringBundle.GetStringFromName('error.xhrNoDetails'));
   }
   try {
     // Validate and parse the (possibly relative) given URL.
@@ -40,7 +41,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     var url = uri.spec;
   } catch (e) {
     // A malformed URL won't be parsed properly.
-    throw new Error(
+    throw new this.wrappedContentWin.Error(
         gStringBundle.GetStringFromName('error.invalidUrl')
             .replace('%1', details.url)
         );
@@ -57,7 +58,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
         GM_util.hitch(this, "chromeStartRequest", url, details, req)();
       break;
     default:
-      throw new Error(
+      throw new this.wrappedContentWin.Error(
           gStringBundle.GetStringFromName('error.disallowedScheme')
               .replace('%1', details.url)
           );
