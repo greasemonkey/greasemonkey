@@ -42,7 +42,7 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
     });
   }
 
-  rs.download(function(aSuccess, aType) {
+  rs.download(function(aSuccess, aType, aStatus) {
     if (aRequest && 'script' == aType) {
       if (aSuccess) {
         aRequest.cancel(Components.results.NS_BINDING_ABORTED);
@@ -51,6 +51,8 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
             .notificationCallbacks.getInterface(Ci.nsILoadContext)
             .topFrameElement;
         browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
+      } else if (aStatus >= 500) {
+        aRequest.cancel(Components.results.NS_BINDING_FAILED);
       } else {
         aRequest.resume();
       }
