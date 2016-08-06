@@ -329,13 +329,16 @@ function getScripts() {
     if (script.needsUninstall) return;
     var mi = document.createElement("menuitem");
     mi.setAttribute("label", script.localized.name);
+    if (script.noframes) {
+      mi.setAttribute("tooltiptext", "noframes");
+    }
     mi.script = script;
     mi.setAttribute("type", "checkbox");
     mi.setAttribute("checked", script.enabled.toString());
     if (!noInsert) {
       point.parentNode.insertBefore(mi, point.nextSibling);
     }
-    return mi;
+    return {"menuItem": mi, "noframes": script.noframes};
   }
   getScripts.appendScriptAfter = appendScriptAfter;
 }
@@ -383,13 +386,13 @@ function asyncShowPopup(aEventTarget, urls) {
     point = scriptsFramedEl;
     runsFramed.forEach(
         function (script) {
-          point = getScripts.appendScriptAfter(script, point);
+          point = getScripts.appendScriptAfter(script, point).menuItem;
         });
   }
   point = scriptsTopEl;
   runsOnTop.forEach(
       function (script) {
-        point = getScripts.appendScriptAfter(script, point);
+        point = getScripts.appendScriptAfter(script, point).menuItem;
       });
 
   // Propagate to commands sub-menu.
@@ -454,24 +457,33 @@ function GM_showTooltip(aEvent) {
 
       var runsOnTopEnable = 0;
       var runsFramedEnable = 0;
+      var runsFramedNoframesDisable = 0;
 
+      var _runsFramed;
+      var _runsFramedEnable;
       var point;
       if (runsFramed.length) {
         runsFramed.forEach(
             function (script) {
-              runsFramedEnable = runsFramedEnable + ((getScripts
-                  .appendScriptAfter(script, point, true)
+              _runsFramed = getScripts.appendScriptAfter(script, point, true);
+              _runsFramedEnable = ((_runsFramed.menuItem
                   .getAttribute("checked") == "true") ? 1 : 0);
+              runsFramedEnable = runsFramedEnable + _runsFramedEnable;
+              if (_runsFramedEnable) {
+                runsFramedNoframesDisable = runsFramedNoframesDisable
+                    + ((!_runsFramed.noframes) ? 1 : 0);
+              }
         });
       }
       runsOnTop.forEach(
           function (script) {
             runsOnTopEnable = runsOnTopEnable + ((getScripts
                 .appendScriptAfter(script, point, true)
-                .getAttribute("checked") == "true") ? 1 : 0);
+                .menuItem.getAttribute("checked") == "true") ? 1 : 0);
       });
 
-      var activeFrames = runsFramedEnable + "/" + runsFramed.length;
+      var activeFrames = runsFramedNoframesDisable + "/"
+          + runsFramedEnable + "/" + runsFramed.length;
       var activeFramesElm = aEvent.target
           .getElementsByClassName("greasemonkey-tooltip-active")[1];
       activeFramesElm.setAttribute("value",
