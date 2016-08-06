@@ -43,6 +43,8 @@ function contentObserver(win) {
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function browserLoad(aEvent) {
+  if (!GM_util.getEnabled()) return;
+
   var contentWin = aEvent.target.defaultView;
   var href = contentWin.location.href;
 
