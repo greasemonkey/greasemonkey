@@ -51,7 +51,9 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
             .notificationCallbacks.getInterface(Ci.nsILoadContext)
             .topFrameElement;
         browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
-      } else if (aStatus >= 500) {
+      } else if ((aStatus == 429) || (aStatus >= 500)) {
+        // HTTP status code:
+        // client errors (429 "Too Many Requests"), server errors
         aRequest.cancel(Components.results.NS_BINDING_FAILED);
       } else {
         aRequest.resume();
