@@ -53,6 +53,8 @@ window.addEventListener('load', function() {
   setNodeAttr('sp-key-run', 'disabled', true);
   setNodeAttr('sp-key-inspect', 'disabled', true);
   setNodeAttr('sp-key-display', 'disabled', true);
+  setNodeAttr('sp-key-evalFunction', 'disabled', true);
+  setNodeAttr('sp-key-reloadAndRun', 'disabled', true);
 
   // But the context menu items can't be accessed by ID (?!) so iterate.
   var textPopup = document.getElementById('scratchpad-text-popup');
@@ -64,6 +66,11 @@ window.addEventListener('load', function() {
       }
       if ('sp-text-inspect' == node.id) node.collapsed = true;
       if ('sp-text-display' == node.id) node.collapsed = true;
+      if ('sp-text-evalFunction' == node.id) node.collapsed = true;
+      if ('sp-text-reloadAndRun' == node.id) {
+        node.collapsed = true;
+        node.previousSibling.collapsed = true;
+      }
     }
   }
 }, true);
