@@ -62,14 +62,18 @@ window.addEventListener('load', function() {
     for (var i = 0, node = null; node = textPopup.childNodes[i]; i++) {
       if ('sp-text-run' == node.id) {
         node.collapsed = true;
-        node.previousSibling.collapsed = true;
+        if (node.previousSibling.tagName.toLowerCase() == "menuseparator") {
+          node.previousSibling.collapsed = true;
+        }
       }
       if ('sp-text-inspect' == node.id) node.collapsed = true;
       if ('sp-text-display' == node.id) node.collapsed = true;
       if ('sp-text-evalFunction' == node.id) node.collapsed = true;
       if ('sp-text-reloadAndRun' == node.id) {
         node.collapsed = true;
-        node.previousSibling.collapsed = true;
+        if (node.previousSibling.tagName.toLowerCase() == "menuseparator") {
+          node.previousSibling.collapsed = true;
+        }
       }
     }
   }
