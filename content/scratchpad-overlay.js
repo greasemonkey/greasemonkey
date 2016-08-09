@@ -62,7 +62,8 @@ window.addEventListener('load', function() {
     for (var i = 0, node = null; node = textPopup.childNodes[i]; i++) {
       if ('sp-text-run' == node.id) {
         node.collapsed = true;
-        if (node.previousSibling.tagName.toLowerCase() == "menuseparator") {
+        if (node.previousSibling && (node.previousSibling.tagName.toLowerCase()
+            == "menuseparator")) {
           node.previousSibling.collapsed = true;
         }
       }
@@ -71,7 +72,8 @@ window.addEventListener('load', function() {
       if ('sp-text-evalFunction' == node.id) node.collapsed = true;
       if ('sp-text-reloadAndRun' == node.id) {
         node.collapsed = true;
-        if (node.previousSibling.tagName.toLowerCase() == "menuseparator") {
+        if (node.previousSibling && (node.previousSibling.tagName.toLowerCase()
+            == "menuseparator")) {
           node.previousSibling.collapsed = true;
         }
       }
