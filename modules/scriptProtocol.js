@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ['initScriptProtocol'];
+var EXPORTED_SYMBOLS = ['initScriptProtocol', 'registerBlob'];
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 Components.utils.import("resource://gre/modules/Services.jsm");
@@ -8,6 +8,7 @@ Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cr = Components.results;
+var Cu = Components.utils;
 var schemeName = 'greasemonkey-script';
 
 
@@ -45,6 +46,25 @@ function DummyChannel(aUri, aScript) {
 DummyChannel.prototype.asyncOpen = function(aListener, aContext) { };
 
 ////////////////////////////////////////////////////////////////////////////////
+
+let blobUris = new Map(); 
+
+function registerBlob(sandbox, blob) {
+  let blobURI = sandbox.URL.createObjectURL(blob);
+  let scriptURI = schemeName + ":" + GM_util.uuid();
+  blobUris.set(scriptURI, blobURI)
+  let retVal = new sandbox.Array(2);
+  retVal[0] = scriptURI;
+  retVal[1] = Cu.exportFunction(function revoke() {
+    blobUris.delete(scriptURI);
+    sandbox.URL.revokeObjectURL(blobURI);
+  }, sandbox);
+
+  return retVal;
+}
+
+
+//////
 
 var ScriptProtocol = {
   _classDescription: 'Protocol handler for "greasemonkey-script:"',
@@ -90,6 +110,7 @@ var ScriptProtocol = {
       | Ci.nsIProtocolHandler.URI_INHERITS_SECURITY_CONTEXT
       | Ci.nsIProtocolHandler.URI_IS_LOCAL_RESOURCE
       | Ci.nsIProtocolHandler.URI_LOADABLE_BY_ANYONE
+      | Ci.nsIProtocolHandler.URI_FETCHABLE_BY_ANYONE 
       | Ci.nsIProtocolHandler.URI_NOAUTH
       | Ci.nsIProtocolHandler.URI_NON_PERSISTABLE
       | Ci.nsIProtocolHandler.URI_NORELATIVE
@@ -105,9 +126,25 @@ var ScriptProtocol = {
     uri.spec = aSpec;
     return uri;
   },
-
+  
   newChannel: function(aUri) {
+    return this.newChannel2(aUri, null)
+  },
+
+  newChannel2: function(aUri, aLoadInfo) {
     var m = aUri.spec.match(/greasemonkey-script:([-0-9a-f]+)\/(.*)/);
+    
+    
+    if(blobUris.has(aUri.spec)) {
+      let blobSpec = blobUris.get(aUri.spec);
+      let blobUri = GM_util.uriFromUrl(blobSpec);
+      let channel = GM_util.channelFromUri(blobUri, aLoadInfo);
+      channel.originalURI = aUri;
+
+      return channel;
+    }
+    
+    
     var dummy = new DummyChannel(aUri);
 
     // Incomplete URI, send a 404.
@@ -125,7 +162,7 @@ var ScriptProtocol = {
         // Get the channel for the file URI, but set its originalURI to the
         // greasemonkey-script: protocol URI, to ensure it can still be loaded
         // in unprivileged contexts (bug #2326).
-        var channel = GM_util.channelFromUri(uri);
+        let channel = GM_util.channelFromUri(uri, aLoadInfo);
         channel.originalURI = aUri;
 
         return channel;
