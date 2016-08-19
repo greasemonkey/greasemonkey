@@ -20,7 +20,7 @@
 <!ENTITY statusbar.enabled.accesskey "A">
 <!ENTITY install.title "Instalação do Greasemonkey">
 <!ENTITY install.runson "é executado em:">
-<!ENTITY install.matches "coincide com:">
+<!ENTITY install.matches "corresponde com:">
 <!ENTITY install.butnoton "não é executado em:">
 <!ENTITY install.warning1 "Scripts maliciosos podem violar a sua privacidade e agir em seu nome sem o seu conhecimento.">
 <!ENTITY install.warning2 "Apenas deve instalar scripts a partir de fontes em que confia.">

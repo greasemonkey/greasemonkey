@@ -10,12 +10,12 @@
 <!ENTITY menu.manage.accesskey "R">
 <!ENTITY menu.options "Greasemonkey – ustawienia…">
 <!ENTITY menu.options.accesskey "O">
-<!ENTITY menu.websites "Web sites...">
-<!ENTITY menu.websites.accesskey "W">
-<!ENTITY menu.websites.greasespot "Greasespot Blog">
-<!ENTITY menu.websites.greasespotwiki "Greasespot Wiki">
-<!ENTITY menu.websites.manual "Greasemonkey Manual">
-<!ENTITY menu.websites.getuserscripts "Get User Scripts">
+<!ENTITY menu.websites "Strony internetowe...">
+<!ENTITY menu.websites.accesskey "T">
+<!ENTITY menu.websites.greasespot "Blog Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Wiki Greasespot">
+<!ENTITY menu.websites.manual "Instrukcja Greasemonkey ">
+<!ENTITY menu.websites.getuserscripts "Pobierz skrypty">
 <!ENTITY statusbar.enabled "Włącz">
 <!ENTITY statusbar.enabled.accesskey "W">
 <!ENTITY install.title "Instalacja skryptu">
@@ -26,24 +26,24 @@
 <!ENTITY install.warning2 "Należy instalować tylko skrypty pochodzące z zaufanych źródeł.">
 <!ENTITY install.showscriptsource "Pokaż kod źródłowy skryptu">
 <!ENTITY install.installbutton "Instaluj">
-<!ENTITY install.downloadError "Download Error">
+<!ENTITY install.downloadError "Błąd pobierania">
 <!ENTITY loading "Pobieranie…">
 <!ENTITY newscript.name "Nazwa">
 <!ENTITY newscript.namespace "Lokalizacja">
 <!ENTITY newscript.description "Opis">
 <!ENTITY newscript.includes "Witryny, na których skrypt będzie uruchamiany (jedna w wierszu)">
 <!ENTITY newscript.excludes "Witryny, na których skrypt nie będzie uruchamiany (jedna w wierszu)">
-<!ENTITY newscript.fromClipboard "Use Script From Clipboard">
+<!ENTITY newscript.fromClipboard "Użyj skryptu ze schowka">
 <!ENTITY options.editor "Edytor">
-<!ENTITY options.experimental "Experimental">
-<!ENTITY options.defaultEditor "Use Default Editor">
-<!ENTITY options.browseForEditor "Browse for Editor Program">
+<!ENTITY options.experimental "Eksperymentalne">
+<!ENTITY options.defaultEditor "Użyj domyślnego edytora">
+<!ENTITY options.browseForEditor "Przeglądaj w poszukiwaniu edytora">
 <!ENTITY options.globalExcludes "Wykluczenia globalne">
-<!ENTITY options.newScript.template "New script template">
-<!ENTITY options.newScript.removeUnused "Remove unused lines">
+<!ENTITY options.newScript.template "Nowy szablon skryptu">
+<!ENTITY options.newScript.removeUnused "Usuń nieużywane linie">
 <!ENTITY Uninstall "Odinstaluj">
 <!ENTITY AnonymousStatistics "Anonimowe statystyki">
-<!ENTITY EnableFirefoxSync "Enable Firefox Sync for User Scripts">
+<!ENTITY EnableFirefoxSync "Włącz Firefox Sync dla skryptów">
 <!ENTITY SubmitStats "Zbieraj i przekazuj anonimowo statystyki używania Greasemonkey, by pomóc w udoskonaleniu aplikacji.">
 <!ENTITY UpdateChecking "Sprawdzaj dostępność aktualizacji">
 <!ENTITY RequireSecureUpdates "Wymaga bezpiecznych aktualizacji">
