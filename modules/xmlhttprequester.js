@@ -11,8 +11,9 @@ var gStringBundle = Components
 Components.utils.importGlobalProperties(['XMLHttpRequest']);
 
 
-function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
+function GM_xmlhttpRequester(wrappedContentWin, fileURL, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
+  this.fileURL = fileURL;
   this.originUrl = originUrl;
   this.sandbox = sandbox;
   // Firefox < 29 (i.e. PaleMoon) does not support getObjectPrincipal in a
@@ -33,7 +34,7 @@ function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   if (!details) {
     throw new this.wrappedContentWin.Error(
-        gStringBundle.GetStringFromName('error.xhrNoDetails'));
+        gStringBundle.GetStringFromName('error.xhrNoDetails'), this.fileURL);
   }
   try {
     // Validate and parse the (possibly relative) given URL.
@@ -43,7 +44,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     // A malformed URL won't be parsed properly.
     throw new this.wrappedContentWin.Error(
         gStringBundle.GetStringFromName('error.invalidUrl')
-            .replace('%1', details.url)
+            .replace('%1', details.url), this.fileURL
         );
   }
 
@@ -60,7 +61,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     default:
       throw new this.wrappedContentWin.Error(
           gStringBundle.GetStringFromName('error.disallowedScheme')
-              .replace('%1', details.url)
+              .replace('%1', details.url).this.fileURL
           );
   }
 
@@ -127,8 +128,14 @@ function(safeUrl, details, req) {
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
-  req.open(details.method, safeUrl,
-      !details.synchronous, details.user || "", details.password || "");
+  // See #2423
+  try {
+    req.open(details.method, safeUrl,
+        !details.synchronous, details.user || "", details.password || "");
+  } catch (e) {
+    throw new this.wrappedContentWin.Error(
+        "GM_xmlhttpRequest(): " + details.url + "\n" + e, this.fileURL);
+  }
 
   var channel;
 
@@ -138,9 +145,13 @@ function(safeUrl, details, req) {
     channel.setPrivate(true);
   }
 
-  channel = req.channel
-      .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
-  channel.forceAllowThirdPartyCookie = true;
+  try {
+    channel = req.channel
+        .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
+    channel.forceAllowThirdPartyCookie = true;
+  } catch (e) {
+    // Ignore.  e.g. ftp://
+  }
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
