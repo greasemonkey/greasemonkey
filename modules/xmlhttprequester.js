@@ -61,7 +61,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     default:
       throw new this.wrappedContentWin.Error(
           gStringBundle.GetStringFromName('error.disallowedScheme')
-              .replace('%1', details.url).this.fileURL
+              .replace('%1', details.url), this.fileURL
           );
   }
 
