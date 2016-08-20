@@ -138,9 +138,13 @@ function(safeUrl, details, req) {
     channel.setPrivate(true);
   }
 
-  channel = req.channel
-      .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
-  channel.forceAllowThirdPartyCookie = true;
+  try {
+    channel = req.channel
+        .QueryInterface(Components.interfaces.nsIHttpChannelInternal);
+    channel.forceAllowThirdPartyCookie = true;
+  } catch (e) {
+    // Ignore.  e.g. ftp://
+  }
 
   if (details.overrideMimeType) {
     req.overrideMimeType(details.overrideMimeType);
