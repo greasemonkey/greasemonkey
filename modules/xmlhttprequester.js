@@ -34,7 +34,8 @@ function GM_xmlhttpRequester(wrappedContentWin, fileURL, originUrl, sandbox) {
 GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
   if (!details) {
     throw new this.wrappedContentWin.Error(
-        gStringBundle.GetStringFromName('error.xhrNoDetails'), this.fileURL);
+        gStringBundle.GetStringFromName('error.xhrNoDetails'),
+        this.fileURL, null);
   }
   try {
     // Validate and parse the (possibly relative) given URL.
@@ -44,7 +45,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     // A malformed URL won't be parsed properly.
     throw new this.wrappedContentWin.Error(
         gStringBundle.GetStringFromName('error.invalidUrl')
-            .replace('%1', details.url), this.fileURL
+            .replace('%1', details.url), this.fileURL, null
         );
   }
 
@@ -61,7 +62,7 @@ GM_xmlhttpRequester.prototype.contentStartRequest = function(details) {
     default:
       throw new this.wrappedContentWin.Error(
           gStringBundle.GetStringFromName('error.disallowedScheme')
-              .replace('%1', details.url), this.fileURL
+              .replace('%1', details.url), this.fileURL, null
           );
   }
 
@@ -134,7 +135,7 @@ function(safeUrl, details, req) {
         !details.synchronous, details.user || "", details.password || "");
   } catch (e) {
     throw new this.wrappedContentWin.Error(
-        "GM_xmlhttpRequest(): " + details.url + "\n" + e, this.fileURL);
+        "GM_xmlhttpRequest(): " + details.url + "\n" + e, this.fileURL, null);
   }
 
   var channel;
