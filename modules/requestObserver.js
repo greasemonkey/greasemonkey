@@ -97,7 +97,10 @@ function installObserver(aSubject, aTopic, aData) {
   // this same URI.
   try {
     var request = channel.QueryInterface(Ci.nsIRequest);
-    request.suspend();
+    // See #1717
+    if (request.isPending()) {
+      request.suspend();
+    }
 
     var browser = channel
         .QueryInterface(Ci.nsIHttpChannel)

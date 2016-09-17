@@ -11,6 +11,7 @@ Cu.import('chrome://greasemonkey-modules/content/scriptIcon.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
 Cu.import("resource://gre/modules/NetUtil.jsm");
+Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
@@ -604,6 +605,22 @@ RemoteScript.prototype._downloadFile = function(
   // 1. It creates temporary folder ("gm-temp-...") - permanently (see #2069)
   // 2. Infinite loading web page
   channel.loadFlags |= channel.LOAD_BYPASS_CACHE;
+  // See #1717
+  // A page with a userscript - http auth
+  // Private browsing
+  if (channel instanceof Ci.nsIPrivateBrowsingChannel) {
+    var isPrivate = true;
+    var chromeWin = GM_util.getBrowserWindow();
+    if (chromeWin.gBrowser) {
+      // i.e. the Private Browsing autoStart pref:
+      // "browser.privatebrowsing.autostart"
+      isPrivate = PrivateBrowsingUtils.isBrowserPrivate(chromeWin.gBrowser);
+    }
+    if (isPrivate) {
+      channel = channel.QueryInterface(Ci.nsIPrivateBrowsingChannel);
+      channel.setPrivate(true);
+    }
+  }
   this._channels.push(channel);
   var dsl = new DownloadListener(
       0 == this._progressIndex,  // aTryToParse
