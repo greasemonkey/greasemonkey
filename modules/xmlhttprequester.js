@@ -130,6 +130,7 @@ function(safeUrl, details, req) {
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
   // See #2423
+  // http://bugzil.la/1275746
   try {
     req.open(details.method, safeUrl,
         !details.synchronous, details.user || "", details.password || "");
@@ -186,15 +187,22 @@ function(safeUrl, details, req) {
   }
 
   var body = details.data ? details.data : null;
-  if (details.binary && (body !== null)) {
-    var bodyLength = body.length;
-    var bodyData = new Uint8Array(bodyLength);
-    for (var i = 0; i < bodyLength; i++) {
-      bodyData[i] = body.charCodeAt(i) & 0xff;
+  // See #2423
+  // http://bugzil.la/918751
+  try {
+    if (details.binary && (body !== null)) {
+      var bodyLength = body.length;
+      var bodyData = new Uint8Array(bodyLength);
+      for (var i = 0; i < bodyLength; i++) {
+        bodyData[i] = body.charCodeAt(i) & 0xff;
+      }
+      req.send(new Blob([bodyData]));
+    } else {
+      req.send(body);
     }
-    req.send(new Blob([bodyData]));
-  } else {
-    req.send(body);
+  } catch (e) {
+    throw new this.wrappedContentWin.Error(
+        "GM_xmlhttpRequest(): " + details.url + "\n" + e, this.fileURL, null);
   }
 };
 
