@@ -57,7 +57,8 @@ function MenuCommandRun(aContent, aMessage) {
 // This function is injected into the sandbox, in a private scope wrapper, BY
 // SOURCE.  Data and sensitive references are wrapped up inside its closure.
 function MenuCommandSandbox(
-    aScriptUuid, aScriptName, aCommandResponder, aInvalidAccesskeyErrorStr,
+    aScriptUuid, aScriptName, aScriptFileURL,
+    aCommandResponder, aInvalidAccesskeyErrorStr,
     aMenuCommandEventNameSuffix) {
   // 1) Internally to this function's private scope, maintain a set of
   // registered menu commands.
@@ -82,7 +83,9 @@ function MenuCommandSandbox(
         e.stopImmediatePropagation();
         var commandFunc = commandFuncs[detail.cookie];
         if (!commandFunc) {
-          throw new Error('Could not run requested menu command!');
+          throw new Error(
+              'Could not run requested menu command!',
+              aScriptFileURL, null);
         } else {
           commandFunc.call();
         }
@@ -99,7 +102,9 @@ function MenuCommandSandbox(
     if (accessKey
         && (("string" != typeof accessKey) || (accessKey.length != 1))
     ) {
-      throw new Error(aInvalidAccesskeyErrorStr.replace('%1', commandName));
+      throw new Error(
+          aInvalidAccesskeyErrorStr.replace('%1', commandName),
+          aScriptFileURL, null);
     }
 
     var command = {

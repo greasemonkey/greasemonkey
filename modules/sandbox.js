@@ -76,8 +76,9 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
     Components.utils.evalInSandbox(
         'this._MenuCommandSandbox = ' + MenuCommandSandbox.toSource(), sandbox);
     sandbox._MenuCommandSandbox(
-        aScript.uuid, aScript.localized.name, MenuCommandRespond,
-        gInvalidAccesskeyErrorStr, MenuCommandEventNameSuffix);
+        aScript.uuid, aScript.localized.name, aScript.fileURL,
+        MenuCommandRespond, gInvalidAccesskeyErrorStr,
+        MenuCommandEventNameSuffix);
     Components.utils.evalInSandbox(
         'delete this._MenuCommandSandbox;', sandbox);
   }

@@ -21,6 +21,7 @@ function GM_Resources(script) {
 }
 
 GM_Resources.prototype.getResourceURL = function(aScript, name) {
+  var dep = this._getDep(name);
   return ['greasemonkey-script:', aScript.uuid, '/', name].join('');
 };
 
