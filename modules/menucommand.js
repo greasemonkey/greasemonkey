@@ -58,7 +58,10 @@ function MenuCommandRun(aContent, aMessage) {
 // SOURCE.  Data and sensitive references are wrapped up inside its closure.
 function MenuCommandSandbox(
     aScriptUuid, aScriptName, aScriptFileURL,
-    aCommandResponder, aInvalidAccesskeyErrorStr,
+    aCommandResponder,
+    aMenuCommandCallbackIsNotFunctionErrorStr,
+    aMenuCommandCouldNotRunErrorStr,
+    aMenuCommandInvalidAccesskeyErrorStr,
     aMenuCommandEventNameSuffix) {
   // 1) Internally to this function's private scope, maintain a set of
   // registered menu commands.
@@ -84,7 +87,13 @@ function MenuCommandSandbox(
         var commandFunc = commandFuncs[detail.cookie];
         if (!commandFunc) {
           throw new Error(
-              'Could not run requested menu command!',
+              aMenuCommandCouldNotRunErrorStr.replace(
+                  "%1", commands[detail.cookie].name),
+              aScriptFileURL, null);
+        } else if ("function" !== typeof commandFunc) {
+          throw new Error(
+              aMenuCommandCallbackIsNotFunctionErrorStr.replace(
+                  "%1", commands[detail.cookie].name),
               aScriptFileURL, null);
         } else {
           commandFunc.call();
@@ -103,7 +112,7 @@ function MenuCommandSandbox(
         && (("string" != typeof accessKey) || (accessKey.length != 1))
     ) {
       throw new Error(
-          aInvalidAccesskeyErrorStr.replace('%1', commandName),
+          aMenuCommandInvalidAccesskeyErrorStr.replace('%1', commandName),
           aScriptFileURL, null);
     }
 

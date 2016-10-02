@@ -16,8 +16,12 @@ Cu.import("chrome://greasemonkey-modules/content/extractMeta.js");
 var gStringBundle = Cc["@mozilla.org/intl/stringbundle;1"]
     .getService(Ci.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
-var gInvalidAccesskeyErrorStr = gStringBundle
-    .GetStringFromName('error.menu-invalid-accesskey');
+var gMenuCommandCallbackIsNotFunctionErrorStr = gStringBundle
+    .GetStringFromName("error.menu-callback-is-not-function");
+var gMenuCommandCouldNotRunErrorStr = gStringBundle
+    .GetStringFromName("error.menu-could-not-run");
+var gMenuCommandInvalidAccesskeyErrorStr = gStringBundle
+    .GetStringFromName("error.menu-invalid-accesskey");
 var subLoader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
     .getService(Components.interfaces.mozIJSSubScriptLoader);
 
@@ -77,7 +81,10 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'this._MenuCommandSandbox = ' + MenuCommandSandbox.toSource(), sandbox);
     sandbox._MenuCommandSandbox(
         aScript.uuid, aScript.localized.name, aScript.fileURL,
-        MenuCommandRespond, gInvalidAccesskeyErrorStr,
+        MenuCommandRespond,
+        gMenuCommandCallbackIsNotFunctionErrorStr,
+        gMenuCommandCouldNotRunErrorStr,
+        gMenuCommandInvalidAccesskeyErrorStr,
         MenuCommandEventNameSuffix);
     Components.utils.evalInSandbox(
         'delete this._MenuCommandSandbox;', sandbox);
