@@ -841,7 +841,7 @@ Script.prototype.checkConfig = function() {
 };
 
 Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
-  if (this.availableUpdate) return aCallback(true);
+  if (this.availableUpdate) return aCallback(0);
 
   var uri = GM_util.uriFromUrl(this.updateURL).clone();
 
@@ -856,15 +856,37 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.overrideMimeType('application/javascript');
   req.timeout = 45000;  // milliseconds
-  req.open("GET", url, true);
+  try {
+    req.open("GET", url, true);
+  } catch (e) {
+    return aCallback(1, {
+      "name": this.localized.name,
+      "url": url,
+      "error": e,
+    });
+  }
 
   // Let the server know we want a user script metadata block
   req.setRequestHeader('Accept', 'text/x-userscript-meta');
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
-  req.onerror = GM_util.hitch(null, aCallback, false);
-  req.ontimeout = GM_util.hitch(null, aCallback, false);
-  req.send(null);
+  req.onerror = GM_util.hitch(null, aCallback, 1, {
+    "name": this.localized.name,
+    "url": url,
+  });
+  req.ontimeout = GM_util.hitch(null, aCallback, 2, {
+    "name": this.localized.name,
+    "url": url,
+  });
+  try {
+    req.send(null);
+  } catch (e) {
+    return aCallback(1, {
+      "name": this.localized.name,
+      "url": url,
+      "error": e,
+    });
+  }
 };
 
 Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
@@ -875,7 +897,11 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   });
 
   if (req.status != 200 && req.status != 0) {
-    return ( aMeta ? metaFail() : aCallback(false) );
+    return ( aMeta ? metaFail() : aCallback(3, {
+      "name": this.localized.name,
+      "url": req.responseURL,
+      "status": req.status + " (" + req.statusText + ")",
+    }));
   }
 
   var source = req.responseText;
@@ -884,7 +910,11 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   var newScript = scope.parse(source, this.downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) {
-    return ( aMeta ? metaFail() : aCallback(false) );
+    return ( aMeta ? metaFail() : aCallback(4, {
+      "name": this.localized.name,
+      "url": this.downloadURL,
+      "version": remoteVersion,
+    }));
   }
 
   if (aMeta && 'ok' != this._updateMetaStatus) {
@@ -896,12 +926,17 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
   if (!aForced && versionChecker.compare(this._version, remoteVersion) >= 0) {
-    return aCallback(false);
+    return aCallback(5, {
+      "name": this.localized.name,
+      "url": this.downloadURL,
+      "versionOld": this._version,
+      "versionNew": remoteVersion,
+    });
   }
 
   this.availableUpdate = newScript;
   this._changed('modified', null);
-  aCallback(true);
+  aCallback(0);
 };
 
 Script.prototype.allFiles = function() {

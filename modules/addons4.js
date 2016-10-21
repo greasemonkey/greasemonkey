@@ -18,6 +18,7 @@ var EXPORTED_SYMBOLS = [
 Components.utils.import('resource://gre/modules/AddonManager.jsm');
 Components.utils.import('resource://gre/modules/Services.jsm');
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
+Components.utils.import("chrome://greasemonkey-modules/content/GM_notification.js");
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/remoteScript.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
@@ -200,34 +201,101 @@ ScriptAddon.prototype.findUpdates = function(aUpdateListener, aReason) {
 };
 
 ScriptAddon.prototype._handleRemoteUpdate = function(
-    aUpdateListener, aAvailable) {
+    aUpdateListener, aResult, aInfo) {
   function tryToCall(obj, methName) {
     if (obj && ('undefined' != typeof obj[methName])) {
       obj[methName].apply(obj, Array.prototype.slice.call(arguments, 2));
     }
   }
 
+  var stringBundle = Components
+      .classes["@mozilla.org/intl/stringbundle;1"]
+      .getService(Components.interfaces.nsIStringBundleService)
+      .createBundle("chrome://greasemonkey/locale/gm-addons.properties");
+
+  var _scriptUpdatesFailure = stringBundle.GetStringFromName(
+      "script.updated.failure");
+
   try {
-    if (aAvailable) {
-      // Purge any possible ScriptInstall cache.
-      if (this.id in ScriptInstallCache) {
-        delete ScriptInstallCache[this.id];
-      }
-      // Then create one with this newly found update info.
-      var scriptInstall = ScriptInstallFactoryByAddon(
-          this, this._script);
-      AddonManagerPrivate.callInstallListeners(
-          'onNewInstall', [], scriptInstall);
-      tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
-    } else {
-      tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+    switch (aResult) {
+      case 0:
+        // Purge any possible ScriptInstall cache.
+        if (this.id in ScriptInstallCache) {
+          delete ScriptInstallCache[this.id];
+        }
+        // Then create one with this newly found update info.
+        var scriptInstall = ScriptInstallFactoryByAddon(
+            this, this._script);
+        AddonManagerPrivate.callInstallListeners(
+            'onNewInstall', [], scriptInstall);
+        tryToCall(aUpdateListener, 'onUpdateAvailable', this, scriptInstall);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_NO_ERROR);
+        break;
+      case 1:      
+        if (aInfo.error) {
+          GM_util.logError(
+              _scriptUpdatesFailure +
+              " " + aInfo.name + " - \"" + aInfo.url + "\"" +
+              " = " + aInfo.error);
+        } else {
+          /*
+          dump(
+              _scriptUpdatesFailure +
+              " " + aInfo.name + " - \"" + aInfo.url + "\"");
+          */
+        }
+        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
+        break;
+      case 2:      
+        GM_util.logError(
+            _scriptUpdatesFailure +
+            " " + aInfo.name + " - \"" + aInfo.url + "\" = " + "timeout");
+        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_TIMEOUT);
+        break;
+      case 3:      
+        var _error = _scriptUpdatesFailure +
+            " " + aInfo.name + " - \"" + aInfo.url + "\" = " +
+            "status: " + aInfo.status;
+        GM_util.logError(_error);
+        GM_notification(_error, "script-update-failed");
+        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
+        break;
+      case 4:      
+        /*
+        dump(
+            _scriptUpdatesFailure +
+            " " + aInfo.name + " - \"" + aInfo.url + "\" = " +
+            "version: " + aInfo.version);
+        */
+        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_NO_ERROR);
+        break;
+      case 5:      
+        /*
+        dump(
+            _scriptUpdatesFailure +
+            " " + aInfo.name + " - \"" + aInfo.url + "\" ; " +
+            "version: " + aInfo.versionOld + " >= " + aInfo.versionNew);
+        */
+        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
+        tryToCall(aUpdateListener, 'onUpdateFinished', this,
+            AddonManager.UPDATE_STATUS_NO_ERROR);
+        break;
     }
-    tryToCall(aUpdateListener, 'onUpdateFinished', this,
-        AddonManager.UPDATE_STATUS_NO_ERROR);
   } catch (e) {
     // See #1621.  Don't die if (e.g.) an addon listener doesn't provide
     // the entire interface and thus a method is undefined.
-    Components.utils.reportError(e);
+    GM_util.logError(
+        _scriptUpdatesFailure +
+        " " + aInfo.name + " - \"" + aInfo.url + "\" = " + e);
     tryToCall(aUpdateListener, 'onUpdateFinished', this,
         AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
   }
