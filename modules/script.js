@@ -841,7 +841,7 @@ Script.prototype.checkConfig = function() {
 };
 
 Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
-  if (this.availableUpdate) return aCallback(0);
+  if (this.availableUpdate) return aCallback("updateAvailable");
 
   var uri = GM_util.uriFromUrl(this.updateURL).clone();
 
@@ -859,10 +859,12 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   try {
     req.open("GET", url, true);
   } catch (e) {
-    return aCallback(1, {
+    return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
       "url": url,
-      "error": e,
+      "info": " = " + e,
+      "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
+      "log": true,
     });
   }
 
@@ -870,21 +872,28 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   req.setRequestHeader('Accept', 'text/x-userscript-meta');
   req.onload = GM_util.hitch(
       this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
-  req.onerror = GM_util.hitch(null, aCallback, 1, {
+  req.onerror = GM_util.hitch(null, aCallback, "noUpdateAvailable", {
     "name": this.localized.name,
     "url": url,
+    "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
+    "log": false,
   });
-  req.ontimeout = GM_util.hitch(null, aCallback, 2, {
+  req.ontimeout = GM_util.hitch(null, aCallback, "noUpdateAvailable", {
     "name": this.localized.name,
     "url": url,
+    "info": " = timeout",
+    "updateStatus": "UPDATE_STATUS_TIMEOUT",
+    "log": true,
   });
   try {
     req.send(null);
   } catch (e) {
-    return aCallback(1, {
+    return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
       "url": url,
-      "error": e,
+      "info": " = " + e,
+      "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
+      "log": true,
     });
   }
 };
@@ -897,10 +906,13 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   });
 
   if (req.status != 200 && req.status != 0) {
-    return ( aMeta ? metaFail() : aCallback(3, {
+    return ( aMeta ? metaFail() : aCallback("noUpdateAvailable", {
       "name": this.localized.name,
       "url": req.responseURL,
-      "status": req.status + " (" + req.statusText + ")",
+      "info": " = status: " + req.status + " (" + req.statusText + ")",
+      "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
+      "log": true,
+      "notification": true,
     }));
   }
 
@@ -910,10 +922,12 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   var newScript = scope.parse(source, this.downloadURL);
   var remoteVersion = newScript.version;
   if (!remoteVersion) {
-    return ( aMeta ? metaFail() : aCallback(4, {
+    return ( aMeta ? metaFail() : aCallback("noUpdateAvailable", {
       "name": this.localized.name,
       "url": this.downloadURL,
-      "version": remoteVersion,
+      "info": " = version: " + remoteVersion,
+      "updateStatus": "UPDATE_STATUS_NO_ERROR",
+      "log": false,
     }));
   }
 
@@ -926,17 +940,18 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
       .classes["@mozilla.org/xpcom/version-comparator;1"]
       .getService(Components.interfaces.nsIVersionComparator);
   if (!aForced && versionChecker.compare(this._version, remoteVersion) >= 0) {
-    return aCallback(5, {
+    return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
       "url": this.downloadURL,
-      "versionOld": this._version,
-      "versionNew": remoteVersion,
+      "info": " ; version: " + this._version + " >= " + remoteVersion,
+      "updateStatus": "UPDATE_STATUS_NO_ERROR",
+      "log": false,
     });
   }
 
   this.availableUpdate = newScript;
   this._changed('modified', null);
-  aCallback(0);
+  aCallback("updateAvailable");
 };
 
 Script.prototype.allFiles = function() {

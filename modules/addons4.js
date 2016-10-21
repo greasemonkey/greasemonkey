@@ -218,7 +218,7 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
 
   try {
     switch (aResult) {
-      case 0:
+      case "updateAvailable":
         // Purge any possible ScriptInstall cache.
         if (this.id in ScriptInstallCache) {
           delete ScriptInstallCache[this.id];
@@ -232,62 +232,19 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
         tryToCall(aUpdateListener, 'onUpdateFinished', this,
             AddonManager.UPDATE_STATUS_NO_ERROR);
         break;
-      case 1:      
-        if (aInfo.error) {
-          GM_util.logError(
-              _scriptUpdatesFailure +
-              " " + aInfo.name + " - \"" + aInfo.url + "\"" +
-              " = " + aInfo.error);
-        } else {
-          /*
-          dump(
-              _scriptUpdatesFailure +
-              " " + aInfo.name + " - \"" + aInfo.url + "\"");
-          */
+      case "noUpdateAvailable":
+        var _info = _scriptUpdatesFailure +
+            " " + aInfo.name + " - \"" + aInfo.url + "\"" +
+            (aInfo.info ? aInfo.info : "");
+        if (aInfo.log) {
+          GM_util.logError(_info);
         }
-        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
-        tryToCall(aUpdateListener, 'onUpdateFinished', this,
-            AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
-        break;
-      case 2:      
-        GM_util.logError(
-            _scriptUpdatesFailure +
-            " " + aInfo.name + " - \"" + aInfo.url + "\" = " + "timeout");
-        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
-        tryToCall(aUpdateListener, 'onUpdateFinished', this,
-            AddonManager.UPDATE_STATUS_TIMEOUT);
-        break;
-      case 3:      
-        var _error = _scriptUpdatesFailure +
-            " " + aInfo.name + " - \"" + aInfo.url + "\" = " +
-            "status: " + aInfo.status;
-        GM_util.logError(_error);
-        GM_notification(_error, "script-update-failed");
-        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
-        tryToCall(aUpdateListener, 'onUpdateFinished', this,
-            AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
-        break;
-      case 4:      
-        /*
-        dump(
-            _scriptUpdatesFailure +
-            " " + aInfo.name + " - \"" + aInfo.url + "\" = " +
-            "version: " + aInfo.version);
-        */
-        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
-        tryToCall(aUpdateListener, 'onUpdateFinished', this,
-            AddonManager.UPDATE_STATUS_NO_ERROR);
-        break;
-      case 5:      
-        /*
-        dump(
-            _scriptUpdatesFailure +
-            " " + aInfo.name + " - \"" + aInfo.url + "\" ; " +
-            "version: " + aInfo.versionOld + " >= " + aInfo.versionNew);
-        */
-        tryToCall(aUpdateListener, 'onNoUpdateAvailable', this);
-        tryToCall(aUpdateListener, 'onUpdateFinished', this,
-            AddonManager.UPDATE_STATUS_NO_ERROR);
+        if (aInfo.notification) {
+          GM_notification(_info, "script-update-failed");
+        }
+        tryToCall(aUpdateListener, "onNoUpdateAvailable", this);
+        tryToCall(aUpdateListener, "onUpdateFinished", this,
+            AddonManager[aInfo.updateStatus]);
         break;
     }
   } catch (e) {
