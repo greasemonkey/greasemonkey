@@ -108,12 +108,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_listValues')) {
-    // Return plain (JSON) string from chrome, parse it in the sandbox,
-    // to avoid issues with objects (Array) crossing security boundaries.
-    sandbox._GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
-    Components.utils.evalInSandbox(
-        'function GM_listValues() { return JSON.parse(_GM_listValues()); }',
-        sandbox);
+    sandbox.GM_listValues = GM_util.hitch(scriptStorage, 'listValues');
   }
 
   if (GM_util.inArray(aScript.grants, 'GM_openInTab')) {

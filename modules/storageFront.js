@@ -86,7 +86,16 @@ GM_ScriptStorageFront.prototype.listValues = function() {
   var value = this._messageManager.sendSyncMessage(
       'greasemonkey:scriptVal-list',
       {scriptId: this._script.id});
-  return JSON.stringify(value.length && value[0] || []);
+  value = value.length && value[0] || [];
+
+  try {
+    value = JSON.parse(JSON.stringify(value));
+    return Components.utils.cloneInto(
+        value, this._sandbox, { wrapReflectors: true });
+  } catch (e) {
+    dump('JSON parse error? ' + uneval(e) + '\n');
+    return Components.utils.cloneInto([], this._sandbox);
+  }
 };
 
 
