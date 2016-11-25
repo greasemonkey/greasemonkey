@@ -14,7 +14,7 @@ var PICK_EXE = stringBundle.GetStringFromName("editor.please_pick_executable");
 function setEditor(aScratchpad) {
   if (aScratchpad) {
     GM_prefRoot.remove("editor");
-    return;
+    return true;
   }
 
   // Ask the user to choose a new editor. Sometimes users get confused and
@@ -40,15 +40,16 @@ function setEditor(aScratchpad) {
     }
 
     if (filePicker.show() != nsIFilePicker.returnOK) {
-      // The user canceled, return null.
-      return;
+      // The user canceled, return false.
+      return false;
     }
 
     if (filePicker.file.exists() && filePicker.file.isExecutable()) {
       GM_prefRoot.setValue("editor", filePicker.file.path);
-      return;
+      return true;
     } else {
       GM_util.alert(PICK_EXE);
+      return false;
     }
   }
 }

@@ -4,14 +4,7 @@ var EXPORTED_SYMBOLS = ["windowIsPrivate"];
 
 
 function windowIsPrivate(aContentWin) {
-  var isPrivate = true;
-  if (PrivateBrowsingUtils.isContentWindowPrivate) {
-    // Firefox >= 35
-    isPrivate = PrivateBrowsingUtils.isContentWindowPrivate(aContentWin);
-  } else {
-    // Firefox <= 34; i.e. PaleMoon
-    isPrivate = PrivateBrowsingUtils.isWindowPrivate(aContentWin);
-  }
-
-  return isPrivate;
+  // i.e. the Private Browsing autoStart pref:
+  // "browser.privatebrowsing.autostart"
+  return PrivateBrowsingUtils.isContentWindowPrivate(aContentWin);
 }

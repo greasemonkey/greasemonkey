@@ -8,9 +8,14 @@ try {
     // See: http://hg.mozilla.org/mozilla-central/rev/397c69fa1677
     Components.utils.import("resource:///modules/devtools/client/scratchpad/scratchpad-manager.jsm");
   } catch (e) {
-    // Moved in Firefox 44
-    // See: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
-    Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+    // Pale Moon
+    try {
+      // Moved in Firefox 44
+      // See: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
+      Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
+    } catch (e) {
+      // Ignore.
+    }
   }
 }
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
@@ -29,11 +34,18 @@ var COULD_NOT_LAUNCH = (function() {
 function openInEditor(script) {
   var editor = GM_util.getEditor();
   if (!editor) {
-    ScratchpadManager.openScratchpad({
-      'filename': script.file.path,
-      'text': script.textContent,
-      'saved': true,
-    });
+    // Pale Moon
+    try {
+      ScratchpadManager.openScratchpad({
+        'filename': script.file.path,
+        'text': script.textContent,
+        'saved': true,
+      });
+    } catch (e) {
+      if (GM_util.setEditor(0)) {
+        openInEditor(script);
+      }
+    }
     return;
   }
 

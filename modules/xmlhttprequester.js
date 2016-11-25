@@ -15,11 +15,7 @@ function GM_xmlhttpRequester(wrappedContentWin, originUrl, sandbox) {
   this.wrappedContentWin = wrappedContentWin;
   this.originUrl = originUrl;
   this.sandbox = sandbox;
-  // Firefox < 29 (i.e. PaleMoon) does not support getObjectPrincipal in a
-  // scriptable context.  Greasemonkey users on this platform otherwise would
-  // use an older version without this check, so skipping is no worse.
-  this.sandboxPrincipal = 'function' == typeof Components.utils.getObjectPrincipal
-      ? Components.utils.getObjectPrincipal(sandbox) : null;
+  this.sandboxPrincipal = Components.utils.getObjectPrincipal(sandbox);
 }
 
 // this function gets called by user scripts in content security scope to
@@ -198,11 +194,8 @@ function(wrappedContentWin, sandbox, req, event, details) {
 
   // ... but ensure that the callback came from a script, not content, by
   // checking that its principal equals that of the sandbox.
-  if ('function' == typeof Components.utils.getObjectPrincipal) {
-    // Firefox < 29; i.e. PaleMoon.
-    var callbackPrincipal = Components.utils.getObjectPrincipal(eventCallback);
-    if (!this.sandboxPrincipal.equals(callbackPrincipal)) return;
-  }
+  var callbackPrincipal = Components.utils.getObjectPrincipal(eventCallback);
+  if (!this.sandboxPrincipal.equals(callbackPrincipal)) return;
 
   req.addEventListener(event, function(evt) {
     var responseState = {
