@@ -37,7 +37,7 @@ var windowsMaxNameLen = (240 - GM_util.scriptDir().path.length) / 2;
 /////////////////////////////// Private Helpers ////////////////////////////////
 
 function assertIsFunction(aFunc, aMessage) {
-  if (typeof aFunc !== typeof function() {}) throw Error(aMessage);
+  if (typeof aFunc !== typeof function() {}) throw new Error(aMessage);
 }
 
 var disallowedFilenameCharacters = new RegExp('[\\\\/:*?\'"<>|]', 'g');
@@ -52,7 +52,7 @@ function cleanFilename(aFilename, aDefault) {
   // Limit length on Windows (#1548; http://goo.gl/vDSk9)
   if ('WINNT' == xulRuntime.OS) {
     if (windowsMaxNameLen <= 0) {
-      throw Error('Could not make a valid file name to save.');
+      throw new Error('Could not make a valid file name to save.');
     }
 
     var match = filename.match(/^(.+?)(\.(:?user\.js)|[^.{,8}])$/);
@@ -313,7 +313,7 @@ RemoteScript.prototype.downloadMetadata = function(aCallback) {
 RemoteScript.prototype.downloadScript = function(aCompletionCallback) {
   assertIsFunction(
       aCompletionCallback, 'Completion callback is not a function.');
-  if (!this._url) throw Error('Tried to download script, but have no URL.');
+  if (!this._url) throw new Error('Tried to download script, but have no URL.');
 
   this._scriptFile = GM_util.getTempFile(
       this._tempDir, filenameFromUri(this._uri, 'gm_script'));
@@ -512,7 +512,7 @@ RemoteScript.prototype.toString = function() {
 RemoteScript.prototype._dispatchCallbacks = function(aType, aData) {
   var callbacks = this['_' + aType + 'Callbacks'];
   if (!callbacks) {
-    throw Error('Invalid callback type: ' + aType);
+    throw new Error('Invalid callback type: ' + aType);
   }
   for (var i = 0, callback = null; callback = callbacks[i]; i++) {
     callback(this, aType, aData);

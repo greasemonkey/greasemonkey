@@ -24,7 +24,6 @@ Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
 var Cc = Components.classes;
 var Ci = Components.interfaces;
-var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 var SCRIPT_ID_SUFFIX = '@greasespot.net';
 var SCRIPT_ADDON_TYPE = 'greasemonkey-user-script';
 
@@ -136,7 +135,7 @@ function ScriptAddon_getApplyBackgroundUpdates() {
 });
 
 ScriptAddon.prototype.__defineSetter__('applyBackgroundUpdates',
-function ScriptAddon_SetApplyBackgroundUpdates(aVal) {
+function ScriptAddon_setApplyBackgroundUpdates(aVal) {
   this._script.checkRemoteUpdates = aVal;
   this._script._changed('modified', null);
   AddonManagerPrivate.callAddonListeners(

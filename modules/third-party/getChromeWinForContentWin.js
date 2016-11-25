@@ -47,12 +47,17 @@ var EXPORTED_SYMBOLS = ["getChromeWinForContentWin"];
 var Ci = Components.interfaces;
 
 function getChromeWinForContentWin(aContentWin) {
-  return aContentWin
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIWebNavigation)
-      .QueryInterface(Ci.nsIDocShellTreeItem)
-      .rootTreeItem
-      .QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIDOMWindow)
-      .QueryInterface(Ci.nsIDOMChromeWindow);
+  // Only with e10s disabled.
+  try {
+    return aContentWin
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIWebNavigation)
+        .QueryInterface(Ci.nsIDocShellTreeItem)
+        .rootTreeItem
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIDOMWindow)
+        .QueryInterface(Ci.nsIDOMChromeWindow);
+  } catch (e) {
+    return null;
+  }
 }

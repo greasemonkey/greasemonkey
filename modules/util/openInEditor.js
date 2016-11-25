@@ -65,6 +65,6 @@ function openInEditor(script) {
     // next time they can pick a different one.
     GM_util.alert(COULD_NOT_LAUNCH + "\n" + e);
     GM_prefRoot.remove("editor");
-    throw(e);
+    throw e;
   }
 }
