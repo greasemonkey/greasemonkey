@@ -17,5 +17,7 @@ overlay    chrome://greasemonkey/content/options.xul chrome://greasemonkey/conte
 overlay    chrome://greasemonkey/content/newscript.xul chrome://greasemonkey/content/closewindow.xul
 overlay    chrome://browser/content/devtools/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion<44.0a1
 overlay    chrome://devtools/content/scratchpad/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul appversion>=44.0a1
+# Pale Moon
+overlay    chrome://global/content/devtools/scratchpad.xul chrome://greasemonkey/content/scratchpad-overlay.xul application={8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}
 
 locale     greasemonkey en-US locale/en-US/

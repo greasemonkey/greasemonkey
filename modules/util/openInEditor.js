@@ -14,7 +14,11 @@ try {
       // See: http://hg.mozilla.org/mozilla-central/rev/3b90d45a2bbc
       Components.utils.import("resource:///modules/devtools/scratchpad-manager.jsm");
     } catch (e) {
-      // Ignore.
+      try {
+        Components.utils.import("resource://gre/modules/devtools/scratchpad-manager.jsm");
+      } catch (e) {
+        // Ignore.
+      }
     }
   }
 }
