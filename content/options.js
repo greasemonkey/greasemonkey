@@ -1,3 +1,7 @@
+// Pale Moon
+Components.utils.import("resource://gre/modules/Services.jsm");
+var gPalemoonId = "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
+
 Components.utils.import('chrome://greasemonkey-modules/content/prefmanager.js');
 Components.utils.import('chrome://greasemonkey-modules/content/util.js');
 
@@ -6,8 +10,15 @@ var cpmm = Components.classes["@mozilla.org/childprocessmessagemanager;1"]
 
 
 function GM_loadOptions() {
-  document.getElementById('check-sync')
-  .checked = GM_prefRoot.getValue('sync.enabled');
+  // Pale Moon
+  document.getElementById("check-sync")
+      .setAttribute("label", document.getElementById("check-sync")
+      .getAttribute("label")
+      .replace(/Firefox/i, (
+      (Services.appinfo.ID == gPalemoonId)
+          ? "Pale Moon"
+          : "$&")
+      ));
   document.getElementById('secure-update')
       .checked = GM_prefRoot.getValue('requireSecureUpdates');
   document.getElementById('submit-stats')
