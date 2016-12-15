@@ -250,7 +250,7 @@ function(wrappedContentWin, sandbox, req, event, details) {
       case "error":
         break;
       default:
-        if (4 != req.readyState) break;
+        if (2 > req.readyState) break;
         responseState.responseHeaders = req.getAllResponseHeaders();
         responseState.status = req.status;
         responseState.statusText = req.statusText;
