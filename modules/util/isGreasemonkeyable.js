@@ -22,6 +22,8 @@ function isGreasemonkeyable(url) {
       return GM_prefRoot.getValue('dataIsGreaseable');
     case "file":
       return GM_prefRoot.getValue('fileIsGreaseable');
+    case "jar":
+      return GM_prefRoot.getValue('jarIsGreaseable');
     case "unmht":
       return GM_prefRoot.getValue('unmhtIsGreaseable');
   }

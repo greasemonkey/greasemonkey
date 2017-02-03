@@ -2,6 +2,7 @@ pref("extensions.{e4a8a97b-f2ed-450b-b12d-ee082ba24781}.description", "chrome://
 pref("extensions.greasemonkey.dataIsGreaseable", false);
 pref("extensions.greasemonkey.enableScriptRefreshing", true);
 pref("extensions.greasemonkey.fileIsGreaseable", false);
+pref("extensions.greasemonkey.jarIsGreaseable", false);
 pref("extensions.greasemonkey.globalExcludes", '[]');
 pref("extensions.greasemonkey.newScript.removeUnused", true);
 pref("extensions.greasemonkey.newScript.template", '// ==UserScript==\n// @name        %name%\n// @namespace   %namespace%\n// @description %description%\n// @include     %include%\n// @exclude     %exclude%\n// @version     1\n// @grant       none\n// ==/UserScript==');
