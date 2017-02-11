@@ -12,6 +12,7 @@ function isGreasemonkeyable(url) {
     case "http":
     case "https":
     case "ftp":
+    case "view-source":
       return true;
     case "about":
       // Always allow "about:blank" and "about:reader".
