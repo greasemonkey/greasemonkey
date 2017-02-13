@@ -237,7 +237,7 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
             " " + aInfo.name + " - \"" + aInfo.url + "\"" +
             (aInfo.info ? aInfo.info : "");
         if (aInfo.log) {
-          GM_util.logError(_info);
+          GM_util.logError(_info, false, aInfo.fileURL, null);
         }
         if (aInfo.notification) {
           GM_notification(_info, "script-update-failed");
@@ -252,7 +252,8 @@ ScriptAddon.prototype._handleRemoteUpdate = function(
     // the entire interface and thus a method is undefined.
     GM_util.logError(
         _scriptUpdatesFailure +
-        " " + aInfo.name + " - \"" + aInfo.url + "\" = " + e);
+        " " + aInfo.name + " - \"" + aInfo.url + "\" = " + e, false,
+        aInfo.fileURL, null);
     tryToCall(aUpdateListener, 'onUpdateFinished', this,
         AddonManager.UPDATE_STATUS_DOWNLOAD_ERROR);
   }

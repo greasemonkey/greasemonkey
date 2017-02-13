@@ -861,6 +861,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   } catch (e) {
     return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
+      "fileURL": this.fileURL,
       "url": url,
       "info": " = " + e,
       "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
@@ -874,12 +875,14 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
       this, "checkRemoteVersion", req, aCallback, aForced, usedMeta);
   req.onerror = GM_util.hitch(null, aCallback, "noUpdateAvailable", {
     "name": this.localized.name,
+    "fileURL": this.fileURL,
     "url": url,
     "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
     "log": false,
   });
   req.ontimeout = GM_util.hitch(null, aCallback, "noUpdateAvailable", {
     "name": this.localized.name,
+    "fileURL": this.fileURL,
     "url": url,
     "info": " = timeout",
     "updateStatus": "UPDATE_STATUS_TIMEOUT",
@@ -890,6 +893,7 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   } catch (e) {
     return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
+      "fileURL": this.fileURL,
       "url": url,
       "info": " = " + e,
       "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
@@ -908,6 +912,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   if (req.status != 200 && req.status != 0) {
     return ( aMeta ? metaFail() : aCallback("noUpdateAvailable", {
       "name": this.localized.name,
+      "fileURL": this.fileURL,
       "url": req.responseURL,
       "info": " = status: " + req.status + " (" + req.statusText + ")",
       "updateStatus": "UPDATE_STATUS_DOWNLOAD_ERROR",
@@ -924,6 +929,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   if (!remoteVersion) {
     return ( aMeta ? metaFail() : aCallback("noUpdateAvailable", {
       "name": this.localized.name,
+      "fileURL": this.fileURL,
       "url": this.downloadURL,
       "info": " = version: " + remoteVersion,
       "updateStatus": "UPDATE_STATUS_NO_ERROR",
@@ -942,6 +948,7 @@ Script.prototype.checkRemoteVersion = function(req, aCallback, aForced, aMeta) {
   if (!aForced && versionChecker.compare(this._version, remoteVersion) >= 0) {
     return aCallback("noUpdateAvailable", {
       "name": this.localized.name,
+      "fileURL": this.fileURL,
       "url": this.downloadURL,
       "info": " ; version: " + this._version + " >= " + remoteVersion,
       "updateStatus": "UPDATE_STATUS_NO_ERROR",
