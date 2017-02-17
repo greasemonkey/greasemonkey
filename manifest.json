@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "WebbyMonkey",
+  "version": "0",
+  "description": "A User Script manager for Firefox.",
+  "icons": {"32": "skin/icon32.png"},
+
+  "content_scripts": [{
+    "matches": ["*://*/*"],
+    "js": ["src/webbymonkey.js"]
+  }]
+}
