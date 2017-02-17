@@ -1,0 +1,14 @@
+<!ENTITY promptForNewPage.msg "Masukkan URL baru di bawah. Anda bisa menyertakan banyak halaman sekaligus menggunakan karakter wildcard (*).">
+<!ENTITY promptForNewPage.title "Tambah Halaman">
+<!ENTITY promptForNewPage.defVal "http://example.com/*">
+<!ENTITY promptForEdit.msg "Ubah URL halaman di bawah. Anda bisa menyertakan banyak halaman sekaligus menggunakan karakter wildcard (*).">
+<!ENTITY promptForEdit.title "Sunting Halaman">
+<!ENTITY button.add "Tambahkan...">
+<!ENTITY button.addUserExclude "Tambahkan sebagai pengecualian">
+<!ENTITY button.addUserMatch "Tambah Kecocokan">
+<!ENTITY button.addUserInclude "Tambah Kesertaan">
+<!ENTITY button.edit "Sunting...">
+<!ENTITY button.remove "Buang">
+<!ENTITY label.grpIncluded "Halaman yang Disertakan">
+<!ENTITY label.grpMatched "Halaman yang Cocok">
+<!ENTITY label.grpExcluded "Halaman yang Dikecualikan">

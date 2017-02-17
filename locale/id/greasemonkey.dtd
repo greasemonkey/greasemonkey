@@ -1,0 +1,55 @@
+<!ENTITY menu.install "Pasang Skrip...">
+<!ENTITY menu.install.accesskey "I">
+<!ENTITY menu.show "Lihat Sumber Skrip">
+<!ENTITY menu.show.accesskey "V">
+<!ENTITY menu.commands "Perintah Skrip...">
+<!ENTITY menu.commands.accesskey "C">
+<!ENTITY menu.new "Skrip Baru...">
+<!ENTITY menu.new.accesskey "N">
+<!ENTITY menu.manage "Kelola Skrip...">
+<!ENTITY menu.manage.accesskey "M">
+<!ENTITY menu.options "Opsi Greasemonkey...">
+<!ENTITY menu.options.accesskey "O">
+<!ENTITY menu.websites "Situs Web...">
+<!ENTITY menu.websites.accesskey "W">
+<!ENTITY menu.websites.greasespot "Blog Greasespot">
+<!ENTITY menu.websites.greasespotwiki "Wiki Greasespot">
+<!ENTITY menu.websites.manual "Penggunaan Greasemonkey">
+<!ENTITY menu.websites.getuserscripts "Dapatkan Skrip">
+<!ENTITY statusbar.enabled "Diaktifkan">
+<!ENTITY statusbar.enabled.accesskey "E">
+<!ENTITY install.title "Pemasangan Greasemonkey">
+<!ENTITY install.runson "berjalan pada:">
+<!ENTITY install.matches "cocok:">
+<!ENTITY install.butnoton "tidak berjalan pada:">
+<!ENTITY install.warning1 "Skrip yang jahat bisa membahayakan privasi Anda dan bertindak atas nama Anda tanpa diketahui.">
+<!ENTITY install.warning2 "Anda harus memasang skrip hanya dari sumber yang Anda percaya.">
+<!ENTITY install.showscriptsource "Tampilkan Sumber Skrip">
+<!ENTITY install.installbutton "Pasang">
+<!ENTITY install.downloadError "Gagal Mengunduh">
+<!ENTITY loading "Mengunduh...">
+<!ENTITY newscript.name "Nama">
+<!ENTITY newscript.namespace "Namespace">
+<!ENTITY newscript.description "Deskripsi">
+<!ENTITY newscript.includes "Disertakan (Satu per baris)">
+<!ENTITY newscript.excludes "Dikecualikan (Satu per baris)">
+<!ENTITY newscript.fromClipboard "Gunakan skrip dari papan klip">
+<!ENTITY options.editor "Penyunting">
+<!ENTITY options.experimental "Eksperimental">
+<!ENTITY options.defaultEditor "Gunakan Penyunting Bawaan">
+<!ENTITY options.browseForEditor "Cari Program Penyunting">
+<!ENTITY options.globalExcludes "Pengecualian Global">
+<!ENTITY options.newScript.template "Templat skrip baru">
+<!ENTITY options.newScript.removeUnused "Buang baris yang tidak digunakan">
+<!ENTITY Uninstall "Copot">
+<!ENTITY AnonymousStatistics "Statistik Anonim">
+<!ENTITY EnableFirefoxSync "Aktifkan Firefox Sync untuk Skrip">
+<!ENTITY SubmitStats "Mengumpulkan dan mengirim statistik penggunaan secara anonim untuk perbaikan dan peningkatan Greasemonkey.">
+<!ENTITY UpdateChecking "Pemeriksaan Pembaruan">
+<!ENTITY RequireSecureUpdates "Membutuhkan pembaruan aman">
+<!ENTITY greasemonkey.noscriptshere "Tidak ada skrip terpasang yang berjalan di halaman ini.">
+<!ENTITY greasemonkey.youhavenoscripts "Belum ada satupun skrip yang terpasang.">
+<!ENTITY greasemonkey.getuserscripts "Dapatkan skrip">
+<!ENTITY scriptprefs.title "Preferensi Skrip Greasemonkey - !!">
+<!ENTITY scriptprefs.usersettings "Pengaturan Pengguna">
+<!ENTITY scriptprefs.scriptsettings "Pengaturan Skrip">

@@ -5,10 +5,10 @@
 <!ENTITY promptForEdit.title "Upraviť stránku">
 <!ENTITY button.add "Pridať...">
 <!ENTITY button.addUserExclude "Pridať ako užívateľskú výnimku">
-<!ENTITY button.addUserMatch "Add as user match">
+<!ENTITY button.addUserMatch "Pridať ako užívateľskú zhodu">
 <!ENTITY button.addUserInclude "Pridať a zahrnúť užívateľa">
 <!ENTITY button.edit "Upraviť...">
 <!ENTITY button.remove "Odstrániť">
 <!ENTITY label.grpIncluded "Zahrnuté stránky">
-<!ENTITY label.grpMatched "Matched Pages">
+<!ENTITY label.grpMatched "Zhodné stránky">
 <!ENTITY label.grpExcluded "Vylúčené stránky">
