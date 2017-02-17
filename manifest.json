@@ -16,5 +16,10 @@
   "content_scripts": [{
     "matches": ["*://*/*"],
     "js": ["src/webbymonkey.js"]
-  }]
+  }],
+
+  "permissions": [
+    "<all_urls>",
+    "tabs"
+  ]
 }

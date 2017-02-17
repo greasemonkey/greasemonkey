@@ -10,3 +10,20 @@ function setMockIcons() {
 }
 
 setMockIcons();
+
+window.addEventListener('click', function(event) {
+  let el = event.target;
+  console.log('saw click on', el);
+
+  while (el && !el.classList.contains('panel-list-item')) {
+    el = el.parentNode;
+  }
+
+  if (el.hasAttribute('data')) {
+    browser.tabs.create({
+      'active': true,
+      'url': el.getAttribute('data')
+    });
+    window.close();
+  }
+}, true);
