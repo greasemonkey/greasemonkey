@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<!-- 1"browser_style": true,` should do this, no?! -->
+<link rel="stylesheet" href="chrome://browser/content/extension.css">
+<style>
+body {
+  margin: 1px; /* Work around unwanted horizontal scroll bar. */
+}
+
+.panel-list-item .icon {
+  min-width: 1.5em;
+  margin-left: -6px;
+  padding-right: 6px;
+}
+.panel-list-item .icon img {
+  margin-top: 3px;
+  max-height: 1em;
+  max-width: 1em;
+}
+.panel-list-item.disabled .icon img {
+  opacity: 0.66;
+}
+</style>
+<body>
+
+<!-- Based on https://firefoxux.github.io/StyleGuide/#/navigation -->
+
+<div class="panel">
+  <div class="panel-arrowUp"></div>
+
+  <!--
+  <div class="panel-section panel-section-header">
+    <div class="icon-section-header"></div>
+    <div class="text-section-header">Header</div>
+  </div>
+  -->
+
+  <div class="panel-section panel-section-list">
+    <!--
+    <div class="panel-list-item">
+      <div class="icon"></div>
+      <div class="text">List Item</div>
+      <div class="text-shortcut">Ctrl-L</div>
+    </div>
+    -->
+
+    <div class="panel-list-item" data="https://www.greasespot.net/">
+      <div class="icon">🔗</div>
+      <div class="text">Greasemonkey home page</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-list-item" data="https://wiki.greasespot.net/">
+      <div class="icon">🔗</div>
+      <div class="text">Greasemonkey Wiki</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-list-item"
+        data="https://wiki.greasespot.net/User_Script_Hosting">
+      <div class="icon">🔗</div>
+      <div class="text">Get User Scripts</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-section-separator"></div>
+
+    <div class="panel-list-item" id="open-options">
+      <div class="icon"></div>
+      <div class="text">Webbymonkey Options</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-list-item" id="manage-scripts">
+      <div class="icon"></div>
+      <div class="text">Manage User Scripts</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-list-item" id="manage-scripts">
+      <div class="icon"></div>
+      <div class="text">New User Script...</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-section-separator"></div>
+
+    <!--
+    <div class="panel-list-item disabled">
+      <div class="icon"></div>
+      <div class="text">Disabled List Item</div>
+      <div class="text-shortcut"></div>
+    </div>
+
+    <div class="panel-section-separator"></div>
+    -->
+
+    <div class="panel-list-item user-script">
+      <div class="icon"></div>
+      <div class="text">Mock Script 1</div>
+      <div class="text-shortcut"></div>
+    </div>
+    <div class="panel-list-item user-script disabled">
+      <div class="icon"></div>
+      <div class="text">Mock Script 2</div>
+      <div class="text-shortcut"></div>
+    </div>
+  </div>
+
+  <!--
+  <div class="panel-section panel-section-footer">
+    <div class="panel-section-footer-button">Cancel</div>
+    <div class="panel-section-footer-separator"></div>
+    <div class="panel-section-footer-button default">Confirm</div>
+  </div>
+  -->
+</div>
+
+<script src="monkey-menu.js"></script>
+
+</body>
+</html>
