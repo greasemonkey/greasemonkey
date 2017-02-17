@@ -45,6 +45,7 @@ Components.utils.import("chrome://greasemonkey-modules/content/util.js");
 
 var validSchemes = ['http', 'https', 'ftp', 'file'];
 var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
+var REG_PARTS = new RegExp('^([a-z*]+)://([^/]+)(?:(/.*))$');
 var getString = (function() {
   var stringBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"]
       .getService(Components.interfaces.nsIStringBundleService);
@@ -63,36 +64,31 @@ function MatchPattern(pattern) {
     this._all = true;
     this._scheme = "all_urls";
     return;
+  } else {
+    this._all = false;
   }
 
-  // Special case wild scheme.
-  if (pattern[0] == "*") {
-    this._wildScheme = true;
-    // Forge http, to satisfy the URI parser, and get a host.
-    pattern = "http" + pattern.slice(1);
-  }
-
-  var uri = GM_util.uriFromUrl(pattern);
-  if (!uri) {
+  var m = pattern.match(REG_PARTS);
+  if (!m) {
     throw new Error(getString("error.matchPattern.parse"));
   }
+  var scheme = m[1];
+  this._scheme = scheme;
+  var host = m[2];
+  var path = m[3];
 
-  var scheme = this._wildScheme ? "all" : uri.scheme;
-  if (scheme != "all" && validSchemes.indexOf(scheme) == -1) {
+  if (scheme != "*" && validSchemes.indexOf(scheme) == -1) {
     throw new Error(getString("error.matchPattern.scheme"));
   }
 
-  var host = uri.host;
   if (!REG_HOST.test(host)) {
     throw new Error(getString("error.matchPattern.host"));
   }
 
-  var path = uri.path;
   if (path[0] !== "/") {
     throw new Error(getString("error.matchPattern.path"));
   }
 
-  this._scheme = scheme;
   if (host) {
     // We have to manually create the hostname regexp (instead of using
     // GM_convert2RegExp) to properly handle *.example.tld, which should match
@@ -126,7 +122,7 @@ MatchPattern.prototype.doMatch = function(uriSpec) {
   if (this._all) {
     return true;
   }
-  if (!this._wildScheme && this._scheme != matchURI.scheme) {
+  if (this._scheme != '*' && this._scheme != matchURI.scheme) {
     return false;
   }
   return this._hostExpr.test(matchURI.host)
