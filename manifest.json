@@ -13,13 +13,13 @@
     "default_title": "Webbymonkey"
   },
 
-  "content_scripts": [{
-    "matches": ["*://*/*"],
-    "js": ["src/webbymonkey.js"]
-  }],
+  "background": {
+    "scripts": ["src/runner.js"]
+  },
 
   "permissions": [
     "<all_urls>",
-    "tabs"
+    "tabs",
+    "webNavigation"
   ]
 }
