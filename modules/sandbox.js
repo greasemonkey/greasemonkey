@@ -186,8 +186,9 @@ function injectGMInfo(aScript, sandbox, aContentWin) {
 function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
   function evalWithWrapper(url) {
+    const code = GM_util.loadFile(url, "text/plain,charset=utf-8");
     try {
-      subLoader.loadSubScript(url, sandbox, "UTF-8");
+      Cu.evalInSandbox(code, sandbox, "latest", url);
     } catch (e) {
       if ("return not in function" == e.message) {
         // See #1592; we never anon wrap anymore, unless forced to by a return
@@ -199,13 +200,12 @@ function runScriptInSandbox(script, sandbox) {
             e.lineNumber
             );
 
-        var code = GM_util.fileXhr(url, "application/javascript");
         Components.utils.evalInSandbox(
-            '(function(){ '+code+'\n})()', sandbox, gMaxJSVersion, url, 1);
-      } else {
-        // Otherwise raise.
-        throw e;
+            '(function(){ '+ code + '\n})()', sandbox, gMaxJSVersion, url, 1);
+        return;
       }
+      // Otherwise raise.
+      throw e;
     }
   }
 

@@ -78,6 +78,34 @@ function startup(aService) {
   parentMessageManager.addMessageListener(
       'greasemonkey:url-is-temp-file', aService.urlIsTempFile.bind(aService));
 
+  const scriptsBaseUri = GM_util.getUriFromFile(GM_util.scriptDir()).spec;
+  parentMessageManager.addMessageListener(
+      'greasemonkey:load-file', function (message) {
+        "use strict";
+        try {
+          let data = message.data;
+          if (!data) {
+            throw new Error("Invalid request");
+          }
+          if (!data.url) {
+            throw new Error("Invalid URL");
+          }
+          if (!data.url.startsWith(scriptsBaseUri)) {
+            throw new Error("Cannot request arbritrary files");
+          }
+          let content = GM_util.fileXhr(data.url, data.mime, data.type);
+          return {
+            result: true,
+            content: content
+          };
+        } catch (e) {
+          return {
+            result: false,
+            error: e.message || e
+          };
+        }
+      });
+
   // Yes, we have to load the frame script once here in the parent scope. Why!?
   globalMessageManager.loadFrameScript(
       'chrome://greasemonkey/content/framescript.js', true);
