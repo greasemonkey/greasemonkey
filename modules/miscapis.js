@@ -28,7 +28,7 @@ GM_Resources.prototype.getResourceURL = function(aScript, name) {
 GM_Resources.prototype.getResourceText = function(sandbox, name, responseType) {
   var dep = this._getDep(name);
   if (dep.textContent !== undefined) return dep.textContent;
-  return Cu.cloneInto(GM_util.fileXhr(
+  return Cu.cloneInto(GM_util.loadFile(
       dep.file_url, "text/plain", responseType), sandbox);
 };
 
