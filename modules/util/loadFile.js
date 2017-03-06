@@ -38,6 +38,7 @@ function loadFile(url, mime, type) {
       case "":
       case "arraybuffer":
       case "json":
+      case "text":
         break;
       case "blob":
         etype = "arraybuffer";
