@@ -45,6 +45,7 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'hitch', 'chrome://greasemonkey-modul
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'inArray', 'chrome://greasemonkey-modules/content/util/inArray.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'installScriptFromSource', 'chrome://greasemonkey-modules/content/util/installScriptFromSource.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'isGreasemonkeyable', 'chrome://greasemonkey-modules/content/util/isGreasemonkeyable.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'loadFile', 'chrome://greasemonkey-modules/content/util/loadFile.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'logError', 'chrome://greasemonkey-modules/content/util/logError.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'memoize', 'chrome://greasemonkey-modules/content/util/memoize.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'newUserScript', 'chrome://greasemonkey-modules/content/util/newUserScript.js');
@@ -60,9 +61,8 @@ XPCOMUtils.defineLazyModuleGetter(GM_util, 'sniffGrants', 'chrome://greasemonkey
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'timeout', 'chrome://greasemonkey-modules/content/util/timeout.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uriFromUrl', 'chrome://greasemonkey-modules/content/util/uriFromUrl.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'uuid', 'chrome://greasemonkey-modules/content/util/uuid.js');
-XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'chrome://greasemonkey-modules/content/util/windowIdForEvent.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowId', 'chrome://greasemonkey-modules/content/util/windowId.js');
+XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIdForEvent', 'chrome://greasemonkey-modules/content/util/windowIdForEvent.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsClosed', 'chrome://greasemonkey-modules/content/util/windowIsClosed.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'windowIsPrivate', 'chrome://greasemonkey-modules/content/util/windowIsPrivate.js');
 XPCOMUtils.defineLazyModuleGetter(GM_util, 'writeToFile', 'chrome://greasemonkey-modules/content/util/writeToFile.js');
-XPCOMUtils.defineLazyModuleGetter(GM_util, 'loadFile', 'chrome://greasemonkey-modules/content/util/loadFile.js');
