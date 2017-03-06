@@ -156,7 +156,7 @@ function injectGMInfo(aScript, sandbox, aContentWin) {
   function getScriptSource() {
     var content = fileCache.get("scriptSource");
     if (content === undefined) {
-      content = GM_util.fileXhr(scriptURL, "application/javascript");
+      content = GM_util.loadFile(scriptURL, "text/plain,charset=utf-8");
       fileCache.set("scriptSource", content);
     }
     return content;
