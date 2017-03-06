@@ -45,7 +45,7 @@ function loadFile(url, mime, type) {
         break;
       default:
         // This would either throw later anyway, or actually crash the tab
-        throw new Error("Unsupported type");
+        throw new Error("Unsupported type '" + type + "'");
     }
     let result = cpmm.sendSyncMessage("greasemonkey:load-file", {
       url: url,
