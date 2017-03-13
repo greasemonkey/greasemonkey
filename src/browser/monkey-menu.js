@@ -8,8 +8,8 @@ function setMockIcons() {
     icon.appendChild(img);
   }
 }
-
 setMockIcons();
+
 
 window.addEventListener('click', function(event) {
   let el = event.target;

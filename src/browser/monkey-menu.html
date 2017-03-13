@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
-<!-- 1"browser_style": true,` should do this, no?! -->
-<link rel="stylesheet" href="chrome://browser/content/extension.css">
 <style>
 body {
   margin: 1px; /* Work around unwanted horizontal scroll bar. */
@@ -29,22 +27,7 @@ body {
 <div class="panel">
   <div class="panel-arrowUp"></div>
 
-  <!--
-  <div class="panel-section panel-section-header">
-    <div class="icon-section-header"></div>
-    <div class="text-section-header">Header</div>
-  </div>
-  -->
-
   <div class="panel-section panel-section-list">
-    <!--
-    <div class="panel-list-item">
-      <div class="icon"></div>
-      <div class="text">List Item</div>
-      <div class="text-shortcut">Ctrl-L</div>
-    </div>
-    -->
-
     <div class="panel-list-item">
       <div class="icon">✓</div>
       <div class="text">Enable Webbymonkey</div>
@@ -94,16 +77,6 @@ body {
 
     <div class="panel-section-separator"></div>
 
-    <!--
-    <div class="panel-list-item disabled">
-      <div class="icon"></div>
-      <div class="text">Disabled List Item</div>
-      <div class="text-shortcut"></div>
-    </div>
-
-    <div class="panel-section-separator"></div>
-    -->
-
     <div class="panel-list-item user-script">
       <div class="icon"></div>
       <div class="text">Mock Script 1</div>
@@ -115,14 +88,6 @@ body {
       <div class="text-shortcut"></div>
     </div>
   </div>
-
-  <!--
-  <div class="panel-section panel-section-footer">
-    <div class="panel-section-footer-button">Cancel</div>
-    <div class="panel-section-footer-separator"></div>
-    <div class="panel-section-footer-button default">Confirm</div>
-  </div>
-  -->
 </div>
 
 <script src="monkey-menu.js"></script>

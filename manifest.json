@@ -8,13 +8,35 @@
 
   "browser_action": {
     "browser_style": true,
-    "default_icon": "skin/icon24.png",
-    "default_popup": "popup/monkey-menu.html",
+    "default_icon": "skin/icon32.png",
+    "default_popup": "src/browser/monkey-menu.html",
     "default_title": "Webbymonkey"
   },
 
   "background": {
-    "scripts": ["src/runner.js"]
+    "scripts": [
+      "src/parse-meta-line.js",
+      "src/parse-user-script.js",
+      "src/user-script-obj.js",
+      "src/bg/bg-script-install.js",
+      "src/bg/on-message.js",
+      "src/bg/user-script-registry.js"
+    ]
+  },
+
+  "content_scripts": [{
+    "matches": ["*://*/*.user.js"],
+    "js": [
+      "src/parse-meta-line.js",
+      "src/parse-user-script.js",
+      "src/user-script-obj.js",
+      "src/content/content-script-install.js"
+    ]
+  }],
+
+  "page_action": {
+    "browser_style": true,
+    "default_icon": "skin/userscript.png"
   },
 
   "permissions": [
