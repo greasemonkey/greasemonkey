@@ -43,24 +43,24 @@ function contentObserver(win) {
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
 function browserLoad(aEvent) {
-  if (!GM_util.getEnabled()) return;
-
   var contentWin = aEvent.target.defaultView;
   var href = contentWin.location.href;
 
-  // See #1820, #2371, #2195
-  if ((href == "about:blank")
+  if (GM_util.getEnabled()) {
+    // See #1820, #2371, #2195
+    if ((href == "about:blank")
       || (href.match(/^about:reader/))) {
-    // #1696: document-element-inserted doesn't see about:blank
-    runScripts('document-start', contentWin);
-    runScripts('document-end', contentWin);
-    runScripts('document-idle', contentWin);
+      // #1696: document-element-inserted doesn't see about:blank
+      runScripts('document-start', contentWin);
+      runScripts('document-end', contentWin);
+      runScripts('document-idle', contentWin);
+    }
+  } else {
+    gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
+      "contentType": contentWin.document.contentType,
+      "href": href
+    });
   }
-
-  gScope.sendAsyncMessage("greasemonkey:DOMContentLoaded", {
-    "contentType": contentWin.document.contentType,
-    "href": href
-  });
 }
 
 
