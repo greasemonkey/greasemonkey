@@ -9,7 +9,12 @@ if (document.contentType == 'text/plain'
   var userScriptContent = document.body.textContent;
   var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
 
-  var iframe = document.createElement('iframe');
+  // For development: in case of reloading the extension, the old injected
+  // iframe is still left around.  If so, clean it out.
+  let oldIframe = document.querySelector('iframe');
+  if (oldIframe) oldIframe.parentNode.removeChild(oldIframe);
+
+  let iframe = document.createElement('iframe');
   iframe.frameborder = 0;
   iframe.src = browser.extension.getURL('src/content/install-dialog.html')
       + '?' + escape(JSON.stringify(userScriptDetails));
