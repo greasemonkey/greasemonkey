@@ -1,7 +1,8 @@
 /* Reference: https://firefoxux.github.io/StyleGuide/ */
 
 html, body {
-	overflow: hidden;
+  overflow: hidden;
+  overflow-y: auto;
   height: 100%;
 }
 
@@ -13,14 +14,15 @@ html, body {
 #details {
   border: 1px solid lightgrey;
   border-radius: 4px;
-  max-height: 16em;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   margin: 0 16px;
-  overflow-y: auto;
   padding: 4px;
 }
 
 #details > * {
-	margin-top: 1em;
+  margin-top: 1em;
 }
 /* Because margin collapsing isn't doing what I expect. */
 p { margin: 0; }
@@ -44,5 +46,5 @@ p { margin: 0; }
 .panel, .spacer {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex-grow: 1000;
 }
