@@ -25,7 +25,7 @@ function nameFromUrl(url) {
 }
 
 
-/** Parse the source of a script; produce UserScript object. */
+/** Parse the source of a script; produce object of data. */
 parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
@@ -51,7 +51,7 @@ parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
   };
 
   if (!meta) {
-    return new UserScript(details);
+    return details;
   }
 
   let locales = {};
@@ -130,7 +130,7 @@ parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
     details.includes.push('*');
   }
 
-  return new UserScript(details);
+  return details;
 }
 
 })();

@@ -7,12 +7,12 @@ if (document.contentType == 'text/plain'
     || document.contentType == 'application/x-javascript') {
   var userScriptUrl = document.URL;
   var userScriptContent = document.body.textContent;
-  var userScript = parseUserScript(userScriptContent, userScriptUrl);
+  var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
 
   var iframe = document.createElement('iframe');
   iframe.frameborder = 0;
   iframe.src = browser.extension.getURL('src/content/install-dialog.html')
-      + '?' + escape(JSON.stringify(userScript.details));
+      + '?' + escape(JSON.stringify(userScriptDetails));
   iframe.style = `
       border: none;
       border-right: 1px solid rgba(0, 0, 0, 0.15);
