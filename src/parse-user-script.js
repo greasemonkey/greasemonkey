@@ -131,7 +131,7 @@ parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
 
   // We couldn't set this default above in case of real data, so if there's
   // still no includes, set the default of include everything.
-  if (details.includes.length == 0) {
+  if (details.includes.length == 0 && details.matches.length == 0) {
     details.includes.push('*');
   }
 
