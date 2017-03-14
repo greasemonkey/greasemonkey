@@ -30,7 +30,7 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
-      "src/content/content-script-install.js"
+      "src/content/script-install.js"
     ]
   }],
 
@@ -41,8 +41,8 @@
   ],
 
   "web_accessible_resources": [
-    "src/content/content-install-dialog.css",
-    "src/content/content-install-dialog.html",
-    "src/content/content-install-dialog.js"
+    "src/content/install-dialog.css",
+    "src/content/install-dialog.html",
+    "src/content/install-dialog.js"
   ]
 }

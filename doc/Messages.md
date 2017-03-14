@@ -12,7 +12,7 @@ parameter for dispatching.  Additional values are documented per messsage name
 below.
 
 # UserScriptInstallation
-Sent by: `content/content-install-dialog.js`
+Sent by: `content/install-dialog.js`
 
 Triggered when the install button of the install dialog is clicked by the
 user.  Data:

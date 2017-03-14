@@ -11,9 +11,8 @@ if (document.contentType == 'text/plain'
 
   var iframe = document.createElement('iframe');
   iframe.frameborder = 0;
-  iframe.src
-      = browser.extension.getURL('src/content/content-install-dialog.html')
-          + '?' + escape(JSON.stringify(userScript.details));
+  iframe.src = browser.extension.getURL('src/content/install-dialog.html')
+      + '?' + escape(JSON.stringify(userScript.details));
   iframe.style = `
       border: none;
       border-right: 1px solid rgba(0, 0, 0, 0.15);

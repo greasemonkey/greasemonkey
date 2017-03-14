@@ -3,8 +3,7 @@ let details = JSON.parse(unescape(document.location.search.substr(1)));
 let installCountdown = 9;
 let btnInstall = document.getElementById('btn-install');
 function onClickInstall(event) {
-  console.log(
-      'in content-install-dialog, clicked install!', details.downloadUrl);
+  console.log('in install-dialog, clicked install!', details.downloadUrl);
 
   browser.runtime.sendMessage({
     'name': 'UserScriptInstall',
