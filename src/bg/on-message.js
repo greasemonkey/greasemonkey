@@ -11,8 +11,9 @@ browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   }
 
   var cb = window['on' + message.name];
-  if (!message.name) {
-    console.error('Background has no callback for message!', message, sender);
+  if (!cb) {
+    console.error(
+        'Background has no callback for message:', message, 'sender:', sender);
     return;
   }
 
