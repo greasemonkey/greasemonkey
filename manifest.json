@@ -18,7 +18,6 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
-      "src/bg/bg-script-install.js",
       "src/bg/on-message.js",
       "src/bg/user-script-registry.js"
     ]
@@ -30,7 +29,7 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
-      "src/content/script-install.js"
+      "src/content/script-detect.js"
     ]
   }],
 
