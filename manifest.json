@@ -34,14 +34,15 @@
     ]
   }],
 
-  "page_action": {
-    "browser_style": true,
-    "default_icon": "skin/userscript.png"
-  },
-
   "permissions": [
     "<all_urls>",
     "tabs",
     "webNavigation"
+  ],
+
+  "web_accessible_resources": [
+    "src/content/content-install-dialog.css",
+    "src/content/content-install-dialog.html",
+    "src/content/content-install-dialog.js"
   ]
 }

@@ -11,12 +11,11 @@ All message should specify `JSON.parse()`-able bodies, and always with a `name`
 parameter for dispatching.  Additional values are documented per messsage name
 below.
 
-# UserScriptNavigation
-Sent by: `content/content-script-install.js`
+# UserScriptInstallation
+Sent by: `content/content-install-dialog.js`
 
-The `script-install.js` content script detected navigation to a user script.
-This message is passed to the background script so that it can attach a
-page action to install this script.  Data:
+Triggered when the install button of the install dialog is clicked by the
+user.  Data:
 
-* `details` An object of values parsed from the `==UserScript==` section.
-  TODO: Document this object somewhere.  Link to `UserScript`?
+* `details` An object of values parsed from the `==UserScript==` section,
+  as produced by `parseUserScript()`.

@@ -1,13 +1,33 @@
 let details = JSON.parse(unescape(document.location.search.substr(1)));
 
-let btnCancel = document.getElementById('btn-cancel');
-btnCancel.addEventListener('click', event => window.close(), true);
-
+let installCountdown = 9;
 let btnInstall = document.getElementById('btn-install');
-btnInstall.addEventListener('click', event => {
-  console.log('TODO: install this script', details.downloadUrl);
-  window.close();  // Switch to/reveal progress instead?
-}, true);
+function onClickInstall(event) {
+  console.log(
+      'in content-install-dialog, clicked install!', details.downloadUrl);
+
+  browser.runtime.sendMessage({
+    'name': 'UserScriptInstall',
+    'details': details
+  });
+
+  // Switch to/reveal <progress> bar?
+}
+let installCounter = document.createElement('span');
+installCounter.textContent = installCountdown;
+btnInstall.appendChild(document.createTextNode(' '));
+btnInstall.appendChild(installCounter);
+let installTimer = setInterval(() => {
+  installCountdown--;
+  if (installCountdown) {
+    installCounter.textContent = installCountdown;
+  } else {
+    clearTimeout(installTimer);
+    btnInstall.removeChild(installCounter);
+    btnInstall.classList.remove('disabled');
+    btnInstall.addEventListener('click', onClickInstall, true);
+  }
+}, 250);
 
 
 let iconContEl = document.querySelector(

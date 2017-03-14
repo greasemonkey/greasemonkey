@@ -1,36 +1,13 @@
 <!DOCTYPE html>
+<!--
+This dialog is inserted into a content page to enable user script installation.
+-->
 <html>
 <meta charset="utf-8">
-<style>
-body {
-  margin: 0 1px; /* Work around unwanted horizontal scroll bar. */
-  max-width: 32em;
-}
+<!-- TODO: Non-firefox support? -->
+<link rel="stylesheet" href="chrome://browser/content/extension.css">
 
-.icon-section-header img {
-  max-width: 32px;
-  height: 32px;
-}
-
-#details {
-  border: 1px solid lightgrey;
-  border-radius: 4px;
-  max-height: 16em;
-  margin: 16px;
-  overflow-y: auto;
-  padding: 4px;
-}
-
-.text {
-  margin: 16px;
-}
-.text strong {
-  font-size: 1.2em;
-}
-
-/* Because margin collapsing isn't doing what I expect. */
-p { margin: 0; }
-</style>
+<link rel="stylesheet" href="content-install-dialog.css">
 <body>
 
 <!-- Based on https://firefoxux.github.io/StyleGuide/#/navigation -->
@@ -66,6 +43,8 @@ p { margin: 0; }
     </div>
   </div>
 
+  <div class="spacer"></div>
+
   <div class="text">
     <p>
       Malicious scripts can violate your privacy and act on your behalf without your knowledge.
@@ -74,13 +53,12 @@ p { margin: 0; }
   </div>
 
   <div class="panel-section panel-section-footer">
-    <div class="panel-section-footer-button" id="btn-cancel">Cancel</div>
-    <div class="panel-section-footer-separator"></div>
-    <div class="panel-section-footer-button default" id="btn-install">Install</div>
+    <div class="panel-section-footer-button default disabled" id="btn-install"
+        >Install</div>
   </div>
 </div>
 
-<script src="page-script-install.js"></script>
+<script src="content-install-dialog.js"></script>
 
 </body>
 </html>
