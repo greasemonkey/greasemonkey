@@ -6,6 +6,15 @@ html, body {
   height: 100%;
 }
 
+body.install #install,
+body.result #result
+{ display: block; }
+
+body.result #install,
+body.result .panel-section-footer,
+body.install #result
+{ display: none; }
+
 .icon-section-header img {
   max-width: 32px;
   height: 32px;
@@ -43,8 +52,14 @@ p { margin: 0; }
 }
 
 
-.panel, .spacer {
+.panel, .spacer, #install, #result {
   display: flex;
   flex-direction: column;
   flex-grow: 1000;
+}
+
+progress {
+	height: 17px;
+	margin: 13px;
+	width: 100%;
 }

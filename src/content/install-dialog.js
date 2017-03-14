@@ -1,16 +1,16 @@
 let details = JSON.parse(unescape(document.location.search.substr(1)));
 
+/****************************** INSTALL BUTTON *******************************/
+
 let installCountdown = 9;
 let btnInstall = document.getElementById('btn-install');
 function onClickInstall(event) {
-  console.log('in install-dialog, clicked install!', details.downloadUrl);
-
   browser.runtime.sendMessage({
     'name': 'UserScriptInstall',
     'details': details
   });
 
-  // Switch to/reveal <progress> bar?
+  btnInstall.parentNode.replaceChild(progressBar, btnInstall);
 }
 let installCounter = document.createElement('span');
 installCounter.textContent = installCountdown;
@@ -28,6 +28,27 @@ let installTimer = setInterval(() => {
   }
 }, 250);
 
+/******************************* PROGRESS BAR ********************************/
+
+let progressBar = document.createElement('progress');
+
+browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  progressBar.value = message.progress;
+  if (message.progress == 1.0) {
+    document.body.className = 'result';
+    let resultEl = document.getElementById('result')
+        .getElementsByTagName('p')[0];
+    // TODO: Style well!
+    if (message.errors.length) {
+      resultEl.textContent = JSON.stringify(message.errors);
+    } else {
+      // TODO: Something better?
+      resultEl.textContent = 'Success!';
+    }
+  }
+});
+
+/****************************** DETAIL DISPLAY *******************************/
 
 let iconContEl = document.querySelector(
     '.panel .panel-section-header .icon-section-header');

@@ -46,7 +46,7 @@ parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
     'name': nameFromUrl(url),
     'namespace': new URL(url).host,
     'requireUrls': [],
-    'resourceUrls': [],
+    'resourceUrls': {},
     'runAt': 'document-end'
   };
 
@@ -119,7 +119,12 @@ parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
       details.requireUrls.push( new URL(data.value, url).toString() );
       break;
     case 'resource':
-      details.resourceUrls.push( new URL(data.value, url).toString() );
+      let resourceName = data.value1;
+      let resourceUrl = data.value2;
+      if (resourceName in details.resourceUrls) {
+        throw new Error('Duplicate resource name: ' + resourceName);
+      }
+      details.resourceUrls[resourceUrl] = new URL(resourceUrl, url).toString();
       break;
     }
   }

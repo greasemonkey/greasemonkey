@@ -19,6 +19,7 @@
       "src/parse-user-script.js",
       "src/user-script-obj.js",
       "src/bg/on-message.js",
+      "src/bg/user-script-install.js",
       "src/bg/user-script-registry.js"
     ]
   },

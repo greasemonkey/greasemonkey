@@ -11,7 +11,17 @@ All message should specify `JSON.parse()`-able bodies, and always with a `name`
 parameter for dispatching.  Additional values are documented per messsage name
 below.
 
-# UserScriptInstallation
+# InstallProgress
+Sent by: `bg/user-script-install.js`
+
+While downloading a user script (and all dependencies), reports the current
+progress as a percentage.  Sent specifically back to the content process
+(tab / frame) which started the install.  Data:
+
+* `errors` A (possibly empty) list of string error messages.
+* `progress` A number, 0.0 to 1.0, representing the completion so far.
+
+# UserScriptInstall
 Sent by: `content/install-dialog.js`
 
 Triggered when the install button of the install dialog is clicked by the
