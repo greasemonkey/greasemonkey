@@ -16,7 +16,7 @@ let installCounter = document.createElement('span');
 installCounter.textContent = installCountdown;
 btnInstall.appendChild(document.createTextNode(' '));
 btnInstall.appendChild(installCounter);
-let installTimer = setInterval(() => {
+let installTimer = setInterval(function() {
   installCountdown--;
   if (installCountdown) {
     installCounter.textContent = installCountdown;
@@ -25,6 +25,7 @@ let installTimer = setInterval(() => {
     btnInstall.removeChild(installCounter);
     btnInstall.classList.remove('disabled');
     btnInstall.addEventListener('click', onClickInstall, true);
+    btnInstall.focus();
   }
 }, 250);
 
