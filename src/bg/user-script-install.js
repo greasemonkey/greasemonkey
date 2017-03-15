@@ -1,7 +1,7 @@
 /// Receive a UserScriptInstall message.
 function onUserScriptInstall(message, sender, sendResponse) {
   let downloader = new Downloader(message.details, sender);
-  downloader.start().then(() => {
+  downloader.start(function() {
     console.log('Complete, downloads:');
     console.group();
     downloader.downloads.forEach(d => { console.log(d.url); console.log(d.xhr) });
@@ -20,7 +20,9 @@ class Downloader {
     this.resolvePromise = null;
   }
 
-  start() {
+  start(cb) {
+    this.completionCallback = cb;
+
     // TODO: Use messaging to grab the script from the content window instead?
     this.addDownload(this.scriptDetails.downloadUrl);
 
@@ -31,12 +33,6 @@ class Downloader {
     this.scriptDetails.requireUrls.forEach(u => this.addDownload(u));
     Object.values(this.scriptDetails.resourceUrls)
         .forEach(u => this.addBinaryDownload(u));
-
-    // TODO: Figure out how to mix `class` and `async`?
-    return new Promise((resolve, reject) => {
-      console.log('resolve?', resolve);
-      this.resolvePromise = resolve;
-    });
   }
 
   get progress() {
@@ -81,8 +77,7 @@ class Downloader {
         },
         {'frameId': this.sender.frameId});
 
-    console.log('resolve!');
-    this.resolvePromise();
+    this.completionCallback();
   }
 
   onProgress(download, event) {
