@@ -1,5 +1,8 @@
+// Private implementation.
+(function() {
+
 /// Receive a UserScriptInstall message.
-function onUserScriptInstall(message, sender, sendResponse) {
+window.onUserScriptInstall = function(message, sender, sendResponse) {
   let downloader = new Downloader(message.details, sender);
   downloader.start(function() {
     console.log('Complete, downloads:');
@@ -138,3 +141,4 @@ class Download {
   }
 }
 
+})();

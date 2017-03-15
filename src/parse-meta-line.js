@@ -1,6 +1,3 @@
-// Public API.
-var parseMetaLine = null;
-
 // Private implementation.
 (function() {
 
@@ -30,7 +27,7 @@ function peg$SyntaxError(message, expected, found, location) {
 
 peg$subclass(peg$SyntaxError, Error);
 
-parseMetaLine = function parseMetaLineImpl(input) {
+window.parseMetaLine = function(input) {
   var options = arguments.length > 1 ? arguments[1] : {},
       parser  = this,
 

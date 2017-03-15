@@ -1,6 +1,3 @@
-// Public API.
-var parseUserScript = null;
-
 // Private implementation.
 (function() {
 
@@ -26,7 +23,7 @@ function nameFromUrl(url) {
 
 
 /** Parse the source of a script; produce object of data. */
-parseUserScript = function parseUserScriptImpl(content, url, failIfMissing) {
+window.parseUserScript = function(content, url, failIfMissing) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }

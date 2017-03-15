@@ -3,6 +3,9 @@ This file detects navigation events.  If a navigation points to a user script,
 the installation dialog is added, inside the content page.
 */
 
+// Private implementation.
+(function() {
+
 if (document.contentType == 'text/plain'
     || document.contentType == 'application/x-javascript') {
   var userScriptUrl = document.URL;
@@ -31,4 +34,7 @@ if (document.contentType == 'text/plain'
   document.body.appendChild(iframe);
 
   // Idea: Automatically linkify `@require` and `@resource` URLs, for review?
+  // Idea: Colorize source?
 }
+
+})();

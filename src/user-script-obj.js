@@ -13,14 +13,8 @@ This file uses `storage.local` with the prefix "user-script-".  The
 installed scripts has ... [TODO several keys starting user-script-UUID-].
 */
 
-// Public API.
-var RemoteUserScript;
-var RunnableUserScript;
-var EditableUserScript;
-
 // Private implementation.
 (function() {
-
 
 /// Safely copies selected input values to another object.
 function _loadValuesInto(dest, vals, keys) {
@@ -68,7 +62,7 @@ const userScriptKeys = [
     'name', 'namespace', 'noFrames', 'requireUrls', 'resourceUrls', 'runAt',
     'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
-class _UserScript {
+window.RemoteUserScript = class {
   constructor(vals) {
     // Fixed details parsed from the ==UserScript== section.
     this._description = null;
@@ -117,7 +111,7 @@ const runnableUserScriptKeys = [
     'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
-class _RunnableUserScript extends _UserScript {
+window.RunnableUserScript = class extends window.RemoteUserScript {
   constructor(details) {
     super(details);
 
@@ -158,7 +152,7 @@ class _RunnableUserScript extends _UserScript {
 const editableUserScriptKeys = ['content', 'requiresContent'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
-class _EditableUserScript extends _UserScript {
+window.EditableUserScript = class extends window.RunnableUserScript {
   constructor(details) {
     super(details);
 
@@ -179,11 +173,5 @@ class _EditableUserScript extends _UserScript {
   get content() { return this._content; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
 }
-
-
-// Export public API.
-RemoteUserScript = _UserScript;
-RunnableUserScript = _RunnableUserScript;
-EditableUserScript = _EditableUserScript;
 
 })();

@@ -10,11 +10,9 @@ and the generated (random) ID of each.  The ID is used to form further keys
 to fetch the sources and resources of each script.
 */
 
-// Public API.
-const UserScriptRegistry = {};
-
-
 // Private implementation.
 (function() {
+
+window.UserScriptRegistry = {};
 
 })();
