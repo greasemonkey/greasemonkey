@@ -139,6 +139,12 @@ function(safeUrl, details, req) {
         "GM_xmlhttpRequest(): " + details.url + "\n" + e, this.fileURL, null);
   }
 
+  // Firefox 40-
+  // http://bugzil.la/1163898
+  if (!req.mozAnon && (details.mozAnon || details.anonymous)) {
+    req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_ANONYMOUS;
+  }
+
   var channel;
 
   if (GM_util.windowIsPrivate(this.wrappedContentWin)) {
