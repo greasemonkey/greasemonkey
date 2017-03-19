@@ -141,7 +141,7 @@ function(safeUrl, details, req) {
 
   // Firefox 40-
   // http://bugzil.la/1163898
-  if (!req.mozAnon && (details.mozAnon || details.anonymous)) {
+  if ((details.mozAnon || details.anonymous) && !req.mozAnon) {
     req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_ANONYMOUS;
   }
 
