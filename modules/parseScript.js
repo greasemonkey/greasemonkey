@@ -80,7 +80,7 @@ function parse(aSource, aUri, aFailWhenMissing) {
       if (name in resourceNames) {
         script.parseErrors.push(
             gStringBundle.GetStringFromName('parse.resource-duplicate')
-                .replace('%1', name));
+                .replace('%s', name));
         break;
       }
       resourceNames[name] = true;
