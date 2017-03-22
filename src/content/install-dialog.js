@@ -41,10 +41,17 @@ browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         .getElementsByTagName('p')[0];
     // TODO: Style well!
     if (message.errors.length) {
-      resultEl.textContent = JSON.stringify(message.errors);
+      let errorList = document.createElement('ul');
+      message.errors.forEach(error => {
+        var errorEl = document.createElement('li');
+        errorEl.textContent = error;
+        errorList.appendChild(errorEl);
+      });
+      while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
+      resultEl.appendChild(errorList);
     } else {
       // TODO: Something better?
-      resultEl.textContent = 'Success!';
+      resultEl.textContent = 'Download Success!';
     }
   }
 });
