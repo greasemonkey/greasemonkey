@@ -6,8 +6,12 @@ the installation dialog is added, inside the content page.
 // Private implementation.
 (function() {
 
-if (document.contentType == 'text/plain'
-    || document.contentType == 'application/x-javascript') {
+const userScriptTypes = {
+  'text/plain': 1,
+  'application/x-javascript': 1
+  };
+
+if (document.contentType in userScriptTypes) {
   var userScriptUrl = document.URL;
   var userScriptContent = document.body.textContent;
   var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
