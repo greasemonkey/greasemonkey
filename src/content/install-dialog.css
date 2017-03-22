@@ -8,7 +8,7 @@ html, body {
 
 body.install #install,
 body.result #result
-{ display: block; }
+{ display: flex; }
 
 body.result #install,
 body.result .panel-section-footer,
