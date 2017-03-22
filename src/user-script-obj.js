@@ -67,7 +67,7 @@ window.RemoteUserScript = class RemoteUserScript {
     this._noFrames = false;
     this._requireUrls = [];
     this._resourceUrls = [];
-    this._runAt = false;
+    this._runAt = 'end';
     this._version = null;
 
     _loadValuesInto(this, vals, userScriptKeys);
@@ -96,6 +96,14 @@ window.RemoteUserScript = class RemoteUserScript {
   get version() { return this._version; }
 
   get id() { return this.namespace + '/' + this.name; }
+
+  runsAt(url) {
+    if (!(url instanceof URL)) {
+      throw new Error('runsAt() got non-url parameter: ' + url);
+    }
+    // TODO: Implement!!
+    return true;
+  }
 }
 
 

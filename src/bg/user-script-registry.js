@@ -12,7 +12,7 @@ let userScripts = {};
 
 
 const dbName = 'webbymonkey';
-const dbVersion = 3;
+const dbVersion = 4;
 const scriptStoreName = 'user-scripts';
 const db = (function() {
   return new Promise((resolve, reject) => {
@@ -43,11 +43,29 @@ const db = (function() {
 })();
 
 
-function _save(userScript) {
+function loadUserScripts() {
+  db.then(db => {
+    let txn = db.transaction([scriptStoreName], "readonly");
+    let store = txn.objectStore(scriptStoreName);
+    let req = store.getAll();
+    req.onsuccess = event => {
+      userScripts = {};
+      event.target.result.forEach(details => {
+        userScripts[details.uuid] = new RunnableUserScript(details);
+      });
+    };
+    req.onerror = event => {
+      console.error('loadUserScripts() failure', e);
+    };
+  });
+};
+
+
+function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
-    throw new Error('Cannot save this type of UserScript object!', userScript);
+    throw new Error('Cannot save this type of UserScript object:' + userScript.constructor.name);
   }
-  console.log('>>> _save()', userScript, db);
+  console.log('>>> saveUserScript()', userScript, db);
   db.then((db) => {
     console.log('listen...');
     let txn = db.transaction([scriptStoreName], "readwrite");
@@ -62,10 +80,8 @@ function _save(userScript) {
       let store = txn.objectStore(scriptStoreName);
       store.onsuccess = event => {
         console.log('store success?', event);
+        userScripts[userScript.uuid] = userScript;
       };
-      console.log('transaction', txn);
-      console.log('store', store);
-      console.log('add...');
       store.add(userScript.details, userScript.uuid);
     } catch (e) {
       // If these fail, they fail invisibly unless we catch and log (!?).
@@ -88,10 +104,23 @@ window.UserScriptRegistry = {
     var userScript = new EditableUserScript(userScriptDetails);
 
     userScript.updateFromDownloader(downloader);
-    _save(userScript);
+    saveUserScript(userScript);
 
     // TODO: Notification?
+  },
+
+  scriptsToRunAt: function*(urlStr) {
+    let url = new URL(urlStr);
+    for (let uuid in userScripts) {
+      let userScript = userScripts[uuid];
+      if (!userScript.enabled) return;
+      if (!userScript.runsAt(url)) return;
+      yield userScript;
+    }
   }
 };
+
+
+loadUserScripts();
 
 })();

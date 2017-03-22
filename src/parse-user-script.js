@@ -44,7 +44,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
     'namespace': new URL(url).host,
     'requireUrls': [],
     'resourceUrls': {},
-    'runAt': 'document-end'
+    'runAt': 'end'
   };
 
   if (!meta) {
@@ -70,7 +70,8 @@ window.parseUserScript = function(content, url, failIfMissing) {
       details[data.keyword] = data.value;
       break;
     case 'run-at':
-      details.runAt = data.value;
+      details.runAt = data.value.replace('document-', '');
+      // TODO: Assert/normalize to supported value.
       break;
     /*
     case 'grant':
