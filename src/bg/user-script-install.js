@@ -9,6 +9,9 @@ window.onUserScriptInstall = function(message, sender, sendResponse) {
     console.group();
     downloader.downloads.forEach(d => { console.log(d.url); console.log(d.xhr) });
     console.groupEnd();
+    console.log('Download errors:', downloader.errors);
+
+    if (downloader.errors) return;
   });
 }
 
@@ -52,20 +55,14 @@ class Downloader {
     this.downloads.push(new Download(this, url, false));
   }
 
-  onAbort(download, event) {
-    console.warn('abort?', event);
-    this.onLoad(download, event);
-  }
-
-  onError(download, event) {
-    console.warn('error?', event);
-    this.errors.push(
-        'Download error at ' + download.url
-        + ': ' + event.target.status + ' ' + event.target.statusText);
-    this.onLoad(download, event);
-  }
-
   onLoad(download, event) {
+    if (download.xhr.status == 0 || download.xhr.status >= 300) {
+      this.errors.push(
+          'Download error at ' + download.url
+          + ': ' + event.target.status
+          + ' (' + (event.target.statusText || 'Unknown') + ')');
+    }
+
     if (this.downloads.filter(d => d.pending).length != 0) {
       // Something is still pending, wait!
       return;
@@ -104,8 +101,8 @@ class Download {
     this.url = url;
 
     this.xhr = new XMLHttpRequest();
-    this.xhr.addEventListener('abort', this.onAbort.bind(this));
-    this.xhr.addEventListener('error', this.onError.bind(this));
+    this.xhr.addEventListener('abort', this.onLoad.bind(this));
+    this.xhr.addEventListener('error', this.onLoad.bind(this));
     this.xhr.addEventListener('load', this.onLoad.bind(this));
     this.xhr.addEventListener('progress', this.onProgress.bind(this));
 
@@ -116,16 +113,6 @@ class Download {
     }
 
     this.xhr.send();
-  }
-
-  onAbort(event) {
-    this.pending = false;
-    this._downloader.onAbort(this, event);
-  }
-
-  onError(event) {
-    this.pending = false;
-    this._downloader.onError(this, event);
   }
 
   onLoad(event) {

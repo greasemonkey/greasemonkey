@@ -13,6 +13,12 @@ to fetch the sources and resources of each script.
 // Private implementation.
 (function() {
 
-window.UserScriptRegistry = {};
+let userScripts = {};
+
+window.UserScriptRegistry = {
+  install(downloads) {
+    var userScript = new EditableUserScript();
+  }
+};
 
 })();
