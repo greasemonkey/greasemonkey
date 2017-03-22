@@ -1,16 +1,9 @@
 /*
 The UserScript object represents a user script, and all content and behaviors.
 
-There are several contexts in which we want a similar (but not identical!) set
-of data:
-- We're in the process of installing a new user script.
-- An installed user script needs to run.
-- ...
-So we ...
-
-This file uses `storage.local` with the prefix "user-script-".  The
-`UserScriptRegistry` can enumerate installed scripts (by UUID), and each
-installed scripts has ... [TODO several keys starting user-script-UUID-].
+Content scripts can and should use `RemoteUserScript`, for display during
+the install process.  Nothing else besides `UserScriptRegistry` should ever
+reference any other objects from this file.
 */
 
 // Private implementation.
@@ -18,12 +11,11 @@ installed scripts has ... [TODO several keys starting user-script-UUID-].
 
 /// Safely copies selected input values to another object.
 function _loadValuesInto(dest, vals, keys) {
-  Object.keys(vals).forEach(k => {
-    if (!keys.includes(k)) {
-      throw new Error(
-          'Unsupported property for ' + dest.constructor.name + ': ' + k);
+  keys.forEach(k => {
+    if (vals.hasOwnProperty(k)) {
+      // TODO: This without nasty digging into other object's privates?
+      dest['_' + k] = _safeCopy(vals[k]);
     }
-    dest[k] = _safeCopy(vals[k]);
   });
 }
 
@@ -58,17 +50,16 @@ function _safeCopy(v) {
 
 
 const userScriptKeys = [
-    'description', 'downloadUrl', 'excludes', 'iconUrl', 'includes', 'matches',
+    'description', 'downloadUrl', 'excludes', 'includes', 'matches',
     'name', 'namespace', 'noFrames', 'requireUrls', 'resourceUrls', 'runAt',
     'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
-window.RemoteUserScript = class {
+window.RemoteUserScript = class RemoteUserScript {
   constructor(vals) {
     // Fixed details parsed from the ==UserScript== section.
     this._description = null;
     this._downloadUrl = null;
     this._excludes = [];
-    this._iconUrl = null;
     this._includes = [];
     this._matches = [];
     this._name = 'user-script';
@@ -87,13 +78,13 @@ window.RemoteUserScript = class {
     userScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
+    d.id = this.id;
     return d;
   }
 
   get description() { return this._description; }
   get downloadUrl() { return this._downloadUrl; }
   get excludes() { return _safeCopy(this._excludes); }
-  get iconUrl() { return this._iconUrl; }
   get includes() { return _safeCopy(this._includes); }
   get matches() { return _safeCopy(this._matches); }
   get name() { return this._name; }
@@ -103,20 +94,25 @@ window.RemoteUserScript = class {
   get resourceUrls() { return _safeCopy(this._resourceUrls); }
   get runAt() { return this._runAt; }
   get version() { return this._version; }
+
+  get id() { return this.namespace + '/' + this.name; }
 }
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'userExcludes', 'userMatches', 'userIncludes',
+    'enabled', 'evalContent', 'iconBlob',
+    'userExcludes', 'userMatches', 'userIncludes',
     'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
-window.RunnableUserScript = class extends window.RemoteUserScript {
+window.RunnableUserScript = class RunnableUserScript
+    extends window.RemoteUserScript {
   constructor(details) {
     super(details);
 
     this._enabled = true;
-    this._evalContent = null;  // TODO: Calculated final eval string.
+    this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
+    this._iconBlob = null;
     this._userExcludes = [];  // TODO: Not implemented.
     this._userIncludes = [];  // TODO: Not implemented.
     this._userMatches = [];  // TODO: Not implemented.
@@ -133,7 +129,7 @@ window.RunnableUserScript = class extends window.RemoteUserScript {
   }
 
   get details() {
-    var d = super.details();
+    var d = super.details;
     runnableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
@@ -142,6 +138,7 @@ window.RunnableUserScript = class extends window.RemoteUserScript {
 
   get enabled() { return this._enabled; }
   get evalContent() { return this._evalContent; }
+  get iconBlob() { return this._iconBlob; }
   get userExcludes() { return _safeCopy(this._userExcludes); }
   get userIncludes() { return _safeCopy(this._userIncludes); }
   get userMatches() { return _safeCopy(this._userMatches); }
@@ -150,9 +147,10 @@ window.RunnableUserScript = class extends window.RemoteUserScript {
 
 
 const editableUserScriptKeys = ['content', 'requiresContent'];
-/// A _UserScript, plus user settings, plus (eval'able) contents.  Should
+/// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
-window.EditableUserScript = class extends window.RunnableUserScript {
+window.EditableUserScript = class EditableUserScript
+    extends window.RunnableUserScript {
   constructor(details) {
     super(details);
 
@@ -163,7 +161,7 @@ window.EditableUserScript = class extends window.RunnableUserScript {
   }
 
   get details() {
-    var d = super.details();
+    var d = super.details;
     editableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
@@ -172,6 +170,25 @@ window.EditableUserScript = class extends window.RunnableUserScript {
 
   get content() { return this._content; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
+
+  calculateEvalContent() {
+    this._evalContent
+        = this._content + '\n' + this._requiresContent.join('\n')
+            + '\n\n//# sourceURL=user-script:' + this.id;
+  }
+
+  // Given a successful/completed `Downloader` object, update this script's
+  // contents.
+  updateFromDownloader(downloader) {
+    this._content = downloader.scriptDownload.xhr.responseText;
+    // TODO: Icon blob.
+    this._requires = [];
+    downloader.requireDownloads.forEach(d => {
+      this._requires.push(d.xhr.responseText);
+    });
+    // TODO: Resource blobs.
+    this.calculateEvalContent();
+  }
 }
 
 })();
