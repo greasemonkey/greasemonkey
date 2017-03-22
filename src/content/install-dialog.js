@@ -54,8 +54,10 @@ browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 let iconContEl = document.querySelector(
     '.panel .panel-section-header .icon-section-header');
 let iconEl = document.createElement('img');
-iconEl.src = details.iconUrl || browser.extension.getURL('skin/userscript.png');
+let defaultIconSrc = browser.extension.getURL('skin/userscript.png');
+iconEl.src = details.iconUrl || defaultIconSrc;
 iconContEl.appendChild(iconEl);
+iconEl.onerror = () => iconEl.src = defaultIconSrc;
 
 document.getElementById('name').textContent = details.name;
 if (details.version) {
