@@ -16,7 +16,7 @@ to fetch the sources and resources of each script.
 let userScripts = {};
 
 window.UserScriptRegistry = {
-  install(downloads) {
+  install(downloader) {
     var userScript = new EditableUserScript();
   }
 };
