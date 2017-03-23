@@ -611,7 +611,7 @@ RemoteScript.prototype._downloadFile = function(
   if (channel instanceof Ci.nsIPrivateBrowsingChannel) {
     var isPrivate = true;
     var chromeWin = GM_util.getBrowserWindow();
-    if (chromeWin.gBrowser) {
+    if (chromeWin && chromeWin.gBrowser) {
       // i.e. the Private Browsing autoStart pref:
       // "browser.privatebrowsing.autostart"
       isPrivate = PrivateBrowsingUtils.isBrowserPrivate(chromeWin.gBrowser);
