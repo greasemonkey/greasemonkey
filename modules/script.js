@@ -729,7 +729,7 @@ Script.prototype.updateFromNewScript = function(newScript, url, windowId, browse
         } catch (e) {
           // Probably a locked file.  Ignore, warn.
             GM_util.logError(
-                stringBundle.GetStringFromName('delete-failed')
+                stringBundle.GetStringFromName('script.delete-failed')
                     .replace('%1', dep)
                 );
         }
