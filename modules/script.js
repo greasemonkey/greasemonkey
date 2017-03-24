@@ -221,6 +221,11 @@ function Script_setUserMatches(matches) {
 
   for (var i = 0, count = matches.length; i < count; i++) {
     var match = matches[i];
+    // A needed fix for script update (if contains userMatches)
+    // See #2455.
+    if (typeof match == "object") {
+      match = match.pattern;
+    }
     try {
       var match_MatchPattern = new MatchPattern(match);
       matches_MatchPattern.push(match_MatchPattern);
