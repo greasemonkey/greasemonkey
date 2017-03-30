@@ -109,17 +109,27 @@ window.UserScriptRegistry = {
     // TODO: Notification?
   },
 
-  scriptsToRunAt: function*(urlStr) {
-    let url = new URL(urlStr);
+  // Generate user scripts, to run at `urlStr`; all if no URL provided.
+  scriptsToRunAt: function*(urlStr=null) {
+    let url = urlStr && new URL(urlStr);
     for (let uuid in userScripts) {
       let userScript = userScripts[uuid];
       if (!userScript.enabled) return;
-      if (!userScript.runsAt(url)) return;
+      if (url && !userScript.runsAt(url)) return;
       yield userScript;
     }
   }
 };
 
+
+window.onListUserScripts = function(message, sender, sendResponse) {
+  let result = [];
+  var userScriptIterator = UserScriptRegistry.scriptsToRunAt();
+  for (let userScript of userScriptIterator) {
+    result.push(userScript.details);
+  }
+  sendResponse(result);
+};
 
 loadUserScripts();
 

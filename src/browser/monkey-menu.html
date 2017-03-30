@@ -19,6 +19,10 @@ body {
 .panel-list-item.disabled .icon img {
   opacity: 0.66;
 }
+
+#templates {
+  display: none;
+}
 </style>
 <body>
 
@@ -75,16 +79,17 @@ body {
       <div class="text-shortcut"></div>
     </div>
 
-    <div class="panel-section-separator"></div>
+    <div id="user-scripts">
+      <div class="panel-section-separator"></div>
+    </div>
+  </div>
+</div>
 
+<div id="templates">
+  <div class='user-script'>
     <div class="panel-list-item user-script">
       <div class="icon"></div>
-      <div class="text">Mock Script 1</div>
-      <div class="text-shortcut"></div>
-    </div>
-    <div class="panel-list-item user-script disabled">
-      <div class="icon"></div>
-      <div class="text">Mock Script 2</div>
+      <div class="text name">Mock Script 1</div>
       <div class="text-shortcut"></div>
     </div>
   </div>

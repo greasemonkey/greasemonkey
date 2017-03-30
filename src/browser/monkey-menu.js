@@ -1,14 +1,36 @@
-function setMockIcons() {
-  let icons = document.querySelectorAll('.panel .user-script .icon');
-  for (let icon of icons) {
-    while (icon.firstChild) icon.removeChild(icon.firstChild);
-    let img = document.createElement('img');
-    // If this were real, the name *and* icon would come from script data.
-    img.src = browser.extension.getURL('skin/userscript.png');
-    icon.appendChild(img);
-  }
-}
-setMockIcons();
+(function() {
+
+const defaultIcon = browser.extension.getURL('skin/userscript.png');
+
+console.log('send');
+browser.runtime.sendMessage({'name': 'ListUserScripts'})
+    .then(userScripts => {
+      console.log('recv');
+      let containerEl = document.querySelector('#user-scripts');
+      for (let oldEl of containerEl.querySelectorAll('.user-script')) {
+        oldEl.parentNode.removeChild(oldEl);
+      }
+
+      userScripts.sort((a, b) => a.name.localeCompare(b.name));
+
+      let empty = true;
+      let tplEl = document.querySelector('#templates .user-script > div');
+      for (let userScript of userScripts) {
+        empty = false;
+        let menuEl = tplEl.cloneNode(true);
+
+        if (!userScript.enabled) menuEl.classList.append('disabled');
+
+        let icon = document.createElement('img');
+        icon.src = userScript.icon ? userScript.icon : defaultIcon;
+        menuEl.querySelector('.icon').appendChild(icon);
+
+        menuEl.querySelector('.name').textContent = userScript.name;
+        containerEl.appendChild(menuEl);
+      }
+
+      containerEl.style.display = empty ? 'none' : '';
+    });
 
 
 window.addEventListener('click', function(event) {
@@ -27,3 +49,5 @@ window.addEventListener('click', function(event) {
     window.close();
   }
 }, true);
+
+})();

@@ -11,6 +11,13 @@ All message should specify `JSON.parse()`-able bodies, and always with a `name`
 parameter for dispatching.  Additional values are documented per messsage name
 below.
 
+# ListUserScripts
+Sent by: `browser/monkey-menu.js`
+
+Lists all installed user scripts.  Data:
+
+* `userScripts` An array of `.details` from `RunnableUserScript` objects.
+
 # InstallProgress
 Sent by: `bg/user-script-install.js`
 
