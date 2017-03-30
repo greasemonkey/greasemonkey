@@ -8,6 +8,7 @@ exports methods for discovering them.
 // Private implementation.
 (function() {
 
+// TODO: Order?
 let userScripts = {};
 
 
@@ -65,23 +66,19 @@ function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
     throw new Error('Cannot save this type of UserScript object:' + userScript.constructor.name);
   }
-  console.log('>>> saveUserScript()', userScript, db);
   db.then((db) => {
-    console.log('listen...');
-    let txn = db.transaction([scriptStoreName], "readwrite");
+    let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
       console.log('transaction complete?', event);
+      userScripts[userScript.uuid] = userScript;
+      console.info('Stored new userScript in memory.', userScripts);
     };
     txn.onerror = event => {
-      console.log('transaction error?', event);
+      console.warn('transaction error?', event, event.target);
     };
 
     try {
       let store = txn.objectStore(scriptStoreName);
-      store.onsuccess = event => {
-        console.log('store success?', event);
-        userScripts[userScript.uuid] = userScript;
-      };
       store.add(userScript.details, userScript.uuid);
     } catch (e) {
       // If these fail, they fail invisibly unless we catch and log (!?).
@@ -94,13 +91,10 @@ function saveUserScript(userScript) {
 
 window.UserScriptRegistry = {
   install(downloader) {
-    console.log('>>> UserScriptRegistry.install() ...');
-
     // TODO: If is installed already then get, else create:
     var userScriptDetails = parseUserScript(
         downloader.scriptDownload.xhr.responseText,
         downloader.scriptDownload.xhr.responseURL);
-    console.log('install, downloaded details:', userScriptDetails);
     var userScript = new EditableUserScript(userScriptDetails);
 
     userScript.updateFromDownloader(downloader);
