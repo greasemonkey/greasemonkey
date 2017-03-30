@@ -16,9 +16,9 @@ browser.webNavigation.onCommitted.addListener(detail => {
       };
       if (detail.frameId) options.frameId = detail.frameId;
       var r = browser.tabs.executeScript(detail.tabId, options);
-      r.then(v => console.log('execute result?', r, v));
+      //r.then(v => console.log('execute result?', r, v));
     } catch (e) {
-      console.error(e);
+      console.error('Could not execute user script:', e);
     }
   }
 });
