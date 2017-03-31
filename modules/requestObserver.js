@@ -29,15 +29,10 @@ function checkScriptRefresh(channel) {
       ? channel.loadInfo.externalContentPolicyType
       : channel.loadInfo.contentPolicyType;
 
-  // only check for updated scripts when tabs/frames/iframes are loaded
-  // Firefox 44+
-  // http://bugzil.la/1148044
-  if ((type != gContentTypes.TYPE_DOCUMENT)
-      && (type != gContentTypes.TYPE_SUBDOCUMENT)
-      && (gContentTypes.TYPE_INTERNAL_FRAME
-          && (type != gContentTypes.TYPE_INTERNAL_FRAME))
-      && (gContentTypes.TYPE_INTERNAL_IFRAME
-          && (type != gContentTypes.TYPE_INTERNAL_IFRAME))) {
+  // only check for updated scripts when tabs/iframes are loaded
+  if (type != gContentTypes.TYPE_DOCUMENT
+      && type != gContentTypes.TYPE_SUBDOCUMENT
+  ) {
     return;
   }
 
