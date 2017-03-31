@@ -34,10 +34,12 @@ function checkScriptRefresh(channel) {
   // http://bugzil.la/1148044
   if ((type != gContentTypes.TYPE_DOCUMENT)
       && (type != gContentTypes.TYPE_SUBDOCUMENT)
-      && (gContentTypes.TYPE_INTERNAL_FRAME
-          && (type != gContentTypes.TYPE_INTERNAL_FRAME))
-      && (gContentTypes.TYPE_INTERNAL_IFRAME
-          && (type != gContentTypes.TYPE_INTERNAL_IFRAME))) {
+      && (!gContentTypes.TYPE_INTERNAL_FRAME
+          || (gContentTypes.TYPE_INTERNAL_FRAME
+              && (type != gContentTypes.TYPE_INTERNAL_FRAME)))
+      && (!gContentTypes.TYPE_INTERNAL_IFRAME
+          || (gContentTypes.TYPE_INTERNAL_IFRAME
+              && (type != gContentTypes.TYPE_INTERNAL_IFRAME)))) {
     return;
   }
 
