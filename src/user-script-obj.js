@@ -196,6 +196,8 @@ window.EditableUserScript = class EditableUserScript
     });
     // TODO: Resource blobs.
     this.calculateEvalContent();
+
+    _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
   }
 }
 

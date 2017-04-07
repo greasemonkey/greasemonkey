@@ -14,6 +14,7 @@ window.onUserScriptInstall = function(message, sender, sendResponse) {
 
 class Downloader {
   constructor(scriptDetails, sender) {
+    this.scriptDetails = null;
     this.scriptDownload = null;
     this.iconDownload = null;
     this.requireDownloads = [];
@@ -81,6 +82,10 @@ class Downloader {
             'progress': 1.0
           },
           {'frameId': this.sender.frameId});
+
+      this.scriptDetails = parseUserScript(
+        this.scriptDownload.xhr.responseText,
+        this.scriptDownload.xhr.responseURL);
 
       this.completionCallback();
     }

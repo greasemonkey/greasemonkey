@@ -13,7 +13,7 @@ let userScripts = {};
 
 
 const dbName = 'webbymonkey';
-const dbVersion = 4;
+const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 const db = (function() {
   return new Promise((resolve, reject) => {
@@ -24,19 +24,15 @@ const db = (function() {
       reject(event);
     };
     dbOpen.onsuccess = event => {
-      console.log('>>> db success!', dbOpen.result);
       resolve(event.target.result);
     };
     dbOpen.onupgradeneeded = event => {
-      console.log('>>> db upgradeneeded');
       let db = event.target.result;
       db.onerror = event => {
         console.error('Error upgrading user-scripts DB!', event);
         reject(event);
       };
       let store = db.createObjectStore(scriptStoreName, {'keypath': 'uuid'});
-      // The per-install completely random UUID of each script.
-      store.createIndex('uuid', 'uuid', {'unique': true});
       // The generated from @name and @namespace ID.
       store.createIndex('id', 'id', {'unique': true});
     };
@@ -69,20 +65,20 @@ function saveUserScript(userScript) {
   db.then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
-      console.log('transaction complete?', event);
       userScripts[userScript.uuid] = userScript;
-      console.info('Stored new userScript in memory.', userScripts);
     };
     txn.onerror = event => {
-      console.warn('transaction error?', event, event.target);
+      console.warn('save transaction error?', event, event.target);
     };
 
     try {
       let store = txn.objectStore(scriptStoreName);
-      store.add(userScript.details, userScript.uuid);
+      let details = userScript.details;
+      details.id = userScript.id;  // Secondary index on calculated value.
+      store.put(details, userScript.uuid);
     } catch (e) {
       // If these fail, they fail invisibly unless we catch and log (!?).
-      console.error(e);
+      console.error('when saving', userScript, e);
       return;
     }
   });
@@ -91,16 +87,26 @@ function saveUserScript(userScript) {
 
 window.UserScriptRegistry = {
   install(downloader) {
-    // TODO: If is installed already then get, else create:
-    var userScriptDetails = parseUserScript(
-        downloader.scriptDownload.xhr.responseText,
-        downloader.scriptDownload.xhr.responseURL);
-    var userScript = new EditableUserScript(userScriptDetails);
-
-    userScript.updateFromDownloader(downloader);
-    saveUserScript(userScript);
-
-    // TODO: Notification?
+    db.then(db => {
+      try {
+        let remoteScript = new RemoteUserScript(downloader.scriptDetails);
+        let txn = db.transaction([scriptStoreName], "readonly");
+        let store = txn.objectStore(scriptStoreName);
+        let index = store.index('id');
+        let req = index.get(remoteScript.id);
+        txn.oncomplete = event => {
+          let userScript = new EditableUserScript(req.result || {});
+          userScript.updateFromDownloader(downloader);
+          saveUserScript(userScript);
+          // TODO: Notification?
+        };
+        txn.onerror = event => {
+          console.error('Error looking up script!', event);
+        };
+      } catch (e) {
+        console.error('at install(), db fail:', e);
+      }
+    });
   },
 
   // Generate user scripts, to run at `urlStr`; all if no URL provided.
