@@ -56,7 +56,7 @@ function loadUserScripts() {
       });
     };
     req.onerror = event => {
-      console.error('loadUserScripts() failure', e);
+      console.error('loadUserScripts() failure', event);
     };
   });
 };
@@ -124,6 +124,23 @@ window.onListUserScripts = function(message, sender, sendResponse) {
   }
   sendResponse(result);
 };
+
+
+window.onUserScriptUninstall = function(message, sender, sendResponse) {
+  db.then(db => {
+    let txn = db.transaction([scriptStoreName], "readwrite");
+    let store = txn.objectStore(scriptStoreName);
+    let req = store.delete(message.uuid);
+    req.onsuccess = event => {
+      delete userScripts[message.uuid];
+      sendResponse(null);
+    };
+    req.onerror = event => {
+      console.error('onUserScriptUninstall() failure', event);
+    };
+  });
+};
+
 
 loadUserScripts();
 
