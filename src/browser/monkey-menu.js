@@ -50,7 +50,7 @@ window.addEventListener('click', function(event) {
   } else switch (el.getAttribute('id')) {
     case 'manage-scripts':
       browser.tabs.create({
-        'url': browser.runtime.getURL('src/browser/manage-user-scripts.html'),
+        'url': browser.runtime.getURL('src/content/manage-user-scripts.html'),
       });
       break;
     default:

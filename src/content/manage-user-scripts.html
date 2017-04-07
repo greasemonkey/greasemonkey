@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<style>
+/* TODO: Something pretty? */
+#templates {
+  display: none;
+}
+
+#empty {
+  display: none;
+}
+
+ul#user-scripts {
+  margin: 2em;
+  padding: 0;
+}
+li.user-script {
+  margin: 1ex;
+  display: flex;
+  flex-direction: row;
+}
+li.user-script > div {
+  display: flex;
+  flex-direction: row;
+  flex: 0;
+}
+li.user-script > div.name {
+  flex: 1;
+}
+</style>
+<body>
+
+<ul id="user-scripts">
+</ul>
+
+<p id="empty">No user scripts installed!</p>
+
+<div id="templates">
+  <li class='user-script'>
+    <div class="icon"></div>
+    <div class="name"></div>
+    <div class="buttons">
+      <button class="remove">Remove</button>
+      <button class="enable" disabled>Enable</button>
+      <button class="edit" disabled>Edit</button>
+    </div>
+  </li>
+</div>
+
+<script src="manage-user-scripts.js"></script>
+
+</body>
+</html>
