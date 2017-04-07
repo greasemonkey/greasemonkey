@@ -32,10 +32,14 @@ browser.runtime.sendMessage({'name': 'ListUserScripts'}).then(userScripts => {
 
 window.addEventListener('click', function(event) {
   let el = event.target;
-  console.log('saw click on', el);
 
-  while (el && !el.classList.contains('panel-list-item')) {
+  while (el && el.classList && !el.classList.contains('panel-list-item')) {
     el = el.parentNode;
+  }
+  if (!el || !el.classList || !el.classList.contains('panel-list-item')) {
+    console.warn('monkey menu got click on non-menu item:', event.target);
+    window.close();
+    return;
   }
 
   if (el.hasAttribute('data')) {
@@ -43,8 +47,18 @@ window.addEventListener('click', function(event) {
       'active': true,
       'url': el.getAttribute('data')
     });
-    window.close();
+  } else switch (el.getAttribute('id')) {
+    case 'manage-scripts':
+      browser.tabs.create({
+        'url': browser.runtime.getURL('src/browser/manage-user-scripts.html'),
+      });
+      break;
+    default:
+      console.warn('unhandled monkey menu item:', el);
+      break;
   }
+
+  window.close();
 }, true);
 
 })();

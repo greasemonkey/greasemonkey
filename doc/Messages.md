@@ -12,7 +12,7 @@ parameter for dispatching.  Additional values are documented per messsage name
 below.
 
 # ListUserScripts
-Sent by: `browser/monkey-menu.js`
+Sent by: `browser/monkey-menu.js`, `browser/manage-user-scripts.js`
 
 Lists all installed user scripts.  Data:
 
