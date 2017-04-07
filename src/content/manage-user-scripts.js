@@ -19,7 +19,9 @@ browser.runtime.sendMessage({'name': 'ListUserScripts'}).then(userScripts => {
         = userScript.enabled ? 'Disable': 'Enable';
 
     let icon = document.createElement('img');
-    icon.src = userScript.icon ? userScript.icon : defaultIcon;
+    icon.src = userScript.iconBlob
+        ? URL.createObjectURL(userScript.iconBlob)
+        : defaultIcon;
     menuEl.querySelector('.icon').appendChild(icon);
 
     menuEl.querySelector('.name').textContent = userScript.name;

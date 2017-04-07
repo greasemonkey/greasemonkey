@@ -51,8 +51,7 @@ function _safeCopy(v) {
 
 const userScriptKeys = [
     'description', 'downloadUrl', 'excludes', 'includes', 'matches',
-    'name', 'namespace', 'noFrames', 'requireUrls', 'resourceUrls', 'runAt',
-    'version'];
+    'name', 'namespace', 'noFrames', 'runAt', 'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
 window.RemoteUserScript = class RemoteUserScript {
   constructor(vals) {
@@ -65,8 +64,6 @@ window.RemoteUserScript = class RemoteUserScript {
     this._name = 'user-script';
     this._namespace = null;
     this._noFrames = false;
-    this._requireUrls = [];
-    this._resourceUrls = [];
     this._runAt = 'end';
     this._version = null;
 
@@ -90,8 +87,6 @@ window.RemoteUserScript = class RemoteUserScript {
   get name() { return this._name; }
   get namespace() { return this._namespace; }
   get noFrames() { return this._noFrames; }
-  get requireUrls() { return _safeCopy(this._requireUrls); }
-  get resourceUrls() { return _safeCopy(this._resourceUrls); }
   get runAt() { return this._runAt; }
   get version() { return this._version; }
 
@@ -108,7 +103,7 @@ window.RemoteUserScript = class RemoteUserScript {
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'iconBlob',
+    'enabled', 'evalContent', 'iconBlob', 'requiresContent', 'resourceBlobs',
     'userExcludes', 'userMatches', 'userIncludes',
     'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
@@ -121,6 +116,8 @@ window.RunnableUserScript = class RunnableUserScript
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._iconBlob = null;
+    this._requiresContent = [];
+    this._resourceBlobs = [];
     this._userExcludes = [];  // TODO: Not implemented.
     this._userIncludes = [];  // TODO: Not implemented.
     this._userMatches = [];  // TODO: Not implemented.
@@ -147,6 +144,8 @@ window.RunnableUserScript = class RunnableUserScript
   get enabled() { return this._enabled; }
   get evalContent() { return this._evalContent; }
   get iconBlob() { return this._iconBlob; }
+  get requiresContent() { return _safeCopy(this._requiresContent); }
+  get resourceBlobs() { return _safeCopy(this._resourceBlobs); }
   get userExcludes() { return _safeCopy(this._userExcludes); }
   get userIncludes() { return _safeCopy(this._userIncludes); }
   get userMatches() { return _safeCopy(this._userMatches); }
@@ -189,12 +188,18 @@ window.EditableUserScript = class EditableUserScript
   // contents.
   updateFromDownloader(downloader) {
     this._content = downloader.scriptDownload.xhr.responseText;
-    // TODO: Icon blob.
-    this._requires = [];
+    if (downloader.iconDownload) {
+      this._iconBlob = downloader.iconDownload.xhr.response;
+    }
+    this._requiresContent = [];
     downloader.requireDownloads.forEach(d => {
-      this._requires.push(d.xhr.responseText);
+      this._requiresContent.push(d.xhr.responseText);
     });
-    // TODO: Resource blobs.
+    this._resourceBlobs = {};
+    Object.keys(downloader.resourceDownloads).forEach(u => {
+      // TODO: Store by resource name, not URL.
+      this._resourceBlobs[u] = downloader.resourceDownloads[u].xhr.response;
+    });
     this.calculateEvalContent();
 
     _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
