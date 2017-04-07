@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
 <meta charset="utf-8">
 <title>Webbymonkey User Script Management</title>
+<link rel="icon">
 <style>
 /* TODO: Something pretty? */
 #templates {
@@ -19,19 +21,15 @@ ul#user-scripts {
 li.user-script {
   margin: 1ex;
   display: flex;
-  flex-direction: row;
+  flex: row;
 }
 li.user-script > div {
-  display: flex;
-  flex-direction: row;
   flex: 0;
 }
-li.user-script > div.name {
-  flex: 1;
-}
+
 li.user-script .icon {
   display: inline-block;
-  flex: unset;
+  flex-grow: 0;
   margin-right: 1ex;
   width: 2em;
 }
@@ -40,7 +38,21 @@ li.user-script .icon img {
   max-width: 2em;
 }
 
+li.user-script .name {
+  flex: 10;
+}
+
+li.user-script .buttons {
+  display: flex;
+  min-width: 20em;
+}
+li.user-script button {
+  flex: 1;
+  flex-basis: 100%;
+  margin-left: 1ex;
+}
 </style>
+</head>
 <body>
 
 <ul id="user-scripts">
@@ -54,7 +66,7 @@ li.user-script .icon img {
     <div class="name"></div>
     <div class="buttons">
       <button class="remove">Remove</button>
-      <button class="enable" disabled>Enable</button>
+      <button class="toggle-enabled">Enable</button>
       <button class="edit" disabled>Edit</button>
     </div>
   </li>

@@ -16,7 +16,7 @@ Received by: `bg/user-script-registry.js`.
 
 Lists all installed user scripts.  No data is sent.  Response data:
 
-* An array of `.details` from installed `RunnableUserScript` objects.
+* An array of `.details` objects from installed `RunnableUserScript`s.
 
 # InstallProgress
 Sent by: `bg/user-script-install.js`
@@ -29,6 +29,13 @@ progress as a percentage.  Sent specifically back to the content process
 * `errors` A (possibly empty) list of string error messages.
 * `progress` A number, 0.0 to 1.0, representing the completion so far.
 
+# UserScriptChanged
+Sent by: `bg/user-script-registry.js`
+
+Sent when some value (like enabled state) of a script is changed.  Data:
+
+* `details` Updated script details.
+
 # UserScriptInstall
 Sent by: `content/install-dialog.js`
 Received by: `bg/user-script-install.js`
@@ -38,6 +45,17 @@ user.  Data:
 
 * `details` An object of values parsed from the `==UserScript==` section,
   as produced by `parseUserScript()`.
+
+# UserScriptToggleEnabled
+Sent by: `content/manage-user-scripts.js`
+Received by: `bg/user-script-registry.js`
+
+Triggered when the Enable/Disable button of the manage user scripts dialog is
+clicked by the user.  Data:
+
+* `uuid` The UUID value of a script as returned by `ListUserScripts` message.
+
+Response data: none.
 
 # UserScriptUninstall
 Sent by: `content/manage-user-scripts.js`

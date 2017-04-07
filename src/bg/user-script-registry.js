@@ -11,7 +11,6 @@ exports methods for discovering them.
 // TODO: Order?
 let userScripts = {};
 
-
 const dbName = 'webbymonkey';
 const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
@@ -39,6 +38,29 @@ const db = (function() {
   });
 })();
 
+///////////////////////////////////////////////////////////////////////////////
+
+function install(downloader) {
+  db.then(db => {
+    try {
+      let remoteScript = new RemoteUserScript(downloader.scriptDetails);
+      let txn = db.transaction([scriptStoreName], "readonly");
+      let store = txn.objectStore(scriptStoreName);
+      let index = store.index('id');
+      let req = index.get(remoteScript.id);
+      txn.oncomplete = event => {
+        saveUserScript(userScript);
+        // TODO: Notification?
+      };
+      txn.onerror = event => {
+        console.error('Error looking up script!', event);
+      };
+    } catch (e) {
+      console.error('at install(), db fail:', e);
+    }
+  });
+}
+
 
 function loadUserScripts() {
   db.then(db => {
@@ -48,7 +70,7 @@ function loadUserScripts() {
     req.onsuccess = event => {
       userScripts = {};
       event.target.result.forEach(details => {
-        userScripts[details.uuid] = new RunnableUserScript(details);
+        userScripts[details.uuid] = new EditableUserScript(details);
       });
     };
     req.onerror = event => {
@@ -58,6 +80,44 @@ function loadUserScripts() {
 };
 
 
+function onListUserScripts(message, sender, sendResponse) {
+  let result = [];
+  var userScriptIterator = UserScriptRegistry.scriptsToRunAt();
+  for (let userScript of userScriptIterator) {
+    result.push(userScript.details);
+  }
+  sendResponse(result);
+};
+window.onListUserScripts = onListUserScripts;
+
+
+function onUserScriptToggleEnabled(message, sender, sendResponse) {
+  const userScript = userScripts[message.uuid];
+  console.log(
+      '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
+  userScript.enabled = !userScript.enabled;
+  saveUserScript(userScript);
+};
+window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
+
+
+function onUserScriptUninstall(message, sender, sendResponse) {
+  db.then(db => {
+    let txn = db.transaction([scriptStoreName], "readwrite");
+    let store = txn.objectStore(scriptStoreName);
+    let req = store.delete(message.uuid);
+    req.onsuccess = event => {
+      delete userScripts[message.uuid];
+      sendResponse(null);
+    };
+    req.onerror = event => {
+      console.error('onUserScriptUninstall() failure', event);
+    };
+  });
+};
+window.onUserScriptUninstall = onUserScriptUninstall;
+
+
 function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
     throw new Error('Cannot save this type of UserScript object:' + userScript.constructor.name);
@@ -65,7 +125,14 @@ function saveUserScript(userScript) {
   db.then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
+      // In case this was for an install, now that the user script is saved
+      // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
+
+      browser.runtime.sendMessage({
+        'name': 'UserScriptChanged',
+        'details': userScript.details,
+      });
     };
     txn.onerror = event => {
       console.warn('save transaction error?', event, event.target);
@@ -85,69 +152,25 @@ function saveUserScript(userScript) {
 }
 
 
-window.UserScriptRegistry = {
-  install(downloader) {
-    db.then(db => {
-      try {
-        let remoteScript = new RemoteUserScript(downloader.scriptDetails);
-        let txn = db.transaction([scriptStoreName], "readonly");
-        let store = txn.objectStore(scriptStoreName);
-        let index = store.index('id');
-        let req = index.get(remoteScript.id);
-        txn.oncomplete = event => {
-          let userScript = new EditableUserScript(req.result || {});
-          userScript.updateFromDownloader(downloader);
-          saveUserScript(userScript);
-          // TODO: Notification?
-        };
-        txn.onerror = event => {
-          console.error('Error looking up script!', event);
-        };
-      } catch (e) {
-        console.error('at install(), db fail:', e);
-      }
-    });
-  },
-
-  // Generate user scripts, to run at `urlStr`; all if no URL provided.
-  scriptsToRunAt: function*(urlStr=null) {
-    let url = urlStr && new URL(urlStr);
-    for (let uuid in userScripts) {
-      let userScript = userScripts[uuid];
-      if (!userScript.enabled) return;
-      if (url && !userScript.runsAt(url)) return;
-      yield userScript;
-    }
+//Generate user scripts, to run at `urlStr`; all if no URL provided.
+function* scriptsToRunAt(urlStr=null) {
+  let url = urlStr && new URL(urlStr);
+  for (let uuid in userScripts) {
+    let userScript = userScripts[uuid];
+    if (!userScript.enabled) return;
+    if (url && !userScript.runsAt(url)) return;
+    yield userScript;
   }
-};
-
-
-window.onListUserScripts = function(message, sender, sendResponse) {
-  let result = [];
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt();
-  for (let userScript of userScriptIterator) {
-    result.push(userScript.details);
-  }
-  sendResponse(result);
-};
-
-
-window.onUserScriptUninstall = function(message, sender, sendResponse) {
-  db.then(db => {
-    let txn = db.transaction([scriptStoreName], "readwrite");
-    let store = txn.objectStore(scriptStoreName);
-    let req = store.delete(message.uuid);
-    req.onsuccess = event => {
-      delete userScripts[message.uuid];
-      sendResponse(null);
-    };
-    req.onerror = event => {
-      console.error('onUserScriptUninstall() failure', event);
-    };
-  });
-};
+}
 
 
 loadUserScripts();
+
+
+// Export public API.
+window.UserScriptRegistry = {
+  'install': install,
+  'scriptsToRunAt': scriptsToRunAt,
+};
 
 })();

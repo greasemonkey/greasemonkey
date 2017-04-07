@@ -104,8 +104,7 @@ window.RemoteUserScript = class RemoteUserScript {
 
 const runnableUserScriptKeys = [
     'enabled', 'evalContent', 'iconBlob', 'requiresContent', 'resourceBlobs',
-    'userExcludes', 'userMatches', 'userIncludes',
-    'uuid'];
+    'userExcludes', 'userMatches', 'userIncludes', 'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.RunnableUserScript = class RunnableUserScript
@@ -142,13 +141,17 @@ window.RunnableUserScript = class RunnableUserScript
   }
 
   get enabled() { return this._enabled; }
+  set enabled(v) { this._enabled = !!v; }
+
+  // TODO: Setters/mutators.
+  get userExcludes() { return _safeCopy(this._userExcludes); }
+  get userIncludes() { return _safeCopy(this._userIncludes); }
+  get userMatches() { return _safeCopy(this._userMatches); }
+
   get evalContent() { return this._evalContent; }
   get iconBlob() { return this._iconBlob; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
   get resourceBlobs() { return _safeCopy(this._resourceBlobs); }
-  get userExcludes() { return _safeCopy(this._userExcludes); }
-  get userIncludes() { return _safeCopy(this._userIncludes); }
-  get userMatches() { return _safeCopy(this._userMatches); }
   get uuid() { return this._uuid; }
 }
 
@@ -184,8 +187,8 @@ window.EditableUserScript = class EditableUserScript
             + '\n\n//# sourceURL=user-script:' + this.id;
   }
 
-  // Given a successful/completed `Downloader` object, update this script's
-  // contents.
+  // Given a successful/completed `Downloader` object, update this script
+  // from it.
   updateFromDownloader(downloader) {
     this._content = downloader.scriptDownload.xhr.responseText;
     if (downloader.iconDownload) {
