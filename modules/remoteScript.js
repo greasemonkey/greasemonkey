@@ -163,12 +163,18 @@ DownloadListener.prototype = {
   onStartRequest: function(aRequest, aContext) {
     // For the first file (the script) detect an HTML page and abort if so.
     if (this._tryToParse) {
+      var contentType = false;
       try {
         aRequest.QueryInterface(Ci.nsIHttpChannel);
       } catch (e) {
         return;  // Non-http channel?  Ignore.
       }
-      if (this._htmlTypeRegex.test(aRequest.contentType)) {
+      try {
+        contentType = this._htmlTypeRegex.test(aRequest.contentType);
+      } catch (e) {
+        return;  // Problem loading page (Unable to connect)?  Ignore.
+      }
+      if (contentType) {
         // Cancel this request immediately and let onStopRequest handle the
         // cleanup for everything else.
         aRequest.cancel(Components.results.NS_BINDING_ABORTED);
