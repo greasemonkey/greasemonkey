@@ -55,11 +55,6 @@ function showInstallDialog(aUrlOrRemoteScript, aBrowser, aRequest) {
           browser.webNavigation.stop(Ci.nsIWebNavigation.STOP_ALL);
         } catch (e) {
           // Ignore.
-          /*
-          dump("URL: " + aRequest.URI.spec + "\n"
-              + "aRequest.isPending(): " + aRequest.isPending().toString()
-              + "\n" + "e:" + "\n" + e);
-          */
         }
       } else {
         aRequest.resume();
