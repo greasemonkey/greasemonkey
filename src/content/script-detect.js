@@ -16,6 +16,8 @@ if (document.contentType in userScriptTypes) {
   var userScriptContent = document.body.textContent;
   var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
 
+  document.title = userScriptDetails.name + ' - Webbymonkey User Script';
+
   // For development: in case of reloading the extension, the old injected
   // iframe is still left around.  If so, clean it out.
   let oldIframe = document.querySelector('iframe');
