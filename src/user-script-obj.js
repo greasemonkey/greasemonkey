@@ -183,8 +183,27 @@ window.EditableUserScript = class EditableUserScript
 
   calculateEvalContent() {
     this._evalContent
-        = this._content + '\n' + this._requiresContent.join('\n')
-            + '\n\n//# sourceURL=user-script:' + this.id;
+        = this.calculateGmInfo() + '\n\n'
+        + this._content + '\n\n'
+        + this._requiresContent.join('\n\n')
+        + '\n\n//# sourceURL=user-script:' + this.id;
+  }
+
+  calculateGmInfo() {
+    let gmInfo = {
+      'script': {
+        'description': this.description,
+        'name': this.name,
+        'namespace': this.namespace,
+        'resources': {},
+      },
+      'uuid': this.uuid,
+    };
+    Object.keys(this.resourceBlobs).forEach(n => {
+      // This value is useless to content; see http://bugzil.la/1356568 .
+      gmInfo.script.resources[n] = URL.createObjectURL(this.resourceBlobs[n]);
+    });
+    return 'const GM_info=' + JSON.stringify(gmInfo) + ';';
   }
 
   // Given a successful/completed `Downloader` object, update this script

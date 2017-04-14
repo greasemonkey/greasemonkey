@@ -122,7 +122,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
       if (resourceName in details.resourceUrls) {
         throw new Error('Duplicate resource name: ' + resourceName);
       }
-      details.resourceUrls[resourceUrl] = new URL(resourceUrl, url).toString();
+      details.resourceUrls[resourceName] = new URL(resourceUrl, url).toString();
       break;
     }
   }
