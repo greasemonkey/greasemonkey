@@ -103,7 +103,7 @@ window.RemoteUserScript = class RemoteUserScript {
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'iconBlob', 'requiresContent', 'resourceBlobs',
+    'enabled', 'evalContent', 'iconBlob', 'resourceBlobs',
     'userExcludes', 'userMatches', 'userIncludes', 'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
@@ -115,8 +115,7 @@ window.RunnableUserScript = class RunnableUserScript
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._iconBlob = null;
-    this._requiresContent = [];
-    this._resourceBlobs = [];
+    this._resourceBlobs = {};  // Name to blob.
     this._userExcludes = [];  // TODO: Not implemented.
     this._userIncludes = [];  // TODO: Not implemented.
     this._userMatches = [];  // TODO: Not implemented.
@@ -150,7 +149,6 @@ window.RunnableUserScript = class RunnableUserScript
 
   get evalContent() { return this._evalContent; }
   get iconBlob() { return this._iconBlob; }
-  get requiresContent() { return _safeCopy(this._requiresContent); }
   get resourceBlobs() { return _safeCopy(this._resourceBlobs); }
   get uuid() { return this._uuid; }
 }
@@ -164,8 +162,8 @@ window.EditableUserScript = class EditableUserScript
   constructor(details) {
     super(details);
 
-    this._content = null;  // TODO: Content of raw installed user script.
-    this._requiresContent = [];  // TODO: Content of raw installed requires.
+    this._content = null;
+    this._requiresContent = [];
 
     _loadValuesInto(this, details, editableUserScriptKeys);
   }

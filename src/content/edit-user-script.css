@@ -1,0 +1,42 @@
+html, body {
+  background: lightgrey;
+  height: calc(100% - 8px);
+  margin: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+
+
+#tabs {
+  margin-bottom: -1px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+#tabs .tab {
+  background: grey;
+  cursor: default;
+  display: inline-block;
+  font-family: arial, sans-serif;
+  font-size: smaller;
+  list-style: none;
+  margin: 0;
+  margin-left: 1ex;
+  padding: 4px 8px;
+}
+#tabs .tab.active {
+  background: white;
+}
+
+
+body, #editor, .CodeMirror {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  flex-basis: fill;
+
+}
+#editor .CodeMirror {
+  height: 0;
+  background: white;
+}

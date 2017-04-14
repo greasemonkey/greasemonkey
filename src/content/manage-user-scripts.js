@@ -83,9 +83,23 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
     console.warn('manage got click on non-script item:', event.target);
     return;
   }
+  let scriptUuid = scriptEl.getAttribute('data-user-script-uuid');
 
   if (event.target.tagName == 'BUTTON') {
     switch (event.target.getAttribute('class')) {
+      case 'edit':
+        // I really want a distinct and chrome-less window here, but it's
+        // giving me headaches.  (What do normal, popup, panel, detached_panel
+        // do?  everything but normal seems to create a chrome-less window
+        // (which I want), but also always-on-top (which I don't).
+        // Plus it puts "mos-extension://uuid" in front of the title =/
+        browser.tabs.create({
+            'active': true,
+            'url':
+                browser.extension.getURL('src/content/edit-user-script.html')
+                + '#' + scriptUuid,
+            });
+        break;
       case 'remove':
         browser.runtime.sendMessage({
           'name': 'UserScriptUninstall',
@@ -97,7 +111,7 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
       case 'toggle-enabled':
         browser.runtime.sendMessage({
           'name': 'UserScriptToggleEnabled',
-          'uuid': scriptEl.getAttribute('data-user-script-uuid'),
+          'uuid': scriptUuid,
         });
         break;
       default:

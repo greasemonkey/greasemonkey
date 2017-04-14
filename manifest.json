@@ -39,12 +39,14 @@
   "permissions": [
     "<all_urls>",
     "tabs",
-    "webNavigation"
+    "webNavigation",
+    "windows"
   ],
 
   "web_accessible_resources": [
-    "src/content/install-dialog.css",
-    "src/content/install-dialog.html",
-    "src/content/install-dialog.js"
+    "src/content/install-dialog.*",
+    "src/third-party/codemirror/*",
+    "src/third-party/codemirror/*/*",
+    "src/third-party/codemirror/*/*/*"
   ]
 }

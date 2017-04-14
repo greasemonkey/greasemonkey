@@ -104,6 +104,29 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
 window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
+function onUserScriptGet(message, sender, sendResponse) {
+  if (!message.uuid) {
+    console.warn('UserScriptGet handler got no UUID parameter.');
+  } else if (!userScripts[message.uuid]) {
+    console.warn(
+      'UserScriptGet handler asked for non-installed UUID:', message.uuid);
+  } else {
+    sendResponse(userScripts[message.uuid].details);
+  }
+};
+window.onUserScriptGet = onUserScriptGet;
+
+
+function onUserScriptToggleEnabled(message, sender, sendResponse) {
+  const userScript = userScripts[message.uuid];
+  console.log(
+    '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
+  userScript.enabled = !userScript.enabled;
+  saveUserScript(userScript);
+};
+window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
+
+
 function onUserScriptUninstall(message, sender, sendResponse) {
   db.then(db => {
     let txn = db.transaction([scriptStoreName], "readwrite");

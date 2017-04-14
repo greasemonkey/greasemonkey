@@ -61,6 +61,17 @@ Sent when some value (like enabled state) of a script is changed.  Data:
 
 * `details` Updated script details.
 
+# UserScriptGet
+Sent by: `content/edit-user-script.js`
+
+Data:
+
+* `uuid` The UUID of an installed script to fetch.
+
+Response:
+
+* `details` The details object from an `EditableUserScript`.
+
 # UserScriptInstall
 Sent by: `content/install-dialog.js`
 Received by: `bg/user-script-install.js`
