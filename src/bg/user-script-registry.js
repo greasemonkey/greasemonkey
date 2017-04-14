@@ -49,7 +49,10 @@ function install(downloader) {
       let index = store.index('id');
       let req = index.get(remoteScript.id);
       txn.oncomplete = event => {
+        let userScript = new EditableUserScript(req.result || {});
+        userScript.updateFromDownloader(downloader);
         saveUserScript(userScript);
+
         // TODO: Notification?
       };
       txn.onerror = event => {
