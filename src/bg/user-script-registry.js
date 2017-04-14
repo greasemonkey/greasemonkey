@@ -157,11 +157,12 @@ function saveUserScript(userScript) {
 
 //Generate user scripts, to run at `urlStr`; all if no URL provided.
 function* scriptsToRunAt(urlStr=null) {
+  if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
   for (let uuid in userScripts) {
     let userScript = userScripts[uuid];
-    if (!userScript.enabled) return;
-    if (url && !userScript.runsAt(url)) return;
+    if (!userScript.enabled) continue;
+    if (url && !userScript.runsAt(url)) continue;
     yield userScript;
   }
 }

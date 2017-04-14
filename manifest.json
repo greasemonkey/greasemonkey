@@ -18,6 +18,7 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
+      "src/bg/is-enabled.js",
       "src/bg/observe-content.js",
       "src/bg/on-message.js",
       "src/bg/user-script-install.js",

@@ -8,8 +8,33 @@ passes.  All sections should look like:
     within the data property and so on go here.
 
 All message should specify `JSON.parse()`-able bodies, and always with a `name`
-parameter for dispatching.  Additional values are documented per messsage name
+parameter for dispatching.  Additional values are documented per message name
 below.
+
+# EnabledChanged
+Sent by: `bg/is-enabled.js`.
+
+Sent whenever the global enabled status changes.
+
+* `enabled` boolean, the new status (true = enabled, false = disabled).
+
+# EnabledQuery
+Received by: `bg/is-enabled.js`.
+
+Send with no data, responds with a boolean: the new status
+(true = enabled, false = disabled).
+
+# EnabledSet
+Received by: `bg/is-enabled.js`.
+
+Send this to set the global enabled status.
+
+* `enabled` boolean, the new status (true = enabled, false = disabled).
+
+# EnabledToggle
+Received by: `bg/is-enabled.js`.
+
+Send this to toggle the global enabled status.  No data.
 
 # ListUserScripts
 Received by: `bg/user-script-registry.js`.

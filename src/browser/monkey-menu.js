@@ -2,6 +2,11 @@
 
 const defaultIcon = browser.extension.getURL('skin/userscript.png');
 
+browser.runtime.sendMessage({'name': 'EnabledQuery'}).then(enabled => {
+  document.querySelector('#toggle-global-enabled .icon').textContent
+      = enabled ? '\u2611' : '\u2610';
+});
+
 browser.runtime.sendMessage({'name': 'ListUserScripts'}).then(userScripts => {
   let containerEl = document.querySelector('#user-scripts');
   for (let oldEl of containerEl.querySelectorAll('.user-script')) {
@@ -53,6 +58,11 @@ window.addEventListener('click', function(event) {
     case 'manage-scripts':
       browser.tabs.create({
         'url': browser.runtime.getURL('src/content/manage-user-scripts.html'),
+      });
+      break;
+    case 'toggle-global-enabled':
+      browser.runtime.sendMessage({
+        'name': 'EnabledToggle',
       });
       break;
     default:
