@@ -1,8 +1,30 @@
-var editor = CodeMirror(document.getElementById('editor'));
+// TODO: Mark changed-but-unsaved tabs.
+//   markClean(), isClean(), change event
+// TODO: Search, replace.
+// TODO: Put name in title.
+
+var editor = CodeMirror(
+  document.getElementById('editor'),
+  // TODO: Make appropriate options user-configurable.
+  {
+    'tabSize': 2,
+    // 'extraKeys': {},  // https://codemirror.net/doc/manual.html#option_keyMap
+    'lineNumbers': true,
+  });
 console.log('code mirror editor:', editor);
 
 const userScriptUuid = location.hash.substr(1);
-let contents = [];
+const editorDocs = [];
+const editorTabs = [];
+const editorUrls = [];
+
+///////////////////////////////////////////////////////////////////////////////
+
+function nameForUrl(url) {
+  return url.replace(/.*\//, '').replace(/[?#].*/, '');
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 browser.runtime.sendMessage({
   'name': 'UserScriptGet',
@@ -14,18 +36,39 @@ browser.runtime.sendMessage({
 
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
-  scriptTab.textContent = 'User Script';
+  scriptTab.textContent = nameForUrl(userScript.downloadUrl);
   tabs.appendChild(scriptTab);
+  editorTabs.push(scriptTab);
+  editorDocs.push(CodeMirror.Doc(userScript.content, 'javascript'));
+  editorUrls.push(null);
 
-  contents.push(userScript.content);
-  editor.setValue(userScript.content);
+  Object.keys(userScript.requiresContent).forEach(u => {
+    let requireTab = document.createElement('li');
+    requireTab.className = 'tab';
+    requireTab.textContent = nameForUrl(u);
+    tabs.appendChild(requireTab);
+    editorTabs.push(requireTab);
+    editorDocs.push(
+        CodeMirror.Doc(userScript.requiresContent[u], 'javascript'));
+    editorUrls.push(u);
+  });
 
-  // TODO: requires here, but with what tab name?
+  editor.swapDoc(editorDocs[0]);
+  editor.focus();
 });
 
 document.getElementById('tabs').addEventListener('click', event => {
-  console.log('tabs click:', event);
-  // TODO: Switch editor contents, saving cursor/scroll positions.
+  if (event.target.classList.contains('tab')) {
+    let selectedTab = document.querySelector('#tabs .tab.active');
+    selectedTab.classList.remove('active');
+
+    let newTab = event.target;
+    newTab.classList.add('active');
+
+    let idx = editorTabs.indexOf(newTab);
+    editor.swapDoc(editorDocs[idx]);
+    editor.focus();
+  }
 }, true);
 
 // TODO: Ctrl-S will save active, Shift-Ctrl-S will save all.

@@ -12,6 +12,9 @@ html, body {
   margin: 0;
   padding: 0;
   position: relative;
+  /* TODO: Not so ugly. */
+  overflow-x: auto;
+  white-space: nowrap;
 }
 #tabs .tab {
   background: grey;

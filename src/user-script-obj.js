@@ -43,9 +43,12 @@ function _randomUuid() {
 }
 
 
-/// Returns v unless v is an array, then a (shallow) copy of v.
+/// Returns v unless v is an array or object, then a (shallow) copy of v.
 function _safeCopy(v) {
-  return (v && v.constructor == Array) ? v.slice() : v;
+  if (!v) return v;
+  if (v.constructor == Array) return v.slice();
+  if (v.constructor == Object) return Object.assign({}, v);
+  return v;
 }
 
 
@@ -163,7 +166,7 @@ window.EditableUserScript = class EditableUserScript
     super(details);
 
     this._content = null;
-    this._requiresContent = [];
+    this._requiresContent = {};  // Map of download URL to content.
 
     _loadValuesInto(this, details, editableUserScriptKeys);
   }
@@ -183,7 +186,7 @@ window.EditableUserScript = class EditableUserScript
     this._evalContent
         = this.calculateGmInfo() + '\n\n'
         + this._content + '\n\n'
-        + this._requiresContent.join('\n\n')
+        + Object.values(this._requiresContent).join('\n\n')
         + '\n\n//# sourceURL=user-script:' + this.id;
   }
 
@@ -211,9 +214,9 @@ window.EditableUserScript = class EditableUserScript
     if (downloader.iconDownload) {
       this._iconBlob = downloader.iconDownload.xhr.response;
     }
-    this._requiresContent = [];
+    this._requiresContent = {};
     downloader.requireDownloads.forEach(d => {
-      this._requiresContent.push(d.xhr.responseText);
+      this._requiresContent[d.url] = d.xhr.responseText;
     });
     this._resourceBlobs = {};
     Object.keys(downloader.resourceDownloads).forEach(u => {
