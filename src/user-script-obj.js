@@ -207,6 +207,12 @@ window.EditableUserScript = class EditableUserScript
     return 'const GM_info=' + JSON.stringify(gmInfo) + ';';
   }
 
+  updateFromEditorSaved(message) {
+    this._content = message.content;
+    this._requiresContent = message.requires;
+    this.calculateEvalContent();
+  }
+
   // Given a successful/completed `Downloader` object, update this script
   // from it.
   updateFromDownloader(downloader) {

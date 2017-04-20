@@ -11,6 +11,17 @@ All message should specify `JSON.parse()`-able bodies, and always with a `name`
 parameter for dispatching.  Additional values are documented per message name
 below.
 
+# EditorSaved
+Sent by: `content/edit-user-script.js`.
+Received by: `bg/user-script-registry.js`.
+
+Sent whenever the user triggers the save action in the user script editor.
+Data:
+
+* `uuid` String UUID of the script being edited.
+* `content` String text content of main script.
+* `requires` Object mapping require URL to text content.
+
 # EnabledChanged
 Sent by: `bg/is-enabled.js`.
 

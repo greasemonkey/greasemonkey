@@ -83,6 +83,20 @@ function loadUserScripts() {
 };
 
 
+function onEditorSaved(message, sender, sendResponse) {
+  let userScript = userScripts[message.uuid];
+  if (!userScript) {
+    console.error('Got save for UUID', message.uuid, 'but it does not exist.');
+    return;
+  }
+  userScript.updateFromEditorSaved(message);
+  // TODO: Async download changed resources/requires, then:
+  saveUserScript(userScript);
+  // TODO: Only then reply to editor with success.
+};
+window.onEditorSaved = onEditorSaved;
+
+
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt();

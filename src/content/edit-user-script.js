@@ -2,14 +2,15 @@
 // TODO: Put name in title.
 
 var editor = CodeMirror(
-  document.getElementById('editor'),
-  // TODO: Make appropriate options user-configurable.
-  {
-    'tabSize': 2,
-    // 'extraKeys': {},  // https://codemirror.net/doc/manual.html#option_keyMap
-    'lineNumbers': true,
-  });
-console.log('code mirror editor:', editor);
+    document.getElementById('editor'),
+    // TODO: Make appropriate options user-configurable.
+    {
+      'tabSize': 2,
+      'extraKeys': {
+        'Ctrl-S': onSave,
+      },
+      'lineNumbers': true,
+    });
 
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
@@ -28,8 +29,6 @@ browser.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }).then(userScript => {
-  console.log('Got user script:', userScript);
-
   let tabs = document.getElementById('tabs');
 
   let scriptTab = document.createElement('li');
@@ -84,4 +83,27 @@ editor.on('change', change => {
   }
 });
 
-// TODO: Ctrl-S will save active, Shift-Ctrl-S will save all.  markClean()
+
+function onSave() {
+  if (document.querySelectorAll('#tabs .tab.dirty').length == 0) {
+    return;
+  }
+
+  let requires = {};
+  for (let i = 1; i < editorDocs.length; i++) {
+    requires[ editorUrls[i] ] = editorDocs[i].getValue();
+  }
+
+  browser.runtime.sendMessage({
+    'name': 'EditorSaved',
+    'uuid': userScriptUuid,
+    'content': editorDocs[0].getValue(),
+    'requires': requires,
+  });
+
+  // TODO: Spinner, only when completed then:
+  for (let i = 0; i < editorDocs.length; i++) {
+    editorDocs[i].markClean();
+    editorTabs[i].classList.remove('dirty');
+  }
+}
