@@ -1,5 +1,3 @@
-// TODO: Mark changed-but-unsaved tabs.
-//   markClean(), isClean(), change event
 // TODO: Search, replace.
 // TODO: Put name in title.
 
@@ -57,6 +55,9 @@ browser.runtime.sendMessage({
   editor.focus();
 });
 
+///////////////////////////////////////////////////////////////////////////////
+
+// TODO: Keyboard accessibility?
 document.getElementById('tabs').addEventListener('click', event => {
   if (event.target.classList.contains('tab')) {
     let selectedTab = document.querySelector('#tabs .tab.active');
@@ -71,4 +72,16 @@ document.getElementById('tabs').addEventListener('click', event => {
   }
 }, true);
 
-// TODO: Ctrl-S will save active, Shift-Ctrl-S will save all.
+
+editor.on('change', change => {
+  let selectedTab = document.querySelector('#tabs .tab.active');
+  let idx = editorTabs.indexOf(selectedTab);
+  let selectedDoc = editorDocs[idx];
+  if (selectedDoc.isClean()) {
+    selectedTab.classList.remove('dirty');
+  } else {
+    selectedTab.classList.add('dirty');
+  }
+});
+
+// TODO: Ctrl-S will save active, Shift-Ctrl-S will save all.  markClean()

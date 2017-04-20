@@ -30,6 +30,9 @@ html, body {
 #tabs .tab.active {
   background: white;
 }
+#tabs .tab.dirty::after {
+  content: "*";
+}
 
 
 body, #editor, .CodeMirror {
