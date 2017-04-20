@@ -184,10 +184,11 @@ window.EditableUserScript = class EditableUserScript
 
   calculateEvalContent() {
     this._evalContent
-        = this.calculateGmInfo() + '\n\n'
+        = '(function(){\n'
+        + this.calculateGmInfo() + '\n\n'
         + this._content + '\n\n'
         + Object.values(this._requiresContent).join('\n\n')
-        + '\n\n//# sourceURL=user-script:' + this.id;
+        + '})();\n\n//# sourceURL=user-script:' + escape(this.id);
   }
 
   calculateGmInfo() {
