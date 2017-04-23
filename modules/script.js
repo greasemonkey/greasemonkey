@@ -569,6 +569,7 @@ Script.prototype.info = function() {
   }
   return {
     'uuid': this.uuid,
+    'scriptHandler': 'Greasemonkey',
     'version': gGreasemonkeyVersion,
     'scriptMetaStr': extractMeta(this.textContent),
     'scriptSource': this.textContent,
