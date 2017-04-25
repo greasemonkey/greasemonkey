@@ -162,12 +162,18 @@ DownloadListener.prototype = {
   onStartRequest: function(aRequest, aContext) {
     // For the first file (the script) detect an HTML page and abort if so.
     if (this._tryToParse) {
+      var contentType = false;
       try {
         aRequest.QueryInterface(Ci.nsIHttpChannel);
       } catch (e) {
         return;  // Non-http channel?  Ignore.
       }
-      if (this._htmlTypeRegex.test(aRequest.contentType)) {
+      try {
+        contentType = this._htmlTypeRegex.test(aRequest.contentType);
+      } catch (e) {
+        return;  // Problem loading page (Unable to connect)?  Ignore.
+      }
+      if (contentType) {
         // Cancel this request immediately and let onStopRequest handle the
         // cleanup for everything else.
         aRequest.cancel(Components.results.NS_BINDING_ABORTED);
@@ -182,10 +188,12 @@ DownloadListener.prototype = {
 
     var error = !Components.isSuccessCode(aStatusCode);
     var errorMessage = stringBundle.GetStringFromName('error.unknown');
+    var status = -1;
     try {
       var httpChannel = aRequest.QueryInterface(Ci.nsIHttpChannel);
       error |= !httpChannel.requestSucceeded;
       error |= httpChannel.responseStatus >= 400;
+      status = httpChannel.responseStatus;
       errorMessage = stringBundle.GetStringFromName('error.serverReturned')
           + ' ' + httpChannel.responseStatus + ' '
           + httpChannel.responseStatusText + '.';
@@ -212,7 +220,8 @@ DownloadListener.prototype = {
     }
 
     this._progressCallback(aRequest, 1);
-    this._completionCallback(aRequest, !error, errorMessage);
+    this._completionCallback(
+        aRequest, !error, errorMessage, status);
   },
 
   // nsIProgressEventSink
@@ -297,9 +306,9 @@ RemoteScript.prototype.download = function(aCompletionCallback) {
   if (this.script) {
     this._downloadDependencies(aCompletionCallback);
   } else {
-    this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint) {
+    this.downloadScript(GM_util.hitch(this, function(aSuccess, aPoint, aStatus) {
       if (aSuccess) this._downloadDependencies(aCompletionCallback);
-      aCompletionCallback(this._cancelled || aSuccess, aPoint);
+      aCompletionCallback(this._cancelled || aSuccess, aPoint, aStatus);
     }));
   }
 };
@@ -627,7 +636,7 @@ RemoteScript.prototype._downloadFileProgress = function(
 };
 
 RemoteScript.prototype._downloadScriptCb = function(
-    aCompletionCallback, aChannel, aSuccess, aErrorMessage) {
+    aCompletionCallback, aChannel, aSuccess, aErrorMessage, aStatus) {
 
   if (aSuccess) {
     // At this point downloading the script itself is definitely done.
@@ -648,18 +657,18 @@ RemoteScript.prototype._downloadScriptCb = function(
       // Fake a successful download, so the install window will show, with
       // the error message.
       this._dispatchCallbacks('scriptMeta', new Script());
-      return aCompletionCallback(true, 'script');
+      return aCompletionCallback(true, 'script', aStatus);
     }
 
     if (!this.script) {
       dump('RemoteScript: finishing with error because no script was found.\n');
       // If we STILL don't have a script, this is a fatal error.
-      return aCompletionCallback(false, 'script');
+      return aCompletionCallback(false, 'script', aStatus);
     }
   } else {
     this.cleanup(aErrorMessage);
   }
-  aCompletionCallback(aSuccess, 'script');
+  aCompletionCallback(aSuccess, 'script', aStatus);
 };
 
 RemoteScript.prototype._parseScriptFile = function() {
