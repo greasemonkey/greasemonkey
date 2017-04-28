@@ -12,6 +12,7 @@ Cu.import("chrome://greasemonkey-modules/content/storageFront.js");
 Cu.import("chrome://greasemonkey-modules/content/util.js");
 Cu.import("chrome://greasemonkey-modules/content/xmlhttprequester.js");
 Cu.import("chrome://greasemonkey-modules/content/extractMeta.js");
+Cu.import("chrome://greasemonkey-modules/content/scriptProtocol.js");
 
 var gStringBundle = Cc["@mozilla.org/intl/stringbundle;1"]
     .getService(Ci.nsIStringBundleService)
@@ -26,6 +27,16 @@ var gMaxJSVersion = "ECMAv5";
 
 
 function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
+  
+  let innerId = aContentWin.QueryInterface(Ci.nsIInterfaceRequestor).
+    getInterface(Ci.nsIDOMWindowUtils).currentInnerWindowID;
+  
+  // let the debuggers know that the sandbox is associated with a tab and addon
+  let metadata = {
+      "inner-window-id": innerId,
+      //addonId: "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}"
+  };
+  
   if (GM_util.inArray(aScript.grants, 'none')) {
     // If there is an explicit none grant, use a plain unwrapped sandbox
     // with no other content.
@@ -36,6 +47,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
           'sandboxName': aScript.id,
           'sandboxPrototype': aContentWin,
           'wantXrays': false,
+          'metadata': metadata
         });
     // GM_info is always provided.
     injectGMInfo(aScript, contentSandbox, aContentWin);
@@ -46,6 +58,8 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
 
     return contentSandbox;
   }
+  
+  // TODO: create base domain principal from window if @grant baseDomain
 
   var sandbox = new Components.utils.Sandbox(
       [aContentWin],
@@ -54,8 +68,20 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
         'sandboxName': aScript.id,
         'sandboxPrototype': aContentWin,
         'wantXrays': true,
-        'wantExportHelpers': true
+        'wantExportHelpers': true,
+        'metadata': metadata,
+        // this gives the sandbox its own XHR/fetch object which runs with runs with the extended principal
+        // it does not violate same-origin policies, but it bypasses the site's CSP
+        //'wantGlobalProperties': ["XMLHttpRequest", "fetch"] 
       });
+
+  // transplant sandbox global properties objects onto the window xray wrapper
+  // so libraries assuming window is the global object get the right things
+  Cu.evalInSandbox(`
+      window.JSON = JSON;
+      //window.XMLHttpRequest = XMLHttpRequest;
+      //window.fetch = fetch;
+      `, sandbox);
 
   // Note that because waivers aren't propagated between origins, we need the
   // unsafeWindow getter to live in the sandbox.  See http://bugzil.la/1043958
@@ -96,7 +122,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
   if (GM_util.inArray(aScript.grants, 'GM_setClipboard')) {
     sandbox.GM_setClipboard = GM_util.hitch(null, GM_setClipboard);
   }
-
+  
   var scriptResources = new GM_Resources(aScript);
   if (GM_util.inArray(aScript.grants, 'GM_getResourceURL')) {
     sandbox.GM_getResourceURL = GM_util.hitch(
@@ -134,6 +160,11 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
     }
   });
 
+  if (GM_util.inArray(aScript.grants, 'GM_blobURI')) {
+    sandbox.GM_blobURI = Cu.exportFunction(registerBlob.bind(null, sandbox), Cu.waiveXrays(sandbox));
+  }
+
+  
   injectGMInfo(aScript, sandbox, aContentWin);
 
   return sandbox;
