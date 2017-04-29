@@ -151,6 +151,7 @@ Config.prototype.install = function(script, oldScript, tempDir) {
   if (oldScript) {
     // Save the old script's state.
     script._enabled = oldScript.enabled;
+    script.checkRemoteUpdates = oldScript.checkRemoteUpdates;
     script.userExcludes = oldScript.userExcludes;
     script.userMatches = oldScript.userMatches;
     script.userIncludes = oldScript.userIncludes;
