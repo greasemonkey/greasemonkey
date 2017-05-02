@@ -150,7 +150,7 @@ function createScriptSource() {
   }
 
   if (window.navigator.platform.match(/^Win/)) {
-    source = source.replace("\n", "\r\n");
+    source = source.replace(/\n/g, "\r\n");
   }
 
   return source;
