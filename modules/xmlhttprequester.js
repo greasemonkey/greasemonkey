@@ -130,6 +130,10 @@ function(safeUrl, details, req) {
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
 
+  if (details.anonymous) {
+    req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_ANONYMOUS;
+  }
+
   var channel;
 
   if (GM_util.windowIsPrivate(this.wrappedContentWin)) {
