@@ -25,6 +25,9 @@ function writeToFile(aData, aFile, aCallback) {
       .classes["@mozilla.org/network/safe-file-output-stream;1"]
       .createInstance(Components.interfaces.nsIFileOutputStream);
   ostream.init(tmpFile, STREAM_FLAGS, GM_constants.fileMask, 0);
+  if (aFile.leafName.match(/\.user\.js$/)) {
+    ostream.write('\u00EF\u00BB\u00BF', 3); // UTF-8 BOM
+  }
 
   NetUtil.asyncCopy(istream, ostream, function(status) {
     if (Components.isSuccessCode(status)) {
