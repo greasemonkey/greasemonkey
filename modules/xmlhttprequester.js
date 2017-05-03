@@ -127,6 +127,83 @@ function(safeUrl, details, req) {
 
   req.mozBackgroundRequest = !!details.mozBackgroundRequest;
 
+  var safeUrlTmp = new this.wrappedContentWin.URL(safeUrl);
+  var headersArr = new Array();
+  var authorization = {
+    "contrains": false,
+    "string": "Authorization",
+    "method": "Basic",
+    "user": "",
+    "password": ""
+  };
+  var authorizationRegexp =
+      new RegExp("^\\s*" + authorization.method + "\\s*([^\\s]+)\\s*$", "i");
+  var authorizationUserPasswordRegexp = new RegExp("^([^:]+):([^:]+)$", "");
+  var authenticationComponent =
+      Components.classes["@mozilla.org/network/http-auth-manager;1"]
+      .getService(Components.interfaces.nsIHttpAuthManager);
+
+  if (details.headers) {
+    var headers = details.headers;
+
+    for (var prop in headers) {
+      if (Object.prototype.hasOwnProperty.call(headers, prop)) {
+        headersArr.push({"prop": prop, "value": headers[prop]});
+        if (prop.toString().toLowerCase()
+            == authorization.string.toLowerCase()) {
+          var authorizationValue = headers[prop].match(authorizationRegexp);
+          if (authorizationValue) {
+            authorizationValue = atob(authorizationValue[1]);
+            var authorizationUserPassword =
+                authorizationValue.match(authorizationUserPasswordRegexp);
+            if (authorizationUserPassword) {
+              authorization.contrains = true;
+              authorization.user = authorizationUserPassword[1];
+              authorization.password = authorizationUserPassword[2];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if ((authorization.user || authorization.password)
+      || (details.user || details.password)) {
+    authenticationComponent.setAuthIdentity(
+        safeUrlTmp.protocol,
+        safeUrlTmp.hostname,
+        (safeUrlTmp.port || ""),
+        ((authorization.contrains)
+          ? authorization.method : ""),
+        "",
+        "",
+        "",
+        (authorization.user
+          || details.user || ""),
+        (authorization.password
+          || details.password || ""));
+  } else {
+    var authorizationDomain = {};
+    var authorizationUser = {};
+    var authorizationPassword = {};
+    try {
+      authenticationComponent.getAuthIdentity(
+          safeUrlTmp.protocol,
+          safeUrlTmp.hostname,
+          (safeUrlTmp.port || ""),
+          "",
+          "",
+          "",
+          authorizationDomain,
+          authorizationUser,
+          authorizationPassword);
+      details.user = authorizationUser.value || "";
+      details.password = authorizationPassword.value || "";
+    } catch (e) {
+      // Ignore.
+    }
+  }
+
   req.open(details.method, safeUrl,
       !details.synchronous, details.user || "", details.password || "");
 
@@ -163,14 +240,8 @@ function(safeUrl, details, req) {
     }
   }
 
-  if (details.headers) {
-    var headers = details.headers;
-
-    for (var prop in headers) {
-      if (Object.prototype.hasOwnProperty.call(headers, prop)) {
-        req.setRequestHeader(prop, headers[prop]);
-      }
-    }
+  for (var i = 0, headersCount = headersArr.length; i < headersCount; i++) {
+    req.setRequestHeader(headersArr[i].prop, headersArr[i].value);
   }
 
   var body = details.data ? details.data : null;
