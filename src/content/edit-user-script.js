@@ -12,6 +12,7 @@ var editor = CodeMirror(
       'lineNumbers': true,
     });
 
+const titlePattern = '%s - Webbymonkey User Script Editor';
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];
@@ -52,6 +53,16 @@ browser.runtime.sendMessage({
 
   editor.swapDoc(editorDocs[0]);
   editor.focus();
+
+  document.title = titlePattern.replace('%s', userScript.name);
+});
+
+
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.name == 'UserScriptChanged') {
+    console.log('editor saw changed script:', message);
+    document.title = titlePattern.replace('%s', message.details.name);
+  }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -101,7 +112,7 @@ function onSave() {
     'requires': requires,
   });
 
-  // TODO: Spinner, only when completed then:
+  // TODO: Spinner, then only when completed:
   for (let i = 0; i < editorDocs.length; i++) {
     editorDocs[i].markClean();
     editorTabs[i].classList.remove('dirty');

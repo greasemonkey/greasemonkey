@@ -212,6 +212,15 @@ window.EditableUserScript = class EditableUserScript
     this._content = message.content;
     this._requiresContent = message.requires;
     this.calculateEvalContent();
+
+    let newDetails = parseUserScript(
+        message.content, this.downloadUrl, false);
+
+    return new Promise((resolve, reject) => {
+      _loadValuesInto(this, newDetails, userScriptKeys);
+      // TODO: Download any new icon, requires, resources.
+      resolve();
+    });
   }
 
   // Given a successful/completed `Downloader` object, update this script

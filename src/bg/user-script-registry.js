@@ -89,10 +89,11 @@ function onEditorSaved(message, sender, sendResponse) {
     console.error('Got save for UUID', message.uuid, 'but it does not exist.');
     return;
   }
-  userScript.updateFromEditorSaved(message);
-  // TODO: Async download changed resources/requires, then:
-  saveUserScript(userScript);
-  // TODO: Only then reply to editor with success.
+
+  userScript.updateFromEditorSaved(message)
+      .then(
+          () => saveUserScript(userScript),
+          reason => null);
 };
 window.onEditorSaved = onEditorSaved;
 
@@ -192,7 +193,7 @@ function saveUserScript(userScript) {
 }
 
 
-//Generate user scripts, to run at `urlStr`; all if no URL provided.
+// Generate user scripts to run at `urlStr`; all if no URL provided.
 function* scriptsToRunAt(urlStr=null) {
   if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
