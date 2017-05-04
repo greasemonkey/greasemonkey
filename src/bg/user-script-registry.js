@@ -109,16 +109,6 @@ function onListUserScripts(message, sender, sendResponse) {
 window.onListUserScripts = onListUserScripts;
 
 
-function onUserScriptToggleEnabled(message, sender, sendResponse) {
-  const userScript = userScripts[message.uuid];
-  console.log(
-      '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
-  userScript.enabled = !userScript.enabled;
-  saveUserScript(userScript);
-};
-window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
-
-
 function onUserScriptGet(message, sender, sendResponse) {
   if (!message.uuid) {
     console.warn('UserScriptGet handler got no UUID parameter.');
