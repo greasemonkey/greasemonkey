@@ -92,7 +92,7 @@ function onEditorSaved(message, sender, sendResponse) {
 
   userScript.updateFromEditorSaved(message)
       .then(
-          () => saveUserScript(userScript),
+          value => saveUserScript(userScript),
           reason => null);
 };
 window.onEditorSaved = onEditorSaved;
@@ -173,6 +173,7 @@ function saveUserScript(userScript) {
       browser.runtime.sendMessage({
         'name': 'UserScriptChanged',
         'details': userScript.details,
+        'parsedDetails': userScript.parsedDetails,
       });
     };
     txn.onerror = event => {

@@ -20,6 +20,18 @@ const editorUrls = [];
 
 ///////////////////////////////////////////////////////////////////////////////
 
+function addRequireTab(url, content) {
+  if (!url) return console.error('addRequireTab missing URL!');
+  if (!content) return console.error('addRequireTab missing content!');
+  let requireTab = document.createElement('li');
+  requireTab.className = 'tab';
+  requireTab.textContent = nameForUrl(url);
+  tabs.appendChild(requireTab);
+  editorTabs.push(requireTab);
+  editorDocs.push(CodeMirror.Doc(content, 'javascript'));
+  editorUrls.push(url);
+}
+
 function nameForUrl(url) {
   return url.replace(/.*\//, '').replace(/[?#].*/, '');
 }
@@ -41,14 +53,7 @@ browser.runtime.sendMessage({
   editorUrls.push(null);
 
   Object.keys(userScript.requiresContent).forEach(u => {
-    let requireTab = document.createElement('li');
-    requireTab.className = 'tab';
-    requireTab.textContent = nameForUrl(u);
-    tabs.appendChild(requireTab);
-    editorTabs.push(requireTab);
-    editorDocs.push(
-        CodeMirror.Doc(userScript.requiresContent[u], 'javascript'));
-    editorUrls.push(u);
+    addRequireTab(u, userScript.requiresContent[u]);
   });
 
   editor.swapDoc(editorDocs[0]);
@@ -58,12 +63,29 @@ browser.runtime.sendMessage({
 });
 
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.name == 'UserScriptChanged') {
-    console.log('editor saw changed script:', message);
-    document.title = titlePattern.replace('%s', message.details.name);
+function onUserScriptChanged(message, sender, sendResponse) {
+  if (message.name != 'UserScriptChanged') return;
+  let details = message.details;
+
+  document.title = titlePattern.replace('%s', details.name);
+
+  for (let i = editorDocs.length - 1; i > 0; i--) {
+    let u = editorUrls[i];
+    if (message.parsedDetails.requireUrls.indexOf(u) === -1) {
+      editorTabs[i].parentNode.removeChild(editorTabs[i]);
+      delete editorDocs[i];
+      delete editorTabs[i];
+      delete editorUrls[i];
+    }
   }
-});
+
+  message.parsedDetails.requireUrls.forEach(u => {
+    if (editorUrls.indexOf(u) === -1) {
+      addRequireTab(u, details.requiresContent[u]);
+    }
+  });
+}
+browser.runtime.onMessage.addListener(onUserScriptChanged);
 
 ///////////////////////////////////////////////////////////////////////////////
 

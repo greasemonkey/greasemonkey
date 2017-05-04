@@ -157,7 +157,8 @@ window.RunnableUserScript = class RunnableUserScript
 }
 
 
-const editableUserScriptKeys = ['content', 'requiresContent'];
+const editableUserScriptKeys = [
+    'parsedDetails', 'content', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -165,6 +166,7 @@ window.EditableUserScript = class EditableUserScript
   constructor(details) {
     super(details);
 
+    this._parsedDetails = null;  // All details from parseUserScript().
     this._content = null;
     this._requiresContent = {};  // Map of download URL to content.
 
@@ -179,6 +181,7 @@ window.EditableUserScript = class EditableUserScript
     return d;
   }
 
+  get parsedDetails() { return this._parsedDetails; }
   get content() { return this._content; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
 
@@ -209,17 +212,57 @@ window.EditableUserScript = class EditableUserScript
   }
 
   updateFromEditorSaved(message) {
+    // Save immediately passed details.
     this._content = message.content;
     this._requiresContent = message.requires;
-    this.calculateEvalContent();
 
     let newDetails = parseUserScript(
         message.content, this.downloadUrl, false);
 
+    // Remove any no longer referenced remotes.
+    if (!newDetails.iconUrl) {
+      this._iconBlob = null;
+    }
+
+    Object.keys(this._requiresContent).forEach(u => {
+      if (newDetails.requireUrls.indexOf(u) === -1) {
+        delete this._requiresContent[u];
+      }
+    });
+
+    Object.keys(this._resourceBlobs).forEach(n => {
+      if (!newDetails.resourceUrls.hasOwnProperty(n)) {
+        delete this._resourceBlobs[n];
+      }
+    });
+
+    // Add newly referenced remotes (and download them).
     return new Promise((resolve, reject) => {
-      _loadValuesInto(this, newDetails, userScriptKeys);
-      // TODO: Download any new icon, requires, resources.
-      resolve();
+      let updater = new RemoteUpdater(
+          this._parsedDetails, newDetails,
+          () => {
+            // TODO: Check for & pass download failures via reject.
+            if (updater.iconDownload) {
+              this._iconBlob = updater.iconDownload.xhr.response;
+            }
+            updater.requireDownloads.forEach(d => {
+              this._requiresContent[d.url] = d.xhr.responseText;
+            });
+            Object.keys(updater.resourceDownloads).forEach(n => {
+              let d = updater.resourceDownloads[n];
+              this._resourceBlobs[n] = d.xhr.response;
+            });
+
+            this._parsedDetails = newDetails;
+            this.calculateEvalContent();
+            resolve();
+          });
+      if (updater.skip()) {
+        console.log('updater has no added remotes to handle');
+        this._parsedDetails = newDetails;
+        this.calculateEvalContent();
+        resolve();
+      }
     });
   }
 
@@ -241,7 +284,58 @@ window.EditableUserScript = class EditableUserScript
     });
     this.calculateEvalContent();
 
+    this._parsedDetails = downloader.scriptDetails;
     _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
+  }
+}
+
+class RemoteUpdater {
+  constructor(oldDetails, newDetails, onLoad) {
+    this._onLoad = onLoad;
+
+    this.iconDownload = null;
+    if (oldDetails.iconUrl != newDetails.iconUrl) {
+      this.iconDownload = new Download(this, newDetails.iconUrl, true);
+    }
+
+    this.requireDownloads = [];
+    newDetails.requireUrls.forEach(u => {
+      if (oldDetails.requireUrls.indexOf(u) === -1) {
+        this.requireDownloads.push(new Download(this, u, false));
+      }
+    });
+
+    this.resourceDownloads = {};
+    Object.keys(newDetails.resourceUrls).forEach(n => {
+      if (!oldDetails.resourceUrls.hasOwnProperty(n)
+          || oldDetails.resourceUrls[n] != newDetails.resourceUrls[n]
+      ) {
+        let u = newDetails.resourceUrls[n];
+        this.resourceDownloads[n] = new Download(this, u, true);
+      }
+    });
+  }
+
+  onLoad(download, event) {
+    if (this.pending()) return;
+    this._onLoad();
+  }
+
+  onProgress(download, event) {
+    // Ignore.
+  }
+
+  pending() {
+    return (this.iconDownload && this.iconDownload.pending)
+        || this.requireDownloads.filter(d => d.pending).length > 0
+        || Object.values(this.resourceDownloads)
+            .filter(d => d.pending).length > 0;
+  }
+
+  skip() {
+    return !this.iconDownload
+        && this.requireDownloads.length == 0
+        && Object.values(this.resourceDownloads).length == 0;
   }
 }
 

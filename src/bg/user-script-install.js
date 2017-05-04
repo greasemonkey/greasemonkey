@@ -13,7 +13,7 @@ window.onUserScriptInstall = function(message, sender, sendResponse) {
 
 
 class Downloader {
-  constructor(scriptDetails, sender) {
+  constructor(scriptDetails, sender=null) {
     this.scriptDetails = null;
     this.scriptDownload = null;
     this.iconDownload = null;
@@ -30,7 +30,6 @@ class Downloader {
   start(cb) {
     this.completionCallback = cb;
 
-    // TODO: Use messaging to grab the script from the content window instead?
     this.scriptDownload
         = new Download(this, this.scriptDetails.downloadUrl, false);
 
@@ -74,7 +73,7 @@ class Downloader {
         && !Object.values(this.resourceDownloads)
               .filter(d => d.pending).length != 0
     ) {
-      browser.tabs.sendMessage(
+      if (this.sender) browser.tabs.sendMessage(
           this.sender.tab.id,
           {
             'name': 'InstallProgress',
@@ -92,7 +91,7 @@ class Downloader {
   }
 
   onProgress(download, event) {
-    browser.tabs.sendMessage(
+    if (this.sender) browser.tabs.sendMessage(
         this.sender.tab.id,
         {
           'name': 'InstallProgress',
@@ -102,10 +101,11 @@ class Downloader {
         {'frameId': this.sender.frameId});
   }
 }
+window.UserScriptDownloader = Downloader;
 
 
 class Download {
-  constructor(downloader, url, binary) {
+  constructor(downloader, url, binary=false) {
     this._downloader = downloader;
     this.pending = true;
     this.progress = 0;
@@ -118,10 +118,7 @@ class Download {
     this.xhr.addEventListener('progress', this.onProgress.bind(this));
 
     this.xhr.open('GET', url);
-    // Force binary?
-    if (binary) {
-      this.xhr.responseType = "blob";
-    }
+    if (binary) this.xhr.responseType = "blob";
 
     this.xhr.send();
   }
@@ -138,5 +135,6 @@ class Download {
     this._downloader.onProgress(this, event);
   }
 }
+window.Download = Download;
 
 })();

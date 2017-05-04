@@ -70,7 +70,8 @@ Sent by: `bg/user-script-registry.js`
 
 Sent when some value (like enabled state) of a script is changed.  Data:
 
-* `details` Updated script details.
+* `details` Updated script's current.
+* `parsedDetails` Updated script's original parsed details.
 
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
