@@ -71,6 +71,11 @@ function ScriptAddonFactoryByScript(aScript, aReplace) {
   var id = aScript.id + SCRIPT_ID_SUFFIX;
   if (aReplace || !(id in ScriptAddonCache)) {
     ScriptAddonCache[id] = new ScriptAddon(aScript);
+  } else {
+    // To properly update the AOM.
+    if ("isRemoteUpdateAllowed" in aScript) {
+      ScriptAddonCache[id].isCompatible = aScript.isRemoteUpdateAllowed(false);
+    }
   }
   return ScriptAddonCache[id];
 }
