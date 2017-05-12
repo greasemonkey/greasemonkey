@@ -83,8 +83,8 @@ class Downloader {
           {'frameId': this.sender.frameId});
 
       this.scriptDetails = parseUserScript(
-        this.scriptDownload.xhr.responseText,
-        this.scriptDownload.xhr.responseURL);
+          this.scriptDownload.xhr.responseText,
+          this.scriptDownload.xhr.responseURL);
 
       this.completionCallback();
     }
