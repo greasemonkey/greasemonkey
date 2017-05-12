@@ -197,11 +197,15 @@ window.EditableUserScript = class EditableUserScript
 
   calculateEvalContent() {
     this._evalContent
-        = '(function(){\n'
+        = 'try {\n\n'
         + this.calculateGmInfo() + '\n\n'
-        + this._content + '\n\n'
+        + (apiProviderSource && (apiProviderSource(this) + '\n\n') || '')
+        + '(function(){\n'
         + Object.values(this._requiresContent).join('\n\n')
-        + '})();\n\n//# sourceURL=user-script:' + escape(this.id);
+        + this._content + '\n\n'
+        + '})();\n\n'
+        + '} catch (e) { console.error("Script error: ", e); }\n\n'
+        + '//# sourceURL=user-script:' + escape(this.id);
   }
 
   calculateGmInfo() {
@@ -221,7 +225,9 @@ window.EditableUserScript = class EditableUserScript
       // This value is useless to content; see http://bugzil.la/1356568 .
       gmInfo.script.resources[n] = URL.createObjectURL(this.resourceBlobs[n]);
     });
-    return 'const GM_info=' + JSON.stringify(gmInfo) + ';';
+    return 'const GM = {};\n'
+        + 'GM.info=' + JSON.stringify(gmInfo) + ';'
+        + 'const GM_info = GM.info;';
   }
 
   updateFromEditorSaved(message) {

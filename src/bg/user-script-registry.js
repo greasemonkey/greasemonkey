@@ -111,7 +111,7 @@ window.onListUserScripts = onListUserScripts;
 
 function onUserScriptGet(message, sender, sendResponse) {
   if (!message.uuid) {
-    console.warn('UserScriptGet handler got no UUID parameter.');
+    console.warn('UserScriptGet handler got no UUID.');
   } else if (!userScripts[message.uuid]) {
     console.warn(
       'UserScriptGet handler asked for non-installed UUID:', message.uuid);
@@ -120,6 +120,24 @@ function onUserScriptGet(message, sender, sendResponse) {
   }
 };
 window.onUserScriptGet = onUserScriptGet;
+
+
+function onUserScriptGetResourceBlob(message, sender, sendResponse) {
+  if (!message.uuid) {
+    console.warn('onUserScriptGetResourceBlob handler got no UUID.');
+  } else if (!message.resourceName) {
+      console.warn('onUserScriptGetResourceBlob handler got no resourceName.');
+  } else if (!userScripts[message.uuid]) {
+    console.warn(
+      'onUserScriptGetResourceBlob handler asked for non-installed UUID:',
+      message.uuid);
+  } else {
+    let userScript = userScripts[message.uuid];
+    let blob = userScript.resourceBlobs[message.resourceName];
+    sendResponse(blob);
+  }
+};
+window.onUserScriptGetResourceBlob = onUserScriptGetResourceBlob;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {

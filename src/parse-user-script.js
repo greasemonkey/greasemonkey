@@ -75,7 +75,9 @@ window.parseUserScript = function(content, url, failIfMissing) {
       // TODO: Assert/normalize to supported value.
       break;
     case 'grant':
-      details.grants.push(data.value);
+      if (data.value == 'none' || SUPPORTED_APIS.has(data.value)) {
+        details.grants.push(data.value);
+      }
       break;
 
     case 'description':
@@ -130,6 +132,10 @@ window.parseUserScript = function(content, url, failIfMissing) {
   // still no includes, set the default of include everything.
   if (details.includes.length == 0 && details.matches.length == 0) {
     details.includes.push('*');
+  }
+
+  if (details.grants.includes('none') && details.grants.length > 1) {
+    details.grants = 'none';
   }
 
   return details;

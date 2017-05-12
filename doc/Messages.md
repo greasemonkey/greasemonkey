@@ -84,6 +84,20 @@ Response:
 
 * `details` The details object from an `EditableUserScript`.
 
+# UserScriptGetResourceBlob
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `resourceName` The name of a resource to fetch.
+* `uuid` The UUID of an installed script to fetch.
+
+Response:
+
+* `blob` The blob object.
+* `resourceName` As provided in the request.
+* `uuid` As provided in the request.
+
 # UserScriptInstall
 Sent by: `content/install-dialog.js`
 Received by: `bg/user-script-install.js`
