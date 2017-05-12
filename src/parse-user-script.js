@@ -38,6 +38,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
   var details = {
     'downloadUrl': url,
     'excludes': [],
+    'grants': [],
     'includes': [],
     'matches': [],
     'name': nameFromUrl(url),
@@ -73,11 +74,9 @@ window.parseUserScript = function(content, url, failIfMissing) {
       details.runAt = data.value.replace('document-', '');
       // TODO: Assert/normalize to supported value.
       break;
-    /*
     case 'grant':
       details.grants.push(data.value);
       break;
-    */
 
     case 'description':
     case 'name':

@@ -62,7 +62,7 @@ function _safeCopy(v) {
 
 
 const userScriptKeys = [
-    'description', 'downloadUrl', 'excludes', 'includes', 'matches',
+    'description', 'downloadUrl', 'excludes', 'grants', 'includes', 'matches',
     'name', 'namespace', 'noFrames', 'runAt', 'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
 window.RemoteUserScript = class RemoteUserScript {
@@ -94,6 +94,7 @@ window.RemoteUserScript = class RemoteUserScript {
   get description() { return this._description; }
   get downloadUrl() { return this._downloadUrl; }
   get excludes() { return _safeCopy(this._excludes); }
+  get grants() { return _safeCopy(this._grants); }
   get includes() { return _safeCopy(this._includes); }
   get matches() { return _safeCopy(this._matches); }
   get name() { return this._name; }
@@ -300,6 +301,7 @@ window.EditableUserScript = class EditableUserScript
     _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
   }
 }
+
 
 class RemoteUpdater {
   constructor(oldDetails, newDetails, onLoad) {

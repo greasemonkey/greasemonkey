@@ -86,6 +86,10 @@ function addStringsToList(containerEl, listEl, strings) {
 
 
 addStringsToList(
+    document.getElementById('apis'),
+    document.querySelector('#apis ul'),
+    details.grants);
+addStringsToList(
     document.getElementById('includes'),
     document.querySelector('#includes ul'),
     details.includes);
