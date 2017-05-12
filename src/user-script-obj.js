@@ -9,6 +9,15 @@ reference any other objects from this file.
 // Private implementation.
 (function() {
 
+let extensionVersion = (function() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+  xhr.send(null);
+  var manifest = JSON.parse(xhr.responseText);
+  return manifest.version;
+})();
+
+
 /// Safely copies selected input values to another object.
 function _loadValuesInto(dest, vals, keys) {
   keys.forEach(k => {
@@ -201,8 +210,11 @@ window.EditableUserScript = class EditableUserScript
         'name': this.name,
         'namespace': this.namespace,
         'resources': {},
+        'version': this.version,
       },
+      'scriptHandler': 'Webbymonkey',
       'uuid': this.uuid,
+      'version': extensionVersion,
     };
     Object.keys(this.resourceBlobs).forEach(n => {
       // This value is useless to content; see http://bugzil.la/1356568 .
