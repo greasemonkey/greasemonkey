@@ -122,14 +122,14 @@ function onUserScriptGet(message, sender, sendResponse) {
 window.onUserScriptGet = onUserScriptGet;
 
 
-function onUserScriptGetResourceBlob(message, sender, sendResponse) {
+function onApiGetResourceBlob(message, sender, sendResponse) {
   if (!message.uuid) {
-    console.warn('onUserScriptGetResourceBlob handler got no UUID.');
+    console.warn('onApiGetResourceBlob handler got no UUID.');
   } else if (!message.resourceName) {
-      console.warn('onUserScriptGetResourceBlob handler got no resourceName.');
+      console.warn('onApiGetResourceBlob handler got no resourceName.');
   } else if (!userScripts[message.uuid]) {
     console.warn(
-      'onUserScriptGetResourceBlob handler asked for non-installed UUID:',
+      'onApiGetResourceBlob handler asked for non-installed UUID:',
       message.uuid);
   } else {
     let userScript = userScripts[message.uuid];
@@ -137,7 +137,7 @@ function onUserScriptGetResourceBlob(message, sender, sendResponse) {
     sendResponse(blob);
   }
 };
-window.onUserScriptGetResourceBlob = onUserScriptGetResourceBlob;
+window.onApiGetResourceBlob = onApiGetResourceBlob;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {

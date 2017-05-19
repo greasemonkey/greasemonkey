@@ -37,7 +37,7 @@ window.apiProviderSource = apiProviderSource;
 function GM_getResourceURL(name) {
   return new Promise((resolve, reject) => {
     browser.runtime.sendMessage({
-      'name': 'UserScriptGetResourceBlob',
+      'name': 'ApiGetResourceBlob',
       'resourceName': name,
       'uuid': GM_info.uuid,
     }).then(result => {

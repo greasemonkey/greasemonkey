@@ -11,6 +11,20 @@ All message should specify `JSON.parse()`-able bodies, and always with a `name`
 parameter for dispatching.  Additional values are documented per message name
 below.
 
+# ApiGetResourceBlob
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `resourceName` The name of a resource to fetch.
+* `uuid` The UUID of an installed script to fetch.
+
+Response:
+
+* `blob` The blob object.
+* `resourceName` As provided in the request.
+* `uuid` As provided in the request.
+
 # EditorSaved
 Sent by: `content/edit-user-script.js`.
 Received by: `bg/user-script-registry.js`.
@@ -83,20 +97,6 @@ Data:
 Response:
 
 * `details` The details object from an `EditableUserScript`.
-
-# UserScriptGetResourceBlob
-Sent by: `content/api-provider-source.js`
-
-Data:
-
-* `resourceName` The name of a resource to fetch.
-* `uuid` The UUID of an installed script to fetch.
-
-Response:
-
-* `blob` The blob object.
-* `resourceName` As provided in the request.
-* `uuid` As provided in the request.
 
 # UserScriptInstall
 Sent by: `content/install-dialog.js`
