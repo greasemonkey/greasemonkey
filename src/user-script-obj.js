@@ -12,7 +12,7 @@ reference any other objects from this file.
 let extensionVersion = (function() {
   var xhr = new XMLHttpRequest();
   xhr.overrideMimeType('application/json');
-  xhr.open('GET', chrome.extension.getURL('manifest.json'), false);
+  xhr.open('GET', browser.extension.getURL('manifest.json'), false);
   xhr.send(null);
   var manifest = JSON.parse(xhr.responseText);
   return manifest.version;
