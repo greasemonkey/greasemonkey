@@ -72,6 +72,7 @@ window.RemoteUserScript = class RemoteUserScript {
     this._description = null;
     this._downloadUrl = null;
     this._excludes = [];
+    this._grants = ['none'];
     this._includes = [];
     this._matches = [];
     this._name = 'user-script';
@@ -199,9 +200,9 @@ window.EditableUserScript = class EditableUserScript
   calculateEvalContent() {
     this._evalContent
         = 'try {\n\n'
+        + '(function(){\n'
         + this.calculateGmInfo() + '\n\n'
         + (apiProviderSource && (apiProviderSource(this) + '\n\n') || '')
-        + '(function(){\n'
         + Object.values(this._requiresContent).join('\n\n')
         + this._content + '\n\n'
         + '})();\n\n'
@@ -302,10 +303,11 @@ window.EditableUserScript = class EditableUserScript
       // TODO: Store by resource name, not URL.
       this._resourceBlobs[u] = downloader.resourceDownloads[u].xhr.response;
     });
-    this.calculateEvalContent();
 
     this._parsedDetails = downloader.scriptDetails;
     _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
+
+    this.calculateEvalContent();
   }
 }
 
