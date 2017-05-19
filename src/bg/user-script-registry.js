@@ -114,7 +114,7 @@ function onUserScriptGet(message, sender, sendResponse) {
     console.warn('UserScriptGet handler got no UUID.');
   } else if (!userScripts[message.uuid]) {
     console.warn(
-      'UserScriptGet handler asked for non-installed UUID:', message.uuid);
+      'UserScriptGet handler got non-installed UUID:', message.uuid);
   } else {
     sendResponse(userScripts[message.uuid].details);
   }
@@ -129,7 +129,7 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
       console.warn('onApiGetResourceBlob handler got no resourceName.');
   } else if (!userScripts[message.uuid]) {
     console.warn(
-      'onApiGetResourceBlob handler asked for non-installed UUID:',
+      'onApiGetResourceBlob handler got non-installed UUID:',
       message.uuid);
   } else {
     let userScript = userScripts[message.uuid];
@@ -152,10 +152,11 @@ window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 function onUserScriptUninstall(message, sender, sendResponse) {
   db.then(db => {
-    let txn = db.transaction([scriptStoreName], "readwrite");
+    let txn = db.transaction([scriptStoreName], 'readwrite');
     let store = txn.objectStore(scriptStoreName);
     let req = store.delete(message.uuid);
     req.onsuccess = event => {
+      // TODO: Drop value store DB.
       delete userScripts[message.uuid];
       sendResponse(null);
     };

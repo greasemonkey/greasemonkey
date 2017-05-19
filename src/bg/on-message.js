@@ -17,5 +17,5 @@ browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     return;
   }
 
-  cb(message, sender, sendResponse);
+  return cb(message, sender, sendResponse);
 });

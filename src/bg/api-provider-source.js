@@ -8,22 +8,33 @@ to the global scope (the `this` object).  It ...
 
 const SUPPORTED_APIS = new Set([
     'GM.getResourceURL',
+    'GM.getValue', 'GM.setValue',
     ]);
 
 
 (function() {
 
 function apiProviderSource(userScript) {
-  if (!userScript.grants || userScript.grants.length == 0
-      || (userScript.grants.length == 1 && userScript.grants[0] == 'none')
+  const grants = userScript.grants;
+  if (!grants || grants.length == 0
+      || (grants.length == 1 && grants[0] == 'none')
   ) {
     return '/* No grants, no APIs. */';
   }
 
-  let source = '(function() {\n\n';
+  let source = '(function() {\n';
+  // A private copy of the script UUID which cannot be tampered with.
+  source += 'const _uuid = "' + userScript.uuid + '";\n\n';
 
-  if (userScript.grants.includes('GM_getResourceURL')) {
+  if (grants.includes('GM.getResourceURL')) {
     source += 'GM.getResourceURL = ' + GM_getResourceURL.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.getValue')) {
+    source += 'GM.getValue = ' + GM_getValue.toString() + ';\n\n';
+  }
+  if (grants.includes('GM.setValue')) {
+    source += 'GM.setValue = ' + GM_setValue.toString() + ';\n\n';
   }
 
   // TODO: Everything else.
@@ -39,12 +50,48 @@ function GM_getResourceURL(name) {
     browser.runtime.sendMessage({
       'name': 'ApiGetResourceBlob',
       'resourceName': name,
-      'uuid': GM_info.uuid,
+      'uuid': _uuid,
     }).then(result => {
       if (result) {
         resolve(URL.createObjectURL(result))
       } else {
         reject(`No resource named "${name}"`);
+      }
+    });
+  });
+}
+
+
+function GM_getValue(key, defaultValue) {
+  return new Promise((resolve, reject) => {
+    browser.runtime.sendMessage({
+      'key': key,
+      'name': 'ApiGetValue',
+      'uuid': _uuid,
+    }).then(result => {
+      if (result !== undefined) {
+        resolve(result)
+      } else {
+        resolve(defaultValue);
+      }
+    });
+  });
+}
+
+
+function GM_setValue(key, value) {
+  return new Promise((resolve, reject) => {
+    browser.runtime.sendMessage({
+      'key': key,
+      'name': 'ApiSetValue',
+      'uuid': _uuid,
+      'value': value,
+    }).then(result => {
+      if (result !== undefined) {
+        resolve(result);
+      } else {
+        console.warn('set value failed:', result);
+        reject();
       }
     });
   });

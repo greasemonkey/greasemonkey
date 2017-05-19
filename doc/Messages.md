@@ -25,6 +25,27 @@ Response:
 * `resourceName` As provided in the request.
 * `uuid` As provided in the request.
 
+# ApiGetValue
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `key` The key of a value to fetch.
+* `uuid` The UUID of an installed script which stored the named value.
+
+Response:
+
+* `value` The previously stored value, if available.
+
+# ApiSetValue
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `key` The key of a value to store.
+* `uuid` The UUID of an installed script which is storing this value.
+* `value` The new value to store.
+
 # EditorSaved
 Sent by: `content/edit-user-script.js`.
 Received by: `bg/user-script-registry.js`.
