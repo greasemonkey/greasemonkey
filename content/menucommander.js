@@ -43,6 +43,8 @@ GM_MenuCommander.createMenuItem = function(command) {
       menuItem.setAttribute("accesskey", command.accessKey);
   }
 
+  menuItem.setAttribute("_object", JSON.stringify(command));
+
   return menuItem;
 };
 
@@ -53,7 +55,17 @@ GM_MenuCommander.messageMenuCommandResponse = function(aMessage) {
   for (var i in aMessage.data.commands) {
     var command = aMessage.data.commands[i];
     var menuItem = GM_MenuCommander.createMenuItem(command);
-    GM_MenuCommander.popup.appendChild(menuItem);
+    var menuItems = GM_MenuCommander.popup.childNodes;
+    var menuItemExists = false;
+    for (var i = 0, iLen = menuItems.length; i < iLen; i++) {
+      if (JSON.stringify(command) == menuItems[i].getAttribute("_object")) {
+        menuItemExists = true;
+        break;
+      }
+    }
+    if (!menuItemExists) {
+      GM_MenuCommander.popup.appendChild(menuItem);
+    }
   }
   if (GM_MenuCommander.popup.firstChild) {
     GM_MenuCommander.popup.parentNode.disabled = false;

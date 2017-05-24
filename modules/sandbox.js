@@ -80,6 +80,7 @@ function createSandbox(aScript, aContentWin, aUrl, aFrameScope) {
     Components.utils.evalInSandbox(
         'this._MenuCommandSandbox = ' + MenuCommandSandbox.toSource(), sandbox);
     sandbox._MenuCommandSandbox(
+        aFrameScope.content,
         aScript.uuid, aScript.localized.name, aScript.fileURL,
         MenuCommandRespond,
         gMenuCommandCallbackIsNotFunctionErrorStr,

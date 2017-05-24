@@ -57,6 +57,7 @@ function MenuCommandRun(aContent, aMessage) {
 // This function is injected into the sandbox, in a private scope wrapper, BY
 // SOURCE.  Data and sensitive references are wrapped up inside its closure.
 function MenuCommandSandbox(
+    aContent,
     aScriptUuid, aScriptName, aScriptFileURL,
     aCommandResponder,
     aMenuCommandCallbackIsNotFunctionErrorStr,
@@ -68,37 +69,47 @@ function MenuCommandSandbox(
   var commands = {};
   var commandFuncs = {};
   var commandCookie = 0;
-  // 2) Respond to requests to list those registered commands.
-  addEventListener(
-      'greasemonkey-menu-command-list-' + aMenuCommandEventNameSuffix,
-      function(e) {
-        e.stopPropagation();
-        aCommandResponder(e.detail, commands);
-      }, true);
-  // 3) Respond to requests to run those registered commands.
-  addEventListener(
-      'greasemonkey-menu-command-run-' + aMenuCommandEventNameSuffix,
-      function(e) {
-        e.stopPropagation();
-        var detail = JSON.parse(e.detail);
-        if (aScriptUuid != detail.scriptUuid) return;
-        // This event is for this script; stop propagating to other scripts.
-        e.stopImmediatePropagation();
-        var commandFunc = commandFuncs[detail.cookie];
-        if (!commandFunc) {
-          throw new Error(
-              aMenuCommandCouldNotRunErrorStr.replace(
-                  "%1", commands[detail.cookie].name),
-              aScriptFileURL, null);
-        } else if ("function" !== typeof commandFunc) {
-          throw new Error(
-              aMenuCommandCallbackIsNotFunctionErrorStr.replace(
-                  "%1", commands[detail.cookie].name),
-              aScriptFileURL, null);
-        } else {
-          commandFunc.call();
-        }
-      }, true);
+  var _addEventListener = true;
+  try {
+    aContent.addEventListener;
+  } catch (e) {
+    // e.g.:
+    // Error: Permission denied to access property "addEventListener"
+    _addEventListener = false;
+  }
+  if (_addEventListener) {
+    // 2) Respond to requests to list those registered commands.
+    aContent.addEventListener(
+        'greasemonkey-menu-command-list-' + aMenuCommandEventNameSuffix,
+        function(e) {
+          e.stopPropagation();
+          aCommandResponder(e.detail, commands);
+        }, true);
+    // 3) Respond to requests to run those registered commands.
+    aContent.addEventListener(
+        'greasemonkey-menu-command-run-' + aMenuCommandEventNameSuffix,
+        function(e) {
+          e.stopPropagation();
+          var detail = JSON.parse(e.detail);
+          if (aScriptUuid != detail.scriptUuid) return;
+          // This event is for this script; stop propagating to other scripts.
+          e.stopImmediatePropagation();
+          var commandFunc = commandFuncs[detail.cookie];
+          if (!commandFunc) {
+            throw new Error(
+                aMenuCommandCouldNotRunErrorStr.replace(
+                    "%1", commands[detail.cookie].name),
+                aScriptFileURL, null);
+          } else if ("function" !== typeof commandFunc) {
+            throw new Error(
+                aMenuCommandCallbackIsNotFunctionErrorStr.replace(
+                    "%1", commands[detail.cookie].name),
+                aScriptFileURL, null);
+          } else {
+            commandFunc.call();
+          }
+        }, true);
+  }
   // 4) Export the "register a command" API function to the sandbox scope.
   this.GM_registerMenuCommand = function(
       commandName, commandFunc, accessKey, unused, accessKey2) {
