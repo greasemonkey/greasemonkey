@@ -25,6 +25,16 @@ Response:
 * `resourceName` As provided in the request.
 * `uuid` As provided in the request.
 
+# ApiDeleteValue
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `key` The key of a value to fetch.
+* `uuid` The UUID of an installed script which stored the named value.
+
+Response is empty, but sent upon completion.
+
 # ApiGetValue
 Sent by: `content/api-provider-source.js`
 

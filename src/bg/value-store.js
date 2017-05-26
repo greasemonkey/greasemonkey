@@ -34,6 +34,35 @@ function scriptStoreDb(uuid) {
 }
 
 
+function onApiDeleteValue(message, sender, sendResponse) {
+  if (!message.uuid) {
+    console.warn('ApiDeleteValue handler got no UUID.');
+    return;
+  } else if (!message.key) {
+    console.warn('ApiDeleteValue handler got no key.');
+    return;
+  }
+
+  scriptStoreDb(message.uuid).then((db) => {
+    let txn = db.transaction([valueStoreName], 'readwrite');
+    let store = txn.objectStore(valueStoreName);
+    let req = store.delete(message.key);
+    req.onsuccess = event => {
+      sendResponse(true);
+    };
+    req.onerror = event => {
+      console.warn(
+        'failed to delete', message.key, 'for', message.uuid, ':', event);
+      sendResponse(false);
+    };
+  });
+
+  // Return true causes sendResponse to work after async. step above completes.
+  return true;
+};
+window.onApiDeleteValue = onApiDeleteValue;
+
+
 function onApiGetValue(message, sender, sendResponse) {
   if (!message.uuid) {
     console.warn('ApiGetValue handler got no UUID.');

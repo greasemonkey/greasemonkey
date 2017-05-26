@@ -8,7 +8,7 @@ to the global scope (the `this` object).  It ...
 
 const SUPPORTED_APIS = new Set([
     'GM.getResourceURL',
-    'GM.getValue', 'GM.listValues', 'GM.setValue',
+    'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
     ]);
 
 
@@ -30,6 +30,9 @@ function apiProviderSource(userScript) {
     source += 'GM.getResourceURL = ' + GM_getResourceURL.toString() + ';\n\n';
   }
 
+  if (grants.includes('GM.deleteValue')) {
+    source += 'GM.deleteValue = ' + GM_deleteValue.toString() + ';\n\n';
+  }
   if (grants.includes('GM.getValue')) {
     source += 'GM.getValue = ' + GM_getValue.toString() + ';\n\n';
   }
@@ -61,6 +64,17 @@ function GM_getResourceURL(name) {
         reject(`No resource named "${name}"`);
       }
     });
+  });
+}
+
+
+function GM_deleteValue(key) {
+  return new Promise((resolve, reject) => {
+    browser.runtime.sendMessage({
+      'key': key,
+      'name': 'ApiDeleteValue',
+      'uuid': _uuid,
+    }).then(result => result ? resolve() : reject());
   });
 }
 
