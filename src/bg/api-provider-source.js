@@ -8,7 +8,7 @@ to the global scope (the `this` object).  It ...
 
 const SUPPORTED_APIS = new Set([
     'GM.getResourceURL',
-    'GM.getValue', 'GM.setValue',
+    'GM.getValue', 'GM.listValues', 'GM.setValue',
     ]);
 
 
@@ -32,6 +32,9 @@ function apiProviderSource(userScript) {
 
   if (grants.includes('GM.getValue')) {
     source += 'GM.getValue = ' + GM_getValue.toString() + ';\n\n';
+  }
+  if (grants.includes('GM.listValues')) {
+    source += 'GM.listValues = ' + GM_listValues.toString() + ';\n\n';
   }
   if (grants.includes('GM.setValue')) {
     source += 'GM.setValue = ' + GM_setValue.toString() + ';\n\n';
@@ -75,6 +78,16 @@ function GM_getValue(key, defaultValue) {
         resolve(defaultValue);
       }
     });
+  });
+}
+
+
+function GM_listValues() {
+  return new Promise((resolve, reject) => {
+    browser.runtime.sendMessage({
+      'name': 'ApiListValues',
+      'uuid': _uuid,
+    }).then(result => resolve(result));
   });
 }
 

@@ -37,6 +37,17 @@ Response:
 
 * `value` The previously stored value, if available.
 
+# ApiListValues
+Sent by: `content/api-provider-source.js`
+
+Data:
+
+* `uuid` The UUID of an installed script.
+
+Response:
+
+* `values` An array of strings, each the key of a stored value.
+
 # ApiSetValue
 Sent by: `content/api-provider-source.js`
 

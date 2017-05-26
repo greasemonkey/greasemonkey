@@ -67,6 +67,32 @@ function onApiGetValue(message, sender, sendResponse) {
 window.onApiGetValue = onApiGetValue;
 
 
+function onApiListValues(message, sender, sendResponse) {
+  if (!message.uuid) {
+    console.warn('ApiListValues handler got no UUID.');
+    return;
+  }
+
+  scriptStoreDb(message.uuid).then((db) => {
+    let txn = db.transaction([valueStoreName], 'readonly');
+    let store = txn.objectStore(valueStoreName);
+    let req = store.getAllKeys();
+    req.onsuccess = event => {
+      sendResponse(event.target.result);
+    };
+    req.onerror = event => {
+      console.warn(
+          'failed to list stored keys for', message.uuid, ':', event);
+      sendResponse(undefined);
+    };
+  });
+
+  // Return true causes sendResponse to work after async. step above completes.
+  return true;
+};
+window.onApiListValues = onApiListValues;
+
+
 function onApiSetValue(message, sender, sendResponse) {
   if (!message.uuid) {
     console.warn('ApiSetValue handler got no UUID.');
