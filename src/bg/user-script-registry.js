@@ -1,8 +1,8 @@
 /*
 The registry of installed user scripts.
 
-The `UserScriptRegistry` object owns a set of UserScript objects (?), and
-exports methods for discovering them.
+The `UserScriptRegistry` object owns a set of UserScript objects, and
+exports methods for discovering them and their details.
 */
 
 // Private implementation.
