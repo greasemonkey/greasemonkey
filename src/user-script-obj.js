@@ -111,7 +111,7 @@ window.RemoteUserScript = class RemoteUserScript {
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'iconBlob', 'resourceBlobs',
+    'enabled', 'evalContent', 'iconBlob', 'resources',
     'userExcludes', 'userMatches', 'userIncludes', 'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
@@ -123,7 +123,7 @@ window.RunnableUserScript = class RunnableUserScript
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._iconBlob = null;
-    this._resourceBlobs = {};  // Name to blob.
+    this._resources = {};  // Name to object with keys: name, mimetype, blob.
     this._userExcludes = [];  // TODO: Not implemented.
     this._userIncludes = [];  // TODO: Not implemented.
     this._userMatches = [];  // TODO: Not implemented.
@@ -157,7 +157,7 @@ window.RunnableUserScript = class RunnableUserScript
 
   get evalContent() { return this._evalContent; }
   get iconBlob() { return this._iconBlob; }
-  get resourceBlobs() { return _safeCopy(this._resourceBlobs); }
+  get resources() { return _safeCopy(this._resources); }
   get uuid() { return this._uuid; }
 }
 
@@ -216,9 +216,9 @@ window.EditableUserScript = class EditableUserScript
       'uuid': this.uuid,
       'version': extensionVersion,
     };
-    Object.keys(this.resourceBlobs).forEach(n => {
-      // This value is useless to content; see http://bugzil.la/1356568 .
-      gmInfo.script.resources[n] = URL.createObjectURL(this.resourceBlobs[n]);
+    Object.keys(this.resources).forEach(n => {
+      let r = this.resources[n];
+      gmInfo.script.resources[n] = {'name': r.name, 'mimetype': r.mimetype};
     });
     return 'const GM = {};\n'
         + 'GM.info=' + JSON.stringify(gmInfo) + ';'
@@ -244,9 +244,9 @@ window.EditableUserScript = class EditableUserScript
       }
     });
 
-    Object.keys(this._resourceBlobs).forEach(n => {
+    Object.keys(this._resources).forEach(n => {
       if (!newDetails.resourceUrls.hasOwnProperty(n)) {
-        delete this._resourceBlobs[n];
+        delete this._resources[n];
       }
     });
 
@@ -264,7 +264,11 @@ window.EditableUserScript = class EditableUserScript
             });
             Object.keys(updater.resourceDownloads).forEach(n => {
               let d = updater.resourceDownloads[n];
-              this._resourceBlobs[n] = d.xhr.response;
+              this._resources[n] = {
+                  'name': n,
+                  'mimetype': d.xhr.getResponseHeader('Content-Type'),
+                  'blob': d.xhr.response,
+              };
             });
 
             this._parsedDetails = newDetails;
@@ -291,10 +295,14 @@ window.EditableUserScript = class EditableUserScript
     downloader.requireDownloads.forEach(d => {
       this._requiresContent[d.url] = d.xhr.responseText;
     });
-    this._resourceBlobs = {};
-    Object.keys(downloader.resourceDownloads).forEach(u => {
-      // TODO: Store by resource name, not URL.
-      this._resourceBlobs[u] = downloader.resourceDownloads[u].xhr.response;
+    this._resources = {};
+    Object.keys(downloader.resourceDownloads).forEach(n => {
+      let d = downloader.resourceDownloads[n];
+      this._resources[n] = {
+          'name': n,
+          'mimetype': d.xhr.getResponseHeader('Content-Type'),
+          'blob': d.xhr.response,
+      };
     });
 
     this._parsedDetails = downloader.scriptDetails;

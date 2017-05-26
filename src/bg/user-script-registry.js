@@ -133,8 +133,16 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
       message.uuid);
   } else {
     let userScript = userScripts[message.uuid];
-    let blob = userScript.resourceBlobs[message.resourceName];
-    sendResponse(blob);
+    let resource = userScript.resources[message.resourceName];
+    if (!resource) {
+      sendResponse(false);
+    } else {
+      sendResponse({
+        'blob': resource.blob,
+        'mimetype': resource.mimetype,
+        'resourceName': message.resourceName,
+      });
+    }
   }
 };
 window.onApiGetResourceBlob = onApiGetResourceBlob;

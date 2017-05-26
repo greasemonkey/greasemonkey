@@ -59,7 +59,7 @@ function GM_getResourceURL(name) {
       'uuid': _uuid,
     }).then(result => {
       if (result) {
-        resolve(URL.createObjectURL(result))
+        resolve(URL.createObjectURL(result.blob))
       } else {
         reject(`No resource named "${name}"`);
       }
