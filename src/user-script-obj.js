@@ -9,14 +9,7 @@ reference any other objects from this file.
 // Private implementation.
 (function() {
 
-let extensionVersion = (function() {
-  var xhr = new XMLHttpRequest();
-  xhr.overrideMimeType('application/json');
-  xhr.open('GET', browser.extension.getURL('manifest.json'), false);
-  xhr.send(null);
-  var manifest = JSON.parse(xhr.responseText);
-  return manifest.version;
-})();
+const extensionVersion = browser.runtime.getManifest().version;
 
 
 /// Safely copies selected input values to another object.
