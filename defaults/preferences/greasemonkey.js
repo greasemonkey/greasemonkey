@@ -7,7 +7,6 @@ pref("extensions.greasemonkey.newScript.removeUnused", true);
 pref("extensions.greasemonkey.newScript.template", '// ==UserScript==\n// @name        %name%\n// @namespace   %namespace%\n// @description %description%\n// @include     %include%\n// @exclude     %exclude%\n// @version     1\n// @grant       none\n// ==/UserScript==');
 pref("extensions.greasemonkey.haveInsertedToolbarbutton", false);
 pref("extensions.greasemonkey.installDelay", 5);
-pref("extensions.greasemonkey.logChrome", false);
 pref("extensions.greasemonkey.requireSecureUpdates", true);
 pref("extensions.greasemonkey.showGrantsWarning", true);
 pref("extensions.greasemonkey.sniffGrants", false);
