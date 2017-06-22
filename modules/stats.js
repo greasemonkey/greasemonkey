@@ -8,6 +8,7 @@ the work to send data to the server.
 */
 var EXPORTED_SYMBOLS = [];
 
+Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 Components.utils.import('resource://services-common/utils.js');
 Components.utils.import('chrome://greasemonkey-modules/content/miscapis.js');
 Components.utils.import('chrome://greasemonkey-modules/content/parseScript.js');
@@ -71,6 +72,25 @@ function submit() {
   var req = Components.classes['@mozilla.org/xmlextras/xmlhttprequest;1']
       .createInstance(Components.interfaces.nsIXMLHttpRequest);
   req.open('POST', url, true);
+
+  var channel;
+
+  // Private browsing.
+  if (req.channel instanceof Components.interfaces.nsIPrivateBrowsingChannel) {
+    var isPrivate = true;
+    var chromeWin = GM_util.getBrowserWindow();
+    if (chromeWin && chromeWin.gBrowser) {
+      // i.e. the Private Browsing autoStart pref:
+      // "browser.privatebrowsing.autostart"
+      isPrivate = PrivateBrowsingUtils.isBrowserPrivate(chromeWin.gBrowser);
+    }
+    if (isPrivate) {
+      channel = req.channel.QueryInterface(
+          Components.interfaces.nsIPrivateBrowsingChannel);
+      channel.setPrivate(true);
+    }
+  }
+
   req.onload = GM_util.hitch(null, submitOnload, req);
   req.send(stats);
 }

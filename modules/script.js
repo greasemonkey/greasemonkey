@@ -1,5 +1,7 @@
 var EXPORTED_SYMBOLS = ['Script'];
 
+Components.utils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+
 Components.utils.import('chrome://greasemonkey-modules/content/GM_notification.js');
 Components.utils.import('chrome://greasemonkey-modules/content/constants.js');
 Components.utils.import('chrome://greasemonkey-modules/content/extractMeta.js');
@@ -862,6 +864,24 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
   req.overrideMimeType('application/javascript');
   req.timeout = 45000;  // milliseconds
   req.open("GET", url, true);
+
+  var channel;
+  
+  // Private browsing.
+  if (req.channel instanceof Components.interfaces.nsIPrivateBrowsingChannel) {
+    var isPrivate = true;
+    var chromeWin = GM_util.getBrowserWindow();
+    if (chromeWin && chromeWin.gBrowser) {
+      // i.e. the Private Browsing autoStart pref:
+      // "browser.privatebrowsing.autostart"
+      isPrivate = PrivateBrowsingUtils.isBrowserPrivate(chromeWin.gBrowser);
+    }
+    if (isPrivate) {
+      channel = req.channel.QueryInterface(
+          Components.interfaces.nsIPrivateBrowsingChannel);
+      channel.setPrivate(true);
+    }
+  }
 
   // Let the server know we want a user script metadata block
   req.setRequestHeader('Accept', 'text/x-userscript-meta');
