@@ -152,7 +152,11 @@ Config.prototype.install = function(script, oldScript, tempDir) {
     // Save the old script's state.
     script._enabled = oldScript.enabled;
     script.userExcludes = oldScript.userExcludes;
-    script.userMatches = oldScript.userMatches;
+    // A needed fix for script update (if contains userMatches).
+    // See #2455.
+    script.userMatches = oldScript.userMatches.map(function (match) {
+      return match.pattern;
+    });
     script.userIncludes = oldScript.userIncludes;
 
     // Uninstall the old script.
