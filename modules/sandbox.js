@@ -4,6 +4,9 @@ var Cu = Components.utils;
 var Ci = Components.interfaces;
 var Cc = Components.classes;
 
+Cu.importGlobalProperties(["Blob"]);
+Cu.importGlobalProperties(["URL"]);
+
 Cu.import('chrome://greasemonkey-modules/content/GM_openInTab.js');
 Cu.import('chrome://greasemonkey-modules/content/GM_setClipboard.js');
 Cu.import("chrome://greasemonkey-modules/content/menucommand.js");
@@ -188,7 +191,16 @@ function runScriptInSandbox(script, sandbox) {
   function evalWithWrapper(url) {
     const code = GM_util.loadFile(url, "text/plain,charset=utf-8");
     try {
-      Cu.evalInSandbox(code, sandbox, "latest", url);
+      try {
+        // See:
+        // #2485, #2486, #1230
+        // http://bugzil.la/1221148
+        let b = new Blob([code], {});
+        let blobUrl = URL.createObjectURL(b);
+        subLoader.loadSubScript(blobUrl, sandbox, "UTF-8");
+      } catch (e) {
+        Cu.evalInSandbox(code, sandbox, "latest", url);
+      }
     } catch (e) {
       if ("return not in function" == e.message) {
         // See #1592; we never anon wrap anymore, unless forced to by a return
