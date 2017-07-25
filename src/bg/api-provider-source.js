@@ -9,6 +9,7 @@ to the global scope (the `this` object).  It ...
 const SUPPORTED_APIS = new Set([
     'GM.getResourceUrl',
     'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
+    'GM.xmlHttpRequest',
     ]);
 
 
@@ -43,7 +44,12 @@ function apiProviderSource(userScript) {
     source += 'GM.setValue = ' + GM_setValue.toString() + ';\n\n';
   }
 
-  // TODO: Everything else.
+  if (grants.includes('GM.xmlHttpRequest')) {
+    source += 'GM.xmlHttpRequest = ' + GM_xmlHttpRequest.toString() + ';\n\n';
+  }
+
+  // TODO: GM_registerMenuCommand -- maybe.
+  // TODO: GM_getResourceText -- maybe.
 
   source += '})();';
   return source;
@@ -122,6 +128,48 @@ function GM_setValue(key, value) {
       }
     });
   });
+}
+
+
+function GM_xmlHttpRequest(d) {
+  if (!d) throw new Error('GM.xmlHttpRequest: Received no details.');
+  if (!d.url) throw new Error('GM.xmlHttpRequest: Received no URL.');
+
+  let url;
+  try {
+    url = new URL(d.url, location.href);
+  } catch (e) {
+    throw new Error(
+        'GM.xmlHttpRequest: Could not understand the URL: ' + d.url
+        + '\n' + e);
+  }
+
+  if (url.protocol != 'http:'
+      && url.protocol != 'https:'
+      && url.protocol != 'ftp:'
+  ) {
+    throw new Error('GM.xmlHttpRequest: Passed URL has bad protocol: ' + d.url);
+  }
+
+  let port = chrome.runtime.connect({name: 'UserScriptXhr'});
+  port.onMessage.addListener(function(msg) {
+    let o = msg.src == 'up' ? d.upload : d;
+    let cb = o['on' + msg.type];
+    if (cb) cb(msg.responseState);
+  });
+
+  let noCallbackDetails = {};
+  Object.keys(d).forEach(k => {
+    let v = d[k];
+    noCallbackDetails[k] = v;
+    if ('function' == typeof v) noCallbackDetails[k] = true;
+  });
+  noCallbackDetails.upload = {};
+  d.upload && Object.keys(k => noCallbackDetails.upload[k] = true);
+  noCallbackDetails.url = url.href;
+  port.postMessage({name: 'open', details: noCallbackDetails});
+
+  // TODO: Return an object which can be `.abort()`ed.
 }
 
 })();

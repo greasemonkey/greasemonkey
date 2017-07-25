@@ -22,6 +22,7 @@
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
+      "src/bg/on-user-script-xhr.js",
       "src/bg/user-script-install.js",
       "src/bg/user-script-registry.js",
       "src/bg/value-store.js"

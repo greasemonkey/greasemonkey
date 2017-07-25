@@ -173,3 +173,20 @@ by the user.  Data:
 Response data:
 
 * `null`, but presented upon async completion.
+
+# UserScriptXhr
+Sent by: `content/api-provider-source.js`
+Received by: `bg/on-user-script-xhr.js`
+
+This is a channel (not a message).
+Triggered when the `GM.xmlHttpRequest()` method is called by a user script.
+Data:
+
+* `details` The details object specifying the request.
+
+Response data:
+
+* `null`
+
+Messages exchanged via this channel are private to its implementation.
+See sender and receiver for further detail.

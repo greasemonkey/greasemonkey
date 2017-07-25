@@ -204,6 +204,7 @@ window.EditableUserScript = class EditableUserScript
         + 'userScript();})();\n\n' // Ends scope wrapper.
         + '} catch (e) { console.error("Script error: ", e); }\n\n'
         + '//# sourceURL=user-script:' + escape(this.id);
+//    console.log('generated script:\n', this._evalContent);
   }
 
   calculateGmInfo() {
