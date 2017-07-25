@@ -191,14 +191,17 @@ window.EditableUserScript = class EditableUserScript
   get requiresContent() { return _safeCopy(this._requiresContent); }
 
   calculateEvalContent() {
+    // Put the first line of the script content on line one of the
+    // generated content -- wrapped in a function.  Then add the rest
+    // of the generated parts.
     this._evalContent
-        = 'try {\n\n'
-        + '(function(){\n'
+        = 'try {'
+        + '(function scopeWrapper(){'
+        + 'function userScript(){' + this._content + '} // User Script End.\n\n'
         + this.calculateGmInfo() + '\n\n'
-        + (apiProviderSource && (apiProviderSource(this) + '\n\n') || '')
+        + apiProviderSource(this) + '\n\n'
         + Object.values(this._requiresContent).join('\n\n')
-        + this._content + '\n\n'
-        + '})();\n\n'
+        + 'userScript();})();\n\n' // Ends scope wrapper.
         + '} catch (e) { console.error("Script error: ", e); }\n\n'
         + '//# sourceURL=user-script:' + escape(this.id);
   }
