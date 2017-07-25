@@ -1,4 +1,4 @@
-const defaultIcon = browser.extension.getURL('skin/userscript.png');
+const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
 
 let gContainerEl, gScriptTplEl;
 
@@ -50,14 +50,13 @@ window.addEventListener('DOMContentLoaded', event => {
   gScriptTplEl = document.querySelector('#templates .user-script');
 
   document.querySelector('link[rel="icon"]').href
-      = browser.runtime.getURL('skin/icon32.png');
+      = chrome.runtime.getURL('skin/icon32.png');
 
-  browser.runtime.sendMessage({'name': 'ListUserScripts'})
-      .then(loadAllUserScripts);
+  chrome.runtime.sendMessage({'name': 'ListUserScripts'}, loadAllUserScripts);
 }, true);
 
 
-browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.name == 'UserScriptChanged') {
     console.log('manage saw changed script:', message);
     let uuid = message.details.uuid;
@@ -93,23 +92,23 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         // do?  everything but normal seems to create a chrome-less window
         // (which I want), but also always-on-top (which I don't).
         // Plus it puts "mos-extension://uuid" in front of the title =/
-        browser.tabs.create({
+        chrome.tabs.create({
             'active': true,
             'url':
-                browser.extension.getURL('src/content/edit-user-script.html')
+                chrome.runtime.getURL('src/content/edit-user-script.html')
                 + '#' + scriptUuid,
             });
         break;
       case 'remove':
-        browser.runtime.sendMessage({
+        chrome.runtime.sendMessage({
           'name': 'UserScriptUninstall',
           'uuid': scriptEl.getAttribute('data-user-script-uuid'),
-        }).then(() => {
+        }, () => {
           scriptEl.parentNode.removeChild(scriptEl);
         });
         break;
       case 'toggle-enabled':
-        browser.runtime.sendMessage({
+        chrome.runtime.sendMessage({
           'name': 'UserScriptToggleEnabled',
           'uuid': scriptUuid,
         });

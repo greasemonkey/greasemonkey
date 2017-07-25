@@ -187,7 +187,7 @@ function saveUserScript(userScript) {
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
 
-      browser.runtime.sendMessage({
+      chrome.runtime.sendMessage({
         'name': 'UserScriptChanged',
         'details': userScript.details,
         'parsedDetails': userScript.parsedDetails,

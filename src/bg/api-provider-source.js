@@ -53,11 +53,11 @@ window.apiProviderSource = apiProviderSource;
 
 function GM_getResourceURL(name) {
   return new Promise((resolve, reject) => {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       'name': 'ApiGetResourceBlob',
       'resourceName': name,
       'uuid': _uuid,
-    }).then(result => {
+    }, result => {
       if (result) {
         resolve(URL.createObjectURL(result.blob))
       } else {
@@ -70,22 +70,22 @@ function GM_getResourceURL(name) {
 
 function GM_deleteValue(key) {
   return new Promise((resolve, reject) => {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       'key': key,
       'name': 'ApiDeleteValue',
       'uuid': _uuid,
-    }).then(result => result ? resolve() : reject());
+    }, result => result ? resolve() : reject());
   });
 }
 
 
 function GM_getValue(key, defaultValue) {
   return new Promise((resolve, reject) => {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       'key': key,
       'name': 'ApiGetValue',
       'uuid': _uuid,
-    }).then(result => {
+    }, result => {
       if (result !== undefined) {
         resolve(result)
       } else {
@@ -98,26 +98,26 @@ function GM_getValue(key, defaultValue) {
 
 function GM_listValues() {
   return new Promise((resolve, reject) => {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       'name': 'ApiListValues',
       'uuid': _uuid,
-    }).then(result => resolve(result));
+    }, result => resolve(result));
   });
 }
 
 
 function GM_setValue(key, value) {
   return new Promise((resolve, reject) => {
-    browser.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       'key': key,
       'name': 'ApiSetValue',
       'uuid': _uuid,
       'value': value,
-    }).then(result => {
+    }, result => {
       if (result !== undefined) {
         resolve(result);
       } else {
-        console.warn('set value failed:', result);
+        console.warn('set value failed:', chrome.runtime.lastError);
         reject();
       }
     });

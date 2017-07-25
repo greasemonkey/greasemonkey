@@ -38,10 +38,10 @@ function nameForUrl(url) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-browser.runtime.sendMessage({
+chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
-}).then(userScript => {
+}, userScript => {
   let tabs = document.getElementById('tabs');
 
   let scriptTab = document.createElement('li');
@@ -85,7 +85,7 @@ function onUserScriptChanged(message, sender, sendResponse) {
     }
   });
 }
-browser.runtime.onMessage.addListener(onUserScriptChanged);
+chrome.runtime.onMessage.addListener(onUserScriptChanged);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -127,7 +127,7 @@ function onSave() {
     requires[ editorUrls[i] ] = editorDocs[i].getValue();
   }
 
-  browser.runtime.sendMessage({
+  chrome.runtime.sendMessage({
     'name': 'EditorSaved',
     'uuid': userScriptUuid,
     'content': editorDocs[0].getValue(),

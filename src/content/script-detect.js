@@ -25,7 +25,7 @@ if (document.contentType in userScriptTypes) {
 
   let iframe = document.createElement('iframe');
   iframe.frameborder = 0;
-  iframe.src = browser.extension.getURL('src/content/install-dialog.html')
+  iframe.src = chrome.runtime.getURL('src/content/install-dialog.html')
       + '?' + escape(JSON.stringify(userScriptDetails));
   iframe.style = `
       border: none;

@@ -1,13 +1,13 @@
 (function() {
 
-const defaultIcon = browser.extension.getURL('skin/userscript.png');
+const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
 
-browser.runtime.sendMessage({'name': 'EnabledQuery'}).then(enabled => {
+chrome.runtime.sendMessage({'name': 'EnabledQuery'}, enabled => {
   document.querySelector('#toggle-global-enabled .icon').textContent
       = enabled ? '\u2611' : '\u2610';
 });
 
-browser.runtime.sendMessage({'name': 'ListUserScripts'}).then(userScripts => {
+chrome.runtime.sendMessage({'name': 'ListUserScripts'}, userScripts => {
   let containerEl = document.querySelector('#user-scripts');
   for (let oldEl of containerEl.querySelectorAll('.user-script')) {
     oldEl.parentNode.removeChild(oldEl);
@@ -50,20 +50,18 @@ window.addEventListener('click', function(event) {
   }
 
   if (el.hasAttribute('data')) {
-    browser.tabs.create({
+    chrome.tabs.create({
       'active': true,
       'url': el.getAttribute('data')
     });
   } else switch (el.getAttribute('id')) {
     case 'manage-scripts':
-      browser.tabs.create({
-        'url': browser.runtime.getURL('src/content/manage-user-scripts.html'),
+      chrome.tabs.create({
+        'url': chrome.runtime.getURL('src/content/manage-user-scripts.html'),
       });
       break;
     case 'toggle-global-enabled':
-      browser.runtime.sendMessage({
-        'name': 'EnabledToggle',
-      });
+      chrome.runtime.sendMessage({'name': 'EnabledToggle'});
       break;
     default:
       console.warn('unhandled monkey menu item:', el);

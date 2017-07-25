@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Private implementation.
 (function() {
 
-const extensionVersion = browser.runtime.getManifest().version;
+const extensionVersion = chrome.runtime.getManifest().version;
 
 
 /// Safely copies selected input values to another object.

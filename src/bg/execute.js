@@ -11,7 +11,7 @@ TODO: Make document_start execution time work as intended.
 let openPorts = [];
 let pendingPorts = {};
 
-browser.webNavigation.onCommitted.addListener(detail => {
+chrome.webNavigation.onCommitted.addListener(detail => {
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
     try {
@@ -21,13 +21,7 @@ browser.webNavigation.onCommitted.addListener(detail => {
         'runAt': 'document_' + userScript.runAt
       };
       if (detail.frameId) options.frameId = detail.frameId;
-      browser.tabs.executeScript(detail.tabId, options)
-          .then(result => {
-//            console.log('execute result?', result),
-          }, error => {
-//            console.error(
-//                'Could not execute ' + userScript.name + ':', error);
-          });
+      chrome.tabs.executeScript(detail.tabId, options);
     } catch (e) {
       console.error('Could not execute user script:', e);
     }

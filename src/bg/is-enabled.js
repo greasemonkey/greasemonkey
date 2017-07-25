@@ -23,7 +23,7 @@ window.onEnabledQuery = onEnabledQuery;
 
 function setGlobalEnabled(enabled) {
   isEnabled = !!enabled;
-  browser.runtime.sendMessage({
+  chrome.runtime.sendMessage({
     'name': 'EnabledChanged',
     'enabled': isEnabled,
   });

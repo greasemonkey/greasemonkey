@@ -4,7 +4,7 @@ content scripts.  It dispatches to global methods registered in other
 (background) scripts based on the `name` property of the received message,
 and passes all arguments on to that callback.
 */
-browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (!message.name) {
     console.error('Background received message without name!', message, sender);
     return;
