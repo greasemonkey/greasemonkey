@@ -7,7 +7,7 @@ to the global scope (the `this` object).  It ...
 */
 
 const SUPPORTED_APIS = new Set([
-    'GM.getResourceURL',
+    'GM.getResourceUrl',
     'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
     ]);
 
@@ -26,8 +26,8 @@ function apiProviderSource(userScript) {
   // A private copy of the script UUID which cannot be tampered with.
   source += 'const _uuid = "' + userScript.uuid + '";\n\n';
 
-  if (grants.includes('GM.getResourceURL')) {
-    source += 'GM.getResourceURL = ' + GM_getResourceURL.toString() + ';\n\n';
+  if (grants.includes('GM.getResourceUrl')) {
+    source += 'GM.getResourceUrl = ' + GM_getResourceUrl.toString() + ';\n\n';
   }
 
   if (grants.includes('GM.deleteValue')) {
@@ -51,7 +51,7 @@ function apiProviderSource(userScript) {
 window.apiProviderSource = apiProviderSource;
 
 
-function GM_getResourceURL(name) {
+function GM_getResourceUrl(name) {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({
       'name': 'ApiGetResourceBlob',
