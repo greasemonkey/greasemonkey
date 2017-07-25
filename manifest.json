@@ -42,8 +42,7 @@
   "permissions": [
     "<all_urls>",
     "tabs",
-    "webNavigation",
-    "windows"
+    "webNavigation"
   ],
 
   "web_accessible_resources": [
