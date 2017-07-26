@@ -8,7 +8,11 @@ the installation dialog is added, inside the content page.
 
 const userScriptTypes = {
   'text/plain': 1,
-  'application/x-javascript': 1
+  'application/ecmascript': 1,
+  'application/javascript': 1,
+  'application/x-javascript': 1,
+  'text/ecmascript': 1,
+  'text/javascript': 1,
   };
 
 if (document.contentType in userScriptTypes) {
