@@ -190,16 +190,22 @@ function runScriptInSandbox(script, sandbox) {
   // Eval the code, with anonymous wrappers when/if appropriate.
   function evalWithWrapper(url) {
     const code = GM_util.loadFile(url, "text/plain,charset=utf-8");
+    let b = null;
+    let blobUrl = null;
     try {
       try {
         // See:
         // #2485, #2486, #1230
         // http://bugzil.la/1221148
-        let b = new Blob([code], {});
-        let blobUrl = URL.createObjectURL(b);
+        b = new Blob([code], {});
+        blobUrl = URL.createObjectURL(b);
         subLoader.loadSubScript(blobUrl, sandbox, "UTF-8");
       } catch (e) {
         Cu.evalInSandbox(code, sandbox, "latest", url);
+      } finally {
+        b = null;
+        URL.revokeObjectURL(blobUrl);
+        blobUrl = null;
       }
     } catch (e) {
       if ("return not in function" == e.message) {
