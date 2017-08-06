@@ -125,6 +125,9 @@ MatchPattern.prototype.doMatch = function(uriSpec) {
   if (this._scheme != '*' && this._scheme != matchURI.scheme) {
     return false;
   }
+  // See #2536
+  // http://bugzil.la/1326520
   return this._hostExpr.test(matchURI.host)
-      && this._pathExpr.test(matchURI.path);
+      && this._pathExpr.test(
+          matchURI.path ? matchURI.path : matchURI.pathQueryRef);
 };
