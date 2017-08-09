@@ -847,7 +847,14 @@ Script.prototype.checkForRemoteUpdate = function(aCallback, aForced) {
 
   var usedMeta = false;
   if (this._updateMetaStatus != 'fail') {
-    uri.path = uri.path.replace('.user.js', '.meta.js');
+    let exts = ['.user.js', '.meta.js'];
+    // See #2536
+    // http://bugzil.la/1326520
+    if (uri.path) {
+      uri.path = uri.path.replace(exts[0], exts[1]);
+    } else {
+      uri.pathQueryRef = uri.pathQueryRef.replace(exts[0], exts[1]);
+    }
     usedMeta = true;
   }
   var url = uri.spec;
