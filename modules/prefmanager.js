@@ -135,8 +135,15 @@ GM_PrefManager.prototype.watch = function(prefName, watcher) {
   // store the observer in case we need to remove it later
   this.observers.set(watcher, observer);
 
-  this.pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal)
-      .addObserver(prefName, observer, false);
+  // http://bugzil.la/1374847
+  let _pref = null;
+  try {
+    _pref = this.pref.QueryInterface(
+        Components.interfaces.nsIPrefBranchInternal);
+  } catch (e) {
+    _pref = this.pref.QueryInterface(Components.interfaces.nsIPrefBranch);
+  }
+  _pref.addObserver(prefName, observer, false);
 };
 
 /**
@@ -146,8 +153,15 @@ GM_PrefManager.prototype.unwatch = function(prefName, watcher) {
   var obs = this.observers.get(watcher);
   if (obs) {
     this.observers.delete(watcher);
-    this.pref.QueryInterface(Components.interfaces.nsIPrefBranchInternal)
-        .removeObserver(prefName, obs);
+    // http://bugzil.la/1374847
+    let _pref = null;
+    try {
+      _pref = this.pref.QueryInterface(
+          Components.interfaces.nsIPrefBranchInternal);
+    } catch (e) {
+      _pref = this.pref.QueryInterface(Components.interfaces.nsIPrefBranch);
+    }
+    _pref.removeObserver(prefName, obs);
   }
 };
 
