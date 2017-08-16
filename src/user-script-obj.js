@@ -104,7 +104,9 @@ window.RemoteUserScript = class RemoteUserScript {
     if (!(url instanceof URL)) {
       throw new Error('runsAt() got non-url parameter: ' + url);
     }
-    // TODO: Implement!!
+
+    // TODO: Include/exclude/match.
+
     return true;
   }
 }

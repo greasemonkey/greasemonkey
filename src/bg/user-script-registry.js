@@ -215,6 +215,14 @@ function saveUserScript(userScript) {
 function* scriptsToRunAt(urlStr=null) {
   if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
+
+  if (url.protocol != 'http:'
+    && url.protocol != 'https:'
+    && !url.href.startsWith('about:blank')
+  ) {
+    return;
+  }
+
   for (let uuid in userScripts) {
     let userScript = userScripts[uuid];
     if (!userScript.enabled) continue;
