@@ -13,6 +13,9 @@
 #empty {
   display: none;
 }
+#user-scripts:empty + #empty {
+  display: block;
+}
 
 ul#user-scripts {
   margin: 2em;
@@ -55,8 +58,12 @@ li.user-script button {
 </head>
 <body>
 
-<ul id="user-scripts">
-</ul>
+<!--
+This empty <li> will be removed by JS, and replaced by real nodes if there
+are any.  It will prevent the :empty CSS selector from triggering until
+that point.
+-->
+<ul id="user-scripts"><li class='user-script'/></ul>
 
 <p id="empty">No user scripts installed!</p>
 

@@ -38,9 +38,6 @@ function loadAllUserScripts(userScripts) {
     empty = false;
     displayOneScript(userScript);
   }
-
-  gContainerEl.style.display = empty ? 'none' : '';
-  document.querySelector('#empty').style.display = empty ? '' : 'none';
 }
 
 ///////////////////////////////////////////////////////////////////////////////
