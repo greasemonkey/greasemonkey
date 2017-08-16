@@ -7,7 +7,8 @@ chrome.runtime.sendMessage({'name': 'EnabledQuery'}, enabled => {
       = enabled ? '\u2611' : '\u2610';
 });
 
-chrome.runtime.sendMessage({'name': 'ListUserScripts'}, userScripts => {
+chrome.runtime.sendMessage(
+    {'name': 'ListUserScripts', 'includeDisabled': true}, userScripts => {
   let containerEl = document.querySelector('#user-scripts');
   for (let oldEl of containerEl.querySelectorAll('.user-script')) {
     oldEl.parentNode.removeChild(oldEl);
@@ -21,7 +22,7 @@ chrome.runtime.sendMessage({'name': 'ListUserScripts'}, userScripts => {
     empty = false;
     let menuEl = tplEl.cloneNode(true);
 
-    if (!userScript.enabled) menuEl.classList.append('disabled');
+    if (!userScript.enabled) menuEl.classList.add('disabled');
 
     let icon = document.createElement('img');
     icon.src = userScript.iconBlob

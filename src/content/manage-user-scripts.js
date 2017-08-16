@@ -52,7 +52,9 @@ window.addEventListener('DOMContentLoaded', event => {
   document.querySelector('link[rel="icon"]').href
       = chrome.runtime.getURL('skin/icon32.png');
 
-  chrome.runtime.sendMessage({'name': 'ListUserScripts'}, loadAllUserScripts);
+  chrome.runtime.sendMessage(
+      {'name': 'ListUserScripts', 'includeDisabled': true},
+      loadAllUserScripts);
 }, true);
 
 

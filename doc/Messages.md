@@ -106,7 +106,11 @@ Send this to toggle the global enabled status.  No data.
 # ListUserScripts
 Received by: `bg/user-script-registry.js`.
 
-Lists all installed user scripts.  No data is sent.  Response data:
+Lists all installed user scripts.  Request data:
+
+* `includeDisabled` Default false, when true also list disabled scripts.
+
+Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 

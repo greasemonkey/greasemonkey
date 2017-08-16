@@ -100,7 +100,8 @@ window.onEditorSaved = onEditorSaved;
 
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt();
+  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(
+      null, message.includeDisabled);
   for (let userScript of userScriptIterator) {
     result.push(userScript.details);
   }
@@ -212,11 +213,12 @@ function saveUserScript(userScript) {
 
 
 // Generate user scripts to run at `urlStr`; all if no URL provided.
-function* scriptsToRunAt(urlStr=null) {
+function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
 
-  if (url.protocol != 'http:'
+  if (url
+    && url.protocol != 'http:'
     && url.protocol != 'https:'
     && !url.href.startsWith('about:blank')
   ) {
@@ -225,7 +227,7 @@ function* scriptsToRunAt(urlStr=null) {
 
   for (let uuid in userScripts) {
     let userScript = userScripts[uuid];
-    if (!userScript.enabled) continue;
+    if (!includeDisabled && !userScript.enabled) continue;
     if (url && !userScript.runsAt(url)) continue;
     yield userScript;
   }
