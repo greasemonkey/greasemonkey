@@ -12,7 +12,7 @@ var editor = CodeMirror(
       'lineNumbers': true,
     });
 
-const titlePattern = '%s - Webbymonkey User Script Editor';
+const titlePattern = '%s - Greasemonkey User Script Editor';
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];

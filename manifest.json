@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "WebbyMonkey",
+  "name": "Greasemonkey",
   "version": "4.0alpha1",
   "description": "A User Script manager for Firefox.",
   "homepage_url": "https://www.greasespot.net/",
@@ -10,7 +10,7 @@
     "browser_style": true,
     "default_icon": "skin/icon32.png",
     "default_popup": "src/browser/monkey-menu.html",
-    "default_title": "Webbymonkey"
+    "default_title": "Greasemonkey"
   },
 
   "background": {

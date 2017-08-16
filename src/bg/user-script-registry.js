@@ -11,7 +11,7 @@ exports methods for discovering them and their details.
 // TODO: Order?
 let userScripts = {};
 
-const dbName = 'webbymonkey';
+const dbName = 'greasemonkey';
 const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 const db = (function() {

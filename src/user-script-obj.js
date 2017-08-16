@@ -216,7 +216,7 @@ window.EditableUserScript = class EditableUserScript
         'resources': {},
         'version': this.version,
       },
-      'scriptHandler': 'Webbymonkey',
+      'scriptHandler': 'Greasemonkey',
       'uuid': this.uuid,
       'version': extensionVersion,
     };

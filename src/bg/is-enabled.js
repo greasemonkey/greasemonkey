@@ -1,6 +1,6 @@
 /*
 This file is responsible for tracking and exposing the global "enabled" state
-of Webbymonkey.
+of Greasemonkey.
 */
 
 // Private implementation.
