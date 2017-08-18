@@ -4,79 +4,67 @@ This dialog is inserted into a content page to enable user script installation.
 -->
 <html>
 <meta charset="utf-8">
-<!-- TODO: Non-firefox support? -->
-<link rel="stylesheet" href="chrome://browser/content/extension.css">
-
+<link rel="stylesheet" href="/skin/third_party/shoelace/shoelace.css">
 <link rel="stylesheet" href="install-dialog.css">
 <body class="install">
 
-<!-- Based on https://firefoxux.github.io/StyleGuide/#/navigation -->
+<header>
+  <div class="icon"></div>
+  <h1>
+    <strong id="name"></strong> <span id="version"></span>
+  </h1>
+</header>
 
-<div class="panel">
-  <div class="panel-arrowUp"></div>
+<div id="install">
+  <p>This is a Greasemonkey user script.  Click install to start using it.</p>
 
-  <div class="panel-section panel-section-header">
-    <div class="icon-section-header"></div>
-    <div class="text-section-header">
-      <strong id="name"></strong> <span id="version"></span>
+  <div id="details">
+    <div id="apis">
+      <p>Requires special APIs:</p>
+      <ul></ul>
+    </div>
+
+    <div id="includes">
+      <p>Runs on:</p>
+      <ul></ul>
+    </div>
+
+    <div id="matches">
+      <p>Matches:</p>
+      <ul></ul>
+    </div>
+
+    <div id="excludes">
+      <p>Does not run on:</p>
+      <ul></ul>
     </div>
   </div>
 
-  <div id="install">
-    <div class="text">
-      <p>
-       This is a Greasemonkey user script.  Click install to start using it.
-      </p>
-    </div>
+  <div class="spacer"></div>
 
-    <div id="details">
-      <div id="apis">
-        <p>Requires special APIs:</p>
-        <ul></ul>
-      </div>
-
-      <div id="includes">
-        <p>Runs on:</p>
-        <ul></ul>
-      </div>
-
-      <div id="matches">
-        <p>Matches:</p>
-        <ul></ul>
-      </div>
-
-      <div id="excludes">
-        <p>Does not run on:</p>
-        <ul></ul>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <div class="text">
-      <p>
-        Malicious user scripts can violate your privacy, steal your data, and
-        act on your behalf without your knowledge.  <strong>You should only
-        install scripts from sources that you trust.</strong>
-      </p>
-    </div>
-
-    <!-- TODO: Install in disabled state control, for review before running. -->
+  <div class="text">
+    <p>
+      Malicious user scripts can violate your privacy, steal your data, and
+      act on your behalf without your knowledge.  <strong>You should only
+      install scripts from sources that you trust.</strong>
+    </p>
   </div>
 
-  <div id="result">
-    <div class="text">
-      <p></p>
-    </div>
-  </div>
+  <!-- TODO: Install in disabled state control, for review before running. -->
+</div>
 
-  <div class="panel-section panel-section-footer">
-    <!-- TODO: Keyboard accessibility?! -->
-    <div class="panel-section-footer-button default disabled"
-        id="btn-install"
-        tabindex="0"
-        >Install</div>
+<div id="result">
+  <div class="text">
+    <p></p>
   </div>
+</div>
+
+<div id="footer">
+  <button id="btn-cancel" class="button-big button-secondary"
+      >Cancel</button>
+  <div class="spacer"></div>
+  <button id="btn-install" class="button-big button-success" disabled="disabled"
+      >Install</button>
 </div>
 
 <script src="install-dialog.js"></script>

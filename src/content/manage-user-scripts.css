@@ -1,0 +1,48 @@
+#templates {
+  display: none;
+}
+
+#empty {
+  display: none;
+}
+#user-scripts:empty + #empty {
+  display: block;
+}
+
+ul#user-scripts {
+  margin: 2em;
+  padding: 0;
+}
+li.user-script {
+  margin: 1ex;
+  display: flex;
+  flex: row;
+}
+li.user-script > div {
+  flex: 0;
+}
+
+li.user-script .icon {
+  display: inline-block;
+  flex-grow: 0;
+  margin-right: 1ex;
+  width: 2em;
+}
+li.user-script .icon img {
+  height: 2em;
+  max-width: 2em;
+}
+
+li.user-script .name {
+  flex: 10;
+}
+
+li.user-script .buttons {
+  display: flex;
+  min-width: 20em;
+}
+li.user-script button {
+  flex: 1;
+  flex-basis: 100%;
+  margin-left: 1ex;
+}

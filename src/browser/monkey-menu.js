@@ -3,8 +3,15 @@
 const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
 
 chrome.runtime.sendMessage({'name': 'EnabledQuery'}, enabled => {
-  document.querySelector('#toggle-global-enabled .icon').textContent
-      = enabled ? '\u2611' : '\u2610';
+  let enabledEl = document.querySelector('#toggle-global-enabled .icon');
+  if (enabled) {
+    enabledEl.classList.remove('fa-square-o');
+    enabledEl.classList.add('fa-check-square-o');
+  } else {
+    enabledEl.classList.remove('fa-check-square-o');
+    enabledEl.classList.add('fa-square-o');
+  }
+  // TODO: Change the text!
 });
 
 chrome.runtime.sendMessage(
@@ -41,10 +48,10 @@ chrome.runtime.sendMessage(
 window.addEventListener('click', function(event) {
   let el = event.target;
 
-  while (el && el.classList && !el.classList.contains('panel-list-item')) {
+  while (el && el.classList && !el.classList.contains('menu-item')) {
     el = el.parentNode;
   }
-  if (!el || !el.classList || !el.classList.contains('panel-list-item')) {
+  if (!el || !el.classList || !el.classList.contains('menu-item')) {
     console.warn('monkey menu got click on non-menu item:', event.target);
     window.close();
     return;

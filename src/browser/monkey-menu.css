@@ -1,0 +1,43 @@
+body {
+  cursor: default;
+  font: caption;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  padding: 4px 8px;
+}
+.menu-item .icon {
+  min-width: 1.5em;
+  /*
+  margin-left: -6px;
+  padding-right: 6px;
+  */
+}
+.menu-item .icon img {
+  height: 1em;
+  margin-top: 3px;
+  max-width: 1em;
+}
+.menu-item.disabled {
+  color: #999;
+}
+.menu-item.disabled .icon img {
+  opacity: 0.66;
+}
+.menu-item .text {
+  flex-grow: 1;
+}
+.menu-item:hover {
+  background: #EEE;
+}
+
+
+hr {
+  margin: 1px 0;
+}
+
+#templates {
+  display: none;
+}

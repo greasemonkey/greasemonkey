@@ -10,7 +10,11 @@ function onClickInstall(event) {
     'details': details
   });
 
-  btnInstall.parentNode.replaceChild(progressBar, btnInstall);
+  let footerEl = document.getElementById('footer');
+  while (footerEl.firstChild) {
+    footerEl.removeChild(footerEl.firstChild);
+  }
+  footerEl.appendChild(progressBar);
 }
 let installCounter = document.createElement('span');
 installCounter.textContent = installCountdown;
@@ -23,7 +27,7 @@ let installTimer = setInterval(function() {
   } else {
     clearTimeout(installTimer);
     btnInstall.removeChild(installCounter);
-    btnInstall.classList.remove('disabled');
+    btnInstall.removeAttribute('disabled');
     btnInstall.addEventListener('click', onClickInstall, true);
     btnInstall.focus();
   }
@@ -50,16 +54,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
       resultEl.appendChild(errorList);
     } else {
-      // TODO: Something better?
-      resultEl.textContent = 'Download Success!';
+      resultEl.textContent = 'Download and install successful!';
+      progressBar.parentNode.removeChild(progressBar);
     }
   }
 });
 
 /****************************** DETAIL DISPLAY *******************************/
 
-let iconContEl = document.querySelector(
-    '.panel .panel-section-header .icon-section-header');
+let iconContEl = document.querySelector('header .icon');
 let iconEl = document.createElement('img');
 let defaultIconSrc = chrome.runtime.getURL('skin/userscript.png');
 iconEl.src = details.iconUrl || defaultIconSrc;

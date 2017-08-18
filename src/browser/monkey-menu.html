@@ -1,100 +1,64 @@
 <!DOCTYPE html>
 <html>
 <meta charset="utf-8">
-<style>
-body {
-  margin: 1px; /* Work around unwanted horizontal scroll bar. */
-}
-
-.panel-list-item .icon {
-  min-width: 1.5em;
-  margin-left: -6px;
-  padding-right: 6px;
-}
-.panel-list-item .icon img {
-  height: 1em;
-  margin-top: 3px;
-  max-width: 1em;
-}
-.panel-list-item.disabled .icon img {
-  opacity: 0.66;
-}
-
-#templates {
-  display: none;
-}
-</style>
+<link rel="stylesheet" href="/skin/third_party/shoelace/shoelace.css">
+<link rel="stylesheet" href="/skin/third_party/font_awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="monkey-menu.css">
 <body>
 
-<!-- Based on https://firefoxux.github.io/StyleGuide/#/navigation -->
+<div class="menu-item" id="toggle-global-enabled">
+  <div class="icon fa"></div>
+  <div class="text">Greasemonkey is active</div>
+</div>
 
-<div class="panel">
-  <div class="panel-arrowUp"></div>
+<hr>
 
-  <div class="panel-section panel-section-list">
-    <div class="panel-list-item" id="toggle-global-enabled">
-      <div class="icon">xxx</div>
-      <div class="text">Greasemonkey is active</div>
-      <div class="text-shortcut"></div>
-    </div>
+<div class="menu-item" data="http://www.greasespot.net/">
+  <div class="icon fa fa-link"></div>
+  <div class="text">Greasemonkey home page</div>
+</div>
 
-    <div class="panel-section-separator"></div>
+<div class="menu-item" data="https://wiki.greasespot.net/">
+  <div class="icon fa fa-link"></div>
+  <div class="text">Greasemonkey Wiki</div>
+</div>
 
-    <div class="panel-list-item" data="http://www.greasespot.net/">
-      <div class="icon">🔗</div>
-      <div class="text">Greasemonkey home page</div>
-      <div class="text-shortcut"></div>
-    </div>
+<div class="menu-item"
+    data="https://wiki.greasespot.net/User_Script_Hosting">
+  <div class="icon fa fa-link"></div>
+  <div class="text">Get User Scripts</div>
+</div>
 
-    <div class="panel-list-item" data="https://wiki.greasespot.net/">
-      <div class="icon">🔗</div>
-      <div class="text">Greasemonkey Wiki</div>
-      <div class="text-shortcut"></div>
-    </div>
+<hr>
 
-    <div class="panel-list-item"
-        data="https://wiki.greasespot.net/User_Script_Hosting">
-      <div class="icon">🔗</div>
-      <div class="text">Get User Scripts</div>
-      <div class="text-shortcut"></div>
-    </div>
+<!-- TODO: This feature.
+<div class="menu-item" id="open-options">
+  <div class="icon fa fa-cogs"></div>
+  <div class="text">Greasemonkey Options</div>
+</div>
+-->
 
-    <div class="panel-section-separator"></div>
+<div class="menu-item" id="manage-scripts">
+  <div class="icon fa fa-tasks"></div>
+  <div class="text">Manage User Scripts</div>
+</div>
 
-    <!-- TODO: This feature.
-    <div class="panel-list-item" id="open-options">
-      <div class="icon"></div>
-      <div class="text">Greasemonkey Options</div>
-      <div class="text-shortcut"></div>
-    </div>
-    -->
+<!-- TODO: This feature.
+<div class="menu-item" id="new-script">
+  <div class="icon fa fa-file-text-o"></div>
+  <div class="text">New User Script...</div>
+</div>
+-->
 
-    <div class="panel-list-item" id="manage-scripts">
-      <div class="icon"></div>
-      <div class="text">Manage User Scripts</div>
-      <div class="text-shortcut"></div>
-    </div>
-
-    <!-- TODO: This feature.
-    <div class="panel-list-item" id="new-script">
-      <div class="icon"></div>
-      <div class="text">New User Script...</div>
-      <div class="text-shortcut"></div>
-    </div>
-    -->
-
-    <div id="user-scripts">
-      <div class="panel-section-separator"></div>
-    </div>
-  </div>
+<div id="user-scripts">
+  <hr>
 </div>
 
 <div id="templates">
   <div class='user-script'>
-    <div class="panel-list-item user-script">
+    <div class="menu-item user-script">
       <div class="icon"></div>
       <div class="text name"></div>
-      <div class="text-shortcut"></div>
     </div>
   </div>
 </div>

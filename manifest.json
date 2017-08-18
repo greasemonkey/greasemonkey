@@ -7,7 +7,6 @@
   "icons": {"32": "skin/icon32.png"},
 
   "browser_action": {
-    "browser_style": true,
     "default_icon": "skin/icon32.png",
     "default_popup": "src/browser/monkey-menu.html",
     "default_title": "Greasemonkey"

@@ -1,65 +1,85 @@
 /* Reference: https://firefoxux.github.io/StyleGuide/ */
 
 html, body {
+  font: caption;
   overflow: hidden;
   overflow-y: auto;
+}
+html {
   height: 100%;
 }
+body {
+  margin: 1em;
+}
 
-body.install #install,
-body.result #result
-{ display: flex; }
+html, body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
 
 body.result #install,
 body.result .panel-section-footer,
 body.install #result
 { display: none; }
 
-.icon-section-header img {
+header {
+  margin-bottom: 1em;
+}
+header * {
+  display: inline-block;
+  vertical-align: middle;
+}
+header .icon img {
   max-width: 32px;
   height: 32px;
+}
+header h1 {
+  font-size: 20px;
+}
+header h1 #version {
+  padding-left: 6px;
+}
+
+#install {
+  display: flex;
+  flex-direction: column;
+}
+#install, .spacer {
+  flex-grow: 1;
 }
 
 #details {
   border: 1px solid lightgrey;
   border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin: 0 16px;
-  padding: 4px;
+  padding: 16px;
 }
 
 #details > * {
   margin-top: 1em;
 }
-/* Because margin collapsing isn't doing what I expect. */
-p { margin: 0; }
-
-.text {
-  margin: 16px;
+#details #apis {
+  margin-top: 0;
 }
+#details p,
+#details ul
+{ margin: 0; }
+
 .text strong {
   font-size: 1.2em;
 }
 
-.panel-section-footer-button.disabled,
-.panel-section-footer-button.disabled:hover,
-.panel-section-footer-button.disabled:hover:active
-{
-  background-color: #b1b1b1;
-  box-shadow: 0 1px 0 #999999 inset;
-}
-
-
-.panel, .spacer, #install, #result {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1000;
-}
 
 progress {
   height: 17px;
   margin: 13px;
   width: 100%;
+}
+
+
+#footer {
+  display: flex;
+}
+#footer button {
+  flex-grow: 3;
 }
