@@ -155,6 +155,7 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
     '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
   userScript.enabled = !userScript.enabled;
   saveUserScript(userScript);
+  sendResponse({'enabled': userScript.enabled});
 };
 window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 

@@ -88,12 +88,7 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         // do?  everything but normal seems to create a chrome-less window
         // (which I want), but also always-on-top (which I don't).
         // Plus it puts "mos-extension://uuid" in front of the title =/
-        chrome.tabs.create({
-            'active': true,
-            'url':
-                chrome.runtime.getURL('src/content/edit-user-script.html')
-                + '#' + scriptUuid,
-            });
+        openUserScriptEditor(scriptUuid);
         break;
       case 'remove':
         chrome.runtime.sendMessage({

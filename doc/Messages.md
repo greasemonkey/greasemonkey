@@ -163,7 +163,9 @@ clicked by the user.  Data:
 
 * `uuid` The UUID value of a script as returned by `ListUserScripts` message.
 
-Response data: none.
+Response data:
+
+* `enabled` The new resulting value of this script's state.
 
 # UserScriptUninstall
 Sent by: `content/manage-user-scripts.js`
