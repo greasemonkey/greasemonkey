@@ -4,29 +4,30 @@
 <link rel="stylesheet" href="/skin/third_party/shoelace/shoelace.css">
 <link rel="stylesheet" href="/skin/third_party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="monkey-menu.css">
-<body>
+<body class="rendering">
 
 <section id="menu">
   <div class="menu-item" id="toggle-global-enabled">
-    <div class="icon fa"></div>
-    <div class="text">Greasemonkey is active</div>
+    <div rv-show="enabled" class="icon fa fa-fw fa-check-square-o"></div>
+    <div rv-hide="enabled" class="icon fa fa-fw fa-square-o"></div>
+    <div class="text">Greasemonkey is {enabled | active}</div>
   </div>
 
   <hr>
 
   <div class="menu-item" data-url="http://www.greasespot.net/">
-    <div class="icon fa fa-link"></div>
+    <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Greasemonkey home page</div>
   </div>
 
   <div class="menu-item" data-url="https://wiki.greasespot.net/">
-    <div class="icon fa fa-link"></div>
+    <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Greasemonkey Wiki</div>
   </div>
 
   <div class="menu-item"
       data-url="https://wiki.greasespot.net/User_Script_Hosting">
-    <div class="icon fa fa-link"></div>
+    <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Get User Scripts</div>
   </div>
 
@@ -34,54 +35,63 @@
 
   <!-- TODO: This feature.
   <div class="menu-item" id="open-options">
-    <div class="icon fa fa-cogs"></div>
+    <div class="icon fa fa-fw fa-cogs"></div>
     <div class="text">Greasemonkey Options</div>
   </div>
   -->
 
   <div class="menu-item" id="manage-scripts">
-    <div class="icon fa fa-tasks"></div>
+    <div class="icon fa fa-fw fa-tasks"></div>
     <div class="text">Manage User Scripts</div>
   </div>
 
   <!-- TODO: This feature.
   <div class="menu-item" id="new-script">
-    <div class="icon fa fa-file-text-o"></div>
+    <div class="icon fa fa-fw fa-file-text-o"></div>
     <div class="text">New User Script...</div>
   </div>
   -->
 
-  <div id="user-scripts">
-    <hr>
+  <hr>
+
+  <div rv-each-script="userScripts" class="menu-item user-script"
+    rv-class-disabled="script.enabled | not"
+    rv-data-user-script-uuid="script.uuid"
+  >
+    <div class="icon fa-fw"><img rv-src="script.icon"></div>
+    <div class="text">{script.name}</div>
+  </div>
+
+  <div rv-show="userScripts | empty" class="menu-item">
+    <div class="icon fa fa-fw fa-exclamation"></div>
+    <div class="text">No user scripts installed!</div>
   </div>
 </section>
 
-<section id="user-script"></section>
 
-<div id="templates">
-  <div class='user-script-menu-item'>
-    <div class="menu-item user-script">
-      <div class="icon"></div>
-      <div class="text name"></div>
-    </div>
+<section id="user-script-detail">
+  <header>
+    <div class="fa fa-lg fa-chevron-left" id="back"></div>
+    <div id="name">{activeScript.name}</div>
+  </header>
+  <hr>
+  <div class="menu-item" id="user-script-toggle-enabled">
+    <div class="icon fa fa-fw"
+      rv-class-fa-check-square-o="activeScript.enabled"
+      rv-class-fa-square-o="activeScript.enabled | not"
+    ></div>
+    <div class="text">{activeScript.enabled | enabled}</div>
   </div>
-  <div class='user-script-detail'>
-    <header>
-      <div class="fa fa-lg fa-chevron-left" id="back"></div>
-      <div id="name"></div>
-    </header>
-    <hr>
-    <div class="menu-item" id="user-script-toggle-enabled">
-      <div class="icon fa"></div>
-      <div class="text">Enabled</div>
-    </div>
-    <div class="menu-item" id="user-script-edit">
-      <div class="icon fa fa-pencil-square-o"></div>
-      <div class="text">Edit</div>
-    </div>
+  <div class="menu-item" id="user-script-edit">
+    <div class="icon fa fa-fw fa-pencil-square-o"></div>
+    <div class="text">Edit</div>
   </div>
-</div>
+</section>
 
+
+<script src="/src/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/iconUrl.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
 <script src="/src/open-editor.js"></script>
 <script src="monkey-menu.js"></script>
 

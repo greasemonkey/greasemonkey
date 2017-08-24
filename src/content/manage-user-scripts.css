@@ -1,16 +1,14 @@
-#templates {
-  display: none;
-}
-
-#empty {
-  display: none;
-}
-#user-scripts:empty + #empty {
-  display: block;
-}
-
-ul#user-scripts {
+body {
   margin: 2em;
+}
+body.rendering {
+  display: none;
+}
+
+#user-scripts ul li {
+  display: grid;
+  grid-template-columns: 2.5em calc(100% - 2.5em - 23em) 23em;
+  margin: 1ex 0;
   padding: 0;
 }
 li.user-script {
@@ -25,7 +23,6 @@ li.user-script > div {
 li.user-script .icon {
   display: inline-block;
   flex-grow: 0;
-  margin-right: 1ex;
   width: 2em;
 }
 li.user-script .icon img {
@@ -35,6 +32,9 @@ li.user-script .icon img {
 
 li.user-script .name {
   flex: 10;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 li.user-script .buttons {
@@ -42,7 +42,6 @@ li.user-script .buttons {
   min-width: 20em;
 }
 li.user-script button {
-  flex: 1;
-  flex-basis: 100%;
   margin-left: 1ex;
+  width: 100%; /* Shared within flex container. */
 }

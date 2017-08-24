@@ -3,10 +3,10 @@ body {
   font: caption;
   min-width: 21em;
 }
+body.rendering { display: none; }
 
-
-body #user-script, body.detail #menu { display: none; }
-body #menu, body.detail #user-script { display: block; }
+body #user-script-detail, body.detail #menu { display: none; }
+body #menu, body.detail #user-script-detail { display: block; }
 #templates { display: none; }
 
 
@@ -15,16 +15,14 @@ body #menu, body.detail #user-script { display: block; }
   flex-direction: row;
   padding: 4px 8px;
 }
+.menu-item * {
+  vertical-align: middle;
+}
 .menu-item .icon {
-  min-width: 1.5em;
-  /*
-  margin-left: -6px;
-  padding-right: 6px;
-  */
+  margin-right: 4px;
 }
 .menu-item .icon img {
-  height: 1em;
-  margin-top: 3px;
+  max-height: 1em;
   max-width: 1em;
 }
 .menu-item.disabled {
@@ -41,7 +39,7 @@ body #menu, body.detail #user-script { display: block; }
 }
 
 hr {
-  margin: 1px 0;
+  margin: 4px 0;
 }
 
 

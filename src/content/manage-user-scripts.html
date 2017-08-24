@@ -4,31 +4,48 @@
 <meta charset="utf-8">
 <title>User Script Management - Greasemonkey</title>
 <link rel="icon" href="/skin/icon32.png">
+<link rel="stylesheet" href="/skin/third_party/shoelace/shoelace.css">
+<link rel="stylesheet" href="/skin/third_party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="manage-user-scripts.css">
 </head>
-<body>
+<body class="rendering">
 
-<!--
-This empty <li> will be removed by JS, and replaced by real nodes if there
-are any.  It will prevent the :empty CSS selector from triggering until
-that point.
--->
-<ul id="user-scripts"><li class='user-script'/></ul>
+<div id="user-scripts">
+  <ul>
+    <li class='user-script' rv-each-script="userScripts"
+      rv-data-user-script-uuid="script.uuid"
+    >
+      <div class="icon"><img rv-src="script.icon"></div>
+      <div class="name">{script.name}</div>
+      <div class="buttons">
+        <button rv-hide="script.enabled"
+          class="button-light" data-action="toggle-enabled"
+        >
+          Disabled <div class="fa fa-toggle-off"></div>
+        </button>
+        <button rv-show="script.enabled"
+          class="button-light" data-action="toggle-enabled"
+        >
+          Enabled <div class="fa fa-toggle-on"></div>
+        </button>
 
-<p id="empty">No user scripts installed!</p>
+        <button class="button-light" data-action="edit">
+          <div class="fa fa-pencil-square-o"></div> Edit
+        </button>
+        <button class="button-danger" data-action="remove">
+          <div class="fa fa-trash"></div> Remove
+        </button>
+      </div>
+    </li>
+  </ul>
 
-<div id="templates">
-  <li class='user-script'>
-    <div class="icon"></div>
-    <div class="name"></div>
-    <div class="buttons">
-      <button class="remove">Remove</button>
-      <button class="toggle-enabled">Enable</button>
-      <button class="edit">Edit</button>
-    </div>
-  </li>
+  <p rv-if="userScripts | empty">No user scripts installed.</p>
 </div>
 
+<script src="/src/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/iconUrl.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
+<script src="/src/open-editor.js"></script>
 <script src="manage-user-scripts.js"></script>
 
 </body>

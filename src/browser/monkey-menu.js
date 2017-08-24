@@ -1,61 +1,48 @@
-(function() {
-
 const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
-let gUserScripts = {};
+
 let gActiveUuid = null;
-
-
-function setEnabledIcon(enabled, el) {
-  el.classList.remove('fa-square-o');
-  el.classList.remove('fa-check-square-o');
-  el.classList.add(enabled ? 'fa-check-square-o' : 'fa-square-o');
-}
-
-function showScriptEnabledState(enabled) {
-  let el = document.querySelector('#user-script-toggle-enabled .icon');
-  setEnabledIcon(enabled, el);
-}
-
-function showGlobalEnabledState(enabled) {
-  let enabledEl = document.querySelector('#toggle-global-enabled .icon');
-  setEnabledIcon(enabled, enabledEl);
-  // TODO: Change the text!
+let gTplData = {
+  'activeScript': {},
+  'enabled': undefined,
+  'userScripts': [],
 };
-chrome.runtime.sendMessage({'name': 'EnabledQuery'}, showGlobalEnabledState);
+let gUserScripts = {};
 
 
-chrome.runtime.sendMessage(
-    {'name': 'ListUserScripts', 'includeDisabled': true}, userScripts => {
-  let containerEl = document.querySelector('#user-scripts');
-  for (let oldEl of containerEl.querySelectorAll('.user-script-menu-item')) {
-    oldEl.parentNode.removeChild(oldEl);
+function tplItemForUuid(uuid) {
+  for (let tplItem of gTplData.userScripts) {
+    if (tplItem.uuid == uuid) return tplItem;
   }
+}
 
-  userScripts.sort((a, b) => a.name.localeCompare(b.name));
 
-  let empty = true;
-  let tplEl = document.querySelector('#templates .user-script-menu-item > div');
+function loadScripts(userScripts) {
   for (let userScript of userScripts) {
     gUserScripts[userScript.uuid] = userScript;
-
-    empty = false;
-    let menuEl = tplEl.cloneNode(true);
-    menuEl.setAttribute('data-user-script-uuid', userScript.uuid);
-
-    if (!userScript.enabled) menuEl.classList.add('disabled');
-
-    let icon = document.createElement('img');
-    icon.src = userScript.iconBlob
-        ? URL.createObjectURL(userScript.iconBlob)
-        : defaultIcon;
-    menuEl.querySelector('.icon').appendChild(icon);
-
-    menuEl.querySelector('.name').textContent = userScript.name;
-    containerEl.appendChild(menuEl);
+    let tplItem = {
+      'enabled': userScript.enabled,
+      'icon': iconUrl(userScript),
+      'name': userScript.name,
+      'uuid': userScript.uuid,
+    };
+    gTplData.userScripts.push(tplItem);
   }
+}
 
-  containerEl.style.display = empty ? 'none' : '';
-});
+
+window.addEventListener('DOMContentLoaded', event => {
+  chrome.runtime.sendMessage(
+      {'name': 'EnabledQuery'},
+      enabled => gTplData.enabled = enabled);
+  chrome.runtime.sendMessage(
+      // TODO: For current URL only.
+      {'name': 'ListUserScripts', 'includeDisabled': true},
+      function(userScripts) {
+        loadScripts(userScripts);
+        rivets.bind(document.body, gTplData);
+        document.body.classList.remove('rendering');
+      });
+}, true);
 
 
 window.addEventListener('click', function(event) {
@@ -85,17 +72,12 @@ window.addEventListener('click', function(event) {
     let uuid = el.getAttribute('data-user-script-uuid');
     let userScript = gUserScripts[uuid];
 
-    let tplEl = document.querySelector('#templates .user-script-detail');
-    let detailEl = tplEl.cloneNode(true);
-    let contEl = document.getElementById('user-script');
-    while (contEl.firstChild) contEl.removeChild(contEl.firstChild);
-    contEl.appendChild(detailEl);
+    gTplData.activeScript.icon = iconUrl(userScript);
+    gTplData.activeScript.enabled = userScript.enabled;
+    gTplData.activeScript.name = userScript.name;
 
-    detailEl.querySelector('header #name').textContent = userScript.name;
-    showScriptEnabledState(userScript.enabled);
-
-    document.body.className = 'detail';
     gActiveUuid = uuid;
+    document.body.className = 'detail';
   } else switch (el.getAttribute('id')) {
     case 'manage-scripts':
       chrome.tabs.create({
@@ -106,8 +88,7 @@ window.addEventListener('click', function(event) {
     case 'toggle-global-enabled':
       chrome.runtime.sendMessage(
           {'name': 'EnabledToggle'},
-          () => chrome.runtime.sendMessage(
-              {'name': 'EnabledQuery'}, showGlobalEnabledState));;
+          enabled => gTplData.enabled = enabled);
       break;
 
     case 'user-script-toggle-enabled':
@@ -115,7 +96,8 @@ window.addEventListener('click', function(event) {
         'name': 'UserScriptToggleEnabled',
         'uuid': gActiveUuid,
       }, response => {
-        showScriptEnabledState(response.enabled);
+        gTplData.activeScript.enabled = response.enabled;
+        tplItemForUuid(gActiveUuid).enabled = response.enabled;
       });
       break;
     case 'user-script-edit':
@@ -128,5 +110,3 @@ window.addEventListener('click', function(event) {
       break;
   }
 }, true);
-
-})();

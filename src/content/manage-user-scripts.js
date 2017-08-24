@@ -1,64 +1,53 @@
-const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
-
-let gContainerEl, gScriptTplEl;
+let gTplData = {'userScripts': []};
 
 
-function displayOneScript(userScript, replaceEl=null) {
-  let menuEl = gScriptTplEl.cloneNode(true);
-  menuEl.setAttribute('data-user-script-uuid', userScript.uuid);
-
-  menuEl.querySelector('button.toggle-enabled').textContent
-      = userScript.enabled ? 'Disable': 'Enable';
-
-  let icon = document.createElement('img');
-  icon.src = userScript.iconBlob
-      ? URL.createObjectURL(userScript.iconBlob)
-      : defaultIcon;
-  menuEl.querySelector('.icon').appendChild(icon);
-
-  menuEl.querySelector('.name').textContent = userScript.name;
-
-  if (replaceEl) {
-    gContainerEl.replaceChild(menuEl, replaceEl);
-  } else {
-    gContainerEl.appendChild(menuEl);
+function displayScript(userScript) {
+  let push = false;
+  let tplItem = null;
+  for (let s of gTplData.userScripts) {
+    if (s.uuid == userScript.uuid) {
+      tplItem = s;
+      break;
+    }
   }
+  if (tplItem == null) {
+    tplItem = {};
+    push = true;
+  }
+
+  tplItem.enabled = userScript.enabled;
+  tplItem.icon = iconUrl(userScript);
+  tplItem.name = userScript.name;
+  tplItem.uuid = userScript.uuid;
+
+  if (push) gTplData.userScripts.push(tplItem);
 }
 
 
 function loadAllUserScripts(userScripts) {
-  for (let oldEl of gContainerEl.querySelectorAll('.user-script')) {
-    oldEl.parentNode.removeChild(oldEl);
-  }
-
-  userScripts.sort((a, b) => a.name.localeCompare(b.name));
-
-  let empty = true;
   for (let userScript of userScripts) {
-    empty = false;
-    displayOneScript(userScript);
+    displayScript(userScript);
   }
+  gTplData.userScripts.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 window.addEventListener('DOMContentLoaded', event => {
-  gContainerEl = document.querySelector('#user-scripts');
-  gScriptTplEl = document.querySelector('#templates .user-script');
-
   chrome.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true},
-      loadAllUserScripts);
+      function(userScripts) {
+        loadAllUserScripts(userScripts);
+        rivets.bind(document.getElementById('user-scripts'), gTplData);
+        document.body.classList.remove('rendering');
+      });
 }, true);
 
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.name == 'UserScriptChanged') {
-    console.log('manage saw changed script:', message);
-    let uuid = message.details.uuid;
-    let existingScriptEl = document.querySelector(
-        'li.user-script[data-user-script-uuid="' + uuid + '"]') || null;
-    displayOneScript(message.details, existingScriptEl);
+    displayScript(message.details);
+    gTplData.userScripts.sort((a, b) => a.name.localeCompare(b.name));
   }
 });
 
@@ -81,7 +70,7 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
   let scriptUuid = scriptEl.getAttribute('data-user-script-uuid');
 
   if (event.target.tagName == 'BUTTON') {
-    switch (event.target.getAttribute('class')) {
+    switch (event.target.getAttribute('data-action')) {
       case 'edit':
         // I really want a distinct and chrome-less window here, but it's
         // giving me headaches.  (What do normal, popup, panel, detached_panel
@@ -93,9 +82,15 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
       case 'remove':
         chrome.runtime.sendMessage({
           'name': 'UserScriptUninstall',
-          'uuid': scriptEl.getAttribute('data-user-script-uuid'),
+          'uuid': scriptUuid,
         }, () => {
-          scriptEl.parentNode.removeChild(scriptEl);
+          for (i in gTplData.userScripts) {
+            let script = gTplData.userScripts[i];
+            if (script.uuid == scriptUuid) {
+              gTplData.userScripts.splice(i, 1);
+              break;
+            }
+          }
         });
         break;
       case 'toggle-enabled':
