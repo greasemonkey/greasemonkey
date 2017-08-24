@@ -6,6 +6,13 @@
   "homepage_url": "https://www.greasespot.net/",
   "icons": {"32": "skin/icon32.png"},
 
+  "applications": {
+    "gecko": {
+      "id": "e4a8a97b-f2ed-450b-b12d-ee082ba24781@alpha",
+      "strict_min_version": "56.0"
+    }
+  },
+
   "browser_action": {
     "default_icon": "skin/icon32.png",
     "default_popup": "src/browser/monkey-menu.html",
