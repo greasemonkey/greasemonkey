@@ -27,6 +27,7 @@ function setGlobalEnabled(enabled) {
     'name': 'EnabledChanged',
     'enabled': isEnabled,
   });
+  setIcon();
 }
 window.setGlobalEnabled = setGlobalEnabled;
 function onEnabledSet(message, sender, sendResponse) {
@@ -34,6 +35,12 @@ function onEnabledSet(message, sender, sendResponse) {
 }
 window.onEnabledSet = onEnabledSet;
 
+
+function setIcon() {
+  chrome.browserAction.setIcon({
+    'path': 'skin/icon32' + (isEnabled ? '' : '-disabled') + '.png',
+  });
+}
 
 function toggleGlobalEnabled() {
   setGlobalEnabled(!isEnabled);
