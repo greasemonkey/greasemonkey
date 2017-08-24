@@ -17,6 +17,7 @@ function tplItemForUuid(uuid) {
 
 
 function loadScripts(userScripts) {
+  userScripts.sort((a, b) => a.name.localeCompare(b.name));
   for (let userScript of userScripts) {
     gUserScripts[userScript.uuid] = userScript;
     let tplItem = {
