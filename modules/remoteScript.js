@@ -394,6 +394,8 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
               + stringBundleBrowser.GetStringFromName(this.messageName),
           this.messageName);
     }
+
+    GM_util.getService().config._convertScriptToWebext(this.script);
   }
 };
 

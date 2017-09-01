@@ -1,0 +1,3 @@
+[submodule "webextension"]
+	path = webextension
+	url = git@github.com:arantius/greasemonkey.git

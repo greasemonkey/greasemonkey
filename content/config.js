@@ -7,10 +7,15 @@ Cu.import('chrome://greasemonkey-modules/content/script.js');
 Cu.import('chrome://greasemonkey-modules/content/third-party/MatchPattern.js');
 Cu.import('chrome://greasemonkey-modules/content/util.js');
 
+
+Components.utils.importGlobalProperties(['XMLHttpRequest']);
+
+
 var gStringBundle = Components
     .classes["@mozilla.org/intl/stringbundle;1"]
     .getService(Components.interfaces.nsIStringBundleService)
     .createBundle("chrome://greasemonkey/locale/greasemonkey.properties");
+var gWebextPort = null;
 
 
 function Config() {
@@ -102,6 +107,8 @@ Config.prototype._load = function() {
       this._changed(script, "missing-removed", null);
     }
   }
+
+  this._migrateWebext();
 };
 
 Config.prototype._save = function(saveNow) {
@@ -343,3 +350,128 @@ Config.prototype._updateVersion = function() {
     }
   }));
 };
+
+Config.prototype._migrateWebext = function() {
+  // Adapted from https://goo.gl/SxwXBk
+  const {
+    AddonManager,
+  } = Cu.import("resource://gre/modules/AddonManager.jsm", {});
+  const {
+    LegacyExtensionsUtils,
+  } = Cu.import("resource://gre/modules/LegacyExtensionsUtils.jsm");
+
+  AddonManager.getAddonByID(this.GM_GUID, addon => {
+    const baseURI = addon.getResourceURI("/");
+    const myOverlayEmbeddedWebExtension
+        = LegacyExtensionsUtils.getEmbeddedExtensionFor({
+          id: '{e4a8a97b-f2ed-450b-b12d-ee082ba24781}',
+          resourceURI: baseURI,
+        });
+
+    myOverlayEmbeddedWebExtension.startup().then(({browser}) => {
+      browser.runtime.onConnect.addListener(port => {
+        gWebextPort = port;
+        browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+          if (msg.name != 'MigrateGreasemonkeyUserScripts') return;
+          this._convertScriptsToWebext(msg.have)
+        });
+      });
+    }).catch(err => {
+      Components.utils.reportError(
+          `${this.GM_GUID} - embedded webext startup failed: `
+          + `${err.message} ${err.stack}\n`);
+    });
+  });
+};
+
+
+Config.prototype._convertScriptsToWebext = function(have) {
+  let versionComparator = Components
+      .classes["@mozilla.org/xpcom/version-comparator;1"]
+      .getService(Components.interfaces.nsIVersionComparator);
+
+  for (let script of this._scripts) {
+    if (script.uuid in have) {
+      let thisVer = script.version;
+      let thatVer = have[script.uuid];
+      let compare = versionComparator.compare(thisVer, thatVer);
+      if (compare <= 0) continue;
+    }
+
+    this._convertScriptToWebext(script);
+  }
+};
+
+
+Config.prototype._convertScriptToWebext = function(script) {
+  // Make a form as if it came from `EditableUserScript.details()`, which
+  // will be passed via message to the embedded script and used to construct
+  // just that object, to be saved.
+  let messageScript = {
+    // userScriptKeys:
+    'description': script.description,
+    'downloadUrl': script.downloadURL,
+    'excludes': script.excludes,
+    'grants': script.grants,
+    'includes': script.includes,
+    'matches': script.matches,
+    'name': script.name,
+    'namespace': script.namespace,
+    'noFrames': script.noFrames,
+    'runAt': script.runAt,
+    'version': script.version,
+    // runnableUserScriptKeys:
+    'enabled': script.enabled,
+    // 'evalContent': '',  // webext side will calculate
+    'iconBlob': null,
+    'resources': {},
+    'userExcludes': script.userExcludes,
+    'userIncludes': script.userIncludes,
+    'userMatches': script.userMatches,
+    'uuid': script.uuid,
+    // editableUserScriptKeys:
+    // 'parsedDetails': null,  // webext side will calculate
+    'content': script.textContent,
+    'requiresContent': {},
+  };
+
+  if (script.icon.filename) {
+    let iconType = script.icon.file.leafName.replace(/.*\./, '');
+    messageScript.iconBlob
+        = this._blobForFile(script.icon.file, 'image/' + iconType);
+  }
+
+  for (let resource of script.resources) {
+    messageScript.resources[resource.name] = {
+      'name': resource.name,
+      'mimetype': resource.mimetype,
+      'blob': this._blobForFile(resource.file),
+    };
+  }
+
+  for (let require of script.requires) {
+    messageScript.requiresContent[require.downloadURL] = require.textContent;
+  }
+
+  if (!gWebextPort) {
+    throw new Error('FATAL: No gWebextPort, in _convertScriptToWebext()!');
+  }
+
+  gWebextPort.postMessage({
+      'name': 'MigrateUserScript',
+      'script': messageScript,
+  });
+}
+
+
+Config.prototype._blobForFile = function(file, mime) {
+  let url = GM_util.getUriFromFile(file).spec;
+  var xhr = new XMLHttpRequest();
+  xhr.open("open", url, false);
+  xhr.responseType = 'blob';
+  if (mime) {
+    xhr.overrideMimeType(mime);
+  }
+  xhr.send(null);
+  return xhr.response;
+}

@@ -19,7 +19,7 @@ rm -rf build
 mkdir build
 cp -r \
   chrome.manifest components content defaults install.rdf locale skin \
-      modules CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl \
+      modules CREDITS LICENSE.bsd LICENSE.mit LICENSE.mpl webextension \
   build/
 cd build
 
@@ -27,6 +27,8 @@ echo "Cleaning up unwanted files ..."
 find . -depth -name '*~' -exec rm -rf "{}" \;
 find . -depth -name '#*' -exec rm -rf "{}" \;
 find . -depth -name '*.psd' -exec rm -rf "{}" \;
+rm -rf webextension/{.git,.gitignore,doc,package.sh,peg.txt}
+
 
 if [ "official" != "$1" ]; then
   echo "Patching install.rdf version ..."
