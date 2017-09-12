@@ -278,12 +278,14 @@ window.EditableUserScript = class EditableUserScript
             });
 
             this._parsedDetails = newDetails;
+            _loadValuesInto(this, newDetails, userScriptKeys);
             this.calculateEvalContent();
             resolve();
           });
       if (updater.skip()) {
         console.log('updater has no added remotes to handle');
         this._parsedDetails = newDetails;
+        _loadValuesInto(this, newDetails, userScriptKeys);
         this.calculateEvalContent();
         resolve();
       }
