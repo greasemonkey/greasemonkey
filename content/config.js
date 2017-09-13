@@ -425,7 +425,7 @@ Config.prototype._convertScriptToWebext = function(script) {
     'name': script.name,
     'namespace': script.namespace,
     'noFrames': script.noFrames,
-    'runAt': script.runAt,
+    'runAt': script.runAt.replace('document-', ''),
     'version': script.version,
     // runnableUserScriptKeys:
     'enabled': script.enabled,
