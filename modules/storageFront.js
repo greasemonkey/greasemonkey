@@ -49,14 +49,14 @@ GM_ScriptStorageFront.prototype.setValue = function(name, val) {
   }
 
   if ('undefined' == typeof val) val = null;
-  this._messageManager.sendSyncMessage(
+  this._messageManager.sendRpcMessage(
       'greasemonkey:scriptVal-set',
       {scriptId: this._script.id, name: name, val: val});
 };
 
 
 GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
-  var value = this._messageManager.sendSyncMessage(
+  var value = this._messageManager.sendRpcMessage(
       'greasemonkey:scriptVal-get',
       {scriptId: this._script.id, name: name});
   value = value.length && value[0];
@@ -76,14 +76,14 @@ GM_ScriptStorageFront.prototype.getValue = function(name, defVal) {
 
 
 GM_ScriptStorageFront.prototype.deleteValue = function(name) {
-  this._messageManager.sendSyncMessage(
+  this._messageManager.sendRpcMessage(
       'greasemonkey:scriptVal-delete',
       {scriptId: this._script.id, name: name});
 };
 
 
 GM_ScriptStorageFront.prototype.listValues = function() {
-  var value = this._messageManager.sendSyncMessage(
+  var value = this._messageManager.sendRpcMessage(
       'greasemonkey:scriptVal-list',
       {scriptId: this._script.id});
   return JSON.stringify(value.length && value[0] || []);
