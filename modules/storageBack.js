@@ -81,6 +81,7 @@ GM_ScriptStorageBack.prototype.setValue = function(name, val) {
   }
 
   this._script.changed('val-set', name);
+  GM_util.getService().config.migrateSetValue(this._script, name, val);
 };
 
 
@@ -114,6 +115,7 @@ GM_ScriptStorageBack.prototype.deleteValue = function(name) {
   }
 
   this._script.changed('val-del', name);
+  GM_util.getService().config.migrateDeleteValue(this._script, name);
 };
 
 

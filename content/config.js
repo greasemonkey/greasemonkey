@@ -461,6 +461,32 @@ Config.prototype._convertScriptToWebext = function(script) {
       'name': 'MigrateUserScript',
       'script': messageScript,
   });
+
+  let storage = new GM_ScriptStorageBack(script);
+  let names = storage.listValues();
+  for (let i = 0, name = null; name = names[i]; i++) {
+    let val = storage.getValue(name);
+    this.migrateSetValue(script, name, val);
+  }
+}
+
+
+Config.prototype.migrateDeleteValue = function(script, key) {
+  gWebextPort.postMessage({
+    'name': 'ApiDeleteValue',
+    'key': key,
+    'uuid': script.uuid,
+  });
+}
+
+
+Config.prototype.migrateSetValue = function(script, key, val) {
+  gWebextPort.postMessage({
+    'name': 'ApiSetValue',
+    'key': key,
+    'uuid': script.uuid,
+    'value': val,
+  });
 }
 
 
