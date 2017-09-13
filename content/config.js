@@ -190,6 +190,13 @@ Config.prototype.uninstall = function(script, forUpdate) {
     this._scripts.splice(idx, 1);
     script.uninstall(forUpdate);
   }
+
+  if (!forUpdate) {
+    gWebextPort.postMessage({
+      'name': 'UninstallUserScript',
+      'uuid': script.uuid,
+    });
+  }
 };
 
 /**
