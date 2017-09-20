@@ -50,7 +50,9 @@
 
   "permissions": [
     "<all_urls>",
+    "storage",
     "tabs",
+    "unlimitedStorage",
     "webNavigation"
   ],
 
