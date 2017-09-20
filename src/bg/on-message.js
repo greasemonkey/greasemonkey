@@ -14,10 +14,14 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     return;
   }
 
-  // Messages named "Api*" can come from anywhere (i.e. _content_ scripts, where
-  // we execute user scripts).  These are handlers for the GM APIs.  Otherwise,
-  // only accept messages coming from our own source prefix.
-  if (!message.name.startsWith('Api') && !sender.url.startsWith(myPrefix)) {
+  if (message.name == 'OpenInstallDialog') {
+    // No-op; content can legitimately ask for the dialog to be opened.
+  } else if (
+      !message.name.startsWith('Api') && !sender.url.startsWith(myPrefix)
+  ) {
+    // Messages named "Api*" can come from anywhere (i.e. _content_ scripts,
+    // where we execute user scripts).  These are handlers for the GM APIs.
+    // Otherwise, only accept messages coming from our own source prefix.
     throw new Error(
         `ERROR refusing to handle "${message.name}" `
         + `message from sender "${sender.url}".`);
