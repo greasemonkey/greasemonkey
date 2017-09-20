@@ -199,7 +199,7 @@ window.EditableUserScript = class EditableUserScript
     this._evalContent
         = 'try {'
         + '(function scopeWrapper(){'
-        + 'function userScript(){' + this._content + '} // User Script End.\n\n'
+        + 'async function userScript(){' + this._content + '} // User Script End.\n\n'
         + this.calculateGmInfo() + '\n\n'
         + apiProviderSource(this) + '\n\n'
         + Object.values(this._requiresContent).join('\n\n')
