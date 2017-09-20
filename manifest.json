@@ -54,12 +54,5 @@
     "tabs",
     "unlimitedStorage",
     "webNavigation"
-  ],
-
-  "web_accessible_resources": [
-    "src/content/install-dialog.*",
-    "src/third-party/codemirror/*",
-    "src/third-party/codemirror/*/*",
-    "src/third-party/codemirror/*/*/*"
   ]
 }

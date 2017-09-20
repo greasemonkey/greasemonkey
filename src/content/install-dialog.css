@@ -7,9 +7,11 @@ html, body {
 }
 html {
   height: 100%;
+  margin: 0 1em;
 }
 body {
-  margin: 1em;
+  margin: 1em auto;
+  max-width: 40em;
 }
 
 html, body {

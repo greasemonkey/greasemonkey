@@ -1,4 +1,18 @@
 let details = JSON.parse(unescape(document.location.search.substr(1)));
+document.title = details.name + ' - Greasemonkey User Script';
+
+
+function finish() {
+  if (history.length > 1) {
+    history.back();
+  } else {
+    window.close();  // May fail -- message to BG?
+  }
+}
+
+
+let btnCancel = document.getElementById('btn-cancel');
+btnCancel.addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
@@ -38,11 +52,10 @@ let installTimer = setInterval(function() {
 let progressBar = document.createElement('progress');
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  progressBar.value = message.progress;
+  message.progress && (progressBar.value = message.progress);
   if (message.progress == 1.0) {
     document.body.className = 'result';
-    let resultEl = document.getElementById('result')
-        .getElementsByTagName('p')[0];
+    let resultEl = document.querySelector('#result p');
     // TODO: Style well!
     if (message.errors.length) {
       let errorList = document.createElement('ul');
@@ -55,7 +68,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       resultEl.appendChild(errorList);
     } else {
       resultEl.textContent = 'Download and install successful!';
-      progressBar.parentNode.removeChild(progressBar);
+      progressBar.parentNode && progressBar.parentNode.removeChild(progressBar);
+      finish();
     }
   }
 });
