@@ -17,12 +17,13 @@ chrome.webNavigation.onCommitted.addListener(detail => {
     let options = {
       'code': userScript.evalContent,
       'matchAboutBlank': true,
-      'runAt': 'document_' + userScript.runAt
+      'runAt': 'document_' + userScript.runAt,
     };
     if (detail.frameId) options.frameId = detail.frameId;
     chrome.tabs.executeScript(detail.tabId, options, result => {
       let err = chrome.runtime.lastError;
       if (err) {
+        if (err.message.startsWith('Message manager disconnected')) return;
         // TODO: Better indication of the root cause.
         console.error('Could not execute user script:', err);
       }
