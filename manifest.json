@@ -22,6 +22,8 @@
 
   "background": {
     "scripts": [
+      "src/third-party/convert2RegExp.js",
+      "src/third-party/MatchPattern.js",
       "src/open-editor.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",

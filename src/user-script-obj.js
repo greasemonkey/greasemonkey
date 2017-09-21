@@ -10,6 +10,25 @@ reference any other objects from this file.
 (function() {
 
 const extensionVersion = chrome.runtime.getManifest().version;
+const aboutBlankRegexp = /^about:blank/;
+
+
+function _testClude(glob, url) {
+  // Do not run in about:blank unless _specifically_ requested. See #1298
+  if (aboutBlankRegexp.test(url.href) && !aboutBlankRegexp.test(glob)) {
+    return false;
+  }
+
+  return GM_convert2RegExp(glob, url).test(url.href);
+}
+
+
+function _testMatch(matchPattern, url) {
+  if ('string' == typeof matchPattern) {
+    matchPattern = new MatchPattern(matchPattern);
+  }
+  return matchPattern.doMatch(url);
+}
 
 
 /// Safely copies selected input values to another object.
@@ -105,9 +124,21 @@ window.RemoteUserScript = class RemoteUserScript {
       throw new Error('runsAt() got non-url parameter: ' + url);
     }
 
-    // TODO: Include/exclude/match.
+    // TODO: Profile cost of pattern generation, cache if justified.
+    // TODO: User global excludes.
+    // TODO: User includes/excludes/matches.
 
-    return true;
+    for (let glob of this._excludes) {
+      if (_testClude(glob, url)) return false;
+    }
+    for (let glob of this._includes) {
+      if (_testClude(glob, url)) return true;
+    }
+    for (let pattern of this._matches) {
+      if (_testMatch(pattern, url)) return true;
+    }
+
+    return false;
   }
 
   toString() {

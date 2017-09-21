@@ -97,19 +97,17 @@ window.parseUserScript = function(content, url, failIfMissing) {
     case 'include':
       details.includes.push(data.value);
       break;
-    /*
     case 'match':
       try {
-        var match = new MatchPattern(data.value);
-        script._matches.push(match);
+        new MatchPattern(data.value);
+        details.matches.push(data.value);
       } catch (e) {
-        script.parseErrors.push(
-            gStringBundle.GetStringFromName('parse.ignoring-match')
+        throw new Error(
+            "Ignoring @match pattern %1 because:\n%2"
                 .replace('%1', data.value).replace('%2', e)
             );
       }
       break;
-    */
 
     case 'icon':
       details.iconUrl = new URL(data.value, url).toString();
