@@ -227,10 +227,16 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   }
 
   for (let uuid in userScripts) {
-    let userScript = userScripts[uuid];
-    if (!includeDisabled && !userScript.enabled) continue;
-    if (url && !userScript.runsAt(url)) continue;
-    yield userScript;
+    try {
+      let userScript = userScripts[uuid];
+      if (!includeDisabled && !userScript.enabled) continue;
+      if (url && !userScript.runsAt(url)) continue;
+      yield userScript;
+    } catch (e) {
+      console.error(
+          'Failed checking whether', userScript.toString(),
+          'runs at', urlStr, ':', e);
+    }
   }
 }
 
