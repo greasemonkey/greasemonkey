@@ -411,6 +411,11 @@ Config.prototype._convertScriptsToWebext = function(have) {
 
 
 Config.prototype._convertScriptToWebext = function(script) {
+  let matchPatterns = [];
+  for (let match of script.matches) {
+    matchPatterns.push(match.pattern);
+  }
+
   // Make a form as if it came from `EditableUserScript.details()`, which
   // will be passed via message to the embedded script and used to construct
   // just that object, to be saved.
@@ -421,7 +426,7 @@ Config.prototype._convertScriptToWebext = function(script) {
     'excludes': script.excludes,
     'grants': script.grants,
     'includes': script.includes,
-    'matches': script.matches,
+    'matches': matchPatterns,
     'name': script.name,
     'namespace': script.namespace,
     'noFrames': script.noFrames,
