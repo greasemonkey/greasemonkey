@@ -43,6 +43,8 @@
   "content_scripts": [{
     "matches": ["*://*/*.user.js"],
     "js": [
+      "src/third-party/convert2RegExp.js",
+      "src/third-party/MatchPattern.js",
       "src/bg/api-provider-source.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
