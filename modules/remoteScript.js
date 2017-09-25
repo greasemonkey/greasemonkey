@@ -395,7 +395,9 @@ RemoteScript.prototype.install = function(aOldScript, aOnlyDependencies) {
           this.messageName);
     }
 
-    GM_util.getService().config._convertScriptToWebext(this.script);
+    GM_util.timeout(() => {
+      GM_util.getService().config._convertScriptToWebext(this.script);
+    }, 0);
   }
 };
 
