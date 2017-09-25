@@ -505,6 +505,7 @@ Config.prototype.migrateSetValue = function(script, key, val) {
 Config.prototype._blobForFile = function(file, mime) {
   let url = GM_util.getUriFromFile(file).spec;
   var xhr = new XMLHttpRequest();
+  xhr.timeout = 5000;
   xhr.open("open", url, false);
   xhr.responseType = 'blob';
   if (mime) {

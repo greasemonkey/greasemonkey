@@ -11,6 +11,7 @@ function fileXhr(aUrl, aMimetype, aResponseType) {
     throw new Error('fileXhr() used for non-file URL: ' + aUrl + '\n');
   }
   var xhr = new XMLHttpRequest();
+  xhr.timeout = 5000;
   xhr.open("open", aUrl, false);
   if (aResponseType) {
     xhr.responseType = aResponseType;
