@@ -59,6 +59,7 @@
     "<all_urls>",
     "storage",
     "tabs",
+    "clipboardWrite",
     "unlimitedStorage",
     "webNavigation"
   ]

@@ -11,6 +11,7 @@ const SUPPORTED_APIS = new Set([
     'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
     'GM.xmlHttpRequest',
     'GM.openInTab',
+    'GM.setClipboard',
     ]);
 
 
@@ -51,6 +52,10 @@ function apiProviderSource(userScript) {
 
   if (grants.includes('GM.openInTab')) {
     source += 'GM.openInTab = ' + GM_openInTab.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.setClipboard')) {
+    source += 'GM.setClipboard = ' + GM_setClipboard.toString() + ';\n\n';
   }
 
 
@@ -194,6 +199,20 @@ function GM_openInTab(url, openInBackground) {
     'url': _url.href,   
     'active': (openInBackground === false),
   });
+}
+
+function GM_setClipboard(text) {  
+  function onCopy(event) {
+    document.removeEventListener('copy', onCopy, true);
+
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    event.clipboardData.setData('text/plain', text);    
+  }
+
+  document.addEventListener('copy', onCopy, true);
+  document.execCommand('copy');
 }
 
 
