@@ -12,6 +12,7 @@ const SUPPORTED_APIS = new Set([
     'GM.xmlHttpRequest',
     'GM.openInTab',
     'GM.setClipboard',
+    'GM.notification',
     ]);
 
 
@@ -56,6 +57,10 @@ function apiProviderSource(userScript) {
 
   if (grants.includes('GM.setClipboard')) {
     source += 'GM.setClipboard = ' + GM_setClipboard.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.notification')) {
+    source += 'GM.notification = ' + GM_notification.toString() + ';\n\n';
   }
 
 
@@ -215,6 +220,37 @@ function GM_setClipboard(text) {
   document.execCommand('copy');
 }
 
+/*
+ * GM_notification(details, ondone)
+ * GM_notification(text, title, image, onclick)
+ */
+function GM_notification(text, title, image, onclick) {
+  let opt;
+
+  if (typeof text === 'object') {
+    opt = text;
+    typeof title === 'function' && (opt.ondone = title);
+  } else {
+    opt = { title, text, image, onclick };
+  }
+
+  if (typeof opt.text !== 'string') {
+    throw new Error('GM.notification: "text" must be a string');
+  }
+
+  typeof opt.title !== 'string' && (opt.title = 'Greasemonkey');
+
+  typeof opt.image !== 'string' && (opt.image = 'skin/icon32.png');
+
+  let port = chrome.runtime.connect({name: 'UserScriptNotification'});
+
+  port.onMessage.addListener(msg => {
+    const msgType = msg.type;
+    typeof opt[msgType] === 'function' && opt[msgType]();
+  });
+
+  port.postMessage({ name: 'create', details: { title: opt.title, text: opt.text, image: opt.image } });
+}
 
 
 })();
