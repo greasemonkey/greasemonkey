@@ -12,7 +12,7 @@ function onApiOpenInTab(message, sender, sendResponse) {
         url: message.url,
         active: message.active,
         windowId: senderTab.windowId,
-        index: senderTab.index + 1, // next to senderTab       
+        index: senderTab.index + 1, // next to senderTab
     });
 }
 

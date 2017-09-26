@@ -190,7 +190,7 @@ function GM_xmlHttpRequest(d) {
 
 function GM_openInTab(url, openInBackground) {
   let _url;
-  
+
   try {
     _url = new URL(url, location.href);
   } catch(e) {
@@ -201,19 +201,19 @@ function GM_openInTab(url, openInBackground) {
 
   chrome.runtime.sendMessage({
     'name': 'ApiOpenInTab',
-    'url': _url.href,   
+    'url': _url.href,
     'active': (openInBackground === false),
   });
 }
 
-function GM_setClipboard(text) {  
+function GM_setClipboard(text) {
   function onCopy(event) {
     document.removeEventListener('copy', onCopy, true);
 
     event.stopImmediatePropagation();
     event.preventDefault();
 
-    event.clipboardData.setData('text/plain', text);    
+    event.clipboardData.setData('text/plain', text);
   }
 
   document.addEventListener('copy', onCopy, true);
