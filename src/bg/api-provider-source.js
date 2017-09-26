@@ -10,6 +10,7 @@ const SUPPORTED_APIS = new Set([
     'GM.getResourceUrl',
     'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
     'GM.xmlHttpRequest',
+    'GM.openInTab',
     ]);
 
 
@@ -47,6 +48,11 @@ function apiProviderSource(userScript) {
   if (grants.includes('GM.xmlHttpRequest')) {
     source += 'GM.xmlHttpRequest = ' + GM_xmlHttpRequest.toString() + ';\n\n';
   }
+
+  if (grants.includes('GM.openInTab')) {
+    source += 'GM.openInTab = ' + GM_openInTab.toString() + ';\n\n';
+  }
+
 
   // TODO: GM_registerMenuCommand -- maybe.
   // TODO: GM_getResourceText -- maybe.
@@ -171,5 +177,25 @@ function GM_xmlHttpRequest(d) {
 
   // TODO: Return an object which can be `.abort()`ed.
 }
+
+function GM_openInTab(url, openInBackground) {
+  let _url;
+  
+  try {
+    _url = new URL(url, location.href);
+  } catch(e) {
+    throw new Error(
+        'GM.openInTab: Could not understand the URL: ' + url
+        + '\n' + e);
+  }
+
+  chrome.runtime.sendMessage({
+    'name': 'ApiOpenInTab',
+    'url': _url.href,   
+    'active': (openInBackground === false),
+  });
+}
+
+
 
 })();
