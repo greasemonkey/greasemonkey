@@ -25,7 +25,9 @@ chrome.webNavigation.onCommitted.addListener(detail => {
       if (err) {
         if (err.message.startsWith('Message manager disconnected')) return;
         // TODO: Better indication of the root cause.
-        console.error('Could not execute user script:', err);
+        console.error(
+            'Could not execute user script: ' + userScript.toString(),
+            '\n', err);
       }
     });
   }

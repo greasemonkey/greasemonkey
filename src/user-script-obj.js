@@ -142,7 +142,9 @@ window.RemoteUserScript = class RemoteUserScript {
   }
 
   toString() {
-    return '[Greasemonkey Script ' + this.id + '; ' + this.version + ']';
+    return '[Greasemonkey Script ' + this.id
+        + (this.version ? '; ' + this.version : '')
+        + ']';
   }
 }
 
