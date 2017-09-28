@@ -65,6 +65,7 @@ chrome.runtime.sendMessage({
 
 function onUserScriptChanged(message, sender, sendResponse) {
   if (message.name != 'UserScriptChanged') return;
+  if (message.uuid != userScriptUuid) return;
   let details = message.details;
 
   document.title = titlePattern.replace('%s', details.name);
