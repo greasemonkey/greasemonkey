@@ -33,7 +33,7 @@ function addRequireTab(url, content) {
 }
 
 function nameForUrl(url) {
-  return url.replace(/.*\//, '').replace(/[?#].*/, '');
+  return unescape(url.replace(/.*\//, '').replace(/[?#].*/, ''));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ chrome.runtime.sendMessage({
 
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
-  scriptTab.textContent = nameForUrl(userScript.downloadUrl);
+  scriptTab.textContent = userScript.name;
   tabs.appendChild(scriptTab);
   editorTabs.push(scriptTab);
   editorDocs.push(CodeMirror.Doc(userScript.content, 'javascript'));
