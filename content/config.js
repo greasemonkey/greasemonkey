@@ -109,7 +109,19 @@ Config.prototype._load = function() {
   }
 
   this._migrateWebext();
-  this.addObserver({notifyEvent: this._convertScriptToWebext});
+  this.addObserver({notifyEvent: (script, event, data) => {
+    if (event == 'uninstall') {
+      // Handled specially.
+      return;
+    }
+    if (script) GM_util.timeout(() => {
+      try {
+        this._convertScriptToWebext(script);
+      } catch (e) {
+        dump('Ignoring webext migration failure:\n'+e+'\n');
+      }
+    });
+  }});
 };
 
 Config.prototype._save = function(saveNow) {
