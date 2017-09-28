@@ -109,6 +109,7 @@ Config.prototype._load = function() {
   }
 
   this._migrateWebext();
+  this.addObserver({notifyEvent: this._convertScriptToWebext});
 };
 
 Config.prototype._save = function(saveNow) {
