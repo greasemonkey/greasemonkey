@@ -12,7 +12,9 @@ function onUserScriptNotification(port) {
 
   port.onMessage.addListener(msg => {
     switch (msg.name) {
-      case 'create': createNotification(msg.details, port); break;
+      case 'create':
+        createNotification(msg.details, port);
+        break;
       default:
         console.warn('UserScriptNotification port un-handled message name:', msg.name);
     }

@@ -189,19 +189,17 @@ function GM_xmlHttpRequest(d) {
 }
 
 function GM_openInTab(url, openInBackground) {
-  let _url;
+  let objURL;
 
   try {
-    _url = new URL(url, location.href);
+    objURL = new URL(url, location.href);
   } catch(e) {
-    throw new Error(
-        'GM.openInTab: Could not understand the URL: ' + url
-        + '\n' + e);
+    throw new Error('GM.openInTab: Could not understand the URL: ' + url);
   }
 
   chrome.runtime.sendMessage({
     'name': 'ApiOpenInTab',
-    'url': _url.href,
+    'url': objURL.href,
     'active': (openInBackground === false),
   });
 }
@@ -220,36 +218,36 @@ function GM_setClipboard(text) {
   document.execCommand('copy');
 }
 
-/*
- * GM_notification(details, ondone)
- * GM_notification(text, title, image, onclick)
- */
 function GM_notification(text, title, image, onclick) {
   let opt;
 
-  if (typeof text === 'object') {
+  if (typeof text == 'object') {
     opt = text;
-    typeof title === 'function' && (opt.ondone = title);
+    if (typeof title == 'function') opt.ondone = title;
   } else {
     opt = { title, text, image, onclick };
   }
 
-  if (typeof opt.text !== 'string') {
+  if (typeof opt.text != 'string') {
     throw new Error('GM.notification: "text" must be a string');
   }
 
-  typeof opt.title !== 'string' && (opt.title = 'Greasemonkey');
-
-  typeof opt.image !== 'string' && (opt.image = 'skin/icon32.png');
+  if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
+  if (typeof opt.image != 'string') opt.image = 'skin/icon32.png';
 
   let port = chrome.runtime.connect({name: 'UserScriptNotification'});
-
   port.onMessage.addListener(msg => {
     const msgType = msg.type;
-    typeof opt[msgType] === 'function' && opt[msgType]();
+    if (typeof opt[msgType] == 'function') opt[msgType]();
   });
-
-  port.postMessage({ name: 'create', details: { title: opt.title, text: opt.text, image: opt.image } });
+  port.postMessage({
+    name: 'create',
+    details: {
+        title: opt.title,
+        text: opt.text,
+        image: opt.image
+    }
+  });
 }
 
 
