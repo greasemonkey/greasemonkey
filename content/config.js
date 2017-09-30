@@ -114,6 +114,10 @@ Config.prototype._load = function() {
       // Handled specially.
       return;
     }
+    if ('val-set' == event || 'val-del' == event) {
+        // Migration of stored values are done in GM_ScriptStorageBack
+        return;
+    }
     if (script) GM_util.timeout(() => {
       try {
         this._convertScriptToWebext(script);
