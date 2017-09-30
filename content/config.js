@@ -490,7 +490,7 @@ Config.prototype._convertScriptToWebext = function(script) {
   let storage = new GM_ScriptStorageBack(script);
   let names = storage.listValues();
   for (let i = 0, name = null; name = names[i]; i++) {
-    let val = storage.getValue(name);
+    let val = JSON.parse(storage.getValue(name));
     this.migrateSetValue(script, name, val);
   }
 }
