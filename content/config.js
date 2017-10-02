@@ -110,7 +110,7 @@ Config.prototype._load = function() {
 
   this._migrateWebext();
   this.addObserver({notifyEvent: (script, event, data) => {
-    if (event == 'uninstall') {
+    if (event == 'uninstall' || event == 'val-set' || event == 'val-del') {
       // Handled specially.
       return;
     }
