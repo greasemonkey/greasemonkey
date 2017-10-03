@@ -338,9 +338,6 @@ Config.prototype._updateVersion = function() {
     var oldVersion = GM_prefRoot.getValue("version");
     var newVersion = addon.version;
 
-    // Update the stored current version so we don't do this work again.
-    GM_prefRoot.setValue("version", newVersion);
-
     if ("0.0" == oldVersion) {
       // This is the first launch.  Show the welcome screen.
       var chromeWin = GM_util.getBrowserWindow();
@@ -351,27 +348,24 @@ Config.prototype._updateVersion = function() {
         // the setTimeout makes sure we do not execute too early -- sometimes
         // the window isn't quite ready to add a tab yet
         chromeWin.gBrowser.selectedTab = chromeWin.gBrowser.addTab(url);
+        GM_prefRoot.setValue("version", newVersion);
       }, 1000);
     }
 
-    if (newVersion.match(/^3\.5/) && oldVersion != newVersion) {
-      // #1944 Re-scan config to load new metadata values.
-      var scope = {};
-      Cu.import('chrome://greasemonkey-modules/content/parseScript.js', scope);
-      for (var i = 0, script = null; script = this._scripts[i]; i++) {
-        var parsedScript = scope.parse(
-            script.textContent, GM_util.uriFromUrl(script.downloadURL));
-        try {
-          script.updateFromNewScript(parsedScript);
-        } catch (e) {
-          // Ignore.
-        }
-      }
+    if (newVersion.startsWith('3.17') && oldVersion != newVersion) {
+      // #2600 Re-migrate all script (values).
+      GM_util.timeout(() => {
+        this._migrateWebext(forceAll = true);
+        GM_prefRoot.setValue("version", newVersion);
+      }, 5000);
+      return;
     }
+
+    GM_prefRoot.setValue("version", newVersion);
   }));
 };
 
-Config.prototype._migrateWebext = function() {
+Config.prototype._migrateWebext = function(forceAll = false) {
   // Adapted from https://goo.gl/SxwXBk
   const {
     AddonManager,
@@ -393,7 +387,7 @@ Config.prototype._migrateWebext = function() {
         gWebextPort = port;
         browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           if (msg.name != 'MigrateGreasemonkeyUserScripts') return;
-          this._convertScriptsToWebext(msg.have)
+          this._convertScriptsToWebext(forceAll ? {} : msg.have)
         });
       });
     }).catch(err => {
