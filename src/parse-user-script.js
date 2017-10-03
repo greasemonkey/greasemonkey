@@ -133,7 +133,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
   }
 
   if (details.grants.includes('none') && details.grants.length > 1) {
-    details.grants = 'none';
+    details.grants = ['none'];
   }
 
   return details;
