@@ -42,7 +42,7 @@
 
 var validProtocols = ['http:', 'https:', 'ftp:', 'file:'];
 var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
-var REG_PARTS = new RegExp('^([a-z*]+:)//([^/]+)(?:(/.*))$');
+var REG_PARTS = new RegExp('^([a-z*]+:|\\*:)//([^/]+)(/.*)$');
 
 
 // For the format of "pattern", see:
@@ -68,8 +68,8 @@ function MatchPattern(pattern) {
   var host = m[2];
   var path = m[3];
 
-  if (protocol != "*" && validProtocols.indexOf(protocol) == -1) {
-    throw new Error("@match: Invalid protocol specified.");
+  if (protocol != "*:" && validProtocols.indexOf(protocol) == -1) {
+    throw new Error(`@match: Invalid protocol (${protocol}) specified.`);
   }
 
   if (!REG_HOST.test(host)) {
@@ -86,7 +86,7 @@ function MatchPattern(pattern) {
     // example.tld and any of its subdomains, but not anotherexample.tld.
     this._hostExpr = new RegExp("^" +
         // Two characters in the host portion need special treatment:
-        //   - ". should not be treated as a wildcard, so we escape it to \.
+        //   - "." should not be treated as a wildcard, so we escape it to \.
         //   - if the hostname only consists of "*" (i.e. full wildcard),
         //     replace it with .*
         host.replace(/\./g, "\\.").replace(/^\*$/, ".*")
@@ -108,7 +108,7 @@ function MatchPattern_getPattern() { return '' + this._pattern; });
 MatchPattern.prototype.doMatch = function(url) {
   if (validProtocols.indexOf(url.protocol) == -1) return false;
   if (this._all) return true;
-  if (this._protocol != '*' && this._protocol != url.protocol) return false;
+  if (this._protocol != '*:' && this._protocol != url.protocol) return false;
   return this._hostExpr.test(url.host) && this._pathExpr.test(url.pathname);
 };
 
