@@ -97,7 +97,7 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         openUserScriptEditor(scriptUuid);
         break;
       case 'remove':
-        // Set a seven second timer to confirm the script removal */
+        // Set a seven second timer to confirm the script removal
         gUninstallTimers[scriptUuid] = setTimeout(commitUninstall, 7000, scriptUuid);
         let undoButton = event.target.nextElementSibling;
         undoButton.removeAttribute('hide');
