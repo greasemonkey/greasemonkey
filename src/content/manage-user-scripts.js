@@ -1,5 +1,5 @@
 let gTplData = {'userScripts': []};
-
+let gUninstallTimers = {};
 
 function displayScript(userScript) {
   let push = false;
@@ -29,6 +29,23 @@ function loadAllUserScripts(userScripts) {
     displayScript(userScript);
   }
   gTplData.userScripts.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+
+function commitUninstall(scriptUuid) {
+  delete gUninstallTimers[scriptUuid];
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptUninstall',
+    'uuid': scriptUuid,
+  }, () => {
+    for (i in gTplData.userScripts) {
+      let script = gTplData.userScripts[i];
+      if (script.uuid == scriptUuid) {
+        gTplData.userScripts.splice(i, 1);
+        break;
+      }
+    }
+  });
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,18 +97,18 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         openUserScriptEditor(scriptUuid);
         break;
       case 'remove':
-        chrome.runtime.sendMessage({
-          'name': 'UserScriptUninstall',
-          'uuid': scriptUuid,
-        }, () => {
-          for (i in gTplData.userScripts) {
-            let script = gTplData.userScripts[i];
-            if (script.uuid == scriptUuid) {
-              gTplData.userScripts.splice(i, 1);
-              break;
-            }
-          }
-        });
+        // Set a seven second timer to confirm the script removal */
+        gUninstallTimers[scriptUuid] = setTimeout(commitUninstall, 7000, scriptUuid);
+        let undoButton = event.target.nextElementSibling;
+        undoButton.removeAttribute('hide');
+        event.target.setAttribute('hide', '');
+        break;
+      case 'undo':
+        // Undo the removal
+        clearTimeout(gUninstallTimers[scriptUuid]);
+        let removeButton = event.target.previousElementSibling;
+        removeButton.removeAttribute('hide');
+        event.target.setAttribute('hide', '');
         break;
       case 'toggle-enabled':
         chrome.runtime.sendMessage({
