@@ -38,14 +38,14 @@
     <div rv-hide="matches | empty" id="matches">
       <p>Matches:</p>
       <ul>
-        <li rv-each-match="matches"><span>{ match }</span></li>
+        <li rv-each-match="matches">{ match }</li>
       </ul>
     </div>
 
     <div rv-hide="excludes | empty" id="excludes">
       <p>Does not run on:</p>
       <ul>
-        <div rv-each-exclude="excludes"><li>{ exclude }</li></div>
+        <li rv-each-exclude="excludes">{ exclude }</li>
       </ul>
     </div>
   </div>
