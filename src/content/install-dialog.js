@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // The fallback to default icon won't work unless iconUrl has at least an
 // empty string.
-details.iconUrl = details.iconUrl || ""
+details.iconUrl = details.iconUrl || "";
 
 window.addEventListener('DOMContentLoaded', event => {
   rivets.bind(document.body, details);
