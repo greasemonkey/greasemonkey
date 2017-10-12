@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Private implementation.
 (function() {
 
-const extensionVersion = chrome.runtime.getManifest().version;
+const extensionVersion = browser.runtime.getManifest().version;
 const aboutBlankRegexp = /^about:blank/;
 
 

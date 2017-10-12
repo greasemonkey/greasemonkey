@@ -23,7 +23,7 @@ window.onEnabledQuery = onEnabledQuery;
 
 function setGlobalEnabled(enabled) {
   isEnabled = !!enabled;
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     'name': 'EnabledChanged',
     'enabled': isEnabled,
   });
@@ -37,7 +37,7 @@ window.onEnabledSet = onEnabledSet;
 
 
 function setIcon() {
-  chrome.browserAction.setIcon({
+  browser.browserAction.setIcon({
     'path': 'skin/icon32' + (isEnabled ? '' : '-disabled') + '.png',
   });
 }

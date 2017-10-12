@@ -74,74 +74,64 @@ window.apiProviderSource = apiProviderSource;
 
 function GM_deleteValue(key) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       'key': key,
       'name': 'ApiDeleteValue',
       'uuid': _uuid,
-    }, result => result ? resolve() : reject());
+    }).then(resolve()).catch(reject());
   });
 }
 
 
 function GM_getValue(key, defaultValue) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       'key': key,
       'name': 'ApiGetValue',
       'uuid': _uuid,
-    }, result => {
-      if (result !== undefined) {
-        resolve(result)
-      } else {
-        resolve(defaultValue);
-      }
-    });
+    }).then(result => resolve(result)).catch(resolve(defaultValue));
   });
 }
 
 
 function GM_listValues() {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
+  return new Promise(async (resolve, reject) => {
+    let result = await browser.runtime.sendMessage({
       'name': 'ApiListValues',
       'uuid': _uuid,
-    }, result => resolve(result));
+    });
+    resolve(result);
   });
 }
 
 
 function GM_setValue(key, value) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       'key': key,
       'name': 'ApiSetValue',
       'uuid': _uuid,
       'value': value,
-    }, result => {
-      if (result !== undefined) {
-        resolve(result);
-      } else {
-        console.warn('set value failed:', chrome.runtime.lastError);
-        reject();
+    })
+    .then(result => resolve(result))
+    .catch(error => {
+      console.warn(`set value failed: ${error}`);
+      reject();
       }
-    });
+    );
   });
 }
 
 
 function GM_getResourceUrl(name) {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       'name': 'ApiGetResourceBlob',
       'resourceName': name,
       'uuid': _uuid,
-    }, result => {
-      if (result) {
-        resolve(URL.createObjectURL(result.blob))
-      } else {
-        reject(`No resource named "${name}"`);
-      }
-    });
+    })
+    .then(result => resolve(URL.createObjectURL(result.blob)))
+    .catch(reject(`No resource named "${name}"`));
   });
 }
 
@@ -163,7 +153,7 @@ function GM_notification(text, title, image, onclick) {
   if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
   if (typeof opt.image != 'string') opt.image = 'skin/icon32.png';
 
-  let port = chrome.runtime.connect({name: 'UserScriptNotification'});
+  let port = browser.runtime.connect({name: 'UserScriptNotification'});
   port.onMessage.addListener(msg => {
     const msgType = msg.type;
     if (typeof opt[msgType] == 'function') opt[msgType]();
@@ -188,7 +178,7 @@ function GM_openInTab(url, openInBackground) {
     throw new Error('GM.openInTab: Could not understand the URL: ' + url);
   }
 
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     'name': 'ApiOpenInTab',
     'url': objURL.href,
     'active': (openInBackground === false),
@@ -231,7 +221,7 @@ function GM_xmlHttpRequest(d) {
     throw new Error('GM.xmlHttpRequest: Passed URL has bad protocol: ' + d.url);
   }
 
-  let port = chrome.runtime.connect({name: 'UserScriptXhr'});
+  let port = browser.runtime.connect({name: 'UserScriptXhr'});
   port.onMessage.addListener(function(msg) {
     let o = msg.src == 'up' ? d.upload : d;
     let cb = o['on' + msg.type];

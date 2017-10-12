@@ -73,7 +73,7 @@ class Downloader {
         && !Object.values(this.resourceDownloads)
               .filter(d => d.pending).length != 0
     ) {
-      if (this.sender) chrome.tabs.sendMessage(
+      if (this.sender) browser.tabs.sendMessage(
           this.sender.tab.id,
           {
             'name': 'InstallProgress',
@@ -91,7 +91,7 @@ class Downloader {
   }
 
   onProgress(download, event) {
-    if (this.sender) chrome.tabs.sendMessage(
+    if (this.sender) browser.tabs.sendMessage(
         this.sender.tab.id,
         {
           'name': 'InstallProgress',

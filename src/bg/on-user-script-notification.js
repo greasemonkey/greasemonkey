@@ -9,14 +9,12 @@ let portMap = new Map();
 
 
 function createNotification(details, port) {
-  chrome.notifications.create({
+  browser.notifications.create({
     type: 'basic',
     title: details.title,
     iconUrl: details.image,
     message: details.text,
-  }, id => {
-    portMap.set(id, port);
-  });
+  }).then(id => portMap.set(id, port));
 }
 
 
@@ -33,16 +31,16 @@ function onUserScriptNotification(port) {
     }
   });
 }
-chrome.runtime.onConnect.addListener(onUserScriptNotification);
+browser.runtime.onConnect.addListener(onUserScriptNotification);
 
 
-chrome.notifications.onClicked.addListener(id => {
+browser.notifications.onClicked.addListener(id => {
   let port = portMap.get(id);
   port.postMessage({type: 'onclick'});
 });
 
 
-chrome.notifications.onClosed.addListener(id => {
+browser.notifications.onClosed.addListener(id => {
   let port = portMap.get(id);
   portMap.delete(id);
   port.postMessage({type: 'ondone'});
