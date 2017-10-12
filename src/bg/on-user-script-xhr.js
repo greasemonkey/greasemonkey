@@ -18,7 +18,7 @@ function onUserScriptXhr(port) {
     }
   });
 }
-chrome.runtime.onConnect.addListener(onUserScriptXhr);
+browser.runtime.onConnect.addListener(onUserScriptXhr);
 
 
 function open(xhr, d, port) {

@@ -6,9 +6,9 @@ and passes all arguments on to that callback.
 */
 
 (function() {
-const myPrefix = chrome.runtime.getURL('');
+const myPrefix = browser.runtime.getURL('');
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (!message.name) {
     console.error('Background received message without name!', message, sender);
     return;

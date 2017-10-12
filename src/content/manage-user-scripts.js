@@ -34,9 +34,9 @@ function loadAllUserScripts(userScripts) {
 ///////////////////////////////////////////////////////////////////////////////
 
 window.addEventListener('DOMContentLoaded', event => {
-  chrome.runtime.sendMessage(
-      {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
+  browser.runtime.sendMessage(
+      {'name': 'ListUserScripts', 'includeDisabled': true})
+    .then(userScripts => {
         loadAllUserScripts(userScripts);
         rivets.bind(document.getElementById('user-scripts'), gTplData);
         document.body.classList.remove('rendering');
@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', event => {
 }, true);
 
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.name == 'UserScriptChanged') {
     displayScript(message.details);
     gTplData.userScripts.sort((a, b) => a.name.localeCompare(b.name));
@@ -80,10 +80,10 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         openUserScriptEditor(scriptUuid);
         break;
       case 'remove':
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
           'name': 'UserScriptUninstall',
           'uuid': scriptUuid,
-        }, () => {
+        }).then(() => {
           for (i in gTplData.userScripts) {
             let script = gTplData.userScripts[i];
             if (script.uuid == scriptUuid) {
@@ -94,7 +94,7 @@ document.querySelector('#user-scripts').addEventListener('click', event => {
         });
         break;
       case 'toggle-enabled':
-        chrome.runtime.sendMessage({
+        browser.runtime.sendMessage({
           'name': 'UserScriptToggleEnabled',
           'uuid': scriptUuid,
         });

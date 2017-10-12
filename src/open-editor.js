@@ -1,8 +1,8 @@
 function openUserScriptEditor(scriptUuid) {
-  chrome.tabs.create({
+  browser.tabs.create({
     'active': true,
     'url':
-        chrome.runtime.getURL('src/content/edit-user-script.html')
+        browser.runtime.getURL('src/content/edit-user-script.html')
         + '#' + scriptUuid,
     });
 }

@@ -20,7 +20,7 @@ if (document.contentType in userScriptTypes) {
   var userScriptContent = document.body.textContent;
   var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
 
-  let installUrl = chrome.runtime.getURL('src/content/install-dialog.html')
+  let installUrl = browser.runtime.getURL('src/content/install-dialog.html')
       + '?' + escape(JSON.stringify(userScriptDetails));
   location.replace(installUrl);
 }

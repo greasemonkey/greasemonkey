@@ -1,4 +1,4 @@
-const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
+const defaultIcon = browser.runtime.getURL('skin/userscript.png');
 
 let gActiveUuid = null;
 let gTplData = {
@@ -32,13 +32,13 @@ function loadScripts(userScripts) {
 
 
 window.addEventListener('DOMContentLoaded', event => {
-  chrome.runtime.sendMessage(
-      {'name': 'EnabledQuery'},
-      enabled => gTplData.enabled = enabled);
-  chrome.runtime.sendMessage(
+  browser.runtime.sendMessage(
+      {'name': 'EnabledQuery'})
+      .then(enabled => gTplData.enabled = enabled);
+  browser.runtime.sendMessage(
       // TODO: For current URL only.
-      {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
+      {'name': 'ListUserScripts', 'includeDisabled': true})
+      .then(userScripts => {
         loadScripts(userScripts);
         rivets.bind(document.body, gTplData);
         document.body.classList.remove('rendering');
@@ -64,7 +64,7 @@ window.addEventListener('click', function(event) {
   }
 
   if (el.hasAttribute('data-url')) {
-    chrome.tabs.create({
+    browser.tabs.create({
       'active': true,
       'url': el.getAttribute('data-url')
     });
@@ -81,22 +81,21 @@ window.addEventListener('click', function(event) {
     document.body.className = 'detail';
   } else switch (el.getAttribute('id')) {
     case 'manage-scripts':
-      chrome.tabs.create({
-        'url': chrome.runtime.getURL('src/content/manage-user-scripts.html'),
+      browser.tabs.create({
+        'url': browser.runtime.getURL('src/content/manage-user-scripts.html'),
       });
       window.close();
       break;
     case 'toggle-global-enabled':
-      chrome.runtime.sendMessage(
-          {'name': 'EnabledToggle'},
-          enabled => gTplData.enabled = enabled);
+      browser.runtime.sendMessage({'name': 'EnabledToggle'})
+      .then(enabled => gTplData.enabled = enabled);
       break;
 
     case 'user-script-toggle-enabled':
-      chrome.runtime.sendMessage({
+      browser.runtime.sendMessage({
         'name': 'UserScriptToggleEnabled',
         'uuid': gActiveUuid,
-      }, response => {
+      }).then(response => {
         gTplData.activeScript.enabled = response.enabled;
         tplItemForUuid(gActiveUuid).enabled = response.enabled;
       });

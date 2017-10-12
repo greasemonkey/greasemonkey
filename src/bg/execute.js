@@ -11,7 +11,7 @@ TODO: Make document_start execution time work as intended.
 let openPorts = [];
 let pendingPorts = {};
 
-chrome.webNavigation.onCommitted.addListener(detail => {
+browser.webNavigation.onCommitted.addListener(detail => {
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
     let options = {
@@ -20,9 +20,8 @@ chrome.webNavigation.onCommitted.addListener(detail => {
       'runAt': 'document_' + userScript.runAt,
     };
     if (detail.frameId) options.frameId = detail.frameId;
-    chrome.tabs.executeScript(detail.tabId, options, result => {
-      let err = chrome.runtime.lastError;
-      if (!err) return;
+    browser.tabs.executeScript(detail.tabId, options)
+      .catch(err => {
       if (err.message.startsWith('Message manager disconnected')) return;
       if (err.message.startsWith('No matching message handler')) return;
       // TODO: Better indication of the root cause.

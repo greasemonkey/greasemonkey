@@ -19,7 +19,7 @@ btnCancel.addEventListener('click', finish, true);
 let installCountdown = 9;
 let btnInstall = document.getElementById('btn-install');
 function onClickInstall(event) {
-  chrome.runtime.sendMessage({
+  browser.runtime.sendMessage({
     'name': 'UserScriptInstall',
     'details': details
   });
@@ -51,7 +51,7 @@ let installTimer = setInterval(function() {
 
 let progressBar = document.createElement('progress');
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   message.progress && (progressBar.value = message.progress);
   if (message.progress == 1.0) {
     document.body.className = 'result';
@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 let iconContEl = document.querySelector('header .icon');
 let iconEl = document.createElement('img');
-let defaultIconSrc = chrome.runtime.getURL('skin/userscript.png');
+let defaultIconSrc = browser.runtime.getURL('skin/userscript.png');
 iconEl.src = details.iconUrl || defaultIconSrc;
 iconContEl.appendChild(iconEl);
 iconEl.onerror = () => iconEl.src = defaultIconSrc;

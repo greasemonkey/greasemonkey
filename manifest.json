@@ -22,6 +22,7 @@
 
   "background": {
     "scripts": [
+      "src/third-party/browser-polyfill.min.js",
       "src/third-party/convert2RegExp.js",
       "src/third-party/MatchPattern.js",
       "src/open-editor.js",
@@ -45,6 +46,7 @@
   "content_scripts": [{
     "matches": ["*://*/*.user.js"],
     "js": [
+      "src/third-party/browser-polyfill.min.js",
       "src/third-party/convert2RegExp.js",
       "src/third-party/MatchPattern.js",
       "src/bg/api-provider-source.js",
