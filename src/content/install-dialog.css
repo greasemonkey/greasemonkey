@@ -84,4 +84,5 @@ progress {
 }
 #footer button {
   flex-grow: 3;
+  width: 0;
 }

@@ -227,8 +227,8 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   }
 
   for (let uuid in userScripts) {
+    let userScript = userScripts[uuid];
     try {
-      let userScript = userScripts[uuid];
       if (!includeDisabled && !userScript.enabled) continue;
       if (url && !userScript.runsAt(url)) continue;
       yield userScript;

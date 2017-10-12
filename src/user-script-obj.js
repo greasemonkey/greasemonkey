@@ -142,7 +142,9 @@ window.RemoteUserScript = class RemoteUserScript {
   }
 
   toString() {
-    return '[Greasemonkey Script ' + this.id + '; ' + this.version + ']';
+    return '[Greasemonkey Script ' + this.id
+        + (this.version ? '; ' + this.version : '')
+        + ']';
   }
 }
 
@@ -234,7 +236,7 @@ window.EditableUserScript = class EditableUserScript
     this._evalContent
         = 'try {'
         + '(function scopeWrapper(){'
-        + 'async function userScript(){' + this._content + '} // User Script End.\n\n'
+        + 'function userScript(){' + this._content + '} // User Script End.\n\n'
         + this.calculateGmInfo() + '\n\n'
         + apiProviderSource(this) + '\n\n'
         + Object.values(this._requiresContent).join('\n\n')
