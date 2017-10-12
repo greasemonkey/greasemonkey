@@ -7,8 +7,11 @@ to the global scope (the `this` object).  It ...
 */
 
 const SUPPORTED_APIS = new Set([
-    'GM.getResourceUrl',
     'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
+    'GM.getResourceUrl',
+    'GM.notification',
+    'GM.openInTab',
+    'GM.setClipboard',
     'GM.xmlHttpRequest',
     ]);
 
@@ -27,10 +30,6 @@ function apiProviderSource(userScript) {
   // A private copy of the script UUID which cannot be tampered with.
   source += 'const _uuid = "' + userScript.uuid + '";\n\n';
 
-  if (grants.includes('GM.getResourceUrl')) {
-    source += 'GM.getResourceUrl = ' + GM_getResourceUrl.toString() + ';\n\n';
-  }
-
   if (grants.includes('GM.deleteValue')) {
     source += 'GM.deleteValue = ' + GM_deleteValue.toString() + ';\n\n';
   }
@@ -44,6 +43,22 @@ function apiProviderSource(userScript) {
     source += 'GM.setValue = ' + GM_setValue.toString() + ';\n\n';
   }
 
+  if (grants.includes('GM.getResourceUrl')) {
+    source += 'GM.getResourceUrl = ' + GM_getResourceUrl.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.notification')) {
+    source += 'GM.notification = ' + GM_notification.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.openInTab')) {
+    source += 'GM.openInTab = ' + GM_openInTab.toString() + ';\n\n';
+  }
+
+  if (grants.includes('GM.setClipboard')) {
+    source += 'GM.setClipboard = ' + GM_setClipboard.toString() + ';\n\n';
+  }
+
   if (grants.includes('GM.xmlHttpRequest')) {
     source += 'GM.xmlHttpRequest = ' + GM_xmlHttpRequest.toString() + ';\n\n';
   }
@@ -55,23 +70,6 @@ function apiProviderSource(userScript) {
   return source;
 }
 window.apiProviderSource = apiProviderSource;
-
-
-function GM_getResourceUrl(name) {
-  return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({
-      'name': 'ApiGetResourceBlob',
-      'resourceName': name,
-      'uuid': _uuid,
-    }, result => {
-      if (result) {
-        resolve(URL.createObjectURL(result.blob))
-      } else {
-        reject(`No resource named "${name}"`);
-      }
-    });
-  });
-}
 
 
 function GM_deleteValue(key) {
@@ -128,6 +126,88 @@ function GM_setValue(key, value) {
       }
     });
   });
+}
+
+
+function GM_getResourceUrl(name) {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({
+      'name': 'ApiGetResourceBlob',
+      'resourceName': name,
+      'uuid': _uuid,
+    }, result => {
+      if (result) {
+        resolve(URL.createObjectURL(result.blob))
+      } else {
+        reject(`No resource named "${name}"`);
+      }
+    });
+  });
+}
+
+
+function GM_notification(text, title, image, onclick) {
+  let opt;
+
+  if (typeof text == 'object') {
+    opt = text;
+    if (typeof title == 'function') opt.ondone = title;
+  } else {
+    opt = { title, text, image, onclick };
+  }
+
+  if (typeof opt.text != 'string') {
+    throw new Error('GM.notification: "text" must be a string');
+  }
+
+  if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
+  if (typeof opt.image != 'string') opt.image = 'skin/icon32.png';
+
+  let port = chrome.runtime.connect({name: 'UserScriptNotification'});
+  port.onMessage.addListener(msg => {
+    const msgType = msg.type;
+    if (typeof opt[msgType] == 'function') opt[msgType]();
+  });
+  port.postMessage({
+    name: 'create',
+    details: {
+        title: opt.title,
+        text: opt.text,
+        image: opt.image
+    }
+  });
+}
+
+
+function GM_openInTab(url, openInBackground) {
+  let objURL;
+
+  try {
+    objURL = new URL(url, location.href);
+  } catch(e) {
+    throw new Error('GM.openInTab: Could not understand the URL: ' + url);
+  }
+
+  chrome.runtime.sendMessage({
+    'name': 'ApiOpenInTab',
+    'url': objURL.href,
+    'active': (openInBackground === false),
+  });
+}
+
+
+function GM_setClipboard(text) {
+  function onCopy(event) {
+    document.removeEventListener('copy', onCopy, true);
+
+    event.stopImmediatePropagation();
+    event.preventDefault();
+
+    event.clipboardData.setData('text/plain', text);
+  }
+
+  document.addEventListener('copy', onCopy, true);
+  document.execCommand('copy');
 }
 
 
