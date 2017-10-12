@@ -58,10 +58,10 @@
 
   "permissions": [
     "<all_urls>",
-    "storage",
-    "tabs",
     "clipboardWrite",
     "notifications",
+    "storage",
+    "tabs",
     "unlimitedStorage",
     "webNavigation"
   ]
