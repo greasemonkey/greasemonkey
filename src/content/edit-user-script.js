@@ -140,3 +140,13 @@ function onSave() {
     editorTabs[i].classList.remove('dirty');
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+editor.on('swapDoc', doc => {
+  if (doc.getMode().name == 'javascript') {
+    doc.setOption('gutters', ['CodeMirror-lint-markers']);
+    doc.setOption('lint', true);
+    doc.performLint();
+  }
+});
