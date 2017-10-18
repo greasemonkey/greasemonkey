@@ -1,7 +1,4 @@
-// Private implementation.
-(function() {
-
-var gAllMetaRegexp = new RegExp(
+const gAllMetaRegexp = new RegExp(
     '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==',
     'm');
 
@@ -13,6 +10,9 @@ function extractMeta(content) {
   return '';
 }
 
+
+// Private implementation.
+(function() {
 
 /** Pull the filename part from the URL, without `.user.js`. */
 function nameFromUrl(url) {
