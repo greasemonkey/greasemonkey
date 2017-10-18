@@ -11,6 +11,12 @@ CodeMirror.registerHelper('lint', 'javascript', function (text, options) {
   for (let [i, metaLine] of meta.entries()) {
     try {
       let s = metaLine.trim();
+
+      // Ignore comments that aren't meta lines.
+      if (metaLine.substr(0, 2) == '//' && metaLine.substr(0, 4) != '// @') {
+        continue;
+      }
+
       if (s) window.parseMetaLine(s);
     } catch (e) {
       messages.push({
