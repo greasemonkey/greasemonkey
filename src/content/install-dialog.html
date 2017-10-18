@@ -4,11 +4,16 @@
 <link rel="stylesheet" href="/skin/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="install-dialog.css">
 <body class="install">
+<!-- This script is at the top because we want the "defaultIconUrl" variable -->
+<script src="/src/util/iconUrl.js"></script>
 
 <header>
-  <div class="icon"></div>
+  <div class="icon">
+    <img rv-src="iconUrl" onerror="this.src=defaultIconUrl">
+  </div>
   <h1>
-    <strong id="name"></strong> <span id="version"></span>
+    <strong id="name">{ name }</strong>
+    <span rv-show="version" id="version">{ version }</span>
   </h1>
 </header>
 
@@ -16,24 +21,32 @@
   <p>This is a Greasemonkey user script.  Click install to start using it.</p>
 
   <div id="details">
-    <div id="apis">
+    <div rv-hide="grants | empty" id="apis">
       <p>Requires special APIs:</p>
-      <ul></ul>
+      <ul>
+        <li rv-each-grant="grants">{ grant }</li>
+      </ul>
     </div>
 
-    <div id="includes">
+    <div rv-hide="includes | empty" id="includes">
       <p>Runs on:</p>
-      <ul></ul>
+      <ul>
+        <li rv-each-include="includes">{ include }</li>
+      </ul>
     </div>
 
-    <div id="matches">
+    <div rv-hide="matches | empty" id="matches">
       <p>Matches:</p>
-      <ul></ul>
+      <ul>
+        <li rv-each-match="matches">{ match }</li>
+      </ul>
     </div>
 
-    <div id="excludes">
+    <div rv-hide="excludes | empty" id="excludes">
       <p>Does not run on:</p>
-      <ul></ul>
+      <ul>
+        <li rv-each-exclude="excludes">{ exclude }</li>
+      </ul>
     </div>
   </div>
 
@@ -64,6 +77,8 @@
       >Install</button>
 </div>
 
+<script src="/src/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
 <script src="install-dialog.js"></script>
 
 </body>

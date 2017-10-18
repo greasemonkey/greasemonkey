@@ -76,45 +76,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 /****************************** DETAIL DISPLAY *******************************/
 
-let iconContEl = document.querySelector('header .icon');
-let iconEl = document.createElement('img');
-let defaultIconSrc = chrome.runtime.getURL('skin/userscript.png');
-iconEl.src = details.iconUrl || defaultIconSrc;
-iconContEl.appendChild(iconEl);
-iconEl.onerror = () => iconEl.src = defaultIconSrc;
+// The fallback to default icon won't work unless iconUrl has at least an
+// empty string.
+details.iconUrl = details.iconUrl || "";
 
-document.getElementById('name').textContent = details.name;
-if (details.version) {
-  document.getElementById('version').textContent = details.version;
-}
-
-
-function addStringsToList(containerEl, listEl, strings) {
-  if (strings.length == 0) {
-    containerEl.style.display = 'none';
-  } else {
-    strings.forEach(v => {
-      var el = document.createElement('li');
-      el.textContent = v;
-      listEl.append(el);
-    });
-  }
-}
-
-
-addStringsToList(
-    document.getElementById('apis'),
-    document.querySelector('#apis ul'),
-    details.grants);
-addStringsToList(
-    document.getElementById('includes'),
-    document.querySelector('#includes ul'),
-    details.includes);
-addStringsToList(
-    document.getElementById('matches'),
-    document.querySelector('#matches ul'),
-    details.matches);
-addStringsToList(
-    document.getElementById('excludes'),
-    document.querySelector('#excludes ul'),
-    details.excludes);
+window.addEventListener('DOMContentLoaded', event => {
+  rivets.bind(document.body, details);
+});
