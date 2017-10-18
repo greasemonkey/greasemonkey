@@ -1,6 +1,13 @@
 CodeMirror.registerHelper('lint', 'javascript', function (text, options) {
   let messages = [];
   let meta = extractMeta(text).split('\n');
+  let metaStart = (() => {
+    let m = gAllMetaRegexp.exec(text);
+    if (!m) return 0;
+    let prefix = text.substr(0, m.index);
+    return prefix.split('\n').length;
+  })();
+
   for (let [i, metaLine] of meta.entries()) {
     try {
       let s = metaLine.trim();
@@ -8,8 +15,8 @@ CodeMirror.registerHelper('lint', 'javascript', function (text, options) {
     } catch (e) {
       messages.push({
         severity: 'warning',
-        from: CodeMirror.Pos(i, e.location.start.column - 1),
-        to: CodeMirror.Pos(i, e.location.end.column - 1),
+        from: CodeMirror.Pos(metaStart + i, e.location.start.column - 1),
+        to: CodeMirror.Pos(metaStart + i, e.location.end.column - 1),
         message: e.message
       });
     }
