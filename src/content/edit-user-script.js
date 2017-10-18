@@ -17,6 +17,7 @@ const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];
 const editorUrls = [];
+const tabs = document.getElementById('tabs');
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -42,8 +43,6 @@ chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }, userScript => {
-  let tabs = document.getElementById('tabs');
-
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;
@@ -91,7 +90,7 @@ chrome.runtime.onMessage.addListener(onUserScriptChanged);
 ///////////////////////////////////////////////////////////////////////////////
 
 // TODO: Keyboard accessibility?
-document.getElementById('tabs').addEventListener('click', event => {
+tabs.addEventListener('click', event => {
   if (event.target.classList.contains('tab')) {
     let selectedTab = document.querySelector('#tabs .tab.active');
     selectedTab.classList.remove('active');
