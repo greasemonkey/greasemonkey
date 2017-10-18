@@ -234,16 +234,16 @@ window.EditableUserScript = class EditableUserScript
     // generated content -- wrapped in a function.  Then add the rest
     // of the generated parts.
     this._evalContent
-        = 'try {'
-        + '(function scopeWrapper(){'
-        + 'function userScript(){' + this._content + '} // User Script End.\n\n'
-        + this.calculateGmInfo() + '\n\n'
-        + apiProviderSource(this) + '\n\n'
-        + Object.values(this._requiresContent).join('\n\n')
-        + 'userScript();})();\n\n' // Ends scope wrapper.
-        + '} catch (e) { console.error("Script error: ", e); }\n\n'
-        + '//# sourceURL=user-script:' + escape(this.id);
-//    console.log('generated script:\n', this._evalContent);
+        = `try {
+        (function scopeWrapper(){
+        function userScript(){ ${this._content} } // User Script End.
+        const unsafeWindow = window.wrappedJSObject;
+        ${this.calculateGmInfo()}
+        ${apiProviderSource(this)}
+        ${Object.values(this._requiresContent).join('\n\n')}
+        userScript(); })();
+        } catch (e) { console.error("Script error: ", e); }
+        //# sourceURL=user-script:${escape(this.id)}`;
   }
 
   calculateGmInfo() {
