@@ -250,18 +250,27 @@ window.EditableUserScript = class EditableUserScript
     let gmInfo = {
       'script': {
         'description': this.description,
+        'excludes': this.excludes,
+        'includes': this.includes,
+        'matches': this.matches,
         'name': this.name,
         'namespace': this.namespace,
         'resources': {},
+        'runAt': this.runAt,
+        'uuid': this.uuid,
         'version': this.version,
       },
+      'scriptMetaStr': extractMeta(this.content),
       'scriptHandler': 'Greasemonkey',
-      'uuid': this.uuid,
       'version': extensionVersion,
     };
     Object.keys(this.resources).forEach(n => {
       let r = this.resources[n];
-      gmInfo.script.resources[n] = {'name': r.name, 'mimetype': r.mimetype};
+      gmInfo.script.resources[n] = {
+        'name': r.name,
+        'mimetype': r.mimetype,
+        'url': r.url || "",
+      };
     });
     return 'const GM = {};\n'
         + 'GM.info=' + JSON.stringify(gmInfo) + ';'
@@ -310,6 +319,7 @@ window.EditableUserScript = class EditableUserScript
               this._resources[n] = {
                   'name': n,
                   'mimetype': d.xhr.getResponseHeader('Content-Type'),
+                  'url': d.url,
                   'blob': d.xhr.response,
               };
             });
