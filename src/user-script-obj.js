@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 1;
+const EVAL_CONTENT_VERSION = 2;
 
 
 // Private implementation.
@@ -241,6 +241,7 @@ window.EditableUserScript = class EditableUserScript
     // Put the first line of the script content on line one of the
     // generated content -- wrapped in a function.  Then add the rest
     // of the generated parts.
+    let hasGrantNone = this.grants.includes('none');
     this._evalContent
         // Note intentional lack of line breaks before the script content.
         = `try { (function scopeWrapper(){ function userScript(window) { ${this._content} }
@@ -249,7 +250,7 @@ window.EditableUserScript = class EditableUserScript
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
         ${Object.values(this._requiresContent).join('\n\n')}
-        userScript(); })();
+        userScript(${ hasGrantNone ? 'unsafeWindow' : 'window' }); })();
         } catch (e) { console.error("Script error: ", e); }
         //# sourceURL=user-script:${escape(this.id)}`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
