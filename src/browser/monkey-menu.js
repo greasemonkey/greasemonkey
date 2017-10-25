@@ -80,12 +80,6 @@ window.addEventListener('click', function(event) {
     gActiveUuid = uuid;
     document.body.className = 'detail';
   } else switch (el.getAttribute('id')) {
-    case 'manage-scripts':
-      chrome.tabs.create({
-        'url': chrome.runtime.getURL('src/content/manage-user-scripts.html'),
-      });
-      window.close();
-      break;
     case 'toggle-global-enabled':
       chrome.runtime.sendMessage(
           {'name': 'EnabledToggle'},
