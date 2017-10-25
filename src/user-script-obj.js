@@ -6,6 +6,12 @@ the install process.  Nothing else besides `UserScriptRegistry` should ever
 reference any other objects from this file.
 */
 
+// Increment this number when updating `calculateEvalContent()`.  If it
+// is higher than it was when eval content was last calculated, it will
+// be re-calculated.
+const EVAL_CONTENT_VERSION = 2;
+
+
 // Private implementation.
 (function() {
 
@@ -150,7 +156,7 @@ window.RemoteUserScript = class RemoteUserScript {
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'iconBlob', 'resources',
+    'enabled', 'evalContent', 'evalContentVersion', 'iconBlob', 'resources',
     'userExcludes', 'userIncludes', 'userMatches', 'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
@@ -161,6 +167,7 @@ window.RunnableUserScript = class RunnableUserScript
 
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
+    this._evalContentVersion = -1;
     this._iconBlob = null;
     this._resources = {};  // Name to object with keys: name, mimetype, blob.
     this._userExcludes = [];  // TODO: Not implemented.
@@ -195,6 +202,7 @@ window.RunnableUserScript = class RunnableUserScript
   get userMatches() { return _safeCopy(this._userMatches); }
 
   get evalContent() { return this._evalContent; }
+  get evalContentVersion() { return this._evalContentVersion; }
   get iconBlob() { return this._iconBlob; }
   get resources() { return _safeCopy(this._resources); }
   get uuid() { return this._uuid; }
@@ -233,17 +241,19 @@ window.EditableUserScript = class EditableUserScript
     // Put the first line of the script content on line one of the
     // generated content -- wrapped in a function.  Then add the rest
     // of the generated parts.
+    let hasGrantNone = this.grants.includes('none');
     this._evalContent
-        = `try {
-        (function scopeWrapper(){
-        function userScript(){ ${this._content} } // User Script End.
+        // Note intentional lack of line breaks before the script content.
+        = `try { (function scopeWrapper(){ function userScript(window) { ${this._content} }
+
         const unsafeWindow = window.wrappedJSObject;
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
         ${Object.values(this._requiresContent).join('\n\n')}
-        userScript(); })();
+        userScript(${ hasGrantNone ? 'unsafeWindow' : 'window' }); })();
         } catch (e) { console.error("Script error: ", e); }
         //# sourceURL=user-script:${escape(this.id)}`;
+    this._evalContentVersion = EVAL_CONTENT_VERSION;
   }
 
   calculateGmInfo() {
