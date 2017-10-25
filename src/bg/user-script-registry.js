@@ -73,7 +73,12 @@ function loadUserScripts() {
     req.onsuccess = event => {
       userScripts = {};
       event.target.result.forEach(details => {
-        userScripts[details.uuid] = new EditableUserScript(details);
+        let userScript = new EditableUserScript(details);
+        userScripts[details.uuid] = userScript;
+        if (userScript.evalContentVersion < EVAL_CONTENT_VERSION) {
+          userScript.calculateEvalContent();
+          saveUserScript(userScript);
+        }
       });
     };
     req.onerror = event => {
@@ -180,7 +185,9 @@ window.onUserScriptUninstall = onUserScriptUninstall;
 
 function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
-    throw new Error('Cannot save this type of UserScript object:' + userScript.constructor.name);
+    throw new Error(
+        'Cannot save this type of UserScript object:'
+        + userScript.constructor.name);
   }
   db.then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
