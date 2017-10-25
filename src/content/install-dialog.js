@@ -1,4 +1,4 @@
-let details = JSON.parse(unescape(document.location.search.substr(1)));
+const details = JSON.parse(unescape(document.location.search.substr(1)));
 document.title = details.name + ' - Greasemonkey User Script';
 
 
@@ -21,7 +21,7 @@ let btnInstall = document.getElementById('btn-install');
 function onClickInstall(event) {
   chrome.runtime.sendMessage({
     'name': 'UserScriptInstall',
-    'details': details
+    'details': details,
   });
 
   let footerEl = document.getElementById('footer');
@@ -76,10 +76,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 /****************************** DETAIL DISPLAY *******************************/
 
-// The fallback to default icon won't work unless iconUrl has at least an
-// empty string.
-details.iconUrl = details.iconUrl || "";
-
 window.addEventListener('DOMContentLoaded', event => {
-  rivets.bind(document.body, details);
+  // Rivets will mutate its second parameter to have getters and setters,
+  // these will break our attempt to pass `details` to background.  So
+  // make a second copy of details, for Rivets to own.
+  let rvDetails = JSON.parse(unescape(document.location.search.substr(1)));
+
+  // The fallback to default icon won't work unless iconUrl has at least an
+  // empty string.
+  rvDetails.iconUrl = rvDetails.iconUrl || "";
+
+  rivets.bind(document.body, rvDetails);
 });
