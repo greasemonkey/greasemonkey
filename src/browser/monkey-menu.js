@@ -5,6 +5,7 @@ let gTplData = {
   'activeScript': {},
   'enabled': undefined,
   'userScripts': [],
+  'pendingUninstall': 0,
 };
 let gUserScripts = {};
 
@@ -50,8 +51,7 @@ window.addEventListener('click', function(event) {
   let el = event.target;
 
   if (el.id == 'back') {
-    document.body.className = '';
-    gActiveUuid = null;
+    goToTop();
     return;
   }
 
@@ -106,8 +106,62 @@ window.addEventListener('click', function(event) {
       window.close();
       break;
 
+    case 'user-script-uninstall':
+      gTplData.pendingUninstall = 10;
+      break;
+    case 'user-script-uninstall-undo':
+      gTplData.pendingUninstall = null;
+      break;
+
     default:
       console.warn('unhandled monkey menu item:', el);
       break;
   }
 }, true);
+
+
+// I.e. from a script detail view, go back to the top view.
+function goToTop() {
+  if (!gActiveUuid) return;
+  checkPendingUninstall();
+  document.body.className = '';
+  gActiveUuid = null;
+}
+
+
+////////////////////////////////// UNINSTALL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+setInterval(() => {
+  if (gActiveUuid && gTplData.pendingUninstall) {
+    gTplData.pendingUninstall--;
+    if (gTplData.pendingUninstall == 0) {
+      uninstall(gActiveUuid);
+    }
+  }
+}, 1000);
+
+
+function checkPendingUninstall() {
+  if (gActiveUuid && gTplData.pendingUninstall) {
+    uninstall(gActiveUuid);
+  }
+}
+window.addEventListener('unload', checkPendingUninstall, false);
+
+
+function uninstall(scriptUuid) {
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptUninstall',
+    'uuid': scriptUuid,
+  }, () => {
+    for (i in gTplData.userScripts) {
+      let script = gTplData.userScripts[i];
+      if (script.uuid == scriptUuid) {
+        gTplData.userScripts.splice(i, 1);
+        break;
+      }
+    }
+    gTplData.pendingUninstall = null;
+    goToTop();
+  });
+}
