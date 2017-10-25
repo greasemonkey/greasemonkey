@@ -15,25 +15,22 @@
 
   <hr>
 
-  <div class="menu-item" data-url="http://www.greasespot.net/">
-    <div class="icon fa fa-fw fa-link"></div>
-    <div class="text">Greasemonkey home page</div>
+  <div rv-each-script="userScripts" class="menu-item user-script"
+    rv-class-disabled="script.enabled | not"
+    rv-data-user-script-uuid="script.uuid"
+  >
+    <div class="icon fa-fw"><img rv-src="script.icon"></div>
+    <div class="text">{script.name}</div>
   </div>
 
-  <div class="menu-item" data-url="https://wiki.greasespot.net/">
-    <div class="icon fa fa-fw fa-link"></div>
-    <div class="text">Greasemonkey Wiki</div>
+  <div rv-show="userScripts | empty" class="menu-item">
+    <div class="icon fa fa-fw fa-exclamation"></div>
+    <div class="text">No user scripts installed!</div>
   </div>
-
-  <div class="menu-item"
-      data-url="https://wiki.greasespot.net/User_Script_Hosting">
-    <div class="icon fa fa-fw fa-link"></div>
-    <div class="text">Get User Scripts</div>
-  </div>
-
-  <hr>
 
   <!-- TODO: This feature.
+  <hr>
+
   <div class="menu-item" id="open-options">
     <div class="icon fa fa-fw fa-cogs"></div>
     <div class="text">Greasemonkey Options</div>
@@ -49,17 +46,20 @@
 
   <hr>
 
-  <div rv-each-script="userScripts" class="menu-item user-script"
-    rv-class-disabled="script.enabled | not"
-    rv-data-user-script-uuid="script.uuid"
-  >
-    <div class="icon fa-fw"><img rv-src="script.icon"></div>
-    <div class="text">{script.name}</div>
+  <div class="menu-item" data-url="http://www.greasespot.net/">
+    <div class="icon fa fa-fw fa-link"></div>
+    <div class="text">Greasemonkey home page</div>
   </div>
 
-  <div rv-show="userScripts | empty" class="menu-item">
-    <div class="icon fa fa-fw fa-exclamation"></div>
-    <div class="text">No user scripts installed!</div>
+  <div class="menu-item" data-url="https://wiki.greasespot.net/">
+    <div class="icon fa fa-fw fa-link"></div>
+    <div class="text">Greasemonkey Wiki</div>
+  </div>
+
+  <div class="menu-item"
+      data-url="https://wiki.greasespot.net/User_Script_Hosting">
+    <div class="icon fa fa-fw fa-link"></div>
+    <div class="text">Get User Scripts</div>
   </div>
 </section>
 
