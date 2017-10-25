@@ -45,3 +45,26 @@ li.user-script button {
   margin-left: 1ex;
   width: 100%; /* Shared within flex container. */
 }
+
+/* Required to prevent scrollbar from appearing on transition */
+.buttons {
+  overflow: hidden;
+}
+
+button[data-action=remove],
+button[data-action=undo] {
+  transition: opacity 175ms ease-in-out 175ms,
+              visibility 0s 175ms;
+}
+button[data-action=remove][hide],
+button[data-action=undo][hide] {
+  opacity: 0;
+  visibility: collapse;
+  transition: opacity 175ms ease-in-out,
+              visibility 0s 175ms;
+}
+
+/* Flip the direction of the icon for undo */
+button[data-action=undo] .fa-share {
+  transform: scaleX(-1);
+}
