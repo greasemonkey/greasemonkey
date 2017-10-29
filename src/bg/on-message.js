@@ -14,9 +14,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     return;
   }
 
-  if (message.name == 'OpenInstallDialog') {
-    // No-op; content can legitimately ask for the dialog to be opened.
-  } else if (
+  if (
       !message.name.startsWith('Api') && !sender.url.startsWith(myPrefix)
   ) {
     // Messages named "Api*" can come from anywhere (i.e. _content_ scripts,
