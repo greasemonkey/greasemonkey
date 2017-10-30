@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 4;
+const EVAL_CONTENT_VERSION = 5;
 
 
 // Private implementation.
@@ -249,6 +249,7 @@ window.EditableUserScript = class EditableUserScript
         ${apiProviderSource(this)}
         ${Object.values(this._requiresContent).join('\n\n')}
         userScript();
+        })();
         } catch (e) { console.error("Script error: ", e); }
         //# sourceURL=user-script:${escape(this.id)}`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
