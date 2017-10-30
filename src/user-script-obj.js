@@ -248,7 +248,7 @@ window.EditableUserScript = class EditableUserScript
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
         ${Object.values(this._requiresContent).join('\n\n')}
-        userScript();
+        userScript(); })();
         } catch (e) { console.error("Script error: ", e); }
         //# sourceURL=user-script:${escape(this.id)}`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
