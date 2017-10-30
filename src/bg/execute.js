@@ -5,7 +5,7 @@ content script executions.
 TODO: Make document_start execution time work as intended.
 */
 
-function executeUserscriptOnNavigation(detail) {
+function executeUserscriptOnResponseStarted(detail) {
   if (false === getGlobalEnabled()) return;
 
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
