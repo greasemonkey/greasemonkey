@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Greasemonkey (WebExtension Alpha)",
-  "version": "4.0alpha11",
+  "version": "4.0alpha12",
   "description": "A User Script manager for Firefox.",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {"32": "skin/icon32.png"},
