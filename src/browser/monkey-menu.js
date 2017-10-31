@@ -91,6 +91,7 @@ window.addEventListener('click', function(event) {
         'name': 'UserScriptToggleEnabled',
         'uuid': gActiveUuid,
       }, response => {
+        gUserScripts[gActiveUuid].enabled = response.enabled;
         gTplData.activeScript.enabled = response.enabled;
         tplItemForUuid(gActiveUuid).enabled = response.enabled;
       });
