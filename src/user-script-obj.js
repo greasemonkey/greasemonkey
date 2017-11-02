@@ -130,6 +130,14 @@ window.RemoteUserScript = class RemoteUserScript {
       throw new Error('runsAt() got non-url parameter: ' + url);
     }
 
+    if (url
+        && url.protocol != 'http:'
+        && url.protocol != 'https:'
+        && !url.href.startsWith('about:blank')
+    ) {
+      return false;
+    }
+
     // TODO: Profile cost of pattern generation, cache if justified.
     // TODO: User global excludes.
     // TODO: User includes/excludes/matches.

@@ -32,6 +32,11 @@ body #menu, body.detail #user-script-detail { display: block; }
 .menu-item.disabled .icon img {
   opacity: 0.66;
 }
+.menu-item .heading {
+  color: #333;
+  font-style: italic;
+  padding-left: 21px;
+}
 .menu-item .text {
   flex-grow: 1;
   white-space: nowrap;

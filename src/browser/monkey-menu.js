@@ -4,22 +4,29 @@ let gActiveUuid = null;
 let gTplData = {
   'activeScript': {},
   'enabled': undefined,
-  'userScripts': [],
+  'userScripts': {
+    'active': [],
+    'inactive': [],
+  },
   'pendingUninstall': 0,
 };
 let gUserScripts = {};
 
 
 function tplItemForUuid(uuid) {
-  for (let tplItem of gTplData.userScripts) {
+  for (let tplItem of gTplData.userScripts.active) {
+    if (tplItem.uuid == uuid) return tplItem;
+  }
+  for (let tplItem of gTplData.userScripts.inactive) {
     if (tplItem.uuid == uuid) return tplItem;
   }
 }
 
 
-function loadScripts(userScripts) {
-  userScripts.sort((a, b) => a.name.localeCompare(b.name));
-  for (let userScript of userScripts) {
+function loadScripts(userScriptsDetail, url) {
+  userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
+  for (let userScriptDetail of userScriptsDetail) {
+    let userScript = new RunnableUserScript(userScriptDetail);
     gUserScripts[userScript.uuid] = userScript;
     let tplItem = {
       'enabled': userScript.enabled,
@@ -27,7 +34,10 @@ function loadScripts(userScripts) {
       'name': userScript.name,
       'uuid': userScript.uuid,
     };
-    gTplData.userScripts.push(tplItem);
+    (url && userScript.runsAt(url)
+        ? gTplData.userScripts.active
+        : gTplData.userScripts.inactive
+    ).push(tplItem);
   }
 }
 
@@ -37,12 +47,14 @@ window.addEventListener('DOMContentLoaded', event => {
       {'name': 'EnabledQuery'},
       enabled => gTplData.enabled = enabled);
   chrome.runtime.sendMessage(
-      // TODO: For current URL only.
       {'name': 'ListUserScripts', 'includeDisabled': true},
       function(userScripts) {
-        loadScripts(userScripts);
-        rivets.bind(document.body, gTplData);
-        document.body.classList.remove('rendering');
+        chrome.tabs.query({'active': true}, tabs => {
+          let url = tabs.length && new URL(tabs[0].url) || null;
+          loadScripts(userScripts, url);
+          rivets.bind(document.body, gTplData);
+          document.body.classList.remove('rendering');
+        });
       });
 }, true);
 

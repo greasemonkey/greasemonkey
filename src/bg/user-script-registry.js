@@ -225,14 +225,6 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
 
-  if (url
-    && url.protocol != 'http:'
-    && url.protocol != 'https:'
-    && !url.href.startsWith('about:blank')
-  ) {
-    return;
-  }
-
   for (let uuid in userScripts) {
     let userScript = userScripts[uuid];
     try {

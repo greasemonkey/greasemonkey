@@ -12,37 +12,48 @@
     <div rv-hide="enabled" class="icon fa fa-fw fa-circle-o"></div>
     <div class="text">Greasemonkey is {enabled | active}</div>
   </div>
-
-  <hr>
-
-  <div rv-each-script="userScripts" class="menu-item user-script"
-    rv-class-disabled="script.enabled | not"
-    rv-data-user-script-uuid="script.uuid"
-  >
-    <div class="icon fa-fw"><img rv-src="script.icon"></div>
-    <div class="text">{script.name}</div>
-  </div>
-
-  <div rv-show="userScripts | empty" class="menu-item">
-    <div class="icon fa fa-fw fa-exclamation"></div>
-    <div class="text">No user scripts installed!</div>
-  </div>
-
   <!-- TODO: This feature.
-  <hr>
-
   <div class="menu-item" id="open-options">
     <div class="icon fa fa-fw fa-cogs"></div>
     <div class="text">Greasemonkey Options</div>
   </div>
   -->
-
   <!-- TODO: This feature.
   <div class="menu-item" id="new-script">
     <div class="icon fa fa-fw fa-file-text-o"></div>
     <div class="text">New User Script...</div>
   </div>
   -->
+
+  <div rv-hide="userScripts.active | empty">
+    <hr>
+    <div class="menu-item">
+      <div class="text heading">User scripts for this tab</div>
+    </div>
+
+    <div rv-each-script="userScripts.active" class="menu-item user-script"
+        rv-class-disabled="script.enabled | not"
+        rv-data-user-script-uuid="script.uuid"
+    >
+      <div class="icon fa-fw"><img rv-src="script.icon"></div>
+      <div class="text">{script.name}</div>
+    </div>
+  </div>
+
+  <div rv-hide="userScripts.inactive | empty">
+    <hr>
+    <div class="menu-item" rv-hide="userScripts.active | empty">
+      <div class="text heading">Other user scripts</div>
+    </div>
+
+    <div rv-each-script="userScripts.inactive" class="menu-item user-script"
+        rv-class-disabled="script.enabled | not"
+        rv-data-user-script-uuid="script.uuid"
+    >
+      <div class="icon fa-fw"><img rv-src="script.icon"></div>
+      <div class="text">{script.name}</div>
+    </div>
+  </div>
 
   <hr>
 
@@ -97,6 +108,10 @@
 <script src="/src/util/iconUrl.js"></script>
 <script src="/src/util/rivets-formatters.js"></script>
 <script src="/src/open-editor.js"></script>
+
+<script src="/src/third-party/convert2RegExp.js"></script>
+<script src="/src/user-script-obj.js"></script>
+
 <script src="monkey-menu.js"></script>
 
 </body>
