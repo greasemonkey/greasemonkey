@@ -1,3 +1,4 @@
 *.xpi
 .project
 .settings
+node_modules
