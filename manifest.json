@@ -22,36 +22,39 @@
 
   "background": {
     "scripts": [
-      "src/third-party/convert2RegExp.js",
-      "src/third-party/MatchPattern.js",
-      "src/parse-meta-line.js",
-      "src/parse-user-script.js",
-      "src/user-script-obj.js",
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
-      "src/bg/on-user-script-open-in-tab.js",
       "src/bg/on-user-script-notification.js",
+      "src/bg/on-user-script-open-in-tab.js",
       "src/bg/on-user-script-xhr.js",
       "src/bg/user-script-install.js",
       "src/bg/user-script-registry.js",
       "src/bg/value-store.js",
-      "src/bg/welcome.js"
+      "src/parse-meta-line.js",
+      "src/parse-user-script.js",
+      "src/user-script-obj.js",
+      "third-party/MatchPattern.js",
+      "third-party/convert2RegExp.js",
+
+      "src/bg/execute.run.js",
+      "src/bg/user-script-registry.run.js",
+      "src/bg/welcome.run.js"
     ]
   },
 
   "content_scripts": [{
     "matches": ["*://*/*.user.js"],
     "js": [
-      "src/third-party/convert2RegExp.js",
-      "src/third-party/MatchPattern.js",
       "src/bg/api-provider-source.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
+      "third-party/MatchPattern.js",
+      "third-party/convert2RegExp.js",
 
-      "src/content/script-detect.js"
+      "src/content/script-detect.run.js"
     ]
   }],
 
