@@ -10,11 +10,13 @@ module.exports = function(config) {
       './src/**/*.run.js',
       './src/content/**/*.js',  // For now ...
       './src/content/cm-addons/**/*.js',
-      './src/third-party/**/*.js',
       './src/util/rivets-formatters.js',
     ],
     frameworks: ['chai', 'mocha', 'sinon-chrome'],
-    reporters: ['progress'],
+    preprocessors: config.coverage
+        ? {'src/**/*.js': ['coverage']}
+        : {},
+    reporters: ['coverage', 'progress'],
     port: 7328,
     colors: true,
     logLevel: config.LOG_WARN,

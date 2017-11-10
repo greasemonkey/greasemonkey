@@ -11,4 +11,8 @@ after every change.  You can also:
 
     $ npm run-script testonce
 
-To run the tests exactly once.
+To run the tests exactly once.  Further, you can run:
+
+    $ npm run-script coverage
+
+To generate a code coverage report.
