@@ -1,4 +1,4 @@
-describe('is-enabled', () => {
+describe('bg/is-enabled', () => {
   it('passes data between setGlobalEnabled() and getGlobalEnabled()', () => {
     setGlobalEnabled(true);
     assert.equal(getGlobalEnabled(), true);

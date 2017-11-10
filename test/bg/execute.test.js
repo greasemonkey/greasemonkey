@@ -1,4 +1,4 @@
-describe('execute', () => {
+describe('bg/execute', () => {
   before(() => sinon.stub(UserScriptRegistry, 'scriptsToRunAt'));
   after(() => UserScriptRegistry.scriptsToRunAt.restore());
 

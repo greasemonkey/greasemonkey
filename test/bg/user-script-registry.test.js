@@ -1,4 +1,4 @@
-describe('user-script-registry', () => {
+describe('bg/user-script-registry', () => {
   beforeEach(() => {
     indexedDB.deleteDatabase('greasemonkey');
   });
