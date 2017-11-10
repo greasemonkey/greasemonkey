@@ -6,6 +6,8 @@ TODO: Make document_start execution time work as intended.
 */
 
 function executeUserscriptOnNavigation(detail) {
+  if (false === getGlobalEnabled()) return;
+
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
     let options = {

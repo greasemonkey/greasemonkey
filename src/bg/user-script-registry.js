@@ -96,9 +96,7 @@ function onEditorSaved(message, sender, sendResponse) {
   }
 
   userScript.updateFromEditorSaved(message)
-      .then(
-          value => saveUserScript(userScript),
-          reason => null);
+      .then(value => saveUserScript(userScript));
 };
 window.onEditorSaved = onEditorSaved;
 
@@ -189,7 +187,7 @@ function saveUserScript(userScript) {
         'Cannot save this type of UserScript object:'
         + userScript.constructor.name);
   }
-  db.then((db) => {
+  return new Promise((resolve, reject) => db.then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
       // In case this was for an install, now that the user script is saved
@@ -201,9 +199,11 @@ function saveUserScript(userScript) {
         'details': userScript.details,
         'parsedDetails': userScript.parsedDetails,
       });
+      resolve();
     };
     txn.onerror = event => {
       console.warn('save transaction error?', event, event.target);
+      reject();
     };
 
     try {
@@ -216,13 +216,12 @@ function saveUserScript(userScript) {
       console.error('when saving', userScript, e);
       return;
     }
-  });
+  }));
 }
 
 
 // Generate user scripts to run at `urlStr`; all if no URL provided.
 function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
-  if (false === getGlobalEnabled()) return;
   let url = urlStr && new URL(urlStr);
 
   for (let uuid in userScripts) {
@@ -242,8 +241,9 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 
 // Export public API.
 window.UserScriptRegistry = {
+  '_loadUserScripts': loadUserScripts,
+  '_saveUserScript': saveUserScript,
   'install': install,
-  'loadUserScripts': loadUserScripts,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

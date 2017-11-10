@@ -5,3 +5,10 @@ To set up, first install `npm.`  Then at the top level directory, execute:
 To run the tests, just:
 
     $ npm test
+
+This will launch in an endless mode which watches for edits and re-runs tests
+after every change.  You can also:
+
+    $ npm run-script testonce
+
+To run the tests exactly once.

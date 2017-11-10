@@ -185,12 +185,7 @@ window.RunnableUserScript = class RunnableUserScript
 
     _loadValuesInto(this, details, runnableUserScriptKeys);
 
-    if (!this._uuid) {
-      this._uuid = _randomUuid();
-      console.info(
-          'For new RunnableUserScript ' + this._name
-          + ', created UUID: ' + this._uuid);
-    }
+    if (!this._uuid) this._uuid = _randomUuid();
   }
 
   get details() {

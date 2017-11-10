@@ -1,1 +1,1 @@
-UserScriptRegistry.loadUserScripts();
+UserScriptRegistry._loadUserScripts();
