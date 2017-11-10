@@ -1,0 +1,1 @@
+chrome.webNavigation.onCommitted.addListener(executeUserscriptOnNavigation);

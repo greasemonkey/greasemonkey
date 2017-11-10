@@ -240,12 +240,10 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 }
 
 
-loadUserScripts();
-
-
 // Export public API.
 window.UserScriptRegistry = {
   'install': install,
+  'loadUserScripts': loadUserScripts,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

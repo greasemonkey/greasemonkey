@@ -5,13 +5,7 @@ content script executions.
 TODO: Make document_start execution time work as intended.
 */
 
-// Private implementation.
-(function() {
-
-let openPorts = [];
-let pendingPorts = {};
-
-chrome.webNavigation.onCommitted.addListener(detail => {
+function executeUserscriptOnNavigation(detail) {
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
     let options = {
@@ -31,6 +25,4 @@ chrome.webNavigation.onCommitted.addListener(detail => {
           '\n', err);
     });
   }
-});
-
-})();
+}

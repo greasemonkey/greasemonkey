@@ -2,10 +2,11 @@
   "name": "Greasemonkey",
   "version": "0.0.1",
   "scripts": {
-    "test": "karma start test/*conf.js"
+    "test": "karma start"
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "fake-indexeddb": "^2.0.3",
     "karma": "^1.3.0",
     "karma-chai": "^0.1.0",
     "karma-firefox-launcher": "^1.0.0",

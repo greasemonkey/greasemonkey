@@ -42,11 +42,13 @@ function setIcon() {
   });
 }
 
+
 function toggleGlobalEnabled() {
   setGlobalEnabled(!isEnabled);
-  console.info('toggled enabled:', isEnabled);
 }
 window.toggleGlobalEnabled = toggleGlobalEnabled;
+
+
 function onEnabledToggle(message, sender, sendResponse) {
   try {
   console.log('got enabled toggle', message, sender);

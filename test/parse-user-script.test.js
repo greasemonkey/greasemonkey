@@ -1,6 +1,6 @@
 let urlStr = 'http://www.example.com/example.user.js';
 
-describe('prase-user-script', () => {
+describe('parse-user-script', () => {
   it('fails with empty string input', () => {
     chai.expect(() => parseUserScript('', urlStr))
         .to.throw('got no content');
