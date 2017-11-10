@@ -13,16 +13,6 @@ let gTplData = {
 let gUserScripts = {};
 
 
-function tplItemForUuid(uuid) {
-  for (let tplItem of gTplData.userScripts.active) {
-    if (tplItem.uuid == uuid) return tplItem;
-  }
-  for (let tplItem of gTplData.userScripts.inactive) {
-    if (tplItem.uuid == uuid) return tplItem;
-  }
-}
-
-
 function loadScripts(userScriptsDetail, url) {
   userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
   for (let userScriptDetail of userScriptsDetail) {
@@ -38,6 +28,26 @@ function loadScripts(userScriptsDetail, url) {
         ? gTplData.userScripts.active
         : gTplData.userScripts.inactive
     ).push(tplItem);
+  }
+}
+
+
+function openUserScriptEditor(scriptUuid) {
+  chrome.tabs.create({
+    'active': true,
+    'url':
+        chrome.runtime.getURL('src/content/edit-user-script.html')
+        + '#' + scriptUuid,
+    });
+}
+
+
+function tplItemForUuid(uuid) {
+  for (let tplItem of gTplData.userScripts.active) {
+    if (tplItem.uuid == uuid) return tplItem;
+  }
+  for (let tplItem of gTplData.userScripts.inactive) {
+    if (tplItem.uuid == uuid) return tplItem;
   }
 }
 
