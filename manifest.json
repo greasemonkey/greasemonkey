@@ -34,9 +34,9 @@
       "src/bg/value-store.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
-      "src/third-party/MatchPattern.js",
-      "src/third-party/convert2RegExp.js",
       "src/user-script-obj.js",
+      "third-party/MatchPattern.js",
+      "third-party/convert2RegExp.js",
 
       "src/bg/execute.run.js",
       "src/bg/user-script-registry.run.js",
@@ -50,9 +50,9 @@
       "src/bg/api-provider-source.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
-      "src/third-party/MatchPattern.js",
-      "src/third-party/convert2RegExp.js",
       "src/user-script-obj.js",
+      "third-party/MatchPattern.js",
+      "third-party/convert2RegExp.js",
 
       "src/content/script-detect.run.js"
     ]
