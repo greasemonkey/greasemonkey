@@ -12,6 +12,16 @@ let gTplData = {
 };
 let gUserScripts = {};
 
+///////////////////////////////////////////////////////////////////////////////
+
+//I.e. from a script detail view, go back to the top view.
+function goToTop() {
+  if (!gActiveUuid) return;
+  checkPendingUninstall();
+  document.body.className = '';
+  gActiveUuid = null;
+}
+
 
 function loadScripts(userScriptsDetail, url) {
   userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
@@ -32,44 +42,7 @@ function loadScripts(userScriptsDetail, url) {
 }
 
 
-function openUserScriptEditor(scriptUuid) {
-  chrome.tabs.create({
-    'active': true,
-    'url':
-        chrome.runtime.getURL('src/content/edit-user-script.html')
-        + '#' + scriptUuid,
-    });
-}
-
-
-function tplItemForUuid(uuid) {
-  for (let tplItem of gTplData.userScripts.active) {
-    if (tplItem.uuid == uuid) return tplItem;
-  }
-  for (let tplItem of gTplData.userScripts.inactive) {
-    if (tplItem.uuid == uuid) return tplItem;
-  }
-}
-
-
-window.addEventListener('DOMContentLoaded', event => {
-  chrome.runtime.sendMessage(
-      {'name': 'EnabledQuery'},
-      enabled => gTplData.enabled = enabled);
-  chrome.runtime.sendMessage(
-      {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
-        chrome.tabs.query({'active': true}, tabs => {
-          let url = tabs.length && new URL(tabs[0].url) || null;
-          loadScripts(userScripts, url);
-          rivets.bind(document.body, gTplData);
-          document.body.classList.remove('rendering');
-        });
-      });
-}, true);
-
-
-window.addEventListener('click', function(event) {
+function onClick(event) {
   let el = event.target;
 
   if (el.id == 'back') {
@@ -134,36 +107,61 @@ window.addEventListener('click', function(event) {
       console.warn('unhandled monkey menu item:', el);
       break;
   }
-}, true);
+}
 
-
-// I.e. from a script detail view, go back to the top view.
-function goToTop() {
-  if (!gActiveUuid) return;
-  checkPendingUninstall();
-  document.body.className = '';
-  gActiveUuid = null;
+function onLoad(event) {
+  chrome.runtime.sendMessage(
+      {'name': 'EnabledQuery'},
+      enabled => gTplData.enabled = enabled);
+  chrome.runtime.sendMessage(
+      {'name': 'ListUserScripts', 'includeDisabled': true},
+      function(userScripts) {
+        chrome.tabs.query({'active': true}, tabs => {
+          let url = tabs.length && new URL(tabs[0].url) || null;
+          loadScripts(userScripts, url);
+          rivets.bind(document.body, gTplData);
+          document.body.classList.remove('rendering');
+        });
+      });
 }
 
 
-////////////////////////////////// UNINSTALL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+function openUserScriptEditor(scriptUuid) {
+  chrome.tabs.create({
+    'active': true,
+    'url':
+        chrome.runtime.getURL('src/content/edit-user-script.html')
+        + '#' + scriptUuid,
+    });
+}
 
-setInterval(() => {
-  if (gActiveUuid && gTplData.pendingUninstall) {
-    gTplData.pendingUninstall--;
-    if (gTplData.pendingUninstall == 0) {
-      uninstall(gActiveUuid);
-    }
+
+function tplItemForUuid(uuid) {
+  for (let tplItem of gTplData.userScripts.active) {
+    if (tplItem.uuid == uuid) return tplItem;
   }
-}, 1000);
+  for (let tplItem of gTplData.userScripts.inactive) {
+    if (tplItem.uuid == uuid) return tplItem;
+  }
+}
 
+////////////////////////////////// UNINSTALL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function checkPendingUninstall() {
   if (gActiveUuid && gTplData.pendingUninstall) {
     uninstall(gActiveUuid);
   }
 }
-window.addEventListener('unload', checkPendingUninstall, false);
+
+
+function pendingUninstallTicker() {
+  if (gActiveUuid && gTplData.pendingUninstall) {
+    gTplData.pendingUninstall--;
+    if (gTplData.pendingUninstall == 0) {
+      uninstall(gActiveUuid);
+    }
+  }
+}
 
 
 function uninstall(scriptUuid) {

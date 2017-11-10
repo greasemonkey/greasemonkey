@@ -12,7 +12,7 @@ module.exports = function(config) {
       './src/content/cm-addons/**/*.js',
       './src/util/rivets-formatters.js',
     ],
-    frameworks: ['chai', 'mocha', 'sinon-chrome'],
+    frameworks: ['mocha', 'sinon-chai', 'sinon-chrome'],
     preprocessors: config.coverage
         ? {'src/**/*.js': ['coverage']}
         : {},
