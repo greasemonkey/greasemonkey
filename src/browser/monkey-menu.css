@@ -11,6 +11,10 @@ body #menu, body.detail #user-script-detail { display: block; }
 #templates { display: none; }
 
 
+section a {
+  color: inherit;
+}
+
 .menu-item {
   display: flex;
   flex-direction: row;
@@ -43,7 +47,7 @@ body #menu, body.detail #user-script-detail { display: block; }
   white-space: nowrap;
   width: 0;
 }
-.menu-item:hover {
+.menu-item:hover, .menu-item:focus {
   background: #EEE;
 }
 
@@ -64,7 +68,7 @@ header * {
 header #back {
   padding: 8px 6px 4px 6px;
 }
-header #back:hover {
+header #back:hover, header #back:focus {
   background: #EEE;
 }
 header #name {
