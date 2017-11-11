@@ -250,26 +250,6 @@ function focusSelection() {
   }
 }
 
-function onKeypress(event) {
-  let key = event.key;
-  if ('Enter' === key) {
-    return;
-  }
-  event.preventDefault();
-
-  let increment;
-  switch (key) {
-    case 'ArrowUp':
-      increment = -1;
-    case 'ArrowDown':
-      increment = increment || 1;
-
-      incrementIndex(increment);
-      focusSelection();
-      break;
-    }
-}
-
 ////////////////////////////////// UNINSTALL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 function checkPendingUninstall() {
