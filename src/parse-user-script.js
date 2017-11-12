@@ -43,6 +43,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
     'matches': [],
     'name': nameFromUrl(url),
     'namespace': new URL(url).host,
+    'noFrames': false,
     'requireUrls': [],
     'resourceUrls': {},
     'runAt': 'end'
