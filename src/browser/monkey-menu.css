@@ -2,7 +2,7 @@ body {
   cursor: default;
   font: caption;
   overflow-x: hidden;
-  width: 23em;
+  min-width: 23em;
 }
 body.rendering { display: none; }
 
