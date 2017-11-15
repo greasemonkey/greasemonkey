@@ -249,10 +249,7 @@ window.EditableUserScript = class EditableUserScript
     // of the generated parts.
     this._evalContent
         // Note intentional lack of line breaks before the script content.
-        = `try {
-        (function scopeWrapper(){
-        function userScript() {
-        ${this._content}
+        = `try { (function scopeWrapper(){ function userScript() { ${this._content}
         /* catch open comment blocks */ }
         const unsafeWindow = window.wrappedJSObject;
         ${this.calculateGmInfo()}
