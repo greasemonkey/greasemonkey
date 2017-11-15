@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 5;
+const EVAL_CONTENT_VERSION = 6;
 
 
 // Private implementation.
@@ -249,7 +249,11 @@ window.EditableUserScript = class EditableUserScript
     // of the generated parts.
     this._evalContent
         // Note intentional lack of line breaks before the script content.
-        = `try { (function scopeWrapper(){ function userScript() { ${this._content} }
+        = `try {
+        (function scopeWrapper(){
+        function userScript() {
+        ${this._content}
+        /* catch open comment blocks */ }
         const unsafeWindow = window.wrappedJSObject;
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
