@@ -15,6 +15,7 @@ body #menu, body.detail #user-script-detail { display: block; }
   display: flex;
   flex-direction: row;
   padding: 4px 8px;
+  -moz-user-select: none;
 }
 .menu-item * {
   vertical-align: middle;
