@@ -64,22 +64,23 @@ chrome.runtime.sendMessage({
 
 function onUserScriptChanged(message, sender, sendResponse) {
   if (message.name != 'UserScriptChanged') return;
-  if (message.uuid != userScriptUuid) return;
+  if (message.details.uuid != userScriptUuid) return;
   let details = message.details;
+  let parsedDetails = message.parsedDetails;
 
   document.title = titlePattern.replace('%s', details.name);
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];
-    if (message.parsedDetails.requireUrls.indexOf(u) === -1) {
+    if (parsedDetails.requireUrls.indexOf(u) === -1) {
       editorTabs[i].parentNode.removeChild(editorTabs[i]);
-      delete editorDocs[i];
-      delete editorTabs[i];
-      delete editorUrls[i];
+      editorDocs.splice(i, 1);
+      editorTabs.splice(i, 1);
+      editorUrls.splice(i, 1);
     }
   }
 
-  message.parsedDetails.requireUrls.forEach(u => {
+  parsedDetails.requireUrls.forEach(u => {
     if (editorUrls.indexOf(u) === -1) {
       addRequireTab(u, details.requiresContent[u]);
     }
