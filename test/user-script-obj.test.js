@@ -1,5 +1,4 @@
 describe('user-script-obj', () => {
-
   describe('EditableUserScript.calculateEvalContent', () => {
     let script_content = `
 // ==UserScript==
@@ -7,7 +6,8 @@ describe('user-script-obj', () => {
 // ==/UserScript==
 function gt_one(n) { return n > 1; }
 gt_one(2);
-`
+`;
+
     it('does not fail on end of file line comment', () => {
       let line_comment_content = script_content + '// EOF Comment';
       let user_script = new EditableUserScript({'content': line_comment_content});
@@ -25,8 +25,5 @@ gt_one(2);
       chai.expect(() => eval(user_script._evalContent))
           .to.not.throw("expected expression, got ')'");
     });
-
   });
-
 });
-
