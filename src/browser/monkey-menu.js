@@ -11,6 +11,7 @@ let gTplData = {
   'pendingUninstall': 0,
 };
 let gUserScripts = {};
+let gPendingTicker = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -110,6 +111,8 @@ function onClick(event) {
 }
 
 function onLoad(event) {
+  gPendingTicker = setInterval(pendingUninstallTicker, 1000);
+
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
       enabled => gTplData.enabled = enabled);
@@ -123,6 +126,13 @@ function onLoad(event) {
           document.body.classList.remove('rendering');
         });
       });
+}
+
+
+function onUnload(event) {
+  // Clear the pending uninstall ticker and cleanup any pending installs.
+  clearInterval(gPendingTicker);
+  checkPendingUninstall();
 }
 
 
