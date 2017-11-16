@@ -8,7 +8,7 @@ testonce:
 
 coverage:
 	@npm run test -- --coverage --single-run
-	@echo file://$(echo $PWD/coverage/*/*.html)|sed -e 's/ /%20/g'
+	echo "file://$(shell ls $$PWD/coverage/*/*.html|sed -e 's/ /%20/g')"
 
 xpi:
 	@sh package.sh
