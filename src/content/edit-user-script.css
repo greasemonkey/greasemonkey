@@ -26,6 +26,7 @@ html, body {
   margin: 0;
   margin-left: 1ex;
   padding: 4px 8px;
+  -moz-user-select: none;
 }
 #tabs .tab.active {
   background: white;
