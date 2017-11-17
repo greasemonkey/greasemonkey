@@ -40,7 +40,7 @@ const db = (function() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-function install(downloader) {
+function installFromDownloader(downloader) {
   db.then(db => {
     try {
       let remoteScript = new RemoteUserScript(downloader.scriptDetails);
@@ -59,8 +59,39 @@ function install(downloader) {
         console.error('Error looking up script!', event);
       };
     } catch (e) {
-      console.error('at install(), db fail:', e);
+      console.error('at installFromDownloader(), db fail:', e);
     }
+  });
+}
+
+
+async function installFromSource(source) {
+  return new Promise((resolve, reject) => {
+    db.then(db => {
+      try {
+        let details = parseUserScript(source, null);
+        let remoteScript = new RemoteUserScript(details);
+        let txn = db.transaction([scriptStoreName], "readonly");
+        let store = txn.objectStore(scriptStoreName);
+        let index = store.index('id');
+        let req = index.get(remoteScript.id);
+        txn.oncomplete = event => {
+          details = req.result || details;
+          details.content = source;
+          details.parsedDetails = details;
+          let userScript = new EditableUserScript(details);
+          console.log('saving', userScript);
+          saveUserScript(userScript);
+          console.log('<<< installFromSource');
+          resolve(userScript.uuid);
+        };
+        txn.onerror = event => {
+          console.error('Error looking up script!', event);
+        };
+      } catch (e) {
+        console.error('at installFromSource(), db fail:', e);
+      }
+    });
   });
 }
 
@@ -243,7 +274,8 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
-  'install': install,
+  'installFromDownloader': installFromDownloader,
+  'installFromSource': installFromSource,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

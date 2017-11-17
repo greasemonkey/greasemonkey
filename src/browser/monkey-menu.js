@@ -13,6 +13,12 @@ let gTplData = {
 let gUserScripts = {};
 let gPendingTicker = null;
 
+const gNewScriptTpl = `// ==UserScript==
+// @name     Unnamed Script %d
+// @version  1
+// @grant    none
+// ==/UserScript==`;
+
 ///////////////////////////////////////////////////////////////////////////////
 
 //I.e. from a script detail view, go back to the top view.
@@ -80,6 +86,14 @@ function onClick(event) {
       chrome.runtime.sendMessage(
           {'name': 'EnabledToggle'},
           enabled => gTplData.enabled = enabled);
+      break;
+
+    case 'new-user-script':
+      let r = Math.floor(Math.random() * 900000 + 100000);
+      let newScriptSrc = gNewScriptTpl.replace('%d', r);
+      chrome.runtime.sendMessage(
+          {'name': 'UserScriptInstall', 'source': newScriptSrc},
+          uuid => openUserScriptEditor(uuid));
       break;
 
     case 'user-script-toggle-enabled':

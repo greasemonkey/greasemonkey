@@ -6,9 +6,9 @@ describe('parse-user-script', () => {
         .to.throw('got no content');
   });
 
-  it('fails with no download URL', () => {
-    chai.expect(() => parseUserScript('// Empty script.'))
-        .to.throw('got no url');
+  it('works with no download URL', () => {
+    let result = parseUserScript('// Empty script.');
+    assert.equal(result.name, 'Unnamed Script');  // The default.
   });
 
   it('uses download file name as name by default', () => {

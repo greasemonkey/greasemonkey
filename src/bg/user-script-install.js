@@ -2,13 +2,17 @@
 (function() {
 
 /// Receive a UserScriptInstall message.
-window.onUserScriptInstall = function(message, sender, sendResponse) {
-  let downloader = new Downloader(message.details, sender);
-  downloader.start(function() {
-    if (!downloader.errors.length) {
-      UserScriptRegistry.install(downloader);
-    }
-  });
+window.onUserScriptInstall = async function(message, sender) {
+  if (message.details) {
+    let downloader = new Downloader(message.details, sender);
+    downloader.start(function() {
+      if (!downloader.errors.length) {
+        UserScriptRegistry.installFromDownloader(downloader);
+      }
+    });
+  } else if (message.source) {
+    return await UserScriptRegistry.installFromSource(message.source);
+  }
 }
 
 

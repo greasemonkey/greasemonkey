@@ -153,6 +153,10 @@ user.  Data:
 
 * `details` An object of values parsed from the `==UserScript==` section,
   as produced by `parseUserScript()`.
+* `source` A string, the entire source of the script.  Will fail if it
+  references any remote resources.
+
+Callers should specify one or the other, not both.
 
 # UserScriptToggleEnabled
 Sent by: `content/manage-user-scripts.js`

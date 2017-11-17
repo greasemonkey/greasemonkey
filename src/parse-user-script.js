@@ -27,9 +27,6 @@ window.parseUserScript = function(content, url, failIfMissing) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }
-  if (!url) {
-    throw new Error('parseUserScript() got no url!');
-  }
 
   var meta = extractMeta(content).match(/.+/g);
   if (failIfMissing && !meta) return null;
@@ -41,8 +38,8 @@ window.parseUserScript = function(content, url, failIfMissing) {
     'grants': [],
     'includes': [],
     'matches': [],
-    'name': nameFromUrl(url),
-    'namespace': new URL(url).host,
+    'name': url && nameFromUrl(url) || 'Unnamed Script',
+    'namespace': url && new URL(url).host || null,
     'noFrames': false,
     'requireUrls': [],
     'resourceUrls': {},

@@ -18,12 +18,6 @@
     <div class="text">Greasemonkey Options</div>
   </div>
   -->
-  <!-- TODO: This feature.
-  <div class="menu-item" id="new-script">
-    <div class="icon fa fa-fw fa-file-text-o"></div>
-    <div class="text">New User Script...</div>
-  </div>
-  -->
 
   <div rv-hide="userScripts.active | empty">
     <hr>
@@ -56,6 +50,11 @@
   </div>
 
   <hr>
+
+  <div class="menu-item" id="new-user-script">
+    <div class="icon fa fa-fw fa-file-text-o"></div>
+    <div class="text">New user script ...</div>
+  </div>
 
   <div class="menu-item" data-url="http://www.greasespot.net/">
     <div class="icon fa fa-fw fa-link"></div>
@@ -109,10 +108,11 @@
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/src/util/iconUrl.js"></script>
 <script src="/src/util/rivets-formatters.js"></script>
+<script src="/src/parse-meta-line.js"></script>
+<script src="/src/parse-user-script.js"></script>
 <script src="/src/user-script-obj.js"></script>
 <script src="monkey-menu.js"></script>
 <script src="monkey-menu.run.js"></script>
-
 
 </body>
 </html>
