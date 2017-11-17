@@ -119,7 +119,7 @@ function onLoad(event) {
   chrome.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true},
       function(userScripts) {
-        chrome.tabs.query({'active': true}, tabs => {
+        chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
           let url = tabs.length && new URL(tabs[0].url) || null;
           loadScripts(userScripts, url);
           rivets.bind(document.body, gTplData);
