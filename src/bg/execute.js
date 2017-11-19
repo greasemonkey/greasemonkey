@@ -6,7 +6,10 @@ TODO: Make document_start execution time work as intended.
 */
 
 function executeUserscriptOnNavigation(detail) {
-  if (false === getGlobalEnabled()) return;
+  if (false === getGlobalEnabled()
+      || detail.transitionQualifiers.indexOf('forward_back') !== -1) {
+    return;
+  }
 
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
