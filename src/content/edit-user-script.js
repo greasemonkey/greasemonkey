@@ -6,11 +6,10 @@ var editor = CodeMirror(
     // TODO: Make appropriate options user-configurable.
     {
       'tabSize': 2,
-      'extraKeys': {
-        'Ctrl-S': onSave,
-      },
       'lineNumbers': true,
     });
+
+CodeMirror.commands.save = onSave;
 
 const titlePattern = '%s - Greasemonkey User Script Editor';
 const userScriptUuid = location.hash.substr(1);
