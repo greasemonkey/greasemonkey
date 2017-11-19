@@ -147,7 +147,17 @@ function onSave() {
 editor.on('swapDoc', doc => {
   if (doc.getMode().name == 'javascript') {
     doc.setOption('gutters', ['CodeMirror-lint-markers']);
-    doc.setOption('lint', true);
+    doc.setOption('lint', {
+      formatAnnotation(ann) {
+        if (ann.from.ch == 4) {
+          let to = doc.findWordAt(ann.from).head;
+          let invalidWord = doc.getRange(ann.from, to);
+          ann.message = ann.message.replace(/(.+")([^"]+)(".+)$/, `$1${invalidWord}$3`);
+          ann.to = to;
+        }
+        return ann;
+      }
+    });
     doc.performLint();
   }
 });
