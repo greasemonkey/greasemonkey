@@ -55,9 +55,9 @@ function open(xhr, d, port) {
 
     switch (event.type) {
       case "progress":
-        responseState.lengthComputable = evt.lengthComputable;
-        responseState.loaded = evt.loaded;
-        responseState.total = evt.total;
+        responseState.lengthComputable = event.lengthComputable;
+        responseState.loaded = event.loaded;
+        responseState.total = event.total;
         break;
       case "error":
         console.log('error event?', event);
