@@ -8,8 +8,7 @@ module.exports = function(config) {
     ],
     exclude: [
       './src/**/*.run.js',
-      './src/content/**/*.js',  // For now ...
-      './src/content/cm-addons/**/*.js',
+      './src/content/**/!(lint-metadata).js',  // For now ...
       './src/util/rivets-formatters.js',
     ],
     frameworks: ['mocha', 'sinon-chai', 'sinon-chrome'],
