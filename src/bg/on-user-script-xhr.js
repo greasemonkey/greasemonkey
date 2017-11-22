@@ -20,7 +20,9 @@ function onUserScriptXhr(port) {
 }
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
-
+var headersToReplace = ['origin', 'referer'];
+var dummyHeaderPrefix = "x-greasemonkey-";
+  
 function open(xhr, d, port) {
   function xhrEventHandler(src, event) {
     console.log('xhr event;', src, event);
@@ -97,11 +99,17 @@ function open(xhr, d, port) {
   d.overrideMimeType && xhr.overrideMimeType(d.overrideMimeType);
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
-
+  
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
-        xhr.setRequestHeader(prop, d.headers[prop]);
+        var propLower = prop.toLowerCase();
+        if (propLower in headersToReplace) {
+          xhr.setRequestHeader(dummyHeaderPrefix + propLower, d.headers[prop]);
+        }
+        else {
+          xhr.setRequestHeader(prop, d.headers[prop]);
+        }
       }
     }
   }
@@ -118,5 +126,21 @@ function open(xhr, d, port) {
     xhr.send(body);
   }
 }
+
+function rewriteHeaders(e) {
+  for (var name of headersToReplace) {
+    var prefixedName = dummyHeaderPrefix + name;
+    if (prefixedName in e.requestHeaders) {
+      if (!(name in e.requestHeaders)) {
+        xhr.setRequestHeader(name, e.requestHeaders[prefixedName]);
+      }
+      delete e.requestHeaders[prefixedName];
+    }
+  }
+}
+
+browser.webRequest.onBeforeSendHeaders.addListener(
+  rewriteHeaders, {urls: ["<all_urls>"]}, ["blocking", "requestHeaders"]
+);
 
 })();
