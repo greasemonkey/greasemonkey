@@ -140,7 +140,7 @@ function rewriteHeaders(e) {
 }
 
 browser.webRequest.onBeforeSendHeaders.addListener(
-  rewriteHeaders, {urls: ["<all_urls>"]}, ["blocking", "requestHeaders"]
+  rewriteHeaders, {urls: ["<all_urls>"], types: ["xmlhttprequest"]}, ["blocking", "requestHeaders"]
 );
 
 })();
