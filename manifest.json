@@ -65,6 +65,8 @@
     "storage",
     "tabs",
     "unlimitedStorage",
-    "webNavigation"
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
   ]
 }
