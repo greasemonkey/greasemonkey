@@ -99,7 +99,7 @@ function open(xhr, d, port) {
   d.overrideMimeType && xhr.overrideMimeType(d.overrideMimeType);
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
-  
+
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
