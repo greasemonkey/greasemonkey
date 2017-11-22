@@ -99,12 +99,12 @@ function open(xhr, d, port) {
   d.overrideMimeType && xhr.overrideMimeType(d.overrideMimeType);
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
-
+  
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
         var propLower = prop.toLowerCase();
-        if (propLower in headersToReplace) {
+        if (headersToReplace.includes(propLower)) {
           xhr.setRequestHeader(dummyHeaderPrefix + propLower, d.headers[prop]);
         }
         else {
@@ -127,16 +127,33 @@ function open(xhr, d, port) {
   }
 }
 
-function rewriteHeaders(e) {
-  for (var name of headersToReplace) {
-    var prefixedName = dummyHeaderPrefix + name;
-    if (prefixedName in e.requestHeaders) {
-      if (!(name in e.requestHeaders)) {
-        xhr.setRequestHeader(name, e.requestHeaders[prefixedName]);
-      }
-      delete e.requestHeaders[prefixedName];
+function getHeader(headers, name) {
+  name = name.toLowerCase();
+  for (var header of headers) {
+    if (header.name.toLowerCase() === name) {
+      return header;
     }
   }
+  return null;
+}
+
+var extensionUrl = browser.extension.getURL("");
+
+function rewriteHeaders(e) {
+  if (e.originUrl && e.originUrl.startsWith(extensionUrl)) {
+    for (var name of headersToReplace) {
+      var prefixedHeader = getHeader(e.requestHeaders, dummyHeaderPrefix + name);
+      if (prefixedHeader) {
+        if (!getHeader(e.requestHeaders, name)) {
+          // only try to add real header if request doesn't already have it
+          e.requestHeaders.push({name: name, value: prefixedHeader.value});
+        }
+        // remove the prefixed header regardless
+        e.requestHeaders.splice(e.requestHeaders.indexOf(prefixedHeader), 1);
+      }
+    }
+  }
+  return { requestHeaders: e.requestHeaders };
 }
 
 browser.webRequest.onBeforeSendHeaders.addListener(
