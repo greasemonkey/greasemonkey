@@ -24,6 +24,7 @@ let gTopMenuSelection = 0;
 let gTopMenuTags;
 let gScriptMenuSelection = 0;
 let gScriptMenuTags;
+let gLastHashChangeWasKey = false;
 // Prevent variables from entering scope
 (function() {
   let userScriptTopSection = document.getElementById('menu');
@@ -42,7 +43,9 @@ function goToTop() {
   document.body.className = '';
   gActiveUuid = null;
   gScriptMenuSelection = 0;
-  focusSelection();
+  if (gLastHashChangeWasKey) {
+    focusSelection();
+  }
 }
 
 
@@ -107,11 +110,15 @@ function onHashChange(event) {
       break;
     case '#uninstall-user-script':
       gTplData.pendingUninstall = 10;
-      focusSelection();
+      if (gLastHashChangeWasKey) {
+        focusSelection();
+      }
       break;
     case '#undo-uninstall-user-script':
       gTplData.pendingUninstall = null;
-      focusSelection();
+      if (gLastHashChangeWasKey) {
+        focusSelection();
+      }
       break;
     default:
       // Check if it's a Userscript by examing the gUserScript object
@@ -147,12 +154,15 @@ function onHashChange(event) {
       }
       break;
   }
+  // Reset whether has change was from a click or keyboard
+  gLastHashChangeWasKey = false;
 }
 
 
 function onKeypress(event) {
   let key = event.key;
   if ('Enter' === key) {
+    gLastHashChangeWasKey = true;
     return;
   }
   event.preventDefault();
