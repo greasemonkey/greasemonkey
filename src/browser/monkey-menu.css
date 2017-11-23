@@ -14,6 +14,10 @@ body #menu, body.detail #user-script-detail { display: block; }
 section a {
   color: inherit;
 }
+section a:hover {
+  color: inherit;
+  text-decoration: none;
+}
 
 .menu-item {
   display: flex;
@@ -37,15 +41,18 @@ section a {
 .menu-item.disabled .icon img {
   opacity: 0.66;
 }
-.menu-item .heading {
-  color: #333;
-  font-style: italic;
-  padding-left: 21px;
-}
 .menu-item .text {
   flex-grow: 1;
   white-space: nowrap;
   width: 0;
+}
+.menu-item.heading {
+  color: #333;
+  font-style: italic;
+  padding-left: 21px;
+}
+.menu-item.heading:hover {
+  background: inherit;
 }
 .menu-item:hover, .menu-item:focus {
   background: #EEE;
