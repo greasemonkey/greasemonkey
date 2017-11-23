@@ -70,32 +70,10 @@ function onHashChange(event) {
   event.preventDefault();
 
   let hash = location.hash;
-  // Encode the command behind the first underscore (_)
-  let command = hash.split('_', 1)[0];
-  // Encode any parameters as the rest of the string
-  let parameter = hash.slice(command.length + 1);
 
-  switch (command) {
-    case '#open-tab':
-      chrome.tabs.create({
-        'active': true,
-        'url': parameter,
-      });
-      window.close();
-      break;
+  switch (hash) {
     case '#menu-top':
       goToTop();
-      break;
-    case '#menu-uuid':
-      let uuid = parameter;
-      let userScript = gUserScripts[uuid];
-
-      gTplData.activeScript.icon = iconUrl(userScript);
-      gTplData.activeScript.enabled = userScript.enabled;
-      gTplData.activeScript.name = userScript.name;
-
-      gActiveUuid = uuid;
-      document.body.className = 'detail';
       break;
     case '#toggle-global':
       chrome.runtime.sendMessage(
@@ -121,7 +99,7 @@ function onHashChange(event) {
         tplItemForUuid(gActiveUuid).enabled = response.enabled;
       });
       // Replace the history state
-      history.replaceState({}, 'Home', '#menu-uuid_' + gActiveUuid);
+      history.replaceState({}, 'Home', '#' + gActiveUuid);
       break;
     case '#edit-user-script':
       openUserScriptEditor(gActiveUuid);
@@ -136,7 +114,37 @@ function onHashChange(event) {
       focusSelection();
       break;
     default:
-      console.warn('Unhandled Monkey Menu href:', hash);
+      // Check if it's a Userscript by examing the gUserScript object
+      let userScript = gUserScripts[hash.slice(1)];
+      if (userScript) {
+        // Found a userscript, set individual script page
+        gTplData.activeScript.icon = iconUrl(userScript);
+        gTplData.activeScript.enabled = userScript.enabled;
+        gTplData.activeScript.name = userScript.name;
+
+        gActiveUuid = userScript.uuid;
+        document.body.className = 'detail';
+        return;
+      }
+
+      // Check for a valid URL.
+      try {
+        let link = new URL(hash.slice(1));
+        chrome.tabs.create({
+          'active': true,
+          'url': link.href,
+        });
+        window.close();
+      } catch (err) {
+        if ('TypeError' === err.name) {
+          // Indicates a bad URL
+          console.log('Unknown Monkey Menu item, not a valid Uuid nor a url',
+                      hash);
+        } else {
+          console.log('Unknown error parsing Monkey Menu item as url',
+                      hash, err);
+        }
+      }
       break;
   }
 }
