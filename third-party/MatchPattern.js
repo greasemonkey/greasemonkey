@@ -109,7 +109,7 @@ MatchPattern.prototype.doMatch = function(url) {
   if (validProtocols.indexOf(url.protocol) == -1) return false;
   if (this._all) return true;
   if (this._protocol != '*:' && this._protocol != url.protocol) return false;
-  return this._hostExpr.test(url.host) && this._pathExpr.test(url.pathname);
+  return this._hostExpr.test(url.host) && this._pathExpr.test(url.pathname + url.search);
 };
 
 
