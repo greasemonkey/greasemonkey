@@ -16,7 +16,9 @@ module.exports = function(config) {
     preprocessors: config.coverage
         ? {'src/**/*.js': ['coverage']}
         : {},
-    reporters: ['coverage', 'progress'],
+    reporters: process.env.KARMA_REPORTER
+        ? [process.env.KARMA_REPORTER]
+        : ['coverage', 'progress'],
     port: 7328,
     colors: true,
     logLevel: config.LOG_WARN,
@@ -31,7 +33,7 @@ module.exports = function(config) {
       },
     },
 
-    singleRun: false,
+    singleRun: true,
     concurrency: Infinity
   })
 }

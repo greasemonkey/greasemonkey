@@ -2,19 +2,19 @@ To set up, first install `npm.`  Then at the top level directory, execute:
 
     $ npm install --save-dev
 
-To run the tests, just:
+To run the tests, just do one of:
 
     $ npm test
+    $ make test
 
-This will launch in an endless mode which watches for edits and re-runs tests
-after every change.  You can also use either of:
+You can also launch the tests in an endless mode which watches for edits and
+re-runs tests after every change with one of:
 
-    $ npm run test -- --single-run
-    $ make testonce
+    $ npm run test -- --no-single-run
+    $ make testwatch
 
-To run the tests exactly once.  Further, you can run either of:
+To run the tests exactly once.
+Further, to generate a code coverage report you can run one of:
 
-    $ npm run test -- --single-run --coverage
+    $ npm run test -- --coverage
     $ make coverage
-
-To generate a code coverage report.
