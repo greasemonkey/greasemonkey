@@ -31,27 +31,4 @@ describe('bg/user-script-registry', () => {
       });
     });
   });
-
-  it('match pattern respects query string', async () => {
-    let userScriptWithQuery = new EditableUserScript(
-        {'name': 'highlight',
-         'matches': ['https://example.com/test?query=*'],
-         'content': 'void(0)'});
-    await UserScriptRegistry._saveUserScript(userScriptWithQuery);
-    let userScriptNoQuery = new EditableUserScript(
-        {'name': 'lowlight',
-         'matches': ['https://example.com/test'],
-         'content': 'void(0)'});
-    await UserScriptRegistry._saveUserScript(userScriptNoQuery);
-    let scriptsToRunWithQuery = Array.from(
-      UserScriptRegistry.scriptsToRunAt(
-        'https://example.com/test?query=something'));
-    assert.equal(scriptsToRunWithQuery.length, 1);
-    assert.equal(scriptsToRunWithQuery[0].name, userScriptWithQuery.name);
-    let scriptsToRunNoQuery = Array.from(
-      UserScriptRegistry.scriptsToRunAt(
-        'https://example.com/test'));
-    assert.equal(scriptsToRunNoQuery.length, 1);
-    assert.equal(scriptsToRunNoQuery[0].name, userScriptNoQuery.name);
-  });
 });
