@@ -5,7 +5,7 @@ const gAllMetaRegexp = new RegExp(
 
 /** Get just the stuff between ==UserScript== lines. */
 function extractMeta(content) {
-  var meta = content.match(gAllMetaRegexp);
+  var meta = content && content.match(gAllMetaRegexp);
   if (meta) return meta[2].replace(/^\s+/, '');
   return '';
 }
