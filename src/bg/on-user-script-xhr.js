@@ -26,7 +26,7 @@ function open(xhr, d, port) {
     console.log('xhr event;', src, event);
     var responseState = {
       context: d.context || null,
-      finalUrl: null,
+      finalUrl: xhr.responseURL,
       lengthComputable: null,
       loaded: null,
       readyState: xhr.readyState,
@@ -69,7 +69,6 @@ function open(xhr, d, port) {
         responseState.statusText = xhr.statusText;
         break;
     }
-    responseState.finalUrl = xhr.responseURL;
 
     port.postMessage(
         {src: src, type: event.type, responseState: responseState});
