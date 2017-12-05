@@ -69,6 +69,7 @@ function open(xhr, d, port) {
         responseState.statusText = xhr.statusText;
         break;
     }
+    responseState.finalUrl = xhr.responseURL;
 
     port.postMessage(
         {src: src, type: event.type, responseState: responseState});
