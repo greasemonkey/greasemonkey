@@ -4,6 +4,7 @@ const SUPPORTED_APIS = new Set([
     'GM.getResourceUrl',
     'GM.notification',
     'GM.openInTab',
+    'GM.registerMenuCommand',
     'GM.setClipboard',
     'GM.xmlHttpRequest',
     ]);

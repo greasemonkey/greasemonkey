@@ -102,6 +102,12 @@
   "gm_opentab_bad_URL": {
     "message": "GM.openInTab: Could not understand the URL: $1"
   },
+  "gm_rmc_bad_access_key": {
+    "message": "GM.registerMenuCommand: \"accessKey\" must be a single character"
+  },
+  "gm_rmc_bad_command_func": {
+    "message": "GM.registerMenuCommand: \"commandFunc\" must be a function"
+  },
   "gm_script_id": {
     "message": "[Greasemonkey script $1]"
   },
@@ -237,6 +243,12 @@
   },
   "user_matches": {
     "message": "User matches"
+  },
+  "user_script_commands": {
+    "message": "User script commands"
+  },
+  "user_script_commands_button": {
+    "message": "User script commands..."
   },
   "user_script_options": {
     "message": "User script options"

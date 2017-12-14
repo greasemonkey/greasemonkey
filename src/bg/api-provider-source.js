@@ -48,6 +48,10 @@ function apiProviderSource(userScript) {
     source += 'GM.openInTab = ' + GM_openInTab.toString() + ';\n\n';
   }
 
+  if (grants.includes('GM.registerMenuCommand')) {
+    source += 'GM.registerMenuCommand = ' + GM_registerMenuCommand.toString() + ';\n\n';
+  }
+
   if (grants.includes('GM.setClipboard')) {
     source += 'GM.setClipboard = ' + GM_setClipboard.toString() + ';\n\n';
   }
@@ -56,7 +60,6 @@ function apiProviderSource(userScript) {
     source += 'GM.xmlHttpRequest = ' + GM_xmlHttpRequest.toString() + ';\n\n';
   }
 
-  // TODO: GM_registerMenuCommand -- maybe.
   // TODO: GM_getResourceText -- maybe.
 
   source += '})();';
@@ -187,6 +190,41 @@ function GM_openInTab(url, openInBackground) {
     'name': 'ApiOpenInTab',
     'url': objURL.href,
     'uuid': _uuid,
+  });
+}
+
+
+function GM_registerMenuCommand(caption, commandFunc, accessKey = '') {
+  if (typeof caption != 'string') {
+    caption = String(caption);
+  }
+
+  if (typeof commandFunc != 'function') {
+    throw new Error(_('gm_rmc_bad_command_func'));
+  }
+
+  if (typeof accessKey != 'string' || Array.from(accessKey).length > 1) {
+    throw new Error(_('gm_rmc_bad_access_key'));
+  }
+
+  let port = chrome.runtime.connect({name: 'UserScriptMenuCommand'});
+  port.onMessage.addListener(msg => {
+    if (msg.type === 'onclick') {
+      commandFunc();
+    }
+  });
+  port.postMessage({
+    'details': {
+      caption,
+      accessKey,
+    },
+    'name': 'register',
+    'uuid': _uuid,
+  });
+  addEventListener('unload', event => {
+    if (event.isTrusted) {
+      port.disconnect();
+    }
   });
 }
 

@@ -18,3 +18,6 @@ function _(str, ...args) {
 function metaBlockFromLines(...metaLines) {
   return '// ==UserScript==\n' + metaLines.join('\n') + '\n// ==/UserScript==\n';
 }
+
+// bg/on-message.js gets the extension URL
+chrome.runtime.getURL.callsFake(path => new URL(path, 'moz-extension://fake-host/').href);

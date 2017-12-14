@@ -51,6 +51,7 @@ section:focus {
 
 /* Hide non-main sections by default. */
 section.options,
+section.menu-commands,
 section.user-script,
 section.user-script-options
 {
@@ -67,6 +68,7 @@ body#main-menu section.main-menu
 
 /* Slide the other menu in when it's active. */
 body#options section.options,
+body#menu-commands section.menu-commands,
 body#user-script section.user-script,
 body#user-script-options section.user-script-options
 { margin-left: -100vw; }
@@ -225,4 +227,11 @@ section.options #add-exclude-current {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 90vw;
+}
+
+/***************************** MENU COMMANDS *********************************/
+
+section.menu-commands .access-key {
+  text-decoration: underline;
+  text-transform: uppercase;
 }
