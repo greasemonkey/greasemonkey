@@ -19,7 +19,7 @@
 
   "browser_action": {
     "browser_style": false,
-    "default_icon": "skin/icon32.png",
+    "default_icon": "skin/icon.svg",
     "default_popup": "src/browser/monkey-menu.html",
     "default_title": "Greasemonkey"
   },
