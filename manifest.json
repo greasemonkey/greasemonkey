@@ -61,10 +61,13 @@
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "cookies",
     "notifications",
     "storage",
     "tabs",
     "unlimitedStorage",
-    "webNavigation"
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
   ]
 }
