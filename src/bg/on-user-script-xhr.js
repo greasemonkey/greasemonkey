@@ -10,9 +10,9 @@ function onUserScriptXhr(port) {
   if (port.name != 'UserScriptXhr') return;
 
   let xhr = new XMLHttpRequest();
-  port.onMessage.addListener(msg => {
+  port.onMessage.addListener((msg, src) => {
     switch (msg.name) {
-      case 'open': open(xhr, msg.details, port); break;
+      case 'open': open(xhr, msg.details, port, src.sender.tab.id); break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
     }
@@ -23,7 +23,7 @@ chrome.runtime.onConnect.addListener(onUserScriptXhr);
 var headersToReplace = ['origin', 'referer', 'cookie'];
 var dummyHeaderPrefix = 'x-greasemonkey-';
 
-function open(xhr, d, port) {
+function open(xhr, d, port, tabId) {
   function xhrEventHandler(src, event) {
     console.log('xhr event;', src, event);
     var responseState = {
@@ -99,11 +99,13 @@ function open(xhr, d, port) {
   d.overrideMimeType && xhr.overrideMimeType(d.overrideMimeType);
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
-
+  
+  var hasCookies = false;
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
         var propLower = prop.toLowerCase();
+        hasCookies = (propLower === 'cookie');
         if (headersToReplace.includes(propLower)) {
           xhr.setRequestHeader(dummyHeaderPrefix + propLower, d.headers[prop]);
         }
@@ -114,17 +116,29 @@ function open(xhr, d, port) {
     }
   }
 
-  var body = d.data || null;
-  if (d.binary && (body !== null)) {
-    var bodyLength = body.length;
-    var bodyData = new Uint8Array(bodyLength);
-    for (var i = 0; i < bodyLength; i++) {
-      bodyData[i] = body.charCodeAt(i) & 0xff;
-    }
-    xhr.send(new Blob([bodyData]));
-  } else {
-    xhr.send(body);
-  }
+  browser.tabs.get(tabId).then(tab => {
+    browser.cookies.getAll({url: tab.url}).then(cookies => {
+      if (!hasCookies && d.usePageCookies) {
+        let cookieStrings = [];
+        for (let cookie of cookies) {
+          cookieStrings.push(cookie.name + '=' + cookie.value + ';');
+        }
+        xhr.setRequestHeader(dummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
+      }
+      var body = d.data || null;
+      if (d.binary && (body !== null)) {
+        var bodyLength = body.length;
+        var bodyData = new Uint8Array(bodyLength);
+        for (var i = 0; i < bodyLength; i++) {
+          bodyData[i] = body.charCodeAt(i) & 0xff;
+        }
+        xhr.send(new Blob([bodyData]));
+      }
+      else {
+        xhr.send(body);
+      }
+    });
+  });
 }
 
 function getHeader(headers, name) {
