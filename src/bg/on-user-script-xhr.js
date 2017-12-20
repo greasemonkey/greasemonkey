@@ -116,8 +116,8 @@ function open(xhr, d, port, tabId) {
     }
   }
 
-  browser.tabs.get(tabId).then(tab => {
-    browser.cookies.getAll({url: tab.url}).then(cookies => {
+  chrome.tabs.get(tabId).then(tab => {
+    chrome.cookies.getAll({url: tab.url}).then(cookies => {
       if (!hasCookies && d.usePageCookies) {
         let cookieStrings = [];
         for (let cookie of cookies) {
@@ -151,7 +151,7 @@ function getHeader(headers, name) {
   return null;
 }
 
-const extensionUrl = browser.extension.getURL('');
+const extensionUrl = chrome.extension.getURL('');
 
 function rewriteHeaders(e) {
   if (e.originUrl && e.originUrl.startsWith(extensionUrl)) {
@@ -170,7 +170,7 @@ function rewriteHeaders(e) {
   return { requestHeaders: e.requestHeaders };
 }
 
-browser.webRequest.onBeforeSendHeaders.addListener(
+chrome.webRequest.onBeforeSendHeaders.addListener(
   rewriteHeaders, {urls: ['<all_urls>'], types: ['xmlhttprequest']}, ['blocking', 'requestHeaders']
 );
 
