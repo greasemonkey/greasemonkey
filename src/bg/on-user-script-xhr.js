@@ -21,7 +21,7 @@ function onUserScriptXhr(port) {
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
 var headersToReplace = ['origin', 'referer'];
-var dummyHeaderPrefix = "x-greasemonkey-";
+var dummyHeaderPrefix = 'x-greasemonkey-';
   
 function open(xhr, d, port) {
   function xhrEventHandler(src, event) {
@@ -137,18 +137,18 @@ function getHeader(headers, name) {
   return null;
 }
 
-var extensionUrl = browser.extension.getURL("");
+const extensionUrl = chrome.extension.getURL('');
 
 function rewriteHeaders(e) {
   if (e.originUrl && e.originUrl.startsWith(extensionUrl)) {
     for (var name of headersToReplace) {
       var prefixedHeader = getHeader(e.requestHeaders, dummyHeaderPrefix + name);
       if (prefixedHeader) {
-        if (!getHeader(e.requestHeaders, name)) {
-          // only try to add real header if request doesn't already have it
-          e.requestHeaders.push({name: name, value: prefixedHeader.value});
+        var unprefixedHeader = getHeader(e.requestHeaders, name);
+        if (unprefixedHeader) {
+          e.requestHeaders.splice(e.requestHeaders.indexOf(unprefixedHeader), 1);
         }
-        // remove the prefixed header regardless
+        e.requestHeaders.push({name: name, value: prefixedHeader.value});
         e.requestHeaders.splice(e.requestHeaders.indexOf(prefixedHeader), 1);
       }
     }
@@ -156,8 +156,8 @@ function rewriteHeaders(e) {
   return { requestHeaders: e.requestHeaders };
 }
 
-browser.webRequest.onBeforeSendHeaders.addListener(
-  rewriteHeaders, {urls: ["<all_urls>"], types: ["xmlhttprequest"]}, ["blocking", "requestHeaders"]
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  rewriteHeaders, {urls: ['<all_urls>'], types: ['xmlhttprequest']}, ['blocking', 'requestHeaders']
 );
 
 })();
