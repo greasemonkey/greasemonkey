@@ -38,10 +38,24 @@ function nameForUrl(url) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-chrome.runtime.sendMessage({
-  'name': 'UserScriptGet',
-  'uuid': userScriptUuid,
-}, userScript => {
+const port = chrome.runtime
+                   .connect({'name': 'EditorConnect'});
+port.onMessage.addListener(msg => {
+  switch (msg.type) {
+    case 'userscript':
+      loadUserScript(msg);
+      break;
+    case 'change':
+      onUserScriptChanged(msg);
+      break;
+    default:
+      console.warn('Editor port un-handled message type:', msg.type);
+  }
+});
+port.postMessage({'type': 'open', 'uuid': userScriptUuid});
+
+function loadUserScript(message) {
+  let userScript = message.details;
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;
@@ -58,12 +72,10 @@ chrome.runtime.sendMessage({
   editor.focus();
 
   document.title = titlePattern.replace('%s', userScript.name);
-});
+}
 
 
-function onUserScriptChanged(message, sender, sendResponse) {
-  if (message.name != 'UserScriptChanged') return;
-  if (message.details.uuid != userScriptUuid) return;
+function onUserScriptChanged(message) {
   let details = message.details;
   let parsedDetails = message.parsedDetails;
 
@@ -85,7 +97,6 @@ function onUserScriptChanged(message, sender, sendResponse) {
     }
   });
 }
-chrome.runtime.onMessage.addListener(onUserScriptChanged);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -127,8 +138,8 @@ function onSave() {
     requires[ editorUrls[i] ] = editorDocs[i].getValue();
   }
 
-  chrome.runtime.sendMessage({
-    'name': 'EditorSaved',
+  port.postMessage({
+    'type': 'save',
     'uuid': userScriptUuid,
     'content': editorDocs[0].getValue(),
     'requires': requires,

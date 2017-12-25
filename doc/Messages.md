@@ -67,17 +67,6 @@ Data:
 * `uuid` The UUID of an installed script which is storing this value.
 * `value` The new value to store.
 
-# EditorSaved
-Sent by: `content/edit-user-script.js`.
-Received by: `bg/user-script-registry.js`.
-
-Sent whenever the user triggers the save action in the user script editor.
-Data:
-
-* `uuid` String UUID of the script being edited.
-* `content` String text content of main script.
-* `requires` Object mapping require URL to text content.
-
 # EnabledQuery
 Received by: `bg/is-enabled.js`.
 
@@ -117,25 +106,6 @@ progress as a percentage.  Sent specifically back to the content process
 
 * `errors` A (possibly empty) list of string error messages.
 * `progress` A number, 0.0 to 1.0, representing the completion so far.
-
-# UserScriptChanged
-Sent by: `bg/user-script-registry.js`
-
-Sent when some value (like enabled state) of a script is changed.  Data:
-
-* `details` Updated script's current.
-* `parsedDetails` Updated script's original parsed details.
-
-# UserScriptGet
-Sent by: `content/edit-user-script.js`
-
-Data:
-
-* `uuid` The UUID of an installed script to fetch.
-
-Response:
-
-* `details` The details object from an `EditableUserScript`.
 
 # UserScriptInstall
 Sent by: `content/install-dialog.js`

@@ -119,21 +119,32 @@ function loadUserScripts() {
 };
 
 
-function onEditorSaved(message, sender, sendResponse) {
+// Returns a cloned userscript object if it exists, false otherwise
+function userScriptGet(uuid) {
+  if (!uuid) {
+    console.warn('UserScriptGet got no UUID.');
+  } else if (!userScripts[uuid]) {
+    console.warn('UserScriptGet got non-installed UUID:', uuid);
+  } else {
+    return new EditableUserScript(userScripts[uuid].details);
+  }
+  return false;
+}
+
+
+function userScriptEditorSave(uuid, message) {
   let userScript = userScripts[message.uuid];
   if (!userScript) {
     console.error('Got save for UUID', message.uuid, 'but it does not exist.');
     return;
   }
-
   // Use a clone of the current user script. This is so that any changes are
   // not propegated to the actual UserScript unless the transaction is
   // successful.
   let cloneScript = new EditableUserScript(userScript.details);
-  cloneScript.updateFromEditorSaved(message)
+  return cloneScript.updateFromEditorSaved(message)
       .then(value => saveUserScript(cloneScript));
 };
-window.Message.onEditorSaved = onEditorSaved;
 
 
 function onListUserScripts(message, sender, sendResponse) {
@@ -146,19 +157,6 @@ function onListUserScripts(message, sender, sendResponse) {
   sendResponse(result);
 };
 window.Message.onListUserScripts = onListUserScripts;
-
-
-function onUserScriptGet(message, sender, sendResponse) {
-  if (!message.uuid) {
-    console.warn('UserScriptGet handler got no UUID.');
-  } else if (!userScripts[message.uuid]) {
-    console.warn(
-      'UserScriptGet handler got non-installed UUID:', message.uuid);
-  } else {
-    sendResponse(userScripts[message.uuid].details);
-  }
-};
-window.Message.onUserScriptGet = onUserScriptGet;
 
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
@@ -263,13 +261,11 @@ function saveUserScript(userScript) {
       'contextMessage': err.message
     });
   }).then(() => {
-    // Send the script change event, even though the save may have failed.
-    // This way the editor gets the updated script.
-    chrome.runtime.sendMessage({
-      'name': 'UserScriptChanged',
+    // Return the changed script details, even though the save may have failed.
+    return {
       'details': userScript.details,
-      'parsedDetails': userScript.parsedDetails,
-    });
+      'parsedDetails': userScript.parsedDetails
+    };
   });
 }
 
@@ -297,8 +293,10 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
+  'getScript': userScriptGet,
   'installFromDownloader': installFromDownloader,
   'installFromSource': installFromSource,
+  'scriptEditorSave': userScriptEditorSave,
   'scriptsToRunAt': scriptsToRunAt,
 };
 
