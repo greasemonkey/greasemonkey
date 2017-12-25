@@ -78,13 +78,6 @@ Data:
 * `content` String text content of main script.
 * `requires` Object mapping require URL to text content.
 
-# EnabledChanged
-Sent by: `bg/is-enabled.js`.
-
-Sent whenever the global enabled status changes.
-
-* `enabled` boolean, the new status (true = enabled, false = disabled).
-
 # EnabledQuery
 Received by: `bg/is-enabled.js`.
 

@@ -23,13 +23,11 @@ window.Message.onEnabledQuery = onEnabledQuery;
 
 function setGlobalEnabled(enabled) {
   isEnabled = !!enabled;
-  chrome.runtime.sendMessage({
-    'name': 'EnabledChanged',
-    'enabled': isEnabled,
-  });
   setIcon();
 }
 window.setGlobalEnabled = setGlobalEnabled;
+
+
 function onEnabledSet(message, sender, sendResponse) {
   setGlobalEnabled(message.enabled);
 }
