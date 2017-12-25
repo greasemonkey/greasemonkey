@@ -22,6 +22,8 @@
 
   "background": {
     "scripts": [
+      "src/bg/_init.js",
+
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
       "src/bg/is-enabled.js",

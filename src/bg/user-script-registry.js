@@ -129,7 +129,7 @@ function onEditorSaved(message, sender, sendResponse) {
   userScript.updateFromEditorSaved(message)
       .then(value => saveUserScript(userScript));
 };
-window.onEditorSaved = onEditorSaved;
+window.Message.onEditorSaved = onEditorSaved;
 
 
 function onListUserScripts(message, sender, sendResponse) {
@@ -141,7 +141,7 @@ function onListUserScripts(message, sender, sendResponse) {
   }
   sendResponse(result);
 };
-window.onListUserScripts = onListUserScripts;
+window.Message.onListUserScripts = onListUserScripts;
 
 
 function onUserScriptGet(message, sender, sendResponse) {
@@ -154,7 +154,7 @@ function onUserScriptGet(message, sender, sendResponse) {
     sendResponse(userScripts[message.uuid].details);
   }
 };
-window.onUserScriptGet = onUserScriptGet;
+window.Message.onUserScriptGet = onUserScriptGet;
 
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
@@ -180,7 +180,7 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
     }
   }
 };
-window.onApiGetResourceBlob = onApiGetResourceBlob;
+window.Message.onApiGetResourceBlob = onApiGetResourceBlob;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
@@ -191,7 +191,7 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
   saveUserScript(userScript);
   sendResponse({'enabled': userScript.enabled});
 };
-window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
+window.Message.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
 function onUserScriptUninstall(message, sender, sendResponse) {
@@ -209,7 +209,7 @@ function onUserScriptUninstall(message, sender, sendResponse) {
     };
   });
 };
-window.onUserScriptUninstall = onUserScriptUninstall;
+window.Message.onUserScriptUninstall = onUserScriptUninstall;
 
 
 function saveUserScript(userScript) {
