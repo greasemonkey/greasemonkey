@@ -3,6 +3,18 @@ describe('third-party/MatchPattern', () => {
       const newPattern =
         pattern => { return () => new MatchPattern(pattern) };
 
+      it('http:///foo*bar', () => {
+        // No host provided
+        expect(newPattern('http:///foo*bar'))
+          .to.throw('@match: No host specified for (http:).');
+      });
+
+      it('file://value.com/foo*bar', () => {
+          // Host improperly provided for file
+          expect(newPattern('file://value.com/foo*bar'))
+            .to.throw('@match: Invalid (file:) URI, missing prefix "/"?');
+      });
+
       it('http://www.google.com', () => {
         // No path provided
         expect(newPattern('http://www.google.com'))
