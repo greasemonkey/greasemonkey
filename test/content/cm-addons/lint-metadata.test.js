@@ -17,6 +17,11 @@ describe('content/cm-addons/lint-metadata', () => {
     assert.equal(result.to.ch, 4);
   });
 
+  it('reports whole key, with tab and value', () => {
+    let result = lintOneBadMetaLine('license\tfoo');
+    chai.expect(result.message).to.have.string('"license" found');
+  });
+
   it('reports whole key', () => {
     let result = lintOneBadMetaLine('license foo');
     chai.expect(result.message).to.have.string('"license" found');
