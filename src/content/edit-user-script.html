@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Greasemonkey User Script Editor</title>
+<link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="edit-user-script.css">
 
 <script src="/third-party/codemirror/codemirror.js"></script>
@@ -28,7 +29,12 @@
 </head>
 
 <body>
-<ul id="tabs"></ul>
+<div class="tab-bar">
+  <div id="save" class="command-item" title="Save">
+    <i class="icon fa fa-floppy-o"></i>
+  </div>
+  <ul id="tabs"></ul>
+</div>
 <div id="editor"></div>
 <script src="edit-user-script.js"></script>
 </body>
