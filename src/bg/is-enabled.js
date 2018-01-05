@@ -7,6 +7,10 @@ of Greasemonkey.
 (function() {
 
 let isEnabled = true;
+chrome.storage.local.get('globalEnabled', v => {
+  isEnabled = v['globalEnabled'];
+  setIcon();
+});
 
 
 function getGlobalEnabled() {
@@ -28,6 +32,7 @@ function setGlobalEnabled(enabled) {
     'enabled': isEnabled,
   });
   setIcon();
+  chrome.storage.local.set({'globalEnabled': enabled});
 }
 window.setGlobalEnabled = setGlobalEnabled;
 function onEnabledSet(message, sender, sendResponse) {

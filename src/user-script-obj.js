@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 6;
+const EVAL_CONTENT_VERSION = 7;
 
 
 // Private implementation.
@@ -17,6 +17,23 @@ const EVAL_CONTENT_VERSION = 6;
 
 const extensionVersion = chrome.runtime.getManifest().version;
 const aboutBlankRegexp = /^about:blank/;
+
+const SCRIPT_ENV_EXTRA = `
+(() => {
+  let origXhr = XMLHttpRequest;
+  XMLHttpRequest = new Proxy(XMLHttpRequest, {
+    construct: (target, argumentsList, newTarget) => {
+      let xhr = new origXhr();
+      let origOpen = xhr.open;
+      xhr.open = (method_, url_, async_, user_, password_) => {
+        let url = new URL(url_, document.baseURI);
+        return origOpen.apply(xhr, [method_, url.toString(), async_, user_, password_]);
+      };
+      return xhr;
+    },
+  });
+})();
+`;
 
 
 function _testClude(glob, url) {
@@ -33,7 +50,6 @@ function _testMatch(matchPattern, url) {
   if ('string' == typeof matchPattern) {
     matchPattern = new MatchPattern(matchPattern);
   } else if (!(matchPattern instanceof MatchPattern)) {
-    console.error('matchPattern is not a string nor MatchPattern object:', matchPattern);
     return false;
   }
   return matchPattern.doMatch(url);
@@ -255,6 +271,7 @@ window.EditableUserScript = class EditableUserScript
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
         ${Object.values(this._requiresContent).join('\n\n')}
+        ${SCRIPT_ENV_EXTRA}
         userScript();
         })();
         } catch (e) { console.error("Script error: ", e); }
@@ -346,7 +363,6 @@ window.EditableUserScript = class EditableUserScript
             resolve();
           });
       if (updater.skip()) {
-        console.log('updater has no added remotes to handle');
         this._parsedDetails = newDetails;
         _loadValuesInto(this, newDetails, userScriptKeys);
         this.calculateEvalContent();

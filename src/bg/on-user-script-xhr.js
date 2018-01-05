@@ -23,7 +23,6 @@ chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
 function open(xhr, d, port) {
   function xhrEventHandler(src, event) {
-    console.log('xhr event;', src, event);
     var responseState = {
       context: d.context || null,
       finalUrl: xhr.responseURL,

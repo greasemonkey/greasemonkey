@@ -150,3 +150,7 @@ editor.on('swapDoc', doc => {
     doc.performLint();
   }
 });
+
+document.getElementById('save').addEventListener('click', () => {
+  editor.execCommand('save');
+});
