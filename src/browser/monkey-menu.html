@@ -7,11 +7,11 @@
 <body class="rendering">
 
 <section id="menu">
-  <div class="menu-item" id="toggle-global-enabled">
+  <a href="#toggle-global" class="menu-item" id="toggle-global-enabled">
     <div rv-show="enabled" class="icon fa fa-fw fa-check-circle-o"></div>
     <div rv-hide="enabled" class="icon fa fa-fw fa-circle-o"></div>
     <div class="text">Greasemonkey is {enabled | active}</div>
-  </div>
+  </a>
   <!-- TODO: This feature.
   <div class="menu-item" id="open-options">
     <div class="icon fa fa-fw fa-cogs"></div>
@@ -21,17 +21,18 @@
 
   <div rv-hide="userScripts.active | empty">
     <hr>
-    <div class="menu-item">
-      <div class="text heading">User scripts for this tab</div>
+    <div class="menu-item heading">
+      <div class="text">User scripts for this tab</div>
     </div>
 
-    <div rv-each-script="userScripts.active" class="menu-item user-script"
+    <a rv-each-script="userScripts.active"
+        rv-href="script.uuid | mmUuidMenu"
+        rv-data-uuid="script.uuid"
         rv-class-disabled="script.enabled | not"
-        rv-data-user-script-uuid="script.uuid"
-    >
+        class="menu-item user-script">
       <div class="icon fa-fw"><img rv-src="script.icon"></div>
       <div class="text">{script.name}</div>
-    </div>
+    </a>
   </div>
 
   <div rv-hide="userScripts.inactive | empty">
@@ -40,68 +41,84 @@
       <div class="text heading">Other user scripts</div>
     </div>
 
-    <div rv-each-script="userScripts.inactive" class="menu-item user-script"
+    <a rv-each-script="userScripts.inactive"
+        rv-href="script.uuid | mmUuidMenu"
+        rv-data-uuid="script.uuid"
         rv-class-disabled="script.enabled | not"
-        rv-data-user-script-uuid="script.uuid"
-    >
+        class="menu-item user-script">
       <div class="icon fa-fw"><img rv-src="script.icon"></div>
       <div class="text">{script.name}</div>
-    </div>
+    </a>
   </div>
 
   <hr>
 
-  <div class="menu-item" id="new-user-script">
+  <a href="#new-user-script"
+      class="menu-item">
     <div class="icon fa fa-fw fa-file-text-o"></div>
     <div class="text">New user script ...</div>
-  </div>
+  </a>
 
   <hr>
 
-  <div class="menu-item" data-url="http://www.greasespot.net/">
+  <a href="#https://www.greasespot.net/"
+      class="menu-item">
     <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Greasemonkey home page</div>
-  </div>
+  </a>
 
-  <div class="menu-item" data-url="https://wiki.greasespot.net/">
+  <a href="#https://wiki.greasespot.net/"
+      class="menu-item">
     <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Greasemonkey Wiki</div>
-  </div>
+  </a>
 
-  <div class="menu-item"
-      data-url="https://wiki.greasespot.net/User_Script_Hosting">
+  <a href="#https://wiki.greasespot.net/User_Script_Hosting"
+      class="menu-item">
     <div class="icon fa fa-fw fa-link"></div>
     <div class="text">Get User Scripts</div>
-  </div>
+  </a>
 </section>
 
 
 <section id="user-script-detail">
   <header>
-    <div class="fa fa-lg fa-chevron-left" id="back"></div>
+    <a href="#menu-top" class="fa fa-lg fa-chevron-left" id="back"></a>
     <div id="name">{activeScript.name}</div>
   </header>
   <hr>
-  <div class="menu-item" id="user-script-toggle-enabled">
+
+  <a href="#toggle-user-script"
+      class="menu-item"
+      id="user-script-toggle-enabled">
     <div class="icon fa fa-fw"
       rv-class-fa-check-circle-o="activeScript.enabled"
       rv-class-fa-circle-o="activeScript.enabled | not"
     ></div>
     <div class="text">{activeScript.enabled | enabled}</div>
-  </div>
-  <div class="menu-item" id="user-script-edit">
+  </a>
+
+  <a href="#edit-user-script"
+      class="menu-item"
+      id="user-script-edit">
     <div class="icon fa fa-fw fa-pencil-square-o"></div>
     <div class="text">Edit</div>
-  </div>
+  </a>
 
-  <div class="menu-item" id="user-script-uninstall" rv-hide="pendingUninstall">
+  <a href="#uninstall-user-script"
+      class="menu-item"
+      id="user-script-uninstall"
+      rv-hide="pendingUninstall">
     <div class="icon fa fa-fw fa-trash-o"></div>
     <div class="text">Uninstall</div>
-  </div>
-  <div class="menu-item" id="user-script-uninstall-undo" rv-show="pendingUninstall">
+  </a>
+  <a href="#undo-uninstall-user-script"
+      class="menu-item"
+      id="user-script-uninstall-undo"
+      rv-show="pendingUninstall">
     <div class="icon fa fa-fw fa-trash-o"></div>
     <div class="text">Undo uninstall ({ pendingUninstall })</div>
-  </div>
+  </a>
 </section>
 
 
