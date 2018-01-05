@@ -13,6 +13,7 @@ body #menu, body.detail #user-script-detail { display: block; }
 
 section a {
   color: inherit;
+  cursor: default;
 }
 section a:hover {
   color: inherit;
