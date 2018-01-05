@@ -10,8 +10,8 @@ module.exports = function(config) {
     ],
     exclude: [
       './src/**/*.run.js',
-      './src/content/**/*.js',  // For now ...
-      './src/content/cm-addons/**/*.js',
+      './src/content/edit-user-script.js',  // CodeMirror dependency.
+      './src/content/install-dialog.js',  // Not ready for testing yet.  TODO!
       './src/util/rivets-formatters.js',
     ],
     frameworks: ['mocha', 'sinon-chai', 'sinon-chrome'],
