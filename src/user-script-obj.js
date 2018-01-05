@@ -33,7 +33,6 @@ function _testMatch(matchPattern, url) {
   if ('string' == typeof matchPattern) {
     matchPattern = new MatchPattern(matchPattern);
   } else if (!(matchPattern instanceof MatchPattern)) {
-    console.error('matchPattern is not a string nor MatchPattern object:', matchPattern);
     return false;
   }
   return matchPattern.doMatch(url);
@@ -346,7 +345,6 @@ window.EditableUserScript = class EditableUserScript
             resolve();
           });
       if (updater.skip()) {
-        console.log('updater has no added remotes to handle');
         this._parsedDetails = newDetails;
         _loadValuesInto(this, newDetails, userScriptKeys);
         this.calculateEvalContent();
