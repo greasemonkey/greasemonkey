@@ -26,7 +26,7 @@ function open(xhr, d, port) {
     console.log('xhr event;', src, event);
     var responseState = {
       context: d.context || null,
-      finalUrl: null,
+      finalUrl: xhr.responseURL,
       lengthComputable: null,
       loaded: null,
       readyState: xhr.readyState,
@@ -55,9 +55,9 @@ function open(xhr, d, port) {
 
     switch (event.type) {
       case "progress":
-        responseState.lengthComputable = evt.lengthComputable;
-        responseState.loaded = evt.loaded;
-        responseState.total = evt.total;
+        responseState.lengthComputable = event.lengthComputable;
+        responseState.loaded = event.loaded;
+        responseState.total = event.total;
         break;
       case "error":
         console.log('error event?', event);

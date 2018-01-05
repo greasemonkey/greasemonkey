@@ -1,6 +1,6 @@
 describe('user-script-obj', () => {
-  describe('EditableUserScript.calculateEvalContent', () => {
-    let script_content = `
+  describe('EditableUserScript.calculateEvalContent()', () => {
+    let scriptContent = `
 // ==UserScript==
 // @name Origin
 // ==/UserScript==
@@ -9,21 +9,44 @@ gt_one(2);
 `;
 
     it('does not fail on end of file line comment', () => {
-      let line_comment_content = script_content + '// EOF Comment';
-      let user_script = new EditableUserScript({'content': line_comment_content});
-      user_script.calculateEvalContent();
+      let lineCommentContent = scriptContent + '// EOF Comment';
+      let userScript = new EditableUserScript({'content': lineCommentContent});
+      userScript.calculateEvalContent();
 
-      chai.expect(() => eval(user_script._evalContent))
+      chai.expect(() => eval(userScript._evalContent))
           .to.not.throw("expected expression, got ')'");
     });
 
     it('does not fail on end of file block comment', () => {
-      let block_comment_content = script_content + '/* Block'
-      let user_script = new EditableUserScript({'content': block_comment_content});
-      user_script.calculateEvalContent();
+      let blockCommentContent = scriptContent + '/* Block'
+      let userScript = new EditableUserScript({'content': blockCommentContent});
+      userScript.calculateEvalContent();
 
-      chai.expect(() => eval(user_script._evalContent))
+      chai.expect(() => eval(userScript._evalContent))
           .to.not.throw("expected expression, got ')'");
+    });
+  });
+
+  describe('RemoteUserScript.runsAt()', () => {
+    let userScript = new RemoteUserScript({});
+    let url = new URL('http://example.org/');
+
+    it('fails gracefully with a non-MatchPattern object', () => {
+      userScript._matches = [{}];
+      let result = userScript.runsAt(url);
+      assert.equal(result, false);
+    });
+
+    it('works with MatchPattern object', () => {
+      userScript._matches = [new MatchPattern('http://*/*')];
+      let result = userScript.runsAt(url);
+      assert.equal(result, true);
+    });
+
+    it('works with string pattern source', () => {
+      userScript._matches = ['http://*/*'];
+      let result = userScript.runsAt(url);
+      assert.equal(result, true);
     });
   });
 });

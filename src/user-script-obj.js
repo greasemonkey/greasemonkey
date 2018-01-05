@@ -32,7 +32,7 @@ function _testClude(glob, url) {
 function _testMatch(matchPattern, url) {
   if ('string' == typeof matchPattern) {
     matchPattern = new MatchPattern(matchPattern);
-  } else if (MatchPattern != typeof matchPattern) {
+  } else if (!(matchPattern instanceof MatchPattern)) {
     console.error('matchPattern is not a string nor MatchPattern object:', matchPattern);
     return false;
   }

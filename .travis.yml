@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "7"
+addons:
+  firefox: "latest-beta"
+env:
+  KARMA_REPORTER=dots
