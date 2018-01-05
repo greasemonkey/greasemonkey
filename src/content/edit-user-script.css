@@ -36,14 +36,17 @@ html, body {
 }
 
 
-body, #editor, .CodeMirror {
+body, #editor {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   flex-basis: fill;
 
 }
-#editor .CodeMirror {
+#editor {
   height: 0;
   background: white;
+}
+.CodeMirror {
+  height: 100% !important;
 }
