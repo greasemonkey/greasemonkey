@@ -42,9 +42,13 @@ window.onEnabledSet = onEnabledSet;
 
 
 function setIcon() {
-  chrome.browserAction.setIcon({
-    'path': 'skin/icon32' + (isEnabled ? '' : '-disabled') + '.png',
-  });
+  // Firefox for Android does not have setIcon
+  // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/setIcon#Browser_compatibility
+  if (chrome.browserAction.setIcon) {
+    chrome.browserAction.setIcon({
+      'path': 'skin/icon32' + (isEnabled ? '' : '-disabled') + '.png',
+    });
+  }
 }
 
 
