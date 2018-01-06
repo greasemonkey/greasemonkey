@@ -299,7 +299,7 @@ function uninstall(scriptUuid) {
     for (let tag = null, i = 0; tag = gTopMenuTags[i]; i++) {
       let uuid = tag.getAttribute('data-uuid');
       if (uuid == scriptUuid) {
-        gTopMenuTags.splice(i, 1);
+        gTopMenuTags[i].remove();
         gTopMenuSelection = normalizeIndex(i - 1, gTopMenuTags.length);
         break;
       }
