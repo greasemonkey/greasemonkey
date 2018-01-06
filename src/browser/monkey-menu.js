@@ -26,11 +26,6 @@ let gScriptMenuSelection = 0;
 let gScriptMenuTags = [];
 let gLastHashChangeWasKey = false;
 
-window.addEventListener('DOMContentLoaded', () => {
-  gTopMenuTags = document.querySelectorAll('#menu a');
-  gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
-}, true);
-
 ///////////////////////////////////////////////////////////////////////////////
 
 //I.e. from a script detail view, go back to the top view.
@@ -181,6 +176,9 @@ function onKeypress(event) {
 function onLoad(event) {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
 
+  gTopMenuTags = document.getElementById('menu').getElementsByTagName('a');
+  gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
+
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
       enabled => gTplData.enabled = enabled);
@@ -301,7 +299,7 @@ function uninstall(scriptUuid) {
     for (let tag = null, i = 0; tag = gTopMenuTags[i]; i++) {
       let uuid = tag.getAttribute('data-uuid');
       if (uuid == scriptUuid) {
-        gTopMenuTags.splice(i, 1);
+        gTopMenuTags[i].remove();
         gTopMenuSelection = normalizeIndex(i - 1, gTopMenuTags.length);
         break;
       }
