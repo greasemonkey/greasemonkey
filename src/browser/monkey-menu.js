@@ -21,18 +21,15 @@ const gNewScriptTpl = `// ==UserScript==
 
 // Keep global state for keyboard navigation
 let gTopMenuSelection = 0;
-let gTopMenuTags;
+let gTopMenuTags = [];
 let gScriptMenuSelection = 0;
-let gScriptMenuTags;
+let gScriptMenuTags = [];
 let gLastHashChangeWasKey = false;
-// Prevent variables from entering scope
-(function() {
-  let userScriptTopSection = document.getElementById('menu');
-  gTopMenuTags = userScriptTopSection.getElementsByTagName('A');
 
-  let userScriptDetailSection = document.getElementById('user-script-detail');
-  gScriptMenuTags = userScriptDetailSection.getElementsByTagName('A');
-})()
+window.addEventListener('DOMContentLoaded', () => {
+  gTopMenuTags = document.querySelectorAll('#menu a');
+  gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
+}, true);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -299,15 +296,17 @@ function uninstall(scriptUuid) {
         break;
       }
     }
+
     // Remove the element from the list of top menu tags
-    for (i in gTopMenuTags) {
-      let uuid = gTopMenuTags.getAttribute('data-uuid');
+    for (let tag = null, i = 0; tag = gTopMenuTags[i]; i++) {
+      let uuid = tag.getAttribute('data-uuid');
       if (uuid == scriptUuid) {
         gTopMenuTags.splice(i, 1);
         gTopMenuSelection = normalizeIndex(i - 1, gTopMenuTags.length);
         break;
       }
     }
+
     gTplData.pendingUninstall = null;
     goToTop();
   });
