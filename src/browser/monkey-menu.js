@@ -176,7 +176,7 @@ function onKeypress(event) {
 function onLoad(event) {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
 
-  gTopMenuTags = document.querySelectorAll('#menu a');
+  gTopMenuTags = document.getElementById('menu').getElementsByTagName('a');
   gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
 
   chrome.runtime.sendMessage(
