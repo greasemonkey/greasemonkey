@@ -26,11 +26,6 @@ let gScriptMenuSelection = 0;
 let gScriptMenuTags = [];
 let gLastHashChangeWasKey = false;
 
-window.addEventListener('DOMContentLoaded', () => {
-  gTopMenuTags = document.querySelectorAll('#menu a');
-  gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
-}, true);
-
 ///////////////////////////////////////////////////////////////////////////////
 
 //I.e. from a script detail view, go back to the top view.
@@ -180,6 +175,9 @@ function onKeypress(event) {
 
 function onLoad(event) {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
+
+  gTopMenuTags = document.querySelectorAll('#menu a');
+  gScriptMenuTags = document.querySelectorAll('#user-script-detail a');
 
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
