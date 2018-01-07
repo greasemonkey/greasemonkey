@@ -106,7 +106,7 @@ function loadUserScripts() {
       event.target.result.forEach(details => {
         let userScript = new EditableUserScript(details);
         userScripts[details.uuid] = userScript;
-        if (userScript.evalContentVersion < EVAL_CONTENT_VERSION) {
+        if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
           userScript.calculateEvalContent();
           saveUserScript(userScript);
         }
