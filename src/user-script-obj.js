@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 7;
+const EVAL_CONTENT_VERSION = 8;
 
 
 // Private implementation.
@@ -25,9 +25,12 @@ const SCRIPT_ENV_EXTRA = `
     construct: (target, argumentsList, newTarget) => {
       let xhr = new origXhr();
       let origOpen = xhr.open;
-      xhr.open = (method_, url_, async_, user_, password_) => {
-        let url = new URL(url_, document.baseURI);
-        return origOpen.apply(xhr, [method_, url.toString(), async_, user_, password_]);
+      xhr.open = function() {
+        if (arguments.length >= 2) {
+          let url = new URL(arguments[1], document.baseURI);
+          arguments[1] = url.toString();
+        }
+        return origOpen.apply(xhr, arguments);
       };
       return xhr;
     },
