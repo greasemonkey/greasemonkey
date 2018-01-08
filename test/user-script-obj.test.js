@@ -28,25 +28,49 @@ gt_one(2);
   });
 
   describe('RemoteUserScript.runsAt()', () => {
-    let userScript = new RemoteUserScript({});
-    let url = new URL('http://example.org/');
+    let userScript;
+    const matches = urlStr => assert.isOk(userScript.runsAt(new URL(urlStr)));
+    const notMatches =
+        urlStr => assert.isNotOk(userScript.runsAt(new URL(urlStr)));
 
-    it('fails gracefully with a non-MatchPattern object', () => {
-      userScript._matches = [{}];
-      let result = userScript.runsAt(url);
-      assert.equal(result, false);
+    beforeEach(() => {
+      userScript = new RemoteUserScript({});
     });
 
-    it('works with MatchPattern object', () => {
-      userScript._matches = [new MatchPattern('http://*/*')];
-      let result = userScript.runsAt(url);
-      assert.equal(result, true);
+    describe('basic functionality', () => {
+      const url = 'http://example.org/';
+
+      it('fails gracefully with a non-MatchPattern object', () => {
+        userScript._matches = [{}];
+        notMatches(url);
+      });
+
+      it('works with MatchPattern object', () => {
+        userScript._matches = [new MatchPattern('http://*/*')];
+        matches(url);
+      });
+
+      it('works with string pattern source', () => {
+        userScript._matches = ['http://*/*'];
+        matches(url);
+      });
     });
 
-    it('works with string pattern source', () => {
-      userScript._matches = ['http://*/*'];
-      let result = userScript.runsAt(url);
-      assert.equal(result, true);
+    describe('specific protocol', () => {
+      it('matches http:', () => {
+        userScript._matches = ['http://*/*'];
+        matches('http://example.org');
+      });
+
+      it('matches https:', () => {
+        userScript._matches = ['https://*/*'];
+        matches('https://example.org');
+      });
+
+      it('matches file:', () => {
+        userScript._includes = ['file:///*'];
+        matches('file:///foo/bar');
+      });
     });
   });
 });
