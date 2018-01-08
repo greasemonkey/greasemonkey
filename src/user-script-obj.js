@@ -149,6 +149,7 @@ window.RemoteUserScript = class RemoteUserScript {
     if (url
         && url.protocol != 'http:'
         && url.protocol != 'https:'
+        && url.protocol != 'file:'
         && !url.href.startsWith('about:blank')
     ) {
       return false;
