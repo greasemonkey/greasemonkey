@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 7;
+const EVAL_CONTENT_VERSION = 9;
 
 
 // Private implementation.
@@ -19,20 +19,17 @@ const extensionVersion = chrome.runtime.getManifest().version;
 const aboutBlankRegexp = /^about:blank/;
 
 const SCRIPT_ENV_EXTRA = `
-(() => {
-  let origXhr = XMLHttpRequest;
-  XMLHttpRequest = new Proxy(XMLHttpRequest, {
-    construct: (target, argumentsList, newTarget) => {
-      let xhr = new origXhr();
-      let origOpen = xhr.open;
-      xhr.open = (method_, url_, async_, user_, password_) => {
-        let url = new URL(url_, document.baseURI);
-        return origOpen.apply(xhr, [method_, url.toString(), async_, user_, password_]);
-      };
-      return xhr;
-    },
-  });
-})();
+{
+  let origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function open(method, url) {
+    // only include method and url parameters so the function length is set properly
+    if (arguments.length >= 2) {
+      let newUrl = new URL(arguments[1], document.location.href);
+      arguments[1] = newUrl.toString();
+    }
+    return origOpen.apply(this, arguments);
+  };
+}
 `;
 
 
