@@ -9,6 +9,7 @@ of Greasemonkey.
 let isEnabled = true;
 chrome.storage.local.get('globalEnabled', v => {
   isEnabled = v['globalEnabled'];
+  if ('undefined' == typeof isEnabled) isEnabled = true;
   setIcon();
 });
 
