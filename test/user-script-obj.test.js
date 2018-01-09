@@ -61,6 +61,13 @@ gt_one(2);
       });
     });
 
+    describe('@include, .tld', () => {
+      it('matches .tld against .com', () => {
+        userScript._includes = ['http://example.tld/*'];
+        matches('http://example.com/');
+      });
+    });
+
     describe('@match, general', () => {
       const url = 'http://example.org/';
 
