@@ -35,6 +35,7 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
+      "src/util/check-api-call-allowed.js",
       "third-party/MatchPattern.js",
       "third-party/convert2RegExp.js",
 

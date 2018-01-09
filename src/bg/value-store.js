@@ -42,6 +42,7 @@ function onApiDeleteValue(message, sender, sendResponse) {
     console.warn('ApiDeleteValue handler got no key.');
     return;
   }
+  checkApiCallAllowed('GM.deleteValue', message.uuid);
 
   scriptStoreDb(message.uuid).then((db) => {
     let txn = db.transaction([valueStoreName], 'readwrite');
@@ -71,6 +72,7 @@ function onApiGetValue(message, sender, sendResponse) {
     console.warn('ApiGetValue handler got no key.');
     return;
   }
+  checkApiCallAllowed('GM.getValue', message.uuid);
 
   scriptStoreDb(message.uuid).then((db) => {
     let txn = db.transaction([valueStoreName], 'readonly');
@@ -101,6 +103,7 @@ function onApiListValues(message, sender, sendResponse) {
     console.warn('ApiListValues handler got no UUID.');
     return;
   }
+  checkApiCallAllowed('GM.listValues', message.uuid);
 
   scriptStoreDb(message.uuid).then((db) => {
     let txn = db.transaction([valueStoreName], 'readonly');
@@ -130,6 +133,7 @@ function onApiSetValue(message, sender, sendResponse) {
     console.warn('ApiSetValue handler got no key.');
     return;
   }
+  checkApiCallAllowed('GM.setValue', message.uuid);
 
   scriptStoreDb(message.uuid).then((db) => {
     let txn = db.transaction([valueStoreName], 'readwrite');

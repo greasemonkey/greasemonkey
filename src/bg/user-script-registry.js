@@ -159,25 +159,31 @@ window.onUserScriptGet = onUserScriptGet;
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
   if (!message.uuid) {
-    console.warn('onApiGetResourceBlob handler got no UUID.');
+    console.error('onApiGetResourceBlob handler got no UUID.');
+    sendResponse(false);
+    return;
   } else if (!message.resourceName) {
-      console.warn('onApiGetResourceBlob handler got no resourceName.');
+    console.error('onApiGetResourceBlob handler got no resourceName.');
+    sendResponse(false);
+    return;
   } else if (!userScripts[message.uuid]) {
-    console.warn(
-      'onApiGetResourceBlob handler got non-installed UUID:',
-      message.uuid);
+    console.error(
+        'onApiGetResourceBlob handler got non-installed UUID:', message.uuid);
+    sendResponse(false);
+    return;
+  }
+  checkApiCallAllowed('GM.getResourceUrl', message.uuid);
+
+  let userScript = userScripts[message.uuid];
+  let resource = userScript.resources[message.resourceName];
+  if (!resource) {
+    sendResponse(false);
   } else {
-    let userScript = userScripts[message.uuid];
-    let resource = userScript.resources[message.resourceName];
-    if (!resource) {
-      sendResponse(false);
-    } else {
-      sendResponse({
-        'blob': resource.blob,
-        'mimetype': resource.mimetype,
-        'resourceName': message.resourceName,
-      });
-    }
+    sendResponse({
+      'blob': resource.blob,
+      'mimetype': resource.mimetype,
+      'resourceName': message.resourceName,
+    });
   }
 };
 window.onApiGetResourceBlob = onApiGetResourceBlob;
@@ -251,6 +257,15 @@ function saveUserScript(userScript) {
 }
 
 
+function scriptByUuid(scriptUuid) {
+  if (!userScripts[scriptUuid]) {
+    throw new Error(
+        'Could not find installed user script with uuid ' + scriptUuid);
+  }
+  return userScripts[scriptUuid];
+}
+
+
 // Generate user scripts to run at `urlStr`; all if no URL provided.
 function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   let url = urlStr && new URL(urlStr);
@@ -276,6 +291,7 @@ window.UserScriptRegistry = {
   '_saveUserScript': saveUserScript,
   'installFromDownloader': installFromDownloader,
   'installFromSource': installFromSource,
+  'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

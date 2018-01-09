@@ -24,6 +24,7 @@ function onUserScriptNotification(port) {
   if (port.name != 'UserScriptNotification') return;
 
   port.onMessage.addListener(msg => {
+    checkApiCallAllowed('GM.notification', msg.uuid);
     switch (msg.name) {
       case 'create':
         createNotification(msg.details, port);

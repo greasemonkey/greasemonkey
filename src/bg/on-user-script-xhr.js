@@ -11,8 +11,11 @@ function onUserScriptXhr(port) {
 
   let xhr = new XMLHttpRequest();
   port.onMessage.addListener(msg => {
+    checkApiCallAllowed('GM.xmlHttpRequest', msg.uuid);
     switch (msg.name) {
-      case 'open': open(xhr, msg.details, port); break;
+      case 'open':
+        open(xhr, msg.details, port);
+        break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
     }
