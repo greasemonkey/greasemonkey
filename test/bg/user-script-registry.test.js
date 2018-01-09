@@ -25,7 +25,7 @@ describe('bg/user-script-registry', () => {
     assert.isNotOk(scriptNamed('exponential'));
     UserScriptRegistry._saveUserScript(userScript).then(() => {
       assert.isOk(scriptNamed('exponential'));
-      onUserScriptUninstall({'uuid': userScript.uuid}, null, () => {
+      Message.onUserScriptUninstall({'uuid': userScript.uuid}, null, () => {
         assert.isNotOk(scriptNamed('exponential'));
         done();
       });

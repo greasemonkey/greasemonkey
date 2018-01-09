@@ -2,7 +2,7 @@
 (function() {
 
 /// Receive a UserScriptInstall message.
-window.onUserScriptInstall = async function(message, sender) {
+async function onUserScriptInstall(message, sender) {
   if (message.details) {
     let downloader = new Downloader(message.details, sender);
     downloader.start(function() {
@@ -14,6 +14,7 @@ window.onUserScriptInstall = async function(message, sender) {
     return await UserScriptRegistry.installFromSource(message.source);
   }
 }
+window.Message.onUserScriptInstall = onUserScriptInstall;
 
 
 class Downloader {

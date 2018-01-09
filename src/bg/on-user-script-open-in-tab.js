@@ -2,6 +2,8 @@
 This file is responsible for providing the GM.openInTab API method.
 */
 
+(function() {
+
 function onApiOpenInTab(message, sender, sendResponse) {
   const senderTab = sender.tab;
   chrome.tabs.create({
@@ -11,3 +13,6 @@ function onApiOpenInTab(message, sender, sendResponse) {
     index: senderTab.index + 1, // next to senderTab
   });
 };
+window.Message.onApiOpenInTab = onApiOpenInTab;
+
+})();

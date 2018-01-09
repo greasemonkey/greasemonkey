@@ -119,17 +119,32 @@ function loadUserScripts() {
 };
 
 
-function onEditorSaved(message, sender, sendResponse) {
+// Returns a cloned userscript object if it exists, false otherwise
+function userScriptGet(uuid) {
+  if (!uuid) {
+    console.warn('UserScriptGet got no UUID.');
+  } else if (!userScripts[uuid]) {
+    console.warn('UserScriptGet got non-installed UUID:', uuid);
+  } else {
+    return new EditableUserScript(userScripts[uuid].details);
+  }
+  return false;
+}
+
+
+function userScriptEditorSave(uuid, message) {
   let userScript = userScripts[message.uuid];
   if (!userScript) {
     console.error('Got save for UUID', message.uuid, 'but it does not exist.');
     return;
   }
-
-  userScript.updateFromEditorSaved(message)
-      .then(value => saveUserScript(userScript));
+  // Use a clone of the current user script. This is so that any changes are
+  // not propegated to the actual UserScript unless the transaction is
+  // successful.
+  let cloneScript = new EditableUserScript(userScript.details);
+  return cloneScript.updateFromEditorSaved(message)
+      .then(value => saveUserScript(cloneScript));
 };
-window.onEditorSaved = onEditorSaved;
 
 
 function onListUserScripts(message, sender, sendResponse) {
@@ -141,20 +156,7 @@ function onListUserScripts(message, sender, sendResponse) {
   }
   sendResponse(result);
 };
-window.onListUserScripts = onListUserScripts;
-
-
-function onUserScriptGet(message, sender, sendResponse) {
-  if (!message.uuid) {
-    console.warn('UserScriptGet handler got no UUID.');
-  } else if (!userScripts[message.uuid]) {
-    console.warn(
-      'UserScriptGet handler got non-installed UUID:', message.uuid);
-  } else {
-    sendResponse(userScripts[message.uuid].details);
-  }
-};
-window.onUserScriptGet = onUserScriptGet;
+window.Message.onListUserScripts = onListUserScripts;
 
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
@@ -180,7 +182,7 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
     }
   }
 };
-window.onApiGetResourceBlob = onApiGetResourceBlob;
+window.Message.onApiGetResourceBlob = onApiGetResourceBlob;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
@@ -191,7 +193,7 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
   saveUserScript(userScript);
   sendResponse({'enabled': userScript.enabled});
 };
-window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
+window.Message.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
 function onUserScriptUninstall(message, sender, sendResponse) {
@@ -209,7 +211,7 @@ function onUserScriptUninstall(message, sender, sendResponse) {
     };
   });
 };
-window.onUserScriptUninstall = onUserScriptUninstall;
+window.Message.onUserScriptUninstall = onUserScriptUninstall;
 
 
 function saveUserScript(userScript) {
@@ -224,17 +226,11 @@ function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-
-      chrome.runtime.sendMessage({
-        'name': 'UserScriptChanged',
-        'details': userScript.details,
-        'parsedDetails': userScript.parsedDetails,
-      });
       resolve();
     };
     txn.onerror = event => {
       console.warn('save transaction error?', event, event.target);
-      reject();
+      reject(event.target.error);
     };
 
     try {
@@ -247,7 +243,30 @@ function saveUserScript(userScript) {
       console.error('when saving', userScript, e);
       return;
     }
-  }));
+  })).catch(err => {
+    // If the transaction had an error of some sort..
+    let message;
+    if (err.name == 'ConstraintError') {
+      // Most likely due to namespace / name conflict.
+      message = 'Failed to save: namespace/name already exists: '
+              + userScript.id;
+    } else {
+      message = 'Failed to save: ' + userScript.id + ': Unknown error';
+    }
+    browser.notifications.create({
+      'type': 'basic',
+      'title': 'Script Save Error',
+      'message': message,
+      // contextMessage doesn't currently display anything. Firefox bug?
+      'contextMessage': err.message
+    });
+  }).then(() => {
+    // Return the changed script details, even though the save may have failed.
+    return {
+      'details': userScript.details,
+      'parsedDetails': userScript.parsedDetails
+    };
+  });
 }
 
 
@@ -274,8 +293,10 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
+  'getScript': userScriptGet,
   'installFromDownloader': installFromDownloader,
   'installFromSource': installFromSource,
+  'scriptEditorSave': userScriptEditorSave,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

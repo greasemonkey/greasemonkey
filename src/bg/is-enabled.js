@@ -22,23 +22,21 @@ window.getGlobalEnabled = getGlobalEnabled;
 function onEnabledQuery(message, sender, sendResponse) {
   sendResponse(isEnabled);
 }
-window.onEnabledQuery = onEnabledQuery;
+window.Message.onEnabledQuery = onEnabledQuery;
 
 
 function setGlobalEnabled(enabled) {
   isEnabled = !!enabled;
-  chrome.runtime.sendMessage({
-    'name': 'EnabledChanged',
-    'enabled': isEnabled,
-  });
   setIcon();
   chrome.storage.local.set({'globalEnabled': enabled});
 }
 window.setGlobalEnabled = setGlobalEnabled;
+
+
 function onEnabledSet(message, sender, sendResponse) {
   setGlobalEnabled(message.enabled);
 }
-window.onEnabledSet = onEnabledSet;
+window.Message.onEnabledSet = onEnabledSet;
 
 
 function setIcon() {
@@ -65,6 +63,6 @@ function onEnabledToggle(message, sender, sendResponse) {
   sendResponse(isEnabled);
   } catch (e) { console.error(e); }
 }
-window.onEnabledToggle = onEnabledToggle;
+window.Message.onEnabledToggle = onEnabledToggle;
 
 })();

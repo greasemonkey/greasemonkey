@@ -8,7 +8,7 @@ and passes all arguments on to that callback.
 (function() {
 const myPrefix = chrome.runtime.getURL('');
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+function onMessage(message, sender, sendResponse) {
   if (!message.name) {
     console.error('Background received message without name!', message, sender);
     return;
@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         + `message from sender "${sender.url}".`);
   }
 
-  var cb = window['on' + message.name];
+  var cb = window.Message['on' + message.name];
   if (!cb) {
     console.error(
         'Background has no callback for message:', message, 'sender:', sender);
@@ -31,6 +31,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   }
 
   return cb(message, sender, sendResponse);
-});
+}
+window.onMessage = onMessage;
+chrome.runtime.onMessage.addListener(onMessage);
 
 })();

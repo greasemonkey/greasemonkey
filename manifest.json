@@ -22,9 +22,12 @@
 
   "background": {
     "scripts": [
+      "src/bg/_init.js",
+
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
+      "src/bg/on-editor-connect.js",
       "src/bg/on-message.js",
       "src/bg/on-user-script-notification.js",
       "src/bg/on-user-script-open-in-tab.js",

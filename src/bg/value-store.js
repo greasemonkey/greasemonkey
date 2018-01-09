@@ -60,7 +60,7 @@ function onApiDeleteValue(message, sender, sendResponse) {
   // Return true causes sendResponse to work after async. step above completes.
   return true;
 };
-window.onApiDeleteValue = onApiDeleteValue;
+window.Message.onApiDeleteValue = onApiDeleteValue;
 
 
 function onApiGetValue(message, sender, sendResponse) {
@@ -93,7 +93,7 @@ function onApiGetValue(message, sender, sendResponse) {
   // Return true causes sendResponse to work after async. step above completes.
   return true;
 };
-window.onApiGetValue = onApiGetValue;
+window.Message.onApiGetValue = onApiGetValue;
 
 
 function onApiListValues(message, sender, sendResponse) {
@@ -119,7 +119,7 @@ function onApiListValues(message, sender, sendResponse) {
   // Return true causes sendResponse to work after async. step above completes.
   return true;
 };
-window.onApiListValues = onApiListValues;
+window.Message.onApiListValues = onApiListValues;
 
 
 function onApiSetValue(message, sender, sendResponse) {
@@ -148,6 +148,6 @@ function onApiSetValue(message, sender, sendResponse) {
   // Return true causes sendResponse to work after async. step above completes.
   return true;
 };
-window.onApiSetValue = onApiSetValue;
+window.Message.onApiSetValue = onApiSetValue;
 
 })();
