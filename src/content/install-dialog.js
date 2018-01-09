@@ -87,4 +87,11 @@ window.addEventListener('DOMContentLoaded', event => {
   rvDetails.iconUrl = rvDetails.iconUrl || "";
 
   rivets.bind(document.body, rvDetails);
+
+  // Fix for Fx57 bug where bundled page loaded using
+  // browser.windows.create won't show contents unless resized.
+  // See https://bugzilla.mozilla.org/show_bug.cgi?id=1402110
+  chrome.windows.getCurrent(win => {
+    chrome.windows.update(win.id, {width: win.width + 1});
+  })
 });

@@ -26,6 +26,7 @@
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
+      "src/bg/on-open-install-dialog.js",
       "src/bg/on-user-script-notification.js",
       "src/bg/on-user-script-open-in-tab.js",
       "src/bg/on-user-script-xhr.js",
