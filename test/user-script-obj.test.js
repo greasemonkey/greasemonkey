@@ -37,7 +37,31 @@ gt_one(2);
       userScript = new RemoteUserScript({});
     });
 
-    describe('basic functionality', () => {
+    describe('@include, general', () => {
+      const url = 'http://example.org/path?query';
+
+      it('* matches http', () => {
+        userScript._includes = ['*'];
+        matches(url);
+      });
+
+      it('* matches file', () => {
+        userScript._includes = ['file:///*'];
+        matches('file:///tmp/anything.html');
+      });
+
+      it('path * matches', () => {
+        userScript._includes = ['http://example.org/*'];
+        matches(url);
+      });
+
+      it('different domain does not match', () => {
+        userScript._includes = ['http://example.net/*'];
+        notMatches(url);
+      });
+    });
+
+    describe('@match, general', () => {
       const url = 'http://example.org/';
 
       it('fails gracefully with a non-MatchPattern object', () => {
@@ -56,7 +80,7 @@ gt_one(2);
       });
     });
 
-    describe('specific protocol', () => {
+    describe('@match, protocol', () => {
       it('matches http:', () => {
         userScript._matches = ['http://*/*'];
         matches('http://example.org');
