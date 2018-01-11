@@ -282,19 +282,20 @@ function pendingUninstallTicker() {
 }
 
 
+function spliceUserScriptList(scriptUuid, scriptList, i) {
+  if (scriptList[i].uuid == scriptUuid) {
+    scriptList.splice(i, 1);
+    return true;
+  }
+  return false;
+}
+
+
 function uninstall(scriptUuid) {
   chrome.runtime.sendMessage({
     'name': 'UserScriptUninstall',
     'uuid': scriptUuid,
   }, () => {
-    for (i in gTplData.userScripts) {
-      let script = gTplData.userScripts[i];
-      if (script.uuid == scriptUuid) {
-        gTplData.userScripts.splice(i, 1);
-        break;
-      }
-    }
-
     // Remove the element from the list of top menu tags
     for (let tag = null, i = 0; tag = gTopMenuTags[i]; i++) {
       let uuid = tag.getAttribute('data-uuid');
@@ -304,6 +305,23 @@ function uninstall(scriptUuid) {
         break;
       }
     }
+
+    // Separate function in order to short circuit looping through both lists
+    (function() {
+      let activeScripts = gTplData.userScripts.active;
+      for (i in activeScripts) {
+        if (spliceUserScriptList(scriptUuid, activeScripts, i)) {
+          return;
+        }
+      }
+
+      let inactiveScripts = gTplData.userScripts.inactive;
+      for (i in inactiveScripts) {
+        if (spliceUserScriptList(scriptUuid, inactiveScripts, i)) {
+          return;
+        }
+      }
+    })();
 
     gTplData.pendingUninstall = null;
     goToTop();
