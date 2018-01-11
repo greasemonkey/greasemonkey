@@ -21,7 +21,7 @@ describe('bg/user-script-registry', () => {
     assert.isNotOk(scriptNamed('footnote'));
     await UserScriptRegistry._saveUserScript(userScript);
     assert.isOk(scriptNamed('footnote'));
-    UserScriptRegistry._loadUserScripts();
+    await UserScriptRegistry._loadUserScripts();
     assert.isOk(scriptNamed('footnote'));
   });
 
