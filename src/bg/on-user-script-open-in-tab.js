@@ -10,5 +10,6 @@ function onApiOpenInTab(message, sender, sendResponse) {
     active: message.active,
     windowId: senderTab.windowId,
     index: senderTab.index + 1, // next to senderTab
+    openerTabId: senderTab.id,
   });
 };
