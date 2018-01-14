@@ -69,7 +69,7 @@ function _randomUuid() {
   window.crypto.getRandomValues(randomInts);
   var randomChars = [];
   for (let i = 0; i<16; i++) {
-    let s = randomInts[i].toString(16);
+    let s = randomInts[i].toString(16).padStart(2, 0);
     randomChars.push(s.substr(0, 1));
     randomChars.push(s.substr(1, 1));
   }
