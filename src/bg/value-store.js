@@ -12,25 +12,34 @@ const valueStoreName = 'values';
 
 
 function scriptStoreDb(uuid) {
-  const dbVersion = 1;
-  return new Promise((resolve, reject) => {
-    let dbOpen = indexedDB.open('user-script-' + uuid, dbVersion);
-    dbOpen.onerror = event => {
-      console.error('Error opening script store DB!', uuid, event);
-      reject(event);
-    };
-    dbOpen.onsuccess = event => {
-      resolve(event.target.result);
-    };
-    dbOpen.onupgradeneeded = event => {
-      let db = event.target.result;
-      db.onerror = event => {
-        console.error('Error upgrading script store DB!', uuid, event);
+  function openDb() {
+    const dbVersion = 1;
+    return new Promise((resolve, reject) => {
+      let dbOpen = indexedDB.open('user-script-' + uuid, dbVersion);
+      dbOpen.onerror = event => {
+        console.error('Error opening script store DB!', uuid, event);
         reject(event);
       };
-      let store = db.createObjectStore(valueStoreName, {'keypath': 'key'});
-    };
-  });
+      dbOpen.onsuccess = event => {
+        resolve(event.target.result);
+      };
+      dbOpen.onupgradeneeded = event => {
+        let db = event.target.result;
+        db.onerror = event => {
+          console.error('Error upgrading script store DB!', uuid, event);
+          reject(event);
+        };
+        let store = db.createObjectStore(valueStoreName, {'keypath': 'key'});
+      };
+    });
+  }
+
+  // Persist is a FF 57+ feature. Conditionally use it
+  if (navigator.storage && navigator.storage.persist) {
+    return navigator.storage.persist().then(openDb);
+  } else {
+    return openDb();
+  }
 }
 
 //////////////////////////// Store Implementation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
