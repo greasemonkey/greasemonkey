@@ -1,88 +1,213 @@
+:root {
+  --arrowpanel-dimmed: hsla(0, 0%, 80%, 0.3);
+  --panel-separator-color: ThreeDShadow;
+  --panelui-subview-transition-duration: 150ms;
+}
+
 body {
   cursor: default;
   font: caption;
+  max-height: 734px;
+  max-width: 22.35em;
+  min-width: 22.35em;
+  overflow: visible;
   overflow-x: hidden;
-  min-width: 23em;
+  transition: height var(--panelui-subview-transition-duration);
+  will-change: transform;
+
+  display: flex;
+
 }
 body.rendering { display: none; }
 
-body #user-script-detail, body.detail #menu { display: none; }
-body #menu, body.detail #user-script-detail { display: block; }
-#templates { display: none; }
-
-
-section a {
-  color: inherit;
-  cursor: default;
-}
-section a:hover {
-  color: inherit;
-  text-decoration: none;
+/* Depth = 1 Cascading Menu
+ * The below styles (along with a simple JS listener) are used to create a
+ * sliding menu effect. To create a top level menu (depth = 1) the below style
+ * structure can be copied. Further down incudes explaination on how to create
+ * a nested cascading menu (depth > 1).
+ */
+body #menu {
+  transition-duration: 0.25s;
+  transition-property: margin;
 }
 
-.menu-item {
+body.detail #menu {
+  margin-left: -22.35em;
+}
+
+body #user-script-detail {
+  visibility: hidden;
+  transition-duration: 0.25s;
+  transition-property: visibility;
+}
+
+body.detail #user-script-detail {
+  visibility: visible;
+}
+
+/* Depth > 1 Cascading Menu
+ *
+ * For the below example let us assume we have a section with id
+ * '#user-script-config' and it is displayed by applying the class '.config'
+ * on the body element. Furthermore, this section is accessed from the
+ * '#user-script-detail' menu.
+ *
+ * Note: It is assumed that the HTML follows all <section> tags belong to
+ * the same parent node.
+ *
+ * Firstly, add the margin transition on the direct parent menu.
+body #user-script-detail {
+  transition-duration: 0.25s, 0.25s;
+  transition-property: visibility, margin;
+}
+ *
+ * Then, for the specific body class, apply a negative margin to all parent
+ * menus (including the TOP menu).
+body.config #menu,
+body.config #user-script-detail {
+  margin-left: -22.35em;
+}
+ *
+ * Set the default visibility and transition effect on the new menu section.
+body #user-script-config {
+  visibility: hidden;
+  transition-duration: 0.25s;
+  transition-property: visibility;
+}
+ *
+ * Apply visibility to the new menu, and parent menus (not the TOP menu) when
+ * the body is set to the new class.
+body.config #user-script-detail,
+body.config #user-script-config {
+  visibility: visible;
+}
+ *
+ * In the JS code, when the body class is applied it should be noted that the
+ * new menu needs its display set to 'block'. Check the '#user-script-detail'
+ * section for example.
+ */
+
+section {
+  max-width: 22.35em;
+  min-width: 22.35em;
+}
+
+.subview-header {
+  align-items: center;
+  border-bottom: 1px solid var(--panel-separator-color);
   display: flex;
-  flex-direction: row;
-  padding: 4px 8px;
-  -moz-user-select: none;
+  flex: 1 auto;
+  height: 40px;
+  padding: 4px;
 }
-.menu-item * {
-  vertical-align: middle;
-}
-.menu-item .icon {
+
+.subview-back {
+  -moz-context-properties: fill;
+  box-sizing: content-box;
+  color: inherit;
+  display: -moz-box;
+  fill: -moz-fieldText;
+  height: 16px;
   margin-right: 4px;
+  padding: 8px;
+  width: 16px;
 }
-.menu-item .icon img {
-  max-height: 1em;
-  max-width: 1em;
+
+.subview-back::before {
+  content: url(chrome://browser/skin/arrow-left.svg);
+  display: -moz-box;
 }
-.menu-item.disabled {
-  color: #999;
-}
-.menu-item.disabled .icon img {
-  opacity: 0.66;
-}
-.menu-item .text {
-  flex-grow: 1;
+
+.subview-title {
+  color: -moz-fieldText;
+  margin-right: 24px;
+  overflow-x: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  width: 0;
+  width: 100%;
 }
-.menu-item.heading {
+
+.subview-body {
+  padding: 6px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.subview-body hr {
+  border-top: 1px solid var(--panel-separator-color);
+  margin: 6px 0;
+  min-height: 0;
+}
+
+.subview-item {
+  -moz-box-align: center;
+  background-color: transparent;
+  color: -moz-fieldText;
+  cursor: default;
+  display: -moz-box;
+  max-height: 24px;
+  min-height: 24px;
+  padding: 4px 12px 4px 7px;
+  width: 100%;
+}
+
+.subview-item.heading {
   color: #333;
   font-style: italic;
   padding-left: 21px;
 }
-.menu-item.heading:hover {
-  background: inherit;
-}
-.menu-item:hover, .menu-item:focus {
-  background: #EEE;
+
+.subview-item.disabled {
+  color: #999;
 }
 
-hr {
-  margin: 4px 0;
+.subview-back:hover,
+.subview-back:focus,
+.subview-item:hover,
+.subview-item:focus {
+  background-color: var(--arrowpanel-dimmed);
+  color: inherit;
+  text-decoration: none;
 }
 
+.subview-item .icon {
+  -moz-box-pack: center;
+  display: -moz-box;
+  font-size: 14px;
+  margin-inline-end: 5px;
+  max-width: 21px;
+  min-width: 21px;
+}
 
-header {
-  display: flex;
-  flex-direction: row;
+.subview-item .icon img {
+  max-height: 17px;
+  max-width: 21px;
+  min-width: 21px;
 }
-header * {
-  display: inline-block !important;
-  padding: 6px;
-  vertical-align: middle;
+
+.subview-item.disabled .icon {
+  opacity: 0.7;
 }
-header #back {
-  padding: 8px 6px 4px 6px;
+
+.subview-item .text {
+  -moz-box-flex: 1;
+  display: -moz-box;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
-header #back:hover, header #back:focus {
-  background: #EEE;
+
+.subview-item::after {
+  margin-inline-start: 10px;
+  content: attr(after);
+  float: right;
+  color: GrayText;
 }
-header #name {
-  display: inline-block;
-  flex-grow: 1;
-  text-align: center;
-  white-space: nowrap;
-  width: 0;
+
+.subview-item.next-menu::after {
+  -moz-context-properties: fill;
+  color: -moz-fieldText;
+  content: url(chrome://browser/skin/back-12.svg);
+  fill: GrayText;
+  transform: scaleX(-1) translateY(2px);
 }
