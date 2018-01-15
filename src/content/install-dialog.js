@@ -3,11 +3,9 @@ document.title = details.name + ' - Greasemonkey User Script';
 
 
 function finish() {
-  if (history.length > 1) {
-    history.back();
-  } else {
-    window.close();  // May fail -- message to BG?
-  }
+  chrome.windows.getCurrent(null, win => {
+    chrome.windows.remove(win.id);
+  });
 }
 
 
