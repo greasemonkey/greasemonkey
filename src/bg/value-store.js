@@ -35,12 +35,27 @@ function scriptStoreDb(uuid) {
 
 //////////////////////////// Store Implementation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+function deleteStore(uuid) {
+  return new Promise((resolve, reject) => {
+    let deleteReq = indexedDB.deleteDatabase('user-script-' + uuid);
+    deleteReq.onsuccess = event => {
+      resolve(null);
+    };
+    deleteReq.onerror = event => {
+      reject(event);
+    };
+  });
+}
+
+
 function deleteValue(uuid, key) {
   return scriptStoreDb(uuid).then(db => {
     return new Promise((resolve, reject) => {
       let txn = db.transaction([valueStoreName], 'readwrite');
       let store = txn.objectStore(valueStoreName);
       let req = store.delete(key);
+      db.close();
+
       req.onsuccess = event => {
         resolve(true);
       };
@@ -62,6 +77,8 @@ function getValue(uuid, key) {
       let txn = db.transaction([valueStoreName], 'readonly');
       let store = txn.objectStore(valueStoreName);
       let req = store.get(key);
+      db.close();
+
       req.onsuccess = event => {
         if (!event.target.result) {
           resolve(undefined);
@@ -87,6 +104,8 @@ function listValues(uuid) {
       let txn = db.transaction([valueStoreName], 'readonly');
       let store = txn.objectStore(valueStoreName);
       let req = store.getAllKeys();
+      db.close();
+
       req.onsuccess = event => {
         resolve(req.result);
       };
@@ -108,6 +127,8 @@ function setValue(uuid, key, value) {
       let txn = db.transaction([valueStoreName], 'readwrite');
       let store = txn.objectStore(valueStoreName);
       let req = store.put({'value': value}, key);
+      db.close();
+
       req.onsuccess = event => {
         resolve(true);
       };
@@ -124,6 +145,7 @@ function setValue(uuid, key, value) {
 
 
 window.ValueStore = {
+  'deleteStore': deleteStore,
   'deleteValue': deleteValue,
   'getValue': getValue,
   'listValues': listValues,
