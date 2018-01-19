@@ -170,16 +170,14 @@ section {
 }
 
 .subview-item .icon {
-  -moz-box-pack: center;
-  display: -moz-box;
-  font-size: 14px;
-  margin-inline-end: 5px;
+  text-align: center;
+  width: 19px;
 }
 
 .subview-item .icon img {
-  height: 17px;
   object-fit: contain;
-  width: 21px;
+  width: 19px;
+  height: 17px;
 }
 
 .subview-item.disabled .icon {
@@ -190,6 +188,7 @@ section {
   -moz-box-flex: 1;
   display: -moz-box;
   overflow-x: hidden;
+  padding-left: 3px;
   text-overflow: ellipsis;
 }
 
