@@ -10,7 +10,7 @@
         <dc:date>2017-01-15</dc:date>
         <dc:creator>J.W (jakwings@gmail.com)</dc:creator>
         <dc:rights>https://github.com/greasemonkey/greasemonkey/blob/master/LICENSE.mit</dc:rights>
-        <dc:source>https://github.com/greasemonkey/greasemonkey/blob/master/skin/icon32.png</dc:source>
+        <dc:source>https://github.com/greasemonkey/greasemonkey/blob/4fe181e56c8e6e59869e1dd4cd79720bb879904f/skin/icon32.png</dc:source>
         <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/legalcode"/>
         <cc:attributionName rdf:resource="J.W"/>
         <cc:attributionURL rdf:resource="https://github.com/jakwings"/>
