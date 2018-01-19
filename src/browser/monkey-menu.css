@@ -174,14 +174,12 @@ section {
   display: -moz-box;
   font-size: 14px;
   margin-inline-end: 5px;
-  max-width: 21px;
-  min-width: 21px;
 }
 
 .subview-item .icon img {
-  max-height: 17px;
-  max-width: 21px;
-  min-width: 21px;
+  height: 17px;
+  object-fit: contain;
+  width: 21px;
 }
 
 .subview-item.disabled .icon {
