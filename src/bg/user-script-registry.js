@@ -106,7 +106,7 @@ function loadUserScripts() {
       event.target.result.forEach(details => {
         let userScript = new EditableUserScript(details);
         userScripts[details.uuid] = userScript;
-        if (userScript.evalContentVersion < EVAL_CONTENT_VERSION) {
+        if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
           userScript.calculateEvalContent();
           saveUserScript(userScript);
         }
@@ -126,8 +126,12 @@ function onEditorSaved(message, sender, sendResponse) {
     return;
   }
 
-  userScript.updateFromEditorSaved(message)
-      .then(value => saveUserScript(userScript));
+  // Use a clone of the current user script. This is so that any changes are
+  // not propegated to the actual UserScript unless the transaction is
+  // successful.
+  let cloneScript = new EditableUserScript(userScript.details);
+  cloneScript.updateFromEditorSaved(message)
+      .then(value => saveUserScript(cloneScript));
 };
 window.onEditorSaved = onEditorSaved;
 
@@ -159,25 +163,31 @@ window.onUserScriptGet = onUserScriptGet;
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
   if (!message.uuid) {
-    console.warn('onApiGetResourceBlob handler got no UUID.');
+    console.error('onApiGetResourceBlob handler got no UUID.');
+    sendResponse(false);
+    return;
   } else if (!message.resourceName) {
-      console.warn('onApiGetResourceBlob handler got no resourceName.');
+    console.error('onApiGetResourceBlob handler got no resourceName.');
+    sendResponse(false);
+    return;
   } else if (!userScripts[message.uuid]) {
-    console.warn(
-      'onApiGetResourceBlob handler got non-installed UUID:',
-      message.uuid);
+    console.error(
+        'onApiGetResourceBlob handler got non-installed UUID:', message.uuid);
+    sendResponse(false);
+    return;
+  }
+  checkApiCallAllowed('GM.getResourceUrl', message.uuid);
+
+  let userScript = userScripts[message.uuid];
+  let resource = userScript.resources[message.resourceName];
+  if (!resource) {
+    sendResponse(false);
   } else {
-    let userScript = userScripts[message.uuid];
-    let resource = userScript.resources[message.resourceName];
-    if (!resource) {
-      sendResponse(false);
-    } else {
-      sendResponse({
-        'blob': resource.blob,
-        'mimetype': resource.mimetype,
-        'resourceName': message.resourceName,
-      });
-    }
+    sendResponse({
+      'blob': resource.blob,
+      'mimetype': resource.mimetype,
+      'resourceName': message.resourceName,
+    });
   }
 };
 window.onApiGetResourceBlob = onApiGetResourceBlob;
@@ -224,17 +234,11 @@ function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-
-      chrome.runtime.sendMessage({
-        'name': 'UserScriptChanged',
-        'details': userScript.details,
-        'parsedDetails': userScript.parsedDetails,
-      });
       resolve();
     };
     txn.onerror = event => {
       console.warn('save transaction error?', event, event.target);
-      reject();
+      reject(event.target.error);
     };
 
     try {
@@ -247,7 +251,41 @@ function saveUserScript(userScript) {
       console.error('when saving', userScript, e);
       return;
     }
-  }));
+  })).catch(err => {
+    // If the transaction had an error of some sort..
+    let message;
+    if (err.name == 'ConstraintError') {
+      // Most likely due to namespace / name conflict.
+      message = 'Failed to save: namespace/name already exists: '
+              + userScript.id;
+    } else {
+      message = 'Failed to save: ' + userScript.id + ': Unknown error';
+    }
+    chrome.notifications.create({
+      'type': 'basic',
+      'title': 'Script Save Error',
+      'message': message,
+      // contextMessage doesn't currently display anything. Firefox bug?
+      'contextMessage': err.message
+    });
+  }).then(() => {
+    // Send the script change event, even though the save may have failed.
+    // This way the editor gets the updated script.
+    chrome.runtime.sendMessage({
+      'name': 'UserScriptChanged',
+      'details': userScript.details,
+      'parsedDetails': userScript.parsedDetails,
+    });
+  });
+}
+
+
+function scriptByUuid(scriptUuid) {
+  if (!userScripts[scriptUuid]) {
+    throw new Error(
+        'Could not find installed user script with uuid ' + scriptUuid);
+  }
+  return userScripts[scriptUuid];
 }
 
 
@@ -276,6 +314,7 @@ window.UserScriptRegistry = {
   '_saveUserScript': saveUserScript,
   'installFromDownloader': installFromDownloader,
   'installFromSource': installFromSource,
+  'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };
 

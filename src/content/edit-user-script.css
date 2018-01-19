@@ -35,15 +35,31 @@ html, body {
   content: "*";
 }
 
+.tab-bar {
+  display: flex;
+}
+.command-item {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: whitesmoke;
+  -moz-user-select: none;
+}
+.command-item:hover {
+  background: #e5e5e5;
+}
 
-body, #editor, .CodeMirror {
+body, #editor {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   flex-basis: fill;
 
 }
-#editor .CodeMirror {
+#editor {
   height: 0;
   background: white;
+}
+.CodeMirror {
+  height: 100% !important;
 }
