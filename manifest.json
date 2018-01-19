@@ -43,6 +43,7 @@
       "/src/bg/on-user-script-open-in-tab.js",
       "/src/bg/on-user-script-xhr.js",
       "/src/bg/options.js",
+      "/src/bg/sync-via-webdav.js",
       "/src/bg/user-script-detect.js",
       "/src/bg/user-script-registry.js",
       "/src/bg/updater.js",
@@ -64,6 +65,7 @@
       "/third-party/webdav/webdav.js",
 
       "/src/bg/execute.run.js",
+      "/src/bg/sync-via-webdav.run.js",
       "/src/bg/user-script-detect.run.js",
       "/src/bg/user-script-registry.run.js"
     ]
