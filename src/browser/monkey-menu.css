@@ -165,6 +165,7 @@ section {
 .subview-item:hover,
 .subview-item:focus {
   background-color: var(--arrowpanel-dimmed);
+  cursor: default;
   color: inherit;
   text-decoration: none;
 }
