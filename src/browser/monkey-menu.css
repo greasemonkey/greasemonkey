@@ -171,6 +171,7 @@ section {
 }
 
 .subview-item .icon {
+  font-size: 14px;
   text-align: center;
   width: 19px;
 }
