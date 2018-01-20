@@ -112,6 +112,12 @@ function onHashChange(event) {
         focusSelection();
       }
       break;
+
+    // Imports are handled by onchange listeners or on keypress
+    case '#import-user-script':
+      history.replaceState({}, 'Home', '#menu-top');
+      break;
+
     default:
       // Check if it's a Userscript by examing the gUserScript object
       let userScript = gUserScripts[hash.slice(1)];
@@ -153,10 +159,26 @@ function onHashChange(event) {
 }
 
 
+// Import a new user script
+// TODO: Add onImportUserScript to monkey menu when file picker bugs are fixed
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+function onImportUserScript(event) {
+}
+
+
 function onKeypress(event) {
   let key = event.key;
   if ('Enter' === key) {
     gLastHashChangeWasKey = true;
+    // Unfortunately file inputs cannot be opened in the hashchange because
+    // it's not considered a 'user action' context
+    if (event.target.classList.contains('input-item')) {
+      event.preventDefault();
+      // Create a non-bubbling event.
+      let fakeEvent =
+          new MouseEvent('click', {'bubbles': false, 'cancelable': true});
+      event.target.getElementsByTagName('input')[0].dispatchEvent(fakeEvent);
+    }
     return;
   }
   event.preventDefault();
@@ -207,6 +229,21 @@ function onLoad(event) {
       });
     }
   }
+
+  // TODO: Remove when file picker bugs are fixed
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+  // document.getElementById('import-script-file')
+  //     .addEventListener('change', onImportUserScript);
+  function preventAll(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+  }
+  document.getElementById('import-script-file')
+      .addEventListener('click', event => {
+        preventAll(event);
+        openTemporaryImportPage('import-script.html');
+      });
 }
 
 
@@ -214,6 +251,17 @@ function onUnload(event) {
   // Clear the pending uninstall ticker and cleanup any pending installs.
   clearInterval(gPendingTicker);
   checkPendingUninstall();
+}
+
+
+// TODO: Remove when file picker bugs are fixed
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+function openTemporaryImportPage(page) {
+  chrome.tabs.create({
+    'active': true,
+    'url': chrome.runtime.getURL('src/content/import/' + page),
+  });
+  window.close();
 }
 
 

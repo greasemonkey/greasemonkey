@@ -155,6 +155,7 @@ section {
   min-height: 24px;
   padding: 4px 12px 4px 7px;
   width: 100%;
+  overflow-y: hidden;
 }
 
 .subview-item.heading {
@@ -199,6 +200,14 @@ section {
   overflow-x: hidden;
   padding-left: 3px;
   text-overflow: ellipsis;
+}
+
+.subview-item .input {
+  left: 0;
+  margin-top: -9px;
+  opacity: 0;
+  position: absolute;
+  width: 100%;
 }
 
 .subview-item::after {

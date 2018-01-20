@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+  This /should/ be temporary until Mozilla fixes their stuff.
+  Bugzilla:
+  "Keep autoclose popups opened when opening a modal file picker dialog"
+  https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+-->
+
+<html>
+<head>
+<meta charset="utf-8">
+
+<link rel="stylesheet" href="import.css">
+<script src="import-script.js"></script>
+
+</head>
+
+
+<body>
+<div id="content">
+
+
+<h2 class="header">Greasemonkey Import Script From File</h2>
+<div class="body">
+  <div class="details">
+    <p>
+This page is used to import a userscript from a file. Unfortunately, for the
+time (until Mozilla fixes a particular bug) this needs to be done in a
+separate tab and cannot be done through the Monkey Menu.
+    </p>
+  </div>
+
+  <div class="import-option">
+    <h4>User Script</h4>
+    <div class="details">
+Add a script to the database.
+    </div>
+    <input class="input-item" id="import-script-file" type="file" />
+  </div>
+</div>
+
+
+</div>
+</body>

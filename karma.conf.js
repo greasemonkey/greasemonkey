@@ -11,6 +11,7 @@ module.exports = function(config) {
       './src/**/*.run.js',
       './src/content/edit-user-script.js',  // CodeMirror dependency.
       './src/content/install-dialog.js',  // Not ready for testing yet.  TODO!
+      './src/content/import/*',         // DB Imports
       './src/util/rivets-formatters.js',
     ],
     frameworks: ['chai', 'mocha', 'sinon', 'sinon-chrome'],
