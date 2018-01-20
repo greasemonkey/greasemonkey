@@ -38,7 +38,7 @@ function checkScript(userScriptContent, url) {
 
 
 function detectUserScriptOnHeadersReceived(details) {
-  if (!checkHeaders(details.responseHeaders)) {
+  if (!getGlobalEnabled() || !checkHeaders(details.responseHeaders)) {
     return {};
   }
 
