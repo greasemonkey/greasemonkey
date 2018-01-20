@@ -2,20 +2,22 @@
 
 (function() {
 
-const userScriptTypes = new Set([
+const userScriptTypes = [
    'text/plain',
    'application/ecmascript',
    'application/javascript',
    'application/x-javascript',
    'text/ecmascript',
    'text/javascript',
-]);
+];
+const contentTypeRe = new RegExp(`(${userScriptTypes.join('|')})(;.*)?`);
 
 
 // Examine headers before determining if script checking is needed
 function checkHeaders(responseHeaders) {
   for (header of responseHeaders) {
-    if ('Content-Type' === header.name && userScriptTypes.has(header.value)) {
+    let headerName = header.name.toLowerCase();
+    if ('content-type' === headerName && contentTypeRe.test(header.value)) {
       return true;
     }
   }
