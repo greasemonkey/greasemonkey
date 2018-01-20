@@ -1,8 +1,4 @@
-/*
-Add listeners to detecting user scripts and opening the installation
-dialog.
-*/
-
+/* Add listeners to detect user scripts and open the installation dialog. */
 
 (function() {
 
