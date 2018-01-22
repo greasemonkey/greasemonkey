@@ -114,6 +114,13 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
+# OpenInstallDialog
+Sent by: `content/script-detect.js`
+
+Sent when the content script has detected navigation to a user script.
+
+* `userScript` Details of parsing the user script for installation.
+
 # InstallProgress
 Sent by: `bg/user-script-install.js`
 Received by: `content/install-dialog.js`

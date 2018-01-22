@@ -161,7 +161,7 @@ function GM_notification(text, title, image, onclick) {
   }
 
   if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
-  if (typeof opt.image != 'string') opt.image = 'skin/icon32.png';
+  if (typeof opt.image != 'string') opt.image = 'skin/icon.svg';
 
   let port = chrome.runtime.connect({name: 'UserScriptNotification'});
   port.onMessage.addListener(msg => {
@@ -169,12 +169,13 @@ function GM_notification(text, title, image, onclick) {
     if (typeof opt[msgType] == 'function') opt[msgType]();
   });
   port.postMessage({
-    name: 'create',
-    details: {
-        title: opt.title,
-        text: opt.text,
-        image: opt.image
-    }
+    'details': {
+      'title': opt.title,
+      'text': opt.text,
+      'image': opt.image
+    },
+    'name': 'create',
+    'uuid': _uuid,
   });
 }
 
@@ -189,14 +190,20 @@ function GM_openInTab(url, openInBackground) {
   }
 
   chrome.runtime.sendMessage({
+    'active': (openInBackground === false),
     'name': 'ApiOpenInTab',
     'url': objURL.href,
-    'active': (openInBackground === false),
+    'uuid': _uuid,
   });
 }
 
 
 function GM_setClipboard(text) {
+  // TODO: This.  The check only works background side, but this implementation
+  // relies on clipboardWrite permission leaking to the content script so we
+  // couldn't block a script from doing this directly, anyway.
+  //checkApiCallAllowed('GM.setClipboard', message.uuid);
+
   function onCopy(event) {
     document.removeEventListener('copy', onCopy, true);
 
@@ -247,7 +254,11 @@ function GM_xmlHttpRequest(d) {
   noCallbackDetails.upload = {};
   d.upload && Object.keys(k => noCallbackDetails.upload[k] = true);
   noCallbackDetails.url = url.href;
-  port.postMessage({name: 'open', details: noCallbackDetails});
+  port.postMessage({
+    'details': noCallbackDetails,
+    'name': 'open',
+    'uuid': _uuid,
+  });
 
   // TODO: Return an object which can be `.abort()`ed.
 }

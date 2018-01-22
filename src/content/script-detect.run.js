@@ -1,6 +1,6 @@
 /*
 This file detects navigation events.  If a navigation points to a user script,
-the installation dialog is fired.
+the installation dialog is opened.
 */
 
 // Private implementation.
@@ -20,9 +20,12 @@ if (document.contentType in userScriptTypes) {
   var userScriptContent = document.body.textContent;
   var userScriptDetails = parseUserScript(userScriptContent, userScriptUrl);
 
-  let installUrl = chrome.runtime.getURL('src/content/install-dialog.html')
-      + '?' + escape(JSON.stringify(userScriptDetails));
-  location.replace(installUrl);
+  chrome.runtime.sendMessage({
+    'name': 'OpenInstallDialog',
+    'userScript': userScriptDetails,
+  });
+
+  history.back();
 }
 
 })();

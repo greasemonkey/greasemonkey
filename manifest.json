@@ -1,10 +1,14 @@
 {
   "manifest_version": 2,
   "name": "Greasemonkey",
-  "version": "4.1",
+  "version": "4.2",
   "description": "A User Script manager for Firefox.",
   "homepage_url": "https://www.greasespot.net/",
-  "icons": {"32": "skin/icon32.png"},
+  "icons": {
+    "48": "skin/icon.svg",
+    "96": "skin/icon.svg",
+    "512": "skin/icon.svg"
+  },
 
   "applications": {
     "gecko": {
@@ -15,7 +19,7 @@
 
   "browser_action": {
     "browser_style": false,
-    "default_icon": "skin/icon32.png",
+    "default_icon": "skin/icon.svg",
     "default_popup": "src/browser/monkey-menu.html",
     "default_title": "Greasemonkey"
   },
@@ -26,6 +30,7 @@
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
+      "src/bg/on-open-install-dialog.js",
       "src/bg/on-user-script-notification.js",
       "src/bg/on-user-script-open-in-tab.js",
       "src/bg/on-user-script-xhr.js",
@@ -35,6 +40,7 @@
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
+      "src/util/check-api-call-allowed.js",
       "third-party/MatchPattern.js",
       "third-party/convert2RegExp.js",
 

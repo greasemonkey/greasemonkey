@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <metadata id="license"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:cc="http://creativecommons.org/ns#">
+    <rdf:RDF>
+      <cc:Work rdf:about="https://github.com/greasemonkey/greasemonkey/blob/master/skin/icon.svg">
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:date>2017-01-15</dc:date>
+        <dc:creator>J.W (jakwings@gmail.com)</dc:creator>
+        <dc:rights>https://github.com/greasemonkey/greasemonkey/blob/master/LICENSE.mit</dc:rights>
+        <dc:source>https://github.com/greasemonkey/greasemonkey/blob/4fe181e56c8e6e59869e1dd4cd79720bb879904f/skin/icon32.png</dc:source>
+        <cc:license rdf:resource="https://creativecommons.org/licenses/by-sa/4.0/legalcode"/>
+        <cc:attributionName rdf:resource="J.W"/>
+        <cc:attributionURL rdf:resource="https://github.com/jakwings"/>
+        <dc:description>This work is licensed under the MIT license or the Creative Commons licens e, at your option.</dc:description>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path fill="#874300" fill-rule="evenodd" d="M81.363 31.525c6.531-8.512 15.93-1.201 17.173 5.45 2.992 16-2.674 22.442-9.592 25.98-3.176 1.625-7.011-6.986-8.077-11.378-1.42-5.855-3.277-15.136.496-20.052z"/>
+  <path fill="url(#a)" fill-rule="evenodd" d="M85.693 35.195c3.825-2.297 6.425 2.427 7.427 5.426 1.304 3.901.397 8.84-.146 11.017-.763 3.06-3.049 6.806-4.356 6.327-2.221-.814-3.794-4.688-4.165-7.575-.649-5.047-.463-14.172 1.24-15.195z"/>
+  <defs>
+    <radialGradient id="a" cx="84.116" cy="46.615" r="12.71" fx="86.832" fy="52.673" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#957c53"/>
+      <stop offset=".762" stop-color="#d3af75"/>
+      <stop offset="1" stop-color="#c8a66f"/>
+    </radialGradient>
+  </defs>
+  <path fill="#874300" fill-rule="evenodd" d="M17.637 36.473C9.513 29.099.917 37.807.678 44.575.105 60.85 7.004 66.317 14.743 68.716c3.553 1.102 6.17-8.01 6.581-12.516.548-6.009 1.006-15.469-3.687-19.728z"/>
+  <path fill="url(#b)" fill-rule="evenodd" d="M14.073 40.757c-4.134-1.68-5.973 3.39-6.5 6.507-.687 4.055.971 8.794 1.844 10.862 1.226 2.906 4.063 6.254 5.28 5.579 2.07-1.148 3.026-5.217 2.946-8.127-.138-5.087-1.73-14.074-3.57-14.821z"/>
+  <defs>
+    <radialGradient id="b" cx="17.393" cy="51.796" r="12.71" fx="15.645" fy="58.2" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#957c53"/>
+      <stop offset=".762" stop-color="#d3af75"/>
+      <stop offset="1" stop-color="#c8a66f"/>
+    </radialGradient>
+  </defs>
+  <path fill="#874300" fill-rule="evenodd" d="M54.676 99.641c9.827-.763 17.826-2.384 25.552-5.986 7.725-3.602 14.147-11.106 15.441-20.212 1.294-9.107-2.308-16.833-6.517-19.506-.773-9.947-.936-14.003-4.606-20.656-4.333-7.855-11.414-18.13-36.278-16.195h-.01C23.395 19.014 17.984 30.26 14.915 38.688c-2.599 7.14-2.134 11.172-1.362 21.119-3.746 3.291-6.112 11.48-3.428 20.278 2.684 8.798 10.187 15.22 18.376 17.586 8.189 2.366 16.342 2.734 26.17 1.97h.005z"/>
+  <path fill="#613000" fill-rule="evenodd" d="M74.952 0c-11.627 4.906-24.934 13.944-33.19 23.592 10.863-1.845 16.677-4.297 26.469-7.06L74.952 0z"/>
+  <path fill="#874300" fill-rule="evenodd" d="M14.92 38.687C18.122 28.43 23.77 10.975 74.952 0c-13.539 6.055-23.94 13.867-33.19 23.592 10.863-1.845 19.583-5.524 26.469-7.06 6.885-1.534 15.76-3.224 15.76-3.224-1.835 2.144-3.593 5.282-6.268 9.493 2.144 1.835 5.514 6.576 6.818 10.48L14.92 38.687z"/>
+  <path fill="url(#c)" fill-rule="evenodd" d="M49.962 38.968c3.43-12.31 19.465-21.35 28.766-3.234 2.843 5.533 2.898 11.552 3.457 18.744C86.513 58.697 88.94 60.985 88.47 71c-.377 8.034-7.281 13.746-12.69 16.996-5.736 3.447-14.159 5.102-21.573 5.678-7.413.575-15.991.24-22.19-2.28-5.846-2.376-13.549-6.953-15.157-14.833-2.005-9.824.035-12.459 3.66-17.295-.558-7.191-1.432-13.147.522-19.053 6.393-19.335 23.631-12.878 28.92-1.245z"/>
+  <defs>
+    <radialGradient id="c" cx="52.305" cy="69.333" r="69.443" fx="52.292" fy="69.337" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#efddb5"/>
+      <stop offset=".407" stop-color="#efd092"/>
+      <stop offset=".678" stop-color="#cca76e"/>
+      <stop offset="1" stop-color="#8d4600"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#d)" fill-rule="evenodd" d="M52.418 76.1c-3.982.31-7.99.687-11.975.43-3.1-.2-6.307-.528-9.145-1.791-1.52-.677-2.606-2.923-3.293-3.747-.6-1.071-1.845-1.55-2.067-.84-.595 1.904-.462 4.2.464 5.968.982 1.874 2.888 3.272 4.823 4.128 2.695 1.192 5.712 1.583 8.648 1.83 4.32.363 8.685.326 13.008-.01 4.323-.335 8.64-.972 12.854-1.998 2.862-.697 5.783-1.55 8.261-3.143 1.78-1.145 3.448-2.82 4.129-4.824.641-1.89.419-4.178-.463-5.968-.33-.667-1.485-.001-1.913 1.15-.552.92-1.278 3.307-2.675 4.21-2.608 1.686-5.727 2.505-8.759 3.181-3.898.87-7.915 1.115-11.897 1.425z"/>
+  <defs>
+    <radialGradient id="d" cx="50.448" cy="50.737" r="35.867" fx="50.441" fy="50.745" gradientUnits="userSpaceOnUse">
+      <stop offset=".631" stop-color="#570503"/>
+      <stop offset=".796" stop-color="#710603"/>
+      <stop offset=".889" stop-color="#680603"/>
+      <stop offset="1" stop-color="#570503"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#e)" fill-rule="evenodd" d="M35.204 55.123c-.538-6.966 2.122-10.17 5.693-10.45 3.57-.274 6.7 2.48 7.237 9.444.538 6.963-2.122 10.17-5.693 10.45-3.57.274-6.7-2.483-7.237-9.444z"/>
+  <defs>
+    <linearGradient id="e" x1="34.425" x2="42.441" y1="45.089" y2="64.567" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#346732"/>
+      <stop offset="1" stop-color="#021301"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#f)" fill-rule="evenodd" d="M37 52.48c-.193-2.484.724-3.558 1.719-3.635.995-.077 2.067.842 2.26 3.327.193 2.488-.725 3.555-1.72 3.636-.994.08-2.065-.84-2.259-3.328z"/>
+  <defs>
+    <linearGradient id="f" x1="40.979" x2="36.682" y1="52.172" y2="49.003" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6ffe6"/>
+      <stop offset=".343" stop-color="#d0e6d0"/>
+      <stop offset=".694" stop-color="#d0e6d0"/>
+      <stop offset="1" stop-color="#e6ffe6"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#g)" fill-rule="evenodd" d="M54.102 53.655c-.537-6.965 2.122-10.17 5.693-10.45 3.57-.274 6.7 2.48 7.237 9.445.538 6.962-2.122 10.17-5.692 10.45-3.571.274-6.7-2.484-7.238-9.445z"/>
+  <defs>
+    <linearGradient id="g" x1="53.323" x2="61.34" y1="43.621" y2="63.099" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#346732"/>
+      <stop offset="1" stop-color="#021301"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#h)" fill-rule="evenodd" d="M55.898 51.013c-.193-2.485.725-3.559 1.72-3.636.994-.076 2.066.842 2.259 3.328.193 2.487-.724 3.554-1.719 3.635-.994.081-2.066-.839-2.26-3.327z"/>
+  <defs>
+    <linearGradient id="h" x1="59.877" x2="55.58" y1="50.704" y2="47.536" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6ffe6"/>
+      <stop offset=".343" stop-color="#d0e6d0"/>
+      <stop offset=".694" stop-color="#d0e6d0"/>
+      <stop offset="1" stop-color="#e6ffe6"/>
+    </linearGradient>
+  </defs>
+</svg>
