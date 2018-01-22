@@ -10,11 +10,11 @@ function onUserScriptXhr(port) {
   if (port.name != 'UserScriptXhr') return;
 
   let xhr = new XMLHttpRequest();
-  port.onMessage.addListener(msg => {
+  port.onMessage.addListener((msg, src) => {
     checkApiCallAllowed('GM.xmlHttpRequest', msg.uuid);
     switch (msg.name) {
       case 'open':
-        open(xhr, msg.details, port);
+        open(xhr, msg.details, port, src.sender.tab.id);
         break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
@@ -23,8 +23,10 @@ function onUserScriptXhr(port) {
 }
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
+var headersToReplace = ['origin', 'referer', 'cookie'];
+var dummyHeaderPrefix = 'x-greasemonkey-';
 
-function open(xhr, d, port) {
+function open(xhr, d, port, tabId) {
   function xhrEventHandler(src, event) {
     var responseState = {
       context: d.context || null,
@@ -99,26 +101,79 @@ function open(xhr, d, port) {
   d.overrideMimeType && xhr.overrideMimeType(d.overrideMimeType);
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
-
+  
+  var hasCookies = false;
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
-        xhr.setRequestHeader(prop, d.headers[prop]);
+        var propLower = prop.toLowerCase();
+        hasCookies = (propLower === 'cookie');
+        if (headersToReplace.includes(propLower)) {
+          xhr.setRequestHeader(dummyHeaderPrefix + propLower, d.headers[prop]);
+        }
+        else {
+          xhr.setRequestHeader(prop, d.headers[prop]);
+        }
       }
     }
   }
 
-  var body = d.data || null;
-  if (d.binary && (body !== null)) {
-    var bodyLength = body.length;
-    var bodyData = new Uint8Array(bodyLength);
-    for (var i = 0; i < bodyLength; i++) {
-      bodyData[i] = body.charCodeAt(i) & 0xff;
-    }
-    xhr.send(new Blob([bodyData]));
-  } else {
-    xhr.send(body);
-  }
+  chrome.tabs.get(tabId).then(tab => {
+    chrome.cookies.getAll({url: tab.url}).then(cookies => {
+      if (!hasCookies && d.usePageCookies) {
+        let cookieStrings = [];
+        for (let cookie of cookies) {
+          cookieStrings.push(cookie.name + '=' + cookie.value + ';');
+        }
+        xhr.setRequestHeader(dummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
+      }
+      var body = d.data || null;
+      if (d.binary && (body !== null)) {
+        var bodyLength = body.length;
+        var bodyData = new Uint8Array(bodyLength);
+        for (var i = 0; i < bodyLength; i++) {
+          bodyData[i] = body.charCodeAt(i) & 0xff;
+        }
+        xhr.send(new Blob([bodyData]));
+      }
+      else {
+        xhr.send(body);
+      }
+    });
+  });
 }
+
+function getHeader(headers, name) {
+  name = name.toLowerCase();
+  for (var header of headers) {
+    if (header.name.toLowerCase() === name) {
+      return header;
+    }
+  }
+  return null;
+}
+
+const extensionUrl = chrome.extension.getURL('');
+
+function rewriteHeaders(e) {
+  if (e.originUrl && e.originUrl.startsWith(extensionUrl)) {
+    for (var name of headersToReplace) {
+      var prefixedHeader = getHeader(e.requestHeaders, dummyHeaderPrefix + name);
+      if (prefixedHeader) {
+        if (!getHeader(e.requestHeaders, name)) {
+          // only try to add real header if request doesn't already have it
+          e.requestHeaders.push({name: name, value: prefixedHeader.value});
+        }
+        // remove the prefixed header regardless
+        e.requestHeaders.splice(e.requestHeaders.indexOf(prefixedHeader), 1);
+      }
+    }
+  }
+  return { requestHeaders: e.requestHeaders };
+}
+
+chrome.webRequest.onBeforeSendHeaders.addListener(
+  rewriteHeaders, {urls: ['<all_urls>'], types: ['xmlhttprequest']}, ['blocking', 'requestHeaders']
+);
 
 })();
