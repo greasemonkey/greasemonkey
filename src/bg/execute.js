@@ -5,7 +5,7 @@ content script executions.
 TODO: Make document_start execution time work as intended.
 */
 
-function executeUserscriptOnNavigation(detail) {
+function executeUserscriptOnResponseStarted(detail) {
   if (false === getGlobalEnabled()) return;
 
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
@@ -15,7 +15,10 @@ function executeUserscriptOnNavigation(detail) {
       'matchAboutBlank': true,
       'runAt': 'document_' + userScript.runAt,
     };
-    if (detail.frameId) options.frameId = detail.frameId;
+    if (detail.frameId) {
+        if (userScript.noFrames) return;
+        options.frameId = detail.frameId;
+    }
     chrome.tabs.executeScript(detail.tabId, options, result => {
       let err = chrome.runtime.lastError;
       if (!err) return;

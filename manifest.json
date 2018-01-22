@@ -71,6 +71,6 @@
     "storage",
     "tabs",
     "unlimitedStorage",
-    "webNavigation"
+    "webRequest"
   ]
 }
