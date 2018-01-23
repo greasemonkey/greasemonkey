@@ -60,8 +60,7 @@ function deleteValue(uuid, key) {
         resolve(true);
       };
       req.onerror = event => {
-        console.warn(
-          'failed to delete', key, 'for', uuid, ':', event);
+        console.warn('failed to delete', key, 'for', uuid, ':', event);
         // Don't reject to maintain compatibility with code that expects a
         // false return value.
         resolve(false);
@@ -87,8 +86,7 @@ function getValue(uuid, key) {
         }
       };
       req.onerror = event => {
-        console.warn(
-            'failed to retrieve', key, 'for', uuid, ':', event);
+        console.warn('failed to retrieve', key, 'for', uuid, ':', event);
         // Don't reject to maintain compatibility with code that expects a
         // undefined return value.
         resolve(undefined);
@@ -110,8 +108,7 @@ function listValues(uuid) {
         resolve(req.result);
       };
       req.onerror = event => {
-        console.warn(
-            'failed to list stored keys for', uuid, ':', event);
+        console.warn('failed to list stored keys for', uuid, ':', event);
         // Don't reject to maintain compatibility with code that expects a
         // undefined return value.
         resolve(undefined);
@@ -133,8 +130,7 @@ function setValue(uuid, key, value) {
         resolve(true);
       };
       req.onerror = event => {
-        console.warn(
-            'failed to set', key, 'for', uuid, ':', event);
+        console.warn('failed to set', key, 'for', uuid, ':', event);
         // Don't reject to maintain compatibility with code that expects a
         // false return value.
         resolve(false);
