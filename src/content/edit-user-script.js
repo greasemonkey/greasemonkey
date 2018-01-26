@@ -11,7 +11,6 @@ var editor = CodeMirror(
 
 CodeMirror.commands.save = onSave;
 
-const titlePattern = '%s - Greasemonkey User Script Editor';
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];
@@ -57,7 +56,7 @@ chrome.runtime.sendMessage({
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  document.title = titlePattern.replace('%s', userScript.name);
+  document.title = _('$1 - Greasemonkey User Script Editor', userScript.name);
 });
 
 
@@ -67,7 +66,7 @@ function onUserScriptChanged(message, sender, sendResponse) {
   let details = message.details;
   let parsedDetails = message.parsedDetails;
 
-  document.title = titlePattern.replace('%s', details.name);
+  document.title = _('$1 - Greasemonkey User Script Editor', details.name);
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];

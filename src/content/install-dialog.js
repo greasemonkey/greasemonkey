@@ -1,5 +1,5 @@
 const details = JSON.parse(unescape(document.location.search.substr(1)));
-document.title = details.name + ' - Greasemonkey User Script';
+document.title = _('$1 - Greasemonkey User Script', details.name);
 
 
 function finish() {
@@ -65,7 +65,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
       resultEl.appendChild(errorList);
     } else {
-      resultEl.textContent = 'Download and install successful!';
+      resultEl.textContent = _('Download and install successful!');
       progressBar.parentNode && progressBar.parentNode.removeChild(progressBar);
       finish();
     }
@@ -82,7 +82,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
   // The fallback to default icon won't work unless iconUrl has at least an
   // empty string.
-  rvDetails.iconUrl = rvDetails.iconUrl || "";
+  rvDetails.iconUrl = rvDetails.iconUrl || '';
 
   rivets.bind(document.body, rvDetails);
 });

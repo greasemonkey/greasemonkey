@@ -9,6 +9,7 @@
     "96": "skin/icon.svg",
     "512": "skin/icon.svg"
   },
+  "default_locale": "en",
 
   "applications": {
     "gecko": {
@@ -26,6 +27,8 @@
 
   "background": {
     "scripts": [
+      "src/i18n.js",
+
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
       "src/bg/is-enabled.js",

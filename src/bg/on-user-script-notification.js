@@ -30,7 +30,8 @@ function onUserScriptNotification(port) {
         createNotification(msg.details, port);
         break;
       default:
-        console.warn('UserScriptNotification port un-handled message name:', msg.name);
+        console.warn(
+            'UserScriptNotification port un-handled message name:', msg.name);
     }
   });
 }

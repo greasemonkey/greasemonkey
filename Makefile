@@ -1,4 +1,4 @@
-.PHONY: test testonce coverage xpi
+.PHONY: test testwatch coverage xpi
 
 test:
 	@npm run test

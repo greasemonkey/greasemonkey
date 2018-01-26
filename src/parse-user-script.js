@@ -114,9 +114,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
         details.matches.push(data.value);
       } catch (e) {
         throw new Error(
-            "Ignoring @match pattern %1 because:\n%2"
-                .replace('%1', data.value).replace('%2', e)
-            );
+            _('Ignoring @match pattern $1 because:\n$2', data.value, e));
       }
       break;
 
@@ -130,7 +128,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
       let resourceName = data.value1;
       let resourceUrl = data.value2;
       if (resourceName in details.resourceUrls) {
-        throw new Error('Duplicate resource name: ' + resourceName);
+        throw new Error(_('Duplicate resource name: $1', resourceName));
       }
       details.resourceUrls[resourceName] = safeURL(resourceUrl, url).toString();
       break;

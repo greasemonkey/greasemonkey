@@ -83,7 +83,7 @@ function openInstallDialog(scriptDetails, url) {
     } else {
       let options = {
         'height': 640,
-        'titlePreface': scriptDetails.name + ' - Greasemonkey User Script',
+        'titlePreface': _('$1 - Greasemonkey User Script', scriptDetails.name),
         'type': 'popup',
         'url': installUrl,
         'width': 480,

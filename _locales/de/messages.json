@@ -1,0 +1,6 @@
+{
+  "Disabled": { "message": "Deaktiviert" },
+  "Enabled": { "message": "Activiert" },
+  "Greasemonkey is active": { "message": "Greasemonkey ist aktiv" },
+  "Greasemonkey is disabled": { "message": "Greasemonkey ist behindert" }
+}

@@ -139,11 +139,11 @@ function onHashChange(event) {
       } catch (err) {
         if ('TypeError' === err.name) {
           // Indicates a bad URL
-          console.log('Unknown Monkey Menu item, not a valid Uuid nor a url',
-                      hash);
+          console.log(
+              'Unknown Monkey Menu item, not a valid Uuid nor a url', hash);
         } else {
-          console.log('Unknown error parsing Monkey Menu item as url',
-                      hash, err);
+          console.log(
+              'Unknown error parsing Monkey Menu item as url', hash, err);
         }
       }
       break;
@@ -196,7 +196,7 @@ function onLoad(event) {
       });
 
   // Set up listeners for the transition effect. Set display: none when the
-  // vibility property is changed.
+  // visibility property is changed.
   for (el of document.getElementsByTagName('section')) {
     if (el.id !== 'menu') {
       el.style.display = 'none';
