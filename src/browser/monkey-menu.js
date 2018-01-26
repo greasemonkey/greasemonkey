@@ -120,9 +120,11 @@ function onHashChange(event) {
         gTplData.activeScript.icon = iconUrl(userScript);
         gTplData.activeScript.enabled = userScript.enabled;
         gTplData.activeScript.name = userScript.name;
+        gTplData.activeScript.uuid = userScript.uuid;
 
         gActiveUuid = userScript.uuid;
         document.body.className = 'detail';
+        document.getElementById('user-script-detail').style.display = 'block';
         return;
       }
 
@@ -192,6 +194,19 @@ function onLoad(event) {
           document.body.classList.remove('rendering');
         });
       });
+
+  // Set up listeners for the transition effect. Set display: none when the
+  // vibility property is changed.
+  for (el of document.getElementsByTagName('section')) {
+    if (el.id !== 'menu') {
+      el.style.display = 'none';
+      el.addEventListener('transitionend', event => {
+        if ('visibility' === event.propertyName) {
+          event.target.style.display = 'none';
+        }
+      });
+    }
+  }
 }
 
 

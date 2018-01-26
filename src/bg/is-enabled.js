@@ -45,10 +45,24 @@ window.onEnabledSet = onEnabledSet;
 function setIcon() {
   // Firefox for Android does not have setIcon
   // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/setIcon#Browser_compatibility
-  if (chrome.browserAction.setIcon) {
-    chrome.browserAction.setIcon({
-      'path': 'skin/icon32' + (isEnabled ? '' : '-disabled') + '.png',
-    });
+  if (!chrome.browserAction.setIcon) {
+    return;
+  }
+  let iconPath = chrome.extension.getURL('skin/icon.svg');
+  if (isEnabled) {
+    chrome.browserAction.setIcon({'path': iconPath});
+  } else {
+    let img = document.createElement('img');
+    img.onload = function() {
+      let canvas = document.createElement('canvas');
+      let ctx = canvas.getContext('2d');
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(img, 0, 0);
+      chrome.browserAction.setIcon({
+        'imageData': ctx.getImageData(0, 0, img.width, img.height),
+      });
+    };
+    img.src = iconPath;
   }
 }
 
