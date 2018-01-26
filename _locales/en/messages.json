@@ -8,6 +8,8 @@
   "Does not run on:": { "message": "Does not run on:" },
   "Download and install successful!": { "message": "Download and install successful!" },
   "Duplicate resource name: $1": { "message": "Duplicate resource name: $1" },
+  "Other user scripts": { "message": "Other user scripts" },
+  "Get user scripts": { "message": "Get user scripts" },
   "Edit": { "message": "Edit" },
   "Enabled": { "message": "Enabled" },
   "GM.notification: \"text\" must be a string": { "message": "GM.notification: \"text\" must be a string" },
