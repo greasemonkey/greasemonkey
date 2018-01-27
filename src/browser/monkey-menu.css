@@ -1,5 +1,6 @@
 :root {
   --arrowpanel-dimmed: hsla(0, 0%, 80%, 0.3);
+  --panel-max-height: 600px;
   --panel-separator-color: ThreeDShadow;
   --panelui-subview-transition-duration: 150ms;
 }
@@ -7,10 +8,9 @@
 body {
   cursor: default;
   font: caption;
-  max-height: 734px;
+  max-height: var(--panel-max-height);
   max-width: 22.35em;
   min-width: 22.35em;
-  overflow: visible;
   overflow-x: hidden;
   transition: height var(--panelui-subview-transition-duration);
   will-change: transform;
@@ -19,6 +19,7 @@ body {
 
 }
 body.rendering { display: none; }
+body section { max-height: var(--panel-max-height); }
 
 /* Depth = 1 Cascading Menu
  * The below styles (along with a simple JS listener) are used to create a
@@ -127,6 +128,7 @@ section {
 }
 
 .subview-body {
+  max-height: 560px;
   padding: 6px 0;
   overflow-y: auto;
   overflow-x: hidden;
