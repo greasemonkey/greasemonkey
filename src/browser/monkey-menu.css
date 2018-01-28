@@ -9,6 +9,10 @@ body {
   cursor: default;
   font: caption;
   max-height: var(--panel-max-height);
+  /* The duplicated (min|max)-width attributes are required. If only the width
+   * attribute is used then the submenu transition effect becomes incredibly
+   * janky.
+   */
   max-width: 100vw;
   min-width: 100vw;
   overflow-x: hidden;
@@ -89,6 +93,7 @@ body.config #user-script-config {
  */
 
 section {
+  /* See (min|max)-width comment at top of file */
   max-width: 100vw;
   min-width: 100vw;
 }
@@ -209,6 +214,7 @@ section {
 }
 
 @media (max-width: 300px) {
+  /* See (min|max)-width comment at top of file */
   body {
     max-width: 22.35em;
     min-width: 22.35em;
