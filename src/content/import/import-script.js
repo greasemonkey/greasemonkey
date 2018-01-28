@@ -14,7 +14,12 @@ function onImportUserScript(event) {
       // Done loading
       chrome.runtime.sendMessage(
           {'name': 'UserScriptInstall', 'source': fr.result},
-          uuid => openUserScriptEditor(uuid));
+          uuid => {
+            // TODO: When switching to promises use `.catch`
+            if (!chrome.runtime.lastError) {
+              openUserScriptEditor(uuid);
+            }
+          });
     }
   };
   fr.readAsText(importScript.files[0]);

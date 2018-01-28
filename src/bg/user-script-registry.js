@@ -93,7 +93,12 @@ async function installFromSource(source) {
           console.error('Error looking up script!', event);
         };
       } catch (e) {
-        console.error('at installFromSource(), db fail:', e);
+        if (e instanceof ParseError) {
+          // Noop, will be handled by caller
+        } else {
+          console.error('at installFromSource(), db fail:', e);
+        }
+        reject(e);
       }
     });
   });
