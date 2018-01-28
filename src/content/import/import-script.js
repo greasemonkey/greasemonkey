@@ -1,5 +1,7 @@
 
 function onLoad(event) {
+  rivets.bind(document);
+
   document.getElementById('import-script-file')
       .addEventListener('change', onImportUserScript);
 }

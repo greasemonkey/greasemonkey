@@ -20,20 +20,18 @@
 <div id="content">
 
 
-<h2 class="header">Greasemonkey Import Script From File</h2>
+<h2 class="header">{'Greasemonkey Import Script From File'|i18n}</h2>
 <div class="body">
   <div class="details">
     <p>
-This page is used to import a userscript from a file. Unfortunately, for the
-time (until Mozilla fixes a particular bug) this needs to be done in a
-separate tab and cannot be done through the Monkey Menu.
+{'This page is used to import a userscript from a file. Unfortunately, for the time (until Mozilla fixes a particular bug) this needs to be done in a separate tab and cannot be done through the Monkey Menu.'|i18n}
     </p>
   </div>
 
   <div class="import-option">
-    <h4>User Script</h4>
+    <h4>{'Install'|i18n}</h4>
     <div class="details">
-Add a script to the database.
+{'Add a script to the database.'|i18n}
     </div>
     <input class="input-item" id="import-script-file" type="file" />
   </div>
@@ -41,4 +39,7 @@ Add a script to the database.
 
 
 </div>
+
+<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
 </body>
