@@ -13,3 +13,16 @@ class DuplicateResourceError extends ParseError {
     this.name = 'DuplicateResourceError';
   }
 }
+
+
+// Error to throw if relative resources are found without a valid downloadUrl
+class InvalidRemoteUrl extends ParseError {
+  constructor(resourceType, url) {
+    super(
+        _('Invalid $1 URL ($2).\nScript missing `@downloadUrl`?',
+          resourceType,
+          url)
+    );
+    this.name = 'InvalidRemoteUrl';
+  }
+}

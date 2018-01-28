@@ -35,6 +35,47 @@ function safeURL(path, base) {
 }
 
 
+function parseRemoteResources(details) {
+  let currentUrl;
+  let remoteType;
+  let downloadUrl = details.downloadUrl;
+
+  try {
+    if (details.iconUrl) {
+      remoteType = 'icon'
+      currentUrl = details.iconUrl;
+      details.iconUrl = safeURL(currentUrl, downloadUrl).toString();
+    }
+
+    let requireUrls = details.requireUrls;
+    if (requireUrls.length) {
+      remoteType = 'require';
+      for (let idx = requireUrls.length; idx--;) {
+        currentUrl = requireUrls[idx];
+        requireUrls[idx] = safeURL(currentUrl, downloadUrl).toString();
+      }
+    }
+
+    let resourceKeys = Object.keys(details.resourceUrls);
+    if (resourceKeys.length) {
+      let resourceUrls = details.resourceUrls;
+      remoteType = 'resource';
+      for (key of resourceKeys) {
+        currentUrl = resourceUrls[key];
+        resourceUrls[key] = safeURL(currentUrl, downloadUrl).toString();
+      }
+    }
+  } catch (e) {
+    if (e instanceof TypeError) {
+      // Could not create URL object. Likely due to missing downloadUrl
+      throw new InvalidRemoteUrl(remoteType, currentUrl);
+    } else {
+      throw e;
+    }
+  }
+}
+
+
 /** Parse the source of a script; produce object of data. */
 window.parseUserScript = function(content, url, failIfMissing) {
   if (!content) {
@@ -77,6 +118,9 @@ window.parseUserScript = function(content, url, failIfMissing) {
     case 'noframes':
       details.noFrames = true;
       break;
+    case 'downloadURL':
+      details.downloadUrl = data.value;
+      break;
     case 'namespace':
     case 'version':
       details[data.keyword] = data.value;
@@ -118,11 +162,13 @@ window.parseUserScript = function(content, url, failIfMissing) {
       }
       break;
 
+    // The following need to be done last in order to account for explicit
+    // @downloadURL. Save the provided values for further processing.
     case 'icon':
-      details.iconUrl = safeURL(data.value, url).toString();
+      details.iconUrl = data.value;
       break;
     case 'require':
-      details.requireUrls.push( safeURL(data.value, url).toString() );
+      details.requireUrls.push(data.value);
       break;
     case 'resource':
       let resourceName = data.value1;
@@ -131,10 +177,13 @@ window.parseUserScript = function(content, url, failIfMissing) {
         throw new DuplicateResourceError(
             _('Duplicate resource name: $1', resourceName));
       }
-      details.resourceUrls[resourceName] = safeURL(resourceUrl, url).toString();
+      details.resourceUrls[resourceName] = resourceUrl;
       break;
     }
   }
+
+  // Process remote resources
+  parseRemoteResources(details);
 
   // We couldn't set this default above in case of real data, so if there's
   // still no includes, set the default of include everything.

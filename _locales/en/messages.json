@@ -23,6 +23,7 @@
   "Greasemonkey is active": { "message": "Greasemonkey is active" },
   "Greasemonkey is disabled": { "message": "Greasemonkey is disabled" },
   "Ignoring @match pattern $1 because:\n$2": { "message": "Ignoring @match pattern $1 because:\n$2" },
+  "Invalid $1 URL ($2).\nScript missing `@downloadUrl`?": { "message": "Invalid $1 URL ($2).\nScript missing `@downloadUrl`?"},
   "Install": { "message": "Install" },
   "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": { "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge." },
   "Matches:": { "message": "Matches:" },
