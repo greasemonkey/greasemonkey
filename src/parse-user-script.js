@@ -128,7 +128,8 @@ window.parseUserScript = function(content, url, failIfMissing) {
       let resourceName = data.value1;
       let resourceUrl = data.value2;
       if (resourceName in details.resourceUrls) {
-        throw new Error(_('Duplicate resource name: $1', resourceName));
+        throw new DuplicateResourceError(
+            _('Duplicate resource name: $1', resourceName));
       }
       details.resourceUrls[resourceName] = safeURL(resourceUrl, url).toString();
       break;
