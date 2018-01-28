@@ -18,7 +18,7 @@ window.onUserScriptInstall = function(message, sender) {
             console.warn(err);
             chrome.notifications.create({
               'type': 'basic',
-              'title': 'Failed to import script',
+              'title': _('Import Failure'),
               'message': err.message,
             });
           }
