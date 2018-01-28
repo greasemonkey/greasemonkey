@@ -4,12 +4,10 @@
 <link rel="stylesheet" href="/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="install-dialog.css">
 <body class="install">
-<!-- This script is at the top because we want the "defaultIconUrl" variable -->
-<script src="/src/util/iconUrl.js"></script>
 
 <header>
   <div class="icon">
-    <img rv-src="iconUrl" onerror="this.src=defaultIconUrl">
+    <img id="script-icon" rv-src="iconUrl">
   </div>
   <h1>
     <strong id="name">{ name }</strong>
@@ -78,6 +76,7 @@
 
 <script src="/src/i18n.js"></script>
 <script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/iconUrl.js"></script>
 <script src="/src/util/rivets-formatters.js"></script>
 <script src="install-dialog.js"></script>
 

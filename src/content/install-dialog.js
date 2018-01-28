@@ -75,6 +75,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 /****************************** DETAIL DISPLAY *******************************/
 
 window.addEventListener('DOMContentLoaded', event => {
+  // Apply the onerror event for the img tag. CSP does not allow it to be done
+  // directly in HTML.
+  let iconEl = document.getElementById('script-icon');
+  iconEl.onerror = () => { iconEl.src = defaultIconUrl; };
+
   // Rivets will mutate its second parameter to have getters and setters,
   // these will break our attempt to pass `details` to background.  So
   // make a second copy of details, for Rivets to own.
