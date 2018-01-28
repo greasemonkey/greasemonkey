@@ -5,14 +5,9 @@
 <link rel="stylesheet" href="install-dialog.css">
 <body class="install">
 
-<header>
-  <div class="icon">
-    <img id="script-icon" rv-src="iconUrl">
-  </div>
-  <h1>
-    <strong id="name">{ name }</strong>
-    <span rv-show="version" id="version">{ version }</span>
-  </h1>
+<header rv-version="version">
+  <div class="icon"><img id="script-icon" rv-src="iconUrl"></div>
+  <h1><strong>{ name }</strong></h1>
 </header>
 
 <div id="install">
