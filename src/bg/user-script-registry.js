@@ -39,12 +39,7 @@ const db = (function() {
     });
   }
 
-  // Persist is a FF 57+ feature. Conditionally use it.
-  if (navigator.storage && navigator.storage.persist) {
-    return navigator.storage.persist().then(openDb);
-  } else {
-    return openDb();
-  }
+  return navigator.storage.persist().then(openDb);
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
