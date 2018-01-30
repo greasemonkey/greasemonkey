@@ -15,27 +15,31 @@ const dbName = 'greasemonkey';
 const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 const db = (function() {
-  return new Promise((resolve, reject) => {
-    let dbOpen = indexedDB.open(dbName, dbVersion);
-    dbOpen.onerror = event => {
-      // Note: can get error here if dbVersion is too low.
-      console.error('Error opening user-scripts DB!', event);
-      reject(event);
-    };
-    dbOpen.onsuccess = event => {
-      resolve(event.target.result);
-    };
-    dbOpen.onupgradeneeded = event => {
-      let db = event.target.result;
-      db.onerror = event => {
-        console.error('Error upgrading user-scripts DB!', event);
+  function openDb() {
+    return new Promise((resolve, reject) => {
+      let dbOpen = indexedDB.open(dbName, dbVersion);
+      dbOpen.onerror = event => {
+        // Note: can get error here if dbVersion is too low.
+        console.error('Error opening user-scripts DB!', event);
         reject(event);
       };
-      let store = db.createObjectStore(scriptStoreName, {'keypath': 'uuid'});
-      // The generated from @name and @namespace ID.
-      store.createIndex('id', 'id', {'unique': true});
-    };
-  });
+      dbOpen.onsuccess = event => {
+        resolve(event.target.result);
+      };
+      dbOpen.onupgradeneeded = event => {
+        let db = event.target.result;
+        db.onerror = event => {
+          console.error('Error upgrading user-scripts DB!', event);
+          reject(event);
+        };
+        let store = db.createObjectStore(scriptStoreName, {'keypath': 'uuid'});
+        // The generated from @name and @namespace ID.
+        store.createIndex('id', 'id', {'unique': true});
+      };
+    });
+  }
+
+  return navigator.storage.persist().then(openDb);
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
