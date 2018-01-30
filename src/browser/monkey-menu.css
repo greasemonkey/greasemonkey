@@ -1,5 +1,6 @@
 :root {
   --arrowpanel-dimmed: hsla(0, 0%, 80%, 0.3);
+  --panel-max-height: 600px;
   --panel-separator-color: ThreeDShadow;
   --panelui-subview-transition-duration: 150ms;
 }
@@ -7,10 +8,13 @@
 body {
   cursor: default;
   font: caption;
-  max-height: 734px;
-  max-width: 22.35em;
-  min-width: 22.35em;
-  overflow: visible;
+  max-height: var(--panel-max-height);
+  /* The duplicated (min|max)-width attributes are required. If only the width
+   * attribute is used then the submenu transition effect becomes incredibly
+   * janky.
+   */
+  max-width: 100vw;
+  min-width: 100vw;
   overflow-x: hidden;
   transition: height var(--panelui-subview-transition-duration);
   will-change: transform;
@@ -19,6 +23,7 @@ body {
 
 }
 body.rendering { display: none; }
+body section { max-height: var(--panel-max-height); }
 
 /* Depth = 1 Cascading Menu
  * The below styles (along with a simple JS listener) are used to create a
@@ -32,7 +37,7 @@ body #menu {
 }
 
 body.detail #menu {
-  margin-left: -22.35em;
+  margin-left: -100vw;
 }
 
 body #user-script-detail {
@@ -65,7 +70,7 @@ body #user-script-detail {
  * menus (including the TOP menu).
 body.config #menu,
 body.config #user-script-detail {
-  margin-left: -22.35em;
+  margin-left: -100vw;
 }
  *
  * Set the default visibility and transition effect on the new menu section.
@@ -88,8 +93,9 @@ body.config #user-script-config {
  */
 
 section {
-  max-width: 22.35em;
-  min-width: 22.35em;
+  /* See (min|max)-width comment at top of file */
+  max-width: 100vw;
+  min-width: 100vw;
 }
 
 .subview-header {
@@ -127,6 +133,7 @@ section {
 }
 
 .subview-body {
+  max-height: 560px;
   padding: 6px 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -204,4 +211,16 @@ section {
 .subview-item.next-menu::after {
   content: url(/skin/next.svg);
   transform: scaleX(-1) translateY(2px);
+}
+
+@media (max-width: 300px) {
+  /* See (min|max)-width comment at top of file */
+  body {
+    max-width: 22.35em;
+    min-width: 22.35em;
+  }
+  section {
+    max-width: 22.35em;
+    min-width: 22.35em;
+  }
 }
