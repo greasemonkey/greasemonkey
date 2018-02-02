@@ -1,4 +1,7 @@
 /* Reference: https://firefoxux.github.io/StyleGuide/ */
+:root {
+  --dialog-max-width: 456px;
+}
 
 html, body {
   font: caption;
@@ -7,17 +10,15 @@ html, body {
 }
 html {
   height: 100%;
-  margin: 0 1em;
 }
 body {
-  margin: 1em auto;
-  max-width: 40em;
-}
-
-html, body {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  justify-content: space-between;
+  height: 100%;
+  margin: auto;
+  padding: 1em 0;
+  width: var(--dialog-max-width);
 }
 
 body.result #install,
@@ -26,21 +27,36 @@ body.install #result
 { display: none; }
 
 header {
-  margin-bottom: 1em;
-}
-header * {
-  display: inline-block;
-  vertical-align: middle;
-}
-header .icon img {
-  max-width: 32px;
+  -moz-box-align: center;
+  display: -moz-box;
   height: 32px;
+  margin-bottom: 1em;
+  width: var(--dialog-max-width);
 }
 header h1 {
+  -moz-box-flex: 1;
+  display: -moz-box;
   font-size: 20px;
+  overflow-x: hidden;
+  padding-left: 10px;
+  text-overflow: ellipsis;
 }
-header h1 #version {
-  padding-left: 6px;
+header .icon {
+  font-size: 14px;
+  text-align: center;
+  width: 32px;
+}
+header .icon img {
+  object-fit: contain;
+  height: 32px;
+  width: 32px;
+}
+header::after {
+  margin-inline-start: 10px;
+  content: attr(version);
+  float: right;
+  font-size: 16px;
+  color: GrayText;
 }
 
 #install {
@@ -54,6 +70,8 @@ header h1 #version {
 #details {
   border: 1px solid lightgrey;
   border-radius: 4px;
+  max-height: calc(100vh - 197px);
+  overflow-y: auto;
   padding: 16px;
 }
 
@@ -75,14 +93,14 @@ header h1 #version {
 progress {
   height: 17px;
   margin: 13px;
-  width: 100%;
+  width: -moz-available;
 }
 
 
-#footer {
+#footer #actions {
   display: flex;
 }
-#footer button {
+#footer #actions button {
   flex-grow: 3;
   width: 0;
 }
