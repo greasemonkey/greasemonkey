@@ -2,7 +2,7 @@
 (function() {
 
 /// Receive a UserScriptInstall message.
-window.onUserScriptInstall = async function(message, sender) {
+window.onUserScriptInstall = function(message, sender) {
   if (message.details) {
     let downloader = new Downloader(message.details, sender);
     downloader.start(function() {
@@ -11,7 +11,20 @@ window.onUserScriptInstall = async function(message, sender) {
       }
     });
   } else if (message.source) {
-    return await UserScriptRegistry.installFromSource(message.source);
+    // Returning a promise
+    return UserScriptRegistry.installFromSource(message.source)
+        .catch(err => {
+          if (err instanceof ParseError) {
+            console.warn(err);
+            chrome.notifications.create({
+              'type': 'basic',
+              'title': _('Import Failure'),
+              'message': err.message,
+            });
+          }
+          // Propagate to the message listener
+          throw err;
+        });
   }
 }
 
