@@ -34,7 +34,12 @@ function scriptStoreDb(uuid) {
     });
   }
 
-  return navigator.storage.persist().then(openDb);
+  // Android does not support persist. Conditionally set it.
+  if (navigator.storage && navigator.storage.persist) {
+    return navigator.storage.persist().then(openDb);
+  } else {
+    return openDb();
+  }
 }
 
 //////////////////////////// Store Implementation \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
