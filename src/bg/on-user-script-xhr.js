@@ -11,8 +11,11 @@ function onUserScriptXhr(port) {
 
   let xhr = new XMLHttpRequest();
   port.onMessage.addListener(msg => {
+    checkApiCallAllowed('GM.xmlHttpRequest', msg.uuid);
     switch (msg.name) {
-      case 'open': open(xhr, msg.details, port); break;
+      case 'open':
+        open(xhr, msg.details, port);
+        break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
     }
@@ -25,10 +28,9 @@ var dummyHeaderPrefix = 'x-greasemonkey-';
   
 function open(xhr, d, port) {
   function xhrEventHandler(src, event) {
-    console.log('xhr event;', src, event);
     var responseState = {
       context: d.context || null,
-      finalUrl: null,
+      finalUrl: xhr.responseURL,
       lengthComputable: null,
       loaded: null,
       readyState: xhr.readyState,

@@ -1,27 +1,34 @@
 {
   "manifest_version": 2,
   "name": "Greasemonkey",
-  "version": "4.1beta4",
+  "version": "4.3beta3",
   "description": "A User Script manager for Firefox.",
   "homepage_url": "https://www.greasespot.net/",
-  "icons": {"32": "skin/icon32.png"},
+  "icons": {
+    "48": "skin/icon.svg",
+    "96": "skin/icon.svg",
+    "512": "skin/icon.svg"
+  },
+  "default_locale": "en",
 
   "applications": {
     "gecko": {
       "id": "{e4a8a97b-f2ed-450b-b12d-ee082ba24781}",
-      "strict_min_version": "52.0"
+      "strict_min_version": "57.0"
     }
   },
 
   "browser_action": {
     "browser_style": false,
-    "default_icon": "skin/icon32.png",
+    "default_icon": "skin/icon.svg",
     "default_popup": "src/browser/monkey-menu.html",
     "default_title": "Greasemonkey"
   },
 
   "background": {
     "scripts": [
+      "src/i18n.js",
+
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
       "src/bg/is-enabled.js",
@@ -29,34 +36,23 @@
       "src/bg/on-user-script-notification.js",
       "src/bg/on-user-script-open-in-tab.js",
       "src/bg/on-user-script-xhr.js",
+      "src/bg/user-script-detect.js",
       "src/bg/user-script-install.js",
       "src/bg/user-script-registry.js",
       "src/bg/value-store.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
       "src/user-script-obj.js",
+      "src/util/check-api-call-allowed.js",
       "third-party/MatchPattern.js",
       "third-party/convert2RegExp.js",
 
       "src/bg/execute.run.js",
+      "src/bg/user-script-detect.run.js",
       "src/bg/user-script-registry.run.js",
       "src/bg/welcome.run.js"
     ]
   },
-
-  "content_scripts": [{
-    "matches": ["*://*/*.user.js"],
-    "js": [
-      "src/bg/api-provider-source.js",
-      "src/parse-meta-line.js",
-      "src/parse-user-script.js",
-      "src/user-script-obj.js",
-      "third-party/MatchPattern.js",
-      "third-party/convert2RegExp.js",
-
-      "src/content/script-detect.run.js"
-    ]
-  }],
 
   "permissions": [
     "<all_urls>",

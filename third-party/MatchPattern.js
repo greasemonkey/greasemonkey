@@ -42,7 +42,7 @@
 
 var validProtocols = ['http:', 'https:', 'ftp:', 'file:'];
 var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
-var REG_PARTS = new RegExp('^([a-z*]+:|\\*:)//([^/]+)(/.*)$');
+var REG_PARTS = new RegExp('^([a-z*]+:|\\*:)//([^/]+)?(/.*)$');
 
 
 // For the format of "pattern", see:
@@ -72,6 +72,12 @@ function MatchPattern(pattern) {
     throw new Error(`@match: Invalid protocol (${protocol}) specified.`);
   }
 
+  if (!host && protocol != "file:") {
+    throw new Error(`@match: No host specified for (${protocol}).`)
+  } else if (host && protocol == "file:") {
+    throw new Error("@match: Invalid (file:) URI, missing prefix \"/\"?");
+  }
+
   if (!REG_HOST.test(host)) {
     throw new Error("@match: Invalid host specified.");
   }
@@ -94,7 +100,7 @@ function MatchPattern(pattern) {
         // patterns. "*." has been escaped to "*\." by the replace above.
             .replace("*\\.", "(.*\\.)?") + "$", "i");
   } else {
-    // If omitted, then it means "", an alias for localhost.
+    // If omitted, then it means "", used for file: protocol only
     this._hostExpr = /^$/;
   }
   this._pathExpr = GM_convert2RegExp(path, false, true);
@@ -109,7 +115,9 @@ MatchPattern.prototype.doMatch = function(url) {
   if (validProtocols.indexOf(url.protocol) == -1) return false;
   if (this._all) return true;
   if (this._protocol != '*:' && this._protocol != url.protocol) return false;
-  return this._hostExpr.test(url.host) && this._pathExpr.test(url.pathname);
+
+  const path = url.pathname + url.search;
+  return this._hostExpr.test(url.hostname) && this._pathExpr.test(path);
 };
 
 

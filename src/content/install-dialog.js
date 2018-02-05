@@ -1,13 +1,11 @@
 const details = JSON.parse(unescape(document.location.search.substr(1)));
-document.title = details.name + ' - Greasemonkey User Script';
+document.title = _('$1 - Greasemonkey User Script', details.name);
 
 
 function finish() {
-  if (history.length > 1) {
-    history.back();
-  } else {
-    window.close();  // May fail -- message to BG?
-  }
+  chrome.tabs.getCurrent(curTab => {
+    chrome.tabs.remove(curTab.id);
+  });
 }
 
 
@@ -67,7 +65,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
       resultEl.appendChild(errorList);
     } else {
-      resultEl.textContent = 'Download and install successful!';
+      resultEl.textContent = _('Download and install successful!');
       progressBar.parentNode && progressBar.parentNode.removeChild(progressBar);
       finish();
     }
@@ -77,6 +75,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 /****************************** DETAIL DISPLAY *******************************/
 
 window.addEventListener('DOMContentLoaded', event => {
+  // Apply the onerror event for the img tag. CSP does not allow it to be done
+  // directly in HTML.
+  let iconEl = document.getElementById('script-icon');
+  iconEl.onerror = () => { iconEl.src = defaultIconUrl; };
+
   // Rivets will mutate its second parameter to have getters and setters,
   // these will break our attempt to pass `details` to background.  So
   // make a second copy of details, for Rivets to own.
@@ -84,7 +87,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
   // The fallback to default icon won't work unless iconUrl has at least an
   // empty string.
-  rvDetails.iconUrl = rvDetails.iconUrl || "";
+  rvDetails.iconUrl = rvDetails.iconUrl || '';
 
   rivets.bind(document.body, rvDetails);
 });

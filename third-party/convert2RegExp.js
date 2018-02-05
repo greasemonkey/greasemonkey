@@ -27,7 +27,7 @@
 
 (function() {
 
-var tldRegExp = /^([^:]+:\/\/[^\/]+)\.tld(\/.*)?$/;
+var tldRegExp = /^([^:]+:\/\/[^\/]+)\\.tld(\/.*)?$/;
 
 
 // Exposed outer method takes regex as string, and handles the magic TLD.
@@ -38,9 +38,6 @@ function GM_convert2RegExp(pattern, uri, forceGlob) {
     // Leading and trailing slash means raw regex.
     return new RegExp(s.substring(1, s.length - 1), 'i');
   }
-
-  // TODO: Accurate ".tld" support; blocked by http://bugzil.la/1315558
-  pattern = pattern.replace(tldRegExp, '$1(.[a-z]{,6}){1,3}$2');
 
   var res = "^";
 
@@ -75,6 +72,10 @@ function GM_convert2RegExp(pattern, uri, forceGlob) {
         break;
     }
   }
+
+
+  // TODO: Accurate ".tld" support; blocked by http://bugzil.la/1315558
+  res = res.replace(tldRegExp, '$1(.[a-z]{1,6}){1,3}$2');
 
   return new RegExp(res + "$", "i");
 }

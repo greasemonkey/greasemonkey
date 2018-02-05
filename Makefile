@@ -1,13 +1,13 @@
-.PHONY: test testonce coverage xpi
+.PHONY: test testwatch coverage xpi
 
 test:
 	@npm run test
 
-testonce:
-	@npm run test -- --single-run
+testwatch:
+	@npm run test -- --no-single-run
 
 coverage:
-	@npm run test -- --coverage --single-run
+	@npm run test -- --coverage
 	echo "file://$(shell ls $$PWD/coverage/*/*.html|sed -e 's/ /%20/g')"
 
 xpi:
