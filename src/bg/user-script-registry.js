@@ -242,6 +242,30 @@ function saveUserScript(userScript) {
         'Cannot save this type of UserScript object:'
         + userScript.constructor.name);
   }
+
+  function onSaveError(error) {
+    let message;
+    if (error.name == 'ConstraintError') {
+      // Most likely due to namespace / name conflict.
+      message = chrome.i18n.getMessage(
+          'User script save failed: script named $1 already exists in namespace $2.',
+          [JSON.stringify(userScript.name),
+           JSON.stringify(userScript.namespace)]);
+    } else {
+      message = chrome.i18n.getMessage(
+          'User script save failed: unknown error.');
+    }
+
+    // TODO: Pass this message to the editor tab, not general notifications.
+    let notificationOpts = {
+      'iconUrl': '/skin/icon.svg',
+      'message': message,
+      'title': 'Script Save Error',
+      'type': 'basic',
+    };
+    chrome.notifications.create(notificationOpts);
+  }
+
   return new Promise((resolve, reject) => openDb().then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
@@ -252,7 +276,7 @@ function saveUserScript(userScript) {
       db.close();
     };
     txn.onerror = event => {
-      console.warn('save transaction error?', event, event.target);
+      onSaveError(event.target.error);
       reject(event.target.error);
       db.close();
     };
@@ -263,37 +287,10 @@ function saveUserScript(userScript) {
       details.id = userScript.id;  // Secondary index on calculated value.
       store.put(details, userScript.uuid);
     } catch (e) {
-      // If these fail, they fail invisibly unless we catch and log (!?).
-      console.error('when saving', userScript, e);
-      db.close();
-      return;
+      onSaveError(e.target.error);
+      reject(e);
     }
-  })).catch(err => {
-    // If the transaction had an error of some sort..
-    let message;
-    if (err.name == 'ConstraintError') {
-      // Most likely due to namespace / name conflict.
-      message = 'Failed to save: namespace/name already exists: '
-              + userScript.id;
-    } else {
-      message = 'Failed to save: ' + userScript.id + ': Unknown error';
-    }
-    chrome.notifications.create({
-      'type': 'basic',
-      'title': 'Script Save Error',
-      'message': message,
-      // contextMessage doesn't currently display anything. Firefox bug?
-      'contextMessage': err.message
-    });
-  }).then(() => {
-    // Send the script change event, even though the save may have failed.
-    // This way the editor gets the updated script.
-    chrome.runtime.sendMessage({
-      'name': 'UserScriptChanged',
-      'details': userScript.details,
-      'parsedDetails': userScript.parsedDetails,
-    });
-  });
+  }));
 }
 
 
