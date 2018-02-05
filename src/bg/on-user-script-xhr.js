@@ -6,6 +6,11 @@ listens for a connection on a Port, and
 // Private implementation.
 (function() {
 
+const gExtensionUrl = chrome.extension.getURL('');
+const gHeadersToReplace = ['origin', 'referer'];
+const gDummyHeaderPrefix = 'x-greasemonkey-';
+
+
 function onUserScriptXhr(port) {
   if (port.name != 'UserScriptXhr') return;
 
@@ -23,9 +28,7 @@ function onUserScriptXhr(port) {
 }
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
-var headersToReplace = ['origin', 'referer'];
-var dummyHeaderPrefix = 'x-greasemonkey-';
-  
+
 function open(xhr, d, port) {
   function xhrEventHandler(src, event) {
     var responseState = {
@@ -106,8 +109,8 @@ function open(xhr, d, port) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
         var propLower = prop.toLowerCase();
-        if (headersToReplace.includes(propLower)) {
-          xhr.setRequestHeader(dummyHeaderPrefix + propLower, d.headers[prop]);
+        if (gHeadersToReplace.includes(propLower)) {
+          xhr.setRequestHeader(gDummyHeaderPrefix + propLower, d.headers[prop]);
         }
         else {
           xhr.setRequestHeader(prop, d.headers[prop]);
@@ -129,6 +132,7 @@ function open(xhr, d, port) {
   }
 }
 
+
 function getHeader(headers, name) {
   name = name.toLowerCase();
   for (var header of headers) {
@@ -139,12 +143,11 @@ function getHeader(headers, name) {
   return null;
 }
 
-const extensionUrl = chrome.extension.getURL('');
 
 function rewriteHeaders(e) {
-  if (e.originUrl && e.originUrl.startsWith(extensionUrl)) {
-    for (var name of headersToReplace) {
-      var prefixedHeader = getHeader(e.requestHeaders, dummyHeaderPrefix + name);
+  if (e.originUrl && e.originUrl.startsWith(gExtensionUrl)) {
+    for (var name of gHeadersToReplace) {
+      var prefixedHeader = getHeader(e.requestHeaders, gDummyHeaderPrefix + name);
       if (prefixedHeader) {
         var unprefixedHeader = getHeader(e.requestHeaders, name);
         if (unprefixedHeader) {
@@ -155,11 +158,11 @@ function rewriteHeaders(e) {
       }
     }
   }
-  return { requestHeaders: e.requestHeaders };
+  return {'requestHeaders': e.requestHeaders};
 }
-
 chrome.webRequest.onBeforeSendHeaders.addListener(
-  rewriteHeaders, {urls: ['<all_urls>'], types: ['xmlhttprequest']}, ['blocking', 'requestHeaders']
-);
+    rewriteHeaders,
+    {'urls': ['<all_urls>'], 'types': ['xmlhttprequest']},
+    ['blocking', 'requestHeaders']);
 
 })();
