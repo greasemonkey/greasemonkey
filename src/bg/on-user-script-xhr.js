@@ -7,7 +7,7 @@ listens for a connection on a Port, and
 (function() {
 
 const gExtensionUrl = chrome.extension.getURL('');
-const gHeadersToReplace = ['origin', 'referer'];
+const gHeadersToReplace = ['cookie', 'origin', 'referer'];
 const gDummyHeaderPrefix = 'x-greasemonkey-';
 
 
