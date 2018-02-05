@@ -14,43 +14,41 @@ let userScripts = {};
 const dbName = 'greasemonkey';
 const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
-const db = (function() {
-  function openDb() {
-    return new Promise((resolve, reject) => {
-      let dbOpen = indexedDB.open(dbName, dbVersion);
-      dbOpen.onerror = event => {
-        // Note: can get error here if dbVersion is too low.
-        console.error('Error opening user-scripts DB!', event);
-        reject(event);
-      };
-      dbOpen.onsuccess = event => {
-        resolve(event.target.result);
-      };
-      dbOpen.onupgradeneeded = event => {
-        let db = event.target.result;
-        db.onerror = event => {
-          console.error('Error upgrading user-scripts DB!', event);
-          reject(event);
-        };
-        let store = db.createObjectStore(scriptStoreName, {'keypath': 'uuid'});
-        // The generated from @name and @namespace ID.
-        store.createIndex('id', 'id', {'unique': true});
-      };
-    });
+
+
+async function openDb() {
+  if (navigator.storage && navigator.storage.persist) {
+    await navigator.storage.persist();
   }
 
-  // Android does not support persist. Conditionally set it.
-  if (navigator.storage && navigator.storage.persist) {
-    return navigator.storage.persist().then(openDb);
-  } else {
-    return openDb();
-  }
-})();
+  return new Promise((resolve, reject) => {
+    let dbOpen = indexedDB.open(dbName, dbVersion);
+    dbOpen.onerror = event => {
+      // Note: can get error here if dbVersion is too low.
+      console.error('Error opening user-scripts DB!', event);
+      reject(event);
+    };
+    dbOpen.onsuccess = event => {
+      resolve(event.target.result);
+    };
+    dbOpen.onupgradeneeded = event => {
+      let db = event.target.result;
+      db.onerror = event => {
+        console.error('Error upgrading user-scripts DB!', event);
+        reject(event);
+      };
+      let store = db.createObjectStore(scriptStoreName, {'keypath': 'uuid'});
+      // The generated from @name and @namespace ID.
+      store.createIndex('id', 'id', {'unique': true});
+    };
+  });
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 function installFromDownloader(downloader) {
-  db.then(db => {
+  openDb().then(db => {
     try {
       let remoteScript = new RemoteUserScript(downloader.scriptDetails);
       let txn = db.transaction([scriptStoreName], "readonly");
@@ -61,14 +59,16 @@ function installFromDownloader(downloader) {
         let userScript = new EditableUserScript(req.result || {});
         userScript.updateFromDownloader(downloader);
         saveUserScript(userScript);
-
+        db.close();
         // TODO: Notification?
       };
       txn.onerror = event => {
         console.error('Error looking up script!', event);
+        db.close();
       };
     } catch (e) {
       console.error('at installFromDownloader(), db fail:', e);
+      db.close();
     }
   });
 }
@@ -76,7 +76,7 @@ function installFromDownloader(downloader) {
 
 async function installFromSource(source) {
   return new Promise((resolve, reject) => {
-    db.then(db => {
+    openDb().then(db => {
       try {
         let details = parseUserScript(source, null);
         let remoteScript = new RemoteUserScript(details);
@@ -89,16 +89,17 @@ async function installFromSource(source) {
           details.content = source;
           details.parsedDetails = details;
           let userScript = new EditableUserScript(details);
-          console.log('saving', userScript);
           saveUserScript(userScript);
-          console.log('<<< installFromSource');
           resolve(userScript.uuid);
+          db.close();
         };
         txn.onerror = event => {
           console.error('Error looking up script!', event);
+          db.close();
         };
       } catch (e) {
         console.error('at installFromSource(), db fail:', e);
+        db.close();
       }
     });
   });
@@ -106,7 +107,7 @@ async function installFromSource(source) {
 
 
 function loadUserScripts() {
-  db.then(db => {
+  openDb().then(db => {
     let txn = db.transaction([scriptStoreName], "readonly");
     let store = txn.objectStore(scriptStoreName);
     let req = store.getAll();
@@ -120,9 +121,11 @@ function loadUserScripts() {
           saveUserScript(userScript);
         }
       });
+      db.close();
     };
     req.onerror = event => {
       console.error('loadUserScripts() failure', event);
+      db.close();
     };
   });
 };
@@ -136,7 +139,7 @@ function onEditorSaved(message, sender, sendResponse) {
   }
 
   // Use a clone of the current user script. This is so that any changes are
-  // not propegated to the actual UserScript unless the transaction is
+  // not propagated to the actual UserScript unless the transaction is
   // successful.
   let cloneScript = new EditableUserScript(userScript.details);
   cloneScript.updateFromEditorSaved(message)
@@ -214,7 +217,7 @@ window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
 function onUserScriptUninstall(message, sender, sendResponse) {
-  db.then(db => {
+  openDb().then(db => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     let store = txn.objectStore(scriptStoreName);
     let req = store.delete(message.uuid);
@@ -222,9 +225,11 @@ function onUserScriptUninstall(message, sender, sendResponse) {
       // TODO: Drop value store DB.
       delete userScripts[message.uuid];
       sendResponse(null);
+      db.close();
     };
     req.onerror = event => {
       console.error('onUserScriptUninstall() failure', event);
+      db.close();
     };
   });
 };
@@ -237,17 +242,19 @@ function saveUserScript(userScript) {
         'Cannot save this type of UserScript object:'
         + userScript.constructor.name);
   }
-  return new Promise((resolve, reject) => db.then((db) => {
+  return new Promise((resolve, reject) => openDb().then((db) => {
     let txn = db.transaction([scriptStoreName], 'readwrite');
     txn.oncomplete = event => {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
       resolve();
+      db.close();
     };
     txn.onerror = event => {
       console.warn('save transaction error?', event, event.target);
       reject(event.target.error);
+      db.close();
     };
 
     try {
@@ -258,6 +265,7 @@ function saveUserScript(userScript) {
     } catch (e) {
       // If these fail, they fail invisibly unless we catch and log (!?).
       console.error('when saving', userScript, e);
+      db.close();
       return;
     }
   })).catch(err => {

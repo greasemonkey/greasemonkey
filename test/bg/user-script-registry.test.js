@@ -1,6 +1,12 @@
 describe('bg/user-script-registry', () => {
-  beforeEach(() => {
-    indexedDB.deleteDatabase('greasemonkey');
+  afterEach((done) => {
+    let req = indexedDB.deleteDatabase('greasemonkey');
+    req.onsuccess = event => {
+      done();
+    };
+    req.onerror = event => {
+      console.error('delete error;', event, event.result);
+    };
   });
 
   function scriptNamed(name) {
