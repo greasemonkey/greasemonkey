@@ -123,14 +123,14 @@ function open(xhr, d, port, tabUrl) {
   
   // if same-origin XHR, add cookies unless already specified by user
   chrome.cookies.getAll({url: d.url}, cookies => {
-    if (!hasCookieHeader) {
-      if (d.withCredentials || isSameOrigin(tabUrl, d.url)) {        
-          var cookieStrings = [];
-          for (var cookie of cookies) {
-            cookieStrings.push(cookie.name + '=' + cookie.value + ';');
-          }
-          xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
-        }
+    if (cookies.length && !hasCookieHeader
+        && (d.withCredentials || isSameOrigin(tabUrl, d.url))
+    ) {
+      var cookieStrings = [];
+      for (var cookie of cookies) {
+        cookieStrings.push(cookie.name + '=' + cookie.value + ';');
+      }
+      xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
     }
     
     // if/when we switch from "chrome" to "browser" APIs, set up the promise
