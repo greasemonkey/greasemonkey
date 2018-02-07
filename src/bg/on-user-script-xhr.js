@@ -121,7 +121,9 @@ function open(xhr, d, port, tabUrl) {
     }
   }
   
-  // if same-origin XHR, add cookies unless already specified by user
+  // if same-origin XHR, add cookies unless already specified by user.
+  // if/when we switch from "chrome" to "browser" APIs, set up the promise
+  // so we don't have to query cookies when we know we don't need them.
   chrome.cookies.getAll({url: d.url}, cookies => {
     if (cookies.length && !hasCookieHeader
         && (d.withCredentials || isSameOrigin(tabUrl, d.url))
@@ -132,9 +134,7 @@ function open(xhr, d, port, tabUrl) {
       }
       xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
     }
-    
-    // if/when we switch from "chrome" to "browser" APIs, set up the promise
-    // so this code doesn't have to be nested in the cookie-handling block
+
     var body = d.data || null;
     if (d.binary && (body !== null)) {
       var bodyLength = body.length;
