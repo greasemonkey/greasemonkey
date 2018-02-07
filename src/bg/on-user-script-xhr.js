@@ -15,11 +15,11 @@ function onUserScriptXhr(port) {
   if (port.name != 'UserScriptXhr') return;
 
   let xhr = new XMLHttpRequest();
-  port.onMessage.addListener(msg => {
+  port.onMessage.addListener((msg, src) => {
     checkApiCallAllowed('GM.xmlHttpRequest', msg.uuid);
     switch (msg.name) {
       case 'open':
-        open(xhr, msg.details, port);
+        open(xhr, msg.details, port, src.sender.tab.url);
         break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
@@ -29,7 +29,7 @@ function onUserScriptXhr(port) {
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
 
-function open(xhr, d, port) {
+function open(xhr, d, port, tabUrl) {
   function xhrEventHandler(src, event) {
     var responseState = {
       context: d.context || null,
@@ -105,10 +105,12 @@ function open(xhr, d, port) {
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
 
+  var hasCookieHeader = false;
   if (d.headers) {
     for (var prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
         var propLower = prop.toLowerCase();
+        hasCookieHeader = (propLower === 'cookie');
         if (gHeadersToReplace.includes(propLower)) {
           xhr.setRequestHeader(gDummyHeaderPrefix + propLower, d.headers[prop]);
         }
@@ -118,18 +120,46 @@ function open(xhr, d, port) {
       }
     }
   }
-
-  var body = d.data || null;
-  if (d.binary && (body !== null)) {
-    var bodyLength = body.length;
-    var bodyData = new Uint8Array(bodyLength);
-    for (var i = 0; i < bodyLength; i++) {
-      bodyData[i] = body.charCodeAt(i) & 0xff;
+  
+  // if same-origin XHR, add cookies unless already specified by user
+  chrome.cookies.getAll({url: d.url}, cookies => {
+    if (!hasCookieHeader) {
+      if (d.withCredentials || isSameOrigin(tabUrl, d.url)) {        
+          var cookieStrings = [];
+          for (var cookie of cookies) {
+            cookieStrings.push(cookie.name + '=' + cookie.value + ';');
+          }
+          xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
+        }
     }
-    xhr.send(new Blob([bodyData]));
-  } else {
-    xhr.send(body);
+    
+    // if/when we switch from "chrome" to "browser" APIs, set up the promise
+    // so this code doesn't have to be nested in the cookie-handling block
+    var body = d.data || null;
+    if (d.binary && (body !== null)) {
+      var bodyLength = body.length;
+      var bodyData = new Uint8Array(bodyLength);
+      for (var i = 0; i < bodyLength; i++) {
+        bodyData[i] = body.charCodeAt(i) & 0xff;
+      }
+      xhr.send(new Blob([bodyData]));
+    } else {
+      xhr.send(body);
+    }
+  });
+}
+
+
+function isSameOrigin(first, second) {
+  var firstUrl, secondUrl;
+  try {
+    firstUrl = new URL(first);
+    secondUrl = new URL(second);
   }
+  catch {
+    return false;
+  }
+  return firstUrl.origin === secondUrl.origin;
 }
 
 
