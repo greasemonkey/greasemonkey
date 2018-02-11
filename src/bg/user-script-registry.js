@@ -130,25 +130,29 @@ async function loadUserScripts() {
 
 async function loadUserScripts() {
   let db = await openDb();
-  let txn = db.transaction([scriptStoreName], "readonly");
-  let store = txn.objectStore(scriptStoreName);
-  let req = store.getAll();
-  req.onsuccess = event => {
-    userScripts = {};
-    event.target.result.forEach(details => {
-      let userScript = new EditableUserScript(details);
-      userScripts[details.uuid] = userScript;
-      if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-        userScript.calculateEvalContent();
-        saveUserScript(userScript);
-      }
-    });
-    db.close();
-  };
-  req.onerror = event => {
-    console.error('loadUserScripts() failure', event);
-    db.close();
-  };
+  return new Promise((resolve, reject) => {
+    let txn = db.transaction([scriptStoreName], "readonly");
+    let store = txn.objectStore(scriptStoreName);
+    let req = store.getAll();
+    req.onsuccess = async event => {
+      userScripts = {};
+      await Promise.all(event.target.result.map(async details => {
+        let userScript = new EditableUserScript(details);
+        userScripts[details.uuid] = userScript;
+        if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
+          userScript.calculateEvalContent();
+          await saveUserScript(userScript);
+        }
+      }));
+      resolve(); 
+      db.close();
+    };
+    req.onerror = event => {
+      console.error('loadUserScripts() failure', event);
+      reject(event.target.error);
+      db.close();
+    };
+  });
 }
 
 
