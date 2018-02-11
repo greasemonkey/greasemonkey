@@ -280,7 +280,7 @@ async function saveUserScript(userScript) {
     let notificationOpts = {
       'iconUrl': '/skin/icon.svg',
       'message': message,
-      'title': 'Script Save Error',
+      'title': _('Script Save Error'),
       'type': 'basic',
     };
     chrome.notifications.create(notificationOpts);
