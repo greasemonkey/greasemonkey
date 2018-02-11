@@ -37,7 +37,7 @@ function checkHeaders(responseHeaders) {
 
 // Check if enough content is available to open an install message
 function checkScript(userScriptContent, url) {
-  let scriptDetails = catchParseUserScript(userScriptContent, url, true);
+  let scriptDetails = catchParseUserScript(userScriptContent, url);
   if (scriptDetails) {
     openInstallDialog(scriptDetails, url);
     return true;
