@@ -15,9 +15,12 @@ const contentTypeRe = new RegExp(`(${userScriptTypes.join('|')})(;.*)?`);
 function catchParseUserScript(userScriptContent, url) {
   try {
     return parseUserScript(userScriptContent, url, true);
-  } catch {
+  } catch (err) {
     // It's not important why the parse failed or threw. Just treat it as the
     // parsing was unsuccessful and fetch more data.
+    // Log the error so it isn't silently dismissed.
+    // TODO: This may flood the console
+    console.info('Detect script parse error', err);
     return false;
   }
 }
