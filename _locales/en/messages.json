@@ -26,7 +26,7 @@
   "Install": { "message": "Install" },
   "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": { "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge." },
   "Matches:": { "message": "Matches:" },
-  "New user script ...": { "message": "New user script ..." },
+  "New user script...": { "message": "New user script..." },
   "Requires special APIs:": { "message": "Requires special APIs:" },
   "Runs on:": { "message": "Runs on:" },
   "This is a Greasemonkey user script.  Click install to start using it.": { "message": "This is a Greasemonkey user script.  Click install to start using it." },
