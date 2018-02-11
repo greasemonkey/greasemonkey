@@ -138,5 +138,9 @@
     "Does not run on:": {
         "message": "Ausgeschlossen von:",
         "description": ""
+    },
+    "Unnamed Script $1": {
+        "message": "Unbenanntes Skript $1",
+        "description": ""
     }
 }
