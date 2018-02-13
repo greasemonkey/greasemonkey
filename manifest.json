@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Greasemonkey",
+  "name": "__MSG_extName__",
   "version": "4.3beta4",
-  "description": "A User Script manager for Firefox.",
+  "description": "__MSG_extDesc__",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
     "48": "skin/icon.svg",
@@ -22,7 +22,7 @@
     "browser_style": false,
     "default_icon": "skin/icon.svg",
     "default_popup": "src/browser/monkey-menu.html",
-    "default_title": "Greasemonkey"
+    "default_title": "__MSG_extName__"
   },
 
   "background": {
