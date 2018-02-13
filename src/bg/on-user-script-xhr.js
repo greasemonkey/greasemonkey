@@ -105,11 +105,11 @@ function open(xhr, d, port, tabUrl) {
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
 
-  var hasCookieHeader = false;
+  let hasCookieHeader = false;
   if (d.headers) {
-    for (var prop in d.headers) {
+    for (let prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
-        var propLower = prop.toLowerCase();
+        let propLower = prop.toLowerCase();
         hasCookieHeader = (propLower === 'cookie');
         if (gHeadersToReplace.includes(propLower)) {
           xhr.setRequestHeader(gDummyHeaderPrefix + propLower, d.headers[prop]);
@@ -121,15 +121,14 @@ function open(xhr, d, port, tabUrl) {
     }
   }
   
-  // if same-origin XHR, add cookies unless already specified by user.
-  // if/when we switch from "chrome" to "browser" APIs, set up the promise
-  // so we don't have to query cookies when we know we don't need them.
+  // If this is a same-origin XHR or the user opted in with withCredentials,
+  // add cookies unless already specified by the user.
   chrome.cookies.getAll({url: d.url}, cookies => {
     if (cookies.length && !hasCookieHeader
         && (d.withCredentials || isSameOrigin(tabUrl, d.url))
     ) {
-      var cookieStrings = [];
-      for (var cookie of cookies) {
+      let cookieStrings = [];
+      for (let cookie of cookies) {
         cookieStrings.push(cookie.name + '=' + cookie.value + ';');
       }
       xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
@@ -151,12 +150,11 @@ function open(xhr, d, port, tabUrl) {
 
 
 function isSameOrigin(first, second) {
-  var firstUrl, secondUrl;
+  let firstUrl, secondUrl;
   try {
     firstUrl = new URL(first);
     secondUrl = new URL(second);
-  }
-  catch {
+  } catch {
     return false;
   }
   return firstUrl.origin === secondUrl.origin;
