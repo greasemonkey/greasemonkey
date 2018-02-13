@@ -106,30 +106,6 @@ async function installFromSource(source) {
 
 async function loadUserScripts() {
   let db = await openDb();
-  let txn = db.transaction([scriptStoreName], "readonly");
-  let store = txn.objectStore(scriptStoreName);
-  let req = store.getAll();
-  req.onsuccess = event => {
-    userScripts = {};
-    event.target.result.forEach(details => {
-      let userScript = new EditableUserScript(details);
-      userScripts[details.uuid] = userScript;
-      if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-        userScript.calculateEvalContent();
-        saveUserScript(userScript);
-      }
-    });
-    db.close();
-  };
-  req.onerror = event => {
-    console.warn('failed to load user scripts?', event);
-    db.close();
-  };
-}
-
-
-async function loadUserScripts() {
-  let db = await openDb();
   return new Promise((resolve, reject) => {
     let txn = db.transaction([scriptStoreName], "readonly");
     let store = txn.objectStore(scriptStoreName);
@@ -144,7 +120,7 @@ async function loadUserScripts() {
           await saveUserScript(userScript);
         }
       }));
-      resolve(); 
+      resolve();
       db.close();
     };
     req.onerror = event => {
