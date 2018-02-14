@@ -138,5 +138,53 @@
     "Does not run on:": {
         "message": "Ausgeschlossen von:",
         "description": ""
+    },
+    "User script save failed: script named $1 already exists in namespace $2.": {
+        "message": "Fehler beim Speichern: Es gibt bereits ein Benutzerskript $1 im Namensbereich $2.",
+        "description": ""
+    },
+    "User script save failed: unknown error.": {
+        "message": "Fehler beim Speichern: Allgemeiner Fehler.",
+        "description": ""
+    },
+    "$1; Version $2": {
+        "message": "$1; Version $2",
+        "description": ""
+    },
+    "Save": {
+        "message": "Speichern",
+        "description": ""
+    },
+    "Script Save Error": {
+        "message": "Fehler beim Speichern des Benutzerskripts",
+        "description": ""
+    },
+    "[Greasemonkey Script $1]": {
+        "message": "[Greasemonkey Benutzerskript $1]",
+        "description": ""
+    },
+    "GM.registerMenuCommand: \"accessKey\" must be a single character": {
+        "message": "GM.registerMenuCommand: \"accessKey\" benötigt ein einzelnes Zeichen",
+        "description": ""
+    },
+    "GM.registerMenuCommand: \"commandFunc\" must be a function": {
+        "message": "GM.registerMenuCommand: \"commandFunc\" muß eine Funktion sein",
+        "description": ""
+    },
+    "User script commands": {
+        "message": "Benutzerbefehle",
+        "description": ""
+    },
+    "User script commands...": {
+        "message": "Benutzerbefehle...",
+        "description": ""
+    },
+    "Download and install errors:": {
+        "message": "Fehler beim Laden und Installieren des Benutzerskripts:",
+        "description": ""
+    },
+    "Script Updated": {
+        "message": "Benutzerskript aktualisiert",
+        "description": ""
     }
 }

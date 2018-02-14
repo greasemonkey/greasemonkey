@@ -2,6 +2,7 @@
   "$1 - Greasemonkey User Script Editor": { "message": "$1 - Greasemonkey User Script Editor" },
   "$1 - Greasemonkey User Script": { "message": "$1 - Greasemonkey User Script" },
   "$1 does not @grant method $2": { "message": "$1 does not @grant method $2" },
+  "$1; Version $2": { "message": "$1; Version $2" },
   "Cancel": { "message": "Cancel" },
   "Could not execute user script: $1\n$2": { "message": "Could not execute user script: $1\n$2" },
   "Disabled": { "message": "Disabled" },
@@ -29,11 +30,14 @@
   "New user script...": { "message": "New user script..." },
   "Requires special APIs:": { "message": "Requires special APIs:" },
   "Runs on:": { "message": "Runs on:" },
+  "Save": { "message": "Save" },
+  "Script Save Error": { "message": "Script Save Error" },
   "This is a Greasemonkey user script.  Click install to start using it.": { "message": "This is a Greasemonkey user script.  Click install to start using it." },
   "Undo uninstall": { "message": "Undo uninstall" },
   "Uninstall": { "message": "Uninstall" },
   "User scripts for this tab": { "message": "User scripts for this tab" },
   "User script save failed: script named $1 already exists in namespace $2.": { "message": "User script save failed: script named $1 already exists in namespace $2." },
   "User script save failed: unknown error.": { "message": "User script save failed: unknown error." },
-  "You should only install scripts from sources that you trust.": { "message": "You should only install scripts from sources that you trust." }
+  "You should only install scripts from sources that you trust.": { "message": "You should only install scripts from sources that you trust." },
+  "[Greasemonkey Script $1]": { "message": "[Greasemonkey Script $1]" }
 }

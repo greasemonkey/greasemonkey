@@ -1,5 +1,7 @@
 // TODO: Search, replace.
-// TODO: Put name in title.
+
+// Change this title as soon as possible, but it won't change later.
+document.getElementById('save').setAttribute('title', _('Save'));
 
 var editor = CodeMirror(
     document.getElementById('editor'),
@@ -41,6 +43,10 @@ chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }, userScript => {
+  // Apply as soon as possible, but this label doesn't ever change...
+  //alert(document.getElementById('save').innerHTML); // _('Save');
+  //document.body.getElementById('save').setAttribute('title', _('Save'));
+
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;

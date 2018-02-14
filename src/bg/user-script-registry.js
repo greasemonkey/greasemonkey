@@ -239,7 +239,7 @@ window.onUserScriptUninstall = onUserScriptUninstall;
 async function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
     throw new Error(
-        'Cannot save this type of UserScript object:'
+        'Cannot save this type of UserScript object: '
         + userScript.constructor.name);
   }
 
@@ -247,20 +247,18 @@ async function saveUserScript(userScript) {
     let message;
     if (error.name == 'ConstraintError') {
       // Most likely due to namespace / name conflict.
-      message = chrome.i18n.getMessage(
-          'User script save failed: script named $1 already exists in namespace $2.',
-          [JSON.stringify(userScript.name),
-           JSON.stringify(userScript.namespace)]);
+      message = _('User script save failed: script named $1 already exists in namespace $2.',
+                  JSON.stringify(userScript.name),
+                  JSON.stringify(userScript.namespace));
     } else {
-      message = chrome.i18n.getMessage(
-          'User script save failed: unknown error.');
+      message = _('User script save failed: unknown error.');
     }
 
     // TODO: Pass this message to the editor tab, not general notifications.
     let notificationOpts = {
       'iconUrl': '/skin/icon.svg',
       'message': message,
-      'title': 'Script Save Error',
+      'title': _('Script Save Error'),
       'type': 'basic',
     };
     chrome.notifications.create(notificationOpts);
