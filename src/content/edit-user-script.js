@@ -43,10 +43,6 @@ chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }, userScript => {
-  // Apply as soon as possible, but this label doesn't ever change...
-  //alert(document.getElementById('save').innerHTML); // _('Save');
-  //document.body.getElementById('save').setAttribute('title', _('Save'));
-
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;
