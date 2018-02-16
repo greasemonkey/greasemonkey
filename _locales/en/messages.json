@@ -35,6 +35,7 @@
   "This is a Greasemonkey user script.  Click install to start using it.": { "message": "This is a Greasemonkey user script.  Click install to start using it." },
   "Undo uninstall": { "message": "Undo uninstall" },
   "Uninstall": { "message": "Uninstall" },
+  "Unnamed Script $1": { "message": "Unnamed Script $1" },
   "User scripts for this tab": { "message": "User scripts for this tab" },
   "User script save failed: script named $1 already exists in namespace $2.": { "message": "User script save failed: script named $1 already exists in namespace $2." },
   "User script save failed: unknown error.": { "message": "User script save failed: unknown error." },

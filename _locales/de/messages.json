@@ -196,5 +196,9 @@
     "Script Updated": {
         "message": "Benutzerskript aktualisiert",
         "description": ""
+    },
+    "Unnamed Script $1": {
+        "message": "Unbenanntes Skript $1",
+        "description": ""
     }
 }

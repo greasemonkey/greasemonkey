@@ -12,6 +12,19 @@ const userScriptTypes = [
 ];
 const contentTypeRe = new RegExp(`(${userScriptTypes.join('|')})(;.*)?`);
 
+function catchParseUserScript(userScriptContent, url) {
+  try {
+    return parseUserScript(userScriptContent, url, true);
+  } catch (err) {
+    // It's not important why the parse failed or threw. Just treat it as the
+    // parsing was unsuccessful and fetch more data.
+    // Log the error so it isn't silently dismissed.
+    // TODO: This may flood the console
+    console.info('Detect script parse error', err);
+    return false;
+  }
+}
+
 
 // Examine headers before determining if script checking is needed
 function checkHeaders(responseHeaders) {
@@ -27,7 +40,7 @@ function checkHeaders(responseHeaders) {
 
 // Check if enough content is available to open an install message
 function checkScript(userScriptContent, url) {
-  let scriptDetails = parseUserScript(userScriptContent, url, true);
+  let scriptDetails = catchParseUserScript(userScriptContent, url);
   if (scriptDetails) {
     openInstallDialog(scriptDetails, url);
     return true;

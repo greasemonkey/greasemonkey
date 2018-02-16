@@ -29,6 +29,8 @@ function apiProviderSource(userScript) {
   let source = '(function() {\n';
   // A private copy of the script UUID which cannot be tampered with.
   source += 'const _uuid = "' + userScript.uuid + '";\n\n';
+  // A private copy of the localization function, used by some of the API functions.
+  source += 'const _ = ' + _.toString() + ';\n\n';
 
   if (grants.includes('GM.deleteValue')) {
     source += 'GM.deleteValue = ' + GM_deleteValue.toString() + ';\n\n';
