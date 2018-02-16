@@ -247,9 +247,10 @@ async function saveUserScript(userScript) {
     let message;
     if (error.name == 'ConstraintError') {
       // Most likely due to namespace / name conflict.
-      message = _('User script save failed: script named $1 already exists in namespace $2.',
-                  JSON.stringify(userScript.name),
-                  JSON.stringify(userScript.namespace));
+      message = _(
+          'User script save failed: script named $1 already exists in namespace $2.',
+          JSON.stringify(userScript.name),
+          JSON.stringify(userScript.namespace));
     } else {
       message = _('User script save failed: unknown error.');
     }
