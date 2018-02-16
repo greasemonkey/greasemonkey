@@ -13,8 +13,11 @@ let gTplData = {
 let gUserScripts = {};
 let gPendingTicker = null;
 
+const gPlaceHolder = '%d';
+const gUnnamedScript = _('Unnamed Script $1', gPlaceHolder);
+
 const gNewScriptTpl = `// ==UserScript==
-// @name     Unnamed Script %d
+// @name     ${gUnnamedScript}
 // @version  1
 // @grant    none
 // ==/UserScript==`;
@@ -79,7 +82,7 @@ function onHashChange(event) {
       break;
     case '#new-user-script':
       let r = Math.floor(Math.random() * 900000 + 100000);
-      let newScriptSrc = gNewScriptTpl.replace('%d', r);
+      let newScriptSrc = gNewScriptTpl.replace(gPlaceHolder, r);
       chrome.runtime.sendMessage(
           {'name': 'UserScriptInstall', 'source': newScriptSrc},
           uuid => openUserScriptEditor(uuid));
