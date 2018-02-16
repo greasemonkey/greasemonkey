@@ -1,7 +1,7 @@
 // TODO: Search, replace.
 
-// Change this title as soon as possible, but it won't change later.
-document.getElementById('save').setAttribute('title', _('Save'));
+// Change the title of the save icon (and more) to initial values.
+rivets.bind(document, {});
 
 var editor = CodeMirror(
     document.getElementById('editor'),
