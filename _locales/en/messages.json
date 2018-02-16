@@ -29,6 +29,7 @@
   "New user script...": { "message": "New user script..." },
   "Requires special APIs:": { "message": "Requires special APIs:" },
   "Runs on:": { "message": "Runs on:" },
+  "Script Save Error": { "message": "Script Save Error" },
   "This is a Greasemonkey user script.  Click install to start using it.": { "message": "This is a Greasemonkey user script.  Click install to start using it." },
   "Undo uninstall": { "message": "Undo uninstall" },
   "Uninstall": { "message": "Uninstall" },
