@@ -174,10 +174,11 @@ window.RemoteUserScript = class RemoteUserScript {
 
   toString() {
     if (this.version) {
-        const scriptIdAndVersion = _('$ID$; Version $VERSION$', this.id, this.version);
-        return _('[Greasemonkey Script $1]', scriptIdAndVersion);
+      return _(
+          '[Greasemonkey script $id$; version $version$]',
+          this.id, this.version);
     } else {
-        return _('[Greasemonkey Script $1]', this.id);
+      return _('[Greasemonkey script $1]', this.id);
     }
   }
 }
