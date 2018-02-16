@@ -23,7 +23,7 @@ function nameFromUrl(url) {
 
 
 // Safely construct a new URL object from a path and base. According to MDN,
-// if a URL constructor recieved an absolute URL as the path then the base
+// if a URL constructor received an absolute URL as the path then the base
 // is ignored. Unfortunately that doesn't seem to be the case. And if the
 // base is invalid (null / empty string) then an exception is thrown.
 function safeUrl(path, base) {
