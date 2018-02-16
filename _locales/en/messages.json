@@ -2,7 +2,7 @@
   "$1 - Greasemonkey User Script Editor": { "message": "$1 - Greasemonkey User Script Editor" },
   "$1 - Greasemonkey User Script": { "message": "$1 - Greasemonkey User Script" },
   "$1 does not @grant method $2": { "message": "$1 does not @grant method $2" },
-  "$1; Version $2": { "message": "$1; Version $2" },
+  "$ID$; Version $VERSION$": { "message": "$ID$; Version $VERSION$", "placeholders": { "id": { "content": "$1", "example": "namespace/name" }, "version": { "content": "$2", "example": "1" }}},
   "Cancel": { "message": "Cancel" },
   "Could not execute user script: $1\n$2": { "message": "Could not execute user script: $1\n$2" },
   "Disabled": { "message": "Disabled" },

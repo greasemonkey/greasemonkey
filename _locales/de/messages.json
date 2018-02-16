@@ -147,9 +147,19 @@
         "message": "Fehler beim Speichern: Allgemeiner Fehler.",
         "description": ""
     },
-    "$1; Version $2": {
-        "message": "$1; Version $2",
-        "description": ""
+    "$ID$; Version $VERSION$": {
+        "message": "$ID$; Version $VERSION$",
+        "description": "",
+        "placeholders": {
+            "id": {
+                "content": "$1",
+                "example": "namespace/name"
+            },
+            "version": {
+                "content": "$2",
+                "example": "1"
+            }
+        }
     },
     "Save": {
         "message": "Speichern",
