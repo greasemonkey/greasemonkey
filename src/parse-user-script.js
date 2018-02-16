@@ -26,7 +26,7 @@ function nameFromUrl(url) {
 // if a URL constructor recieved an absolute URL as the path then the base
 // is ignored. Unfortunately that doesn't seem to be the case. And if the
 // base is invalid (null / empty string) then an exception is thrown.
-function safeURL(path, base) {
+function safeUrl(path, base) {
   if (base) {
     return new URL(path, base);
   } else {
@@ -119,10 +119,10 @@ window.parseUserScript = function(content, url, failIfMissing) {
       break;
 
     case 'icon':
-      details.iconUrl = safeURL(data.value, url).toString();
+      details.iconUrl = safeUrl(data.value, url).toString();
       break;
     case 'require':
-      details.requireUrls.push( safeURL(data.value, url).toString() );
+      details.requireUrls.push( safeUrl(data.value, url).toString() );
       break;
     case 'resource':
       let resourceName = data.value1;
@@ -130,7 +130,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
       if (resourceName in details.resourceUrls) {
         throw new Error(_('Duplicate resource name: $1', resourceName));
       }
-      details.resourceUrls[resourceName] = safeURL(resourceUrl, url).toString();
+      details.resourceUrls[resourceName] = safeUrl(resourceUrl, url).toString();
       break;
     }
   }
