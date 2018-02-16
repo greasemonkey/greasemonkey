@@ -4,39 +4,39 @@
         "description": ""
     },
     "You should only install scripts from sources that you trust.": {
-        "message": "Installieren Sie dieses Benutzerskript nur, wenn Sie der Quelle vertrauen.",
+        "message": "您应该只安装来源可信的脚本。",
         "description": ""
     },
     "Greasemonkey is active": {
-        "message": "Greasemonkey ist aktiviert",
+        "message": "Greasemonkey 已启用",
         "description": ""
     },
     "Matches:": {
-        "message": "Ausgeführt auf (@match):",
+        "message": "匹配：",
         "description": ""
     },
     "GM.openInTab: Could not understand the URL: $1": {
-        "message": "GM.openInTab: Ungültige URL: $1",
+        "message": "GM.openInTab：无法理解此 URL: $1",
         "description": ""
     },
     "Enabled": {
-        "message": "Aktiviert",
+        "message": "已启用",
         "description": ""
     },
     "Install": {
-        "message": "Installieren",
+        "message": "安装",
         "description": ""
     },
     "Other user scripts": {
-        "message": "Sonstige Benutzerskripte",
+        "message": "其他用户脚本",
         "description": ""
     },
     "$1 - Greasemonkey User Script Editor": {
-        "message": "$1 - Greasemonkey Benutzerskript-Editor",
+        "message": "$1 - Greasemonkey 用户脚本编辑器",
         "description": ""
     },
     "Greasemonkey home page": {
-        "message": "Greasemonkey Homepage",
+        "message": "Greasemonkey 首页",
         "description": ""
     },
     "[Greasemonkey script $1]": {
@@ -44,15 +44,15 @@
         "description": ""
     },
     "Runs on:": {
-        "message": "Ausgeführt auf:",
+        "message": "运行于：",
         "description": ""
     },
     "Uninstall": {
-        "message": "Deinstallieren",
+        "message": "卸载",
         "description": ""
     },
     "Duplicate resource name: $1": {
-        "message": "Mehrfach genutzter Ressourcen-Name: $1",
+        "message": "重复的资源名称：$1",
         "description": ""
     },
     "User script save failed: unknown error.": {
@@ -64,7 +64,7 @@
         "description": ""
     },
     "Download and install successful!": {
-        "message": "Benutzerskript erfolgreich heruntergeladen und installiert!",
+        "message": "成功下载和安装！",
         "description": ""
     },
     "New user script...": {
@@ -76,39 +76,39 @@
         "description": ""
     },
     "Ignoring @match pattern $1 because:\n$2": {
-        "message": "Ignoriere @match-Eintrag $1 aus folgendem Grund:\n$2",
+        "message": "忽略 @match 模式 $1，原因：\n$2",
         "description": ""
     },
     "GM.xmlHttpRequest: Could not understand the URL: $1\n$2": {
-        "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2",
+        "message": "GM.xmlHttpRequest：无法理解此 URL: $1\n$2",
         "description": ""
     },
     "Get user scripts": {
-        "message": "Benutzerskripte im Netz",
+        "message": "获取用户脚本",
         "description": ""
     },
     "GM.xmlHttpRequest: Received no URL.": {
-        "message": "GM.xmlHttpRequest: Keine URL angegeben.",
+        "message": "GM.xmlHttpRequest：没有收到 URL。",
         "description": ""
     },
     "User scripts for this tab": {
-        "message": "Benutzerskripte für diesen Reiter",
+        "message": "适用于此标签页的用户脚本",
         "description": ""
     },
     "GM.xmlHttpRequest: Received no details.": {
-        "message": "GM.xmlHttpRequest: Keine Anfrage-Details übergeben.",
+        "message": "GM.xmlHttpRequest：没有收到细节。",
         "description": ""
     },
     "GM.notification: \"text\" must be a string": {
-        "message": "GM.notification: Parameter \"text\" muss ein String sein.",
+        "message": "GM.notification：\"text\" 必须为一个字符串",
         "description": ""
     },
     "Requires special APIs:": {
-        "message": "Benötigte API-Funktionen:",
+        "message": "需要特殊 API：",
         "description": ""
     },
     "$1 - Greasemonkey User Script": {
-        "message": "$1 - Greasemonkey Benutzerskript",
+        "message": "$1 - Greasemonkey 用户脚本",
         "description": ""
     },
     "Script Save Error": {
@@ -116,15 +116,15 @@
         "description": ""
     },
     "Could not execute user script: $1\n$2": {
-        "message": "Benutzerskript nicht ausführbar: $1\n$2",
+        "message": "未能执行用户脚本：$1\n$2",
         "description": ""
     },
     "GM.xmlHttpRequest: Passed URL has bad protocol: $1": {
-        "message": "GM.xmlHttpRequest: Das Protokoll dieser URL wird nicht unterstützt: $1",
+        "message": "GM.xmlHttpRequest：所传递 URL 的协议不良: $1",
         "description": ""
     },
     "Cancel": {
-        "message": "Abbrechen",
+        "message": "取消",
         "description": ""
     },
     "Unnamed Script $1": {
@@ -132,19 +132,19 @@
         "description": ""
     },
     "Disabled": {
-        "message": "Deaktiviert",
+        "message": "已禁用",
         "description": ""
     },
     "Edit": {
-        "message": "Bearbeiten",
+        "message": "编辑",
         "description": ""
     },
     "Undo uninstall": {
-        "message": "Deinstallation zurücknehmen",
+        "message": "撤销卸载",
         "description": ""
     },
     "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": {
-        "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen.",
+        "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。",
         "description": ""
     },
     "Save": {
@@ -152,19 +152,19 @@
         "description": ""
     },
     "$1 does not @grant method $2": {
-        "message": "$1 benötigt @grant für Funktion $2",
+        "message": "$1 没有 @grant 方法 $2",
         "description": ""
     },
     "Greasemonkey is disabled": {
-        "message": "Greasemonkey ist deaktiviert",
+        "message": "Greasemonkey 已禁用",
         "description": ""
     },
     "This is a Greasemonkey user script.  Click install to start using it.": {
-        "message": "Dies ist ein Greasemonkey Benutzerskript. Installieren wählen, um es zu benutzen.",
+        "message": "这是一个 Greasemonkey 用户脚本。点击安装来开始使用。",
         "description": ""
     },
     "Does not run on:": {
-        "message": "Keine Ausführung auf:",
+        "message": "不会运行于：",
         "description": ""
     }
 }

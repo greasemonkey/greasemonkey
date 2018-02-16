@@ -4,39 +4,39 @@
         "description": ""
     },
     "You should only install scripts from sources that you trust.": {
-        "message": "Installieren Sie dieses Benutzerskript nur, wenn Sie der Quelle vertrauen.",
+        "message": "出所が信頼できないスクリプトはインストールしないでください。",
         "description": ""
     },
     "Greasemonkey is active": {
-        "message": "Greasemonkey ist aktiviert",
+        "message": "Greasemonkey は有効",
         "description": ""
     },
     "Matches:": {
-        "message": "Ausgeführt auf (@match):",
+        "message": "実行されるページ (@match):",
         "description": ""
     },
     "GM.openInTab: Could not understand the URL: $1": {
-        "message": "GM.openInTab: Ungültige URL: $1",
+        "message": "GM.openInTab: 不正なURLです: $1",
         "description": ""
     },
     "Enabled": {
-        "message": "Aktiviert",
+        "message": "有効",
         "description": ""
     },
     "Install": {
-        "message": "Installieren",
+        "message": "インストール",
         "description": ""
     },
     "Other user scripts": {
-        "message": "Sonstige Benutzerskripte",
+        "message": "その他のユーザースクリプト",
         "description": ""
     },
     "$1 - Greasemonkey User Script Editor": {
-        "message": "$1 - Greasemonkey Benutzerskript-Editor",
+        "message": "$1 — Greasemonkey ユーザースクリプトエディタ",
         "description": ""
     },
     "Greasemonkey home page": {
-        "message": "Greasemonkey Homepage",
+        "message": "Greasemonkey ホームページ",
         "description": ""
     },
     "[Greasemonkey script $1]": {
@@ -44,15 +44,15 @@
         "description": ""
     },
     "Runs on:": {
-        "message": "Ausgeführt auf:",
+        "message": "実行されるページ (@includes):",
         "description": ""
     },
     "Uninstall": {
-        "message": "Deinstallieren",
+        "message": "アンインストール",
         "description": ""
     },
     "Duplicate resource name: $1": {
-        "message": "Mehrfach genutzter Ressourcen-Name: $1",
+        "message": "リソース名が重複しています: $1",
         "description": ""
     },
     "User script save failed: unknown error.": {
@@ -64,7 +64,7 @@
         "description": ""
     },
     "Download and install successful!": {
-        "message": "Benutzerskript erfolgreich heruntergeladen und installiert!",
+        "message": "ダウンロード、およびインストールが完了しました!",
         "description": ""
     },
     "New user script...": {
@@ -72,43 +72,43 @@
         "description": ""
     },
     "Greasemonkey Wiki": {
-        "message": "Greasemonkey Wiki",
+        "message": "Greasemonkey wiki",
         "description": ""
     },
     "Ignoring @match pattern $1 because:\n$2": {
-        "message": "Ignoriere @match-Eintrag $1 aus folgendem Grund:\n$2",
+        "message": "「$1」は不正な @match パターンです:\n$2",
         "description": ""
     },
     "GM.xmlHttpRequest: Could not understand the URL: $1\n$2": {
-        "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2",
+        "message": "GM.xmlHttpRequest: 不正なURLです: $1\n$2",
         "description": ""
     },
     "Get user scripts": {
-        "message": "Benutzerskripte im Netz",
+        "message": "ユーザースクリプトの入手",
         "description": ""
     },
     "GM.xmlHttpRequest: Received no URL.": {
-        "message": "GM.xmlHttpRequest: Keine URL angegeben.",
+        "message": "GM.xmlHttpRequest: URLが指定されていません。",
         "description": ""
     },
     "User scripts for this tab": {
-        "message": "Benutzerskripte für diesen Reiter",
+        "message": "現在のタブで実行されるユーザースクリプト",
         "description": ""
     },
     "GM.xmlHttpRequest: Received no details.": {
-        "message": "GM.xmlHttpRequest: Keine Anfrage-Details übergeben.",
+        "message": "GM.xmlHttpRequest: 「details」引数が指定されていません。",
         "description": ""
     },
     "GM.notification: \"text\" must be a string": {
-        "message": "GM.notification: Parameter \"text\" muss ein String sein.",
+        "message": "GM.notification: 「text」は文字列でなければなりません。",
         "description": ""
     },
     "Requires special APIs:": {
-        "message": "Benötigte API-Funktionen:",
+        "message": "次の特権APIを許可:",
         "description": ""
     },
     "$1 - Greasemonkey User Script": {
-        "message": "$1 - Greasemonkey Benutzerskript",
+        "message": "$1 — Greasemonkey ユーザースクリプト",
         "description": ""
     },
     "Script Save Error": {
@@ -116,15 +116,15 @@
         "description": ""
     },
     "Could not execute user script: $1\n$2": {
-        "message": "Benutzerskript nicht ausführbar: $1\n$2",
+        "message": "ユーザースクリプトを実行できませんでした: $1\n$2",
         "description": ""
     },
     "GM.xmlHttpRequest: Passed URL has bad protocol: $1": {
-        "message": "GM.xmlHttpRequest: Das Protokoll dieser URL wird nicht unterstützt: $1",
+        "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です: $1",
         "description": ""
     },
     "Cancel": {
-        "message": "Abbrechen",
+        "message": "キャンセル",
         "description": ""
     },
     "Unnamed Script $1": {
@@ -132,19 +132,19 @@
         "description": ""
     },
     "Disabled": {
-        "message": "Deaktiviert",
+        "message": "無効",
         "description": ""
     },
     "Edit": {
-        "message": "Bearbeiten",
+        "message": "編集",
         "description": ""
     },
     "Undo uninstall": {
-        "message": "Deinstallation zurücknehmen",
+        "message": "アンインストールを取り消す",
         "description": ""
     },
     "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": {
-        "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen.",
+        "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。",
         "description": ""
     },
     "Save": {
@@ -152,19 +152,19 @@
         "description": ""
     },
     "$1 does not @grant method $2": {
-        "message": "$1 benötigt @grant für Funktion $2",
+        "message": "$1 は @grant $2 を含みません。",
         "description": ""
     },
     "Greasemonkey is disabled": {
-        "message": "Greasemonkey ist deaktiviert",
+        "message": "Greasemonkey は無効",
         "description": ""
     },
     "This is a Greasemonkey user script.  Click install to start using it.": {
-        "message": "Dies ist ein Greasemonkey Benutzerskript. Installieren wählen, um es zu benutzen.",
+        "message": "これは Greasemonkey ユーザースクリプトです。利用する場合は、インストールボタンをクリックします。",
         "description": ""
     },
     "Does not run on:": {
-        "message": "Keine Ausführung auf:",
+        "message": "実行されるページから除外されるページ:",
         "description": ""
     }
 }
