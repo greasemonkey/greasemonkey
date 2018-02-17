@@ -361,13 +361,11 @@ window.EditableUserScript = class EditableUserScript
 
             this._parsedDetails = newDetails;
             _loadValuesInto(this, newDetails, userScriptKeys);
-            this.calculateEvalContent();
             resolve();
           });
       if (updater.skip()) {
         this._parsedDetails = newDetails;
         _loadValuesInto(this, newDetails, userScriptKeys);
-        this.calculateEvalContent();
         resolve();
       }
     });
@@ -396,8 +394,6 @@ window.EditableUserScript = class EditableUserScript
 
     this._parsedDetails = downloader.scriptDetails;
     _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
-
-    this.calculateEvalContent();
   }
 }
 
