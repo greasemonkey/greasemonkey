@@ -69,6 +69,8 @@ function onUserScriptChanged(message, sender, sendResponse) {
   let parsedDetails = message.parsedDetails;
 
   document.title = _('$1 - Greasemonkey User Script Editor', details.name);
+  // The first tab is always the user script
+  editorTabs[0].textContent = details.name;
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];
