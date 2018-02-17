@@ -116,7 +116,6 @@ async function loadUserScripts() {
         let userScript = new EditableUserScript(details);
         userScripts[details.uuid] = userScript;
         if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-          userScript.calculateEvalContent();
           await saveUserScript(userScript);
         }
       }));
@@ -242,6 +241,8 @@ async function saveUserScript(userScript) {
         'Cannot save this type of UserScript object: '
         + userScript.constructor.name);
   }
+  // Calculate eval content before saving.
+  userScript.calculateEvalContent();
 
   function onSaveError(error) {
     let message;
