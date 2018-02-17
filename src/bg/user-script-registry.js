@@ -290,6 +290,14 @@ async function saveUserScript(userScript) {
       onSaveError(e.target.error);
       reject(e);
       db.close();
+    } finally {
+      // Send the script change event, even though the save may have failed.
+      // This way the editor gets the updated script.
+      chrome.runtime.sendMessage({
+        'name': 'UserScriptChanged',
+        'details': userScript.details,
+        'parsedDetails': userScript.parsedDetails,
+      });
     }
   });
 }
