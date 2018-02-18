@@ -35,8 +35,17 @@ let scriptProcessors = new Map();
 
 // Create and track a new script installer for a given request Id
 function downloadForRequest(responseDetails, scriptDetails, contentPromise) {
+  let id = `${scriptDetails.namespace}/${scriptDetails.name}`;
   let requestId = responseDetails.requestId;
-  let processor = new ScriptInstaller(scriptDetails, contentPromise, requestId);
+  let userScript = UserScriptRegistry.scriptById(id);
+  let processor;
+  // If the script id exists treat the navigation as an 'update'
+  if (userScript) {
+    processor =
+        new ScriptUpdater(userScript, scriptDetails, contentPromise, requestId);
+  } else {
+    processor = new ScriptInstaller(scriptDetails, contentPromise, requestId);
+  }
   let pInfo = {'processor': processor, 'progress': [0]};
   scriptProcessors.set(requestId, pInfo);
   scriptDetails.requestId = requestId;

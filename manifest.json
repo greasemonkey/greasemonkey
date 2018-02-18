@@ -34,6 +34,8 @@
       "src/bg/is-enabled.js",
       "src/bg/objects/user-script-downloader.js",
       "src/bg/objects/user-script-installer.js",
+      "src/bg/objects/user-script-save-notification.js",
+      "src/bg/objects/user-script-updater.js",
       "src/bg/on-message.js",
       "src/bg/on-user-script-notification.js",
       "src/bg/on-user-script-open-in-tab.js",

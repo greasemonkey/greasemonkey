@@ -239,6 +239,17 @@ async function saveUserScript(userScript) {
 }
 
 
+function scriptById(id) {
+  for (let uuid in userScripts) {
+    if (id === userScripts[uuid].id) {
+      // Return clone in order to prevent accidental modification.
+      return new EditableUserScript(userScripts[uuid].details);
+    }
+  }
+  return null;
+}
+
+
 function scriptByUuid(scriptUuid) {
   if (!userScripts[scriptUuid]) {
     throw new Error(
@@ -271,6 +282,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   'saveUserScript': saveUserScript,
+  'scriptById': scriptById,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };

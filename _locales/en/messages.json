@@ -31,6 +31,7 @@
   "Runs on:": { "message": "Runs on:" },
   "Save": { "message": "Save" },
   "Script Save Error": { "message": "Script Save Error" },
+  "Script Updated": { "message": "Script Updated" },
   "This is a Greasemonkey user script.  Click install to start using it.": { "message": "This is a Greasemonkey user script.  Click install to start using it." },
   "Undo uninstall": { "message": "Undo uninstall" },
   "Uninstall": { "message": "Uninstall" },
