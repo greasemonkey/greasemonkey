@@ -176,5 +176,29 @@
     "Does not run on:": {
         "message": "Keine Ausführung auf:",
         "description": ""
+    },
+    "GM.registerMenuCommand: \"accessKey\" must be a single character": {
+        "message": "GM.registerMenuCommand: \"accessKey\" benötigt ein einzelnes Zeichen.",
+        "description": ""
+    },
+    "GM.registerMenuCommand: \"commandFunc\" must be a function": {
+        "message": "GM.registerMenuCommand: \"commandFunc\" muß eine Funktion sein.",
+        "description": ""
+    },
+    "User script commands": {
+        "message": "Benutzerbefehle",
+        "description": ""
+    },
+    "User script commands...": {
+        "message": "Benutzerbefehle...",
+        "description": ""
+    },
+    "Download and install errors:": {
+        "message": "Fehler beim Laden und Installieren des Benutzerskripts:",
+        "description": ""
+    },
+    "Script Updated": {
+        "message": "Benutzerskript aktualisiert",
+        "description": ""
     }
 }
