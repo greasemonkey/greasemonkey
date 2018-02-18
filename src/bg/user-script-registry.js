@@ -327,9 +327,9 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 // Export public API.
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
-  '_saveUserScript': saveUserScript,
   'installFromDownloader': installFromDownloader,
   'installFromSource': installFromSource,
+  'saveUserScript': saveUserScript,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };
