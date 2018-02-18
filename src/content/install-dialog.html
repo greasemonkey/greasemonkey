@@ -5,16 +5,18 @@
 <link rel="stylesheet" href="install-dialog.css">
 <body class="install">
 
-<div>
-  <header rv-version="version">
-    <div class="icon"><img id="script-icon" rv-src="iconUrl"></div>
-    <h1><strong>{ name }</strong></h1>
-  </header>
+<div class="wrapper">
+  <div class="head-wrapper">
+    <header rv-version="version">
+      <div class="icon"><img id="script-icon" rv-src="iconUrl"></div>
+      <h1><strong>{ name }</strong></h1>
+    </header>
+  </div>
 
   <div id="install">
     <p>{'This is a Greasemonkey user script.  Click install to start using it.'|i18n}</p>
 
-    <div id="details">
+    <div id="details" class="info">
       <div rv-hide="grants | empty" id="apis">
         <p>{'Requires special APIs:'|i18n}</p>
         <ul>
@@ -46,11 +48,14 @@
 
     <!-- TODO: Install in disabled state control, for review before running. -->
   </div>
-</div>
 
-<div id="result">
-  <div class="text">
-    <p></p>
+  <div id="errors" class="info">
+    <p>{'Download and Install errors:'|i18n}</p>
+    <ul id="error-list">
+      <li rv-each-error="errors">
+        {error}
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -62,12 +67,14 @@
     </p>
   </div>
 
+  <progress value="0" id="progress"></progress>
+
   <div id="actions">
     <button id="btn-cancel" class="button-big button-secondary"
         >{'Cancel'|i18n}</button>
     <div class="spacer"></div>
     <button id="btn-install" class="button-big button-success" disabled="disabled"
-        >{'Install'|i18n}</button>
+        ></button>
   </div>
 </div>
 

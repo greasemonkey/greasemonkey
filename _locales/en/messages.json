@@ -6,7 +6,7 @@
   "Could not execute user script: $1\n$2": { "message": "Could not execute user script: $1\n$2" },
   "Disabled": { "message": "Disabled" },
   "Does not run on:": { "message": "Does not run on:" },
-  "Download and install successful!": { "message": "Download and install successful!" },
+  "Download and install errors:": { "message": "Download and install errors:" },
   "Duplicate resource name: $1": { "message": "Duplicate resource name: $1" },
   "Edit": { "message": "Edit" },
   "Enabled": { "message": "Enabled" },
