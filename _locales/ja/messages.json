@@ -1,6 +1,6 @@
 {
     "User script save failed: script named $1 already exists in namespace $2.": {
-        "message": "User script save failed: script named $1 already exists in namespace $2.",
+        "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。 ",
         "description": ""
     },
     "You should only install scripts from sources that you trust.": {
@@ -40,7 +40,7 @@
         "description": ""
     },
     "[Greasemonkey script $1]": {
-        "message": "[Greasemonkey script $1]",
+        "message": "[Greasemonkey スクリプト $1] ",
         "description": ""
     },
     "Runs on:": {
@@ -56,11 +56,11 @@
         "description": ""
     },
     "User script save failed: unknown error.": {
-        "message": "User script save failed: unknown error.",
+        "message": "ユーザースクリプトの保存に失敗: 不明なエラー。 ",
         "description": ""
     },
     "[Greasemonkey script $id$; version $version$]": {
-        "message": "[Greasemonkey script $ID$; version $VERSION$]",
+        "message": "[Greasemonkey スクリプト $ID$; バージョン $VERSION$]",
         "description": "",
         "placeholders": {
             "id": {
@@ -78,7 +78,7 @@
         "description": ""
     },
     "New user script...": {
-        "message": "ユーザースクリプトの新規作成 ...",
+        "message": "ユーザースクリプトの新規作成...",
         "description": ""
     },
     "Greasemonkey Wiki": {
@@ -122,7 +122,7 @@
         "description": ""
     },
     "Script Save Error": {
-        "message": "Script Save Error",
+        "message": "スクリプト保存エラー",
         "description": ""
     },
     "Could not execute user script: $1\n$2": {
@@ -138,7 +138,7 @@
         "description": ""
     },
     "Unnamed Script $1": {
-        "message": "Unnamed Script $1",
+        "message": "新しいスクリプト $1",
         "description": ""
     },
     "Disabled": {
@@ -158,7 +158,7 @@
         "description": ""
     },
     "Save": {
-        "message": "Save",
+        "message": "保存",
         "description": ""
     },
     "$1 does not @grant method $2": {
