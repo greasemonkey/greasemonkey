@@ -43,12 +43,12 @@ class ScriptDownloader {
     switch (cInfo.type) {
       case 'require':
         // Fetch as a string
-        download = new Download(cInfo.url, false, this);
+        download = new Download(cInfo.url, false, this.sendProgress.bind(this));
         break;
       case 'icon':
       case 'resource':
         // Fetch as a blob
-        download = new Download(cInfo.url, true, this);
+        download = new Download(cInfo.url, true, this.sendProgress.bind(this));
         break;
     }
     this._downloads.set(cInfo, download);
@@ -89,10 +89,10 @@ class ScriptDownloader {
 
 
 class Download {
-  constructor(url, blob, downloader=null) {
+  constructor(url, blob, sendProgress=null) {
     this.url = url;
     this.blob = blob;
-    this.downloader = downloader;
+    this.sendProgress = sendProgress;
     this.progress = 0;
 
     this._xhr = null;
@@ -166,8 +166,8 @@ class Download {
 
   _setProgress(progress) {
     this.progress = progress;
-    if (this.downloader) {
-      this.downloader.sendProgress();
+    if (this.sendProgress) {
+      this.sendProgress();
     }
   }
 
