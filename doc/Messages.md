@@ -67,17 +67,6 @@ Data:
 * `uuid` The UUID of an installed script which is storing this value.
 * `value` The new value to store.
 
-# EditorSaved
-Sent by: `content/edit-user-script.js`.
-Received by: `bg/user-script-registry.js`.
-
-Sent whenever the user triggers the save action in the user script editor.
-Data:
-
-* `uuid` String UUID of the script being edited.
-* `content` String text content of main script.
-* `requires` Object mapping require URL to text content.
-
 # EnabledChanged
 Sent by: `bg/is-enabled.js`.
 
@@ -114,16 +103,9 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
-# UserScriptChanged
-Sent by: `bg/user-script-registry.js`
-
-Sent when some value (like enabled state) of a script is changed.  Data:
-
-* `details` Updated script's current.
-* `parsedDetails` Updated script's original parsed details.
-
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
+Received by: `bg/user-script-registry.js`
 
 Data:
 
@@ -156,6 +138,18 @@ clicked by the user.  Data:
 Response data:
 
 * `enabled` The new resulting value of this script's state.
+
+# UserScriptUpdate
+Sent by: `content/edit-user-script.js`.
+Received by: `bg/objects/user-script-updater.js`
+
+Sent whenever the user triggers the save action in the user script editor.
+Data:
+
+* `uuid` String UUID of the script being edited.
+* `content` String text content of main script.
+* `details` (optional) Properties that should be applied to the user script.
+If not provided then it will be parsed from the content.
 
 # UserScriptUninstall
 Sent by: `content/manage-user-scripts.js`
