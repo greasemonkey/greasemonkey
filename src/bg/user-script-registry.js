@@ -241,7 +241,7 @@ async function saveUserScript(userScript) {
         'Cannot save this type of UserScript object: '
         + userScript.constructor.name);
   }
-  // Calculate eval content before saving.
+
   userScript.calculateEvalContent();
 
   function onSaveError(error) {
