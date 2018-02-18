@@ -61,14 +61,24 @@
     },
     "[Greasemonkey script $id$; version $version$]": {
         "message": "[Greasemonkey script $ID$; version $VERSION$]",
-        "description": ""
+        "description": "",
+        "placeholders": {
+            "id": {
+                "content": "$1",
+                "example": "User Script Name Here"
+            },
+            "version": {
+                "content": "$2",
+                "example": "1.0"
+            }
+        }
     },
     "Download and install successful!": {
         "message": "ダウンロード、およびインストールが完了しました!",
         "description": ""
     },
     "New user script...": {
-        "message": "New user script...",
+        "message": "ユーザースクリプトの新規作成 ...",
         "description": ""
     },
     "Greasemonkey Wiki": {
