@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>Greasemonkey User Script Editor</title>
+<link rel="stylesheet" href="/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="edit-user-script.css">
 
 <script src="/src/i18n.js"></script>
+<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
 
 <script src="/third-party/codemirror/codemirror.js"></script>
 <link rel="stylesheet" href="/third-party/codemirror/codemirror.css">
@@ -32,6 +35,28 @@
 </head>
 
 <body>
+<div id="modal">
+  <div class="panel">
+    <div class="panel-head">
+      <span class="fa fa-cog fa-lg fa-spin"></span>
+      <h2>{'Saving'|i18n}</h2>
+    </div>
+    <div class="panel-body">
+      <div id="save-errors">
+        <p>{'Script Save Error'|i18n}</p>
+        <ul>
+          <li rv-each-error="errors">
+            {error}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-foot">
+      <button class="button button-big" id="close-modal">{'Close'|i18n}</button>
+    </div>
+  </div>
+</div>
+
 <div class="tab-bar">
   <div id="save" class="command-item" title="__MSG_Save__">
     <i class="icon fa fa-floppy-o"></i>

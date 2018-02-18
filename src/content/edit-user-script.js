@@ -18,6 +18,8 @@ const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorUrls = [];
 const tabs = document.getElementById('tabs');
+const gModalCloseBtn = document.getElementById('close-modal');
+const rvDetails = {'errors': []};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -96,6 +98,8 @@ function onSave() {
     return;
   }
 
+  openSaveModal();
+
   try {
     let requires = {};
     for (let i = 1; i < editorDocs.length; i++) {
@@ -110,6 +114,7 @@ function onSave() {
     }, onSaveComplete);
   } catch (err) {
     console.error('Error in onSave', err);
+    showErrorSaveModal([err.message]);
   }
 }
 
@@ -119,8 +124,11 @@ function onSaveComplete(savedDetails) {
   if (chrome.runtime.lastError) {
     // TODO: Display to the user in some way.
     console.log('Error in onSaveComplete', chrome.runtime.lastError);
+    showErrorSaveModal([chrome.runtime.lastError.message]);
     return;
   }
+
+  closeSaveModal();
 
   document.title =
       _('$1 - Greasemonkey User Script Editor', savedDetails.name);
@@ -144,6 +152,26 @@ function onSaveComplete(savedDetails) {
   });
 }
 
+
+function closeSaveModal() {
+  document.body.classList.remove('save');
+  document.body.classList.remove('error');
+}
+
+
+function openSaveModal() {
+  console.log(gModalCloseBtn);
+  gModalCloseBtn.setAttribute('disabled', 'disabled');
+  document.body.classList.add('save');
+}
+
+
+function showErrorSaveModal(errors) {
+  rvDetails.errors = errors;
+  gModalCloseBtn.removeAttribute('disabled');
+  document.body.classList.add('error');
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 editor.on('swapDoc', doc => {
@@ -157,3 +185,7 @@ editor.on('swapDoc', doc => {
 document.getElementById('save').addEventListener('click', () => {
   editor.execCommand('save');
 });
+
+gModalCloseBtn.addEventListener('click', closeSaveModal);
+
+rivets.bind(document, rvDetails);
