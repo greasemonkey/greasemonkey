@@ -74,23 +74,6 @@ async function loadUserScripts() {
 }
 
 
-function onEditorSaved(message, sender, sendResponse) {
-  let userScript = userScripts[message.uuid];
-  if (!userScript) {
-    console.error('Got save for UUID', message.uuid, 'but it does not exist.');
-    return;
-  }
-
-  // Use a clone of the current user script. This is so that any changes are
-  // not propagated to the actual UserScript unless the transaction is
-  // successful.
-  let cloneScript = new EditableUserScript(userScript.details);
-  cloneScript.updateFromEditorSaved(message)
-      .then(value => saveUserScript(cloneScript));
-};
-window.onEditorSaved = onEditorSaved;
-
-
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(
