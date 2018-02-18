@@ -48,11 +48,10 @@ chrome.notifications.onClicked.addListener(id => {
 
 chrome.notifications.onClosed.addListener(id => {
   let port = portMap.get(id);
-  if (port) {
-    portMap.delete(id);
-    port.postMessage({type: 'ondone'});
-    port.disconnect();
-  }
+  if (!port) return;
+  portMap.delete(id);
+  port.postMessage({type: 'ondone'});
+  port.disconnect();
 });
 
 })();
