@@ -13,9 +13,9 @@ var editor = CodeMirror(
 
 CodeMirror.commands.save = onSave;
 
+const indexOf = (array, item) => Array.prototype.indexOf.call(array, item);
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
-const editorTabs = [];
 const editorUrls = [];
 const tabs = document.getElementById('tabs');
 
@@ -28,7 +28,6 @@ function addRequireTab(url, content) {
   requireTab.className = 'tab';
   requireTab.textContent = nameForUrl(url);
   tabs.appendChild(requireTab);
-  editorTabs.push(requireTab);
   editorDocs.push(CodeMirror.Doc(content, 'javascript'));
   editorUrls.push(url);
 }
@@ -42,51 +41,25 @@ function nameForUrl(url) {
 chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
-}, userScript => {
+}, scriptDetails => {
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
-  scriptTab.textContent = userScript.name;
+  scriptTab.textContent = scriptDetails.name;
+
   tabs.appendChild(scriptTab);
-  editorTabs.push(scriptTab);
-  editorDocs.push(CodeMirror.Doc(userScript.content, 'javascript'));
+  editorDocs.push(CodeMirror.Doc(scriptDetails.content, 'javascript'));
   editorUrls.push(null);
 
-  Object.keys(userScript.requiresContent).forEach(u => {
-    addRequireTab(u, userScript.requiresContent[u]);
+  Object.keys(scriptDetails.requiresContent).forEach(url => {
+    addRequireTab(url, scriptDetails.requiresContent[url]);
   });
 
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  document.title = _('$1 - Greasemonkey User Script Editor', userScript.name);
+  document.title = _('$1 - Greasemonkey User Script Editor', scriptDetails.name);
 });
 
-
-function onUserScriptChanged(message, sender, sendResponse) {
-  if (message.name != 'UserScriptChanged') return;
-  if (message.details.uuid != userScriptUuid) return;
-  let details = message.details;
-  let parsedDetails = message.parsedDetails;
-
-  document.title = _('$1 - Greasemonkey User Script Editor', details.name);
-
-  for (let i = editorDocs.length - 1; i > 0; i--) {
-    let u = editorUrls[i];
-    if (parsedDetails.requireUrls.indexOf(u) === -1) {
-      editorTabs[i].parentNode.removeChild(editorTabs[i]);
-      editorDocs.splice(i, 1);
-      editorTabs.splice(i, 1);
-      editorUrls.splice(i, 1);
-    }
-  }
-
-  parsedDetails.requireUrls.forEach(u => {
-    if (editorUrls.indexOf(u) === -1) {
-      addRequireTab(u, details.requiresContent[u]);
-    }
-  });
-}
-chrome.runtime.onMessage.addListener(onUserScriptChanged);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +72,7 @@ tabs.addEventListener('click', event => {
     let newTab = event.target;
     newTab.classList.add('active');
 
-    let idx = editorTabs.indexOf(newTab);
+    let idx = indexOf(tabs.children, newTab);
     editor.swapDoc(editorDocs[idx]);
     editor.focus();
   }
@@ -108,7 +81,7 @@ tabs.addEventListener('click', event => {
 
 editor.on('change', change => {
   let selectedTab = document.querySelector('#tabs .tab.active');
-  let idx = editorTabs.indexOf(selectedTab);
+  let idx = indexOf(tabs.children, selectedTab);
   let selectedDoc = editorDocs[idx];
   if (selectedDoc.isClean()) {
     selectedTab.classList.remove('dirty');
@@ -123,23 +96,52 @@ function onSave() {
     return;
   }
 
-  let requires = {};
-  for (let i = 1; i < editorDocs.length; i++) {
-    requires[ editorUrls[i] ] = editorDocs[i].getValue();
+  try {
+    let requires = {};
+    for (let i = 1; i < editorDocs.length; i++) {
+      requires[ editorUrls[i] ] = editorDocs[i].getValue();
+    }
+
+    chrome.runtime.sendMessage({
+      'name': 'EditorSaved',
+      'uuid': userScriptUuid,
+      'content': editorDocs[0].getValue(),
+      'requires': requires,
+    }, onSaveComplete);
+  } catch (err) {
+    console.error('Error in onSave', err);
+  }
+}
+
+
+function onSaveComplete(savedDetails) {
+  // TODO: Make `.catch` when switching to promises
+  if (chrome.runtime.lastError) {
+    // TODO: Display to the user in some way.
+    console.log('Error in onSaveComplete', chrome.runtime.lastError);
+    return;
   }
 
-  chrome.runtime.sendMessage({
-    'name': 'EditorSaved',
-    'uuid': userScriptUuid,
-    'content': editorDocs[0].getValue(),
-    'requires': requires,
+  document.title =
+      _('$1 - Greasemonkey User Script Editor', savedDetails.name);
+
+  for (let idx = editorDocs.length; idx--; ) {
+    let url = editorUrls[idx];
+    if (idx > 0 && !savedDetails.requiresContent[url]) {
+      tabs.removeChild(tabs.children.item(idx));
+      editorDocs.splice(idx, 1);
+      editorUrls.splice(idx, 1);
+    } else {
+      editorDocs[idx].markClean();
+      tabs.children.item(idx).classList.remove('dirty');
+    }
+  }
+
+  Object.keys(savedDetails.requiresContent).forEach(url => {
+    if (editorUrls.indexOf(url) === -1) {
+      addRequireTab(url, savedDetails.requiresContent[url]);
+    }
   });
-
-  // TODO: Spinner, then only when completed:
-  for (let i = 0; i < editorDocs.length; i++) {
-    editorDocs[i].markClean();
-    editorTabs[i].classList.remove('dirty');
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
