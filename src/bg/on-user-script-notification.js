@@ -40,12 +40,15 @@ chrome.runtime.onConnect.addListener(onUserScriptNotification);
 
 chrome.notifications.onClicked.addListener(id => {
   let port = portMap.get(id);
-  port.postMessage({type: 'onclick'});
+  if (port) {
+    port.postMessage({type: 'onclick'});
+  }
 });
 
 
 chrome.notifications.onClosed.addListener(id => {
   let port = portMap.get(id);
+  if (!port) return;
   portMap.delete(id);
   port.postMessage({type: 'ondone'});
   port.disconnect();
