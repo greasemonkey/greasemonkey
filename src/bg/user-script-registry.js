@@ -143,7 +143,7 @@ function onEditorSaved(message, sender, sendResponse) {
   // not propagated to the actual UserScript unless the transaction is
   // successful.
   let cloneScript = new EditableUserScript(userScript.details);
-  cloneScript.updateFromEditorSaved(message)
+  return cloneScript.updateFromEditorSaved(message)
       .then(value => saveUserScript(cloneScript));
 };
 window.onEditorSaved = onEditorSaved;
@@ -272,7 +272,7 @@ async function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-      resolve();
+      resolve(userScript.details);
       db.close();
     };
     txn.onerror = event => {
@@ -290,14 +290,6 @@ async function saveUserScript(userScript) {
       onSaveError(e.target.error);
       reject(e);
       db.close();
-    } finally {
-      // Send the script change event, even though the save may have failed.
-      // This way the editor gets the updated script.
-      chrome.runtime.sendMessage({
-        'name': 'UserScriptChanged',
-        'details': userScript.details,
-        'parsedDetails': userScript.parsedDetails,
-      });
     }
   });
 }

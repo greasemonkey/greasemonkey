@@ -125,14 +125,6 @@ progress as a percentage.  Sent specifically back to the content process
 * `errors` A (possibly empty) list of string error messages.
 * `progress` A number, 0.0 to 1.0, representing the completion so far.
 
-# UserScriptChanged
-Sent by: `bg/user-script-registry.js`
-
-Sent when some value (like enabled state) of a script is changed.  Data:
-
-* `details` Updated script's current.
-* `parsedDetails` Updated script's original parsed details.
-
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
 
