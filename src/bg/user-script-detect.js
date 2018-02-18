@@ -28,25 +28,36 @@ function catchParseUserScript(userScriptContent, url) {
 
 // Examine headers before determining if script checking is needed
 function checkHeaders(responseHeaders) {
-  for (header of responseHeaders) {
-    let headerName = header.name.toLowerCase();
-    if ('content-type' === headerName && contentTypeRe.test(header.value)) {
-      return true;
-    }
+  let typeValue = collectHeader(responseHeaders, 'Content-Type');
+  if (typeValue && contentTypeRe.test(typeValue)) {
+    return  true;
+  } else {
+    return false;
   }
-  return false;
 }
 
 
 // Check if enough content is available to open an install message
-function checkScript(userScriptContent, url) {
-  let scriptDetails = catchParseUserScript(userScriptContent, url);
+function checkScript(userScriptContent, details, contentPromise) {
+  let scriptDetails = catchParseUserScript(userScriptContent, details.url);
   if (scriptDetails) {
-    openInstallDialog(scriptDetails, url);
+    ScriptInstall.downloadForRequest(details, scriptDetails, contentPromise);
     return true;
   } else {
     return false;
   }
+}
+
+
+function collectHeader(responseHeaders, name) {
+  name = name.toLowerCase();
+  for (header of responseHeaders) {
+    let headerName = header.name.toLowerCase();
+    if (name == headerName) {
+      return header.value;
+    }
+  }
+  return null;
 }
 
 
@@ -56,59 +67,47 @@ function detectUserScriptOnHeadersReceived(details) {
   }
 
   let decoder = new TextDecoder("utf-8");
-  let encoder = new TextEncoder();
   let filter = chrome.webRequest.filterResponseData(details.requestId);
 
   let userScriptContent = '';
+  let filterSize = 0;
+  let contentSize =
+      Number(collectHeader(details.responseHeaders, 'Content-Length'));
+  let contentResolve;
+  let contentReject;
+  let contentPromise = new Promise((resolve, reject) => {
+    contentResolve = resolve; contentReject = reject;
+  });
+
+  // If the script is valid then don't keep checking as new data comes in
+  let skipCheck = false;
 
   filter.ondata = event => {
     userScriptContent = userScriptContent
         + decoder.decode(event.data, {'stream': true});
-    if (checkScript(userScriptContent, details.url)) {
-      // We have enough for the details. Since we use a new window for install
-      // the filter can be flushed and disconnected so that Firefox handles
-      // the rest of the data normally.
-      filter.write(encoder.encode(userScriptContent));
-      filter.disconnect();
+    filterSize += event.data.byteLength;
+    filter.write(event.data);
+
+    if (!skipCheck && checkScript(userScriptContent, details, contentPromise)) {
+      // Stop checking if the script is valid.
+      skipCheck = true;
+    } else if (skipCheck && contentSize) {
+      // A dialog has been opened and progress should be tracked.
+      let progress = filterSize / contentSize;
+      ScriptInstall.reportRequestProgress(details.requestId, progress);
     }
   };
   filter.onstop = event => {
-    // One last check to see if we have a valid script.
-    checkScript(userScriptContent, details.url);
-    // Regardless, since we use a new window just flush the filter and close.
-    filter.write(encoder.encode(userScriptContent));
+    // One last progress report
+    if (skipCheck) {
+      ScriptInstall.reportRequestProgress(details.requestId, 1);
+    }
+    contentResolve(userScriptContent);
     filter.close();
   };
 
   return {};
 }
 window.detectUserScriptOnHeadersReceived = detectUserScriptOnHeadersReceived;
-
-
-// Open platform specific installation dialog
-function openInstallDialog(scriptDetails, url) {
-  chrome.runtime.getPlatformInfo(platform => {
-    let installUrl = chrome.runtime.getURL('src/content/install-dialog.html')
-        + '?' + escape(JSON.stringify(scriptDetails));
-
-    if ('android' === platform.os) {
-      chrome.tabs.create({'active': true, 'url': installUrl});
-    } else {
-      let options = {
-        'height': 640,
-        'titlePreface': _('$1 - Greasemonkey User Script', scriptDetails.name),
-        'type': 'popup',
-        'url': installUrl,
-        'width': 480,
-      };
-      chrome.windows.create(options, newWindow => {
-        // Fix for Fx57 bug where bundled page loaded using
-        // browser.windows.create won't show contents unless resized.
-        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1402110
-        chrome.windows.update(newWindow.id, {width: newWindow.width + 1});
-      });
-    }
-  });
-}
 
 })();

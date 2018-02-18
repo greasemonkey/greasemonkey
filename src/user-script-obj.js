@@ -370,31 +370,6 @@ window.EditableUserScript = class EditableUserScript
       }
     });
   }
-
-  // Given a successful/completed `Downloader` object, update this script
-  // from it.
-  updateFromDownloader(downloader) {
-    this._content = downloader.scriptDownload.xhr.responseText;
-    if (downloader.iconDownload) {
-      this._iconBlob = downloader.iconDownload.xhr.response;
-    }
-    this._requiresContent = {};
-    downloader.requireDownloads.forEach(d => {
-      this._requiresContent[d.url] = d.xhr.responseText;
-    });
-    this._resources = {};
-    Object.keys(downloader.resourceDownloads).forEach(n => {
-      let d = downloader.resourceDownloads[n];
-      this._resources[n] = {
-          'name': n,
-          'mimetype': d.xhr.getResponseHeader('Content-Type'),
-          'blob': d.xhr.response,
-      };
-    });
-
-    this._parsedDetails = downloader.scriptDetails;
-    _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
-  }
 }
 
 

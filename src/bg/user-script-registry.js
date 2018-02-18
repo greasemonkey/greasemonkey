@@ -47,63 +47,6 @@ async function openDb() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-async function installFromDownloader(downloader) {
-  let db = await openDb();
-  try {
-    let remoteScript = new RemoteUserScript(downloader.scriptDetails);
-    let txn = db.transaction([scriptStoreName], "readonly");
-    let store = txn.objectStore(scriptStoreName);
-    let index = store.index('id');
-    let req = index.get(remoteScript.id);
-    txn.oncomplete = event => {
-      let userScript = new EditableUserScript(req.result || {});
-      userScript.updateFromDownloader(downloader);
-      saveUserScript(userScript);
-      db.close();
-      // TODO: Notification?
-    };
-    txn.onerror = event => {
-      console.error('Error looking up script!', event);
-      db.close();
-    };
-  } catch (e) {
-    console.error('at installFromDownloader(), db fail:', e);
-    db.close();
-  }
-}
-
-
-async function installFromSource(source) {
-  let db = await openDb();
-  return new Promise((resolve, reject) => {
-    try {
-      let details = parseUserScript(source, null);
-      let remoteScript = new RemoteUserScript(details);
-      let txn = db.transaction([scriptStoreName], "readonly");
-      let store = txn.objectStore(scriptStoreName);
-      let index = store.index('id');
-      let req = index.get(remoteScript.id);
-      txn.oncomplete = event => {
-        details = req.result || details;
-        details.content = source;
-        details.parsedDetails = details;
-        let userScript = new EditableUserScript(details);
-        saveUserScript(userScript);
-        resolve(userScript.uuid);
-        db.close();
-      };
-      txn.onerror = event => {
-        console.error('Error looking up script!', event);
-        db.close();
-      };
-    } catch (e) {
-      console.error('at installFromSource(), db fail:', e);
-      db.close();
-    }
-  });
-}
-
-
 async function loadUserScripts() {
   let db = await openDb();
   return new Promise((resolve, reject) => {
@@ -327,8 +270,6 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 // Export public API.
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
-  'installFromDownloader': installFromDownloader,
-  'installFromSource': installFromSource,
   'saveUserScript': saveUserScript,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
