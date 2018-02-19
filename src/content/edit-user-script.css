@@ -1,9 +1,68 @@
 html, body {
   background: lightgrey;
-  height: calc(100% - 8px);
+  height: 100%;
   margin: 0;
   overflow: hidden;
   padding: 4px;
+  font-size: 12px;
+}
+
+
+body.save #modal
+{ display: grid; }
+body.error #modal #save-errors
+{ display: block; }
+body #modal,
+body #modal #save-errors
+{ display: none; }
+
+#modal {
+  background-color: #A3A3A363;
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}
+#modal .panel {
+  background-color: #FCFCF9;
+  border: 1px solid #CCC;
+  border-radius: 1.7px;
+  display: flex;
+  flex-direction: column;
+  grid-column: 2 / 4;
+  grid-row: 2;
+  padding: 1rem;
+}
+
+#modal .fa {
+  font-size: 25px;
+  margin-right: 10px;
+  vertical-align: unset;
+}
+#modal h2 {
+  display: inline-block;
+  font-weight: 300;
+  font-size: 25px;
+  margin: 0;
+}
+#modal button {
+  float: right;
+  font-size: 15px;
+  width: 140px;
+}
+
+#modal .panel-head {
+  border-bottom: 1px solid #CCC;
+}
+#modal .panel-body {
+  font-size: 14px;
+  padding: 10px 0;
+  flex-grow: 2;
 }
 
 
@@ -62,4 +121,7 @@ body, #editor {
 }
 .CodeMirror {
   height: 100% !important;
+}
+.CodeMirror pre {
+  line-height: 14px !important;
 }

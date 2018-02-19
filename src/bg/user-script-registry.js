@@ -142,7 +142,7 @@ function onEditorSaved(message, sender, sendResponse) {
   // not propagated to the actual UserScript unless the transaction is
   // successful.
   let cloneScript = new EditableUserScript(userScript.details);
-  cloneScript.updateFromEditorSaved(message)
+  return cloneScript.updateFromEditorSaved(message)
       .then(value => saveUserScript(cloneScript));
 };
 window.onEditorSaved = onEditorSaved;
@@ -273,7 +273,7 @@ async function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-      resolve();
+      resolve(userScript.details);
       db.close();
     };
     txn.onerror = event => {
