@@ -156,13 +156,14 @@ function onSaveComplete(savedDetails) {
 function closeSaveModal() {
   document.body.classList.remove('save');
   document.body.classList.remove('error');
+  editor.getInputField().focus();
 }
 
 
 function openSaveModal() {
-  console.log(gModalCloseBtn);
   gModalCloseBtn.setAttribute('disabled', 'disabled');
   document.body.classList.add('save');
+  editor.getInputField().blur();
 }
 
 
