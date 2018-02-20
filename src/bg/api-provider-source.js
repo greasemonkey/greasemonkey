@@ -6,16 +6,6 @@ This will be an anonymous and immediately called function which exports objects
 to the global scope (the `this` object).  It ...
 */
 
-const SUPPORTED_APIS = new Set([
-    'GM.deleteValue', 'GM.getValue', 'GM.listValues', 'GM.setValue',
-    'GM.getResourceUrl',
-    'GM.notification',
-    'GM.openInTab',
-    'GM.setClipboard',
-    'GM.xmlHttpRequest',
-    ]);
-
-
 (function() {
 
 function apiProviderSource(userScript) {

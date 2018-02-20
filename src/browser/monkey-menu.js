@@ -83,9 +83,14 @@ function onHashChange(event) {
     case '#new-user-script':
       let r = Math.floor(Math.random() * 900000 + 100000);
       let newScriptSrc = gNewScriptTpl.replace(gPlaceHolder, r);
-      chrome.runtime.sendMessage(
-          {'name': 'UserScriptInstall', 'source': newScriptSrc},
-          uuid => openUserScriptEditor(uuid));
+
+      chrome.runtime.sendMessage({
+        'name': 'UserScriptInstall',
+        'content': newScriptSrc,
+      }, savedDetails => {
+        openUserScriptEditor(savedDetails.uuid);
+        window.close();
+      });
       break;
     case '#toggle-user-script':
       chrome.runtime.sendMessage({

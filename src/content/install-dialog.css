@@ -21,10 +21,19 @@ body {
   width: var(--dialog-max-width);
 }
 
-body.result #install,
-body.result .panel-section-footer,
-body.install #result
+body #errors,
+body #install,
+body #footer
 { display: none; }
+
+body.install #footer
+{ display: block; }
+body.errors #errors,
+body.install #install {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
 
 header {
   -moz-box-align: center;
@@ -59,40 +68,42 @@ header::after {
   color: GrayText;
 }
 
-#install {
+.wrapper {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  min-height: 0;
 }
-#install, .spacer {
+
+.spacer {
   flex-grow: 1;
 }
 
-#details {
+#details #apis {
+  margin-top: 0;
+}
+
+.info {
   border: 1px solid lightgrey;
   border-radius: 4px;
-  max-height: calc(100vh - 197px);
   overflow-y: auto;
   padding: 16px;
 }
 
-#details > * {
+.info > * {
   margin-top: 1em;
 }
-#details #apis {
-  margin-top: 0;
-}
-#details p,
-#details ul
+.info p,
+.info ul
 { margin: 0; }
 
 .text strong {
   font-size: 1.2em;
 }
 
-
-progress {
+#progress {
   height: 17px;
-  margin: 13px;
+  margin: 13px 0;
   width: -moz-available;
 }
 

@@ -67,17 +67,6 @@ Data:
 * `uuid` The UUID of an installed script which is storing this value.
 * `value` The new value to store.
 
-# EditorSaved
-Sent by: `content/edit-user-script.js`.
-Received by: `bg/user-script-registry.js`.
-
-Sent whenever the user triggers the save action in the user script editor.
-Data:
-
-* `uuid` String UUID of the script being edited.
-* `content` String text content of main script.
-* `requires` Object mapping require URL to text content.
-
 # EnabledChanged
 Sent by: `bg/is-enabled.js`.
 
@@ -114,27 +103,9 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
-# InstallProgress
-Sent by: `bg/user-script-install.js`
-Received by: `content/install-dialog.js`
-
-While downloading a user script (and all dependencies), reports the current
-progress as a percentage.  Sent specifically back to the content process
-(tab / frame) which started the install.  Data:
-
-* `errors` A (possibly empty) list of string error messages.
-* `progress` A number, 0.0 to 1.0, representing the completion so far.
-
-# UserScriptChanged
-Sent by: `bg/user-script-registry.js`
-
-Sent when some value (like enabled state) of a script is changed.  Data:
-
-* `details` Updated script's current.
-* `parsedDetails` Updated script's original parsed details.
-
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
+Received by: `bg/user-script-registry.js`
 
 Data:
 
@@ -145,18 +116,15 @@ Response:
 * `details` The details object from an `EditableUserScript`.
 
 # UserScriptInstall
-Sent by: `content/install-dialog.js`
-Received by: `bg/user-script-install.js`
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/objects/user-script-installer.js`
 
-Triggered when the install button of the install dialog is clicked by the
-user.  Data:
+Triggered when the new user script button is pressed in the Monkey Menu.
+Data:
 
-* `details` An object of values parsed from the `==UserScript==` section,
-  as produced by `parseUserScript()`.
-* `source` A string, the entire source of the script.  Will fail if it
-  references any remote resources.
-
-Callers should specify one or the other, not both.
+* `content` A string, the entire source of the script.
+* `details` (optional) Properties that should be applied to the user script.
+If not provided then it will be parsed from the content.
 
 # UserScriptToggleEnabled
 Sent by: `content/manage-user-scripts.js`
@@ -170,6 +138,18 @@ clicked by the user.  Data:
 Response data:
 
 * `enabled` The new resulting value of this script's state.
+
+# UserScriptUpdate
+Sent by: `content/edit-user-script.js`.
+Received by: `bg/objects/user-script-updater.js`
+
+Sent whenever the user triggers the save action in the user script editor.
+Data:
+
+* `uuid` String UUID of the script being edited.
+* `content` String text content of main script.
+* `details` (optional) Properties that should be applied to the user script.
+If not provided then it will be parsed from the content.
 
 # UserScriptUninstall
 Sent by: `content/manage-user-scripts.js`

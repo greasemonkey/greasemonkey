@@ -1,6 +1,9 @@
 const details = JSON.parse(unescape(document.location.search.substr(1)));
 document.title = _('$1 - Greasemonkey User Script', details.name);
 
+let rvDetails;
+let gRequestId = details.requestId;
+delete details.requestId;
 
 function finish() {
   chrome.tabs.getCurrent(curTab => {
@@ -8,69 +11,86 @@ function finish() {
   });
 }
 
+/****************************** BG CONNECTION ********************************/
 
-let btnCancel = document.getElementById('btn-cancel');
-btnCancel.addEventListener('click', finish, true);
+let gPort = chrome.runtime.connect({'name': 'RemoteInstallDialog'});
+gPort.onMessage.addListener(message => {
+  switch (message.type) {
+    case 'progress':
+      updateProgress(message.progress);
+      break;
+    case 'finish':
+      finish();
+      break;
+    case 'error':
+      showError(message.errors);
+      break;
+  }
+});
+gPort.postMessage({'requestId': gRequestId});
+window.addEventListener('beforeunload', () => gPort.disconnect());
+
+/******************************* PROGRESS BAR ********************************/
+
+let gProgressBar = document.getElementById('progress');
+
+function updateProgress(progress) {
+  gProgressBar.value = progress;
+  if (progress === 1) {
+    checkGatekeeper();
+  }
+}
+
+/****************************** CANCEL BUTTON ********************************/
+
+function loadCancelButton() {
+  let btnCancel = document.getElementById('btn-cancel');
+  btnCancel.addEventListener('click', finish, true);
+}
 
 /****************************** INSTALL BUTTON *******************************/
 
 let installCountdown = 9;
-let btnInstall = document.getElementById('btn-install');
-function onClickInstall(event) {
-  chrome.runtime.sendMessage({
-    'name': 'UserScriptInstall',
-    'details': details,
-  });
 
-  let footerEl = document.getElementById('footer');
-  while (footerEl.firstChild) {
-    footerEl.removeChild(footerEl.firstChild);
-  }
-  footerEl.appendChild(progressBar);
+function loadInstallButton() {
+  let btnInstall = document.getElementById('btn-install');
+  let installText = _('Install');
+  btnInstall.textContent = `${installText} ${installCountdown}`;
+
+  let installTimer = setInterval(() => {
+    if (--installCountdown) {
+      btnInstall.textContent = `${installText} ${installCountdown}`;
+    } else {
+      clearTimeout(installTimer);
+      btnInstall.textContent = installText;
+      checkGatekeeper();
+    }
+  }, 250);
 }
-let installCounter = document.createElement('span');
-installCounter.textContent = installCountdown;
-btnInstall.appendChild(document.createTextNode(' '));
-btnInstall.appendChild(installCounter);
-let installTimer = setInterval(function() {
-  installCountdown--;
-  if (installCountdown) {
-    installCounter.textContent = installCountdown;
-  } else {
-    clearTimeout(installTimer);
-    btnInstall.removeChild(installCounter);
+
+function onClickInstall(event) {
+  gPort.postMessage();
+  gProgressBar.removeAttribute('value');
+}
+
+/******************************** GATEKEEPER *********************************/
+
+function checkGatekeeper() {
+  // Don't allow install until both the countdown and script download have
+  // finished.
+  if (!installCountdown && progress.value === 1) {
+    let btnInstall = document.getElementById('btn-install');
     btnInstall.removeAttribute('disabled');
     btnInstall.addEventListener('click', onClickInstall, true);
     btnInstall.focus();
   }
-}, 250);
+}
 
-/******************************* PROGRESS BAR ********************************/
 
-let progressBar = document.createElement('progress');
-
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  message.progress && (progressBar.value = message.progress);
-  if (message.progress == 1.0) {
-    document.body.className = 'result';
-    let resultEl = document.querySelector('#result p');
-    // TODO: Style well!
-    if (message.errors.length) {
-      let errorList = document.createElement('ul');
-      message.errors.forEach(error => {
-        var errorEl = document.createElement('li');
-        errorEl.textContent = error;
-        errorList.appendChild(errorEl);
-      });
-      while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
-      resultEl.appendChild(errorList);
-    } else {
-      resultEl.textContent = _('Download and install successful!');
-      progressBar.parentNode && progressBar.parentNode.removeChild(progressBar);
-      finish();
-    }
-  }
-});
+function showError(errors) {
+  document.body.className = 'errors';
+  rvDetails.errors.push.apply(rvDetails.errors, errors);
+}
 
 /****************************** DETAIL DISPLAY *******************************/
 
@@ -80,14 +100,19 @@ window.addEventListener('DOMContentLoaded', event => {
   let iconEl = document.getElementById('script-icon');
   iconEl.onerror = () => { iconEl.src = defaultIconUrl; };
 
+  loadCancelButton();
+  loadInstallButton();
+
   // Rivets will mutate its second parameter to have getters and setters,
   // these will break our attempt to pass `details` to background.  So
   // make a second copy of details, for Rivets to own.
-  let rvDetails = JSON.parse(unescape(document.location.search.substr(1)));
+  rvDetails = JSON.parse(unescape(document.location.search.substr(1)));
 
   // The fallback to default icon won't work unless iconUrl has at least an
   // empty string.
   rvDetails.iconUrl = rvDetails.iconUrl || '';
+  // Set an empty array for errors
+  rvDetails.errors = [];
 
   rivets.bind(document.body, rvDetails);
 });

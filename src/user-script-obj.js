@@ -233,8 +233,7 @@ window.RunnableUserScript = class RunnableUserScript
 }
 
 
-const editableUserScriptKeys = [
-    'parsedDetails', 'content', 'requiresContent'];
+const editableUserScriptKeys = ['content', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -242,7 +241,6 @@ window.EditableUserScript = class EditableUserScript
   constructor(details) {
     super(details);
 
-    this._parsedDetails = null;  // All details from parseUserScript().
     this._content = null;
     this._requiresContent = {};  // Map of download URL to content.
 
@@ -257,7 +255,6 @@ window.EditableUserScript = class EditableUserScript
     return d;
   }
 
-  get parsedDetails() { return this._parsedDetails; }
   get content() { return this._content; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
 
@@ -310,141 +307,6 @@ window.EditableUserScript = class EditableUserScript
     return 'const GM = {};\n'
         + 'GM.info=' + JSON.stringify(gmInfo) + ';'
         + 'const GM_info = GM.info;';
-  }
-
-  updateFromEditorSaved(message) {
-    // Save immediately passed details.
-    this._content = message.content;
-    this._requiresContent = message.requires;
-
-    let newDetails = parseUserScript(
-        message.content, this.downloadUrl, false);
-
-    // Remove any no longer referenced remotes.
-    if (!newDetails.iconUrl) {
-      this._iconBlob = null;
-    }
-
-    Object.keys(this._requiresContent).forEach(u => {
-      if (newDetails.requireUrls.indexOf(u) === -1) {
-        delete this._requiresContent[u];
-      }
-    });
-
-    Object.keys(this._resources).forEach(n => {
-      if (!newDetails.resourceUrls.hasOwnProperty(n)) {
-        delete this._resources[n];
-      }
-    });
-
-    // Add newly referenced remotes (and download them).
-    return new Promise((resolve, reject) => {
-      let updater = new RemoteUpdater(
-          this._parsedDetails, newDetails,
-          () => {
-            // TODO: Check for & pass download failures via reject.
-            if (updater.iconDownload) {
-              this._iconBlob = updater.iconDownload.xhr.response;
-            }
-            updater.requireDownloads.forEach(d => {
-              this._requiresContent[d.url] = d.xhr.responseText;
-            });
-            Object.keys(updater.resourceDownloads).forEach(n => {
-              let d = updater.resourceDownloads[n];
-              this._resources[n] = {
-                  'name': n,
-                  'mimetype': d.xhr.getResponseHeader('Content-Type'),
-                  'url': d.url,
-                  'blob': d.xhr.response,
-              };
-            });
-
-            this._parsedDetails = newDetails;
-            _loadValuesInto(this, newDetails, userScriptKeys);
-            resolve();
-          });
-      if (updater.skip()) {
-        this._parsedDetails = newDetails;
-        _loadValuesInto(this, newDetails, userScriptKeys);
-        resolve();
-      }
-    });
-  }
-
-  // Given a successful/completed `Downloader` object, update this script
-  // from it.
-  updateFromDownloader(downloader) {
-    this._content = downloader.scriptDownload.xhr.responseText;
-    if (downloader.iconDownload) {
-      this._iconBlob = downloader.iconDownload.xhr.response;
-    }
-    this._requiresContent = {};
-    downloader.requireDownloads.forEach(d => {
-      this._requiresContent[d.url] = d.xhr.responseText;
-    });
-    this._resources = {};
-    Object.keys(downloader.resourceDownloads).forEach(n => {
-      let d = downloader.resourceDownloads[n];
-      this._resources[n] = {
-          'name': n,
-          'mimetype': d.xhr.getResponseHeader('Content-Type'),
-          'blob': d.xhr.response,
-      };
-    });
-
-    this._parsedDetails = downloader.scriptDetails;
-    _loadValuesInto(this, downloader.scriptDetails, userScriptKeys);
-  }
-}
-
-
-class RemoteUpdater {
-  constructor(oldDetails, newDetails, onLoad) {
-    this._onLoad = onLoad;
-
-    this.iconDownload = null;
-    if (oldDetails.iconUrl != newDetails.iconUrl) {
-      this.iconDownload = new Download(this, newDetails.iconUrl, true);
-    }
-
-    this.requireDownloads = [];
-    newDetails.requireUrls.forEach(u => {
-      if (oldDetails.requireUrls.indexOf(u) === -1) {
-        this.requireDownloads.push(new Download(this, u, false));
-      }
-    });
-
-    this.resourceDownloads = {};
-    Object.keys(newDetails.resourceUrls).forEach(n => {
-      if (!oldDetails.resourceUrls.hasOwnProperty(n)
-          || oldDetails.resourceUrls[n] != newDetails.resourceUrls[n]
-      ) {
-        let u = newDetails.resourceUrls[n];
-        this.resourceDownloads[n] = new Download(this, u, true);
-      }
-    });
-  }
-
-  onLoad(download, event) {
-    if (this.pending()) return;
-    this._onLoad();
-  }
-
-  onProgress(download, event) {
-    // Ignore.
-  }
-
-  pending() {
-    return (this.iconDownload && this.iconDownload.pending)
-        || this.requireDownloads.filter(d => d.pending).length > 0
-        || Object.values(this.resourceDownloads)
-            .filter(d => d.pending).length > 0;
-  }
-
-  skip() {
-    return !this.iconDownload
-        && this.requireDownloads.length == 0
-        && Object.values(this.resourceDownloads).length == 0;
   }
 }
 
