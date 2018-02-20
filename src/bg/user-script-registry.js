@@ -207,8 +207,6 @@ window.onApiGetResourceBlob = onApiGetResourceBlob;
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
   const userScript = userScripts[message.uuid];
-  console.log(
-    '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
   userScript.enabled = !userScript.enabled;
   saveUserScript(userScript);
   sendResponse({'enabled': userScript.enabled});
