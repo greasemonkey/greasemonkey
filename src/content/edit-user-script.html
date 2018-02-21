@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="edit-user-script.css">
 
 <script src="/src/i18n.js"></script>
+<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
 
 <script src="/third-party/codemirror/codemirror.js"></script>
 <link rel="stylesheet" href="/third-party/codemirror/codemirror.css">
@@ -33,7 +35,7 @@
 
 <body>
 <div class="tab-bar">
-  <div id="save" class="command-item" title="__MSG_Save__">
+  <div id="save" class="command-item" rv-title="'Save'|i18n">
     <i class="icon fa fa-floppy-o"></i>
   </div>
   <ul id="tabs"></ul>
