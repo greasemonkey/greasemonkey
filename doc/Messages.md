@@ -115,7 +115,7 @@ Response data:
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
 # InstallProgress
-Sent by: `bg/user-script-install.js`
+Sent by: `downloader.js`
 Received by: `content/install-dialog.js`
 
 While downloading a user script (and all dependencies), reports the current
@@ -146,7 +146,7 @@ Response:
 
 # UserScriptInstall
 Sent by: `content/install-dialog.js`
-Received by: `bg/user-script-install.js`
+Received by: `downloader.js`
 
 Triggered when the install button of the install dialog is clicked by the
 user.  Data:
