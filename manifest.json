@@ -42,10 +42,11 @@
       "src/downloader.js",
       "src/parse-meta-line.js",
       "src/parse-user-script.js",
+      "src/supported-apis.js",
       "src/user-script-obj.js",
       "src/util/check-api-call-allowed.js",
-      "third-party/MatchPattern.js",
       "third-party/convert2RegExp.js",
+      "third-party/MatchPattern.js",
 
       "src/bg/execute.run.js",
       "src/bg/user-script-detect.run.js",

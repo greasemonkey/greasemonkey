@@ -36,13 +36,10 @@ function safeUrl(path, base) {
 
 
 /** Parse the source of a script; produce object of data. */
-window.parseUserScript = function(content, url, failIfMissing) {
+window.parseUserScript = function(content, url) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }
-
-  var meta = extractMeta(content).match(/.+/g);
-  if (failIfMissing && !meta) return null;
 
   // Populate with defaults in case the script specifies no value.
   var details = {
@@ -59,6 +56,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
     'runAt': 'end'
   };
 
+  var meta = extractMeta(content).match(/.+/g);
   if (!meta) {
     return details;
   }

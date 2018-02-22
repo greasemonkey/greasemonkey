@@ -7,73 +7,34 @@ let gRvDetails = {
 };
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
-
-/****************************** CANCEL BUTTON ********************************/
-
-function finish() {
-  chrome.tabs.getCurrent(curTab => {
-    chrome.tabs.remove(curTab.id);
-  });
-}
-
-document.getElementById('btn-cancel').addEventListener('click', finish, true);
-
-/****************************** INSTALL BUTTON *******************************/
-
-function onClickInstall(event) {
-  gProgressBar.style.display = '';
-  chrome.runtime.sendMessage({
-    'name': 'UserScriptInstall',
-    'details': gDetails,
-  });
-}
-let installCounter = document.createElement('span');
-installCounter.textContent = gInstallCountdown;
-gBtnInstall.appendChild(document.createTextNode(' '));
-gBtnInstall.appendChild(installCounter);
-let installTimer = setInterval(function() {
-  gInstallCountdown--;
-  if (gInstallCountdown) {
-    installCounter.textContent = gInstallCountdown;
-  } else {
-    clearTimeout(installTimer);
-    gBtnInstall.removeChild(installCounter);
-    gBtnInstall.removeAttribute('disabled');
-    gBtnInstall.addEventListener('click', onClickInstall, true);
-    gBtnInstall.focus();
-  }
-}, 250);
+let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
 
 /******************************* PROGRESS BAR ********************************/
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  message.progress && (gProgressBar.value = message.progress);
-  if (message.progress == 1.0) {
-    document.body.className = 'result';
-    let resultEl = document.querySelector('#result p');
-    // TODO: Style well!
-    if (message.errors.length) {
-      let errorList = document.createElement('ul');
-      message.errors.forEach(error => {
-        var errorEl = document.createElement('li');
-        errorEl.textContent = error;
-        errorList.appendChild(errorEl);
-      });
-      while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
-      resultEl.appendChild(errorList);
-    } else {
-      // TODO: Localize string.
-      resultEl.textContent = _('Download and install successful!');
+gDownloader.addProgressListener(() => {
+  gProgressBar.value = gDownloader.progress;
+
+  if (gDownloader.errors.length > 0) {
+    let errorList = document.createElement('ul');
+    message.errors.forEach(error => {
+      var errorEl = document.createElement('li');
+      errorEl.textContent = error;
+      errorList.appendChild(errorEl);
+    });
+    while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
+    resultEl.appendChild(errorList);
+  } else {
+    if (gDownloader.progress == 1) {
       gProgressBar.style.display = 'none';
-      finish();
     }
+    maybeEnableInstall();
   }
 });
 
 /****************************** DETAIL DISPLAY *******************************/
 
-window.addEventListener('DOMContentLoaded', event => {
-  gDetails = JSON.parse(unescape(document.location.search.substr(1)));
+gDownloader.scriptDetails.then(scriptDetails => {
+  gDetails = scriptDetails;
 
   // TODO: Localize string.
   document.title = _('$1 - Greasemonkey User Script', gDetails.name);
@@ -89,4 +50,64 @@ window.addEventListener('DOMContentLoaded', event => {
   Object.assign(gRvDetails, rvDetails);
 
   rivets.bind(document.body, gRvDetails);
+
+  document.body.className = 'install';
+}).catch(err => {
+  // TODO: Show error results HTML.
+  console.warn('installer could not get script details:', err);
 });
+
+/******************************* CANCEL BUTTON *******************************/
+
+function finish() {
+  chrome.tabs.getCurrent(curTab => {
+    chrome.tabs.remove(curTab.id);
+  });
+}
+
+document.getElementById('btn-cancel').addEventListener('click', finish, true);
+
+/****************************** INSTALL BUTTON *******************************/
+
+async function onClickInstall(event) {
+  document.body.className = 'result';
+  let resultEl = document.querySelector('#result p');
+  // TODO: Localize string.
+  resultEl.textContent = _('Download and install successful!');
+
+  gDownloader.install();
+
+  // TODO: Wait for success reply?
+  finish();
+}
+
+
+function maybeEnableInstall() {
+  if (gInstallCountdown) return;
+  if (gDownloader.progress < 1) return;
+
+  gBtnInstall.addEventListener('click', onClickInstall, true);
+  gBtnInstall.removeAttribute('disabled');
+  gBtnInstall.focus();
+}
+
+
+(() => {
+  let installCounter = document.createElement('span');
+  installCounter.textContent = ' ' + gInstallCountdown;
+  gBtnInstall.appendChild(installCounter);
+  let installTimer = setInterval(function() {
+    gInstallCountdown--;
+    if (gInstallCountdown) {
+      installCounter.textContent = ' ' + gInstallCountdown;
+    } else {
+      clearTimeout(installTimer);
+      maybeEnableInstall();
+      installCounter.parentNode.removeChild(installCounter);
+    }
+  }, 250);
+})();
+
+/*****************************************************************************/
+
+gDownloader.start();

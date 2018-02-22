@@ -6,7 +6,12 @@
 <link rel="stylesheet" href="install-dialog.css">
 <title>{name} - {'Greasemonkey user script'|i18n}</title>
 </head>
-<body class="install">
+<body class="loading">
+
+<section id="loading">
+  <!-- TODO spinner -->
+  Loading user script ...
+</section>
 
 <section id="install">
   <header>
@@ -50,7 +55,7 @@
   <div class="spacer"></div>
 
   <div id="footer">
-    <progress style="display: none;"></progress>
+    <progress></progress>
 
     <!-- TODO: Install in disabled state control, for review before running. -->
 

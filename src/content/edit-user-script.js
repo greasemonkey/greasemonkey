@@ -1,4 +1,4 @@
-// TODO: Search, replace.
+let gUserScript = null;
 
 // Change the title of the save icon (and more) to initial values.
 rivets.bind(document, {});
@@ -43,6 +43,8 @@ chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }, userScript => {
+  gUserScript = userScript;
+
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;
@@ -118,24 +120,29 @@ editor.on('change', change => {
 });
 
 
-function onSave() {
+async function onSave() {
   if (document.querySelectorAll('#tabs .tab.dirty').length == 0) {
     return;
   }
+
+  // Always use a downloader to save, in case of new remotes.
+  let downloader = new UserScriptDownloader()
+  downloader.setScriptUrl(gUserScript.downloadUrl);
+  downloader.setScriptContent(editorDocs[0].getValue());
 
   let requires = {};
   for (let i = 1; i < editorDocs.length; i++) {
     requires[ editorUrls[i] ] = editorDocs[i].getValue();
   }
+  downloader.setKnownRequires(requires);
+  downloader.setKnownResources(gUserScript.resources);
 
-  chrome.runtime.sendMessage({
-    'name': 'EditorSaved',
-    'uuid': userScriptUuid,
-    'content': editorDocs[0].getValue(),
-    'requires': requires,
-  });
+  await downloader.start();
 
-  // TODO: Spinner, then only when completed:
+  // TODO: Some sort of progress "dialog" here.
+
+  await downloader.install();
+
   for (let i = 0; i < editorDocs.length; i++) {
     editorDocs[i].markClean();
     editorTabs[i].classList.remove('dirty');
