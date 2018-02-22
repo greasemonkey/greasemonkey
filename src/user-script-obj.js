@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 10;
+const EVAL_CONTENT_VERSION = 11;
 
 
 // Private implementation.
@@ -173,13 +173,9 @@ window.RemoteUserScript = class RemoteUserScript {
   }
 
   toString() {
-    if (this.version) {
-      return _(
-          '[Greasemonkey script $id$; version $version$]',
-          this.id, this.version);
-    } else {
-      return _('[Greasemonkey script $1]', this.id);
-    }
+    return this.version
+        ? _('gm_script_id_ver', this.id, this.version)
+        : _('gm_script_id', this.id);
   }
 }
 

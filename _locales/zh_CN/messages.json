@@ -1,169 +1,129 @@
 {
-    "User script save failed: script named $1 already exists in namespace $2.": {
-        "message": "User script save failed: script named $1 already exists in namespace $2.",
-        "description": ""
-    },
-    "You should only install scripts from sources that you trust.": {
+    "sources_you_trust": {
         "message": "您应该只安装来源可信的脚本。",
         "description": ""
     },
-    "Greasemonkey is active": {
+    "greasemonkey_is_active": {
         "message": "Greasemonkey 已启用",
         "description": ""
     },
-    "Matches:": {
+    "matches": {
         "message": "匹配：",
         "description": ""
     },
-    "GM.openInTab: Could not understand the URL: $1": {
+    "gm_opentab_bad_URL": {
         "message": "GM.openInTab：无法理解此 URL: $1",
         "description": ""
     },
-    "Enabled": {
+    "enabled": {
         "message": "已启用",
         "description": ""
     },
-    "Install": {
+    "install": {
         "message": "安装",
         "description": ""
     },
-    "Other user scripts": {
+    "other_user_scripts": {
         "message": "其他用户脚本",
         "description": ""
     },
-    "$1 - Greasemonkey User Script Editor": {
+    "NAME_greasemonkey_user_script_editor": {
         "message": "$1 - Greasemonkey 用户脚本编辑器",
         "description": ""
     },
-    "Greasemonkey home page": {
+    "greasemonkey_home_page": {
         "message": "Greasemonkey 首页",
         "description": ""
     },
-    "[Greasemonkey script $1]": {
-        "message": "[Greasemonkey script $1]",
-        "description": ""
-    },
-    "Runs on:": {
+    "runs_on": {
         "message": "运行于：",
         "description": ""
     },
-    "Uninstall": {
+    "uninstall": {
         "message": "卸载",
         "description": ""
     },
-    "Duplicate resource name: $1": {
+    "duplicate_resource_NAME": {
         "message": "重复的资源名称：$1",
         "description": ""
     },
-    "User script save failed: unknown error.": {
-        "message": "User script save failed: unknown error.",
-        "description": ""
-    },
-    "[Greasemonkey script $id$; version $version$]": {
-        "message": "[Greasemonkey script $ID$; version $VERSION$]",
-        "description": ""
-    },
-    "Download and install successful!": {
+    "download_and_install_successful": {
         "message": "成功下载和安装！",
         "description": ""
     },
-    "New user script...": {
-        "message": "New user script...",
-        "description": ""
-    },
-    "Greasemonkey Wiki": {
-        "message": "Greasemonkey Wiki",
-        "description": ""
-    },
-    "Ignoring @match pattern $1 because:\n$2": {
+    "ignoring_MATCH_because_REASON": {
         "message": "忽略 @match 模式 $1，原因：\n$2",
         "description": ""
     },
-    "GM.xmlHttpRequest: Could not understand the URL: $1\n$2": {
+    "xhr_bad_url": {
         "message": "GM.xmlHttpRequest：无法理解此 URL: $1\n$2",
         "description": ""
     },
-    "Get user scripts": {
+    "get_user_scripts": {
         "message": "获取用户脚本",
         "description": ""
     },
-    "GM.xmlHttpRequest: Received no URL.": {
+    "xhr_no_url": {
         "message": "GM.xmlHttpRequest：没有收到 URL。",
         "description": ""
     },
-    "User scripts for this tab": {
+    "user_scripts_for_this_tab": {
         "message": "适用于此标签页的用户脚本",
         "description": ""
     },
-    "GM.xmlHttpRequest: Received no details.": {
+    "xhr_no_details": {
         "message": "GM.xmlHttpRequest：没有收到细节。",
         "description": ""
     },
-    "GM.notification: \"text\" must be a string": {
+    "gm_notif_text_must_be_string": {
         "message": "GM.notification：\"text\" 必须为一个字符串",
         "description": ""
     },
-    "Requires special APIs:": {
+    "requires_special_apis": {
         "message": "需要特殊 API：",
         "description": ""
     },
-    "$1 - Greasemonkey User Script": {
+    "NAME_greasemonkey_user_script": {
         "message": "$1 - Greasemonkey 用户脚本",
         "description": ""
     },
-    "Script Save Error": {
-        "message": "Script Save Error",
-        "description": ""
-    },
-    "Could not execute user script: $1\n$2": {
-        "message": "未能执行用户脚本：$1\n$2",
-        "description": ""
-    },
-    "GM.xmlHttpRequest: Passed URL has bad protocol: $1": {
+    "xhr_bad_url_scheme": {
         "message": "GM.xmlHttpRequest：所传递 URL 的协议不良: $1",
         "description": ""
     },
-    "Cancel": {
+    "cancel": {
         "message": "取消",
         "description": ""
     },
-    "Unnamed Script $1": {
-        "message": "Unnamed Script $1",
-        "description": ""
-    },
-    "Disabled": {
+    "disabled": {
         "message": "已禁用",
         "description": ""
     },
-    "Edit": {
+    "edit": {
         "message": "编辑",
         "description": ""
     },
-    "Undo uninstall": {
+    "undo_uninstall": {
         "message": "撤销卸载",
         "description": ""
     },
-    "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": {
+    "malicious_user_scripts": {
         "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。",
         "description": ""
     },
-    "Save": {
-        "message": "Save",
-        "description": ""
-    },
-    "$1 does not @grant method $2": {
+    "SCRIPT_does_not_grant_METHOD": {
         "message": "$1 没有 @grant 方法 $2",
         "description": ""
     },
-    "Greasemonkey is disabled": {
+    "greasemonkey_is_disabled": {
         "message": "Greasemonkey 已禁用",
         "description": ""
     },
-    "This is a Greasemonkey user script.  Click install to start using it.": {
+    "this_is_a_greasemonkey_user_script": {
         "message": "这是一个 Greasemonkey 用户脚本。点击安装来开始使用。",
         "description": ""
     },
-    "Does not run on:": {
+    "does_not_run_on": {
         "message": "不会运行于：",
         "description": ""
     }

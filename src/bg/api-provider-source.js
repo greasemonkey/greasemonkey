@@ -149,7 +149,7 @@ function GM_notification(text, title, image, onclick) {
   }
 
   if (typeof opt.text != 'string') {
-    throw new Error(_('GM.notification: "text" must be a string'));
+    throw new Error(_('gm_notif_text_must_be_string'));
   }
 
   if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
@@ -178,7 +178,7 @@ function GM_openInTab(url, openInBackground) {
   try {
     objURL = new URL(url, location.href);
   } catch(e) {
-    throw new Error(_('GM.openInTab: Could not understand the URL: $1', url));
+    throw new Error(_('gm_opentab_bad_URL', url));
   }
 
   chrome.runtime.sendMessage({
@@ -211,23 +211,21 @@ function GM_setClipboard(text) {
 
 
 function GM_xmlHttpRequest(d) {
-  if (!d) throw new Error(_('GM.xmlHttpRequest: Received no details.'));
-  if (!d.url) throw new Error(_('GM.xmlHttpRequest: Received no URL.'));
+  if (!d) throw new Error(_('xhr_no_details'));
+  if (!d.url) throw new Error(_('xhr_no_url'));
 
   let url;
   try {
     url = new URL(d.url, location.href);
   } catch (e) {
-    throw new Error(
-        _('GM.xmlHttpRequest: Could not understand the URL: $1\n$2', d.url, e));
+    throw new Error(_('xhr_bad_url', d.url, e));
   }
 
   if (url.protocol != 'http:'
       && url.protocol != 'https:'
       && url.protocol != 'ftp:'
   ) {
-    throw new Error(
-        _('GM.xmlHttpRequest: Passed URL has bad protocol: $1', d.url));
+    throw new Error(_('xhr_bad_url_scheme', d.url));
   }
 
   let port = chrome.runtime.connect({name: 'UserScriptXhr'});

@@ -37,7 +37,7 @@ gDownloader.scriptDetails.then(scriptDetails => {
   gDetails = scriptDetails;
 
   // TODO: Localize string.
-  document.title = _('$1 - Greasemonkey User Script', gDetails.name);
+  document.title = _('NAME_greasemonkey_user_script', gDetails.name);
   // Apply the onerror event for the img tag. CSP does not allow it to be done
   // directly in HTML.
   let iconEl = document.querySelector('#install header img');
@@ -73,7 +73,7 @@ async function onClickInstall(event) {
   document.body.className = 'result';
   let resultEl = document.querySelector('#result p');
   // TODO: Localize string.
-  resultEl.textContent = _('Download and install successful!');
+  resultEl.textContent = _('download_and_install_successful');
 
   gDownloader.install();
 

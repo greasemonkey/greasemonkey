@@ -1,169 +1,133 @@
 {
-    "User script save failed: script named $1 already exists in namespace $2.": {
-        "message": "User script save failed: script named $1 already exists in namespace $2.",
-        "description": ""
-    },
-    "You should only install scripts from sources that you trust.": {
+    "sources_you_trust": {
         "message": "出所が信頼できないスクリプトはインストールしないでください。",
         "description": ""
     },
-    "Greasemonkey is active": {
+    "greasemonkey_is_active": {
         "message": "Greasemonkey は有効",
         "description": ""
     },
-    "Matches:": {
+    "matches": {
         "message": "実行されるページ (@match):",
         "description": ""
     },
-    "GM.openInTab: Could not understand the URL: $1": {
+    "gm_opentab_bad_URL": {
         "message": "GM.openInTab: 不正なURLです: $1",
         "description": ""
     },
-    "Enabled": {
+    "enabled": {
         "message": "有効",
         "description": ""
     },
-    "Install": {
+    "install": {
         "message": "インストール",
         "description": ""
     },
-    "Other user scripts": {
+    "other_user_scripts": {
         "message": "その他のユーザースクリプト",
         "description": ""
     },
-    "$1 - Greasemonkey User Script Editor": {
+    "NAME_greasemonkey_user_script_editor": {
         "message": "$1 — Greasemonkey ユーザースクリプトエディタ",
         "description": ""
     },
-    "Greasemonkey home page": {
+    "greasemonkey_home_page": {
         "message": "Greasemonkey ホームページ",
         "description": ""
     },
-    "[Greasemonkey script $1]": {
-        "message": "[Greasemonkey script $1]",
+    "gm_script_id": {
+        "message": "gm_script_id",
         "description": ""
     },
-    "Runs on:": {
+    "runs_on": {
         "message": "実行されるページ (@includes):",
         "description": ""
     },
-    "Uninstall": {
+    "uninstall": {
         "message": "アンインストール",
         "description": ""
     },
-    "Duplicate resource name: $1": {
+    "duplicate_resource_NAME": {
         "message": "リソース名が重複しています: $1",
         "description": ""
     },
-    "User script save failed: unknown error.": {
-        "message": "User script save failed: unknown error.",
-        "description": ""
-    },
-    "[Greasemonkey script $id$; version $version$]": {
-        "message": "[Greasemonkey script $ID$; version $VERSION$]",
-        "description": ""
-    },
-    "Download and install successful!": {
+    "download_and_install_successful": {
         "message": "ダウンロード、およびインストールが完了しました!",
         "description": ""
     },
-    "New user script...": {
-        "message": "New user script...",
-        "description": ""
-    },
-    "Greasemonkey Wiki": {
-        "message": "Greasemonkey wiki",
-        "description": ""
-    },
-    "Ignoring @match pattern $1 because:\n$2": {
+    "ignoring_MATCH_because_REASON": {
         "message": "「$1」は不正な @match パターンです:\n$2",
         "description": ""
     },
-    "GM.xmlHttpRequest: Could not understand the URL: $1\n$2": {
+    "xhr_bad_url": {
         "message": "GM.xmlHttpRequest: 不正なURLです: $1\n$2",
         "description": ""
     },
-    "Get user scripts": {
+    "get_user_scripts": {
         "message": "ユーザースクリプトの入手",
         "description": ""
     },
-    "GM.xmlHttpRequest: Received no URL.": {
+    "xhr_no_url": {
         "message": "GM.xmlHttpRequest: URLが指定されていません。",
         "description": ""
     },
-    "User scripts for this tab": {
+    "user_scripts_for_this_tab": {
         "message": "現在のタブで実行されるユーザースクリプト",
         "description": ""
     },
-    "GM.xmlHttpRequest: Received no details.": {
+    "xhr_no_details": {
         "message": "GM.xmlHttpRequest: 「details」引数が指定されていません。",
         "description": ""
     },
-    "GM.notification: \"text\" must be a string": {
+    "gm_notif_text_must_be_string": {
         "message": "GM.notification: 「text」は文字列でなければなりません。",
         "description": ""
     },
-    "Requires special APIs:": {
+    "requires_special_apis": {
         "message": "次の特権APIを許可:",
         "description": ""
     },
-    "$1 - Greasemonkey User Script": {
+    "NAME_greasemonkey_user_script": {
         "message": "$1 — Greasemonkey ユーザースクリプト",
         "description": ""
     },
-    "Script Save Error": {
-        "message": "Script Save Error",
-        "description": ""
-    },
-    "Could not execute user script: $1\n$2": {
-        "message": "ユーザースクリプトを実行できませんでした: $1\n$2",
-        "description": ""
-    },
-    "GM.xmlHttpRequest: Passed URL has bad protocol: $1": {
+    "xhr_bad_url_scheme": {
         "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です: $1",
         "description": ""
     },
-    "Cancel": {
+    "cancel": {
         "message": "キャンセル",
         "description": ""
     },
-    "Unnamed Script $1": {
-        "message": "Unnamed Script $1",
-        "description": ""
-    },
-    "Disabled": {
+    "disabled": {
         "message": "無効",
         "description": ""
     },
-    "Edit": {
+    "edit": {
         "message": "編集",
         "description": ""
     },
-    "Undo uninstall": {
+    "undo_uninstall": {
         "message": "アンインストールを取り消す",
         "description": ""
     },
-    "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge.": {
+    "malicious_user_scripts": {
         "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。",
         "description": ""
     },
-    "Save": {
-        "message": "Save",
-        "description": ""
-    },
-    "$1 does not @grant method $2": {
+    "SCRIPT_does_not_grant_METHOD": {
         "message": "$1 は @grant $2 を含みません。",
         "description": ""
     },
-    "Greasemonkey is disabled": {
+    "greasemonkey_is_disabled": {
         "message": "Greasemonkey は無効",
         "description": ""
     },
-    "This is a Greasemonkey user script.  Click install to start using it.": {
+    "this_is_a_greasemonkey_user_script": {
         "message": "これは Greasemonkey ユーザースクリプトです。利用する場合は、インストールボタンをクリックします。",
         "description": ""
     },
-    "Does not run on:": {
+    "does_not_run_on": {
         "message": "実行されるページから除外されるページ:",
         "description": ""
     }

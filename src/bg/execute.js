@@ -26,8 +26,7 @@ function executeUserscriptOnNavigation(detail) {
 
       // TODO: Better indication of the root cause.
       console.error(
-          _('Could not execute user script: $1\n$2', userScript.toString(), err)
-          );
+          'Could not execute user script', userScript.toString(), '\n', err);
     });
   }
 }

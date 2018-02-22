@@ -211,18 +211,18 @@ async function saveUserScript(userScript) {
     if (error.name == 'ConstraintError') {
       // Most likely due to namespace / name conflict.
       message = _(
-          'User script save failed: script named $1 already exists in namespace $2.',
+          'save_failed_NAME_already_in_NAMESPACE',
           JSON.stringify(userScript.name),
           JSON.stringify(userScript.namespace));
     } else {
-      message = _('User script save failed: unknown error.');
+      message = _('save_failed_unknown');
     }
 
     // TODO: Pass this message to the editor tab, not general notifications.
     let notificationOpts = {
       'iconUrl': '/skin/icon.svg',
       'message': message,
-      'title': _('Script Save Error'),
+      'title': _('script_save_error'),
       'type': 'basic',
     };
     chrome.notifications.create(notificationOpts);

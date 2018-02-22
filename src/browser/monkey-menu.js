@@ -14,7 +14,7 @@ let gUserScripts = {};
 let gPendingTicker = null;
 
 const gPlaceHolder = '%d';
-const gUnnamedScript = _('Unnamed Script $1', gPlaceHolder);
+const gUnnamedScript = _('unnamed_script_RAND', gPlaceHolder);
 
 const gNewScriptTpl = `// ==UserScript==
 // @name     ${gUnnamedScript}

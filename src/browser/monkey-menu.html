@@ -15,7 +15,7 @@
       <div rv-show="enabled" class="icon fa fa-check-circle-o"></div>
       <div rv-hide="enabled" class="icon fa fa-circle-o"></div>
       <div class="text i18n">
-          {enabled|i18nBool 'Greasemonkey is active' 'Greasemonkey is disabled'}
+          {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
       </div>
     </a>
     <!-- TODO: This feature.
@@ -28,7 +28,7 @@
     <div rv-hide="userScripts.active | empty">
       <hr>
       <div class="subview-item heading">
-        <div class="text">{'User scripts for this tab'|i18n}</div>
+        <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
       </div>
 
       <a class="subview-item next-menu user-script"
@@ -44,7 +44,7 @@
     <div rv-hide="userScripts.inactive | empty">
       <hr>
       <div class="subview-item heading" rv-hide="userScripts.active | empty">
-        <div class="text">{'Other user scripts'|i18n}</div>
+        <div class="text">{'other_user_scripts'|i18n}</div>
       </div>
 
       <a class="subview-item next-menu user-script"
@@ -61,7 +61,7 @@
 
     <a href="#new-user-script" class="subview-item">
       <div class="icon fa fa-file-text-o"></div>
-      <div class="text">{'New user script...'|i18n}</div>
+      <div class="text">{'new_user_script'|i18n}</div>
     </a>
 
     <hr>
@@ -69,19 +69,19 @@
     <a href="#https://www.greasespot.net/"
         class="subview-item">
       <div class="icon fa fa-link"></div>
-      <div class="text">{'Greasemonkey home page'|i18n}</div>
+      <div class="text">{'greasemonkey_home_page'|i18n}</div>
     </a>
 
     <a href="#https://wiki.greasespot.net/"
         class="subview-item">
       <div class="icon fa fa-link"></div>
-      <div class="text">{'Greasemonkey Wiki'|i18n}</div>
+      <div class="text">{'greasemonkey_wiki'|i18n}</div>
     </a>
 
     <a href="#https://wiki.greasespot.net/User_Script_Hosting"
         class="subview-item">
       <div class="icon fa fa-link"></div>
-      <div class="text">{'Get user scripts'|i18n}</div>
+      <div class="text">{'get_user_scripts'|i18n}</div>
     </a>
   </div>
 </section>
@@ -99,23 +99,23 @@
           rv-class-fa-check-circle-o="activeScript.enabled"
           rv-class-fa-circle-o="activeScript.enabled | not">
       </div>
-      <div class="text">{activeScript.enabled|i18nBool 'Enabled' 'Disabled'}</div>
+      <div class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</div>
     </a>
 
     <a href="#edit-user-script" class="subview-item">
       <div class="icon fa fa-pencil-square-o"></div>
-      <div class="text">{'Edit'|i18n}</div>
+      <div class="text">{'edit'|i18n}</div>
     </a>
 
     <a href="#uninstall-user-script" class="subview-item"
         rv-hide="pendingUninstall">
       <div class="icon fa fa-trash-o"></div>
-      <div class="text">{'Uninstall'|i18n}</div>
+      <div class="text">{'uninstall'|i18n}</div>
     </a>
     <a href="#undo-uninstall-user-script" class="subview-item"
         rv-show="pendingUninstall">
       <div class="icon fa fa-trash-o"></div>
-      <div class="text">{'Undo uninstall'|i18n} ({ pendingUninstall })</div>
+      <div class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</div>
     </a>
   </div>
 </section>

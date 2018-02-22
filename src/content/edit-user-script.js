@@ -60,7 +60,7 @@ chrome.runtime.sendMessage({
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  document.title = _('$1 - Greasemonkey User Script Editor', userScript.name);
+  document.title = _('NAME_greasemonkey_user_script_editor', userScript.name);
 });
 
 
@@ -70,7 +70,7 @@ function onUserScriptChanged(message, sender, sendResponse) {
   let details = message.details;
   let parsedDetails = message.parsedDetails;
 
-  document.title = _('$1 - Greasemonkey User Script Editor', details.name);
+  document.title = _('NAME_greasemonkey_user_script_editor', details.name);
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];
