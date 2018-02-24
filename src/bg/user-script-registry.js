@@ -44,60 +44,33 @@ async function openDb() {
   });
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 
-async function installFromDownloader(downloader) {
+async function installFromDownloader(userScriptDetails, downloaderDetails) {
   let db = await openDb();
-  try {
-    let remoteScript = new RemoteUserScript(downloader.scriptDetails);
-    let txn = db.transaction([scriptStoreName], "readonly");
-    let store = txn.objectStore(scriptStoreName);
-    let index = store.index('id');
-    let req = index.get(remoteScript.id);
-    txn.oncomplete = event => {
-      let userScript = new EditableUserScript(req.result || {});
-      userScript.updateFromDownloader(downloader);
-      saveUserScript(userScript);
-      db.close();
-      // TODO: Notification?
-    };
-    txn.onerror = event => {
-      console.error('Error looking up script!', event);
-      db.close();
-    };
-  } catch (e) {
-    console.error('at installFromDownloader(), db fail:', e);
-    db.close();
-  }
-}
-
-
-async function installFromSource(source) {
-  let db = await openDb();
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
-      let details = parseUserScript(source, null);
-      let remoteScript = new RemoteUserScript(details);
+      let remoteScript = new RemoteUserScript(userScriptDetails);
       let txn = db.transaction([scriptStoreName], "readonly");
       let store = txn.objectStore(scriptStoreName);
       let index = store.index('id');
       let req = index.get(remoteScript.id);
-      txn.oncomplete = event => {
-        details = req.result || details;
-        details.content = source;
-        details.parsedDetails = details;
-        let userScript = new EditableUserScript(details);
-        saveUserScript(userScript);
+      txn.oncomplete = async event => {
+        let userScript = new EditableUserScript(req.result || {});
+        userScript.updateFromDownloaderDetails(
+            userScriptDetails, downloaderDetails);
+        await saveUserScript(userScript);
         resolve(userScript.uuid);
         db.close();
       };
       txn.onerror = event => {
         console.error('Error looking up script!', event);
+        reject();
         db.close();
       };
     } catch (e) {
-      console.error('at installFromSource(), db fail:', e);
+      console.error('at installFromDownloader(), db fail:', e);
+      reject();
       db.close();
     }
   });
@@ -106,67 +79,29 @@ async function installFromSource(source) {
 
 async function loadUserScripts() {
   let db = await openDb();
-  let txn = db.transaction([scriptStoreName], "readonly");
-  let store = txn.objectStore(scriptStoreName);
-  let req = store.getAll();
-  req.onsuccess = event => {
-    userScripts = {};
-    event.target.result.forEach(details => {
-      let userScript = new EditableUserScript(details);
-      userScripts[details.uuid] = userScript;
-      if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-        userScript.calculateEvalContent();
-        saveUserScript(userScript);
-      }
-    });
-    db.close();
-  };
-  req.onerror = event => {
-    console.warn('failed to load user scripts?', event);
-    db.close();
-  };
+  return new Promise((resolve, reject) => {
+    let txn = db.transaction([scriptStoreName], "readonly");
+    let store = txn.objectStore(scriptStoreName);
+    let req = store.getAll();
+    req.onsuccess = async event => {
+      userScripts = {};
+      await Promise.all(event.target.result.map(async details => {
+        let userScript = new EditableUserScript(details);
+        userScripts[details.uuid] = userScript;
+        if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
+          await saveUserScript(userScript);
+        }
+      }));
+      resolve();
+      db.close();
+    };
+    req.onerror = event => {
+      console.error('loadUserScripts() failure', event);
+      reject(event.target.error);
+      db.close();
+    };
+  });
 }
-
-
-async function loadUserScripts() {
-  let db = await openDb();
-  let txn = db.transaction([scriptStoreName], "readonly");
-  let store = txn.objectStore(scriptStoreName);
-  let req = store.getAll();
-  req.onsuccess = event => {
-    userScripts = {};
-    event.target.result.forEach(details => {
-      let userScript = new EditableUserScript(details);
-      userScripts[details.uuid] = userScript;
-      if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-        userScript.calculateEvalContent();
-        saveUserScript(userScript);
-      }
-    });
-    db.close();
-  };
-  req.onerror = event => {
-    console.error('loadUserScripts() failure', event);
-    db.close();
-  };
-}
-
-
-function onEditorSaved(message, sender, sendResponse) {
-  let userScript = userScripts[message.uuid];
-  if (!userScript) {
-    console.error('Got save for UUID', message.uuid, 'but it does not exist.');
-    return;
-  }
-
-  // Use a clone of the current user script. This is so that any changes are
-  // not propagated to the actual UserScript unless the transaction is
-  // successful.
-  let cloneScript = new EditableUserScript(userScript.details);
-  cloneScript.updateFromEditorSaved(message)
-      .then(value => saveUserScript(cloneScript));
-};
-window.onEditorSaved = onEditorSaved;
 
 
 function onListUserScripts(message, sender, sendResponse) {
@@ -192,6 +127,14 @@ function onUserScriptGet(message, sender, sendResponse) {
   }
 };
 window.onUserScriptGet = onUserScriptGet;
+
+
+window.onUserScriptInstall = async function(message, sender, sendResponse) {
+  let uuid
+      = await installFromDownloader(message.userScript, message.downloader);
+  sendResponse(uuid);
+  return uuid;
+}
 
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
@@ -228,8 +171,6 @@ window.onApiGetResourceBlob = onApiGetResourceBlob;
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
   const userScript = userScripts[message.uuid];
-  console.log(
-    '>>> onUserScriptToggleEnabled;', message.uuid, userScript);
   userScript.enabled = !userScript.enabled;
   saveUserScript(userScript);
   sendResponse({'enabled': userScript.enabled});
@@ -259,28 +200,29 @@ window.onUserScriptUninstall = onUserScriptUninstall;
 async function saveUserScript(userScript) {
   if (!(userScript instanceof EditableUserScript)) {
     throw new Error(
-        'Cannot save this type of UserScript object:'
+        'Cannot save this type of UserScript object: '
         + userScript.constructor.name);
   }
+
+  userScript.calculateEvalContent();
 
   function onSaveError(error) {
     let message;
     if (error.name == 'ConstraintError') {
       // Most likely due to namespace / name conflict.
-      message = chrome.i18n.getMessage(
-          'User script save failed: script named $1 already exists in namespace $2.',
-          [JSON.stringify(userScript.name),
-           JSON.stringify(userScript.namespace)]);
+      message = _(
+          'save_failed_NAME_already_in_NAMESPACE',
+          JSON.stringify(userScript.name),
+          JSON.stringify(userScript.namespace));
     } else {
-      message = chrome.i18n.getMessage(
-          'User script save failed: unknown error.');
+      message = _('save_failed_unknown');
     }
 
     // TODO: Pass this message to the editor tab, not general notifications.
     let notificationOpts = {
       'iconUrl': '/skin/icon.svg',
       'message': message,
-      'title': 'Script Save Error',
+      'title': _('script_save_error'),
       'type': 'basic',
     };
     chrome.notifications.create(notificationOpts);
@@ -348,8 +290,6 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
-  'installFromDownloader': installFromDownloader,
-  'installFromSource': installFromSource,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };

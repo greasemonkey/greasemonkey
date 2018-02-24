@@ -4,6 +4,6 @@
 function checkApiCallAllowed(method, userScriptUuid) {
   let userScript = UserScriptRegistry.scriptByUuid(userScriptUuid);
   if (!userScript.grants.includes(method)) {
-    throw new Error(_('$1 does not @grant method $2', userScript, method));
+    throw new Error(_('SCRIPT_does_not_grant_METHOD', userScript, method));
   }
 }

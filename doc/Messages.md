@@ -67,17 +67,6 @@ Data:
 * `uuid` The UUID of an installed script which is storing this value.
 * `value` The new value to store.
 
-# EditorSaved
-Sent by: `content/edit-user-script.js`.
-Received by: `bg/user-script-registry.js`.
-
-Sent whenever the user triggers the save action in the user script editor.
-Data:
-
-* `uuid` String UUID of the script being edited.
-* `content` String text content of main script.
-* `requires` Object mapping require URL to text content.
-
 # EnabledChanged
 Sent by: `bg/is-enabled.js`.
 
@@ -114,17 +103,6 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
-# InstallProgress
-Sent by: `bg/user-script-install.js`
-Received by: `content/install-dialog.js`
-
-While downloading a user script (and all dependencies), reports the current
-progress as a percentage.  Sent specifically back to the content process
-(tab / frame) which started the install.  Data:
-
-* `errors` A (possibly empty) list of string error messages.
-* `progress` A number, 0.0 to 1.0, representing the completion so far.
-
 # UserScriptChanged
 Sent by: `bg/user-script-registry.js`
 
@@ -145,8 +123,8 @@ Response:
 * `details` The details object from an `EditableUserScript`.
 
 # UserScriptInstall
-Sent by: `content/install-dialog.js`
-Received by: `bg/user-script-install.js`
+Sent by: `downloader.js`
+Received by: `bg/user-script-registry.js`
 
 Triggered when the install button of the install dialog is clicked by the
 user.  Data:

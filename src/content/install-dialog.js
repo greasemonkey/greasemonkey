@@ -1,6 +1,63 @@
-const details = JSON.parse(unescape(document.location.search.substr(1)));
-document.title = _('$1 - Greasemonkey User Script', details.name);
+let gBtnInstall = document.getElementById('btn-install');
+let gDetails = null;
+let gInstallCountdown = 9;
+let gProgressBar = document.querySelector('progress');
+let gRvDetails = {
+  'iconUrl': defaultIconUrl,
+};
+let gUserScriptUrl = unescape(document.location.search.substr(1));
 
+let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
+
+/******************************* PROGRESS BAR ********************************/
+
+gDownloader.addProgressListener(() => {
+  gProgressBar.value = gDownloader.progress;
+
+  if (gDownloader.errors.length > 0) {
+    let errorList = document.createElement('ul');
+    message.errors.forEach(error => {
+      var errorEl = document.createElement('li');
+      errorEl.textContent = error;
+      errorList.appendChild(errorEl);
+    });
+    while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
+    resultEl.appendChild(errorList);
+  } else {
+    if (gDownloader.progress == 1) {
+      gProgressBar.style.display = 'none';
+    }
+    maybeEnableInstall();
+  }
+});
+
+/****************************** DETAIL DISPLAY *******************************/
+
+gDownloader.scriptDetails.then(scriptDetails => {
+  gDetails = scriptDetails;
+
+  // TODO: Localize string.
+  document.title = _('NAME_greasemonkey_user_script', gDetails.name);
+  // Apply the onerror event for the img tag. CSP does not allow it to be done
+  // directly in HTML.
+  let iconEl = document.querySelector('#install header img');
+  iconEl.onerror = () => { gRvDetails.iconUrl = defaultIconurl; };
+
+  // Rivets will mutate its second parameter to have getters and setters,
+  // these will break our attempt to pass `gDetails` to background.  So
+  // make a second copy of `gDetails`, for Rivets to own.
+  let rvDetails = JSON.parse(JSON.stringify(gDetails));
+  Object.assign(gRvDetails, rvDetails);
+
+  rivets.bind(document.body, gRvDetails);
+
+  document.body.className = 'install';
+}).catch(err => {
+  // TODO: Show error results HTML.
+  console.warn('installer could not get script details:', err);
+});
+
+/******************************* CANCEL BUTTON *******************************/
 
 function finish() {
   chrome.tabs.getCurrent(curTab => {
@@ -8,86 +65,49 @@ function finish() {
   });
 }
 
-
-let btnCancel = document.getElementById('btn-cancel');
-btnCancel.addEventListener('click', finish, true);
+document.getElementById('btn-cancel').addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
-let installCountdown = 9;
-let btnInstall = document.getElementById('btn-install');
-function onClickInstall(event) {
-  chrome.runtime.sendMessage({
-    'name': 'UserScriptInstall',
-    'details': details,
-  });
+async function onClickInstall(event) {
+  document.body.className = 'result';
+  let resultEl = document.querySelector('#result p');
+  // TODO: Localize string.
+  resultEl.textContent = _('download_and_install_successful');
 
-  let footerEl = document.getElementById('footer');
-  while (footerEl.firstChild) {
-    footerEl.removeChild(footerEl.firstChild);
-  }
-  footerEl.appendChild(progressBar);
+  gDownloader.install();
+
+  // TODO: Wait for success reply?
+  finish();
 }
-let installCounter = document.createElement('span');
-installCounter.textContent = installCountdown;
-btnInstall.appendChild(document.createTextNode(' '));
-btnInstall.appendChild(installCounter);
-let installTimer = setInterval(function() {
-  installCountdown--;
-  if (installCountdown) {
-    installCounter.textContent = installCountdown;
-  } else {
-    clearTimeout(installTimer);
-    btnInstall.removeChild(installCounter);
-    btnInstall.removeAttribute('disabled');
-    btnInstall.addEventListener('click', onClickInstall, true);
-    btnInstall.focus();
-  }
-}, 250);
 
-/******************************* PROGRESS BAR ********************************/
 
-let progressBar = document.createElement('progress');
+function maybeEnableInstall() {
+  if (gInstallCountdown) return;
+  if (gDownloader.progress < 1) return;
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  message.progress && (progressBar.value = message.progress);
-  if (message.progress == 1.0) {
-    document.body.className = 'result';
-    let resultEl = document.querySelector('#result p');
-    // TODO: Style well!
-    if (message.errors.length) {
-      let errorList = document.createElement('ul');
-      message.errors.forEach(error => {
-        var errorEl = document.createElement('li');
-        errorEl.textContent = error;
-        errorList.appendChild(errorEl);
-      });
-      while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
-      resultEl.appendChild(errorList);
+  gBtnInstall.addEventListener('click', onClickInstall, true);
+  gBtnInstall.removeAttribute('disabled');
+  gBtnInstall.focus();
+}
+
+
+(() => {
+  let installCounter = document.createElement('span');
+  installCounter.textContent = ' ' + gInstallCountdown;
+  gBtnInstall.appendChild(installCounter);
+  let installTimer = setInterval(function() {
+    gInstallCountdown--;
+    if (gInstallCountdown) {
+      installCounter.textContent = ' ' + gInstallCountdown;
     } else {
-      resultEl.textContent = _('Download and install successful!');
-      progressBar.parentNode && progressBar.parentNode.removeChild(progressBar);
-      finish();
+      clearTimeout(installTimer);
+      maybeEnableInstall();
+      installCounter.parentNode.removeChild(installCounter);
     }
-  }
-});
+  }, 250);
+})();
 
-/****************************** DETAIL DISPLAY *******************************/
+/*****************************************************************************/
 
-window.addEventListener('DOMContentLoaded', event => {
-  // Apply the onerror event for the img tag. CSP does not allow it to be done
-  // directly in HTML.
-  let iconEl = document.getElementById('script-icon');
-  iconEl.onerror = () => { iconEl.src = defaultIconUrl; };
-
-  // Rivets will mutate its second parameter to have getters and setters,
-  // these will break our attempt to pass `details` to background.  So
-  // make a second copy of details, for Rivets to own.
-  let rvDetails = JSON.parse(unescape(document.location.search.substr(1)));
-
-  // The fallback to default icon won't work unless iconUrl has at least an
-  // empty string.
-  rvDetails.iconUrl = rvDetails.iconUrl || '';
-
-  rivets.bind(document.body, rvDetails);
-});
+gDownloader.start();

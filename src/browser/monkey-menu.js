@@ -13,8 +13,11 @@ let gTplData = {
 let gUserScripts = {};
 let gPendingTicker = null;
 
+const gPlaceHolder = '%d';
+const gUnnamedScript = _('unnamed_script_RAND', gPlaceHolder);
+
 const gNewScriptTpl = `// ==UserScript==
-// @name     Unnamed Script %d
+// @name     ${gUnnamedScript}
 // @version  1
 // @grant    none
 // ==/UserScript==`;
@@ -60,8 +63,8 @@ function loadScripts(userScriptsDetail, url) {
 }
 
 
-// Catch when a link has been 'navigated'
-function onHashChange(event) {
+// Catch when a link has been 'navigated'.
+async function onHashChange(event) {
   event.preventDefault();
 
   let hash = location.hash;
@@ -79,10 +82,13 @@ function onHashChange(event) {
       break;
     case '#new-user-script':
       let r = Math.floor(Math.random() * 900000 + 100000);
-      let newScriptSrc = gNewScriptTpl.replace('%d', r);
-      chrome.runtime.sendMessage(
-          {'name': 'UserScriptInstall', 'source': newScriptSrc},
-          uuid => openUserScriptEditor(uuid));
+      let newScriptSrc = gNewScriptTpl.replace(gPlaceHolder, r);
+      let downloader
+          = new UserScriptDownloader().setScriptContent(newScriptSrc);
+      await downloader.start();
+      let uuid = await downloader.install();
+      openUserScriptEditor(uuid);
+      window.close();
       break;
     case '#toggle-user-script':
       chrome.runtime.sendMessage({

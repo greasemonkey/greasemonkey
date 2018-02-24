@@ -17,54 +17,54 @@ body {
   justify-content: space-between;
   height: 100%;
   margin: auto;
-  padding: 1em 0;
+  padding: 1em;
   width: var(--dialog-max-width);
 }
 
+
+body.install #loading,
+body.install #result,
+body.loading #install,
+body.loading #result,
 body.result #install,
-body.result .panel-section-footer,
-body.install #result
+body.result #loading
 { display: none; }
 
-header {
-  -moz-box-align: center;
-  display: -moz-box;
-  height: 32px;
-  margin-bottom: 1em;
-  width: var(--dialog-max-width);
-}
-header h1 {
-  -moz-box-flex: 1;
-  display: -moz-box;
-  font-size: 20px;
-  overflow-x: hidden;
-  padding-left: 10px;
-  text-overflow: ellipsis;
-}
-header .icon {
-  font-size: 14px;
-  text-align: center;
-  width: 32px;
-}
-header .icon img {
-  object-fit: contain;
-  height: 32px;
-  width: 32px;
-}
-header::after {
-  margin-inline-start: 10px;
-  content: attr(version);
-  float: right;
-  font-size: 16px;
-  color: GrayText;
-}
 
-#install {
+section, .spacer {
   display: flex;
   flex-direction: column;
-}
-#install, .spacer {
   flex-grow: 1;
+}
+
+/******************************** LOADING ************************************/
+
+/******************************** INSTALL ************************************/
+
+#install header {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  margin-bottom: 1em;
+}
+#install header img {
+  height: 40px;
+  object-fit: contain;
+  padding-right: 10px;
+  width: 40px;
+}
+#install header .name {
+  font-size: 20px;
+  line-height: 40px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#install header .version {
+  color: GrayText;
+  float: right;
+  font-size: 16px;
+  line-height: 44px;
+  margin-left: 10px;
 }
 
 #details {
@@ -74,33 +74,28 @@ header::after {
   overflow-y: auto;
   padding: 16px;
 }
-
 #details > * {
-  margin-top: 1em;
-}
-#details #apis {
-  margin-top: 0;
+  margin: 1ex 0;
 }
 #details p,
 #details ul
 { margin: 0; }
 
+progress {
+  margin: 1em;
+  width: -moz-available;
+}
+
 .text strong {
   font-size: 1.2em;
 }
 
-
-progress {
-  height: 17px;
-  margin: 13px;
-  width: -moz-available;
-}
-
-
-#footer #actions {
+#install #footer #actions {
   display: flex;
 }
-#footer #actions button {
+#install #footer #actions button {
   flex-grow: 3;
   width: 0;
 }
+
+/******************************** RESULT ************************************/
