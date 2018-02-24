@@ -1,14 +1,10 @@
 // Private implementation.
 (function() {
 
-// Increments for every Downloader created.
-let gDownloaderCounter = 0;
-
 
 class Downloader {
   constructor() {
     this.errors = [];
-    this.id = ++gDownloaderCounter;
 
     this.scriptDownload = null;
     this.iconDownload = null;
