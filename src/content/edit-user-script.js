@@ -1,7 +1,7 @@
-// TODO: Search, replace.
+let gUserScript = null;
 
-// Change this title as soon as possible, but it won't change later.
-document.getElementById('save').setAttribute('title', _('Save'));
+// Change the title of the save icon (and more) to initial values.
+rivets.bind(document, {});
 
 var editor = CodeMirror(
     document.getElementById('editor'),
@@ -43,6 +43,8 @@ chrome.runtime.sendMessage({
   'name': 'UserScriptGet',
   'uuid': userScriptUuid,
 }, userScript => {
+  gUserScript = userScript;
+
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
   scriptTab.textContent = userScript.name;
@@ -58,7 +60,7 @@ chrome.runtime.sendMessage({
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  document.title = _('$1 - Greasemonkey User Script Editor', userScript.name);
+  document.title = _('NAME_greasemonkey_user_script_editor', userScript.name);
 });
 
 
@@ -68,7 +70,7 @@ function onUserScriptChanged(message, sender, sendResponse) {
   let details = message.details;
   let parsedDetails = message.parsedDetails;
 
-  document.title = _('$1 - Greasemonkey User Script Editor', details.name);
+  document.title = _('NAME_greasemonkey_user_script_editor', details.name);
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];
@@ -118,24 +120,29 @@ editor.on('change', change => {
 });
 
 
-function onSave() {
+async function onSave() {
   if (document.querySelectorAll('#tabs .tab.dirty').length == 0) {
     return;
   }
+
+  // Always use a downloader to save, in case of new remotes.
+  let downloader = new UserScriptDownloader()
+  downloader.setScriptUrl(gUserScript.downloadUrl);
+  downloader.setScriptContent(editorDocs[0].getValue());
 
   let requires = {};
   for (let i = 1; i < editorDocs.length; i++) {
     requires[ editorUrls[i] ] = editorDocs[i].getValue();
   }
+  downloader.setKnownRequires(requires);
+  downloader.setKnownResources(gUserScript.resources);
 
-  chrome.runtime.sendMessage({
-    'name': 'EditorSaved',
-    'uuid': userScriptUuid,
-    'content': editorDocs[0].getValue(),
-    'requires': requires,
-  });
+  await downloader.start();
 
-  // TODO: Spinner, then only when completed:
+  // TODO: Some sort of progress "dialog" here.
+
+  await downloader.install();
+
   for (let i = 0; i < editorDocs.length; i++) {
     editorDocs[i].markClean();
     editorTabs[i].classList.remove('dirty');

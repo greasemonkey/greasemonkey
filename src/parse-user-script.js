@@ -23,10 +23,10 @@ function nameFromUrl(url) {
 
 
 // Safely construct a new URL object from a path and base. According to MDN,
-// if a URL constructor recieved an absolute URL as the path then the base
+// if a URL constructor received an absolute URL as the path then the base
 // is ignored. Unfortunately that doesn't seem to be the case. And if the
 // base is invalid (null / empty string) then an exception is thrown.
-function safeURL(path, base) {
+function safeUrl(path, base) {
   if (base) {
     return new URL(path, base);
   } else {
@@ -36,13 +36,10 @@ function safeURL(path, base) {
 
 
 /** Parse the source of a script; produce object of data. */
-window.parseUserScript = function(content, url, failIfMissing) {
+window.parseUserScript = function(content, url) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }
-
-  var meta = extractMeta(content).match(/.+/g);
-  if (failIfMissing && !meta) return null;
 
   // Populate with defaults in case the script specifies no value.
   var details = {
@@ -59,6 +56,7 @@ window.parseUserScript = function(content, url, failIfMissing) {
     'runAt': 'end'
   };
 
+  var meta = extractMeta(content).match(/.+/g);
   if (!meta) {
     return details;
   }
@@ -114,23 +112,23 @@ window.parseUserScript = function(content, url, failIfMissing) {
         details.matches.push(data.value);
       } catch (e) {
         throw new Error(
-            _('Ignoring @match pattern $1 because:\n$2', data.value, e));
+            _('ignoring_MATCH_because_REASON', data.value, e));
       }
       break;
 
     case 'icon':
-      details.iconUrl = safeURL(data.value, url).toString();
+      details.iconUrl = safeUrl(data.value, url).toString();
       break;
     case 'require':
-      details.requireUrls.push( safeURL(data.value, url).toString() );
+      details.requireUrls.push( safeUrl(data.value, url).toString() );
       break;
     case 'resource':
       let resourceName = data.value1;
       let resourceUrl = data.value2;
       if (resourceName in details.resourceUrls) {
-        throw new Error(_('Duplicate resource name: $1', resourceName));
+        throw new Error(_('duplicate_resource_NAME', resourceName));
       }
-      details.resourceUrls[resourceName] = safeURL(resourceUrl, url).toString();
+      details.resourceUrls[resourceName] = safeUrl(resourceUrl, url).toString();
       break;
     }
   }

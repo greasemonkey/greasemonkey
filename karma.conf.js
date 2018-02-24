@@ -8,6 +8,7 @@ module.exports = function(config) {
       './test/**/*.test.js',
     ],
     exclude: [
+      './src/i18n.js',  // Use test set up version instead.
       './src/**/*.run.js',
       './src/content/edit-user-script.js',  // CodeMirror dependency.
       './src/content/install-dialog.js',  // Not ready for testing yet.  TODO!
