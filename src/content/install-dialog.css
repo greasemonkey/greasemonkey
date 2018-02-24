@@ -42,10 +42,9 @@ section, .spacer {
 /******************************** INSTALL ************************************/
 
 #install header {
-  font-size: 20px;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
   margin-bottom: 1em;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
 }
 #install header img {
   height: 40px;
@@ -53,16 +52,19 @@ section, .spacer {
   padding-right: 10px;
   width: 40px;
 }
+#install header .name {
+  font-size: 20px;
+  line-height: 40px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 #install header .version {
   color: GrayText;
   float: right;
   font-size: 16px;
+  line-height: 44px;
   margin-left: 10px;
-}
-#install header,
-#install header *
-{
-  vertical-align: middle;
 }
 
 #details {
