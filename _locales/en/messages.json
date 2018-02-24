@@ -131,8 +131,5 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest: Received no URL."
-  },
-  "execute_fail_SCRIPT_REASON": {
-    "message": "Could not execute user script: $1\n$2"
   }
 }
