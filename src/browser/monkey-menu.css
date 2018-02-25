@@ -189,6 +189,7 @@ section {
 }
 
 .subview-item .icon img {
+  object-fit: contain;
   max-height: 16px;
   width: 16px;
   vertical-align: unset;
