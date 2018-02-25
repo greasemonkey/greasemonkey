@@ -119,7 +119,6 @@ section {
 
 .subview-back::before {
   content: url(/skin/back.svg);
-  display: -moz-box;
 }
 
 .subview-title {
@@ -146,14 +145,14 @@ section {
 }
 
 .subview-item {
-  -moz-box-align: center;
   background-color: transparent;
   color: -moz-fieldText;
   cursor: default;
-  display: -moz-box;
+  display: flex;
+  flex-direction: row;
   max-height: 24px;
   min-height: 24px;
-  padding: 4px 12px 4px 7px;
+  padding: 4px 12px 4px 10px;
   width: 100%;
 }
 
@@ -177,16 +176,22 @@ section {
   text-decoration: none;
 }
 
+.subview-item .icon::before {
+  vertical-align: middle;
+}
+
 .subview-item .icon {
   font-size: 14px;
+  flex-shrink: 0;
   text-align: center;
-  width: 19px;
+  max-height: 16px;
+  width: 16px;
 }
 
 .subview-item .icon img {
-  object-fit: contain;
-  width: 19px;
-  height: 17px;
+  max-height: 16px;
+  width: 16px;
+  vertical-align: unset;
 }
 
 .subview-item.disabled .icon {
@@ -194,17 +199,15 @@ section {
 }
 
 .subview-item .text {
-  -moz-box-flex: 1;
-  display: -moz-box;
-  overflow-x: hidden;
-  padding-left: 3px;
+  flex-grow: 1;
+  margin-left: 6px;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .subview-item::after {
   margin-inline-start: 10px;
   content: attr(after);
-  float: right;
   color: GrayText;
 }
 
