@@ -89,7 +89,7 @@ class Downloader {
     return details;
   }
 
-  async install() {
+  async install(disabled=false, openEditor=false) {
     return new Promise(async (resolve, reject) => {
       let scriptDetails = await this.scriptDetails;
       let downloaderDetails = await this.details();
@@ -103,6 +103,9 @@ class Downloader {
           reject(chrome.runtime.lastError);
         } else {
           resolve(uuid);
+          if (openEditor) {
+            openUserScriptEditor(uuid);
+          }
         }
       });
     });

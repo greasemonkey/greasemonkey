@@ -75,7 +75,9 @@ async function onClickInstall(event) {
   // TODO: Localize string.
   resultEl.textContent = _('download_and_install_successful');
 
-  await gDownloader.install();
+  await gDownloader.install(
+      false,
+      document.getElementById('open-editor-after').checked);
 
   // TODO: Wait for success reply?
   finish();

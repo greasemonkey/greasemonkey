@@ -90,6 +90,16 @@ progress {
   font-size: 1.2em;
 }
 
+#install #footer #options,
+#install #footer #actions
+{
+  margin-top: 1em;
+}
+
+#install #footer #options label * {
+  vertical-align: top;
+}
+
 #install #footer #actions {
   display: flex;
 }

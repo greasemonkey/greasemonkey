@@ -81,6 +81,9 @@
   "new_user_script": {
     "message": "New user script..."
   },
+  "open_editor_after": {
+    "message": "Open editor after install completes"
+  },
   "other_user_scripts": {
     "message": "Other user scripts"
   },

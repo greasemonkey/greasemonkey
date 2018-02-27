@@ -45,6 +45,8 @@
       "src/supported-apis.js",
       "src/user-script-obj.js",
       "src/util/check-api-call-allowed.js",
+      "src/util/check-api-call-allowed.js",
+      "/src/util/open-editor.js",
       "third-party/convert2RegExp.js",
       "third-party/MatchPattern.js",
 
