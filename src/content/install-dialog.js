@@ -75,7 +75,7 @@ async function onClickInstall(event) {
   // TODO: Localize string.
   resultEl.textContent = _('download_and_install_successful');
 
-  gDownloader.install();
+  await gDownloader.install();
 
   // TODO: Wait for success reply?
   finish();
