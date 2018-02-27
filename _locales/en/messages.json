@@ -72,6 +72,9 @@
   "install": {
     "message": "Install"
   },
+  "install_disabled": {
+    "message": "Install in disabled state"
+  },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."
   },

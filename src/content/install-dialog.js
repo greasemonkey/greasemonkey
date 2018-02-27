@@ -76,7 +76,7 @@ async function onClickInstall(event) {
   resultEl.textContent = _('download_and_install_successful');
 
   await gDownloader.install(
-      false,
+      document.getElementById('install-disabled').checked,
       document.getElementById('open-editor-after').checked);
 
   // TODO: Wait for success reply?

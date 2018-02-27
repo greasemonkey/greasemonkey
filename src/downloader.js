@@ -92,6 +92,7 @@ class Downloader {
   async install(disabled=false, openEditor=false) {
     return new Promise(async (resolve, reject) => {
       let scriptDetails = await this.scriptDetails;
+      scriptDetails.enabled = !disabled;
       let downloaderDetails = await this.details();
       chrome.runtime.sendMessage({
         'name': 'UserScriptInstall',

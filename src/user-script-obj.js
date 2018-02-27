@@ -320,10 +320,12 @@ window.EditableUserScript = class EditableUserScript
 
   // Given a successful `Downloader` object, update this script from it.
   async updateFromDownloaderDetails(userScriptDetails, downloaderDetails) {
+    _loadValuesInto(this, userScriptDetails, userScriptKeys);
+    _loadValuesInto(this, userScriptDetails, runnableUserScriptKeys);
+    _loadValuesInto(this, userScriptDetails, editableUserScriptKeys);
+
     this._content = downloaderDetails.content;
-    if (userScriptDetails.uuid) {
-      this._uuid = userScriptDetails.uuid;
-    }
+
     if (downloaderDetails.icon) {
       this._iconBlob = downloaderDetails.icon;
     }
@@ -333,8 +335,6 @@ window.EditableUserScript = class EditableUserScript
 
     this._resources = {};
     Object.assign(this._resources, downloaderDetails.resources);
-
-    _loadValuesInto(this, userScriptDetails, userScriptKeys);
   }
 }
 

@@ -96,6 +96,11 @@ progress {
   margin-top: 1em;
 }
 
+#install #footer #options label {
+  display: block;
+  margin-bottom: 1ex;
+  margin-left: 0;
+}
 #install #footer #options label * {
   vertical-align: top;
 }
