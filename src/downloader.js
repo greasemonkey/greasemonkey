@@ -28,6 +28,7 @@ class Downloader {
     this._knownIconBlob = null;
     this._knownRequires = {};
     this._knownResources = {};
+    this._knownUuid = null;
 
     this._progressListeners = [];
 
@@ -55,6 +56,7 @@ class Downloader {
   }
   setKnownRequires(requires) { this._knownRequires = requires; }
   setKnownResources(resources) { this._knownResources = resources; }
+  setKnownUuid(uuid) { this._knownUuid = uuid; }
 
   setScriptUrl(val) { this._scriptUrl = val; return this; }
   setScriptContent(val) { this._scriptContent = val; return this; }
@@ -117,6 +119,9 @@ class Downloader {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
       let scriptDetails = parseUserScript(this._scriptContent, this._scriptUrl);
       if (scriptDetails) {
+        if (this._knownUuid) {
+          scriptDetails.uuid = this._knownUuid;
+        }
         this._scriptDetailsResolve(scriptDetails);
       }
       this._scriptDetailsResolved = true;
