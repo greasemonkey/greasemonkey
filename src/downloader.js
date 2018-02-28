@@ -11,10 +11,6 @@ class Downloader {
     this.requireDownloads = {};
     this.resourceDownloads = {};
 
-    this.completion = new Promise((resolve, reject) => {
-      this._completionResolve = resolve;
-      this._completionReject = reject;
-    });
     this.scriptDetails = new Promise((resolve, reject) => {
       this._scriptDetailsResolve = resolve;
       this._scriptDetailsReject = reject;
@@ -163,8 +159,6 @@ class Downloader {
     if (this.iconDownload) await this.iconDownload.result;
     await Promise.all(Object.values(this.requireDownloads).map(d => d.result));
     await Promise.all(Object.values(this.resourceDownloads).map(d => d.result));
-
-    this._completionResolve();
   }
 
   _onProgress(download, event) {
@@ -183,7 +177,6 @@ class Downloader {
         // finish.  If not, errors are fatal.
         if (!download.pending) {
           this._scriptDetailsReject(e);
-          this._completionReject(e);
           return;
         }
       }
