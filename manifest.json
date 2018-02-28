@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Greasemonkey",
-  "version": "4.3beta6",
+  "version": "4.3beta7",
   "description": "A User Script manager for Firefox.",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
