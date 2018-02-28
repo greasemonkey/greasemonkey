@@ -5,6 +5,10 @@
   "NAME_greasemonkey_user_script_editor": {
     "message": "$1 - Greasemonkey User Script Editor"
   },
+  "ERROR_at_URL": {
+    "message": "$1 at $2",
+    "description": "E.g. 404 - Not Found at http://.../404.js"
+  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
@@ -32,9 +36,11 @@
   "enabled": {
     "message": "Enabled"
   },
-  "ERROR_at_URL": {
-    "message": "$1 at $2",
-    "description": "E.g. 404 - Not Found at http://.../404.js"
+  "extDesc": {
+    "message": "A User Script manager for Firefox."
+  },
+  "extName": {
+    "message": "Greasemonkey"
   },
   "get_user_scripts": {
     "message": "Get user scripts"

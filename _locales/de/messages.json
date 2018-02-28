@@ -1,4 +1,12 @@
 {
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Ein Benutzerskript-Manager für Firefox.",
+        "description": ""
+    },
     "gm_script_id": {
         "message": "[Greasemonkey Benutzerskript $1]",
         "description": ""

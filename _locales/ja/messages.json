@@ -1,4 +1,12 @@
 {
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Firefox 用のユーザースクリプトマネージャー。",
+        "description": ""
+    },
     "gm_script_id": {
         "message": "[Greasemonkey スクリプト $1] ",
         "description": ""

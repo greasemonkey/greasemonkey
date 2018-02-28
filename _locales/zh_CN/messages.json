@@ -1,4 +1,12 @@
 {
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Firefox 的用户脚本管理器。",
+        "description": ""
+    },
     "gm_script_id": {
         "message": "[Greasemonkey 脚本 $1]",
         "description": ""

@@ -152,7 +152,7 @@ function GM_notification(text, title, image, onclick) {
     throw new Error(_('gm_notif_text_must_be_string'));
   }
 
-  if (typeof opt.title != 'string') opt.title = 'Greasemonkey';
+  if (typeof opt.title != 'string') opt.title = _('extName');
   if (typeof opt.image != 'string') opt.image = 'skin/icon.svg';
 
   let port = chrome.runtime.connect({name: 'UserScriptNotification'});
