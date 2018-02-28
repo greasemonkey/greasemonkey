@@ -114,3 +114,11 @@ progress {
 }
 
 /******************************** RESULT ************************************/
+
+#result header {
+  font-size: 20px;
+}
+
+#result li {
+  padding-top: 1ex;
+}

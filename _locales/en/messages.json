@@ -20,6 +20,9 @@
   "download_and_install_successful": {
     "message": "Download and install successful!"
   },
+  "download_failed": {
+    "message": "User script download failed"
+  },
   "duplicate_resource_NAME": {
     "message": "Duplicate resource name: $1"
   },
@@ -28,6 +31,10 @@
   },
   "enabled": {
     "message": "Enabled"
+  },
+  "ERROR_at_URL": {
+    "message": "$1 at $2",
+    "description": "E.g. 404 - Not Found at http://.../404.js"
   },
   "get_user_scripts": {
     "message": "Get user scripts"

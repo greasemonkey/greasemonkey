@@ -155,10 +155,27 @@ class Downloader {
       }
     });
 
-    await this.scriptDownload.result;
-    if (this.iconDownload) await this.iconDownload.result;
-    await Promise.all(Object.values(this.requireDownloads).map(d => d.result));
-    await Promise.all(Object.values(this.resourceDownloads).map(d => d.result));
+    let allDownloads = Object.values(this.requireDownloads)
+        .concat(Object.values(this.resourceDownloads));
+    if (this.iconDownload) {
+      allDownloads.unshift(iconDownload);
+    }
+    allDownloads.unshift(this.scriptDownload);
+
+    let failedDownloads = [];
+    for (let download of allDownloads) {
+      try {
+        await download.result;
+      } catch (e) {
+        failedDownloads.push(download);
+      }
+    }
+    console.info('near end of downloader.start(); failedDownloads =', failedDownloads);
+    if (failedDownloads.length > 0) {
+      let e = new Error('Download(s) failed; see `.failedDownloads`.');
+      e.failedDownloads = failedDownloads;
+      throw e;
+    }
   }
 
   _onProgress(download, event) {
@@ -191,20 +208,22 @@ window.UserScriptDownloader = Downloader;
 
 class Download {
   constructor(progressCb, url, binary=false) {
+    this.error = null;
     this.mimeType = null;
     this.progress = 0;
     this.status = null;
     this.statusText = null;
+    this.url = url;
 
     this._progressCb = progressCb;
-    this._url = url;
 
     this.result = new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
 
       xhr.addEventListener('abort', this._onError.bind(this, reject));
       xhr.addEventListener('error', this._onError.bind(this, reject));
-      xhr.addEventListener('load', this._onLoad.bind(this, xhr, resolve));
+      xhr.addEventListener(
+          'load', this._onLoad.bind(this, xhr, resolve, reject));
       xhr.addEventListener('progress', this._onProgress.bind(this));
 
       xhr.open('GET', url);
@@ -219,7 +238,13 @@ class Download {
     reject();
   }
 
-  _onLoad(xhr, resolve, event) {
+  _onLoad(xhr, resolve, reject, event) {
+    if (xhr.status < 200 || xhr.status >= 300) {
+      this.error = `${xhr.status} - ${xhr.statusText}`;
+      reject(this.error);
+      return;
+    }
+
     this.mimeType = xhr.getResponseHeader('Content-Type');
     this.progress = 1;
     this.status = xhr.status;

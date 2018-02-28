@@ -4,6 +4,9 @@ let gInstallCountdown = 9;
 let gProgressBar = document.querySelector('progress');
 let gRvDetails = {
   'iconUrl': defaultIconUrl,
+  'resultHeader': '',
+  'resultText': null,
+  'resultList': [],
 };
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
@@ -112,4 +115,9 @@ function maybeEnableInstall() {
 
 /*****************************************************************************/
 
-gDownloader.start();
+gDownloader.start().catch(e => {
+  gRvDetails.resultHeader = _('download_failed');
+  gRvDetails.resultList = e.failedDownloads.map(
+      d => _('ERROR_at_URL', d.error, d.url));
+  document.body.className = 'result';
+});
