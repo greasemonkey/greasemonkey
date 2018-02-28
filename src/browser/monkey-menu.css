@@ -192,7 +192,8 @@ section {
   object-fit: contain;
   max-height: 16px;
   width: 16px;
-  vertical-align: unset;
+  /* This doesn't make sense, but 'super' aligns the icons in the middle */
+  vertical-align: super;
 }
 
 .subview-item.disabled .icon {
