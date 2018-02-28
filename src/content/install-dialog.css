@@ -90,6 +90,21 @@ progress {
   font-size: 1.2em;
 }
 
+#install #footer #options,
+#install #footer #actions
+{
+  margin-top: 1em;
+}
+
+#install #footer #options label {
+  display: block;
+  margin-bottom: 1ex;
+  margin-left: 0;
+}
+#install #footer #options label * {
+  vertical-align: top;
+}
+
 #install #footer #actions {
   display: flex;
 }
@@ -99,3 +114,11 @@ progress {
 }
 
 /******************************** RESULT ************************************/
+
+#result header {
+  font-size: 20px;
+}
+
+#result li {
+  padding-top: 1ex;
+}

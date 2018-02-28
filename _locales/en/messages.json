@@ -5,6 +5,10 @@
   "NAME_greasemonkey_user_script_editor": {
     "message": "$1 - Greasemonkey User Script Editor"
   },
+  "ERROR_at_URL": {
+    "message": "$1 at $2",
+    "description": "E.g. 404 - Not Found at http://.../404.js"
+  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
@@ -19,6 +23,9 @@
   },
   "download_and_install_successful": {
     "message": "Download and install successful!"
+  },
+  "download_failed": {
+    "message": "User script download failed"
   },
   "duplicate_resource_NAME": {
     "message": "Duplicate resource name: $1"
@@ -78,6 +85,9 @@
   "install": {
     "message": "Install"
   },
+  "install_disabled": {
+    "message": "Install in disabled state"
+  },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."
   },
@@ -86,6 +96,9 @@
   },
   "new_user_script": {
     "message": "New user script..."
+  },
+  "open_editor_after": {
+    "message": "Open editor after install completes"
   },
   "other_user_scripts": {
     "message": "Other user scripts"

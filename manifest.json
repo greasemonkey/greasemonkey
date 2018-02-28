@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "version": "4.3beta6",
+  "version": "4.3beta7",
   "description": "__MSG_extDesc__",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
@@ -45,6 +45,7 @@
       "src/supported-apis.js",
       "src/user-script-obj.js",
       "src/util/check-api-call-allowed.js",
+      "/src/util/open-editor.js",
       "third-party/convert2RegExp.js",
       "third-party/MatchPattern.js",
 

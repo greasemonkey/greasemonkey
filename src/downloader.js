@@ -1,24 +1,16 @@
 // Private implementation.
 (function() {
 
-// Increments for every Downloader created.
-let gDownloaderCounter = 0;
-
 
 class Downloader {
   constructor() {
     this.errors = [];
-    this.id = ++gDownloaderCounter;
 
     this.scriptDownload = null;
     this.iconDownload = null;
     this.requireDownloads = {};
     this.resourceDownloads = {};
 
-    this.completion = new Promise((resolve, reject) => {
-      this._completionResolve = resolve;
-      this._completionReject = reject;
-    });
     this.scriptDetails = new Promise((resolve, reject) => {
       this._scriptDetailsResolve = resolve;
       this._scriptDetailsReject = reject;
@@ -28,6 +20,7 @@ class Downloader {
     this._knownIconBlob = null;
     this._knownRequires = {};
     this._knownResources = {};
+    this._knownUuid = null;
 
     this._progressListeners = [];
 
@@ -55,6 +48,7 @@ class Downloader {
   }
   setKnownRequires(requires) { this._knownRequires = requires; }
   setKnownResources(resources) { this._knownResources = resources; }
+  setKnownUuid(uuid) { this._knownUuid = uuid; }
 
   setScriptUrl(val) { this._scriptUrl = val; return this; }
   setScriptContent(val) { this._scriptContent = val; return this; }
@@ -89,9 +83,10 @@ class Downloader {
     return details;
   }
 
-  async install() {
+  async install(disabled=false, openEditor=false) {
     return new Promise(async (resolve, reject) => {
       let scriptDetails = await this.scriptDetails;
+      scriptDetails.enabled = !disabled;
       let downloaderDetails = await this.details();
       chrome.runtime.sendMessage({
         'name': 'UserScriptInstall',
@@ -103,6 +98,9 @@ class Downloader {
           reject(chrome.runtime.lastError);
         } else {
           resolve(uuid);
+          if (openEditor) {
+            openUserScriptEditor(uuid);
+          }
         }
       });
     });
@@ -113,6 +111,9 @@ class Downloader {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
       let scriptDetails = parseUserScript(this._scriptContent, this._scriptUrl);
       if (scriptDetails) {
+        if (this._knownUuid) {
+          scriptDetails.uuid = this._knownUuid;
+        }
         this._scriptDetailsResolve(scriptDetails);
       }
       this._scriptDetailsResolved = true;
@@ -154,12 +155,27 @@ class Downloader {
       }
     });
 
-    await this.scriptDownload.result;
-    if (this.iconDownload) await this.iconDownload.result;
-    await Promise.all(Object.values(this.requireDownloads).map(d => d.result));
-    await Promise.all(Object.values(this.resourceDownloads).map(d => d.result));
+    let allDownloads = Object.values(this.requireDownloads)
+        .concat(Object.values(this.resourceDownloads));
+    if (this.iconDownload) {
+      allDownloads.unshift(iconDownload);
+    }
+    allDownloads.unshift(this.scriptDownload);
 
-    this._completionResolve();
+    let failedDownloads = [];
+    for (let download of allDownloads) {
+      try {
+        await download.result;
+      } catch (e) {
+        failedDownloads.push(download);
+      }
+    }
+    console.info('near end of downloader.start(); failedDownloads =', failedDownloads);
+    if (failedDownloads.length > 0) {
+      let e = new Error('Download(s) failed; see `.failedDownloads`.');
+      e.failedDownloads = failedDownloads;
+      throw e;
+    }
   }
 
   _onProgress(download, event) {
@@ -178,7 +194,6 @@ class Downloader {
         // finish.  If not, errors are fatal.
         if (!download.pending) {
           this._scriptDetailsReject(e);
-          this._completionReject(e);
           return;
         }
       }
@@ -193,20 +208,22 @@ window.UserScriptDownloader = Downloader;
 
 class Download {
   constructor(progressCb, url, binary=false) {
+    this.error = null;
     this.mimeType = null;
     this.progress = 0;
     this.status = null;
     this.statusText = null;
+    this.url = url;
 
     this._progressCb = progressCb;
-    this._url = url;
 
     this.result = new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
 
       xhr.addEventListener('abort', this._onError.bind(this, reject));
       xhr.addEventListener('error', this._onError.bind(this, reject));
-      xhr.addEventListener('load', this._onLoad.bind(this, xhr, resolve));
+      xhr.addEventListener(
+          'load', this._onLoad.bind(this, xhr, resolve, reject));
       xhr.addEventListener('progress', this._onProgress.bind(this));
 
       xhr.open('GET', url);
@@ -221,7 +238,13 @@ class Download {
     reject();
   }
 
-  _onLoad(xhr, resolve, event) {
+  _onLoad(xhr, resolve, reject, event) {
+    if (xhr.status < 200 || xhr.status >= 300) {
+      this.error = `${xhr.status} - ${xhr.statusText}`;
+      reject(this.error);
+      return;
+    }
+
     this.mimeType = xhr.getResponseHeader('Content-Type');
     this.progress = 1;
     this.status = xhr.status;

@@ -130,10 +130,7 @@ window.onUserScriptGet = onUserScriptGet;
 
 
 window.onUserScriptInstall = async function(message, sender, sendResponse) {
-  let uuid
-      = await installFromDownloader(message.userScript, message.downloader);
-  sendResponse(uuid);
-  return uuid;
+  return await installFromDownloader(message.userScript, message.downloader);
 }
 
 

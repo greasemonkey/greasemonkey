@@ -23,28 +23,28 @@
   <p>{'this_is_a_greasemonkey_user_script'|i18n}</p>
 
   <div id="details">
-    <div rv-hide="grants | empty" id="apis">
+    <div rv-if="grants | empty | not" id="apis">
       <p>{'requires_special_apis'|i18n}</p>
       <ul>
         <li rv-each-grant="grants">{grant}</li>
       </ul>
     </div>
 
-    <div rv-hide="includes | empty" id="includes">
+    <div rv-if="includes | empty | not" id="includes">
       <p>{'runs_on'|i18n}</p>
       <ul>
         <li rv-each-include="includes">{include}</li>
       </ul>
     </div>
 
-    <div rv-hide="matches | empty" id="matches">
+    <div rv-if="matches | empty | not" id="matches">
       <p>{'matches'|i18n}</p>
       <ul>
         <li rv-each-match="matches">{match}</li>
       </ul>
     </div>
 
-    <div rv-hide="excludes | empty" id="excludes">
+    <div rv-if="excludes | empty | not" id="excludes">
       <p>{'does_not_run_on'|i18n}</p>
       <ul>
         <li rv-each-exclude="excludes">{exclude}</li>
@@ -66,6 +66,17 @@
       </p>
     </div>
 
+    <div id="options">
+      <label>
+        <input type="checkbox" id="install-disabled">
+        {'install_disabled'|i18n}
+      </label>
+      <label>
+        <input type="checkbox" id="open-editor-after">
+        {'open_editor_after'|i18n}
+      </label>
+    </div>
+
     <div id="actions">
       <button id="btn-cancel" class="button-big button-secondary"
           >{'cancel'|i18n}</button>
@@ -78,9 +89,11 @@
 </section>
 
 <section id="result">
-  <div class="text">
-    <p></p>
-  </div>
+  <header rv-if="resultHeader">{resultHeader}</header>
+  <p rv-if="resultText">{resultText}</p>
+  <ul rv-if="resultList | empty | not">
+    <li rv-each-item="resultList">{item}</li>
+  </ul>
 </section>
 
 <script src="/src/i18n.js"></script>
@@ -88,6 +101,7 @@
 <script src="/src/parse-meta-line.js"></script>
 <script src="/src/parse-user-script.js"></script>
 <script src="/src/supported-apis.js"></script>
+<script src="/src/util/open-editor.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/third-party/rivets/rivets.bundled.min.js"></script>

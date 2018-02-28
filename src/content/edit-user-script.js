@@ -136,6 +136,7 @@ async function onSave() {
   }
   downloader.setKnownRequires(requires);
   downloader.setKnownResources(gUserScript.resources);
+  downloader.setKnownUuid(userScriptUuid);
 
   await downloader.start();
 

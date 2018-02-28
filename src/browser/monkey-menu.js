@@ -86,8 +86,7 @@ async function onHashChange(event) {
       let downloader
           = new UserScriptDownloader().setScriptContent(newScriptSrc);
       await downloader.start();
-      let uuid = await downloader.install();
-      openUserScriptEditor(uuid);
+      await downloader.install(/*disabled=*/false, /*openEditor=*/true);
       window.close();
       break;
     case '#toggle-user-script':
@@ -220,16 +219,6 @@ function onUnload(event) {
   // Clear the pending uninstall ticker and cleanup any pending installs.
   clearInterval(gPendingTicker);
   checkPendingUninstall();
-}
-
-
-function openUserScriptEditor(scriptUuid) {
-  chrome.tabs.create({
-    'active': true,
-    'url':
-        chrome.runtime.getURL('src/content/edit-user-script.html')
-        + '#' + scriptUuid,
-    });
 }
 
 
