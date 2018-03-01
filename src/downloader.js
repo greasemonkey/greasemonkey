@@ -158,7 +158,7 @@ class Downloader {
     let allDownloads = Object.values(this.requireDownloads)
         .concat(Object.values(this.resourceDownloads));
     if (this.iconDownload) {
-      allDownloads.unshift(iconDownload);
+      allDownloads.unshift(this.iconDownload);
     }
     allDownloads.unshift(this.scriptDownload);
 
