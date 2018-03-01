@@ -16,22 +16,6 @@ let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
 
 gDownloader.addProgressListener(() => {
   gProgressBar.value = gDownloader.progress;
-
-  if (gDownloader.errors.length > 0) {
-    let errorList = document.createElement('ul');
-    message.errors.forEach(error => {
-      var errorEl = document.createElement('li');
-      errorEl.textContent = error;
-      errorList.appendChild(errorEl);
-    });
-    while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
-    resultEl.appendChild(errorList);
-  } else {
-    if (gDownloader.progress == 1) {
-      gProgressBar.style.display = 'none';
-    }
-    maybeEnableInstall();
-  }
 });
 
 /****************************** DETAIL DISPLAY *******************************/
@@ -120,4 +104,4 @@ gDownloader.start().catch(e => {
   gRvDetails.resultList = e.failedDownloads.map(
       d => _('ERROR_at_URL', d.error, d.url));
   document.body.className = 'result';
-});
+}).then(maybeEnableInstall);
