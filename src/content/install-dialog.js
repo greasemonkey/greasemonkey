@@ -95,9 +95,9 @@ function maybeEnableInstall() {
 
 /*****************************************************************************/
 
-gDownloader.start().catch(e => {
+gDownloader.start().then(maybeEnableInstall).catch(e => {
   gRvDetails.resultHeader = _('download_failed');
   gRvDetails.resultList = e.failedDownloads.map(
       d => _('ERROR_at_URL', d.error, d.url));
   document.body.className = 'result';
-}).then(maybeEnableInstall);
+});
