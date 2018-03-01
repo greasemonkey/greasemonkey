@@ -5,19 +5,18 @@ content script executions.
 TODO: Make document_start execution time work as intended.
 */
 
-function executeUserscriptOnNavigation(detail) {
+function executeUserscriptOnNavigation(details) {
   if (false === getGlobalEnabled()) return;
 
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
-  let count = 0;
+  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(details.url);
   for (let userScript of userScriptIterator) {
     let options = {
       'code': userScript.evalContent,
       'matchAboutBlank': true,
       'runAt': 'document_' + userScript.runAt,
     };
-    if (detail.frameId) options.frameId = detail.frameId;
-    chrome.tabs.executeScript(detail.tabId, options, result => {
+    if (details.frameId) options.frameId = details.frameId;
+    chrome.tabs.executeScript(details.tabId, options, result => {
       let err = chrome.runtime.lastError;
       if (!err) return;
 
@@ -29,12 +28,23 @@ function executeUserscriptOnNavigation(detail) {
       console.error(
           'Could not execute user script', userScript.toString(), '\n', err);
     });
-    count++;
   }
+
+  // TODO: Optional feature.
+  updateBadgeByDetails(details);
+}
+
+
+function updateBadgeByDetails(details) {
+  if (false === getGlobalEnabled()) return;
+
+  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(details.url);
+  let count = 0;
+  for (let userScript of userScriptIterator) count++;
   if (count) {
-    chrome.browserAction.setBadgeBackgroundColor({'color': 'black'});
-    chrome.browserAction.setBadgeText({'text': String(count)});
+    chrome.browserAction.setBadgeBackgroundColor({'color': 'black', 'tabId': details.tabId});
+    chrome.browserAction.setBadgeText({'text': String(count), 'tabId': details.tabId});
   } else {
-    chrome.browserAction.setBadgeText({'text': null});
+    chrome.browserAction.setBadgeText({'text': null, 'tabId': details.tabId});
   }
 }
