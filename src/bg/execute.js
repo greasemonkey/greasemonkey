@@ -9,6 +9,7 @@ function executeUserscriptOnNavigation(detail) {
   if (false === getGlobalEnabled()) return;
 
   var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
+  let count = 0;
   for (let userScript of userScriptIterator) {
     let options = {
       'code': userScript.evalContent,
@@ -28,5 +29,7 @@ function executeUserscriptOnNavigation(detail) {
       console.error(
           'Could not execute user script', userScript.toString(), '\n', err);
     });
+    count++;
   }
+  if (count) chrome.browserAction.setBadgeText({'text': String(count)});
 }
