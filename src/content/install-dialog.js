@@ -56,18 +56,14 @@ document.getElementById('btn-cancel').addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
-async function onClickInstall(event) {
-  document.body.className = 'result';
-  let resultEl = document.querySelector('#result p');
-  // TODO: Localize string.
-  resultEl.textContent = _('download_and_install_successful');
-
-  await gDownloader.install(
-      document.getElementById('install-disabled').checked,
-      document.getElementById('open-editor-after').checked);
-
-  // TODO: Wait for success reply?
-  finish();
+function onClickInstall(event) {
+  gProgressBar.removeAttribute('value');
+  let disabled = document.getElementById('install-disabled').checked;
+  let openEditor = document.getElementById('open-editor-after').checked;
+  gDownloader.install(disabled, openEditor).then(finish).catch(err => {
+    gRvDetails.resultHeader = _('install_failed');
+    gRvDetails.resultList = [err.message];
+  });
 }
 
 
