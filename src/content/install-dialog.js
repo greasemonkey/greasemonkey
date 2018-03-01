@@ -63,6 +63,7 @@ function onClickInstall(event) {
   gDownloader.install(disabled, openEditor).then(finish).catch(err => {
     gRvDetails.resultHeader = _('install_failed');
     gRvDetails.resultList = [err.message];
+    document.body.className = 'result';
   });
 }
 
