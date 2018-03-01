@@ -42,9 +42,15 @@ function updateBadgeByDetails(details) {
   let count = 0;
   for (let userScript of userScriptIterator) count++;
   if (count) {
-    chrome.browserAction.setBadgeBackgroundColor({'color': 'black', 'tabId': details.tabId});
-    chrome.browserAction.setBadgeText({'text': String(count), 'tabId': details.tabId});
+    chrome.browserAction.setBadgeBackgroundColor({
+        'color': 'black',
+        'tabId': details.tabId});
+    chrome.browserAction.setBadgeText({
+        'text': String(count),
+        'tabId': details.tabId});
   } else {
-    chrome.browserAction.setBadgeText({'text': null, 'tabId': details.tabId});
+    chrome.browserAction.setBadgeText({
+        'text': null,
+        'tabId': details.tabId});
   }
 }
