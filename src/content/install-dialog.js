@@ -16,22 +16,6 @@ let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
 
 gDownloader.addProgressListener(() => {
   gProgressBar.value = gDownloader.progress;
-
-  if (gDownloader.errors.length > 0) {
-    let errorList = document.createElement('ul');
-    message.errors.forEach(error => {
-      var errorEl = document.createElement('li');
-      errorEl.textContent = error;
-      errorList.appendChild(errorEl);
-    });
-    while (resultEl.firstChild) resultEl.removeChild(resultEl.firstChild);
-    resultEl.appendChild(errorList);
-  } else {
-    if (gDownloader.progress == 1) {
-      gProgressBar.style.display = 'none';
-    }
-    maybeEnableInstall();
-  }
 });
 
 /****************************** DETAIL DISPLAY *******************************/
@@ -72,18 +56,15 @@ document.getElementById('btn-cancel').addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
-async function onClickInstall(event) {
-  document.body.className = 'result';
-  let resultEl = document.querySelector('#result p');
-  // TODO: Localize string.
-  resultEl.textContent = _('download_and_install_successful');
-
-  await gDownloader.install(
-      document.getElementById('install-disabled').checked,
-      document.getElementById('open-editor-after').checked);
-
-  // TODO: Wait for success reply?
-  finish();
+function onClickInstall(event) {
+  gProgressBar.removeAttribute('value');
+  let disabled = document.getElementById('install-disabled').checked;
+  let openEditor = document.getElementById('open-editor-after').checked;
+  gDownloader.install(disabled, openEditor).then(finish).catch(err => {
+    gRvDetails.resultHeader = _('install_failed');
+    gRvDetails.resultList = [err.message];
+    document.body.className = 'result';
+  });
 }
 
 
@@ -115,7 +96,7 @@ function maybeEnableInstall() {
 
 /*****************************************************************************/
 
-gDownloader.start().catch(e => {
+gDownloader.start().then(maybeEnableInstall).catch(e => {
   gRvDetails.resultHeader = _('download_failed');
   gRvDetails.resultList = e.failedDownloads.map(
       d => _('ERROR_at_URL', d.error, d.url));
