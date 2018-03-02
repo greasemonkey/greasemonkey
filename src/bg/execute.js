@@ -8,7 +8,7 @@ TODO: Make document_start execution time work as intended.
 function executeUserscriptOnNavigation(details) {
   if (false === getGlobalEnabled()) return;
 
-  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(details.url);
+  const userScriptIterator = UserScriptRegistry.scriptsToRunAt(details.url);
   for (let userScript of userScriptIterator) {
     let options = {
       'code': userScript.evalContent,
@@ -30,27 +30,48 @@ function executeUserscriptOnNavigation(details) {
     });
   }
 
-  // TODO: Optional feature.
-  updateBadgeByDetails(details);
+  // TODO: User configurable feature.
+  updateScriptStatsByDetails(details);
 }
 
 
-function updateBadgeByDetails(details) {
+function updateScriptStatsByDetails(details) {
   if (false === getGlobalEnabled()) return;
+  if (0 !== details.frameId) return;
 
-  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(details.url);
-  let count = 0;
-  for (let userScript of userScriptIterator) count++;
-  if (count) {
+  const enabled = true;  // TODO: query ('EnabledQuery' not yet available).
+  let count = [[0, 0], [0, 0]];
+  if (enabled) {
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < 2; j++) {
+        const url = (i ? details.url : null);
+        const all = !j;
+        const userScriptIterator = UserScriptRegistry.scriptsToRunAt(url, all);
+        for (let userScript of userScriptIterator) ++count[i][j];
+      }
+    }
+    const toolTip = [_('extName'),
+        _('DETECTED_ALL_stats_active', count[1][1], count[0][1]),
+        _('DETECTED_ALL_stats_total', count[1][0], count[0][0])].join('\n   ');
+    chrome.browserAction.setTitle({
+        'title': toolTip,
+        'tabId': details.tabId});
+  } else {
+    chrome.browserAction.setTitle({
+        'title': _('extName'),
+        'tabId': details.tabId});
+  }
+
+  if (count[1][1]) {  // Any detected[1] and activated[1] scripts running?
     chrome.browserAction.setBadgeBackgroundColor({
         'color': 'black',
         'tabId': details.tabId});
     chrome.browserAction.setBadgeText({
-        'text': String(count),
+        'text': String(count[1][1]),
         'tabId': details.tabId});
   } else {
     chrome.browserAction.setBadgeText({
-        'text': null,
+        'text': '',  // Should be null for FF 59+.
         'tabId': details.tabId});
   }
 }

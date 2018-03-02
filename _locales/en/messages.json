@@ -5,6 +5,12 @@
   "NAME_greasemonkey_user_script_editor": {
     "message": "$1 - Greasemonkey User Script Editor"
   },
+  "DETECTED_ALL_stats_active": {
+    "message": "$1 / $2  active"
+  },
+  "DETECTED_ALL_stats_total": {
+    "message": "$1 / $2  total"
+  },
   "ERROR_at_URL": {
     "message": "$1 at $2",
     "description": "E.g. 404 - Not Found at http://.../404.js"
