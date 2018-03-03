@@ -24,6 +24,9 @@
   "download_failed": {
     "message": "User script download failed"
   },
+  "download_error_unknown": {
+    "message": "User script download encountered an unknown error."
+  },
   "duplicate_resource_NAME": {
     "message": "Duplicate resource name: $1"
   },

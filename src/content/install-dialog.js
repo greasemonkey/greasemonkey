@@ -98,7 +98,15 @@ function maybeEnableInstall() {
 
 gDownloader.start().then(maybeEnableInstall).catch(e => {
   gRvDetails.resultHeader = _('download_failed');
-  gRvDetails.resultList = e.failedDownloads.map(
-      d => _('ERROR_at_URL', d.error, d.url));
+  if (e instanceof DownloadError) {
+    gRvDetails.resultList = e.failedDownloads.map(
+        d => _('ERROR_at_URL', d.error, d.url));
+  } else if (e.message) {
+    gRvDetails.resultList = [e.message];
+  } else {
+    // Log the unknown error.
+    console.error('Unknown save error in install dialog', e);
+    gRvDetails.resultList = [_('download_error_unknown')];
+  }
   document.body.className = 'result';
 });
