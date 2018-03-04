@@ -1,3 +1,13 @@
+
+class DownloadError extends Error {
+  constructor(failedDownloads) {
+    super('Download(s) failed; see `.failedDownloads`.');
+    this.name = this.constructor.name;
+    this.failedDownloads = failedDownloads;
+  }
+}
+
+
 // Private implementation.
 (function() {
 
@@ -172,9 +182,7 @@ class Downloader {
     }
     console.info('near end of downloader.start(); failedDownloads =', failedDownloads);
     if (failedDownloads.length > 0) {
-      let e = new Error('Download(s) failed; see `.failedDownloads`.');
-      e.failedDownloads = failedDownloads;
-      throw e;
+      throw new DownloadError(failedDownloads);
     }
   }
 
