@@ -112,7 +112,7 @@
         "description": ""
     },
     "script_save_error": {
-        "message": "Script save error",
+        "message": "Fehler beim Speichern des Benutzerskripts",
         "description": ""
     },
     "ignoring_MATCH_because_REASON": {
