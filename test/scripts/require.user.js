@@ -4,4 +4,3 @@
 // @grant       none
 // @require     require.js
 // ==/UserScript==
-
