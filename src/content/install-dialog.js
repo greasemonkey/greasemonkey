@@ -83,10 +83,14 @@ function maybeEnableInstall() {
   gBtnInstall.appendChild(installCounter);
   let installTimer = setInterval(function() {
     gInstallCountdown--;
-    if (gInstallCountdown) {
+    if (gRvDetails.errorList.length > 0) {
+      clearInterval(installTimer);
+      installCounter.textContent = '';
+      gBtnInstall.setAttribute('disabled', '');
+    } else if (gInstallCountdown) {
       installCounter.textContent = ' ' + gInstallCountdown;
     } else {
-      clearTimeout(installTimer);
+      clearInterval(installTimer);
       maybeEnableInstall();
       installCounter.parentNode.removeChild(installCounter);
     }

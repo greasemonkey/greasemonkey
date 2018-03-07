@@ -91,10 +91,6 @@ progress {
 }
 
 #install #footer #options,
-#install #footer #actions
-{
-  margin-top: 1em;
-}
 
 #install #footer #options label {
   display: block;
@@ -105,14 +101,6 @@ progress {
   vertical-align: top;
 }
 
-#install #footer #actions {
-  display: flex;
-}
-#install #footer #actions button {
-  flex-grow: 3;
-  width: 0;
-}
-
 /********************************* ERROR *************************************/
 
 #error header {
@@ -121,4 +109,16 @@ progress {
 
 #error li {
   padding-top: 1ex;
+}
+
+/******************************** ACTIONS ************************************/
+
+#actions {
+  display: flex;
+  margin-top: 1em;
+}
+
+#actions button {
+  flex-grow: 3;
+  width: 0;
 }

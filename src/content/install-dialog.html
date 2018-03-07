@@ -76,15 +76,6 @@
         {'open_editor_after'|i18n}
       </label>
     </div>
-
-    <div id="actions">
-      <button id="btn-cancel" class="button-big button-secondary"
-          >{'cancel'|i18n}</button>
-      &nbsp;&nbsp;&nbsp;
-      <button id="btn-install" class="button-big button-success"
-          disabled="disabled"
-          >{'install'|i18n}</button>
-    </div>
   </div>
 </section>
 
@@ -94,6 +85,15 @@
     <li rv-each-item="errorList">{item}</li>
   </ul>
 </section>
+
+<div id="actions">
+  <button id="btn-cancel" class="button-big button-secondary"
+      >{'cancel'|i18n}</button>
+  &nbsp;&nbsp;&nbsp;
+  <button id="btn-install" class="button-big button-success"
+      disabled="disabled"
+      >{'install'|i18n}</button>
+</div>
 
 <script src="/src/i18n.js"></script>
 <script src="/src/downloader.js"></script>
