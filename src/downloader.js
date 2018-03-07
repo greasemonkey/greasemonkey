@@ -11,7 +11,6 @@ class DownloadError extends Error {
 // Private implementation.
 (function() {
 
-
 class Downloader {
   constructor() {
     this.errors = [];
@@ -180,7 +179,6 @@ class Downloader {
         failedDownloads.push(download);
       }
     }
-    console.info('near end of downloader.start(); failedDownloads =', failedDownloads);
     if (failedDownloads.length > 0) {
       throw new DownloadError(failedDownloads);
     }
