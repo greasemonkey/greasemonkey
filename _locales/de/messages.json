@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Ein Benutzerskript-Manager für Firefox.",
-        "description": ""
-    },
     "gm_script_id": {
         "message": "[Greasemonkey Benutzerskript $1]",
         "description": ""
@@ -23,13 +15,21 @@
         "message": "$1 benötigt @grant für Funktion $2",
         "description": ""
     },
-    "download_and_install_successful": {
-        "message": "Benutzerskript erfolgreich heruntergeladen und installiert!",
+    "install_disabled": {
+        "message": "Installiertes Skript deaktivieren",
+        "description": ""
+    },
+    "download_error_unknown": {
+        "message": "Allgemeiner Fehler beim Herunterladen des Benutzerskripts.",
         "description": ""
     },
     "edit": {
         "message": "Bearbeiten",
         "description": ""
+    },
+    "ERROR_at_URL": {
+        "message": "$1 für $2",
+        "description": "E.g. 404 - Not Found at http://.../404.js"
     },
     "runs_on": {
         "message": "Ausgeführt auf:",
@@ -91,6 +91,10 @@
         "message": "Benutzerskripte im Netz",
         "description": ""
     },
+    "install_failed": {
+        "message": "Benutzerskript konnte nicht installiert werden",
+        "description": ""
+    },
     "install": {
         "message": "Installieren",
         "description": ""
@@ -112,7 +116,7 @@
         "description": ""
     },
     "script_save_error": {
-        "message": "Script save error",
+        "message": "Fehler beim Speichern des Benutzerskripts",
         "description": ""
     },
     "ignoring_MATCH_because_REASON": {
@@ -133,6 +137,18 @@
     },
     "cancel": {
         "message": "Abbrechen",
+        "description": ""
+    },
+    "download_failed": {
+        "message": "Fehler beim Herunterladen des Benutzerskripts",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Ein Benutzerskript-Verwalter für Firefox.",
+        "description": ""
+    },
+    "extName": {
+        "message": "Greasemonkey",
         "description": ""
     },
     "gm_script_id_ver": {
@@ -175,6 +191,10 @@
     },
     "xhr_no_url": {
         "message": "GM.xmlHttpRequest: Keine URL angegeben.",
+        "description": ""
+    },
+    "open_editor_after": {
+        "message": "Nach der Installation im Editor bearbeiten",
         "description": ""
     },
     "greasemonkey_wiki": {
