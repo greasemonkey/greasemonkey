@@ -39,6 +39,7 @@ class Downloader {
   }
 
   get progress() {
+    if (!this.scriptDownload) return 0;
     let p = this.scriptDownload.progress +
         (this.iconDownload ? this.iconDownload.progress : 0)
         + Object.values(this.requireDownloads)
@@ -190,7 +191,9 @@ class Downloader {
     ) {
       let responseSoFar = event.target.response;
       try {
-        let scriptDetail = parseUserScript(responseSoFar, this._scriptUrl);
+        let scriptDetail = parseUserScript(
+            responseSoFar, this._scriptUrl,
+            /*failWhenMissing=*/!download.pending);
         if (scriptDetail) {
           this._scriptDetailsResolve(scriptDetail);
           this._scriptDetailsResolved = true;
@@ -201,6 +204,8 @@ class Downloader {
         if (!download.pending) {
           this._scriptDetailsReject(e);
           return;
+        } else {
+          console.warn('downloader parse fail:', e);
         }
       }
     }
@@ -216,6 +221,7 @@ class Download {
   constructor(progressCb, url, binary=false) {
     this.error = null;
     this.mimeType = null;
+    this.pending = true;
     this.progress = 0;
     this.status = null;
     this.statusText = null;
@@ -252,7 +258,9 @@ class Download {
     }
 
     this.mimeType = xhr.getResponseHeader('Content-Type');
+    this.pending = false;
     this.progress = 1;
+    this._progressCb(this, event);
     this.status = xhr.status;
     this.statusText = xhr.statusText;
     resolve(xhr.response);
@@ -262,6 +270,7 @@ class Download {
     this.progress = event.lengthComputable
         ? event.loaded / event.total
         : 0;
+    this.pending = progress < 1.0;
     this._progressCb(this, event);
   }
 }

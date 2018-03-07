@@ -36,7 +36,7 @@ function safeUrl(path, base) {
 
 
 /** Parse the source of a script; produce object of data. */
-window.parseUserScript = function(content, url) {
+window.parseUserScript = function(content, url, failWhenMissing=false) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }
@@ -58,7 +58,11 @@ window.parseUserScript = function(content, url) {
 
   var meta = extractMeta(content).match(/.+/g);
   if (!meta) {
-    return details;
+    if (failWhenMissing) {
+      throw new Error('Could not parse, no meta.');
+    } else {
+      return details;
+    }
   }
 
   let locales = {};
