@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Firefox 的用户脚本管理器。",
-        "description": ""
-    },
     "gm_script_id": {
         "message": "[Greasemonkey 脚本 $1]",
         "description": ""
@@ -23,13 +15,21 @@
         "message": "$1 没有 @grant 方法 $2",
         "description": ""
     },
-    "download_and_install_successful": {
-        "message": "成功下载和安装！",
+    "install_disabled": {
+        "message": "Install in disabled state",
+        "description": ""
+    },
+    "download_error_unknown": {
+        "message": "User script download encountered an unknown error.",
         "description": ""
     },
     "edit": {
         "message": "编辑",
         "description": ""
+    },
+    "ERROR_at_URL": {
+        "message": "$1 at $2",
+        "description": "E.g. 404 - Not Found at http://.../404.js"
     },
     "runs_on": {
         "message": "运行于：",
@@ -91,6 +91,10 @@
         "message": "获取用户脚本",
         "description": ""
     },
+    "install_failed": {
+        "message": "User script failed to install",
+        "description": ""
+    },
     "install": {
         "message": "安装",
         "description": ""
@@ -135,6 +139,18 @@
         "message": "取消",
         "description": ""
     },
+    "download_failed": {
+        "message": "User script download failed",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Firefox 的用户脚本管理器。",
+        "description": ""
+    },
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
     "gm_script_id_ver": {
         "message": "[Greasemonkey 脚本 $id$；版本 $version$]",
         "description": "",
@@ -175,6 +191,10 @@
     },
     "xhr_no_url": {
         "message": "GM.xmlHttpRequest：没有收到 URL。",
+        "description": ""
+    },
+    "open_editor_after": {
+        "message": "Open editor after install completes",
         "description": ""
     },
     "greasemonkey_wiki": {
