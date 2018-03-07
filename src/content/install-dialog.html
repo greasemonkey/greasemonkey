@@ -88,11 +88,10 @@
   </div>
 </section>
 
-<section id="result">
-  <header rv-if="resultHeader">{resultHeader}</header>
-  <p rv-if="resultText">{resultText}</p>
-  <ul rv-if="resultList | empty | not">
-    <li rv-each-item="resultList">{item}</li>
+<section id="error">
+  <header rv-if="errorHeader">{errorHeader}</header>
+  <ul rv-if="errorList | empty | not">
+    <li rv-each-item="errorList">{item}</li>
   </ul>
 </section>
 

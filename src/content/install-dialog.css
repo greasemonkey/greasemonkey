@@ -23,11 +23,11 @@ body {
 
 
 body.install #loading,
-body.install #result,
+body.install #error,
 body.loading #install,
-body.loading #result,
-body.result #install,
-body.result #loading
+body.loading #error,
+body.error #install,
+body.error #loading
 { display: none; }
 
 
@@ -113,12 +113,12 @@ progress {
   width: 0;
 }
 
-/******************************** RESULT ************************************/
+/********************************* ERROR *************************************/
 
-#result header {
+#error header {
   font-size: 20px;
 }
 
-#result li {
+#error li {
   padding-top: 1ex;
 }
