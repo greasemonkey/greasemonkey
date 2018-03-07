@@ -96,7 +96,10 @@ function maybeEnableInstall() {
 
 /*****************************************************************************/
 
-gDownloader.start().then(maybeEnableInstall).catch(e => {
+gDownloader.start().then(() => {
+  gProgressBar.style.display = 'none';
+  maybeEnableInstall();
+}).catch(e => {
   gRvDetails.resultHeader = _('download_failed');
   if (e instanceof DownloadError) {
     gRvDetails.resultList = e.failedDownloads.map(
