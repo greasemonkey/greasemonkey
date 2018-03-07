@@ -30,7 +30,6 @@ body.error #install,
 body.error #loading
 { display: none; }
 
-
 section, .spacer {
   display: flex;
   flex-direction: column;
@@ -38,6 +37,12 @@ section, .spacer {
 }
 
 /******************************** LOADING ************************************/
+
+body.loading #actions { display: none; }
+
+#loading .fa {
+  margin: auto;
+}
 
 /******************************** INSTALL ************************************/
 

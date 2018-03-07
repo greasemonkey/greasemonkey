@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="install-dialog.css">
 <title>{name} - {'Greasemonkey user script'|i18n}</title>
@@ -9,8 +10,10 @@
 <body class="loading">
 
 <section id="loading">
-  <!-- TODO spinner -->
-  Loading user script ...
+  <!--
+  The non-break spaces make the container non-empty; both make it centered.
+  --->
+  &nbsp;<i class="fa fa-spinner fa-pulse fa-3x"></i>&nbsp;
 </section>
 
 <section id="install">
