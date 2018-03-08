@@ -161,7 +161,11 @@ async function onHashChange(event) {
 function onClick(event) {
   if (event.button === 2) {  // Right mouse click.
     if (!gActiveUuid) {
-      const hash = event.target.parentElement.hash;
+      let element = event.target;
+      while (element && element.tagName !== 'A') {
+          element = element.parentElement;
+      }
+      const hash = element && element.hash;
       if (hash) {
         const userScript = gUserScripts[hash.slice(1)];
         if (userScript) {
