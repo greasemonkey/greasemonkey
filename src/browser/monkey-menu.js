@@ -161,9 +161,7 @@ async function onHashChange(event) {
 function onClick(event) {
   if (event.button === 2) {  // Right mouse click.
     if (!gActiveUuid) {
-      const elements = document.querySelectorAll(':hover');
-      // Last element is the name of the script; last but one is the anchor.
-      const hash = elements[elements.length - 2].hash;
+      const hash = event.target.parentElement.hash;
       if (hash) {
         const userScript = gUserScripts[hash.slice(1)];
         if (userScript) {
