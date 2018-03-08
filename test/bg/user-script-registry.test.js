@@ -44,16 +44,16 @@ describe('bg/user-script-registry', () => {
         .catch(e => chai.expect(e.name).to.equal('ConstraintError'));
   });
 
-  it('can uninstall a script', (done) => {
+  it('can uninstall a script', () => {
     let userScript = new EditableUserScript(
         {'name': 'exponential', 'content': 'void(0)'});
     assert.isNotOk(scriptNamed('exponential'));
-    UserScriptRegistry._saveUserScript(userScript).then(() => {
+
+    return UserScriptRegistry._saveUserScript(userScript).then(() => {
       assert.isOk(scriptNamed('exponential'));
-      onUserScriptUninstall({'uuid': userScript.uuid}, null, () => {
-        assert.isNotOk(scriptNamed('exponential'));
-        done();
-      });
+      return onUserScriptUninstall({'uuid': userScript.uuid}, null, null);
+    }).then(() => {
+      assert.isNotOk(scriptNamed('exponential'));
     });
   });
 });
