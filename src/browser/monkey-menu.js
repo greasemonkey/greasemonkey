@@ -159,7 +159,7 @@ async function onHashChange(event) {
 
 
 function onClick(event) {
-  if (event.which === 3) {  // Right mouse click.
+  if (event.button === 2) {  // Right mouse click.
     if (!gActiveUuid) {
       const elements = document.querySelectorAll(':hover');
       // Last element is the name of the script; last but one is the anchor.
