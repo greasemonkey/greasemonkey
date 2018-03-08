@@ -158,6 +158,29 @@ async function onHashChange(event) {
 }
 
 
+function onClick(event) {
+  if (event.which === 3) {  // Right mouse click.
+    if (!gActiveUuid) {
+      const elements = document.querySelectorAll(':hover');
+      // Last element is the name of the script; last but one is the anchor.
+      const hash = elements[elements.length - 2].hash;
+      if (hash) {
+        const userScript = gUserScripts[hash.slice(1)];
+        if (userScript) {
+          gActiveUuid = userScript.uuid;
+        }
+      }
+    }
+    if (gActiveUuid) {
+      openUserScriptEditor(gActiveUuid);
+      gActiveUuid = null;
+    }
+    window.close();
+    event.preventDefault();
+  }
+}
+
+
 function onKeypress(event) {
   let key = event.key;
   if ('Enter' === key) {
