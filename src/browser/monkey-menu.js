@@ -63,6 +63,31 @@ function loadScripts(userScriptsDetail, url) {
 }
 
 
+function onClick(event) {
+  if (event.button === 2) {  // Right mouse click.
+    if (!gActiveUuid) {
+      let element = event.target;
+      while (element && element.tagName !== 'A') {
+          element = element.parentElement;
+      }
+      const hash = element && element.hash;
+      if (hash) {
+        const userScript = gUserScripts[hash.slice(1)];
+        if (userScript) {
+          gActiveUuid = userScript.uuid;
+        }
+      }
+    }
+    if (gActiveUuid) {
+      openUserScriptEditor(gActiveUuid);
+      gActiveUuid = null;
+    }
+    window.close();
+    event.preventDefault();
+  }
+}
+
+
 // Catch when a link has been 'navigated'.
 async function onHashChange(event) {
   event.preventDefault();
@@ -155,31 +180,6 @@ async function onHashChange(event) {
   }
   // Reset whether has change was from a click or keyboard
   gLastHashChangeWasKey = false;
-}
-
-
-function onClick(event) {
-  if (event.button === 2) {  // Right mouse click.
-    if (!gActiveUuid) {
-      let element = event.target;
-      while (element && element.tagName !== 'A') {
-          element = element.parentElement;
-      }
-      const hash = element && element.hash;
-      if (hash) {
-        const userScript = gUserScripts[hash.slice(1)];
-        if (userScript) {
-          gActiveUuid = userScript.uuid;
-        }
-      }
-    }
-    if (gActiveUuid) {
-      openUserScriptEditor(gActiveUuid);
-      gActiveUuid = null;
-    }
-    window.close();
-    event.preventDefault();
-  }
 }
 
 
