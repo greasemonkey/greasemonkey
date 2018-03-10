@@ -103,14 +103,6 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
-# UserScriptChanged
-Sent by: `bg/user-script-registry.js`
-
-Sent when some value (like enabled state) of a script is changed.  Data:
-
-* `details` Updated script's current.
-* `parsedDetails` Updated script's original parsed details.
-
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
 

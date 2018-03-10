@@ -63,33 +63,6 @@ chrome.runtime.sendMessage({
   document.title = _('NAME_greasemonkey_user_script_editor', userScript.name);
 });
 
-
-function onUserScriptChanged(message, sender, sendResponse) {
-  if (message.name != 'UserScriptChanged') return;
-  if (message.details.uuid != userScriptUuid) return;
-  let details = message.details;
-  let parsedDetails = message.parsedDetails;
-
-  document.title = _('NAME_greasemonkey_user_script_editor', details.name);
-
-  for (let i = editorDocs.length - 1; i > 0; i--) {
-    let u = editorUrls[i];
-    if (parsedDetails.requireUrls.indexOf(u) === -1) {
-      editorTabs[i].parentNode.removeChild(editorTabs[i]);
-      editorDocs.splice(i, 1);
-      editorTabs.splice(i, 1);
-      editorUrls.splice(i, 1);
-    }
-  }
-
-  parsedDetails.requireUrls.forEach(u => {
-    if (editorUrls.indexOf(u) === -1) {
-      addRequireTab(u, details.requiresContent[u]);
-    }
-  });
-}
-chrome.runtime.onMessage.addListener(onUserScriptChanged);
-
 ///////////////////////////////////////////////////////////////////////////////
 
 // TODO: Keyboard accessibility?
@@ -142,12 +115,32 @@ async function onSave() {
 
   // TODO: Some sort of progress "dialog" here.
 
-  await downloader.install();
+  onSaveComplete(await downloader.install());
+}
 
-  for (let i = 0; i < editorDocs.length; i++) {
-    editorDocs[i].markClean();
-    editorTabs[i].classList.remove('dirty');
+
+function onSaveComplete(savedDetails) {
+  document.title = _('NAME_greasemonkey_user_script_editor', savedDetails.name);
+  tabs.children[0].textContent = savedDetails.name;
+
+  for (let i = editorDocs.length; i--; ) {
+    let url = editorUrls[i];
+    if (i > 0 && !savedDetails.requiresContent[url]) {
+      editorTabs[i].parentNode.removeChild(editorTabs[i]);
+      editorDocs.splice(i, 1);
+      editorTabs.splice(i, 1);
+      editorUrls.splice(i, 1);
+    } else {
+      editorDocs[i].markClean();
+      editorTabs[i].classList.remove('dirty');
+    }
   }
+
+  Object.keys(savedDetails.requiresContent).forEach(u => {
+    if (editorUrls.indexOf(u) === -1) {
+      addRequireTab(u, savedDetails.requiresContent[u]);
+    }
+  });
 }
 
 ///////////////////////////////////////////////////////////////////////////////
