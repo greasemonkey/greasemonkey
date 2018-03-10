@@ -104,7 +104,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       });
       await Promise.all(setValues);
     }
-    return details.uuid;
+    return details;
   }).catch(err => {
     console.error('Error in installFromDownloader()', err);
     // Rethrow so caller can also deal with it
