@@ -1,8 +1,5 @@
 let gUserScript = null;
 
-// Change the title of the save icon (and more) to initial values.
-rivets.bind(document, {});
-
 var editor = CodeMirror(
     document.getElementById('editor'),
     // TODO: Make appropriate options user-configurable.
@@ -18,6 +15,9 @@ const editorDocs = [];
 const editorTabs = [];
 const editorUrls = [];
 const tabs = document.getElementById('tabs');
+const gTplData = {
+  'name': ''
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -60,7 +60,7 @@ chrome.runtime.sendMessage({
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  document.title = _('NAME_greasemonkey_user_script_editor', userScript.name);
+  gTplData.name = userScript.name;
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ async function onSave() {
 
 
 function onSaveComplete(savedDetails) {
-  document.title = _('NAME_greasemonkey_user_script_editor', savedDetails.name);
+  gTplData.name = savedDetails.name;
   tabs.children[0].textContent = savedDetails.name;
 
   for (let i = editorDocs.length; i--; ) {
@@ -156,3 +156,5 @@ editor.on('swapDoc', doc => {
 document.getElementById('save').addEventListener('click', () => {
   editor.execCommand('save');
 });
+
+rivets.bind(document, gTplData);
