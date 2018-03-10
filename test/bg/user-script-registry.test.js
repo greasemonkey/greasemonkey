@@ -40,7 +40,7 @@ describe('bg/user-script-registry', () => {
 
     return UserScriptRegistry._saveUserScript(userScript2Clone)
         .then(() => { throw new Error('Should not succeed here!') })
-        .catch(e => chai.expect(e.name).to.equal('ConstraintError'));
+        .catch(e => chai.expect(e.orig.name).to.equal('ConstraintError'));
   }).timeout(5000);
 
   it('can uninstall a script', async () => {
