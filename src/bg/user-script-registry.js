@@ -226,7 +226,9 @@ async function saveUserScript(userScript) {
       message = _('save_failed_unknown');
     }
     // Rethrow to allow caller to deal with error
-    throw new Error(message);
+    let retError = new Error(message);
+    retError.orig = error;
+    throw retError;
   }
 
   let details = userScript.details;
