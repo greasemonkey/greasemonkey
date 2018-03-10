@@ -15,9 +15,17 @@ const editorDocs = [];
 const editorTabs = [];
 const editorUrls = [];
 const tabs = document.getElementById('tabs');
+const gModalCloseBtn = document.getElementById('modal-close');
+const gModalProgress = document.getElementById('modal-progress');
 const gTplData = {
-  'name': ''
+  'name': '',
+  'modal': {
+    'title': _('saving'),
+    'errorList': []
+  }
 };
+
+gModalCloseBtn.addEventListener('click', closeSaveModal);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +101,7 @@ editor.on('change', change => {
 });
 
 
-async function onSave() {
+function onSave() {
   if (document.querySelectorAll('#tabs .tab.dirty').length == 0) {
     return;
   }
@@ -110,16 +118,24 @@ async function onSave() {
   downloader.setKnownRequires(requires);
   downloader.setKnownResources(gUserScript.resources);
   downloader.setKnownUuid(userScriptUuid);
+  downloader.addProgressListener(() => {
+    gModalProgress.value = downloader.progress;
+  });
 
-  await downloader.start();
-
-  // TODO: Some sort of progress "dialog" here.
-
-  onSaveComplete(await downloader.install());
+  openSaveModal();
+  downloader
+      .start()
+      .then(() => {
+        gModalProgress.removeAttribute('value');
+        return downloader.install();
+      }).then(onSaveComplete)
+      .catch(showErrorModal);
 }
 
 
 function onSaveComplete(savedDetails) {
+  closeSaveModal();
+
   gTplData.name = savedDetails.name;
   tabs.children[0].textContent = savedDetails.name;
 
@@ -141,6 +157,36 @@ function onSaveComplete(savedDetails) {
       addRequireTab(u, savedDetails.requiresContent[u]);
     }
   });
+}
+
+
+function closeSaveModal() {
+  document.body.classList.remove('save');
+  gTplData.modal.errorList = [];
+  editor.getInputField().focus();
+}
+
+
+function openSaveModal() {
+  gModalCloseBtn.setAttribute('disabled', 'disabled');
+  gModalProgress.value = 0;
+  document.body.classList.add('save');
+  editor.getInputField().blur();
+}
+
+
+function showErrorModal(e) {
+  if (e instanceof DownloadError) {
+    gTplData.modal.errorList = e.failedDownloads.map(
+        d => _('ERROR_at_URL', d.error, d.url));
+  } else if (e.message) {
+    gTplData.modal.errorList = [e.message];
+  } else {
+    // Log the unknown error.
+    console.error('Unknown save error saving script', e);
+    gTplData.modal.errorList = [_('download_error_unknown')];
+  }
+  gModalCloseBtn.removeAttribute('disabled');
 }
 
 ///////////////////////////////////////////////////////////////////////////////

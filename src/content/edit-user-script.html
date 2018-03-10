@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>{name} {name|strBool '-' ''} Greasemonkey User Script Editor</title>
+<link rel="stylesheet" href="/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="edit-user-script.css">
 
@@ -39,6 +40,31 @@
 </head>
 
 <body>
+<div id="modal">
+  <div class="panel">
+    <div class="panel-head">
+      <span class="fa fa-cog fa-lg fa-spin"></span>
+      <h2>{modal.title}</h2>
+    </div>
+    <div class="panel-body">
+      <div rv-show="modal.errorList | empty">
+        <progress id="modal-progress">
+      </div>
+      <div rv-hide="modal.errorList | empty">
+        <p>{'script_save_error'|i18n}</p>
+        <ul>
+          <li rv-each-error="modal.errorList">
+            {error}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-foot">
+      <button class="button button-big" id="modal-close">{'close'|i18n}</button>
+    </div>
+  </div>
+</div>
+
 <div class="tab-bar">
   <div id="save" class="command-item" rv-title="'save'|i18n">
     <i class="icon fa fa-floppy-o"></i>

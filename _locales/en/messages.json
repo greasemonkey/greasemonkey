@@ -12,6 +12,9 @@
   "cancel": {
     "message": "Cancel"
   },
+  "close": {
+    "message": "Close"
+  },
   "disabled": {
     "message": "Disabled"
   },
@@ -114,6 +117,9 @@
   },
   "save": {
     "message": "Save"
+  },
+  "saving": {
+    "message": "Saving"
   },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "User script save failed: script named $1 already exists in namespace $2."
