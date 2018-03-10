@@ -225,17 +225,8 @@ async function saveUserScript(userScript) {
     } else {
       message = _('save_failed_unknown');
     }
-
-    // TODO: Pass this message to the editor tab, not general notifications.
-    let notificationOpts = {
-      'iconUrl': '/skin/icon.svg',
-      'message': message,
-      'title': _('script_save_error'),
-      'type': 'basic',
-    };
-    chrome.notifications.create(notificationOpts);
     // Rethrow to allow caller to deal with error
-    throw error;
+    throw new Error(message);
   }
 
   let details = userScript.details;
