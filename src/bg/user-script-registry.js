@@ -68,7 +68,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
     return userScript;
-  }).then(saveUserScript).then(details => details.uuid).catch(err => {
+  }).then(saveUserScript).catch(err => {
     console.error('Error in installFromDownloader()', err);
     // Rethrow so caller can also deal with it
     throw err;
