@@ -11,6 +11,8 @@ let gRvDetails = {
   'iconUrl': defaultIconUrl,
   'matches': [],
 };
+rivets.bind(document.body, gRvDetails);
+
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
 let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
@@ -38,8 +40,6 @@ gDownloader.scriptDetails.then(scriptDetails => {
   // make a second copy of `gDetails`, for Rivets to own.
   let rvDetails = JSON.parse(JSON.stringify(gDetails));
   Object.assign(gRvDetails, rvDetails);
-
-  rivets.bind(document.body, gRvDetails);
 
   document.body.className = 'install';
 }).catch(err => {
