@@ -43,7 +43,10 @@ gDownloader.scriptDetails.then(scriptDetails => {
 
   document.body.className = 'install';
 }).catch(err => {
-  // TODO: Show error HTML.
+  /* Any errors that should be shown to the user will be caught in the
+   * `start().catch()` promise chain.
+   */
+  // Noop, but log the error
   console.warn('installer could not get script details:', err);
 });
 
