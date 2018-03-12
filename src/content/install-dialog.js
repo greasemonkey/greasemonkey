@@ -3,9 +3,13 @@ let gDetails = null;
 let gInstallCountdown = 9;
 let gProgressBar = document.querySelector('progress');
 let gRvDetails = {
-  'iconUrl': defaultIconUrl,
   'errorHeader': '',
   'errorList': [],
+  'excludes': [],
+  'grants': [],
+  'includes': [],
+  'iconUrl': defaultIconUrl,
+  'matches': [],
 };
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
