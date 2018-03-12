@@ -3,10 +3,16 @@ let gDetails = null;
 let gInstallCountdown = 9;
 let gProgressBar = document.querySelector('progress');
 let gRvDetails = {
-  'iconUrl': defaultIconUrl,
   'errorHeader': '',
   'errorList': [],
+  'excludes': [],
+  'grants': [],
+  'includes': [],
+  'iconUrl': defaultIconUrl,
+  'matches': [],
 };
+rivets.bind(document.body, gRvDetails);
+
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
 let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
@@ -35,11 +41,12 @@ gDownloader.scriptDetails.then(scriptDetails => {
   let rvDetails = JSON.parse(JSON.stringify(gDetails));
   Object.assign(gRvDetails, rvDetails);
 
-  rivets.bind(document.body, gRvDetails);
-
   document.body.className = 'install';
 }).catch(err => {
-  // TODO: Show error HTML.
+  /* Any errors that should be shown to the user will be caught in the
+   * `start().catch()` promise chain.
+   */
+  // Noop, but log the error
   console.warn('installer could not get script details:', err);
 });
 
