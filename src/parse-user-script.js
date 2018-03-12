@@ -59,7 +59,7 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
   var meta = extractMeta(content).match(/.+/g);
   if (!meta) {
     if (failWhenMissing) {
-      throw new Error('Could not parse, no meta.');
+      return null;
     } else {
       return details;
     }
