@@ -194,7 +194,7 @@ class Downloader {
       try {
         let scriptDetail = parseUserScript(
             responseSoFar, this._scriptUrl,
-            /*failWhenMissing=*/!download.pending);
+            /*failWhenMissing=*/ download.pending);
         if (scriptDetail) {
           this._scriptDetailsResolve(scriptDetail);
           this._scriptDetailsResolved = true;
