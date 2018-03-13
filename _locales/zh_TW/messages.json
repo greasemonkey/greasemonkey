@@ -1,0 +1,157 @@
+{
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Greasemonkey 使用者指令稿"
+  },
+  "NAME_greasemonkey_user_script_editor": {
+    "message": "$1 - Greasemonkey 使用者指令稿編輯器"
+  },
+  "ERROR_at_URL": {
+    "message": "$1 於 $2",
+    "description": "E.g. 404 - Not Found at http://.../404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 沒有 @grant 方法 $2"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "disabled": {
+    "message": "已停用"
+  },
+  "does_not_run_on": {
+    "message": "不會在執行於："
+  },
+  "download_failed": {
+    "message": "使用者指令稿下載失敗"
+  },
+  "download_error_unknown": {
+    "message": "使用者指令稿下載時遇到未知的錯誤。"
+  },
+  "duplicate_resource_NAME": {
+    "message": "重複的資源名稱：$1"
+  },
+  "edit": {
+    "message": "編輯"
+  },
+  "enabled": {
+    "message": "已啟用"
+  },
+  "extDesc": {
+    "message": "Firefox 的使用者指令稿管理器。"
+  },
+  "extName": {
+    "message": "Greasemonkey"
+  },
+  "get_user_scripts": {
+    "message": "取得使用者指令稿"
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification： \"text\" 必須為字串"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab：無法理解 URL：$1"
+  },
+  "gm_script_id": {
+    "message": "[Greasemonkey 指令稿 $1]"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey 指令稿 $id$; 版本 $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
+    }
+  },
+  "greasemonkey_home_page": {
+    "message": "Greasemonkey 首頁"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey 作用中"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey 已停用"
+  },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey Wiki"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "忽略 @match 模式 $1 因為：\n$2"
+  },
+  "install": {
+    "message": "安裝"
+  },
+  "install_disabled": {
+    "message": "在停用狀態下安裝"
+  },
+  "install_failed": {
+    "message": "使用者指令稿安裝失敗"
+  },
+  "malicious_user_scripts": {
+    "message": "惡意的使用者指令稿可能會侵犯您的隱私、竊取您的資料，甚至在您不知情的狀況下以您的名義做出各種惡意行為。"
+  },
+  "matches": {
+    "message": "符合"
+  },
+  "new_user_script": {
+    "message": "新使用者指令稿……"
+  },
+  "open_editor_after": {
+    "message": "在安裝完成後開啟編輯器"
+  },
+  "other_user_scripts": {
+    "message": "其他使用者指令稿"
+  },
+  "requires_special_apis": {
+    "message": "需要特殊 API："
+  },
+  "runs_on": {
+    "message": "執行於："
+  },
+  "save": {
+    "message": "儲存"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "使用者指令稿儲存失敗：名為 $1 的指令稿已存在於名字空間 $2。"
+  },
+  "save_failed_unknown": {
+    "message": "使用者指令稿儲存失敗：未知的錯誤。"
+  },
+  "script_save_error": {
+    "message": "指令稿儲存錯誤"
+  },
+  "sources_you_trust": {
+    "message": "您應該只從您信任的來源安裝指令稿。"
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "這是 Greasemonkey 使用者指令稿。點按安裝以開始使用它。"
+  },
+  "undo_uninstall": {
+    "message": "復原解除安裝"
+  },
+  "uninstall": {
+    "message": "解除安裝"
+  },
+  "unnamed_script_RAND": {
+    "message": "未命名的指令稿 $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "供此分頁使用的使用者指令稿"
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest：無法理解 URL：$1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest：已傳遞的 URL 有協定錯誤：$1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest：收不到詳細資訊。"
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest：收不到 URL。"
+  }
+}
