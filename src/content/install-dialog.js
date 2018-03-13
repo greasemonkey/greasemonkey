@@ -3,15 +3,21 @@ let gDetails = null;
 let gInstallCountdown = 9;
 let gProgressBar = document.querySelector('progress');
 let gRvDetails = {
+  // Error message.
   'errorHeader': '',
   'errorList': [],
+
+  // Script details.
   'excludes': [],
   'grants': [],
-  'includes': [],
   'iconUrl': defaultIconUrl,
+  'includes': [],
   'matches': [],
 };
+
+
 rivets.bind(document.body, gRvDetails);
+
 
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
@@ -28,7 +34,6 @@ gDownloader.addProgressListener(() => {
 gDownloader.scriptDetails.then(scriptDetails => {
   gDetails = scriptDetails;
 
-  // TODO: Localize string.
   document.title = _('NAME_greasemonkey_user_script', gDetails.name);
   // Apply the onerror event for the img tag. CSP does not allow it to be done
   // directly in HTML.
@@ -42,12 +47,6 @@ gDownloader.scriptDetails.then(scriptDetails => {
   Object.assign(gRvDetails, rvDetails);
 
   document.body.className = 'install';
-}).catch(err => {
-  /* Any errors that should be shown to the user will be caught in the
-   * `start().catch()` promise chain.
-   */
-  // Noop, but log the error
-  console.warn('installer could not get script details:', err);
 });
 
 /******************************* CANCEL BUTTON *******************************/
