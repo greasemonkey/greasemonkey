@@ -81,9 +81,10 @@ function onClick(event) {
     if (gActiveUuid) {
       openUserScriptEditor(gActiveUuid);
       gActiveUuid = null;
+
+      window.close();
+      event.preventDefault();
     }
-    window.close();
-    event.preventDefault();
   }
 }
 
