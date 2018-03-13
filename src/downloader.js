@@ -271,7 +271,6 @@ class Download {
     this.progress = event.lengthComputable
         ? event.loaded / event.total
         : 0;
-    this.pending = this.progress < 1.0;
     this._progressCb(this, event);
   }
 }
