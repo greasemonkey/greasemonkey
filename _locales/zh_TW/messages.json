@@ -1,110 +1,110 @@
 {
     "gm_script_id": {
-        "message": "[Greasemonkey 脚本 $1]",
+        "message": "[Greasemonkey 指令稿 $1]",
         "description": ""
     },
     "save_failed_unknown": {
-        "message": "用户脚本保存失败：未知错误。",
+        "message": "使用者指令稿儲存失敗：未知的錯誤。",
         "description": ""
     },
     "xhr_no_details": {
-        "message": "GM.xmlHttpRequest：没有收到细节。",
+        "message": "GM.xmlHttpRequest：收不到詳細資訊。",
         "description": ""
     },
     "SCRIPT_does_not_grant_METHOD": {
-        "message": "$1 没有 @grant 方法 $2",
+        "message": "$1 沒有 @grant 方法 $2",
         "description": ""
     },
     "install_disabled": {
-        "message": "Install in disabled state",
+        "message": "在停用狀態下安裝",
         "description": ""
     },
     "download_error_unknown": {
-        "message": "User script download encountered an unknown error.",
+        "message": "使用者指令稿下載時遇到未知的錯誤。",
         "description": ""
     },
     "edit": {
-        "message": "编辑",
+        "message": "編輯",
         "description": ""
     },
     "ERROR_at_URL": {
-        "message": "$1 at $2",
+        "message": "$1 於 $2",
         "description": "E.g. 404 - Not Found at http://.../404.js"
     },
     "runs_on": {
-        "message": "运行于：",
+        "message": "執行於：",
         "description": ""
     },
     "uninstall": {
-        "message": "卸载",
+        "message": "解除安裝",
         "description": ""
     },
     "greasemonkey_is_active": {
-        "message": "Greasemonkey 已启用",
+        "message": "Greasemonkey 作用中",
         "description": ""
     },
     "greasemonkey_user_script_editor": {
-        "message": "Greasemonkey User Script Editor",
+        "message": "Greasemonkey 使用者指令稿編輯器",
         "description": ""
     },
     "other_user_scripts": {
-        "message": "其他用户脚本",
+        "message": "其他使用者指令稿",
         "description": ""
     },
     "xhr_bad_url_scheme": {
-        "message": "GM.xmlHttpRequest：所传递 URL 的协议不良: $1",
+        "message": "GM.xmlHttpRequest：已傳遞的 URL 有協定錯誤：$1",
         "description": ""
     },
     "gm_opentab_bad_URL": {
-        "message": "GM.openInTab：无法理解此 URL: $1",
+        "message": "GM.openInTab：無法理解 URL：$1",
         "description": ""
     },
     "this_is_a_greasemonkey_user_script": {
-        "message": "这是一个 Greasemonkey 用户脚本。点击安装来开始使用。",
+        "message": "這是 Greasemonkey 使用者指令稿。點按安裝以開始使用它。",
         "description": ""
     },
     "does_not_run_on": {
-        "message": "不会运行于：",
+        "message": "不會在執行於：",
         "description": ""
     },
     "enabled": {
-        "message": "已启用",
+        "message": "已啟用",
         "description": ""
     },
     "save_failed_NAME_already_in_NAMESPACE": {
-        "message": "用户脚本保存失败：名为 $1 且命名空间为 $2 的脚本已存在。",
+        "message": "使用者指令稿儲存失敗：名為 $1 的指令稿已存在於名字空間 $2。",
         "description": ""
     },
     "close": {
-        "message": "Close",
+        "message": "關閉",
         "description": ""
     },
     "malicious_user_scripts": {
-        "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。",
+        "message": "惡意的使用者指令稿可能會侵犯您的隱私、竊取您的資料，甚至在您不知情的狀況下以您的名義做出各種惡意行為。",
         "description": ""
     },
     "NAME_greasemonkey_user_script": {
-        "message": "$1 - Greasemonkey 用户脚本",
+        "message": "$1 - Greasemonkey 使用者指令稿",
         "description": ""
     },
     "sources_you_trust": {
-        "message": "您应该只安装来源可信的脚本。",
+        "message": "您應該只從您信任的來源安裝指令稿。",
         "description": ""
     },
     "undo_uninstall": {
-        "message": "撤销卸载",
+        "message": "復原解除安裝",
         "description": ""
     },
     "get_user_scripts": {
-        "message": "获取用户脚本",
+        "message": "取得使用者指令稿",
         "description": ""
     },
     "install_failed": {
-        "message": "User script failed to install",
+        "message": "使用者指令稿安裝失敗",
         "description": ""
     },
     "install": {
-        "message": "安装",
+        "message": "安裝",
         "description": ""
     },
     "requires_special_apis": {
@@ -112,35 +112,35 @@
         "description": ""
     },
     "user_scripts_for_this_tab": {
-        "message": "适用于此标签页的用户脚本",
+        "message": "供此分頁使用的使用者指令稿",
         "description": ""
     },
     "greasemonkey_home_page": {
-        "message": "Greasemonkey 首页",
+        "message": "Greasemonkey 首頁",
         "description": ""
     },
     "xhr_bad_url": {
-        "message": "GM.xmlHttpRequest：无法理解此 URL: $1\n$2",
+        "message": "GM.xmlHttpRequest：無法理解 URL：$1\\n$2",
         "description": ""
     },
     "script_save_error": {
-        "message": "Script save error",
+        "message": "指令稿儲存錯誤",
         "description": ""
     },
     "ignoring_MATCH_because_REASON": {
-        "message": "忽略 @match 模式 $1，原因：\n$2",
+        "message": "忽略 @match 模式 $1 因為：\\n$2",
         "description": ""
     },
     "save": {
-        "message": "保存",
+        "message": "儲存",
         "description": ""
     },
     "duplicate_resource_NAME": {
-        "message": "重复的资源名称：$1",
+        "message": "重複的資源名稱：$1",
         "description": ""
     },
     "disabled": {
-        "message": "已禁用",
+        "message": "已停用",
         "description": ""
     },
     "cancel": {
@@ -148,11 +148,11 @@
         "description": ""
     },
     "download_failed": {
-        "message": "User script download failed",
+        "message": "使用者指令稿下載失敗",
         "description": ""
     },
     "extDesc": {
-        "message": "A User Script manager for Firefox.",
+        "message": "Firefox 的使用者指令稿管理器。",
         "description": ""
     },
     "extName": {
@@ -160,39 +160,39 @@
         "description": ""
     },
     "gm_script_id_ver": {
-        "message": "[Greasemonkey script $id$; version $version$]",
+        "message": "[Greasemonkey 指令稿 $id$; 版本 $version$]",
         "description": ""
     },
     "unnamed_script_RAND": {
-        "message": "未命名脚本 $1",
+        "message": "未命名的指令稿 $1",
         "description": ""
     },
     "gm_notif_text_must_be_string": {
-        "message": "GM.notification：\"text\" 必须为一个字符串",
+        "message": "GM.notification： \\\"text\\\" 必須為字串",
         "description": ""
     },
     "saving": {
-        "message": "Saving",
+        "message": "正在儲存",
         "description": ""
     },
     "new_user_script": {
-        "message": "新建用户脚本...",
+        "message": "新使用者指令稿……",
         "description": ""
     },
     "greasemonkey_is_disabled": {
-        "message": "Greasemonkey 已禁用",
+        "message": "Greasemonkey 已停用",
         "description": ""
     },
     "matches": {
-        "message": "匹配：",
+        "message": "符合：",
         "description": ""
     },
     "xhr_no_url": {
-        "message": "GM.xmlHttpRequest：没有收到 URL。",
+        "message": "GM.xmlHttpRequest：收不到 URL。",
         "description": ""
     },
     "open_editor_after": {
-        "message": "Open editor after install completes",
+        "message": "在安裝完成後開啟編輯器",
         "description": ""
     },
     "greasemonkey_wiki": {

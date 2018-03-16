@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Firefox 用のユーザースクリプトマネージャー。",
-        "description": ""
-    },
     "gm_script_id": {
         "message": "[Greasemonkey スクリプト $1] ",
         "description": ""
@@ -23,13 +15,21 @@
         "message": "$1 は @grant $2 を含みません。",
         "description": ""
     },
-    "download_and_install_successful": {
-        "message": "ダウンロード、およびインストールが完了しました!",
+    "install_disabled": {
+        "message": "無効状態でインストール",
+        "description": ""
+    },
+    "download_error_unknown": {
+        "message": "ユーザースクリプトのダウンロードで不明なエラーが発生しました。",
         "description": ""
     },
     "edit": {
         "message": "編集",
         "description": ""
+    },
+    "ERROR_at_URL": {
+        "message": "$2 で $1",
+        "description": "E.g. 404 - Not Found at http://.../404.js"
     },
     "runs_on": {
         "message": "実行されるページ (@includes):",
@@ -41,6 +41,10 @@
     },
     "greasemonkey_is_active": {
         "message": "Greasemonkey は有効",
+        "description": ""
+    },
+    "greasemonkey_user_script_editor": {
+        "message": "Greasemonkey ユーザースクリプトエディタ",
         "description": ""
     },
     "other_user_scripts": {
@@ -71,6 +75,10 @@
         "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。 ",
         "description": ""
     },
+    "close": {
+        "message": "閉じる",
+        "description": ""
+    },
     "malicious_user_scripts": {
         "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。",
         "description": ""
@@ -89,6 +97,10 @@
     },
     "get_user_scripts": {
         "message": "ユーザースクリプトの入手",
+        "description": ""
+    },
+    "install_failed": {
+        "message": "ユーザースクリプトのインストールに失敗しました",
         "description": ""
     },
     "install": {
@@ -135,19 +147,21 @@
         "message": "キャンセル",
         "description": ""
     },
+    "download_failed": {
+        "message": "ユーザースクリプトのダウンロードに失敗しました",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "Firefox 向けのユーザースクリプトマネージャー。",
+        "description": ""
+    },
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
     "gm_script_id_ver": {
         "message": "[Greasemonkey スクリプト $id$; バージョン $version$]",
-        "description": "",
-        "placeholders": {
-            "id": {
-                "content": "$1",
-                "example": "User Script Name Here"
-            },
-            "version": {
-                "content": "$2",
-                "example": "1.0"
-            }
-        }
+        "description": ""
     },
     "unnamed_script_RAND": {
         "message": "新しいスクリプト $1",
@@ -155,6 +169,10 @@
     },
     "gm_notif_text_must_be_string": {
         "message": "GM.notification: 「text」は文字列でなければなりません。",
+        "description": ""
+    },
+    "saving": {
+        "message": "保存中",
         "description": ""
     },
     "new_user_script": {
@@ -169,12 +187,12 @@
         "message": "実行されるページ (@match):",
         "description": ""
     },
-    "NAME_greasemonkey_user_script_editor": {
-        "message": "$1 — Greasemonkey ユーザースクリプトエディタ",
-        "description": ""
-    },
     "xhr_no_url": {
         "message": "GM.xmlHttpRequest: URLが指定されていません。",
+        "description": ""
+    },
+    "open_editor_after": {
+        "message": "インストール完了後にエディタを開く",
         "description": ""
     },
     "greasemonkey_wiki": {
