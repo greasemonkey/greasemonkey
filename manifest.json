@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "version": "4.3beta7",
+  "version": "4.3",
   "description": "__MSG_extDesc__",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
