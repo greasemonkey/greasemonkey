@@ -64,6 +64,11 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       reject(req.error);
     };
   }).then(foundDetails => {
+    if (foundDetails.iconBlob && ! (foundDetails.iconBlob instanceof Blob)) {
+      let info = foundDetails.iconBlob;
+      foundDetails.iconBlob = new Blob([info.buffer], {'type': info.type});
+    }
+
     let userScript = new EditableUserScript(foundDetails || {});
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
@@ -92,6 +97,11 @@ async function loadUserScripts() {
     };
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
+      if (details.iconBlob && ! (details.iconBlob instanceof Blob)) {
+        let info = details.iconBlob;
+        details.iconBlob = new Blob([info.buffer], {'type': info.type});
+      }
+
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
       } else {
@@ -238,8 +248,22 @@ async function saveUserScript(userScript) {
     throw error;
   }
 
+  function blob2buffer(blob) {
+    if (!blob) return Promise.resolve(null);
+
+    let reader = new FileReader();
+    reader.readAsArrayBuffer(blob);
+    return new Promise((resolve, reject) => {
+      reader.onload = event => {
+        resolve({'buffer': reader.result, 'type': blob.type});
+      };
+    });
+  }
+
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
+  details.iconBlob = await blob2buffer(details.iconBlob);
+  delete details.parsedDetails;
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], 'readwrite');
@@ -252,7 +276,10 @@ async function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-      resolve(details);
+      // Create a new details object since the original was modified for saving
+      let resDetails = userScript.details;
+      resDetails.id = userScript.id;
+      resolve(resDetails);
     };
     req.onerror = event => {
       reject(req.error);
