@@ -163,3 +163,12 @@ editor.on('swapDoc', doc => {
 document.getElementById('save').addEventListener('click', () => {
   editor.execCommand('save');
 });
+
+window.addEventListener('beforeunload', event => {
+  let isDirty = editorDocs.some(doc => {
+    return !doc.isClean();
+  });
+  if (isDirty) {
+    event.preventDefault();
+  }
+});
