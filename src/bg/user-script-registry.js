@@ -192,7 +192,6 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
 
   return new Promise((resolve, reject) => {
     req.onsuccess = event => {
-      // TODO: Drop value store DB.
       delete userScripts[message.uuid];
       resolve();
     };
@@ -200,6 +199,9 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
       console.error('onUserScriptUninstall() failure', event);
       reject(req.error);
     };
+  }).then(() => {
+    // TODO: The store may be orphaned if this fails
+    return ValueStore.deleteStore(message.uuid);
   });
 };
 window.onUserScriptUninstall = onUserScriptUninstall;
