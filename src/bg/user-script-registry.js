@@ -48,6 +48,8 @@ async function openDb() {
 
 async function installFromDownloader(userScriptDetails, downloaderDetails) {
   let remoteScript = new RemoteUserScript(userScriptDetails);
+  let scriptValues = downloaderDetails.valueStore;
+  delete downloaderDetails.valueStore;
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], "readonly");
@@ -68,7 +70,17 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
     return userScript;
-  }).then(saveUserScript).then(details => details.uuid).catch(err => {
+  }).then(saveUserScript)
+    .then(async (details) => {
+    if (scriptValues) {
+      await ValueStore.deleteStore(details.uuid);
+      let setValues = Object.entries(scriptValues).map(([key, value]) => {
+        return ValueStore.setValue(details.uuid, key, value);
+      });
+      await Promise.all(setValues);
+    }
+    return details.uuid;
+  }).catch(err => {
     console.error('Error in installFromDownloader()', err);
     // Rethrow so caller can also deal with it
     throw err;

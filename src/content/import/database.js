@@ -144,6 +144,7 @@ function saveDatabaseObj(obj) {
   downloader.setKnownUuid(details.uuid);
   downloader.setScriptUrl(details.downloadUrl);
   downloader.setScriptContent(details.content);
+  downloader.setScriptValues(values);
 
   return downloader.start().then(() => downloader.install())
 }
