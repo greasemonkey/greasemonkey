@@ -89,6 +89,13 @@ async function onHashChange(event) {
       await downloader.install(/*disabled=*/false, /*openEditor=*/true);
       window.close();
       break;
+
+    case '#export-database':
+      chrome.runtime.sendMessage({
+        'name': 'ExportDatabase',
+      });
+      break;
+
     case '#toggle-user-script':
       chrome.runtime.sendMessage({
         'name': 'UserScriptToggleEnabled',

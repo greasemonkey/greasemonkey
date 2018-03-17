@@ -31,6 +31,7 @@
 
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
+      "src/bg/export-db.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
       "src/bg/on-user-script-notification.js",
@@ -60,6 +61,7 @@
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "downloads",
     "notifications",
     "storage",
     "tabs",

@@ -36,6 +36,9 @@
   "enabled": {
     "message": "Enabled"
   },
+  "export_greasemonkey_database": {
+    "message": "Export Greasemonkey database"
+  },
   "extDesc": {
     "message": "A User Script manager for Firefox."
   },
