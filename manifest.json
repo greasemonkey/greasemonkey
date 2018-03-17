@@ -48,6 +48,7 @@
       "src/util/open-editor.js",
       "third-party/convert2RegExp.js",
       "third-party/MatchPattern.js",
+      "third-party/jszip/jszip.min.js",
 
       "src/bg/execute.run.js",
       "src/bg/user-script-detect.run.js",

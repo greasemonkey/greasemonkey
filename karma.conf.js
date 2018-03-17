@@ -4,6 +4,7 @@ module.exports = function(config) {
       './test/setup.js',
       './third-party/convert2RegExp.js',
       './third-party/MatchPattern.js',
+      './third-party/jszip/jszip.min.js',
       './src/**/*.js',
       './test/**/*.test.js',
     ],
