@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+  This /should/ be temporary until Mozilla fixes their stuff.
+  Bugzilla:
+  "Keep autoclose popups opened when opening a modal file picker dialog"
+  https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+-->
+
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="import.css">
+</head>
+
+
+<body>
+<div id="content">
+
+
+<h2 class="header">{'database_import_page_title'|i18n}</h2>
+<div class="body">
+  <div class="details">
+    <p>
+{'database_import_page_detail'|i18n}
+    </p>
+    <p>
+    <span class="important">{'database_import_page_warning'|i18n}</span>
+    </p>
+  </div>
+
+  <div class="import-option">
+    <h4>{'database_import_page_option_merge'|i18n}</h4>
+    <div class="details">
+{'database_import_page_option_merge_detail'|i18n}
+    </div>
+    <input class="input-item" id="import-database-merge-file" type="file" />
+  </div>
+
+  <div class="import-option">
+    <h4>{'database_import_page_option_replace'|i18n}</h4>
+    <div class="details">
+{'database_import_page_option_replace_detail'|i18n}
+    </div>
+    <input class="input-item" id="import-database-replace-file" type="file" />
+  </div>
+
+  <div class="import-option">
+    <h4>{'database_import_page_option_overwrite'|i18n}</h4>
+    <div class="details">
+{'database_import_page_option_overwrite_detail'|i18n}
+    </div>
+    <input class="input-item" id="import-database-overwrite-file" type="file" />
+  </div>
+</div>
+
+
+</div>
+
+
+<script src="/src/i18n.js"></script>
+<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/third-party/convert2RegExp.js"></script>
+<script src="/third-party/MatchPattern.js"></script>
+<script src="/third-party/jszip/jszip.min.js"></script>
+<script src="/src/util/iconUrl.js"></script>
+<script src="/src/util/open-editor.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
+<script src="/src/downloader.js"></script>
+<script src="/src/parse-meta-line.js"></script>
+<script src="/src/parse-user-script.js"></script>
+<script src="/src/supported-apis.js"></script>
+<script src="/src/user-script-obj.js"></script>
+<script src="database.js"></script>
+
+</body>

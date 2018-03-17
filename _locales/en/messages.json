@@ -15,6 +15,42 @@
   "cancel": {
     "message": "Cancel"
   },
+  "confirm_db_merge_FILENAME": {
+    "message": "Merge database using selected file?\n$1"
+  },
+  "confirm_db_replace_FILENAME": {
+    "message": "Replace database using selected file?\n$1"
+  },
+  "confirm_db_overwrite_FILENAME": {
+    "message": "Overwrite database using selected file?\n$1"
+  },
+  "database_import_page_title": {
+    "message": "Greasemonkey Import Database From File"
+  },
+  "database_import_page_detail": {
+    "message": "This page is used to import scripts from an exported database file."
+  },
+  "database_import_page_option_merge": {
+    "message": "Merge Database"
+  },
+  "database_import_page_option_merge_detail": {
+    "message": "The scripts found in the file will be merged into the database. Existing userscripts (and corresponding data) will not be modified."
+  },
+  "database_import_page_option_replace": {
+    "message": "Replace Database"
+  },
+  "database_import_page_option_replace_detail": {
+    "message": "The current database will be wiped and replaced with the userscripts found in the imported file."
+  },
+  "database_import_page_option_overwrite": {
+    "message": "Merge and Overwrite Database"
+  },
+  "database_import_page_option_overwrite_detail": {
+    "message": "Overwrite existing scripts with the data in the imported file. Existing usesrscripts not found in the file are not modified."
+  },
+  "database_import_page_warning": {
+    "message": "Before attempting to import a database it is recommended to export your current database in case an error occurs."
+  },
   "disabled": {
     "message": "Disabled"
   },
@@ -84,6 +120,9 @@
   },
   "ignoring_MATCH_because_REASON": {
     "message": "Ignoring @match pattern $1 because:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Import Greasemonkey database"
   },
   "install": {
     "message": "Install"

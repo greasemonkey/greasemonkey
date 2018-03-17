@@ -95,6 +95,9 @@ async function onHashChange(event) {
         'name': 'ExportDatabase',
       });
       break;
+    case '#import-database':
+      openImportPage();
+      break;
 
     case '#toggle-user-script':
       chrome.runtime.sendMessage({
@@ -236,6 +239,15 @@ function tplItemForUuid(uuid) {
   for (let tplItem of gTplData.userScripts.inactive) {
     if (tplItem.uuid == uuid) return tplItem;
   }
+}
+
+
+function openImportPage() {
+  chrome.tabs.create({
+    'active': true,
+    'url': chrome.runtime.getURL('src/content/import/database.html'),
+  });
+  window.close();
 }
 
 ////////////////////////////////// KEYBOARD \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
