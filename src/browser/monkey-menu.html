@@ -25,39 +25,45 @@
     </div>
     -->
 
-    <div rv-hide="userScripts.active | empty">
-      <hr>
-      <div class="subview-item heading">
-        <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-top">
+
+    <div rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="script-scroll">
+      <div style="margin-top: 5px;"></div>
+      <div rv-hide="userScripts.active | empty">
+        <div class="subview-item heading">
+          <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
+        </div>
+
+        <a class="subview-item next-menu user-script"
+            rv-each-script="userScripts.active"
+            rv-href="script.uuid | mmUuidMenu"
+            rv-data-uuid="script.uuid"
+            rv-class-disabled="script.enabled | not">
+          <div class="icon"><img rv-src="script.icon"></div>
+          <div class="text">{script.name}</div>
+        </a>
       </div>
 
-      <a class="subview-item next-menu user-script"
-          rv-each-script="userScripts.active"
-          rv-href="script.uuid | mmUuidMenu"
-          rv-data-uuid="script.uuid"
-          rv-class-disabled="script.enabled | not">
-        <div class="icon"><img rv-src="script.icon"></div>
-        <div class="text">{script.name}</div>
-      </a>
-    </div>
+      <div rv-hide="userScripts.inactive | empty">
+        <hr rv-hide="userScripts.active | empty">
+        <div class="subview-item heading" rv-hide="userScripts.active | empty">
+          <div class="text">{'other_user_scripts'|i18n}</div>
+        </div>
 
-    <div rv-hide="userScripts.inactive | empty">
-      <hr>
-      <div class="subview-item heading" rv-hide="userScripts.active | empty">
-        <div class="text">{'other_user_scripts'|i18n}</div>
+        <a class="subview-item next-menu user-script"
+            rv-each-script="userScripts.inactive"
+            rv-href="script.uuid | mmUuidMenu"
+            rv-data-uuid="script.uuid"
+            rv-class-disabled="script.enabled | not">
+          <div class="icon"><img rv-src="script.icon"></div>
+          <div class="text">{script.name}</div>
+        </a>
       </div>
-
-      <a class="subview-item next-menu user-script"
-          rv-each-script="userScripts.inactive"
-          rv-href="script.uuid | mmUuidMenu"
-          rv-data-uuid="script.uuid"
-          rv-class-disabled="script.enabled | not">
-        <div class="icon"><img rv-src="script.icon"></div>
-        <div class="text">{script.name}</div>
-      </a>
+      <div style="margin-bottom: 5px;"></div>
     </div>
 
-    <hr>
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-bottom">
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive | not">
 
     <a href="#new-user-script" class="subview-item">
       <div class="icon fa fa-file-text-o"></div>
