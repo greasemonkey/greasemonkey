@@ -64,12 +64,14 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       reject(req.error);
     };
   }).then(foundDetails => {
+    foundDetails = foundDetails || {};
+
     if (foundDetails.iconBlob && ! (foundDetails.iconBlob instanceof Blob)) {
       let info = foundDetails.iconBlob;
       foundDetails.iconBlob = new Blob([info.buffer], {'type': info.type});
     }
 
-    let userScript = new EditableUserScript(foundDetails || {});
+    let userScript = new EditableUserScript(foundDetails);
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
     return userScript;
