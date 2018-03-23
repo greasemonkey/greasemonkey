@@ -18,11 +18,13 @@
 </section>
 
 <section id="install">
-  <header>
-    <img rv-src="iconUrl">
-    <span class="name">{name}</span>
-    <span class="version">{version}</span>
-  </header>
+  <table id="header">
+    <tr>
+      <td class="icon"><img rv-src="iconUrl" width="40"></td>
+      <td class="name">{name}</td>
+      <td class="version">{version}</td>
+    </tr>
+  </table>
 
   <p>{'this_is_a_greasemonkey_user_script'|i18n}</p>
 
