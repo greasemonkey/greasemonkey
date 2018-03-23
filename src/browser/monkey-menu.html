@@ -94,9 +94,6 @@
   </header>
 
   <div class="subview-body">
-    <p rv-if="activeScript.description">{activeScript.description}</p>
-    <p rv-if="activeScript.version">Version: {activeScript.version}</p>
-
     <a href="#toggle-user-script" class="subview-item">
       <div class="icon fa" rv-class-fa-check="activeScript.enabled">
       </div>
@@ -118,6 +115,12 @@
       <div class="icon fa fa-trash-o"></div>
       <div class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</div>
     </a>
+
+    <p rv-if="activeScript.description">Description: {activeScript.description}</p>
+    <p rv-if="activeScript.version">Version: {activeScript.version}</p>
+    <p rv-if="activeScript.homePageUrl">
+      <a rv-href="activeScript.homePageUrl">Home page</a>
+    </p>
   </div>
 </section>
 

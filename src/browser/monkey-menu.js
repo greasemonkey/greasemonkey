@@ -122,6 +122,7 @@ async function onHashChange(event) {
       if (userScript) {
         gTplData.activeScript.description = userScript.description;
         gTplData.activeScript.enabled = userScript.enabled;
+        gTplData.activeScript.homePageUrl = userScript.homePageUrl;
         gTplData.activeScript.icon = iconUrl(userScript);
         gTplData.activeScript.name = userScript.name;
         gTplData.activeScript.uuid = userScript.uuid;
