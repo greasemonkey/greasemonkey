@@ -59,6 +59,7 @@
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "cookies",
     "notifications",
     "storage",
     "tabs",
