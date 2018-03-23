@@ -94,6 +94,8 @@
   </header>
 
   <div class="subview-body">
+    <p rv-if="activeScript.description">{activeScript.description}</p>
+
     <a href="#toggle-user-script" class="subview-item">
       <div class="icon fa" rv-class-fa-check="activeScript.enabled">
       </div>

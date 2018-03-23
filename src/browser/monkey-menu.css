@@ -144,6 +144,10 @@ section {
   min-height: 0;
 }
 
+.subview-body p {
+  margin: 1ex 1em 1em 1em;
+}
+
 .subview-item {
   background-color: transparent;
   color: -moz-fieldText;

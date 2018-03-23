@@ -49,6 +49,7 @@ body.loading #actions { display: none; }
 #header td.icon {
   height: 40px;
   padding: 0;
+  vertical-align: top;
   width: 40px;
 }
 #header td.icon img {

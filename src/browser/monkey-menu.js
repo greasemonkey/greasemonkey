@@ -118,12 +118,11 @@ async function onHashChange(event) {
       }
       break;
     default:
-      // Check if it's a Userscript by examing the gUserScript object
       let userScript = gUserScripts[hash.slice(1)];
       if (userScript) {
-        // Found a userscript, set individual script page
-        gTplData.activeScript.icon = iconUrl(userScript);
+        gTplData.activeScript.description = userScript.description;
         gTplData.activeScript.enabled = userScript.enabled;
+        gTplData.activeScript.icon = iconUrl(userScript);
         gTplData.activeScript.name = userScript.name;
         gTplData.activeScript.uuid = userScript.uuid;
 
