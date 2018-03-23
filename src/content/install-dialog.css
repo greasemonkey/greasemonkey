@@ -1,8 +1,3 @@
-/* Reference: https://firefoxux.github.io/StyleGuide/ */
-:root {
-  --dialog-max-width: 456px;
-}
-
 html, body {
   font: caption;
   overflow: hidden;
@@ -18,7 +13,6 @@ body {
   height: 100%;
   margin: auto;
   padding: 1em;
-  width: var(--dialog-max-width);
 }
 
 
