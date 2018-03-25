@@ -27,10 +27,10 @@ function lintMetadata(text, options) {
         'message': e.message
       };
       // Turn "Expected...but 'w' found" into "Expected...but 'word' found".
-      if (e.message.match(/Expected.*but.*found/) && ann.from.ch == META_POSN) {
-        let m = metaLine.substr(META_POSN).match(/^([^\s]*)/);
+      if (e.message.match(/Expected .* but .* found\./) && ann.from.ch === META_POSN) {
+        let m = metaLine.substr(META_POSN).match(/^(\s+|\S*)/);
+        ann.message = ann.message.replace(/( but ")([^"]*)(" found\.)$/, `$1${m[1]}$3`);
         ann.to.ch = ann.from.ch + m[1].length;
-        ann.message = ann.message.replace(/(.+")([^"]+)(".+)$/, `$1${m[1]}$3`);
       }
       messages.push(ann);
     }
