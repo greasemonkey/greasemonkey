@@ -23,7 +23,7 @@ describe('bg/user-script-registry', () => {
     assert.isOk(scriptNamed('footnote'));
     await UserScriptRegistry._loadUserScripts();
     assert.isOk(scriptNamed('footnote'));
-  });
+  }).timeout(5000);
 
   it('fails when saving two scripts of the same name', async () => {
     let userScript1 = new EditableUserScript(
