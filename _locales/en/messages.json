@@ -97,6 +97,15 @@
   "matches": {
     "message": "Matches:"
   },
+  "menu_description": {
+    "message": "Description:"
+  },
+  "menu_homepage": {
+    "message": "Home page"
+  },
+  "menu_version": {
+    "message": "Version:"
+  },
   "new_user_script": {
     "message": "New user script..."
   },

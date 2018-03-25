@@ -161,7 +161,17 @@
     },
     "gm_script_id_ver": {
         "message": "[Greasemonkey Benutzerskript $id$; Version $version$]",
-        "description": ""
+        "description": "",
+        "placeholders": {
+            "id": {
+                "content": "$1",
+                "example": "Name des Benutzerskripts"
+            },
+            "version": {
+                "content": "$2",
+                "example": "1.0"
+            }
+        }
     },
     "unnamed_script_RAND": {
         "message": "Unbenanntes Skript $1",
@@ -197,6 +207,18 @@
     },
     "greasemonkey_wiki": {
         "message": "Greasemonkey Wiki",
+        "description": ""
+    },
+    "menu_description": {
+        "message": "Beschreibung:",
+        "description": ""
+    },
+    "menu_homepage": {
+        "message": "Homepage",
+        "description": ""
+    },
+    "menu_version": {
+        "message": "Version:",
         "description": ""
     }
 }
