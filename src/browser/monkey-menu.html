@@ -118,10 +118,12 @@
 
     <hr>
 
-    <p rv-if="activeScript.description"><strong>{'description'|i18n}</strong>
-        {activeScript.description}</p>
-    <p rv-if="activeScript.version"><strong>{'version'|i18n}</strong>
-        {activeScript.version}</p>
+    <p rv-if="activeScript.description">
+      <b>{'description'|i18n}</b> {activeScript.description}
+    </p>
+    <p rv-if="activeScript.version">
+      <b>{'version'|i18n}</b> {activeScript.version}
+    </p>
     <p rv-if="activeScript.homePageUrl">
       <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
     </p>
