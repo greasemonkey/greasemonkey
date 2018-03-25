@@ -15,6 +15,9 @@
   "cancel": {
     "message": "Cancel"
   },
+  "description": {
+    "message": "Description:"
+  },
   "disabled": {
     "message": "Disabled"
   },
@@ -79,6 +82,9 @@
   "greasemonkey_wiki": {
     "message": "Greasemonkey Wiki"
   },
+  "homepage": {
+    "message": "Home page"
+  },
   "ignoring_MATCH_because_REASON": {
     "message": "Ignoring @match pattern $1 because:\n$2"
   },
@@ -96,15 +102,6 @@
   },
   "matches": {
     "message": "Matches:"
-  },
-  "menu_description": {
-    "message": "Description:"
-  },
-  "menu_homepage": {
-    "message": "Home page"
-  },
-  "menu_version": {
-    "message": "Version:"
   },
   "new_user_script": {
     "message": "New user script..."
@@ -150,6 +147,9 @@
   },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"
+  },
+  "version": {
+    "message": "Version:"
   },
   "xhr_bad_url": {
     "message": "GM.xmlHttpRequest: Could not understand the URL: $1\n$2"

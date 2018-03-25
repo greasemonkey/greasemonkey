@@ -209,15 +209,15 @@
         "message": "Greasemonkey Wiki",
         "description": ""
     },
-    "menu_description": {
+    "description": {
         "message": "Beschreibung:",
         "description": ""
     },
-    "menu_homepage": {
+    "homepage": {
         "message": "Homepage",
         "description": ""
     },
-    "menu_version": {
+    "version": {
         "message": "Version:",
         "description": ""
     }
