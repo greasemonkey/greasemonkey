@@ -118,8 +118,10 @@
 
     <hr>
 
-    <p rv-if="activeScript.description">{'menu_description'|i18n} {activeScript.description}</p>
-    <p rv-if="activeScript.version">{'menu_version'|i18n} {activeScript.version}</p>
+    <p rv-if="activeScript.description">{'menu_description'|i18n}
+        {activeScript.description}</p>
+    <p rv-if="activeScript.version">{'menu_version'|i18n}
+        {activeScript.version}</p>
     <p rv-if="activeScript.homePageUrl">
       <a rv-href="activeScript.homePageUrl">{'menu_homepage'|i18n}</a>
     </p>
