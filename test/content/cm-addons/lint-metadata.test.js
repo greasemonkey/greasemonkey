@@ -14,7 +14,7 @@ describe('content/cm-addons/lint-metadata', () => {
     let result = lintOneBadMetaLine('  ');
     chai.expect(result.message).to.have.string('end of input');
     assert.equal(result.from.ch, 4);
-    assert.equal(result.to.ch, 4);
+    assert.equal(result.to.ch, 6);
   });
 
   it('reports whole key, with tab and value', () => {
@@ -34,6 +34,12 @@ describe('content/cm-addons/lint-metadata', () => {
 
   it('reports empty key', () => {
     let result = lintOneBadMetaLine('  license baz');
-    chai.expect(result.message).to.have.string('"" found');
+    chai.expect(result.message).to.have.string('"  " found');
+  });
+
+  it('reports empty key, preserves key list', () => {
+    let result = lintOneBadMetaLine('  license baz');
+    chai.expect(result.message).to.have.string('Expected "author",');
+    chai.expect(result.message).to.have.string('or "version" but');
   });
 });
