@@ -92,6 +92,12 @@ Received by: `bg/is-enabled.js`.
 
 Send this to toggle the global enabled status.  No data.
 
+# ExportDatabase
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/export-db.js`
+
+Send with no data to export the entire Userscript dataset.
+
 # ListUserScripts
 Received by: `bg/user-script-registry.js`.
 

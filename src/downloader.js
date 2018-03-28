@@ -62,6 +62,7 @@ class Downloader {
 
   setScriptUrl(val) { this._scriptUrl = val; return this; }
   setScriptContent(val) { this._scriptContent = val; return this; }
+  setScriptValues(keyPairs) { this._scriptValues = keyPairs; return this; }
 
   addProgressListener(cb) {
     this._progressListeners.push(cb);
@@ -90,6 +91,7 @@ class Downloader {
       };
     }
 
+    details.valueStore = this._scriptValues || null;
     return details;
   }
 

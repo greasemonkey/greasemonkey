@@ -1,0 +1,18 @@
+body {
+  border: 1px solid lightgray;
+  font-family: sans;
+  margin: 125px auto 0;
+  padding: 12px;
+  width: 62%;
+}
+
+h2 {
+  border-bottom: 1px solid;
+  margin: 10px auto 20px;
+}
+
+.details { padding: 0 25px; }
+.import-option { margin-top: 10px; }
+.import-option h4 { margin-bottom: 7px; }
+.important { color: red; font-weight: bold; }
+.input-item { margin-top: 7px; }

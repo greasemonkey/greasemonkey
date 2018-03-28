@@ -31,6 +31,7 @@
 
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
+      "src/bg/export-db.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
       "src/bg/on-user-script-notification.js",
@@ -48,6 +49,7 @@
       "src/util/open-editor.js",
       "third-party/convert2RegExp.js",
       "third-party/MatchPattern.js",
+      "third-party/jszip/jszip.min.js",
 
       "src/bg/execute.run.js",
       "src/bg/user-script-detect.run.js",
@@ -60,6 +62,7 @@
     "<all_urls>",
     "clipboardWrite",
     "cookies",
+    "downloads",
     "notifications",
     "storage",
     "tabs",

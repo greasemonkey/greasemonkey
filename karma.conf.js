@@ -4,6 +4,7 @@ module.exports = function(config) {
       './test/setup.js',
       './third-party/convert2RegExp.js',
       './third-party/MatchPattern.js',
+      './third-party/jszip/jszip.min.js',
       './src/**/*.js',
       './test/**/*.test.js',
     ],
@@ -12,6 +13,7 @@ module.exports = function(config) {
       './src/**/*.run.js',
       './src/content/edit-user-script.js',  // CodeMirror dependency.
       './src/content/install-dialog.js',  // Not ready for testing yet.  TODO!
+      './src/content/import/*', // DB imports
       './src/util/rivets-formatters.js',
     ],
     frameworks: ['chai', 'mocha', 'sinon', 'sinon-chrome'],

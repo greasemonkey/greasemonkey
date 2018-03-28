@@ -89,6 +89,16 @@ async function onHashChange(event) {
       await downloader.install(/*disabled=*/false, /*openEditor=*/true);
       window.close();
       break;
+
+    case '#backup-export':
+      chrome.runtime.sendMessage({
+        'name': 'ExportDatabase',
+      });
+      break;
+    case '#backup-import':
+      openImportPage();
+      break;
+
     case '#toggle-user-script':
       chrome.runtime.sendMessage({
         'name': 'UserScriptToggleEnabled',
@@ -230,6 +240,15 @@ function tplItemForUuid(uuid) {
   for (let tplItem of gTplData.userScripts.inactive) {
     if (tplItem.uuid == uuid) return tplItem;
   }
+}
+
+
+function openImportPage() {
+  chrome.tabs.create({
+    'active': true,
+    'url': chrome.runtime.getURL('src/content/backup/import.html'),
+  });
+  window.close();
 }
 
 ////////////////////////////////// KEYBOARD \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
