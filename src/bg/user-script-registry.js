@@ -16,6 +16,26 @@ const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 
 
+function blobToBuffer(blob) {
+  if (!blob) return Promise.resolve(null);
+
+  let reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+  return new Promise((resolve, reject) => {
+    reader.onload = event => {
+      resolve({'buffer': reader.result, 'type': blob.type});
+    };
+  });
+}
+
+
+function bufferToBlob(buffer) {
+  if (!buffer) return buffer;
+  if (buffer instanceof Blob) return buffer;
+  return new Blob([buffer.buffer], {'type': buffer.type});
+}
+
+
 async function openDb() {
   if (navigator.storage && navigator.storage.persist) {
     await navigator.storage.persist();
@@ -65,11 +85,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     };
   }).then(foundDetails => {
     foundDetails = foundDetails || {};
-
-    if (foundDetails.iconBlob && ! (foundDetails.iconBlob instanceof Blob)) {
-      let info = foundDetails.iconBlob;
-      foundDetails.iconBlob = new Blob([info.buffer], {'type': info.type});
-    }
+    foundDetails.iconBlob = bufferToBlob(foundDetails.iconBlob);
 
     let userScript = new EditableUserScript(foundDetails);
     userScript
@@ -101,10 +117,7 @@ async function loadUserScripts() {
     };
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
-      if (details.iconBlob && ! (details.iconBlob instanceof Blob)) {
-        let info = details.iconBlob;
-        details.iconBlob = new Blob([info.buffer], {'type': info.type});
-      }
+      details.iconBlob = bufferToBlob(details.iconBlob);
 
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
@@ -254,21 +267,9 @@ async function saveUserScript(userScript) {
     throw error;
   }
 
-  function blob2buffer(blob) {
-    if (!blob) return Promise.resolve(null);
-
-    let reader = new FileReader();
-    reader.readAsArrayBuffer(blob);
-    return new Promise((resolve, reject) => {
-      reader.onload = event => {
-        resolve({'buffer': reader.result, 'type': blob.type});
-      };
-    });
-  }
-
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
-  details.iconBlob = await blob2buffer(details.iconBlob);
+  details.iconBlob = await blobToBuffer(details.iconBlob);  // See #2908.
   delete details.parsedDetails;
 
   let db = await openDb();
