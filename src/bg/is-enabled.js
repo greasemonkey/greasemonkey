@@ -31,7 +31,7 @@ function setGlobalEnabled(enabled) {
   chrome.runtime.sendMessage({
     'name': 'EnabledChanged',
     'enabled': isEnabled,
-  });
+  }, logUnhandledError);
   setIcon();
   chrome.storage.local.set({'globalEnabled': enabled});
 }
@@ -75,9 +75,8 @@ window.toggleGlobalEnabled = toggleGlobalEnabled;
 
 function onEnabledToggle(message, sender, sendResponse) {
   try {
-  console.log('got enabled toggle', message, sender);
-  toggleGlobalEnabled();
-  sendResponse(isEnabled);
+    toggleGlobalEnabled();
+    sendResponse(isEnabled);
   } catch (e) { console.error(e); }
 }
 window.onEnabledToggle = onEnabledToggle;
