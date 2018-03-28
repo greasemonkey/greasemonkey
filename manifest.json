@@ -61,6 +61,7 @@
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "cookies",
     "downloads",
     "notifications",
     "storage",

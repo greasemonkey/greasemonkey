@@ -9,7 +9,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 11;
+const EVAL_CONTENT_VERSION = 12;
 
 
 // Private implementation.
@@ -97,8 +97,8 @@ function _safeCopy(v) {
 
 
 const userScriptKeys = [
-    'description', 'downloadUrl', 'excludes', 'grants', 'includes', 'matches',
-    'name', 'namespace', 'noFrames', 'runAt', 'version'];
+    'description', 'downloadUrl', 'excludes', 'grants', 'homePageUrl',
+    'includes', 'matches', 'name', 'namespace', 'noFrames', 'runAt', 'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
 window.RemoteUserScript = class RemoteUserScript {
   constructor(vals) {
@@ -107,6 +107,7 @@ window.RemoteUserScript = class RemoteUserScript {
     this._downloadUrl = null;
     this._excludes = [];
     this._grants = ['none'];
+    this._homePageUrl = null;
     this._includes = [];
     this._matches = [];
     this._name = 'user-script';
@@ -131,6 +132,7 @@ window.RemoteUserScript = class RemoteUserScript {
   get downloadUrl() { return this._downloadUrl; }
   get excludes() { return _safeCopy(this._excludes); }
   get grants() { return _safeCopy(this._grants); }
+  get homePageUrl() { return _safeCopy(this._homePageUrl); }
   get includes() { return _safeCopy(this._includes); }
   get matches() { return _safeCopy(this._matches); }
   get name() { return this._name; }

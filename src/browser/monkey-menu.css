@@ -131,6 +131,21 @@ section {
   width: 100%;
 }
 
+.subview-body hr.hr-top {
+  margin-bottom: 0;
+}
+.subview-body hr.hr-bottom {
+  margin-top: 0;
+}
+.subview-body div[style*="none"] + hr.hr-bottom {
+  margin-top: 6px;
+}
+
+.script-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
 .subview-body {
   max-height: 560px;
   padding: 6px 0;
@@ -142,6 +157,10 @@ section {
   border-top: 1px solid var(--panel-separator-color);
   margin: 6px 0;
   min-height: 0;
+}
+
+.subview-body p {
+  margin: 1ex 1em 1em 1em;
 }
 
 .subview-item {

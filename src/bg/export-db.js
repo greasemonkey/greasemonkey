@@ -25,10 +25,10 @@ window.onExportDatabase = onExportDatabase;
 
 // Since `data#toLocaleFormat()` is deprecated, and therefore C style
 // datestring formating, creating a safe datestring in the local timezone is
-// overly verbose; result: GMexport_YYYYMMDD_hhmmss.zip
+// overly verbose; result: Greasemonkey_backup_YYYYMMDD_hhmmss.zip
 function exportFilename() {
   let date = new Date();
-  return 'GMexport_'
+  return 'Greasemonkey_backup_'
     + date.getFullYear().toString()
     + (date.getMonth() + 1).toString().padStart(2, '0')
     + date.getDate().toString().padStart(2, '0')
@@ -46,7 +46,8 @@ function exportZipBlob(databaseObject) {
   let knownFiles = {};
 
   databaseObject.forEach(obj => {
-    // TODO: Sanitize filenames for filesystems. Like the restriction on ':' (windows)
+    // TODO: Sanitize filenames for filesystems.
+    // Like the restriction on ':' (Windows).
     let fileBase = obj.details.name;
 
     // Since scripts can have the same name (different namespace) they all need
@@ -72,18 +73,17 @@ function exportZipBlob(databaseObject) {
 }
 
 
-// Create a promise to resolve details for the passed userscript
+// Create a promise to resolve details for the passed user script.
 async function userScriptData(userScript) {
   let details = userScript.details;
   let grants = details.grants;
-  // Remove parsedDetails as it creates cycles and cannot be properly saved
+  // Remove parsedDetails as it creates cycles and cannot be properly saved.
   delete details.parsedDetails;
 
   if (grants.includes('GM.deleteValue') ||
       grants.includes('GM.getValue') ||
       grants.includes('GM.listValues') ||
       grants.includes('GM.setValue')) {
-
     return {'details': details, 'values': await userScriptStore(details.uuid)};
   } else {
     return {'details': details};

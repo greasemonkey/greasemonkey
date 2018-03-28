@@ -1,6 +1,6 @@
-let urlStr = 'http://www.example.com/example.user.js';
-
 describe('parse-user-script', () => {
+  let urlStr = 'http://www.example.com/example.user.js';
+
   describe('extractMeta()', () => {
     it('does not throw even when script content is null', () => {
       let result = extractMeta(null);
@@ -37,6 +37,14 @@ describe('parse-user-script', () => {
 // ==/UserScript==`;
       let result = parseUserScript(src, urlStr);
       assert.equal(result.name, 'Debts');
+    });
+
+    it('parses the @homepageURL', () => {
+      let src = `// ==UserScript==
+// @homepageURL http://example.com/home
+// ==/UserScript==`;
+      let result = parseUserScript(src, urlStr);
+      assert.equal(result.homePageUrl, 'http://example.com/home');
     });
   });
 });

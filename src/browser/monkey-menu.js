@@ -90,12 +90,12 @@ async function onHashChange(event) {
       window.close();
       break;
 
-    case '#export-database':
+    case '#backup-export':
       chrome.runtime.sendMessage({
         'name': 'ExportDatabase',
       });
       break;
-    case '#import-database':
+    case '#backup-import':
       openImportPage();
       break;
 
@@ -128,14 +128,15 @@ async function onHashChange(event) {
       }
       break;
     default:
-      // Check if it's a Userscript by examing the gUserScript object
       let userScript = gUserScripts[hash.slice(1)];
       if (userScript) {
-        // Found a userscript, set individual script page
-        gTplData.activeScript.icon = iconUrl(userScript);
+        gTplData.activeScript.description = userScript.description;
         gTplData.activeScript.enabled = userScript.enabled;
+        gTplData.activeScript.homePageUrl = userScript.homePageUrl;
+        gTplData.activeScript.icon = iconUrl(userScript);
         gTplData.activeScript.name = userScript.name;
         gTplData.activeScript.uuid = userScript.uuid;
+        gTplData.activeScript.version = userScript.version;
 
         gActiveUuid = userScript.uuid;
         document.body.className = 'detail';
@@ -245,7 +246,7 @@ function tplItemForUuid(uuid) {
 function openImportPage() {
   chrome.tabs.create({
     'active': true,
-    'url': chrome.runtime.getURL('src/content/import/database.html'),
+    'url': chrome.runtime.getURL('src/content/backup/import.html'),
   });
   window.close();
 }

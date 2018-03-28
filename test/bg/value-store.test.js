@@ -33,7 +33,7 @@ describe('bg/value-store', () => {
         }).then(value => {
           assert.isUndefined(value, 'Value has a result, was not deleted');
         });
-  });
+  }).timeout(5000);
 
   it('can list all keys', () => {
     let testKeys = ['gmBaz1', 'gmBaz2', 'gmBaz3'];

@@ -16,6 +16,26 @@ const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 
 
+function blobToBuffer(blob) {
+  if (!blob) return Promise.resolve(null);
+
+  let reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+  return new Promise((resolve, reject) => {
+    reader.onload = event => {
+      resolve({'buffer': reader.result, 'type': blob.type});
+    };
+  });
+}
+
+
+function bufferToBlob(buffer) {
+  if (!buffer) return buffer;
+  if (buffer instanceof Blob) return buffer;
+  return new Blob([buffer.buffer], {'type': buffer.type});
+}
+
+
 async function openDb() {
   if (navigator.storage && navigator.storage.persist) {
     await navigator.storage.persist();
@@ -66,12 +86,15 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       reject(req.error);
     };
   }).then(foundDetails => {
-    let userScript = new EditableUserScript(foundDetails || {});
+    foundDetails = foundDetails || {};
+    foundDetails.iconBlob = bufferToBlob(foundDetails.iconBlob);
+
+    let userScript = new EditableUserScript(foundDetails);
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
     return userScript;
   }).then(saveUserScript)
-    .then(async (details) => {
+  .then(async (details) => {
     if (scriptValues) {
       await ValueStore.deleteStore(details.uuid);
       let setValues = Object.entries(scriptValues).map(([key, value]) => {
@@ -104,6 +127,8 @@ async function loadUserScripts() {
     };
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
+      details.iconBlob = bufferToBlob(details.iconBlob);
+
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
       } else {
@@ -254,6 +279,8 @@ async function saveUserScript(userScript) {
 
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
+  details.iconBlob = await blobToBuffer(details.iconBlob);  // See #2908.
+  delete details.parsedDetails;
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], 'readwrite');
@@ -266,7 +293,10 @@ async function saveUserScript(userScript) {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-      resolve(details);
+      // Create a new details object since the original was modified for saving
+      let resDetails = userScript.details;
+      resDetails.id = userScript.id;
+      resolve(resDetails);
     };
     req.onerror = event => {
       reject(req.error);

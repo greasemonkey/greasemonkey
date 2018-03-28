@@ -46,6 +46,7 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     'downloadUrl': url,
     'excludes': [],
     'grants': [],
+    'homePageUrl': null,
     'includes': [],
     'matches': [],
     'name': url && nameFromUrl(url) || 'Unnamed Script',
@@ -78,6 +79,9 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     switch (data.keyword) {
     case 'noframes':
       details.noFrames = true;
+      break;
+    case 'homepageURL':
+      details.homePageUrl = data.value;
       break;
     case 'namespace':
     case 'version':

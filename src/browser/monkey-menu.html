@@ -25,54 +25,57 @@
     </div>
     -->
 
-    <div rv-hide="userScripts.active | empty">
-      <hr>
-      <div class="subview-item heading">
-        <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-top">
+
+    <div rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="script-scroll">
+      <div style="margin-top: 5px;"></div>
+      <div rv-hide="userScripts.active | empty">
+        <div class="subview-item heading">
+          <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
+        </div>
+
+        <a class="subview-item next-menu user-script"
+            rv-each-script="userScripts.active"
+            rv-href="script.uuid | mmUuidMenu"
+            rv-data-uuid="script.uuid"
+            rv-class-disabled="script.enabled | not">
+          <div class="icon"><img rv-src="script.icon"></div>
+          <div class="text">{script.name}</div>
+        </a>
       </div>
 
-      <a class="subview-item next-menu user-script"
-          rv-each-script="userScripts.active"
-          rv-href="script.uuid | mmUuidMenu"
-          rv-data-uuid="script.uuid"
-          rv-class-disabled="script.enabled | not">
-        <div class="icon"><img rv-src="script.icon"></div>
-        <div class="text">{script.name}</div>
-      </a>
-    </div>
+      <div rv-hide="userScripts.inactive | empty">
+        <hr rv-hide="userScripts.active | empty">
+        <div class="subview-item heading" rv-hide="userScripts.active | empty">
+          <div class="text">{'other_user_scripts'|i18n}</div>
+        </div>
 
-    <div rv-hide="userScripts.inactive | empty">
-      <hr>
-      <div class="subview-item heading" rv-hide="userScripts.active | empty">
-        <div class="text">{'other_user_scripts'|i18n}</div>
+        <a class="subview-item next-menu user-script"
+            rv-each-script="userScripts.inactive"
+            rv-href="script.uuid | mmUuidMenu"
+            rv-data-uuid="script.uuid"
+            rv-class-disabled="script.enabled | not">
+          <div class="icon"><img rv-src="script.icon"></div>
+          <div class="text">{script.name}</div>
+        </a>
       </div>
-
-      <a class="subview-item next-menu user-script"
-          rv-each-script="userScripts.inactive"
-          rv-href="script.uuid | mmUuidMenu"
-          rv-data-uuid="script.uuid"
-          rv-class-disabled="script.enabled | not">
-        <div class="icon"><img rv-src="script.icon"></div>
-        <div class="text">{script.name}</div>
-      </a>
+      <div style="margin-bottom: 5px;"></div>
     </div>
 
-    <hr>
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-bottom">
+    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive | not">
 
     <a href="#new-user-script" class="subview-item">
       <div class="icon fa fa-file-text-o"></div>
       <div class="text">{'new_user_script'|i18n}</div>
     </a>
-
-    <hr>
-
-    <a href="#export-database" class="subview-item">
+    <a href="#backup-export" class="subview-item">
       <div class="icon fa fa-upload"></div>
-      <div class="text">{'export_greasemonkey_database'|i18n}</div>
+      <div class="text">{'backup_export'|i18n}</div>
     </a>
-    <a href="#import-database" class="subview-item">
+    <a href="#backup-import" class="subview-item">
       <div class="icon fa fa-download"></div>
-      <div class="text">{'import_greasemonkey_database'|i18n}</div>
+      <div class="text">{'backup_import'|i18n}</div>
     </a>
 
     <hr>
@@ -126,6 +129,20 @@
       <div class="icon fa fa-trash-o"></div>
       <div class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</div>
     </a>
+
+    <hr>
+
+    <p rv-if="activeScript.description">
+      <b>{'description'|i18n}</b> {activeScript.description}
+    </p>
+    <p rv-if="activeScript.version">
+      <b>{'version'|i18n}</b> {activeScript.version}
+    </p>
+    <p rv-if="activeScript.homePageUrl">
+      <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
+    </p>
+
+    <hr>
   </div>
 </section>
 
