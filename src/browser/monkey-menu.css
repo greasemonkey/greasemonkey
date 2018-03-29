@@ -48,6 +48,7 @@ menuitem {
   display: block;
   overflow-x: hidden;
   padding: 4px 12px 4px 10px;
+  position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -55,7 +56,7 @@ menuitem:focus {
   background-color: hsla(0, 0%, 80%, 0.3);
   outline: none;
 }
-menuitem.disabled {
+menuitem.disabled * {
   opacity: 0.65;
 }
 
@@ -68,6 +69,21 @@ menuitem .icon img {
   object-fit: contain;
   max-height: 16px;
   width: 16px;
+}
+
+menuitem.user-script {
+  padding-right: 24px;
+}
+menuitem.user-script .arrow {
+  background: url(/skin/next.svg) center center no-repeat;
+  display: inline-block;
+  height: 100%;
+  opacity: 1.0;
+  position: absolute;
+  right: 6px;
+  top: 0;
+  transform: rotate(180deg);
+  width: 12px;
 }
 
 menu heading {

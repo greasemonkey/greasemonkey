@@ -14,7 +14,7 @@
     <menuitem id="toggle-global-enabled" tabindex="0">
       <i class="icon fa" rv-class-fa-check="enabled"></i>
       <span class="text i18n">
-          {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
+        {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
       </span>
     </menuitem>
     <!-- TODO: This feature.
@@ -34,6 +34,7 @@
           tabindex="0">
         <i class="icon"><img rv-src="script.icon"></i>
         <span class="text">{script.name}</span>
+        <span class="arrow"></span>
       </menuitem>
     </div>
     <!-- TODO: Don't duplicate the above and below sections. -->
@@ -47,6 +48,7 @@
           tabindex="0">
         <i class="icon"><img rv-src="script.icon"></i>
         <span class="text">{script.name}</span>
+        <span class="arrow"></span>
       </menuitem>
     </div>
 
