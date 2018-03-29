@@ -24,32 +24,35 @@
     </menuitem>
     -->
 
-    <div rv-unless="userScripts.active | empty">
-      <hr>
-      <heading>{'user_scripts_for_this_tab'|i18n}</heading>
-      <menuitem rv-each-script="userScripts.active"
-          class="user-script"
-          rv-class-disabled="script.enabled | not"
-          rv-data-uuid="script.uuid"
-          tabindex="0">
-        <i class="icon"><img rv-src="script.icon"></i>
-        <span class="text">{script.name}</span>
-        <span class="arrow"></span>
-      </menuitem>
-    </div>
-    <!-- TODO: Don't duplicate the above and below sections. -->
-    <div rv-unless="userScripts.inactive | empty">
-      <hr>
-      <heading>{'other_user_scripts'|i18n}</heading>
-      <menuitem rv-each-script="userScripts.inactive"
-          class="user-script"
-          rv-class-disabled="script.enabled | not"
-          rv-data-uuid="script.uuid"
-          tabindex="0">
-        <i class="icon"><img rv-src="script.icon"></i>
-        <span class="text">{script.name}</span>
-        <span class="arrow"></span>
-      </menuitem>
+    <hr rv-unless="userScripts.active | bothArraysEmpty userScripts.inactive">
+
+    <div id="script-list-scroll">
+      <div rv-unless="userScripts.active | empty">
+        <heading>{'user_scripts_for_this_tab'|i18n}</heading>
+        <menuitem rv-each-script="userScripts.active"
+            class="user-script"
+            rv-class-disabled="script.enabled | not"
+            rv-data-uuid="script.uuid"
+            tabindex="0">
+          <i class="icon"><img rv-src="script.icon"></i>
+          <span class="text">{script.name}</span>
+          <span class="arrow"></span>
+        </menuitem>
+      </div>
+      <!-- TODO: Don't duplicate the above and below sections. -->
+      <div rv-unless="userScripts.inactive | empty">
+        <hr rv-unless="userScripts.active | empty">
+        <heading>{'other_user_scripts'|i18n}</heading>
+        <menuitem rv-each-script="userScripts.inactive"
+            class="user-script"
+            rv-class-disabled="script.enabled | not"
+            rv-data-uuid="script.uuid"
+            tabindex="0">
+          <i class="icon"><img rv-src="script.icon"></i>
+          <span class="text">{script.name}</span>
+          <span class="arrow"></span>
+        </menuitem>
+      </div>
     </div>
 
     <hr>

@@ -11,18 +11,21 @@ html, body {
 body {
   cursor: default;
   font: caption;
-  /* TODO: Size in tab, i.e. Android? */
-  max-height: var(--max-height);
   width: 300px;
   overflow: hidden;
 }
 body#rendering { display: none; }
 
+
+#script-list-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+}
+
 /******************************** SECTIONS ***********************************/
 
 section {
   margin-left: 0;
-  max-height: var(--max-height);
   overflow-x: hidden;
   overflow-y: auto;
   transition-duration: 0.15s;
