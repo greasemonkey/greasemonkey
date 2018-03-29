@@ -1,3 +1,4 @@
+'use strict';
 describe('bg/value-store', () => {
   let storeName = 'gmTests';
 

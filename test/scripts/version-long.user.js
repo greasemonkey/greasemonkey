@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        Version long test
 // @description Exercises the `@version` directive.  Should show in the install dialog at minimum.  Has a long value.

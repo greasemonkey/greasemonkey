@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        GM set/get/list/delete
 // @description Exercises all GM storage methods, with bare `Promise`s (no async/await).  Should log "got value =" with an increasing (on each page load) counter, then `["temp", "val"]`, then then `["val"]`.

@@ -1,3 +1,4 @@
+'use strict';
 document.getElementById('import-database-merge-file')
     .addEventListener('change', event => {
       let fileObj = event.target.files[0];

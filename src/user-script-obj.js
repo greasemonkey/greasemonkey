@@ -1,3 +1,4 @@
+'use strict';
 /*
 The UserScript object represents a user script, and all content and behaviors.
 

@@ -1,3 +1,4 @@
+'use strict';
 let gUserScript = null;
 
 // Change the title of the save icon (and more) to initial values.

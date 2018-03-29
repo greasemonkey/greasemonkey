@@ -1,3 +1,4 @@
+'use strict';
 describe('bg/api-provider-source', () => {
   for (let apiName of SUPPORTED_APIS) {
     it('handles ' + apiName, () => {

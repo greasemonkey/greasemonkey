@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        GM_info test
 // @description Just logs the `GM_info` value.

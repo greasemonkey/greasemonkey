@@ -1,3 +1,4 @@
+'use strict';
 describe('browser/monkey-menu', () => {
   it('has no syntax errors in goToTop()', () => {
     goToTop();

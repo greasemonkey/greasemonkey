@@ -1,3 +1,4 @@
+'use strict';
 describe('content/cm-addons/lint-metadata', () => {
   function lintOneBadMetaLine(v) {
     let src = `// ==UserScript==\n// @${v}\n// ==/UserScript==\n`;

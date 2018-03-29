@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file sets up a message receiver, expecting to receive messages from
 content scripts.  It dispatches to global methods registered in other

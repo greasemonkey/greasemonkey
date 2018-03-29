@@ -1,3 +1,4 @@
+'use strict';
 describe('parse-user-script', () => {
   let urlStr = 'http://www.example.com/example.user.js';
 

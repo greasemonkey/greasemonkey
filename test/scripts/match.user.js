@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        @match test
 // @description This user script relies upon the `@match` directive to run.

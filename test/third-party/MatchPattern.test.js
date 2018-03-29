@@ -1,3 +1,4 @@
+'use strict';
 describe('third-party/MatchPattern', () => {
     describe('invalid patterns', () => {
       const newPattern = pattern => { return () => new MatchPattern(pattern) };

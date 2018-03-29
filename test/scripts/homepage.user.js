@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        @homepageURL test
 // @description This user script specifies a `@homepageURL`, which should be linked to.

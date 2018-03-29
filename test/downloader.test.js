@@ -1,3 +1,4 @@
+'use strict';
 describe('downloader', () => {
   const fakeReqs = [];
   let fakeXhr = null;

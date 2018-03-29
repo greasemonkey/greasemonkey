@@ -1,3 +1,4 @@
+'use strict';
 const gAllMetaRegexp = new RegExp(
     '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==',
     'm');

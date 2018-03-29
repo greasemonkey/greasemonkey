@@ -1,3 +1,4 @@
+'use strict';
 /* Functions for exporting GM database. */
 
 // Private implementation.

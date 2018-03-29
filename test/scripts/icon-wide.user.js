@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        Wide Icon
 // @description The icon for this script is very wide (128x16 px).

@@ -1,3 +1,4 @@
+'use strict';
 function openUserScriptEditor(scriptUuid) {
   let url = chrome.runtime.getURL('src/content/edit-user-script.html')
       + '#' + scriptUuid;

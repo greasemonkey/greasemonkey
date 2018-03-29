@@ -1,3 +1,4 @@
+'use strict';
 const defaultIcon = chrome.runtime.getURL('skin/userscript.png');
 
 let gActiveUuid = null;
@@ -317,7 +318,7 @@ function uninstall(scriptUuid) {
     'name': 'UserScriptUninstall',
     'uuid': scriptUuid,
   }, () => {
-    for (i in gTplData.userScripts) {
+    for (let i in gTplData.userScripts) {
       let script = gTplData.userScripts[i];
       if (script.uuid == scriptUuid) {
         gTplData.userScripts.splice(i, 1);

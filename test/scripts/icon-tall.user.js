@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        Tall Icon
 // @description The icon for this script is very tall (16x128 px).

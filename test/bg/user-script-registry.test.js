@@ -1,3 +1,4 @@
+'use strict';
 describe('bg/user-script-registry', () => {
   afterEach((done) => {
     let req = indexedDB.deleteDatabase('greasemonkey');

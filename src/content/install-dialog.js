@@ -1,3 +1,4 @@
+'use strict';
 let gBtnInstall = document.getElementById('btn-install');
 let gDetails = null;
 let gInstallCountdown = 9;

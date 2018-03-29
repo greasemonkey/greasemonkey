@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        GM.notification() Test
 // @description Exercises the `GM.notification()` API method.

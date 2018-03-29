@@ -1,3 +1,4 @@
+'use strict';
 // For a line of the form "// @meta", "meta" is in position 4.
 const META_PREFIX = '// @';
 const META_POSN = META_PREFIX.length;
