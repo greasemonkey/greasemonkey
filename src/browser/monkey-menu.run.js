@@ -1,4 +1,8 @@
-window.addEventListener('hashchange', onHashChange, false);
-window.addEventListener('keydown', onKeypress, false);
 window.addEventListener('DOMContentLoaded', onLoad, true);
-window.addEventListener('unload', onUnload, false);
+window.addEventListener('click', onClick, false);
+window.addEventListener('mouseover', onMouseOver, false);
+window.addEventListener('keydown', onKeyDown, false);
+window.addEventListener('transitionend', onTransitionEnd, false);
+
+// When closing, navigate to main including its 'trigger pending uninstall'.
+window.addEventListener('unload', navigateToMainMenu, false);
