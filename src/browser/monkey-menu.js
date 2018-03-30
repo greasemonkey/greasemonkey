@@ -48,6 +48,14 @@ function onLoad(event) {
 }
 
 
+function onMouseOut(event) {
+  let el = event.target;
+//  while (el && el.tagName != 'MENUITEM') el = el.parentNode;
+//  if (el && el.hasAttribute('tabindex')) el.focus();
+  document.activeElement.blur();
+}
+
+
 function onMouseOver(event) {
   let el = event.target;
   while (el && el.tagName != 'MENUITEM') el = el.parentNode;

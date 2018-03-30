@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', onLoad, true);
 window.addEventListener('click', onClick, false);
 window.addEventListener('mouseover', onMouseOver, false);
+window.addEventListener('mouseout', onMouseOut, false);
 window.addEventListener('keydown', onKeyDown, false);
 window.addEventListener('transitionend', onTransitionEnd, false);
 
