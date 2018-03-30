@@ -1,3 +1,4 @@
+'use strict';
 /*
 The backing implementation for getValue/setValue (and listValues
 and deleteValue).  In the background process, receives messages sent from

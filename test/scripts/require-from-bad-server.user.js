@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        Require from bad server test.
 // @description Exercises the `@require` directive, when pointing at an unavialble server.

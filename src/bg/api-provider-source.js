@@ -1,3 +1,4 @@
+'use strict';
 /*
 Generate the string source of the script-side API providers for a given
 user script.  This source is concatenated with the script itself for injection.

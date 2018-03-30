@@ -1,3 +1,4 @@
+'use strict';
 
 class DownloadError extends Error {
   constructor(failedDownloads) {
@@ -62,6 +63,7 @@ class Downloader {
 
   setScriptUrl(val) { this._scriptUrl = val; return this; }
   setScriptContent(val) { this._scriptContent = val; return this; }
+  setScriptValues(keyPairs) { this._scriptValues = keyPairs; return this; }
 
   addProgressListener(cb) {
     this._progressListeners.push(cb);
@@ -90,6 +92,7 @@ class Downloader {
       };
     }
 
+    details.valueStore = this._scriptValues || null;
     return details;
   }
 
@@ -194,7 +197,7 @@ class Downloader {
       try {
         let scriptDetail = parseUserScript(
             responseSoFar, this._scriptUrl,
-            /*failWhenMissing=*/!download.pending);
+            /*failWhenMissing=*/download.pending);
         if (scriptDetail) {
           this._scriptDetailsResolve(scriptDetail);
           this._scriptDetailsResolved = true;
@@ -271,7 +274,6 @@ class Download {
     this.progress = event.lengthComputable
         ? event.loaded / event.total
         : 0;
-    this.pending = this.progress < 1.0;
     this._progressCb(this, event);
   }
 }

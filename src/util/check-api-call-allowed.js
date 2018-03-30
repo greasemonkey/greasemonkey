@@ -1,3 +1,4 @@
+'use strict';
 // This only works in the background, when UserScriptRegistry is available.
 
 // The user script of `userScriptUuid` has a @grant for `method`, or throw.

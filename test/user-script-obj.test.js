@@ -1,3 +1,4 @@
+'use strict';
 describe('user-script-obj', () => {
   describe('EditableUserScript.calculateEvalContent()', () => {
     let scriptContent = `

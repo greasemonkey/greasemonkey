@@ -1,3 +1,4 @@
+'use strict';
 describe('bg/is-enabled', () => {
   it('passes data between setGlobalEnabled() and getGlobalEnabled()', () => {
     setGlobalEnabled(true);

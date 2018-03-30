@@ -1,3 +1,4 @@
+'use strict';
 /* Detect user scripts, possibly open the installation dialog. */
 
 (function() {

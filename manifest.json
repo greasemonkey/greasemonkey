@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "version": "4.3beta7",
+  "version": "4.3",
   "description": "__MSG_extDesc__",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
@@ -31,6 +31,7 @@
 
       "src/bg/api-provider-source.js",
       "src/bg/execute.js",
+      "src/bg/export-db.js",
       "src/bg/is-enabled.js",
       "src/bg/on-message.js",
       "src/bg/on-user-script-notification.js",
@@ -45,9 +46,11 @@
       "src/supported-apis.js",
       "src/user-script-obj.js",
       "src/util/check-api-call-allowed.js",
-      "/src/util/open-editor.js",
+      "src/util/log-unhandled-error.js",
+      "src/util/open-editor.js",
       "third-party/convert2RegExp.js",
       "third-party/MatchPattern.js",
+      "third-party/jszip/jszip.min.js",
 
       "src/bg/execute.run.js",
       "src/bg/user-script-detect.run.js",
@@ -59,6 +62,8 @@
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "cookies",
+    "downloads",
     "notifications",
     "storage",
     "tabs",

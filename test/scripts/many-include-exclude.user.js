@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        Many include/exclude test.
 // @description This script specifies so many `@include`s and `@exclude`s that it will force the install dialog to scroll.

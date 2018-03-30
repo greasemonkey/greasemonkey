@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file is responsible for providing the GM.xmlHttpRequest API method.  It
 listens for a connection on a Port, and
@@ -15,11 +16,11 @@ function onUserScriptXhr(port) {
   if (port.name != 'UserScriptXhr') return;
 
   let xhr = new XMLHttpRequest();
-  port.onMessage.addListener(msg => {
+  port.onMessage.addListener((msg, src) => {
     checkApiCallAllowed('GM.xmlHttpRequest', msg.uuid);
     switch (msg.name) {
       case 'open':
-        open(xhr, msg.details, port);
+        open(xhr, msg.details, port, src.sender.tab.url);
         break;
       default:
         console.warn('UserScriptXhr port un-handled message name:', msg.name);
@@ -29,7 +30,7 @@ function onUserScriptXhr(port) {
 chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
 
-function open(xhr, d, port) {
+function open(xhr, d, port, tabUrl) {
   function xhrEventHandler(src, event) {
     var responseState = {
       context: d.context || null,
@@ -105,10 +106,12 @@ function open(xhr, d, port) {
   d.responseType && (xhr.responseType = d.responseType);
   d.timeout && (xhr.timeout = d.timeout);
 
+  let hasCookieHeader = false;
   if (d.headers) {
-    for (var prop in d.headers) {
+    for (let prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
-        var propLower = prop.toLowerCase();
+        let propLower = prop.toLowerCase();
+        hasCookieHeader = (propLower === 'cookie');
         if (gHeadersToReplace.includes(propLower)) {
           xhr.setRequestHeader(gDummyHeaderPrefix + propLower, d.headers[prop]);
         }
@@ -119,17 +122,43 @@ function open(xhr, d, port) {
     }
   }
 
-  var body = d.data || null;
-  if (d.binary && (body !== null)) {
-    var bodyLength = body.length;
-    var bodyData = new Uint8Array(bodyLength);
-    for (var i = 0; i < bodyLength; i++) {
-      bodyData[i] = body.charCodeAt(i) & 0xff;
+  // If this is a same-origin XHR or the user opted in with withCredentials,
+  // add cookies unless already specified by the user.
+  chrome.cookies.getAll({url: d.url}, cookies => {
+    if (cookies.length && !hasCookieHeader
+        && (d.withCredentials || isSameOrigin(tabUrl, d.url))
+    ) {
+      let cookieStrings = [];
+      for (let cookie of cookies) {
+        cookieStrings.push(cookie.name + '=' + cookie.value + ';');
+      }
+      xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
     }
-    xhr.send(new Blob([bodyData]));
-  } else {
-    xhr.send(body);
+
+    var body = d.data || null;
+    if (d.binary && (body !== null)) {
+      var bodyLength = body.length;
+      var bodyData = new Uint8Array(bodyLength);
+      for (var i = 0; i < bodyLength; i++) {
+        bodyData[i] = body.charCodeAt(i) & 0xff;
+      }
+      xhr.send(new Blob([bodyData]));
+    } else {
+      xhr.send(body);
+    }
+  });
+}
+
+
+function isSameOrigin(first, second) {
+  let firstUrl, secondUrl;
+  try {
+    firstUrl = new URL(first);
+    secondUrl = new URL(second);
+  } catch (e) {
+    return false;
   }
+  return firstUrl.origin === secondUrl.origin;
 }
 
 

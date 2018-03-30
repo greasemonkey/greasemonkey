@@ -1,12 +1,25 @@
+'use strict';
 let gBtnInstall = document.getElementById('btn-install');
 let gDetails = null;
 let gInstallCountdown = 9;
 let gProgressBar = document.querySelector('progress');
 let gRvDetails = {
-  'iconUrl': defaultIconUrl,
+  // Error message.
   'errorHeader': '',
   'errorList': [],
+
+  // Script details.
+  'excludes': [],
+  'grants': [],
+  'iconUrl': defaultIconUrl,
+  'includes': [],
+  'matches': [],
 };
+
+
+rivets.bind(document.body, gRvDetails);
+
+
 let gUserScriptUrl = unescape(document.location.search.substr(1));
 
 let gDownloader = new UserScriptDownloader().setScriptUrl(gUserScriptUrl);
@@ -22,11 +35,10 @@ gDownloader.addProgressListener(() => {
 gDownloader.scriptDetails.then(scriptDetails => {
   gDetails = scriptDetails;
 
-  // TODO: Localize string.
   document.title = _('NAME_greasemonkey_user_script', gDetails.name);
   // Apply the onerror event for the img tag. CSP does not allow it to be done
   // directly in HTML.
-  let iconEl = document.querySelector('#install header img');
+  let iconEl = document.querySelector('#install #header img');
   iconEl.onerror = () => { gRvDetails.iconUrl = defaultIconUrl; };
 
   // Rivets will mutate its second parameter to have getters and setters,
@@ -35,12 +47,7 @@ gDownloader.scriptDetails.then(scriptDetails => {
   let rvDetails = JSON.parse(JSON.stringify(gDetails));
   Object.assign(gRvDetails, rvDetails);
 
-  rivets.bind(document.body, gRvDetails);
-
   document.body.className = 'install';
-}).catch(err => {
-  // TODO: Show error HTML.
-  console.warn('installer could not get script details:', err);
 });
 
 /******************************* CANCEL BUTTON *******************************/

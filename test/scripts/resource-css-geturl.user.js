@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        GM.getResourceUrl() test
 // @description Exercise the `GM.getResourceUrl()` APi method.  Should cause all pages to have a dashed red border.

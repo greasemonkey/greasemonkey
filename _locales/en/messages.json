@@ -12,8 +12,53 @@
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
+  "backup_export": {
+    "message": "Export a backup..."
+  },
+  "backup_import": {
+    "message": "Import a backup..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey Backup Import"
+  },
+  "backup_import_detail": {
+    "message": "This page is used to import scripts from an exported database file.  Select one of the three import methods below."
+  },
+  "backup_import_option_merge": {
+    "message": "Merge"
+  },
+  "backup_import_option_merge_detail": {
+    "message": "The scripts found in the file will be merged into the database. Existing user scripts (and corresponding data) will not be modified."
+  },
+  "backup_import_option_replace": {
+    "message": "Replace"
+  },
+  "backup_import_option_replace_detail": {
+    "message": "The current database will be wiped and replaced with the user scripts found in the imported file."
+  },
+  "backup_import_option_overwrite": {
+    "message": "Merge and Overwrite"
+  },
+  "backup_import_option_overwrite_detail": {
+    "message": "Overwrite existing scripts with the data in the imported file. Existing usesrscripts not found in the file are not modified."
+  },
+  "backup_import_warning": {
+    "message": "Before importing a backup, it's a good idea back up your current state in case an error occurs."
+  },
   "cancel": {
     "message": "Cancel"
+  },
+  "confirm_db_merge_FILENAME": {
+    "message": "Merge database using selected file?\n$1"
+  },
+  "confirm_db_replace_FILENAME": {
+    "message": "Replace database using selected file?\n$1"
+  },
+  "confirm_db_overwrite_FILENAME": {
+    "message": "Overwrite database using selected file?\n$1"
+  },
+  "description": {
+    "message": "Description:"
   },
   "disabled": {
     "message": "Disabled"
@@ -35,6 +80,9 @@
   },
   "enabled": {
     "message": "Enabled"
+  },
+  "export_greasemonkey_database": {
+    "message": "Export Greasemonkey database"
   },
   "extDesc": {
     "message": "A User Script manager for Firefox."
@@ -79,8 +127,14 @@
   "greasemonkey_wiki": {
     "message": "Greasemonkey Wiki"
   },
+  "homepage": {
+    "message": "Home page"
+  },
   "ignoring_MATCH_because_REASON": {
     "message": "Ignoring @match pattern $1 because:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Import Greasemonkey database"
   },
   "install": {
     "message": "Install"
@@ -141,6 +195,9 @@
   },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"
+  },
+  "version": {
+    "message": "Version:"
   },
   "xhr_bad_url": {
     "message": "GM.xmlHttpRequest: Could not understand the URL: $1\n$2"

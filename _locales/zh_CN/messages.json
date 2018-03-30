@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Firefox 的用户脚本管理器。",
-        "description": ""
-    },
     "gm_script_id": {
         "message": "[Greasemonkey 脚本 $1]",
         "description": ""
@@ -23,13 +15,21 @@
         "message": "$1 没有 @grant 方法 $2",
         "description": ""
     },
-    "download_and_install_successful": {
-        "message": "成功下载和安装！",
+    "install_disabled": {
+        "message": "Install in disabled state",
+        "description": ""
+    },
+    "download_error_unknown": {
+        "message": "User script download encountered an unknown error.",
         "description": ""
     },
     "edit": {
         "message": "编辑",
         "description": ""
+    },
+    "ERROR_at_URL": {
+        "message": "$1 at $2",
+        "description": "E.g. 404 - Not Found at http://.../404.js"
     },
     "runs_on": {
         "message": "运行于：",
@@ -41,6 +41,10 @@
     },
     "greasemonkey_is_active": {
         "message": "Greasemonkey 已启用",
+        "description": ""
+    },
+    "greasemonkey_user_script_editor": {
+        "message": "Greasemonkey User Script Editor",
         "description": ""
     },
     "other_user_scripts": {
@@ -71,6 +75,10 @@
         "message": "用户脚本保存失败：名为 $1 且命名空间为 $2 的脚本已存在。",
         "description": ""
     },
+    "close": {
+        "message": "Close",
+        "description": ""
+    },
     "malicious_user_scripts": {
         "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。",
         "description": ""
@@ -89,6 +97,10 @@
     },
     "get_user_scripts": {
         "message": "获取用户脚本",
+        "description": ""
+    },
+    "install_failed": {
+        "message": "User script failed to install",
         "description": ""
     },
     "install": {
@@ -112,7 +124,7 @@
         "description": ""
     },
     "script_save_error": {
-        "message": "脚本保存出错",
+        "message": "Script save error",
         "description": ""
     },
     "ignoring_MATCH_because_REASON": {
@@ -135,19 +147,21 @@
         "message": "取消",
         "description": ""
     },
+    "download_failed": {
+        "message": "User script download failed",
+        "description": ""
+    },
+    "extDesc": {
+        "message": "A User Script manager for Firefox.",
+        "description": ""
+    },
+    "extName": {
+        "message": "Greasemonkey",
+        "description": ""
+    },
     "gm_script_id_ver": {
-        "message": "[Greasemonkey 脚本 $id$；版本 $version$]",
-        "description": "",
-        "placeholders": {
-            "id": {
-                "content": "$1",
-                "example": "User Script Name Here"
-            },
-            "version": {
-                "content": "$2",
-                "example": "1.0"
-            }
-        }
+        "message": "[Greasemonkey script $id$; version $version$]",
+        "description": ""
     },
     "unnamed_script_RAND": {
         "message": "未命名脚本 $1",
@@ -155,6 +169,10 @@
     },
     "gm_notif_text_must_be_string": {
         "message": "GM.notification：\"text\" 必须为一个字符串",
+        "description": ""
+    },
+    "saving": {
+        "message": "Saving",
         "description": ""
     },
     "new_user_script": {
@@ -169,12 +187,12 @@
         "message": "匹配：",
         "description": ""
     },
-    "NAME_greasemonkey_user_script_editor": {
-        "message": "$1 - Greasemonkey 用户脚本编辑器",
-        "description": ""
-    },
     "xhr_no_url": {
         "message": "GM.xmlHttpRequest：没有收到 URL。",
+        "description": ""
+    },
+    "open_editor_after": {
+        "message": "Open editor after install completes",
         "description": ""
     },
     "greasemonkey_wiki": {

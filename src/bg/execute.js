@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file is responsible for observing content navigation events and triggering
 content script executions.
