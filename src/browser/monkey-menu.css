@@ -69,6 +69,7 @@ menuitem.disabled * {
 
 menuitem .icon {
   font-size: 14px;
+  margin-right: 3px;
   text-align: center;
   width: 16px;
 }
@@ -87,7 +88,7 @@ menuitem.user-script .arrow {
   height: 100%;
   opacity: 1.0;
   position: absolute;
-  right: 6px;
+  right: 12px;
   top: 0;
   transform: rotate(180deg);
   width: 12px;
