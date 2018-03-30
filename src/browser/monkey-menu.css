@@ -22,6 +22,10 @@ body#rendering { display: none; }
   overflow-y: auto;
 }
 
+hr {
+  margin: 6px 0;
+}
+
 /******************************** SECTIONS ***********************************/
 
 section {
@@ -95,10 +99,6 @@ menu heading {
   padding-left: 21px;
 }
 
-menu hr {
-  margin: 6px 0;
-}
-
 /***************************** SCRIPT DETAIL *********************************/
 
 menuitem#back {
@@ -106,7 +106,7 @@ menuitem#back {
   color: inherit;
   display: inline-block;
   height: 16px;
-  margin-right: 4px;
+  margin: 4px 4px 0 4px;
   padding: 8px;
   vertical-align: -10px;  /* Relative to text, after padding. */
   width: 16px;
