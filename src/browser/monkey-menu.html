@@ -7,128 +7,121 @@
 <link rel="stylesheet" href="monkey-menu.css">
 <meta name="viewport" content="width=300, initial-scale=1">
 </head>
-<body class="rendering">
+<body id="rendering">
 
-<section id="menu" class="subview">
-  <div class="subview-body">
-    <a href="#toggle-global" class="subview-item">
-      <div rv-show="enabled" class="icon fa fa-check"></div>
-      <div rv-hide="enabled" class="icon fa"></div>
-      <div class="text i18n">
-          {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
-      </div>
-    </a>
+<section class="main-menu">
+  <menu>
+    <menuitem id="toggle-global-enabled" tabindex="0">
+      <i class="icon fa" rv-class-fa-check="enabled"></i>
+      <span class="text i18n">
+        {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
+      </span>
+    </menuitem>
     <!-- TODO: This feature.
-    <div class="subview-item" id="open-options">
-      <div class="icon fa fa-fw fa-cogs"></div>
-      <div class="text">Greasemonkey Options</div>
-    </div>
+    <menuitem id="open-options">
+      <i class="icon fa fa-fw fa-cogs"></i>
+      <span class="text">Greasemonkey Options</span>
+    </menuitem>
     -->
 
-    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-top">
+    <hr rv-unless="userScripts.active | bothArraysEmpty userScripts.inactive">
 
-    <div rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="script-scroll">
-      <div style="margin-top: 5px;"></div>
-      <div rv-hide="userScripts.active | empty">
-        <div class="subview-item heading">
-          <div class="text">{'user_scripts_for_this_tab'|i18n}</div>
-        </div>
-
-        <a class="subview-item next-menu user-script"
-            rv-each-script="userScripts.active"
-            rv-href="script.uuid | mmUuidMenu"
+    <div id="script-list-scroll">
+      <div rv-unless="userScripts.active | empty">
+        <heading>{'user_scripts_for_this_tab'|i18n}</heading>
+        <menuitem rv-each-script="userScripts.active"
+            class="user-script"
+            rv-class-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
-            rv-class-disabled="script.enabled | not">
-          <div class="icon"><img rv-src="script.icon"></div>
-          <div class="text">{script.name}</div>
-        </a>
+            tabindex="0">
+          <i class="icon"><img rv-src="script.icon"></i>
+          <span class="text">{script.name}</span>
+          <span class="arrow"></span>
+        </menuitem>
       </div>
-
-      <div rv-hide="userScripts.inactive | empty">
-        <hr rv-hide="userScripts.active | empty">
-        <div class="subview-item heading" rv-hide="userScripts.active | empty">
-          <div class="text">{'other_user_scripts'|i18n}</div>
-        </div>
-
-        <a class="subview-item next-menu user-script"
-            rv-each-script="userScripts.inactive"
-            rv-href="script.uuid | mmUuidMenu"
+      <!-- TODO: Don't duplicate the above and below sections. -->
+      <div rv-unless="userScripts.inactive | empty">
+        <hr rv-unless="userScripts.active | empty">
+        <heading>{'other_user_scripts'|i18n}</heading>
+        <menuitem rv-each-script="userScripts.inactive"
+            class="user-script"
+            rv-class-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
-            rv-class-disabled="script.enabled | not">
-          <div class="icon"><img rv-src="script.icon"></div>
-          <div class="text">{script.name}</div>
-        </a>
+            tabindex="0">
+          <i class="icon"><img rv-src="script.icon"></i>
+          <span class="text">{script.name}</span>
+          <span class="arrow"></span>
+        </menuitem>
       </div>
-      <div style="margin-bottom: 5px;"></div>
     </div>
-
-    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive" class="hr-bottom">
-    <hr rv-hide="'' | empty2 userScripts.active userScripts.inactive | not">
-
-    <a href="#new-user-script" class="subview-item">
-      <div class="icon fa fa-file-text-o"></div>
-      <div class="text">{'new_user_script'|i18n}</div>
-    </a>
-    <a href="#backup-export" class="subview-item">
-      <div class="icon fa fa-upload"></div>
-      <div class="text">{'backup_export'|i18n}</div>
-    </a>
-    <a href="#backup-import" class="subview-item">
-      <div class="icon fa fa-download"></div>
-      <div class="text">{'backup_import'|i18n}</div>
-    </a>
 
     <hr>
 
-    <a href="#https://www.greasespot.net/"
-        class="subview-item">
-      <div class="icon fa fa-link"></div>
-      <div class="text">{'greasemonkey_home_page'|i18n}</div>
-    </a>
+    <menuitem id="new-user-script" tabindex="0">
+      <i class="icon fa fa-file-text-o"></i>
+      <span class="text">{'new_user_script'|i18n}</span>
+    </menuitem>
+    <menuitem id="backup-export" tabindex="0">
+      <i class="icon fa fa-upload"></i>
+      <span class="text">{'backup_export'|i18n}</span>
+    </menuitem>
+    <menuitem id="backup-import" tabindex="0">
+      <i class="icon fa fa-download"></i>
+      <span class="text">{'backup_import'|i18n}</span>
+    </menuitem>
 
-    <a href="#https://wiki.greasespot.net/"
-        class="subview-item">
-      <div class="icon fa fa-link"></div>
-      <div class="text">{'greasemonkey_wiki'|i18n}</div>
-    </a>
+    <hr>
 
-    <a href="#https://wiki.greasespot.net/User_Script_Hosting"
-        class="subview-item">
-      <div class="icon fa fa-link"></div>
-      <div class="text">{'get_user_scripts'|i18n}</div>
-    </a>
-  </div>
+    <menuitem tabindex="0" data-url="https://www.greasespot.net/">
+      <i class="icon fa fa-link"></i>
+      <span class="text">{'greasemonkey_home_page'|i18n}</span>
+    </menuitem>
+
+    <menuitem tabindex="0" data-url="https://wiki.greasespot.net/">
+      <i class="icon fa fa-link"></i>
+      <span class="text">{'greasemonkey_wiki'|i18n}</span>
+    </menuitem>
+
+    <menuitem tabindex="0" data-url="https://wiki.greasespot.net/User_Script_Hosting">
+      <i class="icon fa fa-link"></i>
+      <span class="text">{'get_user_scripts'|i18n}</span>
+    </menuitem>
+  </menu>
 </section>
 
 
-<section id="user-script-detail" class="subview">
-  <header class="subview-header">
-    <a href="#menu-top" class="subview-back"></a>
-    <div class="subview-title">{activeScript.name}</div>
+<section class="user-script">
+  <header>
+    <menuitem tabindex="0" id="back"></menuitem>
+    {activeScript.name}
   </header>
 
-  <div class="subview-body">
-    <a href="#toggle-user-script" class="subview-item">
-      <div class="icon fa" rv-class-fa-check="activeScript.enabled">
-      </div>
-      <div class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</div>
-    </a>
+  <hr>
 
-    <a href="#edit-user-script" class="subview-item">
-      <div class="icon fa fa-pencil-square-o"></div>
-      <div class="text">{'edit'|i18n}</div>
-    </a>
+  <menu>
+    <menuitem tabindex="0" id="user-script-toggle-enabled">
+      <span class="icon fa" rv-class-fa-check="activeScript.enabled">
+      </span>
+      <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
+    </menuitem>
 
-    <a href="#uninstall-user-script" class="subview-item"
-        rv-hide="pendingUninstall">
-      <div class="icon fa fa-trash-o"></div>
-      <div class="text">{'uninstall'|i18n}</div>
-    </a>
-    <a href="#undo-uninstall-user-script" class="subview-item"
-        rv-show="pendingUninstall">
-      <div class="icon fa fa-trash-o"></div>
-      <div class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</div>
-    </a>
+    <menuitem tabindex="0" id="user-script-edit">
+      <i class="icon fa fa-pencil-square-o"></i>
+      <span class="text">{'edit'|i18n}</span>
+    </menuitem>
+
+    <menuitem tabindex="0" id="user-script-uninstall"
+        rv-hide="pendingUninstall"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'uninstall'|i18n}</span>
+    </menuitem>
+    <menuitem tabindex="0" id="user-script-undo-uninstall"
+        rv-show="pendingUninstall"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
+    </menuitem>
 
     <hr>
 
@@ -141,9 +134,7 @@
     <p rv-if="activeScript.homePageUrl">
       <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
     </p>
-
-    <hr>
-  </div>
+  </menu>
 </section>
 
 
@@ -152,6 +143,7 @@
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/src/util/iconUrl.js"></script>
+<script src="/src/util/log-unhandled-error.js"></script>
 <script src="/src/util/open-editor.js"></script>
 <script src="/src/util/rivets-formatters.js"></script>
 <script src="/src/downloader.js"></script>

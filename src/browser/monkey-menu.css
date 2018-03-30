@@ -1,250 +1,133 @@
 :root {
-  --arrowpanel-dimmed: hsla(0, 0%, 80%, 0.3);
-  --panel-max-height: 600px;
-  --panel-separator-color: ThreeDShadow;
-  --panelui-subview-transition-duration: 150ms;
+  --focus-color: hsla(0, 0%, 80%, 0.3);
 }
 
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
 body {
   cursor: default;
   font: caption;
-  max-height: var(--panel-max-height);
-  /* The duplicated (min|max)-width attributes are required. If only the width
-   * attribute is used then the submenu transition effect becomes incredibly
-   * janky.
-   */
-  max-width: 100vw;
-  min-width: 100vw;
-  overflow-x: hidden;
-  transition: height var(--panelui-subview-transition-duration);
-  will-change: transform;
-
-  display: flex;
-
+  width: 300px;
+  overflow: hidden;
 }
-body.rendering { display: none; }
-body section { max-height: var(--panel-max-height); }
+body#rendering { display: none; }
 
-/* Depth = 1 Cascading Menu
- * The below styles (along with a simple JS listener) are used to create a
- * sliding menu effect. To create a top level menu (depth = 1) the below style
- * structure can be copied. Further down incudes explaination on how to create
- * a nested cascading menu (depth > 1).
- */
-body #menu {
-  transition-duration: 0.25s;
-  transition-property: margin;
+
+#script-list-scroll {
+  max-height: 380px;
+  overflow-y: auto;
 }
 
-body.detail #menu {
-  margin-left: -100vw;
+hr {
+  margin: 6px 0;
 }
 
-body #user-script-detail {
-  visibility: hidden;
-  transition-duration: 0.25s;
-  transition-property: visibility;
-}
-
-body.detail #user-script-detail {
-  visibility: visible;
-}
-
-/* Depth > 1 Cascading Menu
- *
- * For the below example let us assume we have a section with id
- * '#user-script-config' and it is displayed by applying the class '.config'
- * on the body element. Furthermore, this section is accessed from the
- * '#user-script-detail' menu.
- *
- * Note: It is assumed that the HTML follows all <section> tags belong to
- * the same parent node.
- *
- * Firstly, add the margin transition on the direct parent menu.
-body #user-script-detail {
-  transition-duration: 0.25s, 0.25s;
-  transition-property: visibility, margin;
-}
- *
- * Then, for the specific body class, apply a negative margin to all parent
- * menus (including the TOP menu).
-body.config #menu,
-body.config #user-script-detail {
-  margin-left: -100vw;
-}
- *
- * Set the default visibility and transition effect on the new menu section.
-body #user-script-config {
-  visibility: hidden;
-  transition-duration: 0.25s;
-  transition-property: visibility;
-}
- *
- * Apply visibility to the new menu, and parent menus (not the TOP menu) when
- * the body is set to the new class.
-body.config #user-script-detail,
-body.config #user-script-config {
-  visibility: visible;
-}
- *
- * In the JS code, when the body class is applied it should be noted that the
- * new menu needs its display set to 'block'. Check the '#user-script-detail'
- * section for example.
- */
+/******************************** SECTIONS ***********************************/
 
 section {
-  /* See (min|max)-width comment at top of file */
-  max-width: 100vw;
-  min-width: 100vw;
+  margin-left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition-duration: 0.15s;
+  transition-property: margin-left;
+  width: 100vw;
 }
 
-.subview-header {
-  align-items: center;
-  border-bottom: 1px solid var(--panel-separator-color);
-  display: flex;
-  flex: 1 auto;
-  height: 40px;
-  padding: 4px;
+section.user-script {
+  position: absolute;
+  top: 0;
+  left: 100vw;
 }
 
-.subview-back {
-  box-sizing: content-box;
-  color: inherit;
-  display: -moz-box;
-  height: 16px;
-  margin-right: 4px;
-  padding: 8px;
+body#user-script section { margin-left: -100vw; }
+
+/********************************** MENUS ************************************/
+
+menu {
+  margin: 0;
+  padding: 0;
+}
+menuitem {
+  display: block;
+  overflow-x: hidden;
+  padding: 4px 12px 4px 10px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+menuitem:focus {
+  background-color: hsla(0, 0%, 80%, 0.3);
+  outline: none;
+}
+menuitem.disabled * {
+  opacity: 0.65;
+}
+
+menuitem .icon {
+  font-size: 14px;
+  margin-right: 3px;
+  text-align: center;
+  width: 16px;
+}
+menuitem .icon img {
+  object-fit: contain;
+  max-height: 16px;
   width: 16px;
 }
 
-.subview-back::before {
-  content: url(/skin/back.svg);
+menuitem.user-script {
+  padding-right: 24px;
+}
+menuitem.user-script .arrow {
+  background: url(/skin/next.svg) center center no-repeat;
+  display: inline-block;
+  height: 100%;
+  opacity: 1.0;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  transform: rotate(180deg);
+  width: 12px;
 }
 
-.subview-title {
-  color: -moz-fieldText;
-  margin-right: 24px;
-  overflow-x: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-}
-
-.subview-body hr.hr-top {
-  margin-bottom: 0;
-}
-.subview-body hr.hr-bottom {
-  margin-top: 0;
-}
-.subview-body div[style*="none"] + hr.hr-bottom {
-  margin-top: 6px;
-}
-
-.script-scroll {
-  max-height: 350px;
-  overflow-y: auto;
-}
-
-.subview-body {
-  max-height: 560px;
-  padding: 6px 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.subview-body hr {
-  border-top: 1px solid var(--panel-separator-color);
-  margin: 6px 0;
-  min-height: 0;
-}
-
-.subview-body p {
-  margin: 1ex 1em 1em 1em;
-}
-
-.subview-item {
-  background-color: transparent;
-  color: -moz-fieldText;
-  cursor: default;
-  display: flex;
-  flex-direction: row;
-  max-height: 24px;
-  min-height: 24px;
-  padding: 4px 12px 4px 10px;
-  width: 100%;
-}
-
-.subview-item.heading {
+menu heading {
   color: #333;
   font-style: italic;
   padding-left: 21px;
 }
 
-.subview-item.disabled {
-  color: #999;
-}
+/***************************** SCRIPT DETAIL *********************************/
 
-.subview-back:hover,
-.subview-back:focus,
-.subview-item:hover,
-.subview-item:focus {
-  background-color: var(--arrowpanel-dimmed);
-  cursor: default;
+menuitem#back {
+  box-sizing: content-box;
   color: inherit;
-  text-decoration: none;
-}
-
-.subview-item .icon::before {
-  vertical-align: middle;
-}
-
-.subview-item .icon {
-  font-size: 14px;
-  flex-shrink: 0;
-  text-align: center;
-  max-height: 16px;
+  display: inline-block;
+  height: 16px;
+  margin: 4px 4px 0 4px;
+  padding: 8px;
+  vertical-align: -10px;  /* Relative to text, after padding. */
   width: 16px;
 }
-
-.subview-item .icon img {
-  object-fit: contain;
-  max-height: 16px;
-  width: 16px;
-  /* This doesn't make sense, but 'super' aligns the icons in the middle */
-  vertical-align: super;
+menuitem#back:hover {
+  background-color: var(--focus-color);
+}
+menuitem#back::before {
+  content: url(/skin/back.svg);
 }
 
-.subview-item.disabled .icon {
-  opacity: 0.7;
-}
 
-.subview-item .text {
-  flex-grow: 1;
-  margin-left: 6px;
+section header {
+  color: -moz-fieldText;
+  overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.subview-item::after {
-  margin-inline-start: 10px;
-  content: attr(after);
-  color: GrayText;
-}
 
-.subview-item.next-menu::after {
-  content: url(/skin/next.svg);
-  transform: scaleX(-1) translateY(2px);
-}
-
-@media (max-width: 300px) {
-  /* See (min|max)-width comment at top of file */
-  body {
-    max-width: 22.35em;
-    min-width: 22.35em;
-  }
-  section {
-    max-width: 22.35em;
-    min-width: 22.35em;
-  }
+section.user-script p {
+  margin: 0;
+  padding: 4px 12px 4px 10px;
 }
