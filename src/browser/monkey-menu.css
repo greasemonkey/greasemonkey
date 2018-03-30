@@ -17,7 +17,7 @@ body#rendering { display: none; }
 
 
 #script-list-scroll {
-  max-height: 380px;
+  max-height: 350px;
   overflow-y: auto;
 }
 
