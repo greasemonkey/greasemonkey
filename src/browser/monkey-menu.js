@@ -12,8 +12,20 @@ let gUserScripts = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 
+function onContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+
 function onClick(event) {
-  activate(event.target);
+  if (event.which != 1) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  } else {
+    activate(event.target);
+  }
 }
 
 

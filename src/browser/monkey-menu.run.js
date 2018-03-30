@@ -1,4 +1,5 @@
-window.addEventListener('DOMContentLoaded', onLoad, true);
+window.addEventListener('DOMContentLoaded', onLoad, false);
+window.addEventListener('contextmenu', onContextMenu, false);
 window.addEventListener('click', onClick, false);
 window.addEventListener('mouseover', onMouseOver, false);
 window.addEventListener('mouseout', onMouseOut, false);
