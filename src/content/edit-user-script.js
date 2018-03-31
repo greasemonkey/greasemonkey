@@ -11,6 +11,8 @@ const editor = CodeMirror(
 
 CodeMirror.commands.save = onSave;
 
+let openSaveModalTimer = null;
+
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];
@@ -125,7 +127,7 @@ function onSave() {
     gModalProgress.value = downloader.progress;
   });
 
-  openSaveModal();
+  openSaveModalTimer = setTimeout(openSaveModal, 75);
   downloader
       .start()
       .then(() => {
@@ -164,6 +166,8 @@ function onSaveComplete(savedDetails) {
 
 
 function closeSaveModal() {
+  clearTimeout(openSaveModalTimer);
+
   document.body.classList.remove('save');
   gTplData.modal.errorList = [];
   editor.getInputField().focus();
