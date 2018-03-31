@@ -60,7 +60,12 @@
       </div>
     </div>
     <div class="panel-foot">
-      <button class="button button-big" id="modal-close">{'close'|i18n}</button>
+      <button
+          class="button button-big"
+          id="modal-close"
+          rv-disabled="modal.closeDisabled">
+        {'close'|i18n}
+      </button>
     </div>
   </div>
 </div>

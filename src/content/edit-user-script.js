@@ -23,8 +23,9 @@ const gModalProgress = document.getElementById('modal-progress');
 const gTplData = {
   'name': '',
   'modal': {
-    'title': _('saving'),
-    'errorList': []
+    'closeDisabled': true,
+    'errorList': [],
+    'title': _('saving')
   }
 };
 // Change the title of the save icon (and more) to initial values.
@@ -169,13 +170,13 @@ function closeSaveModal() {
   clearTimeout(openSaveModalTimer);
 
   document.body.classList.remove('save');
+  gTplData.modal.closeDisabled = true;
   gTplData.modal.errorList = [];
   editor.getInputField().focus();
 }
 
 
 function openSaveModal() {
-  gModalCloseBtn.setAttribute('disabled', 'disabled');
   gModalProgress.value = 0;
   document.body.classList.add('save');
   editor.getInputField().blur();
@@ -193,7 +194,7 @@ function showErrorModal(e) {
     console.error('Unknown save error saving script', e);
     gTplData.modal.errorList = [_('download_error_unknown')];
   }
-  gModalCloseBtn.removeAttribute('disabled');
+  gTplData.modal.closeDisabled = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
