@@ -9,7 +9,7 @@ let gTplData = {
   'pendingUninstall': 0,
 };
 let gPendingTicker = null;
-let gUserScripts = {};
+let gScriptTemplates = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -156,17 +156,13 @@ function loadScripts(userScriptsDetail, url) {
   userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
   for (let userScriptDetail of userScriptsDetail) {
     let userScript = new RunnableUserScript(userScriptDetail);
-    gUserScripts[userScript.uuid] = userScript;
-    let tplItem = {
-      'enabled': userScript.enabled,
-      'icon': iconUrl(userScript),
-      'name': userScript.name,
-      'uuid': userScript.uuid,
-    };
+    let tplItem = userScript.details;
+    tplItem.icon = iconUrl(userScript);
     (url && userScript.runsAt(url)
         ? gTplData.userScripts.active
         : gTplData.userScripts.inactive
     ).push(tplItem);
+    gScriptTemplates[userScript.uuid] = tplItem;
   }
 }
 
@@ -193,8 +189,7 @@ function navigateToScript(uuid) {
     section.style.visibility = 'visible';
   }
 
-  let userScript = gUserScripts[uuid];
-  gTplData.activeScript = userScript.details;
+  gTplData.activeScript = gScriptTemplates[uuid];
   document.body.id = 'user-script';
 }
 
@@ -240,22 +235,7 @@ function toggleUserScriptEnabled(uuid) {
     'uuid': uuid,
   }, response => {
     logUnhandledError();
-
-    // Update all four places (!) we might be storing this script's data.
-    gUserScripts[uuid].enabled = response.enabled;
-    gTplData.activeScript.enabled = response.enabled;
-    for (let userScript of gTplData.userScripts.active) {
-      if (userScript.uuid == uuid) {
-        userScript.enabled = response.enabled;
-        return;
-      }
-    }
-    for (let userScript of gTplData.userScripts.inactive) {
-      if (userScript.uuid == uuid) {
-        userScript.enabled = response.enabled;
-        return;
-      }
-    }
+    gScriptTemplates[uuid].enabled = response.enabled;
   });
 }
 
@@ -278,7 +258,7 @@ function uninstall(uuid) {
         }
       }
     }
-    delete gUserScripts[uuid];
+    delete gScriptTemplates[uuid];
 
     navigateToMainMenu();
   });
