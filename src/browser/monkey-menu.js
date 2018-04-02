@@ -78,11 +78,8 @@ function onMouseOver(event) {
 
 function onTransitionEnd(event) {
   // After a CSS transition has moved a section out of the visible area,
-  // force (via display:none) it to be hidden, so that it cannot gain focus.
-  for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = (section.className == document.body.id
-        ? 'visible' : 'hidden');
-  }
+  // force it to be hidden, so that it cannot gain focus.
+  setSectionVisbility();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -173,24 +170,14 @@ function navigateToMainMenu() {
     return;
   }
 
-  // Undo previous "invisible to avoid keyboard focus".
-  for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = 'visible';
-  }
-
   gTplData.activeScript = {};
-  document.body.id = 'main-menu';
+  setSectionVisbility('main-menu');
 }
 
 
 function navigateToScript(uuid) {
-  // Undo previous "invisible to avoid keyboard focus".
-  for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = 'visible';
-  }
-
   gTplData.activeScript = gScriptTemplates[uuid];
-  document.body.id = 'user-script';
+  setSectionVisbility('user-script');
 }
 
 async function newUserScript() {
@@ -219,8 +206,21 @@ function pendingUninstallTicker() {
 }
 
 
+function setSectionVisbility(newSection) {
+  if (newSection) {
+    document.body.id = newSection;
+  }
+
+  for (let section of document.getElementsByTagName('section')) {
+    section.style.visibility = (section.className == document.body.id
+        ? 'visible' : 'hidden');
+  }
+}
+
+
 function switchFocus(move) {
-  let focusable = Array.from(document.querySelectorAll('[tabindex="0"]'));
+  let section = document.querySelector('section.' + document.body.id);
+  let focusable = Array.from(section.querySelectorAll('[tabindex="0"]'));
   let index = focusable.indexOf(document.activeElement);
   if (index == -1 && move == -1) index = 0;
   let l = focusable.length;

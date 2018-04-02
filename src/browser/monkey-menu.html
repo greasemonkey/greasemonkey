@@ -26,7 +26,7 @@
 
     <hr rv-unless="userScripts.active | bothArraysEmpty userScripts.inactive">
 
-    <div id="script-list-scroll">
+    <div id="script-list-scroll" tabindex="-1">
       <div rv-unless="userScripts.active | empty">
         <heading>{'user_scripts_for_this_tab'|i18n}</heading>
         <menuitem rv-each-script="userScripts.active"
@@ -111,13 +111,13 @@
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-uninstall"
-        rv-hide="pendingUninstall"
+        rv-unless="pendingUninstall"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'uninstall'|i18n}</span>
     </menuitem>
     <menuitem tabindex="0" id="user-script-undo-uninstall"
-        rv-show="pendingUninstall"
+        rv-if="pendingUninstall"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
