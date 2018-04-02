@@ -220,7 +220,7 @@ function pendingUninstallTicker() {
 
 
 function switchFocus(move) {
-  let focusable = Array.from(document.querySelectorAll('[tabindex=0]'));
+  let focusable = Array.from(document.querySelectorAll('[tabindex="0"]'));
   let index = focusable.indexOf(document.activeElement);
   if (index == -1 && move == -1) index = 0;
   let l = focusable.length;
