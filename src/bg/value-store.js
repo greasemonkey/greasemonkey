@@ -58,94 +58,90 @@ function deleteStore(uuid) {
 }
 
 
-function deleteValue(uuid, key) {
-  return scriptStoreDb(uuid).then(db => {
-    return new Promise((resolve, reject) => {
-      let txn = db.transaction([valueStoreName], 'readwrite');
-      let store = txn.objectStore(valueStoreName);
-      let req = store.delete(key);
-      db.close();
+async function deleteValue(uuid, key) {
+  let scriptDb = await scriptStoreDb(uuid);
+  let txn = scriptDb.transaction([valueStoreName], 'readwrite');
+  let store = txn.objectStore(valueStoreName);
+  let req = store.delete(key);
+  scriptDb.close();
 
-      req.onsuccess = event => {
-        resolve(true);
-      };
-      req.onerror = event => {
-        console.warn('failed to delete', key, 'for', uuid, ':', event);
-        // Don't reject to maintain compatibility with code that expects a
-        // false return value.
-        resolve(false);
-      };
-    });
+  return new Promise((resolve, reject) => {
+    req.onsuccess = event => {
+      resolve(true);
+    };
+    req.onerror = event => {
+      console.warn('failed to delete', key, 'for', uuid, ':', event);
+      // Don't reject to maintain compatibility with code that expects a
+      // false return value.
+      resolve(false);
+    };
   });
 }
 
 
-function getValue(uuid, key) {
-  return scriptStoreDb(uuid).then(db => {
-    return new Promise((resolve, reject) => {
-      let txn = db.transaction([valueStoreName], 'readonly');
-      let store = txn.objectStore(valueStoreName);
-      let req = store.get(key);
-      db.close();
+async function getValue(uuid, key) {
+  let scriptDb = await scriptStoreDb(uuid);
+  let txn = scriptDb.transaction([valueStoreName], 'readonly');
+  let store = txn.objectStore(valueStoreName);
+  let req = store.get(key);
+  scriptDb.close();
 
-      req.onsuccess = event => {
-        if (!event.target.result) {
-          resolve(undefined);
-        } else {
-          resolve(req.result.value);
-        }
-      };
-      req.onerror = event => {
-        console.warn('failed to retrieve', key, 'for', uuid, ':', event);
-        // Don't reject to maintain compatibility with code that expects a
-        // undefined return value.
+  return new Promise((resolve, reject) => {
+    req.onsuccess = event => {
+      if (!event.target.result) {
         resolve(undefined);
-      };
-    });
+      } else {
+        resolve(req.result.value);
+      }
+    };
+    req.onerror = event => {
+      console.warn('failed to retrieve', key, 'for', uuid, ':', event);
+      // Don't reject to maintain compatibility with code that expects a
+      // undefined return value.
+      resolve(undefined);
+    };
   });
 }
 
 
-function listValues(uuid) {
-  return scriptStoreDb(uuid).then(db => {
-    return new Promise((resolve, reject) => {
-      let txn = db.transaction([valueStoreName], 'readonly');
-      let store = txn.objectStore(valueStoreName);
-      let req = store.getAllKeys();
-      db.close();
+async function listValues(uuid) {
+  let scriptDb = await scriptStoreDb(uuid);
+  let txn = scriptDb.transaction([valueStoreName], 'readonly');
+  let store = txn.objectStore(valueStoreName);
+  let req = store.getAllKeys();
+  scriptDb.close();
 
-      req.onsuccess = event => {
-        resolve(req.result);
-      };
-      req.onerror = event => {
-        console.warn('failed to list stored keys for', uuid, ':', event);
-        // Don't reject to maintain compatibility with code that expects a
-        // undefined return value.
-        resolve(undefined);
-      };
-    });
+  return new Promise((resolve, reject) => {
+    req.onsuccess = event => {
+      resolve(req.result);
+    };
+    req.onerror = event => {
+      console.warn('failed to list stored keys for', uuid, ':', event);
+      // Don't reject to maintain compatibility with code that expects a
+      // undefined return value.
+      resolve(undefined);
+    };
   });
 }
 
 
-function setValue(uuid, key, value) {
-  return scriptStoreDb(uuid).then(db => {
-    return new Promise((resolve, reject) => {
-      let txn = db.transaction([valueStoreName], 'readwrite');
-      let store = txn.objectStore(valueStoreName);
-      let req = store.put({'value': value}, key);
-      db.close();
+async function setValue(uuid, key, value) {
+  let scriptDb = await scriptStoreDb(uuid);
+  let txn = scriptDb.transaction([valueStoreName], 'readwrite');
+  let store = txn.objectStore(valueStoreName);
+  let req = store.put({'value': value}, key);
+  scriptDb.close();
 
-      req.onsuccess = event => {
-        resolve(true);
-      };
-      req.onerror = event => {
-        console.warn('failed to set', key, 'for', uuid, ':', event);
-        // Don't reject to maintain compatibility with code that expects a
-        // false return value.
-        resolve(false);
-      };
-    });
+  return new Promise((resolve, reject) => {
+    req.onsuccess = event => {
+      resolve(true);
+    };
+    req.onerror = event => {
+      console.warn('failed to set', key, 'for', uuid, ':', event);
+      // Don't reject to maintain compatibility with code that expects a
+      // false return value.
+      resolve(false);
+    };
   });
 }
 
