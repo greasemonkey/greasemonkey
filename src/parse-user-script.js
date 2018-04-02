@@ -36,6 +36,22 @@ function safeUrl(path, base) {
 }
 
 
+// Defaults that can only be applied after the entire metablock has been parsed.
+function prepDefaults(details) {
+  // We couldn't set this default above in case of real data, so if there's
+  // still no includes, set the default of include everything.
+  if (details.includes.length == 0 && details.matches.length == 0) {
+    details.includes.push('*');
+  }
+
+  if (details.grants.includes('none') && details.grants.length > 1) {
+    details.grants = ['none'];
+  }
+
+  return details;
+}
+
+
 /** Parse the source of a script; produce object of data. */
 window.parseUserScript = function(content, url, failWhenMissing=false) {
   if (!content) {
@@ -63,7 +79,7 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     if (failWhenMissing) {
       throw new Error('Could not parse, no meta.');
     } else {
-      return details;
+      return prepDefaults(details);
     }
   }
 
@@ -142,17 +158,7 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     }
   }
 
-  // We couldn't set this default above in case of real data, so if there's
-  // still no includes, set the default of include everything.
-  if (details.includes.length == 0 && details.matches.length == 0) {
-    details.includes.push('*');
-  }
-
-  if (details.grants.includes('none') && details.grants.length > 1) {
-    details.grants = ['none'];
-  }
-
-  return details;
+  return prepDefaults(details);
 }
 
 })();
