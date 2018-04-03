@@ -21,10 +21,11 @@ function onContextMenu(event) {
 
 function onClick(event) {
   switch (event.button) {
-    case 0:  // Left mouse click.
+    case 0:  // Left button mouse click.
       activate(event.target);
       return;
-    case 2:  // Right mouse click.
+    case 1:  // Middle button mouse click.
+    case 2:  // Right button mouse click.
       process(event.target);
       return;
     default:
