@@ -43,10 +43,10 @@
 
 <div id="modal">
   <div class="panel">
-    <div class="panel-head">
+    <header>
       <span class="fa fa-cog fa-lg fa-spin"></span>
       <h2>{modal.title}</h2>
-    </div>
+    </header>
     <div class="panel-body">
       <div rv-show="modal.errorList | empty">
         <progress id="modal-progress">
@@ -58,14 +58,14 @@
         </ul>
       </div>
     </div>
-    <div class="panel-foot">
+    <footer>
       <button
           class="button button-big"
           id="modal-close"
           rv-disabled="modal.closeDisabled">
         {'close'|i18n}
       </button>
-    </div>
+    </footer>
   </div>
 </div>
 

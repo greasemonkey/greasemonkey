@@ -47,14 +47,13 @@ body #modal {
   font-size: 25px;
   margin: 0;
 }
-#modal button {
+#modal header {
+  border-bottom: 1px solid #CCC;
+}
+#modal footer button {
   float: right;
   font-size: 15px;
   width: 140px;
-}
-
-#modal .panel-head {
-  border-bottom: 1px solid #CCC;
 }
 #modal .panel-body {
   font-size: 14px;
