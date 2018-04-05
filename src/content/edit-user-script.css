@@ -116,6 +116,7 @@ body, #editor {
 .CodeMirror {
   height: 100% !important;
 }
+/* Required due to inclusiong of shoelace.css */
 .CodeMirror pre {
   line-height: 14px !important;
 }
