@@ -44,21 +44,16 @@ function exportFilename() {
 function exportZipBlob(databaseObject) {
   let ts = Date.now();
   let zip = new JSZip();
-  let knownFiles = {};
 
-  databaseObject.forEach(obj => {
+  databaseObject.forEach((obj, count) => {
     // TODO: Sanitize filenames for filesystems.
     // Like the restriction on ':' (Windows).
     let fileBase = obj.details.name;
 
     // Since scripts can have the same name (different namespace) they all need
     // to be uniquely identified within the zip archive. A simple counter is
-    // used for non-unique names.
-    if (!knownFiles[fileBase]) {
-      knownFiles[fileBase] = 1;
-    } else {
-      fileBase = fileBase + '_(' + knownFiles[fileBase]++ + ')';
-    }
+    // used for each script.
+    fileBase = count.toString().padStart(3, '0') + '_' + fileBase;
 
     zip.file(fileBase + '.user.js', obj.details.content);
     delete obj.details.content;
