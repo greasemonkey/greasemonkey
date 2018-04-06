@@ -1,4 +1,16 @@
 'use strict';
+
+function byteStringToBlob(info) {
+  let byteString = atob(info.data);
+  let buffer = new ArrayBuffer(byteString.length);
+  let uint = new Uint8Array(buffer);
+  for (let idx = 0; idx < byteString.length; ++idx) {
+    uint[idx] = byteString.charCodeAt(idx);
+  }
+  return new Blob([buffer], {'type': info.type});
+}
+
+
 async function dbImport(type, bufferPromise) {
   let databaseObject = await loadZipFile(await bufferPromise);
   let userScripts = await browser.runtime.sendMessage(
@@ -116,6 +128,17 @@ async function prepareImportScript(importObj, databaseObject) {
   } else {
     details = parseUserScript(content);
     id = details.name + '/' + details.namespace;
+  }
+
+  if (details.iconBlob) {
+    details.iconBlob = byteStringToBlob(details.iconBlob);
+  }
+
+  if (details.resources) {
+    let resourceValues = Object.values(details.resources);
+    resourceValues.forEach(resource => {
+      resource.blob = byteStringToBlob(resource.blob);
+    });
   }
 
   details.content = content;
