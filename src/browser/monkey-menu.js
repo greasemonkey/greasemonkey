@@ -80,7 +80,18 @@ function onMouseOver(event) {
 function onTransitionEnd(event) {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
-  setSectionVisbility();
+  for (let section of document.getElementsByTagName('section')) {
+    section.style.visibility = (section.className == document.body.id
+        ? 'visible' : 'hidden');
+  }
+}
+
+
+function onTransitionStart(event) {
+  // While CSS transitioning, keep all sections visible.
+  for (let section of document.getElementsByTagName('section')) {
+    section.style.visibility = 'visible';
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -171,7 +182,7 @@ function navigateToMainMenu() {
     return;
   }
   gTplData.activeScript = {};
-  setSectionVisbility('main-menu');
+  document.body.id = 'main-menu';
 
   if (gMainFocusedItem) {
     gMainFocusedItem.focus();
@@ -183,7 +194,7 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
-  setSectionVisbility('user-script');
+  document.body.id = 'user-script';
 }
 
 async function newUserScript() {
@@ -208,18 +219,6 @@ function pendingUninstallTicker() {
     if (gTplData.pendingUninstall == 0 && gTplData.activeScript.uuid) {
       uninstall(gTplData.activeScript.uuid);
     }
-  }
-}
-
-
-function setSectionVisbility(newSection) {
-  if (newSection) {
-    document.body.id = newSection;
-  }
-
-  for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = (section.className == document.body.id
-        ? 'visible' : 'hidden');
   }
 }
 
