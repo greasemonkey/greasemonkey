@@ -13,7 +13,7 @@ body {
   width: 300px;
   overflow: hidden;
 }
-body#rendering { display: none; }
+body.rendering { display: none; }
 
 
 #script-list-scroll {
@@ -36,13 +36,13 @@ section {
   width: 100vw;
 }
 
-section.user-script {
+section#user-script {
   position: absolute;
   top: 0;
   left: 100vw;
 }
 
-body#user-script section { margin-left: -100vw; }
+body.user-script section { margin-left: -100vw; }
 
 /********************************** MENUS ************************************/
 
@@ -127,7 +127,7 @@ section header {
 }
 
 
-section.user-script p {
+section#user-script p {
   margin: 0;
   padding: 4px 12px 4px 10px;
 }
