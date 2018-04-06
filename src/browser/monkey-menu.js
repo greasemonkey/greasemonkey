@@ -8,6 +8,7 @@ let gTplData = {
   },
   'pendingUninstall': 0,
 };
+let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
 
@@ -169,13 +170,18 @@ function navigateToMainMenu() {
     uninstall(gTplData.activeScript.uuid);
     return;
   }
-
   gTplData.activeScript = {};
   setSectionVisbility('main-menu');
+
+  if (gMainFocusedItem) {
+    gMainFocusedItem.focus();
+    gMainFocusedItem = null;
+  }
 }
 
 
 function navigateToScript(uuid) {
+  gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
   setSectionVisbility('user-script');
 }
