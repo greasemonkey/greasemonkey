@@ -9,6 +9,9 @@ let gTplData = {
   },
   'pendingUninstall': 0,
 };
+rivets.formatters.bothArraysEmpty = (a, b) => !(!!a.length | !!b.length);
+rivets.bind(document.body, gTplData);
+
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
@@ -50,10 +53,6 @@ function onLoad(event) {
         chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
           let url = tabs.length && new URL(tabs[0].url) || null;
           loadScripts(userScripts, url);
-
-          rivets.formatters.bothArraysEmpty
-              = (a, b) => !(!!a.length | !!b.length);
-          rivets.bind(document.body, gTplData);
 
           gTplData.activeView = 'main-menu';
 
