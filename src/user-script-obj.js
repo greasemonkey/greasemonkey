@@ -281,7 +281,7 @@ window.EditableUserScript = class EditableUserScript
         const unsafeWindow = window.wrappedJSObject;
         ${this.calculateGmInfo()}
         ${apiProviderSource(this)}
-        ${Object.values(this._requiresContent).join('\n\n// *** NEXT ***\n\n')}
+        ${Object.values(this._requiresContent).join('\n// *** NEXT ***\n\n')}
         ${SCRIPT_ENV_EXTRA}
         userScript();
         })();
