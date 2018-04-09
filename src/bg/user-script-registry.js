@@ -105,8 +105,8 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     }
     return details.uuid;
   }).catch(err => {
-    console.error('Error in installFromDownloader()', err);
-    // Rethrow so caller can also deal with it
+    console.error('Error in installFromDownloader():', err.message);
+    // Rethrow, so caller can also deal with it.
     throw err;
   });
 }
@@ -143,7 +143,7 @@ async function loadUserScripts() {
       userScripts[details.uuid] = new EditableUserScript(details);
     });
   }).catch(err => {
-    console.error('Failed to load user scripts', err);
+    console.error('Failed to load user scripts:', err.message);
   });
 }
 
