@@ -161,6 +161,25 @@ function onListUserScripts(message, sender, sendResponse) {
 }
 window.onListUserScripts = onListUserScripts;
 
+function onUserScriptGetByName(message, sender, sendResponse) {
+  if (!message.scriptNamespace) {
+    console.warn('UserScriptGetByName handler got no namespace');
+  } else if (!message.scriptName) {
+    console.warn('UserScriptGetByName handler got no name');
+  } else {
+    let userScriptIterator = UserScriptRegistry.scriptsToRunAt(null, true);
+    for (let userScript of userScriptIterator) {
+      if (userScript.namespace === message.scriptNamespace
+          && userScript.name === message.scriptName) {
+        sendResponse(userScript.details);
+        return;
+      }
+    }
+    sendResponse(false);
+  }
+}
+window.onUserScriptGetByName = onUserScriptGetByName;
+
 
 function onUserScriptGet(message, sender, sendResponse) {
   if (!message.uuid) {

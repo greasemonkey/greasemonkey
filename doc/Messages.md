@@ -127,6 +127,21 @@ Passes the user's option values from content to background for persistence.  Req
 
 * `excludes` A string, one `@exclude` pattern per line.
 
+# UserScriptGetByName
+Sent by: `content/install-dialog.js`
+Received by: `bg/user-script-registry.js`
+
+Returns installed user script by namespace and name.
+
+Data:
+
+* `scriptNamespace` The user script's namespace
+* `scriptName` The user script's name
+
+Response:
+
+* The `.details` object of the installed `RunnableUserScript`, or `false` if no user script was found.
+
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
 

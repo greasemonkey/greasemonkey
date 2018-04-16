@@ -151,6 +151,9 @@
   "install": {
     "message": "Install"
   },
+  "update": {
+    "message": "Update"
+  },
   "install_disabled": {
     "message": "Install in disabled state"
   },

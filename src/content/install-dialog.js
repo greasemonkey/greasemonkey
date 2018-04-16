@@ -33,6 +33,24 @@ gDownloader.addProgressListener(() => {
 /****************************** DETAIL DISPLAY *******************************/
 
 gDownloader.scriptDetails.then(scriptDetails => {
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage({
+        'name': 'UserScriptGetByName',
+        'scriptNamespace' : scriptDetails.namespace,
+        'scriptName' : scriptDetails.name
+      }, (installedScriptDetails) => {
+        if (chrome.runtime.lastError) {
+          console.error(chrome.runtime.lastError);
+          reject(chrome.runtime.lastError);
+        } else {
+          if (installedScriptDetails) {
+            scriptDetails.installedVersion = installedScriptDetails.version;
+          }
+          resolve(scriptDetails);
+        }
+    });
+  });
+}).then(scriptDetails => {
   gDetails = scriptDetails;
 
   document.title = _('NAME_greasemonkey_user_script', gDetails.name);
