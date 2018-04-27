@@ -119,7 +119,13 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
       let locale = data.locale;
       if (locale) {
         if (!locales[locale]) locales[locale] = {};
-        locales[locale][data.keyword] = data.value;
+        if (locales[locale][data.keyword] && data.keyword == 'description') {
+          locales[locale][data.keyword] += ' ' + data.value;
+        } else {
+          locales[locale][data.keyword] = data.value;
+        }
+      } else if (details[data.keyword] && data.keyword == 'description') {
+          details[data.keyword] += ' ' + data.value;
       } else {
         details[data.keyword] = data.value;
       }
