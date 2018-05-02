@@ -29,8 +29,6 @@ hr {
 
 section {
   margin-left: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
   transition-duration: 0.15s;
   transition-property: margin-left;
   width: 100vw;
@@ -130,4 +128,15 @@ section header {
 section.user-script p {
   margin: 0;
   padding: 4px 12px 4px 10px;
+}
+
+
+/* Scroll the content of the script detail section, in case it's too tall. */
+section.user-script {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+section.user-script menu {
+  overflow-y: auto;
 }
