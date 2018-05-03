@@ -21,8 +21,7 @@ describe('downloader', () => {
 
     let result = downloader.start();
     assert.equal(fakeReqs.length, 1);
-    fakeReqs[0].respond(
-        200, {}, '// ==UserScript==\n// @name Fake\n// ==/UserScript==');
+    fakeReqs[0].respond(200, {}, metaBlockFromLines('// @name Fake'));
 
     let scriptDetails = await downloader.scriptDetails;
     assert.equal(scriptDetails.name, 'Fake');
@@ -33,8 +32,7 @@ describe('downloader', () => {
   it('downloads @require', async () => {
     let downloader = new UserScriptDownloader();
     downloader.setScriptUrl('http://example/test.user.js');
-    downloader.setScriptContent(
-        '// ==UserScript==\n// @require other.js\n// ==/UserScript==');
+    downloader.setScriptContent(metaBlockFromLines('// @require other.js'));
 
     let result = downloader.start();
     await downloader.scriptDetails;

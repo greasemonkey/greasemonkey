@@ -13,3 +13,8 @@ navigator.storage.persist = () => Promise.resolve(true);
 function _(str) {
   return str;
 }
+
+// Given array of meta lines, create a parsable meta block.
+function metaBlockFromLines(...metaLines) {
+  return '// ==UserScript==\n' + metaLines.join('\n') + '\n// ==/UserScript==\n';
+}

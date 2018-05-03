@@ -1,13 +1,9 @@
 'use strict';
 describe('user-script-obj', () => {
   describe('EditableUserScript.calculateEvalContent()', () => {
-    let scriptContent = `
-// ==UserScript==
-// @name Origin
-// ==/UserScript==
-function gt_one(n) { return n > 1; }
-gt_one(2);
-`;
+    let scriptContent = metaBlockFromLines('// @name Origin')
+        + 'function gt_one(n) { return n > 1; }\n'
+        + 'gt_one(2);\n';
 
     it('does not fail on end of file line comment', () => {
       let lineCommentContent = scriptContent + '// EOF Comment';
@@ -19,7 +15,7 @@ gt_one(2);
     });
 
     it('does not fail on end of file block comment', () => {
-      let blockCommentContent = scriptContent + '/* Block'
+      let blockCommentContent = scriptContent + '/* Block';
       let userScript = new EditableUserScript({'content': blockCommentContent});
       userScript.calculateEvalContent();
 
