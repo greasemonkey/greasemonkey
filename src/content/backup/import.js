@@ -133,16 +133,24 @@ function saveDatabaseObj(obj) {
   let downloader = new UserScriptDownloader();
 
   // TODO: Do blobs jsonify nicely?
-  if (details.iconBlob) {
+  if (typeof details.iconBlob !== 'undefined') {
     downloader.setKnownIcon(details.iconUrl, details.iconBlob);
   }
+  if (typeof details.requiresContent !== 'undefined') {
+    downloader.setKnownRequires(details.requiresContent);
+  }
+  if (typeof details.resources !== 'undefined') {
+    downloader.setKnownResources(details.resources);
+  }
+  if (typeof details.downloadUrl !== 'undefined') {
+    downloader.setScriptUrl(details.downloadUrl);
+  }
+  if (typeof values !== 'undefined') {
+    downloader.setScriptValues(values);
+  }
 
-  downloader.setKnownRequires(details.requiresContent);
-  downloader.setKnownResources(details.resources);
   downloader.setKnownUuid(details.uuid);
-  downloader.setScriptUrl(details.downloadUrl);
   downloader.setScriptContent(details.content);
-  downloader.setScriptValues(values);
 
   return downloader.start().then(() => downloader.install())
 }
