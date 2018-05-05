@@ -7,9 +7,9 @@
 <link rel="stylesheet" href="monkey-menu.css">
 <meta name="viewport" content="width=300, initial-scale=1">
 </head>
-<body id="rendering">
+<body rv-class="activeView">
 
-<section class="main-menu">
+<section id="main-menu">
   <menu>
     <menuitem id="toggle-global-enabled" tabindex="0">
       <i class="icon fa" rv-class-fa-check="enabled"></i>
@@ -90,7 +90,7 @@
 </section>
 
 
-<section class="user-script">
+<section id="user-script">
   <header>
     <menuitem tabindex="0" id="back"></menuitem>
     {activeScript.name}

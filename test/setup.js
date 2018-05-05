@@ -10,3 +10,9 @@ navigator.storage.persist = () => Promise.resolve(true);
 function _(str) {
   return str;
 }
+
+// Stub rivets
+let rivets = {
+  'bind': sinon.stub(),
+  'formatters': {}
+};

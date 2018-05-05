@@ -1,6 +1,7 @@
 'use strict';
 let gTplData = {
   'activeScript': {},
+  'activeView': 'rendering',
   'enabled': undefined,
   'userScripts': {
     'active': [],
@@ -8,6 +9,9 @@ let gTplData = {
   },
   'pendingUninstall': 0,
 };
+rivets.formatters.bothArraysEmpty = (a, b) => !(!!a.length | !!b.length);
+rivets.bind(document.body, gTplData);
+
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
@@ -50,11 +54,7 @@ function onLoad(event) {
           let url = tabs.length && new URL(tabs[0].url) || null;
           loadScripts(userScripts, url);
 
-          rivets.formatters.bothArraysEmpty
-              = (a, b) => !(!!a.length | !!b.length);
-          rivets.bind(document.body, gTplData);
-
-          document.body.id = 'main-menu';
+          gTplData.activeView = 'main-menu';
 
           setTimeout(window.focus, 0);
         });
@@ -81,7 +81,7 @@ function onTransitionEnd(event) {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
   for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = (section.className == document.body.id
+    section.style.visibility = (section.id == gTplData.activeView
         ? 'visible' : 'hidden');
   }
 }
@@ -182,7 +182,9 @@ function navigateToMainMenu() {
     return;
   }
   gTplData.activeScript = {};
-  document.body.id = 'main-menu';
+  gTplData.activeView = 'main-menu';
+  let height = document.getElementById(gTplData.activeView).offsetHeight + 'px';
+  document.body.style.height = height;
 
   if (gMainFocusedItem) {
     gMainFocusedItem.focus();
@@ -194,7 +196,9 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
-  document.body.id = 'user-script';
+  gTplData.activeView = 'user-script';
+  let height = document.getElementById(gTplData.activeView).offsetHeight + 'px';
+  document.body.style.height = height;
 }
 
 async function newUserScript() {
@@ -224,7 +228,7 @@ function pendingUninstallTicker() {
 
 
 function switchFocus(move) {
-  let section = document.querySelector('section.' + document.body.id);
+  let section = document.getElementById(gTplData.activeView);
   let focusable = Array.from(section.querySelectorAll('[tabindex="0"]'));
   let index = focusable.indexOf(document.activeElement);
   if (index == -1 && move == -1) index = 0;
