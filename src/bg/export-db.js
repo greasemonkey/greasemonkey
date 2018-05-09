@@ -23,6 +23,7 @@ async function _createExportZip(userScriptIterator) {
   let pending = [];
   let count = 0;
   for (let userScript of userScriptIterator) {
+    // TODO: Escape special characters in folder name.
     let exportFolderName
         = count.toString().padStart(3, '0') + '_' + userScript.name;
     let exportFolder = result.folder(exportFolderName);
@@ -46,6 +47,8 @@ async function addUserScriptToExport(
   let urlMapFilename = '.files.json';
   takenNames.add(urlMapFilename);
 
+  // TODO: Escape special characters in all file names.
+
   let userScriptFilename;
   try {
     userScriptFilename = fileNameFromUrl(userScript.downloadUrl);
@@ -59,6 +62,7 @@ async function addUserScriptToExport(
   // TODO: Icon.
 
   let gmDetails = {
+    'downloadUrl': userScript.details.downloadUrl,
     'enabled': userScript.details.enabled,
     'userExcludes': userScript.details.userExcludes,
     'userIncludes': userScript.details.userIncludes,
