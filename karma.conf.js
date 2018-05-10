@@ -7,6 +7,7 @@ module.exports = function(config) {
       './third-party/jszip/jszip.min.js',
       './src/**/*.js',
       './test/**/*.test.js',
+      {'pattern': './skin/**', 'included': false, 'served': true},
     ],
     exclude: [
       './src/i18n.js',  // Use test set up version instead.
