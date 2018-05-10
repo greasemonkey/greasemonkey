@@ -1,5 +1,23 @@
 'use strict';
 describe('bg/export-db', () => {
+  function assertZipHasFileNamed(zip, name) {
+    assert.isNotNull(
+        zip.file(name),
+        'Expected "' + name + '" among '
+            + zip.file(/.*/).map(f => f.name).join(', '));
+  }
+
+  it('escapes special characters', async () => {
+    let stubScript = new EditableUserScript({
+      'name': 'name with/slash and:colon in',
+      'content': '// Stub.',
+      'downloadUrl': null,
+    });
+    let zip = await _createExportZip([stubScript]);
+
+    assertZipHasFileNamed(zip, 'name with--slash and--colon in/.gm.json');
+  });
+
   it('handles non-downloaded scripts', async () => {
     let stubScript = new EditableUserScript({
       'name': 'Unnamed Script 876720',
@@ -9,7 +27,8 @@ describe('bg/export-db', () => {
 
     let zip = await _createExportZip([stubScript]);
     let file = zip.file(
-        '000_Unnamed Script 876720/Unnamed Script 876720.user.js');
+        'Unnamed Script 876720/Unnamed Script 876720.user.js');
+
     assert.equal('// Stub.', await file.async('text'));
   });
 
@@ -27,11 +46,11 @@ describe('bg/export-db', () => {
 
     let zip = await _createExportZip([stubScript]);
 
-    let file = zip.file('000_script/.files.json');
+    let file = zip.file('script/.files.json');
     let urlMap = JSON.parse(await file.async('text'));
 
-    assert.equal(urlMap['folder1/anything.js'], '000_script/anything.js');
-    assert.equal(urlMap['folder2/anything.js'], '000_script/anything.2.js');
+    assert.equal(urlMap['folder1/anything.js'], 'script/anything.js');
+    assert.equal(urlMap['folder2/anything.js'], 'script/anything.2.js');
   });
 
   it('mangles identically named @requires', async () => {
@@ -48,16 +67,8 @@ describe('bg/export-db', () => {
 
     let zip = await _createExportZip([stubScript]);
 
-    let zipFileNames = zip.file(/.*/).map(f => f.name);
-    assert.isTrue(
-        zipFileNames.includes('000_script/anything.js'),
-        'expect zip to contain file named: 000_script/anything.js');
-    assert.isTrue(
-        zipFileNames.includes('000_script/anything.2.js'),
-        'expect zip to contain file named: 000_script/anything.2.js');
-    assert.isFalse(
-        zipFileNames.includes('000_script/anythingelse.js'),
-        'expect zip to NOT contain file named: 000_script/anythingelse.js');
+    assertZipHasFileNamed(zip, 'script/anything.js');
+    assertZipHasFileNamed(zip, 'script/anything.2.js');
   });
 
   it('mangles identically named @resources', async () => {
@@ -76,9 +87,21 @@ describe('bg/export-db', () => {
 
     let zip = await _createExportZip([stubScript]);
 
-    let zipFileNames = zip.file(/.*/).map(f => f.name);
-    assert.include(zipFileNames, '000_script/a.css');
-    assert.include(zipFileNames, '000_script/a.2.css');
+    assertZipHasFileNamed(zip, 'script/a.css');
+    assertZipHasFileNamed(zip, 'script/a.2.css');
+  });
+
+  it('mangles identically named scripts', async () => {
+    let stubScript = new EditableUserScript({
+      'name': 'just-a-script',
+      'content': '// Stub.',
+      'downloadUrl': null,
+    });
+
+    let zip = await _createExportZip([stubScript, stubScript]);
+
+    assertZipHasFileNamed(zip, 'just-a-script/.gm.json');
+    assertZipHasFileNamed(zip, 'just-a-script.2/.gm.json');
   });
 
   it('stores enabled state', async () => {
@@ -90,7 +113,7 @@ describe('bg/export-db', () => {
 
     {
       let zip = await _createExportZip([stubScript]);
-      let file = zip.file('000_script/.gm.json');
+      let file = zip.file('script/.gm.json');
       let state = JSON.parse(await file.async('text'));
       assert.isTrue(state.enabled);
     }
@@ -99,7 +122,7 @@ describe('bg/export-db', () => {
 
     {
       let zip = await _createExportZip([stubScript]);
-      let file = zip.file('000_script/.gm.json');
+      let file = zip.file('script/.gm.json');
       let state = JSON.parse(await file.async('text'));
       assert.isFalse(state.enabled);
     }

@@ -20,12 +20,12 @@ window.onExportDatabase = onExportDatabase;
 async function _createExportZip(userScriptIterator) {
   let result = new JSZip();
 
+  let takenFolderNames = new Set();
   let pending = [];
   let count = 0;
   for (let userScript of userScriptIterator) {
-    // TODO: Escape special characters in folder name.
     let exportFolderName
-        = count.toString().padStart(3, '0') + '_' + userScript.name;
+        = minimallyMangleFilename(takenFolderNames, userScript.name);
     let exportFolder = result.folder(exportFolderName);
     pending.push(
         addUserScriptToExport(exportFolder, exportFolderName, userScript));
@@ -41,11 +41,11 @@ window._createExportZip = _createExportZip;
 
 async function addUserScriptToExport(
     exportFolder, exportFolderName, userScript) {
-  let takenNames = new Set();
+  let takenFileNames = new Set();
   let urlMap = {};
 
   let urlMapFilename = '.files.json';
-  takenNames.add(urlMapFilename);
+  takenFileNames.add(urlMapFilename);
 
   // TODO: Escape special characters in all file names.
 
@@ -55,7 +55,7 @@ async function addUserScriptToExport(
   } catch (e) {
     userScriptFilename = userScript.name + '.user.js';
   }
-  takenNames.add(userScriptFilename);
+  takenFileNames.add(userScriptFilename);
   exportFolder.file(
       userScriptFilename, userScript.content, {'compression': 'DEFLATE'});
 
@@ -69,7 +69,7 @@ async function addUserScriptToExport(
     'userMatches': userScript.details.userMatches,
   };
   let gmDetailsFilename = '.gm.json';
-  takenNames.add(gmDetailsFilename);
+  takenFileNames.add(gmDetailsFilename);
   exportFolder.file(
       gmDetailsFilename, JSON.stringify(gmDetails),
       {'compression': 'DEFLATE'});
@@ -77,7 +77,7 @@ async function addUserScriptToExport(
   let storageEntries = await userScriptStore(userScript.uuid);
   if (Object.keys(storageEntries).length > 0) {
     let storageFilename = '.stored.json';
-    takenNames.add(storageFilename);
+    takenFileNames.add(storageFilename);
     exportFolder.file(
         storageFilename, JSON.stringify(storageEntries),
         {'compression': 'DEFLATE'});
@@ -86,7 +86,7 @@ async function addUserScriptToExport(
   Object.entries(userScript.requiresContent).forEach(e => {
     let [url, requireContent] = e;
     let requireFilename = fileNameFromUrl(url);
-    let mangledFilename = minimallyMangleFilename(takenNames, requireFilename);
+    let mangledFilename = minimallyMangleFilename(takenFileNames, requireFilename);
     let options = {'compression': 'DEFLATE'};
     if (mangledFilename != requireFilename) {
       options['comment'] = 'Original file name: ' + requireFilename;
@@ -100,7 +100,7 @@ async function addUserScriptToExport(
     let [name, resource] = e;
     let url = parsedMeta.resourceUrls[name];
     let resourceFilename = fileNameFromUrl(url);
-    let mangledFilename = minimallyMangleFilename(takenNames, resourceFilename);
+    let mangledFilename = minimallyMangleFilename(takenFileNames, resourceFilename);
     exportFolder.file(
         mangledFilename, resource.blob,
         mangledFilename != resourceFilename
@@ -143,24 +143,25 @@ function fileNameFromUrl(url) {
 
 
 function minimallyMangleFilename(takenNames, wantedName) {
+  let escapeFilename = s => s.replace(/[:/]/g, '--');
+  let mangledName = escapeFilename(wantedName);
+
   if (takenNames.has(wantedName)) {
     let i = wantedName.lastIndexOf('.');
     if (i < 0) i = wantedName.length;
     let n = 2;
-    let mangledName;
     do {
       if (n > 99) {
         throw new Error('Could not mangle name ' + wantedName);
       }
       mangledName = wantedName.substr(0, i) + '.' + n + wantedName.substr(i);
+      mangledName = escapeFilename(mangledName);
       n++;
     } while (takenNames.has(mangledName));
-    takenNames.add(mangledName);
-    return mangledName;
-  } else {
-    takenNames.add(wantedName);
-    return wantedName;
   }
+
+  takenNames.add(mangledName);
+  return mangledName;
 }
 
 
