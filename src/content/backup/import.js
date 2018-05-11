@@ -77,9 +77,10 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
   } else {
     let folderName = file.name.substr(0, file.name.lastIndexOf('/'));
 
-    let exportDetails = await zip.file(`${folderName}/.gm.json`)
+    exportDetails = await zip.file(`${folderName}/.gm.json`)
         .async('text')
         .then(JSON.parse);
+
     let urlMap = {};
     if (zip.file(`${folderName}/.files.json`)) {
       urlMap = await zip.file(`${folderName}/.files.json`)

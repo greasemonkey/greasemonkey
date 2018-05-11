@@ -62,11 +62,35 @@ describe('content/import', () => {
 
   it('installs a rich script export', async () => {
     let zip = new JSZip();
-    zip.file('000_any/any.user.js', '// Stub.');
-    zip.file('000_any/.gm.json', '{"enabled": true}');
+    zip.file('any/any.user.js', '// Stub.');
+    zip.file('any/.gm.json', '{"enabled": true}');
 
     await importAllScriptsFromZip(zip, new Set());
 
     assert.equal(countOfMessagesNamed('UserScriptInstall'), 1);
+    for (let call of chrome.runtime.sendMessage.getCalls()) {
+      if ('UserScriptInstall' == call.args[0].name) {
+        let message = call.args[0];
+        assert.isTrue(message.userScript.enabled);
+        break;
+      }
+    }
+  });
+
+  it('installs a script in disabled state', async () => {
+    let zip = new JSZip();
+    zip.file('any/any.user.js', '// Stub.');
+    zip.file('any/.gm.json', '{"enabled": false}');
+
+    await importAllScriptsFromZip(zip, new Set());
+
+    assert.equal(countOfMessagesNamed('UserScriptInstall'), 1);
+    for (let call of chrome.runtime.sendMessage.getCalls()) {
+      if ('UserScriptInstall' == call.args[0].name) {
+        let message = call.args[0];
+        assert.isFalse(message.userScript.enabled);
+        break;
+      }
+    }
   });
 });
