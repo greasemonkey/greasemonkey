@@ -1,6 +1,11 @@
 'use strict';
 
 let gImportOptions = {
+  'modeDialog': true,
+  'modeDone': false,
+  'modeImport': false,
+  'progressCurrent': 0,
+  'progressMax': 1,
   'remove': false,
   'replace': true,
 };
@@ -32,8 +37,16 @@ async function importAllScriptsFromZip(zip, installedIdToUuid) {
   let importedIds = new Set();
 
   let userScriptFiles = zip.file(/\.user\.js$/);
+  gImportOptions.progressMax = userScriptFiles.length;
+  gImportOptions.modeDialog = false;
+  gImportOptions.modeImport = true;
+
   for (let i = 0, file = null; file = userScriptFiles[i]; i++) {
     await importOneScriptFromZip(zip, file, installedIdToUuid, importedIds);
+    gImportOptions.progressCurrent = gImportOptions.progressCurrent + 1;
+    // Rivets can't bind to attribute value of <progress> (??).
+    document.querySelector('progress') && document.querySelector('progress')
+        .setAttribute('value', gImportOptions.progressCurrent.toString());
   }
 
   if (gImportOptions.remove) {
@@ -46,6 +59,9 @@ async function importAllScriptsFromZip(zip, installedIdToUuid) {
       }, logUnhandledError);
     }
   }
+
+  gImportOptions.modeImport = false;
+  gImportOptions.modeDone = true;
 }
 
 

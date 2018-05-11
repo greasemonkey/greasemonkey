@@ -16,26 +16,36 @@ This would be inside the monkey menu, except http://bugzil.la/1366330
   {'backup_import_title'|i18n}
 </h2>
 
-<h4>{'backup_import_options'|i18n}</h4>
-<p>
-  <label>
-    <input type="checkbox" rv-checked="remove">
-    {'backup_import_remove_detail'|i18n}
-  </label>
-  <label>
-    <input type="checkbox" rv-checked="replace">
-    {'backup_import_replace_detail'|i18n}
-  </label>
-</p>
+<div rv-if="modeDialog">
+  <h4>{'backup_import_options'|i18n}</h4>
+  <p>
+    <label>
+      <input type="checkbox" rv-checked="remove">
+      {'backup_import_remove_detail'|i18n}
+    </label>
+    <label>
+      <input type="checkbox" rv-checked="replace">
+      {'backup_import_replace_detail'|i18n}
+    </label>
+  </p>
 
-<h4>{'backup_import_file'|i18n}</h4>
-<p>
-  {'backup_import_select_file'|i18n}
-</p>
-<p>
-  <input class="input-item" type="file" accept="application/zip">
-</p>
+  <h4>{'backup_import_file'|i18n}</h4>
+  <p>
+    {'backup_import_select_file'|i18n}
+  </p>
+  <p>
+    <input class="input-item" type="file" accept="application/zip">
+  </p>
+</div>
 
+<div rv-if="modeImport">
+  <h4>{'importing'|i18n}</h4>
+  <progress rv-max="progressMax"></progress>
+</div>
+
+<div rv-if="modeDone">
+  <h4>{'done'|i18n}</h4>
+</div>
 
 <script src="/src/i18n.js"></script>
 <script src="/third-party/rivets/rivets.bundled.min.js"></script>

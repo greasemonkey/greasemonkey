@@ -57,6 +57,9 @@
   "does_not_run_on": {
     "message": "Does not run on:"
   },
+  "done": {
+    "message": "Done"
+  },
   "download_failed": {
     "message": "User script download failed"
   },
@@ -135,6 +138,9 @@
   },
   "install_failed": {
     "message": "User script failed to install"
+  },
+  "importing": {
+    "message": "Importing ..."
   },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."

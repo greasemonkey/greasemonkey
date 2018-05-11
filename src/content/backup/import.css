@@ -10,3 +10,8 @@ body {
 label {
   display: block;
 }
+
+progress {
+  margin-bottom: 12px;
+  width: calc(100% - 12px);
+}
