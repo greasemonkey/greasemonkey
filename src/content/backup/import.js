@@ -19,7 +19,7 @@ async function onFileChange(event) {
     let [zip, userScripts] = promisedValues;
     let installedIdToUuid = userScripts.reduce((set, val) => {
       let userScript = new RunnableUserScript(val);
-      installedIdToUuid[userScript.id] = userScript.uuid;
+      set[userScript.id] = userScript.uuid;
       return set;
     }, {});
     await importAllScriptsFromZip(zip, installedIdToUuid);
