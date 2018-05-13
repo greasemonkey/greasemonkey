@@ -4,6 +4,20 @@
 // Private implementation.
 (function() {
 
+function blobToBase64(blob) {
+  if (!blob) return Promise.resolve(null);
+
+  let reader = new FileReader();
+  reader.readAsDataURL(blob);
+  return new Promise((resolve, reject) => {
+    reader.onload = event => {
+      let result = reader.result.slice(reader.result.indexOf(',') + 1);
+      resolve({'data': result, 'type': blob.type});
+    };
+  });
+}
+
+
 function onExportDatabase() {
   let scriptsData = [];
 
@@ -75,6 +89,22 @@ async function userScriptData(userScript) {
   let grants = details.grants;
   // Remove parsedDetails as it creates cycles and cannot be properly saved.
   delete details.parsedDetails;
+
+  if (details.iconBlob) {
+    details.iconBlob = await blobToBase64(details.iconBlob);
+  }
+
+  if (details.resources) {
+    let resourceValues = Object.values(details.resources);
+    details.resources = {};
+    await Promise.all(resourceValues.map(async (resource) => {
+      details.resources[resource.name] = {
+        'name': resource.name,
+        'mimetype': resource.mimetype,
+        'blob': await blobToBase64(resource.blob)
+      };
+    }));
+  }
 
   if (grants.includes('GM.deleteValue') ||
       grants.includes('GM.getValue') ||
