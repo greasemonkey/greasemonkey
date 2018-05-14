@@ -21,29 +21,20 @@
   "backup_import_title": {
     "message": "Greasemonkey Backup Import"
   },
-  "backup_import_detail": {
-    "message": "This page is used to import scripts from an exported database file.  Select one of the three import methods below."
+  "backup_import_file": {
+    "message": "Import file"
   },
-  "backup_import_option_merge": {
-    "message": "Merge"
+  "backup_import_select_file": {
+    "message": "Select a Greasemonkey backup ZIP file to import it with the above options."
   },
-  "backup_import_option_merge_detail": {
-    "message": "The scripts found in the file will be merged into the database. Existing user scripts (and corresponding data) will not be modified."
+  "backup_import_options": {
+    "message": "Import options"
   },
-  "backup_import_option_replace": {
-    "message": "Replace"
+  "backup_import_remove_detail": {
+    "message": "Uninstall scripts which are not in the backup file."
   },
-  "backup_import_option_replace_detail": {
-    "message": "The current database will be wiped and replaced with the user scripts found in the imported file."
-  },
-  "backup_import_option_overwrite": {
-    "message": "Merge and Overwrite"
-  },
-  "backup_import_option_overwrite_detail": {
-    "message": "Overwrite existing scripts with the data in the imported file. Existing usesrscripts not found in the file are not modified."
-  },
-  "backup_import_warning": {
-    "message": "Before importing a backup, it's a good idea back up your current state in case an error occurs."
+  "backup_import_replace_detail": {
+    "message": "Overwrite already installed scripts with the version in the backup file."
   },
   "cancel": {
     "message": "Cancel"
@@ -65,6 +56,9 @@
   },
   "does_not_run_on": {
     "message": "Does not run on:"
+  },
+  "done": {
+    "message": "Done"
   },
   "download_failed": {
     "message": "User script download failed"
@@ -144,6 +138,9 @@
   },
   "install_failed": {
     "message": "User script failed to install"
+  },
+  "importing": {
+    "message": "Importing ..."
   },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."

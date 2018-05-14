@@ -123,7 +123,10 @@ class Downloader {
   async start() {
     if (this._scriptContent != null) {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
-      let scriptDetails = parseUserScript(this._scriptContent, this._scriptUrl);
+      let scriptDetails = parseUserScript(
+          this._scriptContent instanceof Promise
+              ? await this._scriptContent : this._scriptContent,
+          this._scriptUrl);
       if (scriptDetails) {
         if (this._knownUuid) {
           scriptDetails.uuid = this._knownUuid;
@@ -282,7 +285,11 @@ class Download {
 class ImmediateDownload {
   constructor(source) {
     this.progress = 1;
-    this.result = Promise.resolve(source);
+    if (source instanceof Promise) {
+      this.result = source;
+    } else {
+      this.result = Promise.resolve(source);
+    }
     this.status = 200;
     this.statusText = 'OK';
   }
