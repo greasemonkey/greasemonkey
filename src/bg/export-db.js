@@ -74,7 +74,7 @@ async function addUserScriptToExport(
   let gmDetails = {
     'downloadUrl': userScript.details.downloadUrl,
     'enabled': userScript.details.enabled,
-    'iconFilename': iconFilename,
+    'iconFilename': iconFilename && (exportFolderName + '/' + iconFilename),
     'iconType': userScript.iconBlob && userScript.iconBlob.type,
     'userExcludes': userScript.details.userExcludes,
     'userIncludes': userScript.details.userIncludes,

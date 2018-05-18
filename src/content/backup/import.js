@@ -109,6 +109,10 @@ function fillDownloaderFromZipFolder(
   let parsedDetails = parseUserScript(scriptContent, exportDetails.downloadUrl);
 
   // TODO: Icon.
+  if (exportDetails.iconFilename) {
+    let iconBlob = zip.file(exportDetails.iconFilename).async('blob');
+    downloader.setKnownIcon(parsedDetails.iconUrl, iconBlob);
+  }
 
   let requires = {};
   parsedDetails.requireUrls.forEach(u => {
