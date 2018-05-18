@@ -22,10 +22,8 @@ function blobToBuffer(blob) {
 
   let reader = new FileReader();
   reader.readAsArrayBuffer(blob);
-  return new Promise((resolve, reject) => {
-    reader.onload = event => {
-      resolve({'buffer': reader.result, 'type': blob.type});
-    };
+  return new Promise(resolve => {
+    reader.onload = () => resolve({'buffer': reader.result, 'type': blob.type});
   });
 }
 
@@ -49,9 +47,7 @@ async function openDb() {
       console.error('Error opening user-scripts DB!', event);
       reject(event);
     };
-    dbOpen.onsuccess = event => {
-      resolve(event.target.result);
-    };
+    dbOpen.onsuccess = event => resolve(event.target.result);
     dbOpen.onupgradeneeded = event => {
       let db = event.target.result;
       db.onerror = event => {
@@ -80,12 +76,8 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
-      resolve(req.result);
-    };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
   }).then(foundDetails => {
     foundDetails = foundDetails || {};
     foundDetails.iconBlob = bufferToBlob(foundDetails.iconBlob);
@@ -120,12 +112,8 @@ async function loadUserScripts() {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
-      resolve(req.result);
-    };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
       details.iconBlob = bufferToBlob(details.iconBlob);
@@ -150,13 +138,13 @@ async function loadUserScripts() {
 
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(
+  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(
       null, message.includeDisabled);
   for (let userScript of userScriptIterator) {
     result.push(userScript.details);
   }
   sendResponse(result);
-};
+}
 window.onListUserScripts = onListUserScripts;
 
 
@@ -169,7 +157,7 @@ function onUserScriptGet(message, sender, sendResponse) {
   } else {
     sendResponse(userScripts[message.uuid].details);
   }
-};
+}
 window.onUserScriptGet = onUserScriptGet;
 
 
@@ -207,7 +195,7 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
       'resourceName': message.resourceName,
     });
   }
-};
+}
 window.onApiGetResourceBlob = onApiGetResourceBlob;
 
 
@@ -217,7 +205,7 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
   return saveUserScript(userScript).then(() => {
     return {'enabled': userScript.enabled}
   });
-};
+}
 window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
@@ -229,7 +217,7 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+    req.onsuccess = () => {
       delete userScripts[message.uuid];
       resolve();
     };
@@ -241,7 +229,7 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
     // TODO: The store may be orphaned if this fails
     return ValueStore.deleteStore(message.uuid);
   });
-};
+}
 window.onUserScriptUninstall = onUserScriptUninstall;
 
 
@@ -289,7 +277,7 @@ async function saveUserScript(userScript) {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+    req.onsuccess = () => {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
@@ -298,9 +286,7 @@ async function saveUserScript(userScript) {
       resDetails.id = userScript.id;
       resolve(resDetails);
     };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onerror = () => reject(req.error);
   }).catch(onSaveError);
 }
 

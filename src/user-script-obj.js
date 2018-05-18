@@ -310,7 +310,7 @@ window.EditableUserScript = class EditableUserScript
   }
 
   // Given a successful `Downloader` object, update this script from it.
-  async updateFromDownloaderDetails(userScriptDetails, downloaderDetails) {
+  updateFromDownloaderDetails(userScriptDetails, downloaderDetails) {
     _loadValuesInto(this, userScriptDetails, userScriptKeys);
     _loadValuesInto(this, userScriptDetails, runnableUserScriptKeys);
     _loadValuesInto(this, userScriptDetails, editableUserScriptKeys);
