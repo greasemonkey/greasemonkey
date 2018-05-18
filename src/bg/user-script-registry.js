@@ -35,6 +35,15 @@ function bufferToBlob(buffer) {
 }
 
 
+function detailsBuffersToBlobs(details) {
+  // See #2909; ArrayBuffers in IndexedDB; convert to Blobs in memory.
+  details.iconBlob = bufferToBlob(details.iconBlob);
+  Object.keys(details.resources).forEach(k => {
+    let r = details.resources[k];
+    r.blob = bufferToBlob(r.blob);
+  });
+}
+
 async function openDb() {
   if (navigator.storage && navigator.storage.persist) {
     await navigator.storage.persist();
@@ -80,8 +89,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     req.onerror = () => reject(req.error);
   }).then(foundDetails => {
     foundDetails = foundDetails || {};
-    foundDetails.iconBlob = bufferToBlob(foundDetails.iconBlob);
-
+    detailsBuffersToBlobs(foundDetails);
     let userScript = new EditableUserScript(foundDetails);
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
@@ -116,7 +124,7 @@ async function loadUserScripts() {
     req.onerror = () => reject(req.error);
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
-      details.iconBlob = bufferToBlob(details.iconBlob);
+      detailsBuffersToBlobs(details);
 
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
@@ -268,7 +276,17 @@ async function saveUserScript(userScript) {
 
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
-  details.iconBlob = await blobToBuffer(details.iconBlob);  // See #2908.
+
+  // See #2909; write ArrayBuffers to IndexedDB; not Blobs.
+  details.iconBlob = await blobToBuffer(details.iconBlob);
+  await Promise.all(Object.entries(details.resources).map(async ([k, v]) => {
+    // Don't modify the script's resources in place; _safeCopy() is shallow!
+    let result = Object.assign({}, v);
+    result.blob = await blobToBuffer(result.blob);
+    return [k, result];
+  })).then(entries => {
+    details.resources = entries.reduce((obj, [k, v]) => ({...obj, [k]: v}), {});
+  });
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], 'readwrite');

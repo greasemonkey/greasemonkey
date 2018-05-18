@@ -209,7 +209,7 @@ window.RunnableUserScript = class RunnableUserScript
   }
 
   get details() {
-    var d = super.details;
+    let d = super.details;
     runnableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
