@@ -233,7 +233,7 @@ window.RunnableUserScript = class RunnableUserScript
 
 
 const editableUserScriptKeys = [
-    'parsedDetails', 'content', 'requiresContent'];
+    'content', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -241,7 +241,6 @@ window.EditableUserScript = class EditableUserScript
   constructor(details) {
     super(details);
 
-    this._parsedDetails = null;  // All details from parseUserScript().
     this._content = null;
     this._requiresContent = {};  // Map of download URL to content.
 
@@ -254,17 +253,6 @@ window.EditableUserScript = class EditableUserScript
       d[k] = _safeCopy(this['_' + k]);
     });
     return d;
-  }
-
-  get parsedDetails() {
-    if (!this._parsedDetails) {
-      if (!this._content) {
-        throw new Error(
-            'EditableUserScript missing both content and parsed details!');
-      }
-      this._parsedDetails = parseUserScript(this._content, this._downloadUrl);
-    }
-    return this._parsedDetails;
   }
 
   get content() { return this._content; }

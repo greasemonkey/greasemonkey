@@ -281,7 +281,6 @@ async function saveUserScript(userScript) {
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
   details.iconBlob = await blobToBuffer(details.iconBlob);  // See #2908.
-  delete details.parsedDetails;
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], 'readwrite');

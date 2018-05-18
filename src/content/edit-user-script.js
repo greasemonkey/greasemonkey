@@ -69,13 +69,13 @@ function onUserScriptChanged(message, sender, sendResponse) {
   if (message.name != 'UserScriptChanged') return;
   if (message.details.uuid != userScriptUuid) return;
   let details = message.details;
-  let parsedDetails = message.parsedDetails;
+  let requireUrls = Object.keys(details.requiresContent);
 
   document.title = _('NAME_greasemonkey_user_script_editor', details.name);
 
   for (let i = editorDocs.length - 1; i > 0; i--) {
     let u = editorUrls[i];
-    if (parsedDetails.requireUrls.indexOf(u) === -1) {
+    if (requireUrls.indexOf(u) === -1) {
       editorTabs[i].parentNode.removeChild(editorTabs[i]);
       editorDocs.splice(i, 1);
       editorTabs.splice(i, 1);
@@ -83,7 +83,7 @@ function onUserScriptChanged(message, sender, sendResponse) {
     }
   }
 
-  parsedDetails.requireUrls.forEach(u => {
+  requireUrls.forEach(u => {
     if (editorUrls.indexOf(u) === -1) {
       addRequireTab(u, details.requiresContent[u]);
     }
