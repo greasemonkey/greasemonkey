@@ -38,11 +38,12 @@ function bufferToBlob(buffer) {
 function detailsBuffersToBlobs(details) {
   // See #2909; ArrayBuffers in IndexedDB; convert to Blobs in memory.
   details.iconBlob = bufferToBlob(details.iconBlob);
-  Object.keys(details.resources).forEach(k => {
+  Object.keys(details.resources || {}).forEach(k => {
     let r = details.resources[k];
     r.blob = bufferToBlob(r.blob);
   });
 }
+
 
 async function openDb() {
   if (navigator.storage && navigator.storage.persist) {
@@ -125,7 +126,6 @@ async function loadUserScripts() {
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
       detailsBuffersToBlobs(details);
-
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
       } else {
