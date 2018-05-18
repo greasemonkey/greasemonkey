@@ -41,6 +41,7 @@ window._createExportZip = _createExportZip;
 
 async function addUserScriptToExport(
     exportFolder, exportFolderName, userScript) {
+  let parsedMeta = parseUserScript(userScript.content, userScript.downloadUrl);
   let takenFileNames = new Set();
   let urlMap = {};
 
@@ -59,11 +60,22 @@ async function addUserScriptToExport(
   exportFolder.file(
       userScriptFilename, userScript.content, {'compression': 'DEFLATE'});
 
-  // TODO: Icon.
+  let iconFilename = null;
+  if (userScript.iconBlob && !parsedMeta.iconUrl.startsWith('data:')) {
+    try {
+      iconFilename = fileNameFromUrl(parsedMeta.iconUrl);
+    } catch (e) {
+      iconFilename = 'icon' + userScript.iconBlob.type.replace(/.*\//, '');
+    }
+    iconFilename = minimallyMangleFilename(takenFileNames, iconFilename);
+    exportFolder.file(iconFilename, userScript.iconBlob);
+  }
 
   let gmDetails = {
     'downloadUrl': userScript.details.downloadUrl,
     'enabled': userScript.details.enabled,
+    'iconFilename': iconFilename,
+    'iconType': userScript.iconBlob && userScript.iconBlob.type,
     'userExcludes': userScript.details.userExcludes,
     'userIncludes': userScript.details.userIncludes,
     'userMatches': userScript.details.userMatches,
@@ -95,7 +107,6 @@ async function addUserScriptToExport(
     urlMap[url] = exportFolderName + '/' + mangledFilename;
   });
 
-  let parsedMeta = parseUserScript(userScript.content, userScript.downloadUrl);
   Object.entries(userScript.resources).forEach(e => {
     let [name, resource] = e;
     let url = parsedMeta.resourceUrls[name];
