@@ -88,8 +88,8 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
           .then(JSON.parse);
     }
 
-    fillDownloaderFromZipFolder(
-        downloader, zip, content, exportDetails, urlMap);
+    await fillDownloaderFromZipFolder(
+        downloader, zip, content, exportDetails, urlMap, folderName);
   }
 
   await downloader.start();
@@ -102,8 +102,8 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
 }
 
 
-function fillDownloaderFromZipFolder(
-    downloader, zip, scriptContent, exportDetails, urlMap) {
+async function fillDownloaderFromZipFolder(
+    downloader, zip, scriptContent, exportDetails, urlMap, folderName) {
   downloader.setScriptUrl(exportDetails.downloadUrl);
 
   let parsedDetails = parseUserScript(scriptContent, exportDetails.downloadUrl);
@@ -125,7 +125,12 @@ function fillDownloaderFromZipFolder(
   });
   downloader.setKnownResources(resources);
 
-  // TODO: Stored values.
+  let storedFilename = folderName + '/' + '.stored.json';
+  let storedFile = zip.file(storedFilename);
+  if (storedFile) {
+    let stored = JSON.parse(await storedFile.async('text'));
+    downloader.setScriptValues(stored);
+  }
 
   return downloader;
 }
