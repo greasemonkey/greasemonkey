@@ -39,15 +39,6 @@
   "cancel": {
     "message": "Cancel"
   },
-  "confirm_db_merge_FILENAME": {
-    "message": "Merge database using selected file?\n$1"
-  },
-  "confirm_db_replace_FILENAME": {
-    "message": "Replace database using selected file?\n$1"
-  },
-  "confirm_db_overwrite_FILENAME": {
-    "message": "Overwrite database using selected file?\n$1"
-  },
   "description": {
     "message": "Description:"
   },
@@ -74,9 +65,6 @@
   },
   "enabled": {
     "message": "Enabled"
-  },
-  "export_greasemonkey_database": {
-    "message": "Export Greasemonkey database"
   },
   "extDesc": {
     "message": "A User Script manager for Firefox."
