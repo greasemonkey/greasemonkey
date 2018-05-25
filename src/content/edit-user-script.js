@@ -4,7 +4,7 @@ let gUserScript = null;
 // Change the title of the save icon (and more) to initial values.
 rivets.bind(document, {});
 
-var editor = CodeMirror(
+const editor = CodeMirror(
     document.getElementById('editor'),
     // TODO: Make appropriate options user-configurable.
     {
@@ -109,7 +109,7 @@ tabs.addEventListener('click', event => {
 }, true);
 
 
-editor.on('change', change => {
+editor.on('change', () => {
   let selectedTab = document.querySelector('#tabs .tab.active');
   let idx = editorTabs.indexOf(selectedTab);
   let selectedDoc = editorDocs[idx];
@@ -127,7 +127,7 @@ async function onSave() {
   }
 
   // Always use a downloader to save, in case of new remotes.
-  let downloader = new UserScriptDownloader()
+  let downloader = new UserScriptDownloader();
   downloader.setScriptUrl(gUserScript.downloadUrl);
   downloader.setScriptContent(editorDocs[0].getValue());
 

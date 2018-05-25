@@ -9,7 +9,7 @@ TODO: Make document_start execution time work as intended.
 function executeUserscriptOnNavigation(detail) {
   if (false === getGlobalEnabled()) return;
 
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
+  const userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);
   for (let userScript of userScriptIterator) {
     let options = {
       'code': userScript.evalContent,
@@ -17,7 +17,7 @@ function executeUserscriptOnNavigation(detail) {
       'runAt': 'document_' + userScript.runAt,
     };
     if (detail.frameId) options.frameId = detail.frameId;
-    chrome.tabs.executeScript(detail.tabId, options, result => {
+    chrome.tabs.executeScript(detail.tabId, options, () => {
       let err = chrome.runtime.lastError;
       if (!err) return;
 

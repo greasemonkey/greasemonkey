@@ -77,7 +77,7 @@ function GM_deleteValue(key) {
 
 
 function GM_getValue(key, defaultValue) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     chrome.runtime.sendMessage({
       'key': key,
       'name': 'ApiGetValue',
@@ -94,7 +94,7 @@ function GM_getValue(key, defaultValue) {
 
 
 function GM_listValues() {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     chrome.runtime.sendMessage({
       'name': 'ApiListValues',
       'uuid': _uuid,

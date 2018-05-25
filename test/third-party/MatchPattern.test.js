@@ -22,7 +22,7 @@ describe('third-party/MatchPattern', () => {
       });
 
       it('http://*foo/bar', () => {
-        // '*' in the host can only be follwed by a '.' or '/'
+        // '*' in the host can only be followed by a '.' or '/'
         expect(newPattern('http://*foo/bar'))
             .to.throw('@match: Invalid host specified.');
       });
@@ -57,7 +57,7 @@ describe('third-party/MatchPattern', () => {
         = (pattern, urlStr) => assert.isNotOk(pattern.doMatch(new URL(urlStr)));
 
     describe('any http: using the http scheme', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://*/*'));
 
       it('matches http://www.google.com/', () => {
@@ -67,10 +67,10 @@ describe('third-party/MatchPattern', () => {
       it('matches http://example.org/foo/bar.html', () => {
         matches(pattern, 'http://example.org/foo/bar.html');
       });
-    })
+    });
 
     describe('any http: with any host with path /foo*', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://*/foo*'));
 
       it('matches http://example.org/foo/bar.html', () => {
@@ -87,7 +87,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('any https: (sub)domain of google.com', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('https://*.google.com/'));
 
       it('matches https://google.com/', () => {
@@ -109,7 +109,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('any http: with path /foo*bar', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://*/foo*bar'));
 
       it('matches http://www.google.com/foo/baz/bar', () => {
@@ -126,7 +126,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('exact url http://example.org/foo/bar.htm', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://example.org/foo/bar.htm'));
 
       it('matches http://example.org/foo/bar.htm', () => {
@@ -139,7 +139,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('any file: with path foo*', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('file:///foo*'));
 
       it('matches file:///foo/bar.html', () => {
@@ -156,7 +156,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('any http: on domain example.org', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://example.org/*'));
 
       it('matches http://example.org/foo', () => {
@@ -169,7 +169,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('any http: on domain 127.0.0.1', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('http://127.0.0.1/*'));
 
       it('matches http://127.0.0.1', () => {
@@ -186,7 +186,7 @@ describe('third-party/MatchPattern', () => {
     });
 
     describe('wildcard protocol on domain mail.google.com', () => {
-      var pattern;
+      let pattern;
       before(() => pattern = new MatchPattern('*://mail.google.com/*'));
 
       it('matches http://mail.google.com/foo/baz/bar', () => {

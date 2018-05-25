@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         + `message from sender "${sender.url}".`);
   }
 
-  var cb = window['on' + message.name];
+  let cb = window['on' + message.name];
   if (!cb) {
     console.error(
         'Background has no callback for message:', message, 'sender:', sender);

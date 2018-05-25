@@ -40,10 +40,9 @@
 
 (function() {
 
-var validProtocols = ['http:', 'https:', 'ftp:', 'file:'];
-var REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
-var REG_PARTS = new RegExp('^([a-z*]+:|\\*:)//([^/]+)?(/.*)$');
-
+const validProtocols = ['http:', 'https:', 'ftp:', 'file:'];
+const REG_HOST = /^(?:\*\.)?[^*\/]+$|^\*$|^$/;
+const REG_PARTS = new RegExp('^([a-z*]+:|\\*:)//([^/]+)?(/.*)$');
 
 // For the format of "pattern", see:
 //   http://code.google.com/chrome/extensions/match_patterns.html
@@ -59,14 +58,14 @@ function MatchPattern(pattern) {
     this._all = false;
   }
 
-  var m = pattern.match(REG_PARTS);
+  let m = pattern.match(REG_PARTS);
   if (!m) {
     throw new Error("@match: Could not parse the pattern.");
   }
-  var protocol = m[1];
+  const protocol = m[1];
   this._protocol = protocol;
-  var host = m[2];
-  var path = m[3];
+  let host = m[2];
+  const path = m[3];
 
   if (protocol != "*:" && validProtocols.indexOf(protocol) == -1) {
     throw new Error(`@match: Invalid protocol (${protocol}) specified.`);

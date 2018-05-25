@@ -252,7 +252,7 @@ class Download {
     });
   }
 
-  _onError(reject, event) {
+  _onError(reject) {
     this.progress = 1;
     reject();
   }

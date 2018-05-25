@@ -66,16 +66,16 @@ function _loadValuesInto(dest, vals, keys) {
 
 
 function _randomUuid() {
-  var randomInts = new Uint8Array(16);
+  const randomInts = new Uint8Array(16);
   window.crypto.getRandomValues(randomInts);
-  var randomChars = [];
+  const randomChars = [];
   for (let i = 0; i<16; i++) {
-    let s = randomInts[i].toString(16).padStart(2, 0);
+    let s = randomInts[i].toString(16).padStart(2, '0');
     randomChars.push(s.substr(0, 1));
     randomChars.push(s.substr(1, 1));
   }
 
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
   uuid = uuid.replace(/[xy]/g, function(c) {
     let r = randomChars.shift();
     if (c == 'y') {
@@ -121,7 +121,7 @@ window.RemoteUserScript = class RemoteUserScript {
   }
 
   get details() {
-    var d = {};
+    const d = {};
     userScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
@@ -180,7 +180,7 @@ window.RemoteUserScript = class RemoteUserScript {
         ? _('gm_script_id_ver', this.id, this.version)
         : _('gm_script_id', this.id);
   }
-}
+};
 
 
 const runnableUserScriptKeys = [
@@ -229,7 +229,7 @@ window.RunnableUserScript = class RunnableUserScript
   get iconBlob() { return this._iconBlob; }
   get resources() { return _safeCopy(this._resources); }
   get uuid() { return this._uuid; }
-}
+};
 
 
 const editableUserScriptKeys = [
@@ -248,7 +248,7 @@ window.EditableUserScript = class EditableUserScript
   }
 
   get details() {
-    var d = super.details;
+    const d = super.details;
     editableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });

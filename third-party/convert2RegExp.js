@@ -26,22 +26,20 @@
  * ***** END LICENSE BLOCK ***** */
 
 (function() {
-
-var tldRegExp = /^([^:]+:\/\/[^\/]+)\\.tld(\/.*)?$/;
-
+const tldRegExp = /^([^:]+:\/\/[^\/]+)\\.tld(\/.*)?$/;
 
 // Exposed outer method takes regex as string, and handles the magic TLD.
 function GM_convert2RegExp(pattern, uri, forceGlob) {
-  var s = new String(pattern);
+  const s = String(pattern);
 
   if (!forceGlob && '/' == s.substr(0, 1) && '/' == s.substr(-1, 1)) {
     // Leading and trailing slash means raw regex.
     return new RegExp(s.substring(1, s.length - 1), 'i');
   }
 
-  var res = "^";
+  let res = "^";
 
-  for (var i = 0 ; i < s.length ; i++) {
+  for (let i = 0 ; i < s.length ; i++) {
     switch(s[i]) {
       case "*" :
         res += ".*";

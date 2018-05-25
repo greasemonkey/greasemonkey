@@ -30,7 +30,7 @@ function scriptStoreDb(uuid) {
           console.error('Error upgrading script store DB!', uuid, event);
           reject(event);
         };
-        let store = db.createObjectStore(valueStoreName, {'keypath': 'key'});
+        db.createObjectStore(valueStoreName, {'keypath': 'key'});
       };
     });
   }
@@ -48,7 +48,7 @@ function scriptStoreDb(uuid) {
 function deleteStore(uuid) {
   return new Promise((resolve, reject) => {
     let deleteReq = indexedDB.deleteDatabase('user-script-' + uuid);
-    deleteReq.onsuccess = event => {
+    deleteReq.onsuccess = () => {
       resolve(null);
     };
     deleteReq.onerror = event => {
@@ -65,8 +65,8 @@ async function deleteValue(uuid, key) {
   let req = store.delete(key);
   scriptDb.close();
 
-  return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+  return new Promise(resolve => {
+    req.onsuccess = () => {
       resolve(true);
     };
     req.onerror = event => {
@@ -86,7 +86,7 @@ async function getValue(uuid, key) {
   let req = store.get(key);
   scriptDb.close();
 
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     req.onsuccess = event => {
       if (!event.target.result) {
         resolve(undefined);
@@ -111,8 +111,8 @@ async function listValues(uuid) {
   let req = store.getAllKeys();
   scriptDb.close();
 
-  return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+  return new Promise(resolve => {
+    req.onsuccess = () => {
       resolve(req.result);
     };
     req.onerror = event => {
@@ -133,7 +133,7 @@ async function setValue(uuid, key, value) {
   scriptDb.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+    req.onsuccess = () => {
       resolve(true);
     };
     req.onerror = event => {
@@ -168,7 +168,7 @@ function onApiDeleteValue(message, sender, sendResponse) {
 
   // Return a promise
   return deleteValue(message.uuid, message.key);
-};
+}
 window.onApiDeleteValue = onApiDeleteValue;
 
 
@@ -184,7 +184,7 @@ function onApiGetValue(message, sender, sendResponse) {
 
   // Return a promise
   return getValue(message.uuid, message.key);
-};
+}
 window.onApiGetValue = onApiGetValue;
 
 
@@ -197,7 +197,7 @@ function onApiListValues(message, sender, sendResponse) {
 
   // Return a promise
   return listValues(message.uuid);
-};
+}
 window.onApiListValues = onApiListValues;
 
 
@@ -213,7 +213,7 @@ function onApiSetValue(message, sender, sendResponse) {
 
   // Return a promise
   return setValue(message.uuid, message.key, message.value);
-};
+}
 window.onApiSetValue = onApiSetValue;
 
 })();

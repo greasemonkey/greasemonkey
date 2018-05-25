@@ -8,7 +8,6 @@ html, body {
 
 
 #tabs {
-  margin-bottom: -1px;
   margin: 0;
   padding: 0;
   position: relative;
@@ -23,8 +22,7 @@ html, body {
   font-family: arial, sans-serif;
   font-size: smaller;
   list-style: none;
-  margin: 0;
-  margin-left: 1ex;
+  margin: 0 0 0 1ex;
   padding: 4px 8px;
   -moz-user-select: none;
 }
@@ -54,7 +52,6 @@ body, #editor {
   flex-direction: column;
   flex: 1 1 auto;
   flex-basis: fill;
-
 }
 #editor {
   height: 0;

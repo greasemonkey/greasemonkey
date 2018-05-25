@@ -62,7 +62,7 @@ document.getElementById('btn-cancel').addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
-function onClickInstall(event) {
+function onClickInstall() {
   gProgressBar.removeAttribute('value');
   let disabled = document.getElementById('install-disabled').checked;
   let openEditor = document.getElementById('open-editor-after').checked;

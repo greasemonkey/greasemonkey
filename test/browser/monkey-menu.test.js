@@ -11,7 +11,7 @@ describe('browser/monkey-menu', () => {
         new URL('http://example.com/'));
 
     chrome.runtime.sendMessage.callsArgWith(1, {'enabled': true});
-    toggleUserScriptEnabled('fake-uuid')
+    toggleUserScriptEnabled('fake-uuid');
 
     chrome.runtime.sendMessage.callsArg(1);
     uninstall('fake-uuid')

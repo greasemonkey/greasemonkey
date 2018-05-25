@@ -20,4 +20,4 @@ function onApiOpenInTab(message, sender, sendResponse) {
 
     chrome.tabs.create(tab);
   });
-};
+}

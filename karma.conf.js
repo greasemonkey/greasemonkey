@@ -40,4 +40,4 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: Infinity
   })
-}
+};

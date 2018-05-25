@@ -2,9 +2,7 @@
 describe('bg/user-script-registry', () => {
   afterEach((done) => {
     let req = indexedDB.deleteDatabase('greasemonkey');
-    req.onsuccess = event => {
-      done();
-    };
+    req.onsuccess = () => done();
     req.onerror = event => {
       console.error('delete error;', event, event.result);
     };
@@ -41,7 +39,7 @@ describe('bg/user-script-registry', () => {
     userScript2Clone._name = 'conflict1';
 
     return UserScriptRegistry._saveUserScript(userScript2Clone)
-        .then(x => { throw new Error('Should not succeed here!') })
+        .then(() => { throw new Error('Should not succeed here!') })
         .catch(e => chai.expect(e.name).to.equal('ConstraintError'));
   }).timeout(5000);
 
