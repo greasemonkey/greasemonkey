@@ -316,10 +316,7 @@ window.EditableUserScript = class EditableUserScript
     _loadValuesInto(this, userScriptDetails, editableUserScriptKeys);
 
     this._content = downloaderDetails.content;
-
-    if (downloaderDetails.icon) {
-      this._iconBlob = downloaderDetails.icon;
-    }
+    this._iconBlob = downloaderDetails.icon || null;
 
     this._requiresContent = {};
     Object.assign(this._requiresContent, downloaderDetails.requires);
