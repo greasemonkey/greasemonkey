@@ -256,12 +256,18 @@ function uninstall(uuid) {
     logUnhandledError();
 
     allScriptsLoop:
-    for (let userScriptContainer of Object.values(gTplData.userScripts)) {
-      for (let i in userScriptContainer) {
-        if (!userScriptContainer.hasOwnProperty(i)) continue;
-        let script = userScriptContainer[i];
+    for (let i of Object.keys(gTplData.userScripts)) {
+      let userScriptContainer = gTplData.userScripts[i];
+      for (let j in userScriptContainer) {
+        if (!userScriptContainer.hasOwnProperty(j)) continue;
+        let script = userScriptContainer[j];
         if (script.uuid == uuid) {
-          userScriptContainer.splice(i, 1);
+          if (userScriptContainer.length == 1) {
+            // Work around a rivets bug (or a problem with our usage?)  #2957
+            gTplData.userScripts[i] = [];
+          } else {
+            userScriptContainer.splice(j, 1);
+          }
           break allScriptsLoop;
         }
       }
