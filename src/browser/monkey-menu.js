@@ -10,6 +10,7 @@ let gTplData = {
 };
 let gMainFocusedItem = null;
 let gPendingTicker = null;
+let gRivetsView = null;
 let gScriptTemplates = {};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -57,7 +58,7 @@ function onLoad() {
 
           rivets.formatters.bothArraysEmpty
               = (a, b) => !(!!a.length || !!b.length);
-          rivets.bind(document.body, gTplData);
+          gRivetsView = rivets.bind(document.body, gTplData);
 
           document.body.id = 'main-menu';
 
@@ -196,6 +197,7 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
+  gRivetsView.update(gTplData);
   document.body.id = 'user-script';
 }
 
