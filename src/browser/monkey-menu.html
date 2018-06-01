@@ -24,10 +24,10 @@
     </menuitem>
     -->
 
-    <hr rv-unless="userScripts.active | bothArraysEmpty userScripts.inactive">
+    <hr rv-if="userScripts.active | bothArraysEmpty userScripts.inactive | not">
 
     <div id="script-list-scroll" tabindex="-1">
-      <div rv-unless="userScripts.active | empty">
+      <div rv-if="userScripts.active | empty | not">
         <heading>{'user_scripts_for_this_tab'|i18n}</heading>
         <menuitem rv-each-script="userScripts.active"
             class="user-script"
@@ -40,8 +40,8 @@
         </menuitem>
       </div>
       <!-- TODO: Don't duplicate the above and below sections. -->
-      <div rv-unless="userScripts.inactive | empty">
-        <hr rv-unless="userScripts.active | empty">
+      <div rv-if="userScripts.inactive | empty | not">
+        <hr rv-if="userScripts.active | empty | not">
         <heading>{'other_user_scripts'|i18n}</heading>
         <menuitem rv-each-script="userScripts.inactive"
             class="user-script"
@@ -111,7 +111,7 @@
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-uninstall"
-        rv-unless="pendingUninstall"
+        rv-if="pendingUninstall | not"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'uninstall'|i18n}</span>
@@ -139,7 +139,7 @@
 
 
 <script src="/src/i18n.js"></script>
-<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/third-party/tinybind.min.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/src/util/iconUrl.js"></script>

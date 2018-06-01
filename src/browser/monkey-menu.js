@@ -10,8 +10,8 @@ let gTplData = {
 };
 let gMainFocusedItem = null;
 let gPendingTicker = null;
-let gRivetsView = null;
 let gScriptTemplates = {};
+let gView = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,9 +56,9 @@ function onLoad() {
           let url = tabs.length && new URL(tabs[0].url) || null;
           loadScripts(userScripts, url);
 
-          rivets.formatters.bothArraysEmpty
+          tinybind.formatters.bothArraysEmpty
               = (a, b) => !(!!a.length || !!b.length);
-          gRivetsView = rivets.bind(document.body, gTplData);
+          gView = tinybind.bind(document.body, gTplData);
 
           document.body.id = 'main-menu';
 
@@ -197,7 +197,7 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
-  gRivetsView.update(gTplData);
+  gView.update(gTplData);
   document.body.id = 'user-script';
 }
 

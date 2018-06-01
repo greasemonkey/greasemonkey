@@ -2,7 +2,7 @@
 let gUserScript = null;
 
 // Change the title of the save icon (and more) to initial values.
-rivets.bind(document, {});
+tinybind.bind(document, {});
 
 const editor = CodeMirror(
     document.getElementById('editor'),
