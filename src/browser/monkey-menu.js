@@ -11,7 +11,6 @@ let gTplData = {
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
-let gView = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +57,7 @@ function onLoad() {
 
           tinybind.formatters.bothArraysEmpty
               = (a, b) => !(!!a.length || !!b.length);
-          gView = tinybind.bind(document.body, gTplData);
+          tinybind.bind(document.body, gTplData);
 
           document.body.id = 'main-menu';
 
@@ -197,7 +196,6 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
-  gView.update(gTplData);
   document.body.id = 'user-script';
 }
 
@@ -264,12 +262,7 @@ function uninstall(uuid) {
         if (!userScriptContainer.hasOwnProperty(j)) continue;
         let script = userScriptContainer[j];
         if (script.uuid == uuid) {
-          if (userScriptContainer.length == 1) {
-            // Work around a rivets bug (or a problem with our usage?)  #2957
-            gTplData.userScripts[i] = [];
-          } else {
-            userScriptContainer.splice(j, 1);
-          }
+          userScriptContainer.splice(j, 1);
           break allScriptsLoop;
         }
       }
