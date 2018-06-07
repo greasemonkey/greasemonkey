@@ -41,23 +41,23 @@
 
 <body>
 
-<div id="modal">
-  <div class="panel">
+<div id="modal-splash">
+  <div id="modal">
     <header>
-      <span class="fa fa-cog fa-lg fa-spin"></span>
-      <h2>{modal.title}</h2>
+      <span class="fa fa-cog fa-spin"></span>
+      {modal.title}
     </header>
-    <div class="panel-body">
-      <div rv-show="modal.errorList | empty">
-        <progress id="modal-progress">
-      </div>
-      <div rv-hide="modal.errorList | empty">
-        <p>{'script_save_error'|i18n}</p>
-        <ul>
-          <li rv-each-error="modal.errorList">{error}</li>
-        </ul>
-      </div>
+
+    <div rv-if="modal.errorList | empty">
+      <progress></progress>
     </div>
+    <div rv-if="modal.errorList | empty | not">
+      <p>{'script_save_error'|i18n}</p>
+      <ul>
+        <li rv-each-error="modal.errorList">{error}</li>
+      </ul>
+    </div>
+
     <footer>
       <button
           class="button button-big"
