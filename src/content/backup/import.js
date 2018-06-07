@@ -115,13 +115,21 @@ async function fillDownloaderFromZipFolder(
 
   let requires = {};
   parsedDetails.requireUrls.forEach(u => {
-    requires[u] = zip.file(urlMap[u]).async('text');
+    try {
+      requires[u] = zip.file(urlMap[u]).async('text');
+    } catch (e) {
+      console.warn('Could not load from backup zip, will attempt download:', u);
+    }
   });
   downloader.setKnownRequires(requires);
 
   let resources = {};
   Object.values(parsedDetails.resourceUrls).forEach(u => {
-    resources[u] = zip.file(urlMap[u]).async('blob');
+    try {
+      resources[u] = zip.file(urlMap[u]).async('blob');
+    } catch (e) {
+      console.warn('Could not load from backup zip, will attempt download:', u);
+    }
   });
   downloader.setKnownResources(resources);
 
