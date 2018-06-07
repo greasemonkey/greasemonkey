@@ -17,7 +17,7 @@ let gRvDetails = {
 };
 
 
-rivets.bind(document.body, gRvDetails);
+tinybind.bind(document.body, gRvDetails);
 
 
 let gUserScriptUrl = unescape(document.location.search.substr(1));

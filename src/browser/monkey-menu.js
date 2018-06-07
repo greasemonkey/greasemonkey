@@ -10,7 +10,6 @@ let gTplData = {
 };
 let gMainFocusedItem = null;
 let gPendingTicker = null;
-let gRivetsView = null;
 let gScriptTemplates = {};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,9 +55,9 @@ function onLoad() {
           let url = tabs.length && new URL(tabs[0].url) || null;
           loadScripts(userScripts, url);
 
-          rivets.formatters.bothArraysEmpty
+          tinybind.formatters.bothArraysEmpty
               = (a, b) => !(!!a.length || !!b.length);
-          gRivetsView = rivets.bind(document.body, gTplData);
+          tinybind.bind(document.body, gTplData);
 
           document.body.id = 'main-menu';
 
@@ -197,7 +196,6 @@ function navigateToMainMenu() {
 function navigateToScript(uuid) {
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
-  gRivetsView.update(gTplData);
   document.body.id = 'user-script';
 }
 
@@ -264,12 +262,7 @@ function uninstall(uuid) {
         if (!userScriptContainer.hasOwnProperty(j)) continue;
         let script = userScriptContainer[j];
         if (script.uuid == uuid) {
-          if (userScriptContainer.length == 1) {
-            // Work around a rivets bug (or a problem with our usage?)  #2957
-            gTplData.userScripts[i] = [];
-          } else {
-            userScriptContainer.splice(j, 1);
-          }
+          userScriptContainer.splice(j, 1);
           break allScriptsLoop;
         }
       }

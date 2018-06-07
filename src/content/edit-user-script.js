@@ -29,7 +29,7 @@ const gTplData = {
   }
 };
 // Change the title of the save icon (and more) to initial values.
-rivets.bind(document, gTplData);
+tinybind.bind(document, gTplData);
 
 gModalCloseBtn.addEventListener('click', closeSaveModal);
 
