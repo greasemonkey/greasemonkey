@@ -72,6 +72,9 @@
   "extName": {
     "message": "Greasemonkey"
   },
+  "fix_and_save": {
+    "message": "The editor contents have not been saved.  Fix this error and try again."
+  },
   "get_user_scripts": {
     "message": "Get user scripts"
   },
