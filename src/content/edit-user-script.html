@@ -44,14 +44,14 @@
 <div id="modal-splash">
   <div id="modal">
     <header>
-      <span class="fa fa-cog fa-spin"></span>
+      <span class="fa fa-cog" rv-class-fa-spin="modal.closeDisabled"></span>
       {modal.title}
     </header>
 
-    <div rv-if="modal.errorList | empty">
+    <div rv-show="modal.errorList | empty">
       <progress></progress>
     </div>
-    <div rv-if="modal.errorList | empty | not">
+    <div rv-show="modal.errorList | empty | not">
       <p>{'script_save_error'|i18n}</p>
       <ul>
         <li rv-each-error="modal.errorList">{error}</li>
@@ -60,7 +60,7 @@
 
     <footer>
       <button
-          class="button button-big"
+          class="button button-info button-big"
           id="modal-close"
           rv-disabled="modal.closeDisabled">
         {'close'|i18n}

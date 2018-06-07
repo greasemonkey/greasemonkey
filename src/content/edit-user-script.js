@@ -11,15 +11,13 @@ const editor = CodeMirror(
 
 CodeMirror.commands.save = onSave;
 
-let openSaveModalTimer = null;
+let modalTimer = null;
 
 const userScriptUuid = location.hash.substr(1);
 const editorDocs = [];
 const editorTabs = [];
 const editorUrls = [];
 const tabs = document.getElementById('tabs');
-const gModalCloseBtn = document.getElementById('modal-close');
-const gModalProgress = document.getElementById('modal-progress');
 const gTplData = {
   'name': '',
   'modal': {
@@ -31,7 +29,8 @@ const gTplData = {
 // Change the title of the save icon (and more) to initial values.
 tinybind.bind(document, gTplData);
 
-gModalCloseBtn.addEventListener('click', closeSaveModal);
+document.querySelector('#modal footer button')
+    .addEventListener('click', modalClose);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -107,6 +106,63 @@ editor.on('change', () => {
 });
 
 
+editor.on('swapDoc', doc => {
+  if (doc.getMode().name == 'javascript') {
+    doc.setOption('gutters', ['CodeMirror-lint-markers']);
+    doc.setOption('lint', true);
+    doc.performLint();
+  }
+});
+
+
+document.getElementById('save').addEventListener('click', () => {
+  editor.execCommand('save');
+});
+
+
+window.addEventListener('beforeunload', event => {
+  let isDirty = editorDocs.some(doc => {
+    return !doc.isClean();
+  });
+  if (isDirty) {
+    event.preventDefault();
+  }
+});
+
+///////////////////////////////////////////////////////////////////////////////
+
+function modalClose() {
+  clearTimeout(modalTimer);
+
+  document.body.classList.remove('save');
+  gTplData.modal.closeDisabled = true;
+  gTplData.modal.errorList = [];
+  editor.getInputField().focus();
+}
+
+
+function modalFill(e) {
+  if (e instanceof DownloadError) {
+    gTplData.modal.errorList = e.failedDownloads.map(
+        d => _('ERROR_at_URL', d.error, d.url));
+  } else if (e.message) {
+    gTplData.modal.errorList = [e.message];
+  } else {
+    // Log the unknown error.
+    console.error('Unknown save error saving script', e);
+    gTplData.modal.errorList = [_('download_error_unknown')];
+  }
+  gTplData.modal.closeDisabled = false;
+}
+
+
+function modalOpen() {
+  document.querySelector('#modal progress').value = 0;
+  document.body.classList.add('save');
+  editor.getInputField().blur();
+}
+
+
 function onSave() {
   if (document.querySelectorAll('#tabs .tab.dirty').length == 0) {
     return;
@@ -125,22 +181,22 @@ function onSave() {
   downloader.setKnownResources(gUserScript.resources);
   downloader.setKnownUuid(userScriptUuid);
   downloader.addProgressListener(() => {
-    gModalProgress.value = downloader.progress;
+    document.querySelector('#modal progress').value = downloader.progress;
   });
 
-  openSaveModalTimer = setTimeout(openSaveModal, 75);
+  modalTimer = setTimeout(modalOpen, 75);
   downloader
       .start()
       .then(() => {
-        gModalProgress.removeAttribute('value');
+        document.querySelector('#modal progress').removeAttribute('value');
         return downloader.install();
       }).then(onSaveComplete)
-      .catch(showErrorModal);
+      .catch(modalFill);
 }
 
 
 function onSaveComplete(savedDetails) {
-  closeSaveModal();
+  modalClose();
 
   gTplData.name = savedDetails.name;
   tabs.children[0].textContent = savedDetails.name;
@@ -164,58 +220,3 @@ function onSaveComplete(savedDetails) {
     }
   });
 }
-
-
-function closeSaveModal() {
-  clearTimeout(openSaveModalTimer);
-
-  document.body.classList.remove('save');
-  gTplData.modal.closeDisabled = true;
-  gTplData.modal.errorList = [];
-  editor.getInputField().focus();
-}
-
-
-function openSaveModal() {
-  gModalProgress.value = 0;
-  document.body.classList.add('save');
-  editor.getInputField().blur();
-}
-
-
-function showErrorModal(e) {
-  if (e instanceof DownloadError) {
-    gTplData.modal.errorList = e.failedDownloads.map(
-        d => _('ERROR_at_URL', d.error, d.url));
-  } else if (e.message) {
-    gTplData.modal.errorList = [e.message];
-  } else {
-    // Log the unknown error.
-    console.error('Unknown save error saving script', e);
-    gTplData.modal.errorList = [_('download_error_unknown')];
-  }
-  gTplData.modal.closeDisabled = false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-editor.on('swapDoc', doc => {
-  if (doc.getMode().name == 'javascript') {
-    doc.setOption('gutters', ['CodeMirror-lint-markers']);
-    doc.setOption('lint', true);
-    doc.performLint();
-  }
-});
-
-document.getElementById('save').addEventListener('click', () => {
-  editor.execCommand('save');
-});
-
-window.addEventListener('beforeunload', event => {
-  let isDirty = editorDocs.some(doc => {
-    return !doc.isClean();
-  });
-  if (isDirty) {
-    event.preventDefault();
-  }
-});
