@@ -1,11 +1,48 @@
 html, body {
   background: lightgrey;
-  height: calc(100% - 8px);
+  height: 100%;
   margin: 0;
   overflow: hidden;
   padding: 4px;
 }
 
+body.save #modal-splash {
+  display: block;
+}
+body #modal-splash {
+  display: none
+}
+
+#modal-splash {
+  background-color: #A3A3A363;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}
+#modal {
+  background-color: #FCFCF9;
+  border: 1px solid #CCC;
+  border-radius: 2px;
+  margin: 25% auto;
+  padding: 1rem;
+  width: 30em;
+}
+#modal header {
+  border-bottom: 1px solid #CCC;
+  font-size: 25px;
+  margin: 0 0 10px 0;
+  padding-bottom: 10px;
+}
+#modal footer {
+  margin: 10px 0 0 0;
+  text-align: right;
+}
+#modal footer button {
+  padding: 0 1em;
+}
 
 #tabs {
   margin: 0;
@@ -20,7 +57,7 @@ html, body {
   cursor: default;
   display: inline-block;
   font-family: arial, sans-serif;
-  font-size: smaller;
+  font-size: small;
   list-style: none;
   margin: 0 0 0 1ex;
   padding: 4px 8px;
@@ -59,4 +96,12 @@ body, #editor {
 }
 .CodeMirror {
   height: 100% !important;
+}
+
+/* Replace shoelace.css settings with defaults. */
+body {
+  font-size: 14px;
+}
+.CodeMirror pre {
+  line-height: 1.0 !important;
 }

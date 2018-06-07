@@ -104,7 +104,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       });
       await Promise.all(setValues);
     }
-    return details.uuid;
+    return details;
   }).catch(err => {
     console.error('Error in installFromDownloader()', err);
     // Rethrow so caller can also deal with it
@@ -261,17 +261,10 @@ async function saveUserScript(userScript) {
     } else {
       message = _('save_failed_unknown');
     }
-
-    // TODO: Pass this message to the editor tab, not general notifications.
-    let notificationOpts = {
-      'iconUrl': '/skin/icon.svg',
-      'message': message,
-      'title': _('script_save_error'),
-      'type': 'basic',
-    };
-    chrome.notifications.create(notificationOpts);
     // Rethrow to allow caller to deal with error
-    throw error;
+    let retError = new Error(message);
+    retError.orig = error;
+    throw retError;
   }
 
   let details = userScript.details;
