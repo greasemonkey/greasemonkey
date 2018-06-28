@@ -2,21 +2,54 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 — Greasemonkey ユーザースクリプト"
   },
+  "NAME_greasemonkey_user_script_editor": {
+    "message": "$1 — Greasemonkey ユーザースクリプトエディタ"
+  },
   "ERROR_at_URL": {
     "message": "$2 で $1",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
   },
   "SCRIPT_does_not_grant_METHOD": {
-    "message": "$1 は @grant $2 を含みません。"
+    "message": "$1 は「@grant $2」を含みません。"
+  },
+  "backup_export": {
+    "message": "バックアップのエクスポート..."
+  },
+  "backup_import": {
+    "message": "バックアップのインポート..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey バックアップのインポート"
+  },
+  "backup_import_file": {
+    "message": "ファイルからインポート"
+  },
+  "backup_import_select_file": {
+    "message": "Greasemonkey バックアップZIPファイルを選択して上記のオプションでインポートします。"
+  },
+  "backup_import_options": {
+    "message": "インポートオプション"
+  },
+  "backup_import_remove_detail": {
+    "message": "バックアップファイルにないスクリプトをアンインストールします。"
+  },
+  "backup_import_replace_detail": {
+    "message": "既にインストールされているスクリプトをバックアップファイルのバージョンで上書きします。"
   },
   "cancel": {
     "message": "キャンセル"
+  },
+  "description": {
+    "message": "説明："
   },
   "disabled": {
     "message": "無効"
   },
   "does_not_run_on": {
-    "message": "実行されるページから除外されるページ:"
+    "message": "実行されるページから除外されるページ："
+  },
+  "done": {
+    "message": "完了"
   },
   "download_failed": {
     "message": "ユーザースクリプトのダウンロードに失敗しました"
@@ -25,7 +58,7 @@
     "message": "ユーザースクリプトのダウンロードで不明なエラーが発生しました。"
   },
   "duplicate_resource_NAME": {
-    "message": "リソース名が重複しています: $1"
+    "message": "リソース名が重複しています：$1"
   },
   "edit": {
     "message": "編集"
@@ -36,6 +69,9 @@
   "extDesc": {
     "message": "Firefox 向けのユーザースクリプトマネージャー。"
   },
+  "extName": {
+    "message": "Greasemonkey"
+  },
   "get_user_scripts": {
     "message": "ユーザースクリプトの入手"
   },
@@ -43,13 +79,13 @@
     "message": "GM.notification: 「text」は文字列でなければなりません。"
   },
   "gm_opentab_bad_URL": {
-    "message": "GM.openInTab: 不正なURLです: $1"
+    "message": "GM.openInTab: 不正なURLです：$1"
   },
   "gm_script_id": {
-    "message": "[Greasemonkey スクリプト $1] "
+    "message": "「Greasemonkey スクリプト $1」"
   },
   "gm_script_id_ver": {
-    "message": "[Greasemonkey スクリプト $id$; バージョン $version$]",
+    "message": "「Greasemonkey スクリプト $id$; バージョン $version$」",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -73,8 +109,14 @@
   "greasemonkey_wiki": {
     "message": "Greasemonkey wiki"
   },
+  "homepage": {
+    "message": "ホームページ"
+  },
   "ignoring_MATCH_because_REASON": {
-    "message": "「$1」は不正な @match パターンです:\n$2"
+    "message": "「$1」は不正な @match パターンです：\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Greasemonkey データベースのインポート"
   },
   "install": {
     "message": "インストール"
@@ -85,11 +127,14 @@
   "install_failed": {
     "message": "ユーザースクリプトのインストールに失敗しました"
   },
+  "importing": {
+    "message": "インポート中..."
+  },
   "malicious_user_scripts": {
     "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。"
   },
   "matches": {
-    "message": "実行されるページ (@match):"
+    "message": "実行されるページ (@match)："
   },
   "new_user_script": {
     "message": "ユーザースクリプトの新規作成..."
@@ -101,19 +146,19 @@
     "message": "その他のユーザースクリプト"
   },
   "requires_special_apis": {
-    "message": "次の特権APIを許可:"
+    "message": "次の特権APIを許可："
   },
   "runs_on": {
-    "message": "実行されるページ (@includes):"
+    "message": "実行されるページ (@includes)："
   },
   "save": {
     "message": "保存"
   },
   "save_failed_NAME_already_in_NAMESPACE": {
-    "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。 "
+    "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。"
   },
   "save_failed_unknown": {
-    "message": "ユーザースクリプトの保存に失敗: 不明なエラー。 "
+    "message": "ユーザースクリプトの保存に失敗: 不明なエラー。"
   },
   "script_save_error": {
     "message": "スクリプト保存エラー"
@@ -136,16 +181,19 @@
   "user_scripts_for_this_tab": {
     "message": "現在のタブで実行されるユーザースクリプト"
   },
+  "version": {
+    "message": "バージョン："
+  },
   "xhr_bad_url": {
-    "message": "GM.xmlHttpRequest: 不正なURLです: $1\n$2"
+    "message": "GM.xmlHttpRequest: 不正なURLです：$1\n$2"
   },
   "xhr_bad_url_scheme": {
-    "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です: $1"
+    "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です：$1"
   },
   "xhr_no_details": {
     "message": "GM.xmlHttpRequest: 「details」引数が指定されていません。"
   },
   "xhr_no_url": {
-    "message": "GM.xmlHttpRequest: URLが指定されていません。"
+    "message": "GM.xmlHttpRequest:「URL」が指定されていません。"
   }
 }

@@ -2,12 +2,39 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey Benutzerskript"
   },
+  "NAME_greasemonkey_user_script_editor": {
+    "message": "$1 - Greasemonkey Benutzerskript-Editor"
+  },
   "ERROR_at_URL": {
     "message": "$1 für $2",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
   },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 benötigt @grant für Funktion $2"
+  },
+  "backup_export": {
+    "message": "Exportieren..."
+  },
+  "backup_import": {
+    "message": "Importieren..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey Import"
+  },
+  "backup_import_file": {
+    "message": "Datei importieren"
+  },
+  "backup_import_select_file": {
+    "message": "Eine Greasemonkey ZIP-Sicherungsdatei zum Import mit obigen Optionen auswählen."
+  },
+  "backup_import_options": {
+    "message": "Import-Optionen"
+  },
+  "backup_import_remove_detail": {
+    "message": "Benutzerskripte deinstallieren, die in der Sicherungsdatei fehlen."
+  },
+  "backup_import_replace_detail": {
+    "message": "Bereits vorhandene Benutzerskripte durch die gesicherte Version ersetzen."
   },
   "cancel": {
     "message": "Abbrechen"
@@ -20,6 +47,9 @@
   },
   "does_not_run_on": {
     "message": "Keine Ausführung auf:"
+  },
+  "done": {
+    "message": "Beendet"
   },
   "download_failed": {
     "message": "Fehler beim Herunterladen des Benutzerskripts"
@@ -76,11 +106,17 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey ist deaktiviert"
   },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey Wiki"
+  },
   "homepage": {
     "message": "Homepage"
   },
   "ignoring_MATCH_because_REASON": {
     "message": "Ignoriere @match-Eintrag $1 aus folgendem Grund:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Greasemonkey-Datenbank importieren"
   },
   "install": {
     "message": "Installieren"
@@ -90,6 +126,9 @@
   },
   "install_failed": {
     "message": "Benutzerskript konnte nicht installiert werden"
+  },
+  "importing": {
+    "message": "Importiere..."
   },
   "malicious_user_scripts": {
     "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen."

@@ -25,7 +25,7 @@
     "message": "Bestand importeren"
   },
   "backup_import_select_file": {
-    "message": "Selecteer een te importeren Greasemonkey-back-up-ZIP-bestand met de opties hierboven."
+    "message": "Selecteer een Greasemonkey-back-up-ZIP-bestand om dit met de opties hierboven te importeren."
   },
   "backup_import_options": {
     "message": "Importopties"
