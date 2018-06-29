@@ -109,7 +109,15 @@ Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
 
-# SaveOptions
+# OptionsLoad
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/options.js`
+
+Returns previously saved options data.  Result is the same format as `OptionsSave`'s request.
+
+* `excludes` A string, one `@exclude` pattern per line.
+
+# OptionsSave
 Sent by: `browser/monkey-menu.js`
 Received by: `bg/options.js`
 

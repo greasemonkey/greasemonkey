@@ -159,9 +159,11 @@ window.RemoteUserScript = class RemoteUserScript {
     }
 
     // TODO: Profile cost of pattern generation, cache if justified.
-    // TODO: User global excludes.
     // TODO: User includes/excludes/matches.
 
+    for (let glob of getGlobalExcludes()) {
+      if (_testClude(glob, url)) return false;
+    }
     for (let glob of this._excludes) {
       if (_testClude(glob, url)) return false;
     }

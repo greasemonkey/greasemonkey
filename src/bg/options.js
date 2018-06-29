@@ -7,31 +7,45 @@ of Greasemonkey.
 // Private implementation.
 (function() {
 
-let isEnabled = true;
+let gIsEnabled = true;
 chrome.storage.local.get('globalEnabled', v => {
-  isEnabled = v['globalEnabled'];
-  if ('undefined' == typeof isEnabled) isEnabled = true;
+  gIsEnabled = v['globalEnabled'];
+  if ('undefined' == typeof gIsEnabled) gIsEnabled = true;
   setIcon();
+});
+
+let gGlobalExcludes = [];
+chrome.storage.local.get('globalExcludes', v => {
+  let str = v['globalExcludes'];
+  if ('undefined' != typeof str) {
+    gGlobalExcludes = str.split('\n');
+  }
 });
 
 
 function getGlobalEnabled() {
-  return !!isEnabled;
+  return !!gIsEnabled;
 }
 window.getGlobalEnabled = getGlobalEnabled;
 
 
+function getGlobalExcludes() {
+  return gGlobalExcludes.slice();
+}
+window.getGlobalExcludes = getGlobalExcludes;
+
+
 function onEnabledQuery(message, sender, sendResponse) {
-  sendResponse(isEnabled);
+  sendResponse(gIsEnabled);
 }
 window.onEnabledQuery = onEnabledQuery;
 
 
 function setGlobalEnabled(enabled) {
-  isEnabled = !!enabled;
+  gIsEnabled = !!enabled;
   chrome.runtime.sendMessage({
     'name': 'EnabledChanged',
-    'enabled': isEnabled,
+    'enabled': gIsEnabled,
   }, logUnhandledError);
   setIcon();
   chrome.storage.local.set({'globalEnabled': enabled});
@@ -50,7 +64,7 @@ function setIcon() {
     return;
   }
   let iconPath = chrome.extension.getURL('skin/icon.svg');
-  if (isEnabled) {
+  if (gIsEnabled) {
     chrome.browserAction.setIcon({'path': iconPath});
   } else {
     let img = document.createElement('img');
@@ -69,17 +83,34 @@ function setIcon() {
 
 
 function toggleGlobalEnabled() {
-  setGlobalEnabled(!isEnabled);
+  setGlobalEnabled(!gIsEnabled);
 }
 window.toggleGlobalEnabled = toggleGlobalEnabled;
 
+/*****************************************************************************/
 
 function onEnabledToggle(message, sender, sendResponse) {
-  try {
-    toggleGlobalEnabled();
-    sendResponse(isEnabled);
-  } catch (e) { console.error(e); }
+  toggleGlobalEnabled();
+  sendResponse(gIsEnabled);
 }
 window.onEnabledToggle = onEnabledToggle;
+
+
+function onOptionsLoad(message, sender, sendResponse) {
+  let options = {
+    'excludes': gGlobalExcludes.join('\n'),
+  };
+  sendResponse(options);
+}
+window.onOptionsLoad = onOptionsLoad;
+
+
+function onOptionsSave(message, sender, sendResponse) {
+  chrome.storage.local.set(
+      {'globalExcludes': message.excludes},
+      logUnhandledError);
+  gGlobalExcludes = message.excludes.split('\n');
+}
+window.onOptionsSave = onOptionsSave;
 
 })();

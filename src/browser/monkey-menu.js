@@ -2,15 +2,28 @@
 let gTplData = {
   'activeScript': {},
   'enabled': undefined,
+  'pendingUninstall': 0,
+  'options': {
+    'globalExcludesStr': '',
+  },
   'userScripts': {
     'active': [],
     'inactive': [],
   },
-  'pendingUninstall': 0,
 };
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
+
+///////////////////////////////////////////////////////////////////////////////
+
+if ('undefined' == typeof window.getGlobalExcludes) {
+  // Equivalent of the version provided by `user-script-registry`, but here.
+  // Undefined check because of shared test scope collision.
+  window.getGlobalExcludes = function() {
+    return gTplData.options.globalExcludesStr.split('\n');
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -45,24 +58,57 @@ function onKeyDown(event) {
 
 function onLoad() {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
+
+  let tabs = null;
+  let userScripts = null;
+  function finish() {
+    numPending--;
+    if (numPending > 0) return;
+
+    let url = tabs.length && new URL(tabs[0].url) || null;
+    loadScripts(userScripts, url);
+
+    tinybind.formatters.bothArraysEmpty
+        = (a, b) => !(!!a.length || !!b.length);
+    tinybind.bind(document.body, gTplData);
+
+    document.body.id = 'main-menu';
+
+    setTimeout(window.focus, 0);
+  }
+
+  let numPending = 0;
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
-      enabled => gTplData.enabled = enabled);
+      enabled => {
+        gTplData.enabled = enabled;
+        finish();
+      });
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
-        chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
-          let url = tabs.length && new URL(tabs[0].url) || null;
-          loadScripts(userScripts, url);
+      userScripts_ => {
+        userScripts = userScripts_;
+        finish();
+      });
 
-          tinybind.formatters.bothArraysEmpty
-              = (a, b) => !(!!a.length || !!b.length);
-          tinybind.bind(document.body, gTplData);
+  numPending++;
+  chrome.runtime.sendMessage(
+      {'name': 'OptionsLoad'},
+      options => {
+        gTplData.options.globalExcludesStr = options.excludes;
+        finish();
+      });
 
-          document.body.id = 'main-menu';
-
-          setTimeout(window.focus, 0);
-        });
+  numPending++;
+  chrome.tabs.query(
+      {'active': true, 'currentWindow': true},
+      tabs_ => {
+        tabs = tabs_;
+        finish();
       });
 }
 
@@ -187,7 +233,10 @@ function loadScripts(userScriptsDetail, url) {
 function navigateToMainMenu() {
   switch (document.body.id) {
     case 'options':
-      console.log('TODO: Save options.');
+      chrome.runtime.sendMessage({
+        'name': 'OptionsSave',
+        'excludes': gTplData.options.globalExcludesStr,
+      }, logUnhandledError);
       break;
     case 'user-script':
       if (gTplData.pendingUninstall > 0) {

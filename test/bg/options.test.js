@@ -20,4 +20,20 @@ describe('bg/options', () => {
       assert.equal(getGlobalEnabled(), false);
     });
   });
+
+  describe('global excludes', () => {
+    it('prevents script matching', () => {
+      window.onOptionsSave({'excludes': ''});
+      let userScript
+          = new EditableUserScript({'includes': ['http://example.net/*']});
+
+      assert.isTrue(userScript.runsAt(new URL('http://example.net/ruined')));
+      assert.isTrue(userScript.runsAt(new URL('http://example.net/weaved')));
+
+      window.onOptionsSave({'excludes': 'http://example.net/r*'});
+
+      assert.isFalse(userScript.runsAt(new URL('http://example.net/ruined')));
+      assert.isTrue(userScript.runsAt(new URL('http://example.net/weaved')));
+    });
+  });
 });

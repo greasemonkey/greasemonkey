@@ -166,5 +166,6 @@ section.options .explain a {
 
 section.options textarea {
   font-family: monospace;
+  font-size: 90%;
   white-space: pre;
 }
