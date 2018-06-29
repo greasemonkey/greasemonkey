@@ -108,11 +108,13 @@ function activate(el) {
   while (el && el.tagName != 'MENUITEM') el = el.parentNode;
   if (!el) return;
 
-  switch (el.id) {
-    case 'back':
+  switch (el.className) {
+    case 'go-back':
       navigateToMainMenu();
       return;
+  }
 
+  switch (el.id) {
     case 'backup-export':
       chrome.runtime.sendMessage({'name': 'ExportDatabase'}, logUnhandledError);
       window.close();
@@ -129,6 +131,10 @@ function activate(el) {
     case 'toggle-global-enabled':
       browser.runtime.sendMessage({'name': 'EnabledToggle'})
           .then(enabled => gTplData.enabled = enabled);
+      return;
+    case 'open-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'options';
       return;
 
     case 'user-script-toggle-enabled':
@@ -179,11 +185,19 @@ function loadScripts(userScriptsDetail, url) {
 
 
 function navigateToMainMenu() {
-  if (gTplData.pendingUninstall > 0) {
-    uninstall(gTplData.activeScript.uuid);
-    return;
+  switch (document.body.id) {
+    case 'options':
+      console.log('TODO: Save options.');
+      break;
+    case 'user-script':
+      if (gTplData.pendingUninstall > 0) {
+        uninstall(gTplData.activeScript.uuid);
+        return;
+      }
+      gTplData.activeScript = {};
+      break;
   }
-  gTplData.activeScript = {};
+
   document.body.id = 'main-menu';
 
   if (gMainFocusedItem) {
@@ -198,6 +212,7 @@ function navigateToScript(uuid) {
   gTplData.activeScript = gScriptTemplates[uuid];
   document.body.id = 'user-script';
 }
+
 
 async function newUserScript() {
   let r = Math.floor(Math.random() * 900000 + 100000);

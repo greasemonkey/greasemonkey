@@ -34,13 +34,50 @@ section {
   width: 100vw;
 }
 
-section.user-script {
+/* Hide non-main sections by default. */
+section.options,
+section.user-script
+{
   position: absolute;
   top: 0;
   left: 100vw;
 }
 
-body#user-script section { margin-left: -100vw; }
+/* Slide the main menu away when it's non-active. */
+section.main-menu
+{ margin-left: -100vw; }
+body#main-menu section.main-menu
+{ margin-left: 0; }
+
+/* Slide the other menu in when it's active. */
+body#options section.options,
+body#user-script section.user-script
+{ margin-left: -100vw; }
+
+
+section header {
+  color: -moz-fieldText;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+section menuitem.go-back {
+  box-sizing: content-box;
+  color: inherit;
+  display: inline-block;
+  height: 16px;
+  margin: 4px 4px 0 4px;
+  padding: 8px;
+  vertical-align: -10px;  /* Relative to text, after padding. */
+  width: 16px;
+}
+section menuitem.go-back:hover {
+  background-color: var(--focus-color);
+}
+section menuitem.go-back::before {
+  content: url(/skin/back.svg);
+}
 
 /********************************** MENUS ************************************/
 
@@ -98,31 +135,6 @@ menu heading {
 }
 
 /***************************** SCRIPT DETAIL *********************************/
-
-menuitem#back {
-  box-sizing: content-box;
-  color: inherit;
-  display: inline-block;
-  height: 16px;
-  margin: 4px 4px 0 4px;
-  padding: 8px;
-  vertical-align: -10px;  /* Relative to text, after padding. */
-  width: 16px;
-}
-menuitem#back:hover {
-  background-color: var(--focus-color);
-}
-menuitem#back::before {
-  content: url(/skin/back.svg);
-}
-
-
-section header {
-  color: -moz-fieldText;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 
 section.user-script p {

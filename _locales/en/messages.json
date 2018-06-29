@@ -109,6 +109,9 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey is disabled"
   },
+  "greasemonkey_options": {
+    "message": "Greasemonkey Options"
+  },
   "greasemonkey_user_script_editor": {
     "message": "Greasemonkey User Script Editor"
   },
