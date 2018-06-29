@@ -82,7 +82,7 @@
     "message": "Global Excludes"
   },
   "global_excludes_explain": {
-    "message": "One @exclude pattern per line, applies to all user scripts."
+    "message": "One @exclude pattern per line.  No user scripts will run here."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: \"text\" must be a string"
