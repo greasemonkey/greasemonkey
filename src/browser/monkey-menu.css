@@ -136,7 +136,6 @@ menu heading {
 
 /***************************** SCRIPT DETAIL *********************************/
 
-
 section.user-script p {
   margin: 0;
   padding: 4px 12px 4px 10px;
@@ -151,4 +150,21 @@ section.user-script {
 }
 section.user-script menu {
   overflow-y: auto;
+}
+
+/******************************** OPTIONS ************************************/
+
+section.options p {
+  margin: 0;
+  padding: 4px 12px 4px 10px;
+}
+
+section.options .explain a {
+  color: black;
+  float: right;
+}
+
+section.options textarea {
+  font-family: monospace;
+  white-space: pre;
 }
