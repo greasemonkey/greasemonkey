@@ -1,14 +1,19 @@
-GM_xmlhttpRequest({
+// ==UserScript==
+// @name        GM.xmlhttpRequest() test.
+// @description Exercise the XHR API.
+// @version     1
+// @grant       GM.xmlHttpRequest
+// ==/UserScript==
+
+GM.xmlHttpRequest({
   method: 'GET',
-  //url: 'http://localhost/',
-  url: '/img/apache_pb.gif',
+  url: 'http://localhost/',
   onload: function(response) {
-    dump('GM_xmlhttpRequest works: '
-        + response.responseText.substring(0, 30) + '\n');
+    console.log('GM_xmlhttpRequest works: ', response.responseText.substring(0, 30));
   },
   onprogress: function(e) {
-    dump('gm_xhr onprogress lengthComputable: ' + (e.lengthComputable || '') + '\n');
-    dump('gm_xhr onprogress loaded: ' + (e.loaded || '') + '\n');
-    dump('gm_xhr onprogress total: ' + (e.total || '') + '\n');
+    console.log('gm_xhr onprogress lengthComputable: ', e.lengthComputable);
+    console.log('gm_xhr onprogress loaded: ', e.loaded);
+    console.log('gm_xhr onprogress total: ', e.total);
   }
 });
