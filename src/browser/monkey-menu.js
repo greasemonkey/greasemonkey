@@ -2,15 +2,31 @@
 let gTplData = {
   'activeScript': {},
   'enabled': undefined,
+  'pendingUninstall': 0,
+  'options': {
+    'globalExcludesStr': '',
+  },
+  'origin': null,
   'userScripts': {
     'active': [],
     'inactive': [],
   },
-  'pendingUninstall': 0,
 };
+
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
+
+///////////////////////////////////////////////////////////////////////////////
+
+if ('undefined' == typeof window.getGlobalExcludes) {
+  // Equivalent of the version provided by `user-script-registry`, but here.
+  // Undefined check because of shared test scope collision.
+  window.getGlobalExcludes = function() {
+    return gTplData.options.globalExcludesStr.trim()
+        .split('\n').map(x => x.trim());
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +47,8 @@ function onClick(event) {
 
 
 function onKeyDown(event) {
+  if (event.target.tagName == 'TEXTAREA') return;
+
   if (event.code == 'Enter') {
     return activate(event.target);
   } else if (event.key == 'ArrowDown') {
@@ -45,24 +63,66 @@ function onKeyDown(event) {
 
 function onLoad() {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
+
+  let tabs = null;
+  let userScripts = null;
+  function finish() {
+    numPending--;
+    if (numPending > 0) return;
+
+    let url = tabs.length && new URL(tabs[0].url) || null;
+    loadScripts(userScripts, url);
+
+    gTplData.origin = url.origin == "null" ? null : url.origin;
+
+    tinybind.formatters.bothArraysEmpty
+        = (a, b) => !(!!a.length || !!b.length);
+    tinybind.formatters.canAddOrigin = excludesStr => {
+      if (!gTplData.origin) return false;
+
+      let originExclude = gTplData.origin + '/*';
+      return !getGlobalExcludes().includes(originExclude);
+    };
+
+    tinybind.bind(document.body, gTplData);
+
+    document.body.id = 'main-menu';
+
+    setTimeout(window.focus, 0);
+  }
+
+  let numPending = 0;
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
-      enabled => gTplData.enabled = enabled);
+      enabled => {
+        gTplData.enabled = enabled;
+        finish();
+      });
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
-        chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
-          let url = tabs.length && new URL(tabs[0].url) || null;
-          loadScripts(userScripts, url);
+      userScripts_ => {
+        userScripts = userScripts_;
+        finish();
+      });
 
-          tinybind.formatters.bothArraysEmpty
-              = (a, b) => !(!!a.length || !!b.length);
-          tinybind.bind(document.body, gTplData);
+  numPending++;
+  chrome.runtime.sendMessage(
+      {'name': 'OptionsLoad'},
+      options => {
+        gTplData.options.globalExcludesStr = options.excludes;
+        finish();
+      });
 
-          document.body.id = 'main-menu';
-
-          setTimeout(window.focus, 0);
-        });
+  numPending++;
+  chrome.tabs.query(
+      {'active': true, 'currentWindow': true},
+      tabs_ => {
+        tabs = tabs_;
+        finish();
       });
 }
 
@@ -108,9 +168,19 @@ function activate(el) {
   while (el && el.tagName != 'MENUITEM') el = el.parentNode;
   if (!el) return;
 
-  switch (el.id) {
-    case 'back':
+  switch (el.className) {
+    case 'go-back':
       navigateToMainMenu();
+      return;
+  }
+
+  switch (el.id) {
+    case 'add-exclude-current':
+      if (gTplData.origin) {
+        gTplData.options.globalExcludesStr =
+            gTplData.options.globalExcludesStr.trim() + '\n'
+            + gTplData.origin + '/*';
+      }
       return;
 
     case 'backup-export':
@@ -129,6 +199,10 @@ function activate(el) {
     case 'toggle-global-enabled':
       browser.runtime.sendMessage({'name': 'EnabledToggle'})
           .then(enabled => gTplData.enabled = enabled);
+      return;
+    case 'open-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'options';
       return;
 
     case 'user-script-toggle-enabled':
@@ -179,11 +253,22 @@ function loadScripts(userScriptsDetail, url) {
 
 
 function navigateToMainMenu() {
-  if (gTplData.pendingUninstall > 0) {
-    uninstall(gTplData.activeScript.uuid);
-    return;
+  switch (document.body.id) {
+    case 'options':
+      chrome.runtime.sendMessage({
+        'name': 'OptionsSave',
+        'excludes': gTplData.options.globalExcludesStr.trim(),
+      }, logUnhandledError);
+      break;
+    case 'user-script':
+      if (gTplData.pendingUninstall > 0) {
+        uninstall(gTplData.activeScript.uuid);
+        return;
+      }
+      gTplData.activeScript = {};
+      break;
   }
-  gTplData.activeScript = {};
+
   document.body.id = 'main-menu';
 
   if (gMainFocusedItem) {
@@ -199,7 +284,8 @@ function navigateToScript(uuid) {
   document.body.id = 'user-script';
 }
 
-async function newUserScript() {
+
+function newUserScript() {
   let r = Math.floor(Math.random() * 900000 + 100000);
   let name = _('unnamed_script_RAND', r);
   let scriptSource = `// ==UserScript==

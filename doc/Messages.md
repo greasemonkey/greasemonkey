@@ -68,27 +68,27 @@ Data:
 * `value` The new value to store.
 
 # EnabledChanged
-Sent by: `bg/is-enabled.js`.
+Sent by: `bg/options.js`.
 
 Sent whenever the global enabled status changes.
 
 * `enabled` boolean, the new status (true = enabled, false = disabled).
 
 # EnabledQuery
-Received by: `bg/is-enabled.js`.
+Received by: `bg/options.js`.
 
 Send with no data, responds with a boolean: the new status
 (true = enabled, false = disabled).
 
 # EnabledSet
-Received by: `bg/is-enabled.js`.
+Received by: `bg/options.js`.
 
 Send this to set the global enabled status.
 
 * `enabled` boolean, the new status (true = enabled, false = disabled).
 
 # EnabledToggle
-Received by: `bg/is-enabled.js`.
+Received by: `bg/options.js`.
 
 Send this to toggle the global enabled status.  No data.
 
@@ -108,6 +108,22 @@ Lists all installed user scripts.  Request data:
 Response data:
 
 * An array of `.details` objects from installed `RunnableUserScript`s.
+
+# OptionsLoad
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/options.js`
+
+Returns previously saved options data.  Result is the same format as `OptionsSave`'s request.
+
+* `excludes` A string, one `@exclude` pattern per line.
+
+# OptionsSave
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/options.js`
+
+Passes the user's option values from content to background for persistence.  Request data:
+
+* `excludes` A string, one `@exclude` pattern per line.
 
 # UserScriptGet
 Sent by: `content/edit-user-script.js`

@@ -66,6 +66,9 @@
   "enabled": {
     "message": "Enabled"
   },
+  "Exclude": {
+    "message": "Exclude"
+  },
   "extDesc": {
     "message": "A User Script manager for Firefox."
   },
@@ -77,6 +80,12 @@
   },
   "get_user_scripts": {
     "message": "Get user scripts"
+  },
+  "global_excludes": {
+    "message": "Global Excludes"
+  },
+  "global_excludes_explain": {
+    "message": "One @exclude pattern per line.  No user scripts will run here."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: \"text\" must be a string"
@@ -108,6 +117,9 @@
   },
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey is disabled"
+  },
+  "greasemonkey_options": {
+    "message": "Greasemonkey Options"
   },
   "greasemonkey_user_script_editor": {
     "message": "Greasemonkey User Script Editor"

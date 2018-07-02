@@ -17,12 +17,10 @@
         {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
       </span>
     </menuitem>
-    <!-- TODO: This feature.
-    <menuitem id="open-options">
+    <menuitem id="open-options" tabindex="0">
       <i class="icon fa fa-fw fa-cogs"></i>
-      <span class="text">Greasemonkey Options</span>
+      <span class="text">{'greasemonkey_options'|i18n}</span>
     </menuitem>
-    -->
 
     <hr rv-if="userScripts.active | bothArraysEmpty userScripts.inactive | not">
 
@@ -76,12 +74,10 @@
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_home_page'|i18n}</span>
     </menuitem>
-
     <menuitem tabindex="0" data-url="https://wiki.greasespot.net/">
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_wiki'|i18n}</span>
     </menuitem>
-
     <menuitem tabindex="0" data-url="https://wiki.greasespot.net/User_Script_Hosting">
       <i class="icon fa fa-link"></i>
       <span class="text">{'get_user_scripts'|i18n}</span>
@@ -92,7 +88,7 @@
 
 <section class="user-script">
   <header>
-    <menuitem tabindex="0" id="back"></menuitem>
+    <menuitem tabindex="0" class="go-back"></menuitem>
     {activeScript.name}
   </header>
 
@@ -135,6 +131,33 @@
       <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
     </p>
   </menu>
+</section>
+
+
+<section class="options">
+  <header>
+    <menuitem tabindex="0" class="go-back"></menuitem>
+    {'greasemonkey_options'|i18n}
+  </header>
+
+  <hr>
+
+  <p><b>{'global_excludes'|i18n}</b></p>
+  <p class="explain">
+    <a href="https://wiki.greasespot.net/Include_and_exclude_rules">
+      <i class="icon fa fa-question-circle"></i>
+    </a>
+    {'global_excludes_explain'|i18n}
+  </p>
+  <p>
+    <textarea rows="5" rv-value="options.globalExcludesStr"
+        title="{'global_excludes'|i18n}"
+    ></textarea>
+    <menuitem id="add-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
+      <i class="icon fa fa-plus"></i>
+      {'exclude'|i18n} {origin}
+    </menuitem>
+  </p>
 </section>
 
 
