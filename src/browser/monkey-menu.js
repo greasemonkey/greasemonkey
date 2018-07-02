@@ -6,11 +6,13 @@ let gTplData = {
   'options': {
     'globalExcludesStr': '',
   },
+  'origin': null,
   'userScripts': {
     'active': [],
     'inactive': [],
   },
 };
+
 let gMainFocusedItem = null;
 let gPendingTicker = null;
 let gScriptTemplates = {};
@@ -21,7 +23,8 @@ if ('undefined' == typeof window.getGlobalExcludes) {
   // Equivalent of the version provided by `user-script-registry`, but here.
   // Undefined check because of shared test scope collision.
   window.getGlobalExcludes = function() {
-    return gTplData.options.globalExcludesStr.split('\n');
+    return gTplData.options.globalExcludesStr.trim()
+        .split('\n').map(x => x.trim());
   }
 }
 
@@ -44,6 +47,8 @@ function onClick(event) {
 
 
 function onKeyDown(event) {
+  if (event.target.tagName == 'TEXTAREA') return;
+
   if (event.code == 'Enter') {
     return activate(event.target);
   } else if (event.key == 'ArrowDown') {
@@ -68,8 +73,17 @@ function onLoad() {
     let url = tabs.length && new URL(tabs[0].url) || null;
     loadScripts(userScripts, url);
 
+    gTplData.origin = url.origin == "null" ? null : url.origin;
+
     tinybind.formatters.bothArraysEmpty
         = (a, b) => !(!!a.length || !!b.length);
+    tinybind.formatters.canAddOrigin = excludesStr => {
+      if (!gTplData.origin) return false;
+
+      let originExclude = gTplData.origin + '/*';
+      return !getGlobalExcludes().includes(originExclude);
+    };
+
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
@@ -161,6 +175,14 @@ function activate(el) {
   }
 
   switch (el.id) {
+    case 'add-exclude-current':
+      if (gTplData.origin) {
+        gTplData.options.globalExcludesStr =
+            gTplData.options.globalExcludesStr.trim() + '\n'
+            + gTplData.origin + '/*';
+      }
+      return;
+
     case 'backup-export':
       chrome.runtime.sendMessage({'name': 'ExportDatabase'}, logUnhandledError);
       window.close();
@@ -235,7 +257,7 @@ function navigateToMainMenu() {
     case 'options':
       chrome.runtime.sendMessage({
         'name': 'OptionsSave',
-        'excludes': gTplData.options.globalExcludesStr,
+        'excludes': gTplData.options.globalExcludesStr.trim(),
       }, logUnhandledError);
       break;
     case 'user-script':
@@ -263,7 +285,7 @@ function navigateToScript(uuid) {
 }
 
 
-async function newUserScript() {
+function newUserScript() {
   let r = Math.floor(Math.random() * 900000 + 100000);
   let name = _('unnamed_script_RAND', r);
   let scriptSource = `// ==UserScript==

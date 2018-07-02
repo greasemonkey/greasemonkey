@@ -149,7 +149,15 @@
     </a>
     {'global_excludes_explain'|i18n}
   </p>
-  <p><textarea rows="5" rv-value="options.globalExcludesStr"></textarea></p>
+  <p>
+    <textarea rows="5" rv-value="options.globalExcludesStr"
+        title="{'global_excludes'|i18n}"
+    ></textarea>
+    <menuitem id="add-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
+      <i class="icon fa fa-plus"></i>
+      {'exclude'|i18n} {origin}
+    </menuitem>
+  </p>
 </section>
 
 

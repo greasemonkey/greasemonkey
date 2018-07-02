@@ -169,3 +169,14 @@ section.options textarea {
   font-size: 90%;
   white-space: pre;
 }
+
+section.options #add-exclude-current {
+  cursor: pointer;
+  display: block;
+  margin-top: 4px;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 90vw;
+}
