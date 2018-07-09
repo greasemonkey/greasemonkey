@@ -231,6 +231,16 @@ function GM_xmlHttpRequest(d) {
 
   let port = chrome.runtime.connect({name: 'UserScriptXhr'});
   port.onMessage.addListener(function(msg) {
+    if (msg.responseState.responseXML) {
+      try {
+        msg.responseState.responseXML = (new DOMParser()).parseFromString(
+            msg.responseState.responseText,
+            'application/xml');
+      } catch (e) {
+        console.warn('GM_xhr could not parse XML:', e);
+        msg.responseState.responseXML = null;
+      }
+    }
     let o = msg.src == 'up' ? d.upload : d;
     let cb = o['on' + msg.type];
     if (cb) cb(msg.responseState);

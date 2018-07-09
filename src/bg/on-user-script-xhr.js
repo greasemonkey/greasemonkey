@@ -55,18 +55,19 @@ function open(xhr, d, port, tabUrl) {
     }
 
     try {
-      responseState.responseXML = xhr.responseXML;
+      // Pass a flag to the content side, that the XML should be parsed.
+      responseState.responseXML = !!xhr.responseXML;
     } catch (e) {
       // Ignore failure.  At least in responseType blob case, this access fails.
     }
 
     switch (event.type) {
-      case "progress":
+      case 'progress':
         responseState.lengthComputable = event.lengthComputable;
         responseState.loaded = event.loaded;
         responseState.total = event.total;
         break;
-      case "error":
+      case 'error':
         console.log('error event?', event);
         break;
       default:
@@ -78,7 +79,7 @@ function open(xhr, d, port, tabUrl) {
     }
 
     port.postMessage(
-        {src: src, type: event.type, responseState: responseState});
+        {'src': src, 'type': event.type, 'responseState': responseState});
   }
 
   [
