@@ -2,9 +2,6 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey Benutzerskript"
   },
-  "NAME_greasemonkey_user_script_editor": {
-    "message": "$1 - Greasemonkey Benutzerskript-Editor"
-  },
   "ERROR_at_URL": {
     "message": "$1 für $2",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
@@ -17,9 +14,6 @@
   },
   "backup_import": {
     "message": "Importieren..."
-  },
-  "backup_import_title": {
-    "message": "Greasemonkey Import"
   },
   "backup_import_file": {
     "message": "Datei importieren"
@@ -38,6 +32,9 @@
   },
   "cancel": {
     "message": "Abbrechen"
+  },
+  "close": {
+    "message": "Schließen"
   },
   "description": {
     "message": "Beschreibung:"
@@ -66,14 +63,23 @@
   "enabled": {
     "message": "Aktiviert"
   },
+  "Exclude": {
+    "message": "Ignoriere"
+  },
   "extDesc": {
     "message": "Eine Benutzerskript-Verwaltung für Firefox."
   },
-  "extName": {
-    "message": "Greasemonkey"
+  "fix_and_save": {
+    "message": "Die veränderten Daten wurden bisher nicht gesichert.  Bitte vorher speichern und neu versuchen."
   },
   "get_user_scripts": {
     "message": "Benutzerskripte im Netz"
+  },
+  "global_excludes": {
+    "message": "Globale Ausnahmen"
+  },
+  "global_excludes_explain": {
+    "message": "Pro Zeile genau ein @exclude-Muster.  Auf derartigen Seiten wird kein Benutzerskript laufen."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: Parameter \"text\" muss ein String sein."
@@ -106,8 +112,11 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey ist deaktiviert"
   },
-  "greasemonkey_wiki": {
-    "message": "Greasemonkey Wiki"
+  "greasemonkey_options": {
+    "message": "Greasemonkey Optionen"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey Benutzerskript-Editor"
   },
   "homepage": {
     "message": "Homepage"
@@ -154,6 +163,9 @@
   "save": {
     "message": "Speichern"
   },
+  "saving": {
+    "message": "Speichern"
+  },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "Fehler beim Speichern: Es gibt bereits ein Benutzerskript $1 im Namensbereich $2."
   },
@@ -180,9 +192,6 @@
   },
   "user_scripts_for_this_tab": {
     "message": "Benutzerskripte für diesen Reiter"
-  },
-  "version": {
-    "message": "Version:"
   },
   "xhr_bad_url": {
     "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2"

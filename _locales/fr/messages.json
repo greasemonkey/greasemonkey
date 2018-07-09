@@ -2,9 +2,6 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Script Utilisateur Greasemonkey"
   },
-  "NAME_greasemonkey_user_script_editor": {
-    "message": "$1 - Éditeur de Script Utilisateur Greasemonkey"
-  },
   "ERROR_at_URL": {
     "message": "$1 à $2",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
@@ -39,6 +36,9 @@
   "cancel": {
     "message": "Annuler"
   },
+  "close": {
+    "message": "Fermer"
+  },
   "description": {
     "message": "Description :"
   },
@@ -66,14 +66,23 @@
   "enabled": {
     "message": "Activé"
   },
+  "Exclude": {
+    "message": "Exclure"
+  },
   "extDesc": {
     "message": "Une gestion des scripts utilisateur pour Firefox."
   },
-  "extName": {
-    "message": "Greasemonkey"
+  "fix_and_save": {
+    "message": "Le contenu de l'éditeur n'a pas été enregistré.  Corrigez cette erreur et réessayez."
   },
   "get_user_scripts": {
     "message": "Trouver scripts utilisateur"
+  },
+  "global_excludes": {
+    "message": "Excludes globales"
+  },
+  "global_excludes_explain": {
+    "message": "Un motif @exclude par ligne. Aucun script utilisateur ne sera exécuté ici."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification : \"text\" doit être un string"
@@ -106,8 +115,8 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey est désactivé"
   },
-  "greasemonkey_wiki": {
-    "message": "Greasemonkey Wiki"
+  "greasemonkey_user_script_editor": {
+    "message": "Éditeur de Script Utilisateur Greasemonkey"
   },
   "homepage": {
     "message": "Page d'accueil"
@@ -152,6 +161,9 @@
     "message": "Fonctionne sur :"
   },
   "save": {
+    "message": "Sauvegarder"
+  },
+  "saving": {
     "message": "Sauvegarder"
   },
   "save_failed_NAME_already_in_NAMESPACE": {

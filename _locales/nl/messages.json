@@ -2,9 +2,6 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey-gebruikersscript"
   },
-  "NAME_greasemonkey_user_script_editor": {
-    "message": "$1 - Greasemonkey-gebruikersscripteditor"
-  },
   "ERROR_at_URL": {
     "message": "$1 op $2",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
@@ -39,6 +36,9 @@
   "cancel": {
     "message": "Annuleren"
   },
+  "close": {
+    "message": "Sluiten"
+  },
   "description": {
     "message": "Beschrijving:"
   },
@@ -66,14 +66,23 @@
   "enabled": {
     "message": "Ingeschakeld"
   },
+  "Exclude": {
+    "message": "Uitsluiten:"
+  },
   "extDesc": {
     "message": "Een gebruikersscriptbeheerder voor Firefox."
   },
-  "extName": {
-    "message": "Greasemonkey"
+  "fix_and_save": {
+    "message": "De inhoud van de editor is niet opgeslagen. Corrigeer deze fout en probeer het opnieuw."
   },
   "get_user_scripts": {
     "message": "Gebruikersscripts verkrijgen"
+  },
+  "global_excludes": {
+    "message": "Algemene uitsluitingen"
+  },
+  "global_excludes_explain": {
+    "message": "Eén @exclude-patroon per regel. Hier worden geen gebruikersscripts uitgevoerd."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: ‘text’ moet een string zijn"
@@ -98,7 +107,7 @@
     }
   },
   "greasemonkey_home_page": {
-    "message": "Greasemonkey-homepage"
+    "message": "Greasemonkey-startpagina"
   },
   "greasemonkey_is_active": {
     "message": "Greasemonkey is actief"
@@ -106,11 +115,17 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey is uitgeschakeld"
   },
+  "greasemonkey_options": {
+    "message": "Greasemonkey-opties"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey-gebruikersscripteditor"
+  },
   "greasemonkey_wiki": {
     "message": "Greasemonkey-wiki"
   },
   "homepage": {
-    "message": "Homepage"
+    "message": "Startpagina"
   },
   "ignoring_MATCH_because_REASON": {
     "message": "@match-patroon $1 wordt om de volgende reden genegeerd:\n$2"
@@ -152,6 +167,9 @@
     "message": "Werkt op:"
   },
   "save": {
+    "message": "Opslaan"
+  },
+  "saving": {
     "message": "Opslaan"
   },
   "save_failed_NAME_already_in_NAMESPACE": {

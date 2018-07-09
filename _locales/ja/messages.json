@@ -2,9 +2,6 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 — Greasemonkey ユーザースクリプト"
   },
-  "NAME_greasemonkey_user_script_editor": {
-    "message": "$1 — Greasemonkey ユーザースクリプトエディタ"
-  },
   "ERROR_at_URL": {
     "message": "$2 で $1",
     "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
@@ -69,9 +66,6 @@
   "extDesc": {
     "message": "Firefox 向けのユーザースクリプトマネージャー。"
   },
-  "extName": {
-    "message": "Greasemonkey"
-  },
   "get_user_scripts": {
     "message": "ユーザースクリプトの入手"
   },
@@ -105,9 +99,6 @@
   },
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey は無効"
-  },
-  "greasemonkey_wiki": {
-    "message": "Greasemonkey wiki"
   },
   "homepage": {
     "message": "ホームページ"
