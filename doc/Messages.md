@@ -104,10 +104,12 @@ Received by: `bg/user-script-registry.js`.
 Lists all installed user scripts.  Request data:
 
 * `includeDisabled` Default false, when true also list disabled scripts.
+* `stripContent` Default true, do not deliver script contents.
+  (Which is faster, when this is not necessary.)
 
 Response data:
 
-* An array of `.details` objects from installed `RunnableUserScript`s.
+* An array of `.details` objects from installed `EditableUserScript`s.
 
 # OptionsLoad
 Sent by: `browser/monkey-menu.js`
@@ -150,14 +152,27 @@ user.  Data:
 
 Callers should specify one or the other, not both.
 
+# UserScriptToggleAutoUpdate
+Sent by: `content/manage-user-scripts.js`
+Received by: `bg/user-script-registry.js`
+
+Triggered when the "Auto Update" monkey menu item is clicked by the user.
+Data:
+
+* `uuid` The UUID value of a script (as returned by `ListUserScripts` message).
+
+Response data:
+
+* `autoUpdate` The new resulting value of this script's state.
+
 # UserScriptToggleEnabled
 Sent by: `content/manage-user-scripts.js`
 Received by: `bg/user-script-registry.js`
 
-Triggered when the Enable/Disable button of the manage user scripts dialog is
-clicked by the user.  Data:
+Triggered when the Enable/Disable monkey menu item is clicked by the user.
+Data:
 
-* `uuid` The UUID value of a script as returned by `ListUserScripts` message.
+* `uuid` The UUID value of a script (as returned by `ListUserScripts` message).
 
 Response data:
 

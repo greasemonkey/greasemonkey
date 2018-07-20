@@ -43,7 +43,7 @@
         <heading>{'other_user_scripts'|i18n}</heading>
         <menuitem rv-each-script="userScripts.inactive"
             class="user-script"
-            rv-class-disabled="script.enabled | not"
+            rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
             tabindex="0">
           <i class="icon"><img rv-src="script.icon"></i>
@@ -96,9 +96,22 @@
 
   <menu>
     <menuitem tabindex="0" id="user-script-toggle-enabled">
-      <span class="icon fa" rv-class-fa-check="activeScript.enabled">
-      </span>
+      <span class="icon fa" rv-class-fa-check="activeScript.enabled"></span>
       <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
+    </menuitem>
+
+    <menuitem tabindex="0" id="user-script-toggle-update">
+      <span class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></span>
+      <span class="text">
+        {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}
+      </span>
+    </menuitem>
+
+    <menuitem tabindex="0" id="user-script-update-now"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
+      <span class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></span>
+      <span class="text">{'update_now'|i18n} (TODO!)</span>
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-edit">

@@ -9,6 +9,12 @@
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
+  "auto_update_enabled": {
+    "message": "Auto update enabled"
+  },
+  "auto_update_disabled": {
+    "message": "Auto update enabled"
+  },
   "backup_export": {
     "message": "Export a backup..."
   },
@@ -38,6 +44,9 @@
   },
   "close": {
     "message": "Close"
+  },
+  "confirm_update_edited": {
+    "message": "You have edited this script, really update it?"
   },
   "description": {
     "message": "Description:"
@@ -198,6 +207,9 @@
   },
   "unnamed_script_RAND": {
     "message": "Unnamed Script $1"
+  },
+  "update_now": {
+    "message": "Update now"
   },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"

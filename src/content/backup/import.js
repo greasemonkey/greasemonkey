@@ -20,15 +20,16 @@ async function onFileChange(event) {
   });
   let userScriptsPromise = browser.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true});
-  await Promise.all([zipPromise, userScriptsPromise]).then(async promisedValues => {
-    let [zip, userScripts] = promisedValues;
-    let installedIdToUuid = userScripts.reduce((set, val) => {
-      let userScript = new RunnableUserScript(val);
-      set[userScript.id] = userScript.uuid;
-      return set;
-    }, {});
-    await importAllScriptsFromZip(zip, installedIdToUuid);
-  });
+  await Promise.all([zipPromise, userScriptsPromise])
+      .then(async promisedValues => {
+        let [zip, userScripts] = promisedValues;
+        let installedIdToUuid = userScripts.reduce((set, val) => {
+          let userScript = new RunnableUserScript(val);
+          set[userScript.id] = userScript.uuid;
+          return set;
+        }, {});
+        await importAllScriptsFromZip(zip, installedIdToUuid);
+      });
 }
 
 

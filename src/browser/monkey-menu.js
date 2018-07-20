@@ -208,6 +208,9 @@ function activate(el) {
     case 'user-script-toggle-enabled':
       toggleUserScriptEnabled(gTplData.activeScript.uuid);
       return;
+    case 'user-script-toggle-update':
+      toggleUserScriptUpdate(gTplData.activeScript.uuid);
+      return;
     case 'user-script-edit':
       openUserScriptEditor(gTplData.activeScript.uuid);
       window.close();
@@ -217,6 +220,20 @@ function activate(el) {
       return;
     case 'user-script-undo-uninstall':
       gTplData.pendingUninstall = null;
+      return;
+    case 'user-script-update-now':
+      if (el.disabled) {
+        return;
+      }
+
+      if (gTplData.activeScript.hasBeenEdited) {
+        if (confirm(_('confirm_update_edited'))) {
+          startUserScriptUpdate(gTplData.activeScript.uuid);
+        }
+      } else {
+        startUserScriptUpdate(gTplData.activeScript.uuid);
+      }
+
       return;
   }
 
@@ -240,7 +257,7 @@ function activate(el) {
 function loadScripts(userScriptsDetail, url) {
   userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
   for (let userScriptDetail of userScriptsDetail) {
-    let userScript = new RunnableUserScript(userScriptDetail);
+    let userScript = new EditableUserScript(userScriptDetail);
     let tplItem = userScript.details;
     tplItem.icon = iconUrl(userScript);
     (url && userScript.runsAt(url)
@@ -313,6 +330,20 @@ function pendingUninstallTicker() {
 }
 
 
+function startUserScriptUpdate(uuid) {
+  gTplData.activeScript.updating = true;
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptUpdateNow',
+    'uuid': uuid,
+  }, response => {
+    logUnhandledError();
+    gTplData.activeScript.updating = false;
+    // TODO: Something?
+    console.log('update response?', response);
+  });
+}
+
+
 function switchFocus(move) {
   let section = document.querySelector('section.' + document.body.id);
   let focusable = Array.from(section.querySelectorAll('[tabindex="0"]'));
@@ -331,6 +362,17 @@ function toggleUserScriptEnabled(uuid) {
   }, response => {
     logUnhandledError();
     gScriptTemplates[uuid].enabled = response.enabled;
+  });
+}
+
+
+function toggleUserScriptUpdate(uuid) {
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptToggleAutoUpdate',
+    'uuid': uuid,
+  }, response => {
+    logUnhandledError();
+    gScriptTemplates[uuid].autoUpdate = response.autoUpdate;
   });
 }
 

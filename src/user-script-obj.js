@@ -186,8 +186,8 @@ window.RemoteUserScript = class RemoteUserScript {
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'evalContentVersion', 'iconBlob', 'resources',
-    'userExcludes', 'userIncludes', 'userMatches', 'uuid'];
+    'autoUpdate', 'enabled', 'evalContent', 'evalContentVersion', 'iconBlob',
+    'resources', 'userExcludes', 'userIncludes', 'userMatches', 'uuid'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.RunnableUserScript = class RunnableUserScript
@@ -195,6 +195,7 @@ window.RunnableUserScript = class RunnableUserScript
   constructor(details) {
     super(details);
 
+    this._autoUpdate = true;
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._evalContentVersion = -1;
@@ -218,6 +219,8 @@ window.RunnableUserScript = class RunnableUserScript
     return d;
   }
 
+  get autoUpdate() { return this._autoUpdate; }
+  set autoUpdate(v) { this._autoUpdate = !!v; }
   get enabled() { return this._enabled; }
   set enabled(v) { this._enabled = !!v; }
 
@@ -256,6 +259,7 @@ window.EditableUserScript = class EditableUserScript
     editableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
+    d.hasBeenEdited = this.hasBeenEdited;
     return d;
   }
 
@@ -265,7 +269,7 @@ window.EditableUserScript = class EditableUserScript
   get requiresContent() { return _safeCopy(this._requiresContent); }
 
   get hasBeenEdited() {
-    if (!this._installTime || !this._editTime) return false;
+    if (!this._editTime) return false;
     return this._installTime < this._editTime;
   }
 

@@ -97,7 +97,7 @@ menuitem:focus {
   background-color: hsla(0, 0%, 80%, 0.3);
   outline: none;
 }
-menuitem.disabled * {
+menuitem[disabled] {
   opacity: 0.65;
 }
 

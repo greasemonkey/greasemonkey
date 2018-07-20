@@ -66,6 +66,12 @@ function fuzz(num) {
 }
 
 
+window.onUserScriptUpdateNow = function(message, sender, sendResponse) {
+  checkForUpdate(message.uuid)
+      .then(r => sendResponse(r))
+      .catch(r => sendResponse(r));
+};
+
 /** Visible only for testing! */
 window._pickNextScriptAutoUpdate = async function() {
   return new Promise((resolve, reject) => {

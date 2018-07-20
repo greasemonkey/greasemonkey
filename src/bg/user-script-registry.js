@@ -149,7 +149,13 @@ function onListUserScripts(message, sender, sendResponse) {
   let userScriptIterator = UserScriptRegistry.scriptsToRunAt(
       null, message.includeDisabled);
   for (let userScript of userScriptIterator) {
-    result.push(userScript.details);
+    let details = userScript.details;
+    if (('undefined' == typeof message.stripContent) || message.stripContent) {
+      delete details.evalContent;
+      delete details.requiresContent;
+      delete details.resources;
+    }
+    result.push(details);
   }
   sendResponse(result);
 }
@@ -205,6 +211,16 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
   }
 }
 window.onApiGetResourceBlob = onApiGetResourceBlob;
+
+
+function onUserScriptToggleAutoUpdate(message, sender, sendResponse) {
+  const userScript = userScripts[message.uuid];
+  userScript.autoUpdate = !userScript.autoUpdate;
+  return saveUserScript(userScript).then(() => {
+    return {'autoUpdate': userScript.autoUpdate}
+  });
+}
+window.onUserScriptToggleAutoUpdate = onUserScriptToggleAutoUpdate;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
