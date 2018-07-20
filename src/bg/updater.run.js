@@ -1,1 +1,1 @@
-// scheduleNextScriptAutoUpdate();
+scheduleNextScriptAutoUpdate();
