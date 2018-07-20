@@ -97,7 +97,7 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
 
   if (gImportOptions.replace || !installedIds.has(userScript.id)) {
     importedIds.add(userScript.id);
-    await downloader.install(/*disabled=*/!exportDetails.enabled);
+    await downloader.install('install', /*disabled=*/!exportDetails.enabled);
   }
 }
 

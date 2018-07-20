@@ -235,7 +235,7 @@ window.RunnableUserScript = class RunnableUserScript
 
 
 const editableUserScriptKeys = [
-    'content', 'installTimes', 'requiresContent'];
+    'content', 'editTime', 'installTime', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -244,7 +244,8 @@ window.EditableUserScript = class EditableUserScript
     super(details);
 
     this._content = null;
-    this._installTimes = [];
+    this._editTime = null;
+    this._installTime = null;
     this._requiresContent = {};  // Map of download URL to content.
 
     _loadValuesInto(this, details, editableUserScriptKeys);
@@ -259,7 +260,14 @@ window.EditableUserScript = class EditableUserScript
   }
 
   get content() { return this._content; }
+  get editTime() { return this._editTime; }
+  get installTime() { return this._installTime; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
+
+  get hasBeenEdited() {
+    if (!this._installTime || !this._editTime) return false;
+    return this._installTime < this._editTime;
+  }
 
   calculateEvalContent() {
     // Put the first line of the script content on line one of the
@@ -320,6 +328,9 @@ window.EditableUserScript = class EditableUserScript
 
     this._content = downloaderDetails.content;
     this._iconBlob = downloaderDetails.icon || null;
+    if (downloaderDetails.installTime) {
+      this._installTime = downloaderDetails.installTime;
+    }
 
     this._requiresContent = {};
     Object.assign(this._requiresContent, downloaderDetails.requires);

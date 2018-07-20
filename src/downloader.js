@@ -96,10 +96,16 @@ class Downloader {
     return details;
   }
 
-  async install(disabled=false, openEditor=false) {
+  async install(event, disabled=false, openEditor=false) {
     let scriptDetails = await this.scriptDetails;
     let downloaderDetails = await this.details();
     scriptDetails.enabled = !disabled;
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({

@@ -189,7 +189,7 @@ function onSave() {
       .start()
       .then(() => {
         document.querySelector('#modal progress').removeAttribute('value');
-        return downloader.install();
+        return downloader.install('edit');
       }).then(onSaveComplete)
       .catch(modalFill);
 }

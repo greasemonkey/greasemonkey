@@ -1,26 +1,56 @@
 'use strict';
 describe('user-script-obj', () => {
-  describe('EditableUserScript.calculateEvalContent()', () => {
-    let scriptContent = metaBlockFromLines('// @name Origin')
-        + 'function gt_one(n) { return n > 1; }\n'
-        + 'gt_one(2);\n';
+  describe('EditableUserScript', () => {
+    describe('calculateEvalContent()', () => {
+      let scriptContent = metaBlockFromLines('// @name Origin')
+          + 'function gt_one(n) { return n > 1; }\n'
+          + 'gt_one(2);\n';
 
-    it('does not fail on end of file line comment', () => {
-      let lineCommentContent = scriptContent + '// EOF Comment';
-      let userScript = new EditableUserScript({'content': lineCommentContent});
-      userScript.calculateEvalContent();
+      it('does not fail on end of file line comment', () => {
+        let lineCommentContent = scriptContent + '// EOF Comment';
+        let userScript = new EditableUserScript({'content': lineCommentContent});
+        userScript.calculateEvalContent();
 
-      chai.expect(() => eval(userScript._evalContent))
-          .to.not.throw("expected expression, got ')'");
-    });
+        chai.expect(() => eval(userScript._evalContent))
+            .to.not.throw("expected expression, got ')'");
+      });
 
-    it('does not fail on end of file block comment', () => {
+      it('does not fail on end of file block comment', () => {
       let blockCommentContent = scriptContent + '/* Block';
       let userScript = new EditableUserScript({'content': blockCommentContent});
       userScript.calculateEvalContent();
 
       chai.expect(() => eval(userScript._evalContent))
           .to.not.throw("expected expression, got ')'");
+    });
+    });
+
+    describe('hasBeenEdited', () => {
+      it('handles missing values', () => {
+        let userScript = new EditableUserScript({});
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns false with earlier edit time', () => {
+        let userScript = new EditableUserScript({
+          'editTime': 1,
+          'installTime': 10,
+        });
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns false with no edit time', () => {
+        let userScript = new EditableUserScript({'installTime': 1});
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns true with later edit time', () => {
+        let userScript = new EditableUserScript({
+          'editTime': 100,
+          'installTime': 10,
+        });
+        assert.equal(userScript.hasBeenEdited, true);
+      });
     });
   });
 

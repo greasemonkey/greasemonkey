@@ -296,7 +296,9 @@ function newUserScript() {
   let downloader
       = new UserScriptDownloader().setScriptContent(scriptSource);
   downloader.start()
-      .then(() => downloader.install(/*disabled=*/false, /*openEditor=*/true))
+      .then(() => {
+        downloader.install('install', /*disabled=*/false, /*openEditor=*/true);
+      })
       .then(window.close);
 }
 

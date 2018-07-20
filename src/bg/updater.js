@@ -76,6 +76,7 @@ window._pickNextScriptAutoUpdate = async function() {
     let userScriptIterator = UserScriptRegistry.scriptsToRunAt();
     for (let userScript of userScriptIterator) {
       if (!userScript.downloadUrl) continue;
+      if (userScript.hasBeenEdited) continue;
       updateNextAtKeys.push('updateNextAt.' + userScript.uuid);
     }
     if (updateNextAtKeys.length == 0) {

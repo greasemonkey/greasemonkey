@@ -66,11 +66,13 @@ function onClickInstall() {
   gProgressBar.removeAttribute('value');
   let disabled = document.getElementById('install-disabled').checked;
   let openEditor = document.getElementById('open-editor-after').checked;
-  gDownloader.install(disabled, openEditor).then(finish).catch(err => {
-    gRvDetails.errorHeader = _('install_failed');
-    gRvDetails.errorList = [err.message];
-    document.body.className = 'error';
-  });
+  gDownloader.install('install', disabled, openEditor)
+      .then(finish)
+      .catch(err => {
+        gRvDetails.errorHeader = _('install_failed');
+        gRvDetails.errorList = [err.message];
+        document.body.className = 'error';
+      });
 }
 
 
