@@ -224,6 +224,8 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
   let req = store.delete(message.uuid);
   db.close();
 
+  // TODO: Delete per-script values from local storage!
+
   return new Promise((resolve, reject) => {
     req.onsuccess = () => {
       delete userScripts[message.uuid];
@@ -315,7 +317,7 @@ function scriptByUuid(scriptUuid) {
 function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   let url = urlStr && new URL(urlStr);
 
-  for (let uuid in userScripts) {
+  for (let uuid of Object.keys(userScripts)) {
     let userScript = userScripts[uuid];
     try {
       if (!includeDisabled && !userScript.enabled) continue;
@@ -334,6 +336,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
+  'installFromDownloader': installFromDownloader,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };

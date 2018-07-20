@@ -120,7 +120,14 @@ class Downloader {
     });
   }
 
-  async start() {
+  async installFromBackground() {
+    let scriptDetails = await this.scriptDetails;
+    let downloaderDetails = await this.details();
+    return UserScriptRegistry.installFromDownloader(
+        scriptDetails, downloaderDetails);
+  }
+
+  async start(detailsHandler) {
     if (this._scriptContent != null) {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
       let scriptDetails = parseUserScript(
@@ -140,6 +147,10 @@ class Downloader {
     }
 
     let scriptDetails = await this.scriptDetails;
+    if (detailsHandler && !detailsHandler(scriptDetails)) {
+      // Abort, e.g. in case of update check with no newer version.
+      return;
+    }
 
     if (scriptDetails.iconUrl) {
       if (this._knownIconUrl == scriptDetails.iconUrl) {

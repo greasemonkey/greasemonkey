@@ -235,7 +235,7 @@ window.RunnableUserScript = class RunnableUserScript
 
 
 const editableUserScriptKeys = [
-    'content', 'requiresContent'];
+    'content', 'installTimes', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -244,6 +244,7 @@ window.EditableUserScript = class EditableUserScript
     super(details);
 
     this._content = null;
+    this._installTimes = [];
     this._requiresContent = {};  // Map of download URL to content.
 
     _loadValuesInto(this, details, editableUserScriptKeys);

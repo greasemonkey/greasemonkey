@@ -1,5 +1,5 @@
 'use strict';
-describe('content/import', () => {
+describe('content/backup/import', () => {
   function countOfMessagesNamed(messageName) {
     let count = 0;
     for (let call of chrome.runtime.sendMessage.getCalls()) {
