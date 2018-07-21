@@ -40,7 +40,7 @@
       "/src/bg/user-script-detect.js",
       "/src/bg/user-script-registry.js",
       "/src/bg/updater.js",
-      "/src/bg/updater/run.js",
+      "/src/bg/updater.run.js",
       "/src/bg/value-store.js",
       "/src/downloader.js",
       "/src/parse-meta-line.js",
