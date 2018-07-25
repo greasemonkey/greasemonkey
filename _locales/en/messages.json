@@ -13,7 +13,7 @@
     "message": "Auto update enabled"
   },
   "auto_update_disabled": {
-    "message": "Auto update enabled"
+    "message": "Auto update disabled"
   },
   "backup_export": {
     "message": "Export a backup..."
