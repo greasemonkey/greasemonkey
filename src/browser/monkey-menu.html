@@ -29,7 +29,7 @@
         <heading>{'user_scripts_for_this_tab'|i18n}</heading>
         <menuitem rv-each-script="userScripts.active"
             class="user-script"
-            rv-class-disabled="script.enabled | not"
+            rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
             tabindex="0">
           <i class="icon"><img rv-src="script.icon"></i>
