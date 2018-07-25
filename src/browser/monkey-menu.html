@@ -96,12 +96,12 @@
 
   <menu>
     <menuitem tabindex="0" id="user-script-toggle-enabled">
-      <span class="icon fa" rv-class-fa-check="activeScript.enabled"></span>
+      <i class="icon fa" rv-class-fa-check="activeScript.enabled"></i>
       <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-toggle-update">
-      <span class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></span>
+      <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
       <span class="text">
         {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}
       </span>
@@ -110,7 +110,7 @@
     <menuitem tabindex="0" id="user-script-update-now"
         rv-disabled="activeScript.downloadUrl | not"
     >
-      <span class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></span>
+      <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
       <span class="text">{'update_now'|i18n}</span>
     </menuitem>
 
