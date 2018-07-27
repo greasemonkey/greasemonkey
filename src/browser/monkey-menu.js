@@ -71,19 +71,17 @@ function onLoad() {
     if (numPending > 0) return;
 
     let url = tabs.length && new URL(tabs[0].url) || null;
-    loadScripts(userScripts, url);
-
     gTplData.origin = url.origin == "null" ? null : url.origin;
+    loadScripts(userScripts, url);
 
     tinybind.formatters.bothArraysEmpty
         = (a, b) => !(!!a.length || !!b.length);
-    tinybind.formatters.canAddOrigin = excludesStr => {
+    tinybind.formatters.canAddOrigin = () => {
       if (!gTplData.origin) return false;
 
       let originExclude = gTplData.origin + '/*';
       return !getGlobalExcludes().includes(originExclude);
     };
-
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
@@ -227,10 +225,10 @@ function activate(el) {
 
       if (gTplData.activeScript.hasBeenEdited) {
         if (confirm(_('confirm_update_edited'))) {
-          startUserScriptUpdate(gTplData.activeScript.uuid);
+          userScriptUpdate(gTplData.activeScript.uuid);
         }
       } else {
-        startUserScriptUpdate(gTplData.activeScript.uuid);
+        userScriptUpdate(gTplData.activeScript.uuid);
       }
 
       return;
@@ -330,20 +328,6 @@ function pendingUninstallTicker() {
 }
 
 
-function startUserScriptUpdate(uuid) {
-  gTplData.activeScript.updating = true;
-  chrome.runtime.sendMessage({
-    'name': 'UserScriptUpdateNow',
-    'uuid': uuid,
-  }, response => {
-    logUnhandledError();
-    gTplData.activeScript.updating = false;
-    // TODO: Something?
-    console.log('update response?', response);
-  });
-}
-
-
 function switchFocus(move) {
   let section = document.querySelector('section.' + document.body.id);
   let focusable = Array.from(section.querySelectorAll('[tabindex="0"]'));
@@ -400,5 +384,20 @@ function uninstall(uuid) {
     delete gScriptTemplates[uuid];
 
     navigateToMainMenu();
+  });
+}
+
+
+function userScriptUpdate(uuid) {
+  gTplData.activeScript.updating = true;
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptUpdateNow',
+    'uuid': uuid,
+  }, response => {
+    logUnhandledError();
+    gTplData.activeScript.updating = false;
+    for (let i of Object.keys(response.details)) {
+      gTplData.activeScript[i] = response.details[i];
+    }
   });
 }

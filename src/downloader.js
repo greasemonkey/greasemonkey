@@ -225,11 +225,11 @@ class Downloader {
       } catch (e) {
         // If the download is still pending, errors might be resolved as we
         // finish.  If not, errors are fatal.
-        if (!download.pending) {
+        if (download.pending) {
+          console.warn('downloader parse fail:', e);
+        } else {
           this._scriptDetailsReject(e);
           return;
-        } else {
-          console.warn('downloader parse fail:', e);
         }
       }
     }
@@ -269,8 +269,10 @@ class Download {
     });
   }
 
-  _onError(reject) {
+  _onError(reject, event) {
+    this.pending = false;
     this.progress = 1;
+    this._progressCb(this, event);
     reject();
   }
 

@@ -31,7 +31,7 @@ function checkForUpdate(uuid) {
         // Return false here will stop the downloader -- skipping e.g.
         // @require, @icon, etc. downloads. So we should return "not abort".
         return !abort;
-      }).then(async scriptDetails => {
+      }).then(async () => {
         let window = fuzz(windowVal[windowKey] || MAX_UPDATE_IN_MS);
         if (abort) {
           window *= CHANGE_RATE;
@@ -50,7 +50,8 @@ function checkForUpdate(uuid) {
         if (abort) {
           resolve({'result': 'noupdate'});
         } else {
-          resolve({'result': 'updated', 'details': scriptDetails});
+          let details = await downloader.scriptDetails;
+          resolve({'result': 'updated', 'details': details});
         }
       }).catch(e => {
         reject({'result': 'error', 'message': e});
@@ -69,7 +70,9 @@ window.onUserScriptUpdateNow = function(message, sender, sendResponse) {
   checkForUpdate(message.uuid)
       .then(r => sendResponse(r))
       .catch(r => sendResponse(r));
+  return true; // I will `sendResponse()` later!
 };
+
 
 /** Visible only for testing! */
 window._pickNextScriptAutoUpdate = async function() {
