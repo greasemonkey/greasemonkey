@@ -280,6 +280,7 @@ function navigateToMainMenu() {
         uninstall(gTplData.activeScript.uuid);
         return;
       }
+      gTplData.activeScript.updateMessage = '';
       gTplData.activeScript = {};
       break;
   }
@@ -390,16 +391,26 @@ function uninstall(uuid) {
 
 function userScriptUpdate(uuid) {
   gTplData.activeScript.updating = true;
+  gTplData.activeScript.updateMessage = '';
   chrome.runtime.sendMessage({
     'name': 'UserScriptUpdateNow',
     'uuid': uuid,
   }, response => {
     logUnhandledError();
     gTplData.activeScript.updating = false;
-    if (response.result == 'updated') {
-      for (let i of Object.keys(response.details)) {
-        gTplData.activeScript[i] = response.details[i];
-      }
+    switch (response.result) {
+      case 'updated':
+        if (response.result == 'updated') {
+          for (let i of Object.keys(response.details)) {
+            gTplData.activeScript[i] = response.details[i];
+          }
+        }
+        // Fall-through!
+      case 'error':
+      case 'noupdate':
+        gTplData.activeScript.updateMessage
+            = _('update_result_' + response.result);
+        break;
     }
   });
 }

@@ -211,6 +211,15 @@
   "update_now": {
     "message": "Update now"
   },
+  "update_result_error": {
+    "message": "Error checking for update."
+  },
+  "update_result_noupdate": {
+    "message": "No newer version available."
+  },
+  "update_result_updated": {
+    "message": "Updated successfully."
+  },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"
   },

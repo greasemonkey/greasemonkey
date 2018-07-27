@@ -114,6 +114,10 @@
     >
       <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
       <span class="text">{'update_now'|i18n}</span>
+      <div rv-if="activeScript.updateMessage">
+        <i class="icon fa"></i>
+        {activeScript.updateMessage}
+      </div>
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-edit">
