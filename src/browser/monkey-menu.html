@@ -100,7 +100,9 @@
       <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
     </menuitem>
 
-    <menuitem tabindex="0" id="user-script-toggle-update">
+    <menuitem tabindex="0" id="user-script-toggle-update"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
       <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
       <span class="text">
         {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}

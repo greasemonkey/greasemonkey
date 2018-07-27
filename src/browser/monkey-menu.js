@@ -209,6 +209,7 @@ function activate(el) {
       toggleUserScriptEnabled(gTplData.activeScript.uuid);
       return;
     case 'user-script-toggle-update':
+      if (el.disabled) return;
       toggleUserScriptUpdate(gTplData.activeScript.uuid);
       return;
     case 'user-script-edit':
@@ -222,9 +223,7 @@ function activate(el) {
       gTplData.pendingUninstall = null;
       return;
     case 'user-script-update-now':
-      if (el.disabled) {
-        return;
-      }
+      if (el.disabled) return;
 
       if (gTplData.activeScript.hasBeenEdited) {
         if (confirm(_('confirm_update_edited'))) {
@@ -264,6 +263,7 @@ function loadScripts(userScriptsDetail, url) {
         ? gTplData.userScripts.active
         : gTplData.userScripts.inactive
     ).push(tplItem);
+    if (!tplItem.downloadUrl) tplItem.autoUpdate = false;
     gScriptTemplates[userScript.uuid] = tplItem;
   }
 }
