@@ -60,7 +60,7 @@ function MatchPattern(pattern) {
 
   let m = pattern.match(REG_PARTS);
   if (!m) {
-    throw new Error("@match: Could not parse the pattern.");
+    throw new Error("@match: Could not parse the pattern: " + pattern);
   }
   const protocol = m[1];
   this._protocol = protocol;
