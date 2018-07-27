@@ -168,11 +168,24 @@ function activate(el) {
 
   switch (el.className) {
     case 'go-back':
-      navigateToMainMenu();
+      if (document.body.id == 'user-script-options') {
+        navigateToScript(gTplData.activeScript.uuid);
+      } else {
+        navigateToMainMenu();
+      }
       return;
   }
 
   switch (el.id) {
+    case 'open-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'options';
+      return;
+    case 'open-user-script-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'user-script-options';
+      return;
+
     case 'add-exclude-current':
       if (gTplData.origin) {
         gTplData.options.globalExcludesStr =
@@ -197,10 +210,6 @@ function activate(el) {
     case 'toggle-global-enabled':
       browser.runtime.sendMessage({'name': 'EnabledToggle'})
           .then(enabled => gTplData.enabled = enabled);
-      return;
-    case 'open-options':
-      gMainFocusedItem = document.activeElement;
-      document.body.id = 'options';
       return;
 
     case 'user-script-toggle-enabled':

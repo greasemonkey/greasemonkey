@@ -20,6 +20,7 @@
     <menuitem id="open-options" tabindex="0">
       <i class="icon fa fa-fw fa-cogs"></i>
       <span class="text">{'greasemonkey_options'|i18n}</span>
+      <span class="arrow"></span>
     </menuitem>
 
     <hr rv-if="userScripts.active | bothArraysEmpty userScripts.inactive | not">
@@ -86,73 +87,6 @@
 </section>
 
 
-<section class="user-script">
-  <header>
-    <menuitem tabindex="0" class="go-back"></menuitem>
-    {activeScript.name}
-  </header>
-
-  <hr>
-
-  <menu>
-    <menuitem tabindex="0" id="user-script-toggle-enabled">
-      <i class="icon fa" rv-class-fa-check="activeScript.enabled"></i>
-      <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
-    </menuitem>
-
-    <menuitem tabindex="0" id="user-script-toggle-update"
-        rv-disabled="activeScript.downloadUrl | not"
-    >
-      <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
-      <span class="text">
-        {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}
-      </span>
-    </menuitem>
-
-    <menuitem tabindex="0" id="user-script-update-now"
-        rv-disabled="activeScript.downloadUrl | not"
-    >
-      <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
-      <span class="text">{'update_now'|i18n}</span>
-      <div rv-if="activeScript.updateMessage">
-        <i class="icon fa"></i>
-        {activeScript.updateMessage}
-      </div>
-    </menuitem>
-
-    <menuitem tabindex="0" id="user-script-edit">
-      <i class="icon fa fa-pencil-square-o"></i>
-      <span class="text">{'edit'|i18n}</span>
-    </menuitem>
-
-    <menuitem tabindex="0" id="user-script-uninstall"
-        rv-if="pendingUninstall | not"
-    >
-      <i class="icon fa fa-trash-o"></i>
-      <span class="text">{'uninstall'|i18n}</span>
-    </menuitem>
-    <menuitem tabindex="0" id="user-script-undo-uninstall"
-        rv-if="pendingUninstall"
-    >
-      <i class="icon fa fa-trash-o"></i>
-      <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
-    </menuitem>
-
-    <hr>
-
-    <p rv-if="activeScript.description">
-      <b>{'description'|i18n}</b> {activeScript.description}
-    </p>
-    <p rv-if="activeScript.version">
-      <b>{'version'|i18n}</b> {activeScript.version}
-    </p>
-    <p rv-if="activeScript.homePageUrl">
-      <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
-    </p>
-  </menu>
-</section>
-
-
 <section class="options">
   <header>
     <menuitem tabindex="0" class="go-back"></menuitem>
@@ -177,6 +111,88 @@
       {'exclude'|i18n} {origin}
     </menuitem>
   </p>
+</section>
+
+
+<section class="user-script">
+  <header>
+    <menuitem tabindex="0" class="go-back"></menuitem>
+    {activeScript.name}
+  </header>
+
+  <hr>
+
+  <menu>
+    <menuitem tabindex="0" id="user-script-toggle-enabled">
+      <i class="icon fa" rv-class-fa-check="activeScript.enabled"></i>
+      <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
+    </menuitem>
+    <menuitem tabindex="0" id="user-script-edit">
+      <i class="icon fa fa-pencil-square-o"></i>
+      <span class="text">{'edit'|i18n}</span>
+    </menuitem>
+    <menuitem tabindex="0" id="user-script-uninstall"
+        rv-if="pendingUninstall | not"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'uninstall'|i18n}</span>
+    </menuitem>
+    <menuitem tabindex="0" id="user-script-undo-uninstall"
+        rv-if="pendingUninstall"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
+    </menuitem>
+    <menuitem tabindex="0" id="open-user-script-options">
+      <i class="icon fa fa-fw fa-cogs"></i>
+      <span class="text">{'user_script_options'|i18n}</span>
+      <span class="arrow"></span>
+    </menuitem>
+
+    <hr>
+
+    <p rv-if="activeScript.description">
+      <b>{'description'|i18n}</b> {activeScript.description}
+    </p>
+    <p rv-if="activeScript.version">
+      <b>{'version'|i18n}</b> {activeScript.version}
+    </p>
+    <p rv-if="activeScript.homePageUrl">
+      <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
+    </p>
+  </menu>
+</section>
+
+
+<section class="user-script-options">
+  <header>
+    <menuitem tabindex="0" class="go-back"></menuitem>
+    {'options'|i18n} {activeScript.name}
+  </header>
+
+  <hr>
+
+  <menu>
+    <menuitem tabindex="0" id="user-script-toggle-update"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
+      <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
+      <span class="text">
+        {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}
+      </span>
+    </menuitem>
+
+    <menuitem tabindex="0" id="user-script-update-now"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
+      <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
+      <span class="text">{'update_now'|i18n}</span>
+      <div rv-if="activeScript.updateMessage">
+        <i class="icon fa"></i>
+        {activeScript.updateMessage}
+      </div>
+    </menuitem>
+  </menu>
 </section>
 
 

@@ -1,19 +1,19 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http://.../404.js",
+    "message": "$1 at $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey User Script"
-  },
-  "ERROR_at_URL": {
-    "message": "$1 at $2",
-    "description": "E.g. 404 - Not Found at http://.../404.js"
   },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
-  "auto_update_enabled": {
-    "message": "Auto update enabled"
-  },
   "auto_update_disabled": {
     "message": "Auto update disabled"
+  },
+  "auto_update_enabled": {
+    "message": "Auto update enabled"
   },
   "backup_export": {
     "message": "Export a backup..."
@@ -21,14 +21,8 @@
   "backup_import": {
     "message": "Import a backup..."
   },
-  "backup_import_title": {
-    "message": "Greasemonkey Backup Import"
-  },
   "backup_import_file": {
     "message": "Import file"
-  },
-  "backup_import_select_file": {
-    "message": "Select a Greasemonkey backup ZIP file to import it with the above options."
   },
   "backup_import_options": {
     "message": "Import options"
@@ -38,6 +32,12 @@
   },
   "backup_import_replace_detail": {
     "message": "Overwrite already installed scripts with the version in the backup file."
+  },
+  "backup_import_select_file": {
+    "message": "Select a Greasemonkey backup ZIP file to import it with the above options."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey Backup Import"
   },
   "cancel": {
     "message": "Cancel"
@@ -60,11 +60,11 @@
   "done": {
     "message": "Done"
   },
-  "download_failed": {
-    "message": "User script download failed"
-  },
   "download_error_unknown": {
     "message": "User script download encountered an unknown error."
+  },
+  "download_failed": {
+    "message": "User script download failed"
   },
   "duplicate_resource_NAME": {
     "message": "Duplicate resource name: $1"
@@ -74,9 +74,6 @@
   },
   "enabled": {
     "message": "Enabled"
-  },
-  "Exclude": {
-    "message": "Exclude"
   },
   "extDesc": {
     "message": "A User Script manager for Firefox."
@@ -145,6 +142,9 @@
   "import_greasemonkey_database": {
     "message": "Import Greasemonkey database"
   },
+  "importing": {
+    "message": "Importing ..."
+  },
   "install": {
     "message": "Install"
   },
@@ -153,9 +153,6 @@
   },
   "install_failed": {
     "message": "User script failed to install"
-  },
-  "importing": {
-    "message": "Importing ..."
   },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."
@@ -169,6 +166,9 @@
   "open_editor_after": {
     "message": "Open editor after install completes"
   },
+  "options": {
+    "message": "Options:"
+  },
   "other_user_scripts": {
     "message": "Other user scripts"
   },
@@ -181,14 +181,14 @@
   "save": {
     "message": "Save"
   },
-  "saving": {
-    "message": "Saving"
-  },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "User script save failed: script named $1 already exists in namespace $2."
   },
   "save_failed_unknown": {
     "message": "User script save failed: unknown error."
+  },
+  "saving": {
+    "message": "Saving"
   },
   "script_save_error": {
     "message": "Script save error"
@@ -219,6 +219,9 @@
   },
   "update_result_updated": {
     "message": "Updated successfully."
+  },
+  "user_script_options": {
+    "message": "User script options"
   },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"

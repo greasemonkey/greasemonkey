@@ -36,7 +36,8 @@ section {
 
 /* Hide non-main sections by default. */
 section.options,
-section.user-script
+section.user-script,
+section.user-script-options
 {
   position: absolute;
   top: 0;
@@ -51,8 +52,13 @@ body#main-menu section.main-menu
 
 /* Slide the other menu in when it's active. */
 body#options section.options,
-body#user-script section.user-script
+body#user-script section.user-script,
+body#user-script-options section.user-script-options
 { margin-left: -100vw; }
+
+/* Second level, when going to third, is even further left! */
+body#user-script-options section.user-script
+{ margin-left: -200vw; }
 
 
 section header {
@@ -100,6 +106,17 @@ menuitem:focus {
 menuitem[disabled] {
   opacity: 0.65;
 }
+menuitem .arrow {
+  background: url(/skin/next.svg) center center no-repeat;
+  display: inline-block;
+  height: 100%;
+  opacity: 1.0;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  transform: rotate(180deg);
+  width: 12px;
+}
 
 menuitem .icon {
   font-size: 14px;
@@ -115,17 +132,6 @@ menuitem .icon img {
 
 menuitem.user-script {
   padding-right: 24px;
-}
-menuitem.user-script .arrow {
-  background: url(/skin/next.svg) center center no-repeat;
-  display: inline-block;
-  height: 100%;
-  opacity: 1.0;
-  position: absolute;
-  right: 12px;
-  top: 0;
-  transform: rotate(180deg);
-  width: 12px;
 }
 
 menu heading {
