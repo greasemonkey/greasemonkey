@@ -229,7 +229,8 @@ window.onUserScriptOptionsSave = async function(message, sender, sendResponse) {
   }
 
   for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
-    userScript[k] = details[k].trim().split('\n').map(x => x.trim());
+    userScript[k] = details[k].trim().split('\n')
+        .map(x => x.trim()).filter(x => x.length > 0);
     userScript[k + 'Exclusive'] = details[k + 'Exclusive'];
   }
 

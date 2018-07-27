@@ -164,9 +164,15 @@ window.RemoteUserScript = class RemoteUserScript {
     for (let glob of getGlobalExcludes()) {
       if (_testClude(glob, url)) return false;
     }
+
+    return this._testCludes(url);
+  }
+
+  _testCludes(url) {
     for (let glob of this._excludes) {
       if (_testClude(glob, url)) return false;
     }
+
     for (let glob of this._includes) {
       if (_testClude(glob, url)) return true;
     }
@@ -212,6 +218,28 @@ window.RunnableUserScript = class RunnableUserScript
     _loadValuesInto(this, details, runnableUserScriptKeys);
 
     if (!this._uuid) this._uuid = _randomUuid();
+  }
+
+  _testCludes(url) {
+    let excludes = _safeCopy(this._userExcludes);
+    if (!this._userExcludesExclusive) excludes.push(...this._excludes);
+    for (let glob of excludes) {
+      if (_testClude(glob, url)) return false;
+    }
+
+    let includes = _safeCopy(this._userIncludes);
+    if (!this._userIncludesExclusive) includes.push(...this._includes);
+    for (let glob of includes) {
+      if (_testClude(glob, url)) return true;
+    }
+
+    let matches = _safeCopy(this._userMatches);
+    if (!this._userMatchesExclusive) matches.push(...this._matches);
+    for (let pattern of matches) {
+      if (_testMatch(pattern, url)) return true;
+    }
+
+    return false;
   }
 
   get details() {

@@ -1,5 +1,10 @@
 'use strict';
 describe('user-script-obj', () => {
+  let userScript;
+  const matches = urlStr => assert.isOk(userScript.runsOn(new URL(urlStr)));
+  const notMatches =
+      urlStr => assert.isNotOk(userScript.runsOn(new URL(urlStr)));
+
   describe('EditableUserScript', () => {
     describe('calculateEvalContent()', () => {
       let scriptContent = metaBlockFromLines('// @name Origin')
@@ -22,7 +27,7 @@ describe('user-script-obj', () => {
 
       chai.expect(() => eval(userScript._evalContent))
           .to.not.throw("expected expression, got ')'");
-    });
+      });
     });
 
     describe('hasBeenEdited', () => {
@@ -55,11 +60,6 @@ describe('user-script-obj', () => {
   });
 
   describe('RemoteUserScript.runsOn()', () => {
-    let userScript;
-    const matches = urlStr => assert.isOk(userScript.runsOn(new URL(urlStr)));
-    const notMatches =
-        urlStr => assert.isNotOk(userScript.runsOn(new URL(urlStr)));
-
     beforeEach(() => {
       userScript = new RemoteUserScript({});
     });
@@ -190,6 +190,61 @@ describe('user-script-obj', () => {
           );
         });
       }
+    });
+
+    describe('user \'clude settings', () => {
+      const url = 'http://example.org/path?query';
+      beforeEach(() => {
+        userScript = new RunnableUserScript({});
+      });
+
+      it('still includes base', () => {
+        userScript._includes = ['*'];
+        userScript._userIncludes = ['http://example.net/*'];
+        matches(url);
+      });
+
+      it('does not include base, when user exclusive=true', () => {
+        userScript._includes = ['*'];
+        userScript._userIncludes = ['http://example.net/*'];
+        userScript._userIncludesExclusive = true;
+        notMatches(url);
+      });
+
+      it('still excludes base', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.org/*'];
+        userScript._userExclude = ['http://example.net/*'];
+        notMatches(url);
+      });
+
+      it('excludes user', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.net/*'];
+        userScript._userExclude = ['http://example.org/*'];
+        notMatches(url);
+      });
+
+      it('does not exclude base, when user eclusive=true', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.org/*'];
+        userScript._userExclude = ['http://example.net/*'];
+        userScript._userExcludeEclusive = true;
+        notMatches(url);
+      });
+
+      it('still matches base', () => {
+        userScript._matches = ['http://*/*'];
+        userScript._userMatches = ['http://example.net/*'];
+        matches(url);
+      });
+
+      it('does not match base, when user exclusive=true', () => {
+        userScript._matches = ['http://*/*'];
+        userScript._userMatches = ['http://example.net/*'];
+        userScript._userMatchesExclusive = true;
+        notMatches(url);
+      });
     });
   });
 });
