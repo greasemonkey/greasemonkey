@@ -1,16 +1,19 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http://.../404.js",
+    "message": "$1 at $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey User Script"
   },
-  "NAME_greasemonkey_user_script_editor": {
-    "message": "$1 - Greasemonkey User Script Editor"
-  },
-  "ERROR_at_URL": {
-    "message": "$1 at $2",
-    "description": "E.g. 404 - Not Found at http://.../404.js"
-  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
+  },
+  "auto_update_disabled": {
+    "message": "Auto update disabled"
+  },
+  "auto_update_enabled": {
+    "message": "Auto update enabled"
   },
   "backup_export": {
     "message": "Export a backup..."
@@ -18,44 +21,32 @@
   "backup_import": {
     "message": "Import a backup..."
   },
+  "backup_import_file": {
+    "message": "Import file"
+  },
+  "backup_import_options": {
+    "message": "Import options"
+  },
+  "backup_import_remove_detail": {
+    "message": "Uninstall scripts which are not in the backup file."
+  },
+  "backup_import_replace_detail": {
+    "message": "Overwrite already installed scripts with the version in the backup file."
+  },
+  "backup_import_select_file": {
+    "message": "Select a Greasemonkey backup ZIP file to import it with the above options."
+  },
   "backup_import_title": {
     "message": "Greasemonkey Backup Import"
-  },
-  "backup_import_detail": {
-    "message": "This page is used to import scripts from an exported database file.  Select one of the three import methods below."
-  },
-  "backup_import_option_merge": {
-    "message": "Merge"
-  },
-  "backup_import_option_merge_detail": {
-    "message": "The scripts found in the file will be merged into the database. Existing user scripts (and corresponding data) will not be modified."
-  },
-  "backup_import_option_replace": {
-    "message": "Replace"
-  },
-  "backup_import_option_replace_detail": {
-    "message": "The current database will be wiped and replaced with the user scripts found in the imported file."
-  },
-  "backup_import_option_overwrite": {
-    "message": "Merge and Overwrite"
-  },
-  "backup_import_option_overwrite_detail": {
-    "message": "Overwrite existing scripts with the data in the imported file. Existing usesrscripts not found in the file are not modified."
-  },
-  "backup_import_warning": {
-    "message": "Before importing a backup, it's a good idea back up your current state in case an error occurs."
   },
   "cancel": {
     "message": "Cancel"
   },
-  "confirm_db_merge_FILENAME": {
-    "message": "Merge database using selected file?\n$1"
+  "close": {
+    "message": "Close"
   },
-  "confirm_db_replace_FILENAME": {
-    "message": "Replace database using selected file?\n$1"
-  },
-  "confirm_db_overwrite_FILENAME": {
-    "message": "Overwrite database using selected file?\n$1"
+  "confirm_update_edited": {
+    "message": "You have edited this script, really update it?"
   },
   "description": {
     "message": "Description:"
@@ -66,11 +57,14 @@
   "does_not_run_on": {
     "message": "Does not run on:"
   },
-  "download_failed": {
-    "message": "User script download failed"
+  "done": {
+    "message": "Done"
   },
   "download_error_unknown": {
     "message": "User script download encountered an unknown error."
+  },
+  "download_failed": {
+    "message": "User script download failed"
   },
   "duplicate_resource_NAME": {
     "message": "Duplicate resource name: $1"
@@ -81,8 +75,8 @@
   "enabled": {
     "message": "Enabled"
   },
-  "export_greasemonkey_database": {
-    "message": "Export Greasemonkey database"
+  "exclude": {
+    "message": "Exclude"
   },
   "extDesc": {
     "message": "A User Script manager for Firefox."
@@ -90,8 +84,17 @@
   "extName": {
     "message": "Greasemonkey"
   },
+  "fix_and_save": {
+    "message": "The editor contents have not been saved.  Fix this error and try again."
+  },
   "get_user_scripts": {
     "message": "Get user scripts"
+  },
+  "global_excludes": {
+    "message": "Global Excludes"
+  },
+  "global_excludes_explain": {
+    "message": "One @exclude pattern per line.  No user scripts will run here."
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: \"text\" must be a string"
@@ -124,6 +127,12 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey is disabled"
   },
+  "greasemonkey_options": {
+    "message": "Greasemonkey Options"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey User Script Editor"
+  },
   "greasemonkey_wiki": {
     "message": "Greasemonkey Wiki"
   },
@@ -135,6 +144,9 @@
   },
   "import_greasemonkey_database": {
     "message": "Import Greasemonkey database"
+  },
+  "importing": {
+    "message": "Importing ..."
   },
   "install": {
     "message": "Install"
@@ -154,8 +166,14 @@
   "new_user_script": {
     "message": "New user script..."
   },
+  "only_use_these": {
+    "message": "Only use these"
+  },
   "open_editor_after": {
     "message": "Open editor after install completes"
+  },
+  "options": {
+    "message": "Options:"
   },
   "other_user_scripts": {
     "message": "Other user scripts"
@@ -175,6 +193,9 @@
   "save_failed_unknown": {
     "message": "User script save failed: unknown error."
   },
+  "saving": {
+    "message": "Saving"
+  },
   "script_save_error": {
     "message": "Script save error"
   },
@@ -192,6 +213,30 @@
   },
   "unnamed_script_RAND": {
     "message": "Unnamed Script $1"
+  },
+  "update_now": {
+    "message": "Update now"
+  },
+  "update_result_error": {
+    "message": "Error checking for update."
+  },
+  "update_result_noupdate": {
+    "message": "No newer version available."
+  },
+  "update_result_updated": {
+    "message": "Updated successfully."
+  },
+  "user_includes": {
+    "message": "User includes"
+  },
+  "user_excludes": {
+    "message": "User excludes"
+  },
+  "user_matches": {
+    "message": "User matches"
+  },
+  "user_script_options": {
+    "message": "User script options"
   },
   "user_scripts_for_this_tab": {
     "message": "User scripts for this tab"

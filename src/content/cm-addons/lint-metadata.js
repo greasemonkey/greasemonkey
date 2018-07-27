@@ -4,7 +4,7 @@ const META_PREFIX = '// @';
 const META_POSN = META_PREFIX.length;
 
 
-function lintMetadata(text, options) {
+function lintMetadata(text) {
   let messages = [];
   let meta = extractMeta(text).split('\n');
   let metaStartLine = (() => {

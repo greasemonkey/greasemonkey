@@ -1,8 +1,8 @@
 'use strict';
 describe('content/cm-addons/lint-metadata', () => {
   function lintOneBadMetaLine(v) {
-    let src = `// ==UserScript==\n// @${v}\n// ==/UserScript==\n`;
-    return lintMetadata(src)[0];
+    let content = metaBlockFromLines('// @' + v);
+    return lintMetadata(content)[0];
   }
 
   it('reports end of input after @', () => {

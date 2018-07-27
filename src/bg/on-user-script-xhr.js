@@ -32,7 +32,7 @@ chrome.runtime.onConnect.addListener(onUserScriptXhr);
 
 function open(xhr, d, port, tabUrl) {
   function xhrEventHandler(src, event) {
-    var responseState = {
+    const responseState = {
       context: d.context || null,
       finalUrl: xhr.responseURL,
       lengthComputable: null,
@@ -54,20 +54,20 @@ function open(xhr, d, port, tabUrl) {
       // .response).  Ignore.
     }
 
-    var responseXML = null;
     try {
-      responseXML = xhr.responseXML;
+      // Pass a flag to the content side, that the XML should be parsed.
+      responseState.responseXML = !!xhr.responseXML;
     } catch (e) {
       // Ignore failure.  At least in responseType blob case, this access fails.
     }
 
     switch (event.type) {
-      case "progress":
+      case 'progress':
         responseState.lengthComputable = event.lengthComputable;
         responseState.loaded = event.loaded;
         responseState.total = event.total;
         break;
-      case "error":
+      case 'error':
         console.log('error event?', event);
         break;
       default:
@@ -79,7 +79,7 @@ function open(xhr, d, port, tabUrl) {
     }
 
     port.postMessage(
-        {src: src, type: event.type, responseState: responseState});
+        {'src': src, 'type': event.type, 'responseState': responseState});
   }
 
   [
@@ -135,11 +135,11 @@ function open(xhr, d, port, tabUrl) {
       xhr.setRequestHeader(gDummyHeaderPrefix + 'cookie', cookieStrings.join(' '));
     }
 
-    var body = d.data || null;
+    const body = d.data || null;
     if (d.binary && (body !== null)) {
-      var bodyLength = body.length;
-      var bodyData = new Uint8Array(bodyLength);
-      for (var i = 0; i < bodyLength; i++) {
+      const bodyLength = body.length;
+      const bodyData = new Uint8Array(bodyLength);
+      for (let i = 0; i < bodyLength; i++) {
         bodyData[i] = body.charCodeAt(i) & 0xff;
       }
       xhr.send(new Blob([bodyData]));
@@ -164,7 +164,7 @@ function isSameOrigin(first, second) {
 
 function getHeader(headers, name) {
   name = name.toLowerCase();
-  for (var header of headers) {
+  for (let header of headers) {
     if (header.name.toLowerCase() === name) {
       return header;
     }
@@ -175,10 +175,11 @@ function getHeader(headers, name) {
 
 function rewriteHeaders(e) {
   if (e.originUrl && e.originUrl.startsWith(gExtensionUrl)) {
-    for (var name of gHeadersToReplace) {
-      var prefixedHeader = getHeader(e.requestHeaders, gDummyHeaderPrefix + name);
+    for (let name of gHeadersToReplace) {
+      const prefixedHeader = getHeader(e.requestHeaders, gDummyHeaderPrefix
+          + name);
       if (prefixedHeader) {
-        var unprefixedHeader = getHeader(e.requestHeaders, name);
+        const unprefixedHeader = getHeader(e.requestHeaders, name);
         if (unprefixedHeader) {
           e.requestHeaders.splice(e.requestHeaders.indexOf(unprefixedHeader), 1);
         }

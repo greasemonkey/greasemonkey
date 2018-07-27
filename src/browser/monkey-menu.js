@@ -2,15 +2,31 @@
 let gTplData = {
   'activeScript': {},
   'enabled': undefined,
+  'pendingUninstall': 0,
+  'options': {
+    'globalExcludesStr': '',
+  },
+  'origin': null,
   'userScripts': {
     'active': [],
     'inactive': [],
   },
-  'pendingUninstall': 0,
 };
-let gMainFocusedItem = null;
+
+let gMainFocusedItem = null;  // TODO: this needs to be a stack.
 let gPendingTicker = null;
 let gScriptTemplates = {};
+
+///////////////////////////////////////////////////////////////////////////////
+
+if ('undefined' == typeof window.getGlobalExcludes) {
+  // Equivalent of the version provided by `user-script-registry`, but here.
+  // Undefined check because of shared test scope collision.
+  window.getGlobalExcludes = function() {
+    return gTplData.options.globalExcludesStr.trim()
+        .split('\n').map(x => x.trim());
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +40,6 @@ function onClick(event) {
   if (event.which != 1) {
     event.preventDefault();
     event.stopPropagation();
-    return;
   } else {
     activate(event.target);
   }
@@ -32,40 +47,85 @@ function onClick(event) {
 
 
 function onKeyDown(event) {
-  if (event.code == 'Enter') return activate(event.target);
-  if (event.key == 'ArrowDown') return event.preventDefault(), switchFocus(1);
-  if (event.key == 'ArrowUp') return event.preventDefault(), switchFocus(-1);
+  if (event.target.tagName == 'TEXTAREA') return;
+
+  if (event.code == 'Enter') {
+    return activate(event.target);
+  } else if (event.key == 'ArrowDown') {
+    event.preventDefault();
+    switchFocus(1);
+  } else  if (event.key == 'ArrowUp') {
+    event.preventDefault();
+    switchFocus(-1);
+  }
 }
 
 
-function onLoad(event) {
+function onLoad() {
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
+
+  let tabs = null;
+  let userScripts = null;
+  function finish() {
+    numPending--;
+    if (numPending > 0) return;
+
+    let url = tabs.length && new URL(tabs[0].url) || null;
+    gTplData.origin = url.origin == "null" ? null : url.origin;
+    loadScripts(userScripts, url);
+
+    tinybind.formatters.bothArraysEmpty
+        = (a, b) => !(!!a.length || !!b.length);
+    tinybind.formatters.canAddOrigin = () => {
+      if (!gTplData.origin) return false;
+
+      let originExclude = gTplData.origin + '/*';
+      return !getGlobalExcludes().includes(originExclude);
+    };
+    tinybind.bind(document.body, gTplData);
+
+    document.body.id = 'main-menu';
+
+    setTimeout(window.focus, 0);
+  }
+
+  let numPending = 0;
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'EnabledQuery'},
-      enabled => gTplData.enabled = enabled);
+      enabled => {
+        gTplData.enabled = enabled;
+        finish();
+      });
+
+  numPending++;
   chrome.runtime.sendMessage(
       {'name': 'ListUserScripts', 'includeDisabled': true},
-      function(userScripts) {
-        chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
-          let url = tabs.length && new URL(tabs[0].url) || null;
-          loadScripts(userScripts, url);
+      userScripts_ => {
+        userScripts = userScripts_;
+        finish();
+      });
 
-          rivets.formatters.bothArraysEmpty
-              = (a, b) => !(!!a.length | !!b.length);
-          rivets.bind(document.body, gTplData);
+  numPending++;
+  chrome.runtime.sendMessage(
+      {'name': 'OptionsLoad'},
+      options => {
+        gTplData.options.globalExcludesStr = options.excludes;
+        finish();
+      });
 
-          document.body.id = 'main-menu';
-
-          setTimeout(window.focus, 0);
-        });
+  numPending++;
+  chrome.tabs.query(
+      {'active': true, 'currentWindow': true},
+      tabs_ => {
+        tabs = tabs_;
+        finish();
       });
 }
 
 
-function onMouseOut(event) {
-  let el = event.target;
-//  while (el && el.tagName != 'MENUITEM') el = el.parentNode;
-//  if (el && el.hasAttribute('tabindex')) el.focus();
+function onMouseOut() {
   document.activeElement.blur();
 }
 
@@ -77,7 +137,7 @@ function onMouseOver(event) {
 }
 
 
-function onTransitionEnd(event) {
+function onTransitionEnd() {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
   for (let section of document.getElementsByTagName('section')) {
@@ -87,7 +147,7 @@ function onTransitionEnd(event) {
 }
 
 
-function onTransitionStart(event) {
+function onTransitionStart() {
   // While CSS transitioning, keep all sections visible.
   for (let section of document.getElementsByTagName('section')) {
     section.style.visibility = 'visible';
@@ -106,9 +166,32 @@ function activate(el) {
   while (el && el.tagName != 'MENUITEM') el = el.parentNode;
   if (!el) return;
 
+  switch (el.className) {
+    case 'go-back':
+      if (document.body.id == 'user-script-options') {
+        navigateToScript(gTplData.activeScript.uuid);
+      } else {
+        navigateToMainMenu();
+      }
+      return;
+  }
+
   switch (el.id) {
-    case 'back':
-      navigateToMainMenu();
+    case 'open-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'options';
+      return;
+    case 'open-user-script-options':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'user-script-options';
+      return;
+
+    case 'add-exclude-current':
+      if (gTplData.origin) {
+        gTplData.options.globalExcludesStr =
+            gTplData.options.globalExcludesStr.trim() + '\n'
+            + gTplData.origin + '/*';
+      }
       return;
 
     case 'backup-export':
@@ -132,6 +215,10 @@ function activate(el) {
     case 'user-script-toggle-enabled':
       toggleUserScriptEnabled(gTplData.activeScript.uuid);
       return;
+    case 'user-script-toggle-update':
+      if (el.disabled) return;
+      toggleUserScriptUpdate(gTplData.activeScript.uuid);
+      return;
     case 'user-script-edit':
       openUserScriptEditor(gTplData.activeScript.uuid);
       window.close();
@@ -141,6 +228,18 @@ function activate(el) {
       return;
     case 'user-script-undo-uninstall':
       gTplData.pendingUninstall = null;
+      return;
+    case 'user-script-update-now':
+      if (el.disabled) return;
+
+      if (gTplData.activeScript.hasBeenEdited) {
+        if (confirm(_('confirm_update_edited'))) {
+          userScriptUpdate(gTplData.activeScript.uuid);
+        }
+      } else {
+        userScriptUpdate(gTplData.activeScript.uuid);
+      }
+
       return;
   }
 
@@ -164,24 +263,51 @@ function activate(el) {
 function loadScripts(userScriptsDetail, url) {
   userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
   for (let userScriptDetail of userScriptsDetail) {
-    let userScript = new RunnableUserScript(userScriptDetail);
+    let userScript = new EditableUserScript(userScriptDetail);
     let tplItem = userScript.details;
     tplItem.icon = iconUrl(userScript);
-    (url && userScript.runsAt(url)
+    (url && userScript.runsOn(url)
         ? gTplData.userScripts.active
         : gTplData.userScripts.inactive
     ).push(tplItem);
+    if (!tplItem.downloadUrl) tplItem.autoUpdate = false;
+    for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
+      tplItem[k] = tplItem[k].join('\n');
+    }
     gScriptTemplates[userScript.uuid] = tplItem;
   }
 }
 
 
-function navigateToMainMenu() {
-  if (gTplData.pendingUninstall > 0) {
-    uninstall(gTplData.activeScript.uuid);
-    return;
+// When leaving a view, save changes made there.
+function navigateAway() {
+  switch (document.body.id) {
+    case 'options':
+      chrome.runtime.sendMessage({
+        'name': 'OptionsSave',
+        'excludes': gTplData.options.globalExcludesStr.trim(),
+      }, logUnhandledError);
+      break;
+    case 'user-script-options':
+      chrome.runtime.sendMessage({
+        'name': 'UserScriptOptionsSave',
+        'details': gTplData.activeScript,
+      }, logUnhandledError);
+      break;
+    case 'user-script':
+      if (gTplData.pendingUninstall > 0) {
+        uninstall(gTplData.activeScript.uuid);
+        return;
+      }
+      gTplData.activeScript.updateMessage = '';
+      gTplData.activeScript = {};
+      break;
   }
-  gTplData.activeScript = {};
+}
+
+
+function navigateToMainMenu() {
+  navigateAway();
   document.body.id = 'main-menu';
 
   if (gMainFocusedItem) {
@@ -192,12 +318,14 @@ function navigateToMainMenu() {
 
 
 function navigateToScript(uuid) {
+  navigateAway();
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
   document.body.id = 'user-script';
 }
 
-async function newUserScript() {
+
+function newUserScript() {
   let r = Math.floor(Math.random() * 900000 + 100000);
   let name = _('unnamed_script_RAND', r);
   let scriptSource = `// ==UserScript==
@@ -207,9 +335,11 @@ async function newUserScript() {
 // ==/UserScript==`;
   let downloader
       = new UserScriptDownloader().setScriptContent(scriptSource);
-  await downloader.start();
-  await downloader.install(/*disabled=*/false, /*openEditor=*/true);
-  window.close();
+  downloader.start()
+      .then(() => {
+        downloader.install('install', /*disabled=*/false, /*openEditor=*/true);
+      })
+      .then(window.close);
 }
 
 
@@ -245,6 +375,17 @@ function toggleUserScriptEnabled(uuid) {
 }
 
 
+function toggleUserScriptUpdate(uuid) {
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptToggleAutoUpdate',
+    'uuid': uuid,
+  }, response => {
+    logUnhandledError();
+    gScriptTemplates[uuid].autoUpdate = response.autoUpdate;
+  });
+}
+
+
 function uninstall(uuid) {
   gTplData.pendingUninstall = null;
   chrome.runtime.sendMessage({
@@ -254,11 +395,13 @@ function uninstall(uuid) {
     logUnhandledError();
 
     allScriptsLoop:
-    for (let userScriptContainer of Object.values(gTplData.userScripts)) {
-      for (let i in userScriptContainer) {
-        let script = userScriptContainer[i];
+    for (let i of Object.keys(gTplData.userScripts)) {
+      let userScriptContainer = gTplData.userScripts[i];
+      for (let j in userScriptContainer) {
+        if (!userScriptContainer.hasOwnProperty(j)) continue;
+        let script = userScriptContainer[j];
         if (script.uuid == uuid) {
-          userScriptContainer.splice(i, 1);
+          userScriptContainer.splice(j, 1);
           break allScriptsLoop;
         }
       }
@@ -266,5 +409,32 @@ function uninstall(uuid) {
     delete gScriptTemplates[uuid];
 
     navigateToMainMenu();
+  });
+}
+
+
+function userScriptUpdate(uuid) {
+  gTplData.activeScript.updating = true;
+  gTplData.activeScript.updateMessage = '';
+  chrome.runtime.sendMessage({
+    'name': 'UserScriptUpdateNow',
+    'uuid': uuid,
+  }, response => {
+    logUnhandledError();
+    gTplData.activeScript.updating = false;
+    switch (response.result) {
+      case 'updated':
+        if (response.result == 'updated') {
+          for (let i of Object.keys(response.details)) {
+            gTplData.activeScript[i] = response.details[i];
+          }
+        }
+        // Fall-through!
+      case 'error':
+      case 'noupdate':
+        gTplData.activeScript.updateMessage
+            = _('update_result_' + response.result);
+        break;
+    }
   });
 }

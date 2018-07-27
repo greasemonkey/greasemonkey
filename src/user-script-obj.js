@@ -10,7 +10,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 12;
+const EVAL_CONTENT_VERSION = 13;
 
 
 // Private implementation.
@@ -66,16 +66,16 @@ function _loadValuesInto(dest, vals, keys) {
 
 
 function _randomUuid() {
-  var randomInts = new Uint8Array(16);
+  const randomInts = new Uint8Array(16);
   window.crypto.getRandomValues(randomInts);
-  var randomChars = [];
+  const randomChars = [];
   for (let i = 0; i<16; i++) {
-    let s = randomInts[i].toString(16).padStart(2, 0);
+    let s = randomInts[i].toString(16).padStart(2, '0');
     randomChars.push(s.substr(0, 1));
     randomChars.push(s.substr(1, 1));
   }
 
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+  let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
   uuid = uuid.replace(/[xy]/g, function(c) {
     let r = randomChars.shift();
     if (c == 'y') {
@@ -121,7 +121,7 @@ window.RemoteUserScript = class RemoteUserScript {
   }
 
   get details() {
-    var d = {};
+    const d = {};
     userScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
@@ -144,9 +144,9 @@ window.RemoteUserScript = class RemoteUserScript {
 
   get id() { return this.namespace + '/' + this.name; }
 
-  runsAt(url) {
+  runsOn(url) {
     if (!(url instanceof URL)) {
-      throw new Error('runsAt() got non-url parameter: ' + url);
+      throw new Error('runsOn() got non-url parameter: ' + url);
     }
 
     if (url
@@ -159,12 +159,20 @@ window.RemoteUserScript = class RemoteUserScript {
     }
 
     // TODO: Profile cost of pattern generation, cache if justified.
-    // TODO: User global excludes.
     // TODO: User includes/excludes/matches.
 
+    for (let glob of getGlobalExcludes()) {
+      if (_testClude(glob, url)) return false;
+    }
+
+    return this._testCludes(url);
+  }
+
+  _testCludes(url) {
     for (let glob of this._excludes) {
       if (_testClude(glob, url)) return false;
     }
+
     for (let glob of this._includes) {
       if (_testClude(glob, url)) return true;
     }
@@ -180,12 +188,15 @@ window.RemoteUserScript = class RemoteUserScript {
         ? _('gm_script_id_ver', this.id, this.version)
         : _('gm_script_id', this.id);
   }
-}
+};
 
 
 const runnableUserScriptKeys = [
-    'enabled', 'evalContent', 'evalContentVersion', 'iconBlob', 'resources',
-    'userExcludes', 'userIncludes', 'userMatches', 'uuid'];
+    'autoUpdate', 'enabled', 'evalContent', 'evalContentVersion', 'iconBlob',
+    'resources', 'uuid',
+    'userExcludes', 'userExcludesExclusive',
+    'userIncludes', 'userIncludesExclusive',
+    'userMatches', 'userMatchesExclusive'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.RunnableUserScript = class RunnableUserScript
@@ -193,14 +204,18 @@ window.RunnableUserScript = class RunnableUserScript
   constructor(details) {
     super(details);
 
+    this._autoUpdate = true;
     this._enabled = true;
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._evalContentVersion = -1;
     this._iconBlob = null;
     this._resources = {};  // Name to object with keys: name, mimetype, blob.
-    this._userExcludes = [];  // TODO: Not implemented.
-    this._userIncludes = [];  // TODO: Not implemented.
-    this._userMatches = [];  // TODO: Not implemented.
+    this._userExcludes = [];
+    this._userExcludesExclusive = false;
+    this._userIncludes = [];
+    this._userIncludesExclusive = false;
+    this._userMatches = [];
+    this._userMatchesExclusive = false;
     this._uuid = null;
 
     _loadValuesInto(this, details, runnableUserScriptKeys);
@@ -208,32 +223,63 @@ window.RunnableUserScript = class RunnableUserScript
     if (!this._uuid) this._uuid = _randomUuid();
   }
 
+  _testCludes(url) {
+    let excludes = _safeCopy(this._userExcludes);
+    if (!this._userExcludesExclusive) excludes.push(...this._excludes);
+    for (let glob of excludes) {
+      if (_testClude(glob, url)) return false;
+    }
+
+    let includes = _safeCopy(this._userIncludes);
+    if (!this._userIncludesExclusive) includes.push(...this._includes);
+    for (let glob of includes) {
+      if (_testClude(glob, url)) return true;
+    }
+
+    let matches = _safeCopy(this._userMatches);
+    if (!this._userMatchesExclusive) matches.push(...this._matches);
+    for (let pattern of matches) {
+      if (_testMatch(pattern, url)) return true;
+    }
+
+    return false;
+  }
+
   get details() {
-    var d = super.details;
+    let d = super.details;
     runnableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
     return d;
   }
 
+  get autoUpdate() { return this._autoUpdate; }
+  set autoUpdate(v) { this._autoUpdate = !!v; }
   get enabled() { return this._enabled; }
   set enabled(v) { this._enabled = !!v; }
 
-  // TODO: Setters/mutators.
   get userExcludes() { return _safeCopy(this._userExcludes); }
+  set userExcludes(v) { this._userExcludes = _safeCopy(v); }
+  get userExcludesExclusive() { return _safeCopy(this._userExcludesExclusive); }
+  set userExcludesExclusive(v) { this._userExcludesExclusive = !!v; }
   get userIncludes() { return _safeCopy(this._userIncludes); }
+  set userIncludes(v) { this._userIncludes = _safeCopy(v); }
+  get userIncludesExclusive() { return _safeCopy(this._userIncludesExclusive); }
+  set userIncludesExclusive(v) { this._userIncludesExclusive = !!v; }
   get userMatches() { return _safeCopy(this._userMatches); }
+  set userMatches(v) { this._userMatches = _safeCopy(v); }
+  set userMatchesExclusive(v) { this._userMatchesExclusive = !!v; }
 
   get evalContent() { return this._evalContent; }
   get evalContentVersion() { return this._evalContentVersion; }
   get iconBlob() { return this._iconBlob; }
   get resources() { return _safeCopy(this._resources); }
   get uuid() { return this._uuid; }
-}
+};
 
 
 const editableUserScriptKeys = [
-    'parsedDetails', 'content', 'requiresContent'];
+    'content', 'editTime', 'installTime', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -241,34 +287,32 @@ window.EditableUserScript = class EditableUserScript
   constructor(details) {
     super(details);
 
-    this._parsedDetails = null;  // All details from parseUserScript().
     this._content = null;
+    this._editTime = null;
+    this._installTime = null;
     this._requiresContent = {};  // Map of download URL to content.
 
     _loadValuesInto(this, details, editableUserScriptKeys);
   }
 
   get details() {
-    var d = super.details;
+    const d = super.details;
     editableUserScriptKeys.forEach(k => {
       d[k] = _safeCopy(this['_' + k]);
     });
+    d.hasBeenEdited = this.hasBeenEdited;
     return d;
   }
 
-  get parsedDetails() {
-    if (!this._parsedDetails) {
-      if (!this._content) {
-        throw new Error(
-            'EditableUserScript missing both content and parsed details!');
-      }
-      this._parsedDetails = parseUserScript(this._content, this._downloadUrl);
-    }
-    return this._parsedDetails;
-  }
-
   get content() { return this._content; }
+  get editTime() { return this._editTime; }
+  get installTime() { return this._installTime; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
+
+  get hasBeenEdited() {
+    if (!this._editTime) return false;
+    return this._installTime < this._editTime;
+  }
 
   calculateEvalContent() {
     // Put the first line of the script content on line one of the
@@ -325,15 +369,15 @@ window.EditableUserScript = class EditableUserScript
   }
 
   // Given a successful `Downloader` object, update this script from it.
-  async updateFromDownloaderDetails(userScriptDetails, downloaderDetails) {
+  updateFromDownloaderDetails(userScriptDetails, downloaderDetails) {
     _loadValuesInto(this, userScriptDetails, userScriptKeys);
     _loadValuesInto(this, userScriptDetails, runnableUserScriptKeys);
     _loadValuesInto(this, userScriptDetails, editableUserScriptKeys);
 
     this._content = downloaderDetails.content;
-
-    if (downloaderDetails.icon) {
-      this._iconBlob = downloaderDetails.icon;
+    this._iconBlob = downloaderDetails.icon || null;
+    if (downloaderDetails.installTime) {
+      this._installTime = downloaderDetails.installTime;
     }
 
     this._requiresContent = {};

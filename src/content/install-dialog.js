@@ -17,7 +17,7 @@ let gRvDetails = {
 };
 
 
-rivets.bind(document.body, gRvDetails);
+tinybind.bind(document.body, gRvDetails);
 
 
 let gUserScriptUrl = unescape(document.location.search.substr(1));
@@ -62,15 +62,17 @@ document.getElementById('btn-cancel').addEventListener('click', finish, true);
 
 /****************************** INSTALL BUTTON *******************************/
 
-function onClickInstall(event) {
+function onClickInstall() {
   gProgressBar.removeAttribute('value');
   let disabled = document.getElementById('install-disabled').checked;
   let openEditor = document.getElementById('open-editor-after').checked;
-  gDownloader.install(disabled, openEditor).then(finish).catch(err => {
-    gRvDetails.errorHeader = _('install_failed');
-    gRvDetails.errorList = [err.message || err.name];
-    document.body.className = 'error';
-  });
+  gDownloader.install('install', disabled, openEditor)
+      .then(finish)
+      .catch(err => {
+        gRvDetails.errorHeader = _('install_failed');
+        gRvDetails.errorList = [err.message || err.name];
+        document.body.className = 'error';
+      });
 }
 
 

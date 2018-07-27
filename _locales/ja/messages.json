@@ -1,202 +1,190 @@
 {
-    "gm_script_id": {
-        "message": "[Greasemonkey スクリプト $1] ",
-        "description": ""
-    },
-    "save_failed_unknown": {
-        "message": "ユーザースクリプトの保存に失敗: 不明なエラー。 ",
-        "description": ""
-    },
-    "xhr_no_details": {
-        "message": "GM.xmlHttpRequest: 「details」引数が指定されていません。",
-        "description": ""
-    },
-    "SCRIPT_does_not_grant_METHOD": {
-        "message": "$1 は @grant $2 を含みません。",
-        "description": ""
-    },
-    "install_disabled": {
-        "message": "無効状態でインストール",
-        "description": ""
-    },
-    "download_error_unknown": {
-        "message": "ユーザースクリプトのダウンロードで不明なエラーが発生しました。",
-        "description": ""
-    },
-    "edit": {
-        "message": "編集",
-        "description": ""
-    },
-    "ERROR_at_URL": {
-        "message": "$2 で $1",
-        "description": "E.g. 404 - Not Found at http://.../404.js"
-    },
-    "runs_on": {
-        "message": "実行されるページ (@includes):",
-        "description": ""
-    },
-    "uninstall": {
-        "message": "アンインストール",
-        "description": ""
-    },
-    "greasemonkey_is_active": {
-        "message": "Greasemonkey は有効",
-        "description": ""
-    },
-    "greasemonkey_user_script_editor": {
-        "message": "Greasemonkey ユーザースクリプトエディタ",
-        "description": ""
-    },
-    "other_user_scripts": {
-        "message": "その他のユーザースクリプト",
-        "description": ""
-    },
-    "xhr_bad_url_scheme": {
-        "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です: $1",
-        "description": ""
-    },
-    "gm_opentab_bad_URL": {
-        "message": "GM.openInTab: 不正なURLです: $1",
-        "description": ""
-    },
-    "this_is_a_greasemonkey_user_script": {
-        "message": "これは Greasemonkey ユーザースクリプトです。利用する場合は、インストールボタンをクリックします。",
-        "description": ""
-    },
-    "does_not_run_on": {
-        "message": "実行されるページから除外されるページ:",
-        "description": ""
-    },
-    "enabled": {
-        "message": "有効",
-        "description": ""
-    },
-    "save_failed_NAME_already_in_NAMESPACE": {
-        "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。 ",
-        "description": ""
-    },
-    "close": {
-        "message": "閉じる",
-        "description": ""
-    },
-    "malicious_user_scripts": {
-        "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。",
-        "description": ""
-    },
-    "NAME_greasemonkey_user_script": {
-        "message": "$1 — Greasemonkey ユーザースクリプト",
-        "description": ""
-    },
-    "sources_you_trust": {
-        "message": "出所が信頼できないスクリプトはインストールしないでください。",
-        "description": ""
-    },
-    "undo_uninstall": {
-        "message": "アンインストールを取り消す",
-        "description": ""
-    },
-    "get_user_scripts": {
-        "message": "ユーザースクリプトの入手",
-        "description": ""
-    },
-    "install_failed": {
-        "message": "ユーザースクリプトのインストールに失敗しました",
-        "description": ""
-    },
-    "install": {
-        "message": "インストール",
-        "description": ""
-    },
-    "requires_special_apis": {
-        "message": "次の特権APIを許可:",
-        "description": ""
-    },
-    "user_scripts_for_this_tab": {
-        "message": "現在のタブで実行されるユーザースクリプト",
-        "description": ""
-    },
-    "greasemonkey_home_page": {
-        "message": "Greasemonkey ホームページ",
-        "description": ""
-    },
-    "xhr_bad_url": {
-        "message": "GM.xmlHttpRequest: 不正なURLです: $1\n$2",
-        "description": ""
-    },
-    "script_save_error": {
-        "message": "スクリプト保存エラー",
-        "description": ""
-    },
-    "ignoring_MATCH_because_REASON": {
-        "message": "「$1」は不正な @match パターンです:\n$2",
-        "description": ""
-    },
-    "save": {
-        "message": "保存",
-        "description": ""
-    },
-    "duplicate_resource_NAME": {
-        "message": "リソース名が重複しています: $1",
-        "description": ""
-    },
-    "disabled": {
-        "message": "無効",
-        "description": ""
-    },
-    "cancel": {
-        "message": "キャンセル",
-        "description": ""
-    },
-    "download_failed": {
-        "message": "ユーザースクリプトのダウンロードに失敗しました",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Firefox 向けのユーザースクリプトマネージャー。",
-        "description": ""
-    },
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "gm_script_id_ver": {
-        "message": "[Greasemonkey スクリプト $id$; バージョン $version$]",
-        "description": ""
-    },
-    "unnamed_script_RAND": {
-        "message": "新しいスクリプト $1",
-        "description": ""
-    },
-    "gm_notif_text_must_be_string": {
-        "message": "GM.notification: 「text」は文字列でなければなりません。",
-        "description": ""
-    },
-    "saving": {
-        "message": "保存中",
-        "description": ""
-    },
-    "new_user_script": {
-        "message": "ユーザースクリプトの新規作成...",
-        "description": ""
-    },
-    "greasemonkey_is_disabled": {
-        "message": "Greasemonkey は無効",
-        "description": ""
-    },
-    "matches": {
-        "message": "実行されるページ (@match):",
-        "description": ""
-    },
-    "xhr_no_url": {
-        "message": "GM.xmlHttpRequest: URLが指定されていません。",
-        "description": ""
-    },
-    "open_editor_after": {
-        "message": "インストール完了後にエディタを開く",
-        "description": ""
-    },
-    "greasemonkey_wiki": {
-        "message": "Greasemonkey wiki",
-        "description": ""
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 — Greasemonkey ユーザースクリプト"
+  },
+  "ERROR_at_URL": {
+    "message": "$2 で $1",
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 は「@grant $2」を含みません。"
+  },
+  "backup_export": {
+    "message": "バックアップのエクスポート..."
+  },
+  "backup_import": {
+    "message": "バックアップのインポート..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey バックアップのインポート"
+  },
+  "backup_import_file": {
+    "message": "ファイルからインポート"
+  },
+  "backup_import_select_file": {
+    "message": "Greasemonkey バックアップZIPファイルを選択して上記のオプションでインポートします。"
+  },
+  "backup_import_options": {
+    "message": "インポートオプション"
+  },
+  "backup_import_remove_detail": {
+    "message": "バックアップファイルにないスクリプトをアンインストールします。"
+  },
+  "backup_import_replace_detail": {
+    "message": "既にインストールされているスクリプトをバックアップファイルのバージョンで上書きします。"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "description": {
+    "message": "説明："
+  },
+  "disabled": {
+    "message": "無効"
+  },
+  "does_not_run_on": {
+    "message": "実行されるページから除外されるページ："
+  },
+  "done": {
+    "message": "完了"
+  },
+  "download_failed": {
+    "message": "ユーザースクリプトのダウンロードに失敗しました"
+  },
+  "download_error_unknown": {
+    "message": "ユーザースクリプトのダウンロードで不明なエラーが発生しました。"
+  },
+  "duplicate_resource_NAME": {
+    "message": "リソース名が重複しています：$1"
+  },
+  "edit": {
+    "message": "編集"
+  },
+  "enabled": {
+    "message": "有効"
+  },
+  "extDesc": {
+    "message": "Firefox 向けのユーザースクリプトマネージャー。"
+  },
+  "get_user_scripts": {
+    "message": "ユーザースクリプトの入手"
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification: 「text」は文字列でなければなりません。"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab: 不正なURLです：$1"
+  },
+  "gm_script_id": {
+    "message": "「Greasemonkey スクリプト $1」"
+  },
+  "gm_script_id_ver": {
+    "message": "「Greasemonkey スクリプト $id$; バージョン $version$」",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
     }
+  },
+  "greasemonkey_home_page": {
+    "message": "Greasemonkey ホームページ"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey は有効"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey は無効"
+  },
+  "homepage": {
+    "message": "ホームページ"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "「$1」は不正な @match パターンです：\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Greasemonkey データベースのインポート"
+  },
+  "install": {
+    "message": "インストール"
+  },
+  "install_disabled": {
+    "message": "無効状態でインストール"
+  },
+  "install_failed": {
+    "message": "ユーザースクリプトのインストールに失敗しました"
+  },
+  "importing": {
+    "message": "インポート中..."
+  },
+  "malicious_user_scripts": {
+    "message": "悪意のあるユーザースクリプトは、知らないうちにプライバシーを侵害し、データを盗み、ユーザーになりすまして行動します。"
+  },
+  "matches": {
+    "message": "実行されるページ (@match)："
+  },
+  "new_user_script": {
+    "message": "ユーザースクリプトの新規作成..."
+  },
+  "open_editor_after": {
+    "message": "インストール完了後にエディタを開く"
+  },
+  "other_user_scripts": {
+    "message": "その他のユーザースクリプト"
+  },
+  "requires_special_apis": {
+    "message": "次の特権APIを許可："
+  },
+  "runs_on": {
+    "message": "実行されるページ (@includes)："
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "ユーザースクリプトの保存に失敗: 「@name $1」「@namespace $2」のどちらも一致するスクリプトが既に存在します。"
+  },
+  "save_failed_unknown": {
+    "message": "ユーザースクリプトの保存に失敗: 不明なエラー。"
+  },
+  "script_save_error": {
+    "message": "スクリプト保存エラー"
+  },
+  "sources_you_trust": {
+    "message": "出所が信頼できないスクリプトはインストールしないでください。"
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "これは Greasemonkey ユーザースクリプトです。利用する場合は、インストールボタンをクリックします。"
+  },
+  "undo_uninstall": {
+    "message": "アンインストールを取り消す"
+  },
+  "uninstall": {
+    "message": "アンインストール"
+  },
+  "unnamed_script_RAND": {
+    "message": "新しいスクリプト $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "現在のタブで実行されるユーザースクリプト"
+  },
+  "version": {
+    "message": "バージョン："
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest: 不正なURLです：$1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest: 指定されたURLのスキームは不正です：$1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest: 「details」引数が指定されていません。"
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest:「URL」が指定されていません。"
+  }
 }

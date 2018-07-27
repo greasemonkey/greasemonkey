@@ -22,10 +22,8 @@ function blobToBuffer(blob) {
 
   let reader = new FileReader();
   reader.readAsArrayBuffer(blob);
-  return new Promise((resolve, reject) => {
-    reader.onload = event => {
-      resolve({'buffer': reader.result, 'type': blob.type});
-    };
+  return new Promise(resolve => {
+    reader.onload = () => resolve({'buffer': reader.result, 'type': blob.type});
   });
 }
 
@@ -34,6 +32,16 @@ function bufferToBlob(buffer) {
   if (!buffer) return buffer;
   if (buffer instanceof Blob) return buffer;
   return new Blob([buffer.buffer], {'type': buffer.type});
+}
+
+
+function detailsBuffersToBlobs(details) {
+  // See #2909; ArrayBuffers in IndexedDB; convert to Blobs in memory.
+  details.iconBlob = bufferToBlob(details.iconBlob);
+  Object.keys(details.resources || {}).forEach(k => {
+    let r = details.resources[k];
+    r.blob = bufferToBlob(r.blob);
+  });
 }
 
 
@@ -49,9 +57,7 @@ async function openDb() {
       console.error('Error opening user-scripts DB!', event);
       reject(event);
     };
-    dbOpen.onsuccess = event => {
-      resolve(event.target.result);
-    };
+    dbOpen.onsuccess = event => resolve(event.target.result);
     dbOpen.onupgradeneeded = event => {
       let db = event.target.result;
       db.onerror = event => {
@@ -80,16 +86,11 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
-      resolve(req.result);
-    };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
   }).then(foundDetails => {
     foundDetails = foundDetails || {};
-    foundDetails.iconBlob = bufferToBlob(foundDetails.iconBlob);
-
+    detailsBuffersToBlobs(foundDetails);
     let userScript = new EditableUserScript(foundDetails);
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
@@ -103,7 +104,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
       });
       await Promise.all(setValues);
     }
-    return details.uuid;
+    return details;
   }).catch(err => {
     console.error('Error in installFromDownloader():', err.message || err.name);
     // Rethrow, so caller can also deal with it.
@@ -120,16 +121,11 @@ async function loadUserScripts() {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
-      resolve(req.result);
-    };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
   }).then(loadDetails => {
     let savePromises = loadDetails.map(details => {
-      details.iconBlob = bufferToBlob(details.iconBlob);
-
+      detailsBuffersToBlobs(details);
       if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
         return saveUserScript(new EditableUserScript(details));
       } else {
@@ -150,13 +146,19 @@ async function loadUserScripts() {
 
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(
+  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(
       null, message.includeDisabled);
   for (let userScript of userScriptIterator) {
-    result.push(userScript.details);
+    let details = userScript.details;
+    if (('undefined' == typeof message.stripContent) || message.stripContent) {
+      delete details.evalContent;
+      delete details.requiresContent;
+      delete details.resources;
+    }
+    result.push(details);
   }
   sendResponse(result);
-};
+}
 window.onListUserScripts = onListUserScripts;
 
 
@@ -169,7 +171,7 @@ function onUserScriptGet(message, sender, sendResponse) {
   } else {
     sendResponse(userScripts[message.uuid].details);
   }
-};
+}
 window.onUserScriptGet = onUserScriptGet;
 
 
@@ -207,8 +209,43 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
       'resourceName': message.resourceName,
     });
   }
-};
+}
 window.onApiGetResourceBlob = onApiGetResourceBlob;
+
+
+window.onUserScriptOptionsSave = async function(message, sender, sendResponse) {
+  let details = message.details;
+  if (!details.uuid) {
+    console.warn(
+        'For UserScriptOptionsSave, details specified no UUID:', details);
+    return;
+  }
+  const userScript = userScripts[details.uuid];
+  if (!userScript) {
+    console.warn(
+        'For UserScriptOptionsSave, could not find script with UUID',
+        details.uuid);
+    return;
+  }
+
+  for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
+    userScript[k] = details[k].trim().split('\n')
+        .map(x => x.trim()).filter(x => x.length > 0);
+    userScript[k + 'Exclusive'] = details[k + 'Exclusive'];
+  }
+
+  return saveUserScript(userScript);
+};
+
+
+function onUserScriptToggleAutoUpdate(message, sender, sendResponse) {
+  const userScript = userScripts[message.uuid];
+  userScript.autoUpdate = !userScript.autoUpdate;
+  return saveUserScript(userScript).then(() => {
+    return {'autoUpdate': userScript.autoUpdate}
+  });
+}
+window.onUserScriptToggleAutoUpdate = onUserScriptToggleAutoUpdate;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
@@ -217,7 +254,7 @@ function onUserScriptToggleEnabled(message, sender, sendResponse) {
   return saveUserScript(userScript).then(() => {
     return {'enabled': userScript.enabled}
   });
-};
+}
 window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
@@ -228,8 +265,10 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
   let req = store.delete(message.uuid);
   db.close();
 
+  // TODO: Delete per-script values from local storage!
+
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+    req.onsuccess = () => {
       delete userScripts[message.uuid];
       resolve();
     };
@@ -241,7 +280,7 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
     // TODO: The store may be orphaned if this fails
     return ValueStore.deleteStore(message.uuid);
   });
-};
+}
 window.onUserScriptUninstall = onUserScriptUninstall;
 
 
@@ -265,23 +304,25 @@ async function saveUserScript(userScript) {
     } else {
       message = _('save_failed_unknown');
     }
-
-    // TODO: Pass this message to the editor tab, not general notifications.
-    let notificationOpts = {
-      'iconUrl': '/skin/icon.svg',
-      'message': message,
-      'title': _('script_save_error'),
-      'type': 'basic',
-    };
-    chrome.notifications.create(notificationOpts);
     // Rethrow to allow caller to deal with error
-    throw error;
+    let retError = new Error(message);
+    retError.orig = error;
+    throw retError;
   }
 
   let details = userScript.details;
   details.id = userScript.id;  // Secondary index on calculated value.
-  details.iconBlob = await blobToBuffer(details.iconBlob);  // See #2908.
-  delete details.parsedDetails;
+
+  // See #2909; write ArrayBuffers to IndexedDB; not Blobs.
+  details.iconBlob = await blobToBuffer(details.iconBlob);
+  await Promise.all(Object.entries(details.resources).map(async ([k, v]) => {
+    // Don't modify the script's resources in place; _safeCopy() is shallow!
+    let result = Object.assign({}, v);
+    result.blob = await blobToBuffer(result.blob);
+    return [k, result];
+  })).then(entries => {
+    details.resources = entries.reduce((obj, [k, v]) => ({...obj, [k]: v}), {});
+  });
 
   let db = await openDb();
   let txn = db.transaction([scriptStoreName], 'readwrite');
@@ -290,7 +331,7 @@ async function saveUserScript(userScript) {
   db.close();
 
   return new Promise((resolve, reject) => {
-    req.onsuccess = event => {
+    req.onsuccess = () => {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
@@ -299,9 +340,7 @@ async function saveUserScript(userScript) {
       resDetails.id = userScript.id;
       resolve(resDetails);
     };
-    req.onerror = event => {
-      reject(req.error);
-    };
+    req.onerror = () => reject(req.error);
   }).catch(onSaveError);
 }
 
@@ -319,11 +358,11 @@ function scriptByUuid(scriptUuid) {
 function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   let url = urlStr && new URL(urlStr);
 
-  for (let uuid in userScripts) {
+  for (let uuid of Object.keys(userScripts)) {
     let userScript = userScripts[uuid];
     try {
       if (!includeDisabled && !userScript.enabled) continue;
-      if (url && !userScript.runsAt(url)) continue;
+      if (url && !userScript.runsOn(url)) continue;
       yield userScript;
     } catch (e) {
       console.error(
@@ -338,6 +377,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
+  'installFromDownloader': installFromDownloader,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };

@@ -1,224 +1,208 @@
 {
-    "gm_script_id": {
-        "message": "[Greasemonkey Benutzerskript $1]",
-        "description": ""
-    },
-    "save_failed_unknown": {
-        "message": "Fehler beim Speichern: Allgemeiner Fehler.",
-        "description": ""
-    },
-    "xhr_no_details": {
-        "message": "GM.xmlHttpRequest: Keine Anfrage-Details übergeben.",
-        "description": ""
-    },
-    "SCRIPT_does_not_grant_METHOD": {
-        "message": "$1 benötigt @grant für Funktion $2",
-        "description": ""
-    },
-    "install_disabled": {
-        "message": "Installiertes Skript deaktivieren",
-        "description": ""
-    },
-    "download_error_unknown": {
-        "message": "Allgemeiner Fehler beim Herunterladen des Benutzerskripts.",
-        "description": ""
-    },
-    "edit": {
-        "message": "Bearbeiten",
-        "description": ""
-    },
-    "ERROR_at_URL": {
-        "message": "$1 für $2",
-        "description": "E.g. 404 - Not Found at http://.../404.js"
-    },
-    "runs_on": {
-        "message": "Ausgeführt auf:",
-        "description": ""
-    },
-    "uninstall": {
-        "message": "Deinstallieren",
-        "description": ""
-    },
-    "greasemonkey_is_active": {
-        "message": "Greasemonkey ist aktiviert",
-        "description": ""
-    },
-    "greasemonkey_user_script_editor": {
-        "message": "Greasemonkey Benutzerskript-Editor",
-        "description": ""
-    },
-    "other_user_scripts": {
-        "message": "Sonstige Benutzerskripte",
-        "description": ""
-    },
-    "xhr_bad_url_scheme": {
-        "message": "GM.xmlHttpRequest: Das Protokoll dieser URL wird nicht unterstützt: $1",
-        "description": ""
-    },
-    "gm_opentab_bad_URL": {
-        "message": "GM.openInTab: Ungültige URL: $1",
-        "description": ""
-    },
-    "this_is_a_greasemonkey_user_script": {
-        "message": "Dies ist ein Greasemonkey Benutzerskript. Installieren wählen, um es zu benutzen.",
-        "description": ""
-    },
-    "does_not_run_on": {
-        "message": "Keine Ausführung auf:",
-        "description": ""
-    },
-    "enabled": {
-        "message": "Aktiviert",
-        "description": ""
-    },
-    "save_failed_NAME_already_in_NAMESPACE": {
-        "message": "Fehler beim Speichern: Es gibt bereits ein Benutzerskript $1 im Namensbereich $2.",
-        "description": ""
-    },
-    "close": {
-        "message": "Schließen",
-        "description": ""
-    },
-    "malicious_user_scripts": {
-        "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen.",
-        "description": ""
-    },
-    "NAME_greasemonkey_user_script": {
-        "message": "$1 - Greasemonkey Benutzerskript",
-        "description": ""
-    },
-    "sources_you_trust": {
-        "message": "Installieren Sie dieses Benutzerskript nur, wenn Sie der Quelle vertrauen.",
-        "description": ""
-    },
-    "undo_uninstall": {
-        "message": "Deinstallation zurücknehmen",
-        "description": ""
-    },
-    "get_user_scripts": {
-        "message": "Benutzerskripte im Netz",
-        "description": ""
-    },
-    "install_failed": {
-        "message": "Benutzerskript konnte nicht installiert werden",
-        "description": ""
-    },
-    "install": {
-        "message": "Installieren",
-        "description": ""
-    },
-    "requires_special_apis": {
-        "message": "Benötigte API-Funktionen:",
-        "description": ""
-    },
-    "user_scripts_for_this_tab": {
-        "message": "Benutzerskripte für diesen Reiter",
-        "description": ""
-    },
-    "greasemonkey_home_page": {
-        "message": "Greasemonkey Homepage",
-        "description": ""
-    },
-    "xhr_bad_url": {
-        "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2",
-        "description": ""
-    },
-    "script_save_error": {
-        "message": "Fehler beim Speichern des Benutzerskripts",
-        "description": ""
-    },
-    "ignoring_MATCH_because_REASON": {
-        "message": "Ignoriere @match-Eintrag $1 aus folgendem Grund:\n$2",
-        "description": ""
-    },
-    "save": {
-        "message": "Speichern",
-        "description": ""
-    },
-    "duplicate_resource_NAME": {
-        "message": "Mehrfach genutzter Ressourcen-Name: $1",
-        "description": ""
-    },
-    "disabled": {
-        "message": "Deaktiviert",
-        "description": ""
-    },
-    "cancel": {
-        "message": "Abbrechen",
-        "description": ""
-    },
-    "download_failed": {
-        "message": "Fehler beim Herunterladen des Benutzerskripts",
-        "description": ""
-    },
-    "extDesc": {
-        "message": "Eine Benutzerskript-Verwaltung für Firefox.",
-        "description": ""
-    },
-    "extName": {
-        "message": "Greasemonkey",
-        "description": ""
-    },
-    "gm_script_id_ver": {
-        "message": "[Greasemonkey Benutzerskript $id$; Version $version$]",
-        "description": "",
-        "placeholders": {
-            "id": {
-                "content": "$1",
-                "example": "Name des Benutzerskripts"
-            },
-            "version": {
-                "content": "$2",
-                "example": "1.0"
-            }
-        }
-    },
-    "unnamed_script_RAND": {
-        "message": "Unbenanntes Skript $1",
-        "description": ""
-    },
-    "gm_notif_text_must_be_string": {
-        "message": "GM.notification: Parameter \"text\" muss ein String sein.",
-        "description": ""
-    },
-    "saving": {
-        "message": "Speichern",
-        "description": ""
-    },
-    "new_user_script": {
-        "message": "Neues Benutzerskript...",
-        "description": ""
-    },
-    "greasemonkey_is_disabled": {
-        "message": "Greasemonkey ist deaktiviert",
-        "description": ""
-    },
-    "matches": {
-        "message": "Ausgeführt auf (@match):",
-        "description": ""
-    },
-    "xhr_no_url": {
-        "message": "GM.xmlHttpRequest: Keine URL angegeben.",
-        "description": ""
-    },
-    "open_editor_after": {
-        "message": "Nach der Installation im Editor bearbeiten",
-        "description": ""
-    },
-    "greasemonkey_wiki": {
-        "message": "Greasemonkey Wiki",
-        "description": ""
-    },
-    "description": {
-        "message": "Beschreibung:",
-        "description": ""
-    },
-    "homepage": {
-        "message": "Homepage",
-        "description": ""
-    },
-    "version": {
-        "message": "Version:",
-        "description": ""
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Greasemonkey Benutzerskript"
+  },
+  "ERROR_at_URL": {
+    "message": "$1 für $2",
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 benötigt @grant für Funktion $2"
+  },
+  "backup_export": {
+    "message": "Exportieren..."
+  },
+  "backup_import": {
+    "message": "Importieren..."
+  },
+  "backup_import_file": {
+    "message": "Datei importieren"
+  },
+  "backup_import_select_file": {
+    "message": "Eine Greasemonkey ZIP-Sicherungsdatei zum Import mit obigen Optionen auswählen."
+  },
+  "backup_import_options": {
+    "message": "Import-Optionen"
+  },
+  "backup_import_remove_detail": {
+    "message": "Benutzerskripte deinstallieren, die in der Sicherungsdatei fehlen."
+  },
+  "backup_import_replace_detail": {
+    "message": "Bereits vorhandene Benutzerskripte durch die gesicherte Version ersetzen."
+  },
+  "cancel": {
+    "message": "Abbrechen"
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "description": {
+    "message": "Beschreibung:"
+  },
+  "disabled": {
+    "message": "Deaktiviert"
+  },
+  "does_not_run_on": {
+    "message": "Keine Ausführung auf:"
+  },
+  "done": {
+    "message": "Beendet"
+  },
+  "download_failed": {
+    "message": "Fehler beim Herunterladen des Benutzerskripts"
+  },
+  "download_error_unknown": {
+    "message": "Allgemeiner Fehler beim Herunterladen des Benutzerskripts."
+  },
+  "duplicate_resource_NAME": {
+    "message": "Mehrfach genutzter Ressourcen-Name: $1"
+  },
+  "edit": {
+    "message": "Bearbeiten"
+  },
+  "enabled": {
+    "message": "Aktiviert"
+  },
+  "Exclude": {
+    "message": "Ignoriere"
+  },
+  "extDesc": {
+    "message": "Eine Benutzerskript-Verwaltung für Firefox."
+  },
+  "fix_and_save": {
+    "message": "Die veränderten Daten wurden bisher nicht gesichert.  Bitte vorher speichern und neu versuchen."
+  },
+  "get_user_scripts": {
+    "message": "Benutzerskripte im Netz"
+  },
+  "global_excludes": {
+    "message": "Globale Ausnahmen"
+  },
+  "global_excludes_explain": {
+    "message": "Pro Zeile genau ein @exclude-Muster.  Auf derartigen Seiten wird kein Benutzerskript laufen."
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification: Parameter \"text\" muss ein String sein."
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab: Ungültige URL: $1"
+  },
+  "gm_script_id": {
+    "message": "[Greasemonkey Benutzerskript $1]"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey Benutzerskript $id$; Version $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
     }
+  },
+  "greasemonkey_home_page": {
+    "message": "Greasemonkey Homepage"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey ist aktiviert"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey ist deaktiviert"
+  },
+  "greasemonkey_options": {
+    "message": "Greasemonkey Optionen"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey Benutzerskript-Editor"
+  },
+  "homepage": {
+    "message": "Homepage"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "Ignoriere @match-Eintrag $1 aus folgendem Grund:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Greasemonkey-Datenbank importieren"
+  },
+  "install": {
+    "message": "Installieren"
+  },
+  "install_disabled": {
+    "message": "Installiertes Skript deaktivieren"
+  },
+  "install_failed": {
+    "message": "Benutzerskript konnte nicht installiert werden"
+  },
+  "importing": {
+    "message": "Importiere..."
+  },
+  "malicious_user_scripts": {
+    "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen."
+  },
+  "matches": {
+    "message": "Ausgeführt auf (@match):"
+  },
+  "new_user_script": {
+    "message": "Neues Benutzerskript..."
+  },
+  "open_editor_after": {
+    "message": "Nach der Installation im Editor bearbeiten"
+  },
+  "other_user_scripts": {
+    "message": "Sonstige Benutzerskripte"
+  },
+  "requires_special_apis": {
+    "message": "Benötigte API-Funktionen:"
+  },
+  "runs_on": {
+    "message": "Ausgeführt auf:"
+  },
+  "save": {
+    "message": "Speichern"
+  },
+  "saving": {
+    "message": "Speichern"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "Fehler beim Speichern: Es gibt bereits ein Benutzerskript $1 im Namensbereich $2."
+  },
+  "save_failed_unknown": {
+    "message": "Fehler beim Speichern: Allgemeiner Fehler."
+  },
+  "script_save_error": {
+    "message": "Fehler beim Speichern des Benutzerskripts"
+  },
+  "sources_you_trust": {
+    "message": "Installieren Sie dieses Benutzerskript nur, wenn Sie der Quelle vertrauen."
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "Dies ist ein Greasemonkey Benutzerskript. Installieren wählen, um es zu benutzen."
+  },
+  "undo_uninstall": {
+    "message": "Deinstallation zurücknehmen"
+  },
+  "uninstall": {
+    "message": "Deinstallieren"
+  },
+  "unnamed_script_RAND": {
+    "message": "Unbenanntes Skript $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "Benutzerskripte für diesen Reiter"
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest: Das Protokoll dieser URL wird nicht unterstützt: $1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest: Keine Anfrage-Details übergeben."
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest: Keine URL angegeben."
+  }
 }
