@@ -193,7 +193,10 @@ window.RemoteUserScript = class RemoteUserScript {
 
 const runnableUserScriptKeys = [
     'autoUpdate', 'enabled', 'evalContent', 'evalContentVersion', 'iconBlob',
-    'resources', 'userExcludes', 'userIncludes', 'userMatches', 'uuid'];
+    'resources', 'uuid',
+    'userExcludes', 'userExcludesExclusive',
+    'userIncludes', 'userIncludesExclusive',
+    'userMatches', 'userMatchesExclusive'];
 /// A _UserScript, plus user settings, plus (eval'able) contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.RunnableUserScript = class RunnableUserScript
