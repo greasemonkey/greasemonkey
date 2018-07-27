@@ -54,11 +54,11 @@ describe('user-script-obj', () => {
     });
   });
 
-  describe('RemoteUserScript.runsAt()', () => {
+  describe('RemoteUserScript.runsOn()', () => {
     let userScript;
-    const matches = urlStr => assert.isOk(userScript.runsAt(new URL(urlStr)));
+    const matches = urlStr => assert.isOk(userScript.runsOn(new URL(urlStr)));
     const notMatches =
-        urlStr => assert.isNotOk(userScript.runsAt(new URL(urlStr)));
+        urlStr => assert.isNotOk(userScript.runsOn(new URL(urlStr)));
 
     beforeEach(() => {
       userScript = new RemoteUserScript({});

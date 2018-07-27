@@ -144,9 +144,9 @@ window.RemoteUserScript = class RemoteUserScript {
 
   get id() { return this.namespace + '/' + this.name; }
 
-  runsAt(url) {
+  runsOn(url) {
     if (!(url instanceof URL)) {
-      throw new Error('runsAt() got non-url parameter: ' + url);
+      throw new Error('runsOn() got non-url parameter: ' + url);
     }
 
     if (url

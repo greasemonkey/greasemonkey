@@ -266,7 +266,7 @@ function loadScripts(userScriptsDetail, url) {
     let userScript = new EditableUserScript(userScriptDetail);
     let tplItem = userScript.details;
     tplItem.icon = iconUrl(userScript);
-    (url && userScript.runsAt(url)
+    (url && userScript.runsOn(url)
         ? gTplData.userScripts.active
         : gTplData.userScripts.inactive
     ).push(tplItem);

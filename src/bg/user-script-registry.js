@@ -361,7 +361,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
     let userScript = userScripts[uuid];
     try {
       if (!includeDisabled && !userScript.enabled) continue;
-      if (url && !userScript.runsAt(url)) continue;
+      if (url && !userScript.runsOn(url)) continue;
       yield userScript;
     } catch (e) {
       console.error(
