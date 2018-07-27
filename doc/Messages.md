@@ -191,6 +191,27 @@ Response data:
 
 * `null`, but presented upon async completion.
 
+# UserScriptUpdateNow
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/updater.js`
+
+Triggered when the "Update Now" button of the manage user scripts dialog is clicked
+by the user.  Data:
+
+* `uuid` The UUID value of a script as returned by `ListUserScripts` message.
+
+Response data, an object with keys:
+
+* `result` A String, one of:
+  * `error` An unexpected error occurred.
+  * `ignore` The request was ignored; e.g. the script was uninstalled since the
+    update check was scheduled.
+  * `noupdate` The update check was successful, but there was no new version.
+  * `updated` The update check was successful, and there was a new version.
+* `details` If the result is `updated`, the script details of the newly
+  installed version.
+* `message` If the result is `error`, a message describing the failure.
+
 # UserScriptXhr
 Sent by: `content/api-provider-source.js`
 Received by: `bg/on-user-script-xhr.js`

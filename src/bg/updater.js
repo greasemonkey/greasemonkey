@@ -14,7 +14,7 @@ function checkForUpdate(uuid) {
     let userScript = UserScriptRegistry.scriptByUuid(uuid);
     if (!userScript) {
       // Uninstalled since the update check was queued.
-      reject('ignore');
+      resolve({'result': 'ignore'});
       return;
     }
 
@@ -24,15 +24,14 @@ function checkForUpdate(uuid) {
       let downloader = new UserScriptDownloader();
       downloader.setScriptUrl(userScript.downloadUrl);
       downloader.start(details => {
-        // Return false here will stop the downloader -- skipping e.g.
-        // @require, @icon, etc. downloads.
         // `compareVersions()` returns -1 when its second argument is "larger".
         let comparison = compareVersions(userScript.version, details.version);
         // So we should abort if we don't get -1.
         abort = comparison !== -1;
-        // And we should return "not stop".
+        // Return false here will stop the downloader -- skipping e.g.
+        // @require, @icon, etc. downloads. So we should return "not abort".
         return !abort;
-      }).then(async () => {
+      }).then(async scriptDetails => {
         let window = fuzz(windowVal[windowKey] || MAX_UPDATE_IN_MS);
         if (abort) {
           window *= CHANGE_RATE;
@@ -49,12 +48,12 @@ function checkForUpdate(uuid) {
         chrome.storage.local.set(d, logUnhandledError);
 
         if (abort) {
-          resolve('no new version');
+          resolve({'result': 'noupdate'});
         } else {
-          resolve('updated');
+          resolve({'result': 'updated', 'details': scriptDetails});
         }
-      }).catch((e) => {
-        reject(e);
+      }).catch(e => {
+        reject({'result': 'error', 'message': e});
       });
     });
   });
