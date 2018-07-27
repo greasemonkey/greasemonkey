@@ -75,6 +75,9 @@
   "enabled": {
     "message": "Enabled"
   },
+  "exclude": {
+    "message": "Exclude"
+  },
   "extDesc": {
     "message": "A User Script manager for Firefox."
   },
