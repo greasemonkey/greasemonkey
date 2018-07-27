@@ -396,8 +396,10 @@ function userScriptUpdate(uuid) {
   }, response => {
     logUnhandledError();
     gTplData.activeScript.updating = false;
-    for (let i of Object.keys(response.details)) {
-      gTplData.activeScript[i] = response.details[i];
+    if (response.result == 'updated') {
+      for (let i of Object.keys(response.details)) {
+        gTplData.activeScript[i] = response.details[i];
+      }
     }
   });
 }
