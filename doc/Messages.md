@@ -152,6 +152,15 @@ user.  Data:
 
 Callers should specify one or the other, not both.
 
+# UserScriptOptionsSave
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/user-script-registry.js`
+
+Triggered when closing the user script options view.  Data:
+
+* `details` An object of values describing the script in question.
+  Must include `uuid`.
+
 # UserScriptToggleAutoUpdate
 Sent by: `content/manage-user-scripts.js`
 Received by: `bg/user-script-registry.js`

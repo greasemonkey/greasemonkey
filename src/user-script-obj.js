@@ -201,9 +201,12 @@ window.RunnableUserScript = class RunnableUserScript
     this._evalContentVersion = -1;
     this._iconBlob = null;
     this._resources = {};  // Name to object with keys: name, mimetype, blob.
-    this._userExcludes = [];  // TODO: Not implemented.
-    this._userIncludes = [];  // TODO: Not implemented.
-    this._userMatches = [];  // TODO: Not implemented.
+    this._userExcludes = [];
+    this._userExcludesExclusive = false;
+    this._userIncludes = [];
+    this._userIncludesExclusive = false;
+    this._userMatches = [];
+    this._userMatchesExclusive = false;
     this._uuid = null;
 
     _loadValuesInto(this, details, runnableUserScriptKeys);
@@ -224,10 +227,17 @@ window.RunnableUserScript = class RunnableUserScript
   get enabled() { return this._enabled; }
   set enabled(v) { this._enabled = !!v; }
 
-  // TODO: Setters/mutators.
   get userExcludes() { return _safeCopy(this._userExcludes); }
+  set userExcludes(v) { this._userExcludes = _safeCopy(v); }
+  get userExcludesExclusive() { return _safeCopy(this._userExcludesExclusive); }
+  set userExcludesExclusive(v) { this._userExcludesExclusive = !!v; }
   get userIncludes() { return _safeCopy(this._userIncludes); }
+  set userIncludes(v) { this._userIncludes = _safeCopy(v); }
+  get userIncludesExclusive() { return _safeCopy(this._userIncludesExclusive); }
+  set userIncludesExclusive(v) { this._userIncludesExclusive = !!v; }
   get userMatches() { return _safeCopy(this._userMatches); }
+  set userMatches(v) { this._userMatches = _safeCopy(v); }
+  set userMatchesExclusive(v) { this._userMatchesExclusive = !!v; }
 
   get evalContent() { return this._evalContent; }
   get evalContentVersion() { return this._evalContentVersion; }

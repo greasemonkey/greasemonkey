@@ -10,6 +10,7 @@ html, body {
 body {
   cursor: default;
   font: caption;
+  min-height: 450px;
   width: 300px;
   overflow: hidden;
 }
@@ -23,6 +24,12 @@ body#rendering { display: none; }
 
 hr {
   margin: 6px 0;
+}
+
+textarea {
+  font-family: monospace;
+  font-size: 90%;
+  white-space: pre;
 }
 
 /******************************** SECTIONS ***********************************/
@@ -67,6 +74,19 @@ section header {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+section p {
+  margin: 0;
+  padding: 4px 12px 4px 10px;
+}
+
+section h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 7px 12px 1px 10px;
+}
+
 
 section menuitem.go-back {
   box-sizing: content-box;
@@ -142,13 +162,7 @@ menu heading {
 
 /***************************** SCRIPT DETAIL *********************************/
 
-section.user-script p {
-  margin: 0;
-  padding: 4px 12px 4px 10px;
-}
-
-
-/* Scroll the content of the script detail section, in case it's too tall. */
+/* Scroll the content of the script detail section. */
 section.user-script {
   display: flex;
   height: 100vh;
@@ -158,22 +172,35 @@ section.user-script menu {
   overflow-y: auto;
 }
 
-/******************************** OPTIONS ************************************/
+/**************************** SCRIPT OPTIONS *********************************/
 
-section.options p {
-  margin: 0;
-  padding: 4px 12px 4px 10px;
+/* Scroll the content of the script options section. */
+section.user-script-options {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+section.user-script-options menu {
+  overflow-y: auto;
 }
 
-section.options .explain a {
+section.user-script-options h2 a {
   color: black;
   float: right;
 }
 
-section.options textarea {
-  font-family: monospace;
-  font-size: 90%;
-  white-space: pre;
+section.user-script-options textarea {
+  margin-bottom: 3px;
+}
+section.user-script-options input[type=checkbox] {
+  vertical-align: text-top;
+}
+
+/******************************** OPTIONS ************************************/
+
+section.options .explain a {
+  color: black;
+  float: right;
 }
 
 section.options #add-exclude-current {

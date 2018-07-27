@@ -95,7 +95,7 @@
 
   <hr>
 
-  <p><b>{'global_excludes'|i18n}</b></p>
+  <h2>{'global_excludes'|i18n}</h2>
   <p class="explain">
     <a href="https://wiki.greasespot.net/Include_and_exclude_rules">
       <i class="icon fa fa-question-circle"></i>
@@ -103,9 +103,8 @@
     {'global_excludes_explain'|i18n}
   </p>
   <p>
-    <textarea rows="5" rv-value="options.globalExcludesStr"
-        title="{'global_excludes'|i18n}"
-    ></textarea>
+    <textarea rows="5" rv-value="options.globalExcludesStr" title="{'global_excludes'|i18n}">
+    </textarea>
     <menuitem id="add-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
       <i class="icon fa fa-plus"></i>
       {'exclude'|i18n} {origin}
@@ -192,6 +191,51 @@
         {activeScript.updateMessage}
       </div>
     </menuitem>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_includes'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userIncludes" title="{'user_includes'|i18n}">
+      </textarea>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userIncludesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_excludes'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userExcludes" title="{'user_excludes'|i18n}">
+      </textarea>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userExcludesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_matches'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userMatches" title="{'user_matches'|i18n}">
+      </textarea>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userMatchesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
   </menu>
 </section>
 

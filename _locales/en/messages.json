@@ -163,6 +163,9 @@
   "new_user_script": {
     "message": "New user script..."
   },
+  "only_use_these": {
+    "message": "Only use these"
+  },
   "open_editor_after": {
     "message": "Open editor after install completes"
   },
@@ -219,6 +222,15 @@
   },
   "update_result_updated": {
     "message": "Updated successfully."
+  },
+  "user_includes": {
+    "message": "User includes"
+  },
+  "user_excludes": {
+    "message": "User excludes"
+  },
+  "user_matches": {
+    "message": "User matches"
   },
   "user_script_options": {
     "message": "User script options"

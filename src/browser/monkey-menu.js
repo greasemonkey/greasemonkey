@@ -13,7 +13,7 @@ let gTplData = {
   },
 };
 
-let gMainFocusedItem = null;
+let gMainFocusedItem = null;  // TODO: this needs to be a stack.
 let gPendingTicker = null;
 let gScriptTemplates = {};
 
@@ -271,17 +271,27 @@ function loadScripts(userScriptsDetail, url) {
         : gTplData.userScripts.inactive
     ).push(tplItem);
     if (!tplItem.downloadUrl) tplItem.autoUpdate = false;
+    for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
+      tplItem[k] = tplItem[k].join('\n');
+    }
     gScriptTemplates[userScript.uuid] = tplItem;
   }
 }
 
 
-function navigateToMainMenu() {
+// When leaving a view, save changes made there.
+function navigateAway() {
   switch (document.body.id) {
     case 'options':
       chrome.runtime.sendMessage({
         'name': 'OptionsSave',
         'excludes': gTplData.options.globalExcludesStr.trim(),
+      }, logUnhandledError);
+      break;
+    case 'user-script-options':
+      chrome.runtime.sendMessage({
+        'name': 'UserScriptOptionsSave',
+        'details': gTplData.activeScript,
       }, logUnhandledError);
       break;
     case 'user-script':
@@ -293,7 +303,11 @@ function navigateToMainMenu() {
       gTplData.activeScript = {};
       break;
   }
+}
 
+
+function navigateToMainMenu() {
+  navigateAway();
   document.body.id = 'main-menu';
 
   if (gMainFocusedItem) {
@@ -304,6 +318,7 @@ function navigateToMainMenu() {
 
 
 function navigateToScript(uuid) {
+  navigateAway();
   gMainFocusedItem = document.activeElement;
   gTplData.activeScript = gScriptTemplates[uuid];
   document.body.id = 'user-script';

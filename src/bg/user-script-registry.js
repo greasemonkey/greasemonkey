@@ -213,6 +213,30 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
 window.onApiGetResourceBlob = onApiGetResourceBlob;
 
 
+window.onUserScriptOptionsSave = async function(message, sender, sendResponse) {
+  let details = message.details;
+  if (!details.uuid) {
+    console.warn(
+        'For UserScriptOptionsSave, details specified no UUID:', details);
+    return;
+  }
+  const userScript = userScripts[details.uuid];
+  if (!userScript) {
+    console.warn(
+        'For UserScriptOptionsSave, could not find script with UUID',
+        details.uuid);
+    return;
+  }
+
+  for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
+    userScript[k] = details[k].trim().split('\n').map(x => x.trim());
+    userScript[k + 'Exclusive'] = details[k + 'Exclusive'];
+  }
+
+  return saveUserScript(userScript);
+};
+
+
 function onUserScriptToggleAutoUpdate(message, sender, sendResponse) {
   const userScript = userScripts[message.uuid];
   userScript.autoUpdate = !userScript.autoUpdate;
