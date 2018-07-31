@@ -6,7 +6,7 @@ let gTplData = {
   'options': {
     'globalExcludesStr': '',
   },
-  'origin': null,
+  'originGlob': null,
   'userScripts': {
     'active': [],
     'inactive': [],
@@ -71,14 +71,14 @@ function onLoad() {
     if (numPending > 0) return;
 
     let url = tabs.length && new URL(tabs[0].url) || null;
-    gTplData.origin = url.origin == "null" ? null : url.origin;
+    gTplData.originGlob = url.origin == "null" ? null : url.origin + '/*';
     loadScripts(userScripts, url);
 
     tinybind.formatters.bothArraysEmpty = (a, b) => !(!!a.length || !!b.length);
-    tinybind.formatters.canAddOrigin = () => {
-      if (!gTplData.origin) return false;
-      let originExclude = gTplData.origin + '/*';
-      return !getGlobalExcludes().includes(originExclude);
+    tinybind.formatters.canAddOrigin = l => {
+      if ('undefined' == typeof l) return false;
+      if (!gTplData.originGlob) return false;
+      return !l.includes(gTplData.originGlob);
     };
     tinybind.formatters.timeToLocaleString
         = t => new Date(t).toLocaleDateString();
@@ -186,12 +186,21 @@ function activate(el) {
       document.body.id = 'user-script-options';
       return;
 
-    case 'add-exclude-current':
-      if (gTplData.origin) {
-        gTplData.options.globalExcludesStr =
-            gTplData.options.globalExcludesStr.trim() + '\n'
-            + gTplData.origin + '/*';
-      }
+    case 'add-global-exclude-current':
+      gTplData.options.globalExcludesStr
+          = addOriginGlobTo(gTplData.options.globalExcludesStr);
+      return;
+    case 'add-user-exclude-current':
+      gTplData.activeScript.userExcludes
+          = addOriginGlobTo(gTplData.activeScript.userExcludes);
+      return;
+    case 'add-user-include-current':
+      gTplData.activeScript.userIncludes
+          = addOriginGlobTo(gTplData.activeScript.userIncludes);
+      return;
+    case 'add-user-match-current':
+      gTplData.activeScript.userMatches
+          = addOriginGlobTo(gTplData.activeScript.userMatches);
       return;
 
     case 'backup-export':
@@ -257,6 +266,12 @@ function activate(el) {
   }
 
   console.info('activate unhandled:', el);
+}
+
+
+function addOriginGlobTo(str) {
+  if (!gTplData.originGlob) return str;
+  return (str.trim() + '\n' + gTplData.originGlob).trim();
 }
 
 

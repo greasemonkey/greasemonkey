@@ -105,9 +105,9 @@
   <p>
     <textarea rows="5" rv-value="options.globalExcludesStr" title="{'global_excludes'|i18n}">
     </textarea>
-    <menuitem id="add-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
+    <menuitem id="add-global-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
       <i class="icon fa fa-plus"></i>
-      {'exclude'|i18n} {origin}
+      {'exclude'|i18n} {originGlob}
     </menuitem>
   </p>
 </section>
@@ -204,6 +204,10 @@
     <p>
       <textarea rows="3" rv-value="activeScript.userIncludes" title="{'user_includes'|i18n}">
       </textarea>
+      <menuitem id="add-user-include-current" rv-if="activeScript.userIncludes|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
       <label>
         <input type="checkbox" rv-checked="activeScript.userIncludesExclusive">
         {'only_use_these'|i18n}
@@ -219,6 +223,10 @@
     <p>
       <textarea rows="3" rv-value="activeScript.userExcludes" title="{'user_excludes'|i18n}">
       </textarea>
+      <menuitem id="add-user-exclude-current" rv-if="activeScript.userExcludes|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
       <label>
         <input type="checkbox" rv-checked="activeScript.userExcludesExclusive">
         {'only_use_these'|i18n}
@@ -234,6 +242,10 @@
     <p>
       <textarea rows="3" rv-value="activeScript.userMatches" title="{'user_matches'|i18n}">
       </textarea>
+      <menuitem id="add-user-match-current" rv-if="activeScript.userMatches|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
       <label>
         <input type="checkbox" rv-checked="activeScript.userMatchesExclusive">
         {'only_use_these'|i18n}

@@ -138,6 +138,11 @@ menuitem .arrow {
   width: 12px;
 }
 
+p menuitem {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 menuitem .icon {
   font-size: 14px;
   margin-right: 3px;
