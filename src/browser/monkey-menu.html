@@ -159,6 +159,9 @@
     <p rv-if="activeScript.homePageUrl">
       <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
     </p>
+    <p rv-if="activeScript.installTime">
+      <b>{'last_updated'|i18n}</b> {activeScript.installTime|timeToLocaleString}
+    </p>
   </menu>
 </section>
 

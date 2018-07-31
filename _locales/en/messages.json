@@ -157,6 +157,9 @@
   "install_failed": {
     "message": "User script failed to install"
   },
+  "last_updated": {
+    "message": "Last updated:"
+  },
   "malicious_user_scripts": {
     "message": "Malicious user scripts can violate your privacy, steal your data, and act on your behalf without your knowledge."
   },

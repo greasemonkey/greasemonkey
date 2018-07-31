@@ -74,14 +74,14 @@ function onLoad() {
     gTplData.origin = url.origin == "null" ? null : url.origin;
     loadScripts(userScripts, url);
 
-    tinybind.formatters.bothArraysEmpty
-        = (a, b) => !(!!a.length || !!b.length);
+    tinybind.formatters.bothArraysEmpty = (a, b) => !(!!a.length || !!b.length);
     tinybind.formatters.canAddOrigin = () => {
       if (!gTplData.origin) return false;
-
       let originExclude = gTplData.origin + '/*';
       return !getGlobalExcludes().includes(originExclude);
     };
+    tinybind.formatters.timeToLocaleString
+        = t => new Date(t).toLocaleDateString();
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
