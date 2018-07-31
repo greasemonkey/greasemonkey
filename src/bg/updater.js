@@ -37,7 +37,7 @@ function checkForUpdate(uuid) {
           window *= CHANGE_RATE;
         } else {
           window /= CHANGE_RATE;
-          await downloader.installFromBackground();
+          await downloader.installFromBackground('install');
         }
         window = Math.min(window, MAX_UPDATE_IN_MS);
         window = Math.max(window, MIN_UPDATE_IN_MS);

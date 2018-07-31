@@ -126,9 +126,16 @@ class Downloader {
     });
   }
 
-  async installFromBackground() {
+  async installFromBackground(event) {
     let scriptDetails = await this.scriptDetails;
     let downloaderDetails = await this.details();
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
+
     return UserScriptRegistry.installFromDownloader(
         scriptDetails, downloaderDetails);
   }
