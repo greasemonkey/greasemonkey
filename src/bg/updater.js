@@ -32,15 +32,19 @@ function checkForUpdate(uuid) {
         // @require, @icon, etc. downloads. So we should return "not abort".
         return !abort;
       }).then(async () => {
-        let window = fuzz(windowVal[windowKey] || MAX_UPDATE_IN_MS);
+        let window = windowVal[windowKey] || MAX_UPDATE_IN_MS;
         if (abort) {
+          // There was no update.  Wait longer before checking again.
           window *= CHANGE_RATE;
         } else {
-          window /= CHANGE_RATE;
+          // There was an update.  Check again, soon.  On the theory that
+          // when a user script changes, it usually changes in bursts.
+          window = MIN_UPDATE_IN_MS;
           await downloader.installFromBackground('install');
         }
         window = Math.min(window, MAX_UPDATE_IN_MS);
         window = Math.max(window, MIN_UPDATE_IN_MS);
+        window = fuzz(window);
 
         let d = {};
         d[windowKey] = window;
