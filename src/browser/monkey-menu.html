@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="/third-party/shoelace/shoelace.css">
 <link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="monkey-menu.css">
+<link rel="stylesheet" href="./monkey-menu.css">
 <meta name="viewport" content="width=300, initial-scale=1">
 </head>
 <body id="rendering">
@@ -17,21 +17,20 @@
         {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
       </span>
     </menuitem>
-    <!-- TODO: This feature.
-    <menuitem id="open-options">
+    <menuitem id="open-options" tabindex="0">
       <i class="icon fa fa-fw fa-cogs"></i>
-      <span class="text">Greasemonkey Options</span>
+      <span class="text">{'greasemonkey_options'|i18n}</span>
+      <span class="arrow"></span>
     </menuitem>
-    -->
 
-    <hr rv-unless="userScripts.active | bothArraysEmpty userScripts.inactive">
+    <hr rv-if="userScripts.active | bothArraysEmpty userScripts.inactive | not">
 
-    <div id="script-list-scroll">
-      <div rv-unless="userScripts.active | empty">
+    <div id="script-list-scroll" tabindex="-1">
+      <div rv-if="userScripts.active | empty | not">
         <heading>{'user_scripts_for_this_tab'|i18n}</heading>
         <menuitem rv-each-script="userScripts.active"
             class="user-script"
-            rv-class-disabled="script.enabled | not"
+            rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
             tabindex="0">
           <i class="icon"><img rv-src="script.icon"></i>
@@ -40,12 +39,12 @@
         </menuitem>
       </div>
       <!-- TODO: Don't duplicate the above and below sections. -->
-      <div rv-unless="userScripts.inactive | empty">
-        <hr rv-unless="userScripts.active | empty">
+      <div rv-if="userScripts.inactive | empty | not">
+        <hr rv-if="userScripts.active | empty | not">
         <heading>{'other_user_scripts'|i18n}</heading>
         <menuitem rv-each-script="userScripts.inactive"
             class="user-script"
-            rv-class-disabled="script.enabled | not"
+            rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
             tabindex="0">
           <i class="icon"><img rv-src="script.icon"></i>
@@ -76,12 +75,10 @@
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_home_page'|i18n}</span>
     </menuitem>
-
     <menuitem tabindex="0" data-url="https://wiki.greasespot.net/">
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_wiki'|i18n}</span>
     </menuitem>
-
     <menuitem tabindex="0" data-url="https://wiki.greasespot.net/User_Script_Hosting">
       <i class="icon fa fa-link"></i>
       <span class="text">{'get_user_scripts'|i18n}</span>
@@ -90,9 +87,35 @@
 </section>
 
 
+<section class="options">
+  <header>
+    <menuitem tabindex="0" class="go-back"></menuitem>
+    {'greasemonkey_options'|i18n}
+  </header>
+
+  <hr>
+
+  <h2>{'global_excludes'|i18n}</h2>
+  <p class="explain">
+    <a href="https://wiki.greasespot.net/Include_and_exclude_rules">
+      <i class="icon fa fa-question-circle"></i>
+    </a>
+    {'global_excludes_explain'|i18n}
+  </p>
+  <p>
+    <textarea rows="5" rv-value="options.globalExcludesStr" title="{'global_excludes'|i18n}">
+    </textarea>
+    <menuitem id="add-global-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
+      <i class="icon fa fa-plus"></i>
+      {'exclude'|i18n} {originGlob}
+    </menuitem>
+  </p>
+</section>
+
+
 <section class="user-script">
   <header>
-    <menuitem tabindex="0" id="back"></menuitem>
+    <menuitem tabindex="0" class="go-back"></menuitem>
     {activeScript.name}
   </header>
 
@@ -100,27 +123,29 @@
 
   <menu>
     <menuitem tabindex="0" id="user-script-toggle-enabled">
-      <span class="icon fa" rv-class-fa-check="activeScript.enabled">
-      </span>
+      <i class="icon fa" rv-class-fa-check="activeScript.enabled"></i>
       <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
     </menuitem>
-
     <menuitem tabindex="0" id="user-script-edit">
       <i class="icon fa fa-pencil-square-o"></i>
       <span class="text">{'edit'|i18n}</span>
     </menuitem>
-
     <menuitem tabindex="0" id="user-script-uninstall"
-        rv-hide="pendingUninstall"
+        rv-if="pendingUninstall | not"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'uninstall'|i18n}</span>
     </menuitem>
     <menuitem tabindex="0" id="user-script-undo-uninstall"
-        rv-show="pendingUninstall"
+        rv-if="pendingUninstall"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
+    </menuitem>
+    <menuitem tabindex="0" id="open-user-script-options">
+      <i class="icon fa fa-fw fa-cogs"></i>
+      <span class="text">{'user_script_options'|i18n}</span>
+      <span class="arrow"></span>
     </menuitem>
 
     <hr>
@@ -134,12 +159,104 @@
     <p rv-if="activeScript.homePageUrl">
       <a rv-href="activeScript.homePageUrl">{'homepage'|i18n}</a>
     </p>
+    <p rv-if="activeScript.installTime">
+      <b>{'last_updated'|i18n}</b> {activeScript.installTime|timeToLocaleString}
+    </p>
+  </menu>
+</section>
+
+
+<section class="user-script-options">
+  <header>
+    <menuitem tabindex="0" class="go-back"></menuitem>
+    {'options'|i18n} {activeScript.name}
+  </header>
+
+  <hr>
+
+  <menu>
+    <menuitem tabindex="0" id="user-script-toggle-update"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
+      <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
+      <span class="text">
+        {activeScript.autoUpdate|i18nBool 'auto_update_enabled' 'auto_update_disabled'}
+      </span>
+    </menuitem>
+
+    <menuitem tabindex="0" id="user-script-update-now"
+        rv-disabled="activeScript.downloadUrl | not"
+    >
+      <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
+      <span class="text">{'update_now'|i18n}</span>
+      <div rv-if="activeScript.updateMessage">
+        <i class="icon fa"></i>
+        {activeScript.updateMessage}
+      </div>
+    </menuitem>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_includes'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userIncludes" title="{'user_includes'|i18n}">
+      </textarea>
+      <menuitem id="add-user-include-current" rv-if="activeScript.userIncludes|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userIncludesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_excludes'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userExcludes" title="{'user_excludes'|i18n}">
+      </textarea>
+      <menuitem id="add-user-exclude-current" rv-if="activeScript.userExcludes|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userExcludesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
+
+    <h2>
+      <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
+        <i class="icon fa fa-question-circle"></i>
+      </a>
+      {'user_matches'|i18n}
+    </h2>
+    <p>
+      <textarea rows="3" rv-value="activeScript.userMatches" title="{'user_matches'|i18n}">
+      </textarea>
+      <menuitem id="add-user-match-current" rv-if="activeScript.userMatches|canAddOrigin">
+        <i class="icon fa fa-plus"></i>
+        {originGlob}
+      </menuitem>
+      <label>
+        <input type="checkbox" rv-checked="activeScript.userMatchesExclusive">
+        {'only_use_these'|i18n}
+      </label>
+    </p>
   </menu>
 </section>
 
 
 <script src="/src/i18n.js"></script>
-<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/third-party/tinybind/tinybind.min.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/src/util/iconUrl.js"></script>
@@ -150,8 +267,8 @@
 <script src="/src/parse-meta-line.js"></script>
 <script src="/src/parse-user-script.js"></script>
 <script src="/src/user-script-obj.js"></script>
-<script src="monkey-menu.js"></script>
-<script src="monkey-menu.run.js"></script>
+<script src="./monkey-menu.js"></script>
+<script src="./monkey-menu.run.js"></script>
 
 </body>
 </html>

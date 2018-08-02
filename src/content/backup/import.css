@@ -1,18 +1,17 @@
 body {
   border: 1px solid lightgray;
-  font-family: sans;
+  border-radius: 1ex;
+  font-family: sans-serif;
   margin: 125px auto 0;
-  padding: 12px;
-  width: 62%;
+  padding-left: 12px;
+  max-width: 40em;
 }
 
-h2 {
-  border-bottom: 1px solid;
-  margin: 10px auto 20px;
+label {
+  display: block;
 }
 
-.details { padding: 0 25px; }
-.import-option { margin-top: 10px; }
-.import-option h4 { margin-bottom: 7px; }
-.important { color: red; font-weight: bold; }
-.input-item { margin-top: 7px; }
+progress {
+  margin-bottom: 12px;
+  width: calc(100% - 12px);
+}

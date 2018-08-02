@@ -30,7 +30,7 @@ window.onHeadersReceivedDetectUserScript = onHeadersReceivedDetectUserScript;
 
 
 function responseHasUserScriptType(responseHeaders) {
-  for (header of responseHeaders) {
+  for (let header of responseHeaders) {
     let headerName = header.name.toLowerCase();
     if ('content-type' === headerName && gContentTypeRe.test(header.value)) {
       return true;

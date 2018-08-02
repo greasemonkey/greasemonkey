@@ -33,17 +33,13 @@ describe('parse-user-script', () => {
     });
 
     it('parses the @name', () => {
-      let src = `// ==UserScript==
-// @name Debts
-// ==/UserScript==`;
+      let src = metaBlockFromLines('// @name Debts');
       let result = parseUserScript(src, urlStr);
       assert.equal(result.name, 'Debts');
     });
 
     it('parses the @homepageURL', () => {
-      let src = `// ==UserScript==
-// @homepageURL http://example.com/home
-// ==/UserScript==`;
+      let src = metaBlockFromLines('// @homepageURL http://example.com/home');
       let result = parseUserScript(src, urlStr);
       assert.equal(result.homePageUrl, 'http://example.com/home');
     });

@@ -1,0 +1,196 @@
+{
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Greasemonkey 用户脚本"
+  },
+  "ERROR_at_URL": {
+    "message": "$2 出现 $1 错误",
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 没有 @grant 方法 $2"
+  },
+  "backup_export": {
+    "message": "导出备份..."
+  },
+  "backup_import": {
+    "message": "导入备份..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey 备份导入"
+  },
+  "backup_import_file": {
+    "message": "导入文件"
+  },
+  "backup_import_select_file": {
+    "message": "选择一个 Greasemonkey 的 ZIP 备份文件，并按照以上设置导入。"
+  },
+  "backup_import_options": {
+    "message": "导入选项"
+  },
+  "backup_import_remove_detail": {
+    "message": "卸载备份文件中未包含的脚本。"
+  },
+  "backup_import_replace_detail": {
+    "message": "使用备份文件中的版本覆盖已经安装的脚本。"
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "description": {
+    "message": "描述："
+  },
+  "disabled": {
+    "message": "已禁用"
+  },
+  "does_not_run_on": {
+    "message": "不会运行于："
+  },
+  "done": {
+    "message": "完成"
+  },
+  "download_failed": {
+    "message": "用户脚本下载失败"
+  },
+  "download_error_unknown": {
+    "message": "下载用户脚本时出现未知错误。"
+  },
+  "duplicate_resource_NAME": {
+    "message": "资源名称重复：$1"
+  },
+  "edit": {
+    "message": "编辑"
+  },
+  "enabled": {
+    "message": "已启用"
+  },
+  "extDesc": {
+    "message": "专为 Firefox 用户开发的脚本管理器"
+  },
+  "extName": {
+    "message": "Greasemonkey 油猴子"
+  },
+  "get_user_scripts": {
+    "message": "获取用户脚本"
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification：\"text\" 必须为一个字符串"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab：无法理解此 URL: $1"
+  },
+  "gm_script_id": {
+    "message": "[Greasemonkey 脚本 $1]"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey 脚本 $id$；版本 $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
+    }
+  },
+  "greasemonkey_home_page": {
+    "message": "Greasemonkey 首页"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey 已启用"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey 已禁用"
+  },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey 维基"
+  },
+  "homepage": {
+    "message": "主页"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "忽略 @match 模式 $1，原因：\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "导入 Greasemonkey 数据库"
+  },
+  "install": {
+    "message": "安装"
+  },
+  "install_disabled": {
+    "message": "已禁用安装"
+  },
+  "install_failed": {
+    "message": "无法安装用户脚本"
+  },
+  "importing": {
+    "message": "正在导入..."
+  },
+  "malicious_user_scripts": {
+    "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。"
+  },
+  "matches": {
+    "message": "匹配："
+  },
+  "new_user_script": {
+    "message": "新建用户脚本..."
+  },
+  "open_editor_after": {
+    "message": "安装完成后打开编辑器"
+  },
+  "other_user_scripts": {
+    "message": "其他用户脚本"
+  },
+  "requires_special_apis": {
+    "message": "需要特殊 API："
+  },
+  "runs_on": {
+    "message": "运行于："
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "用户脚本保存失败：名为 $1 且命名空间为 $2 的脚本已存在。"
+  },
+  "save_failed_unknown": {
+    "message": "用户脚本保存失败：未知错误。"
+  },
+  "script_save_error": {
+    "message": "保存脚本出错"
+  },
+  "sources_you_trust": {
+    "message": "您应该只从信任的来源安装脚本！"
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "这是一个 Greasemonkey 用户脚本。点击安装来开始使用。"
+  },
+  "undo_uninstall": {
+    "message": "撤销卸载"
+  },
+  "uninstall": {
+    "message": "卸载"
+  },
+  "unnamed_script_RAND": {
+    "message": "未命名脚本 $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "适用于此标签页的用户脚本"
+  },
+  "version": {
+    "message": "版本："
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest：无法理解此 URL: $1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest：所传递 URL 的协议有问题: $1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest：没有收到细节。"
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest：没有收到 URL。"
+  }
+}

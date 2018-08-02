@@ -1,0 +1,190 @@
+{
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Scripts de usuario de Greasemonkey"
+  },
+  "ERROR_at_URL": {
+    "message": "$1 en $2",
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 no @grant el método $2"
+  },
+  "backup_export": {
+    "message": "Exportar copia de seguridad..."
+  },
+  "backup_import": {
+    "message": "Importar copia de seguridad..."
+  },
+  "backup_import_title": {
+    "message": "Importar copia de seguridad de Greasemonkey"
+  },
+  "backup_import_file": {
+    "message": "Importar archivo"
+  },
+  "backup_import_select_file": {
+    "message": "Seleccionar el archivo ZIP de la copia de seguridad de Greasemonkey para importar con las opciones expuestas."
+  },
+  "backup_import_options": {
+    "message": "Importar opciones"
+  },
+  "backup_import_remove_detail": {
+    "message": "Desinstalar los scripts que no existan en la copia de seguridad."
+  },
+  "backup_import_replace_detail": {
+    "message": "Sobrescribir los scripts ya instalados con la versión existente en la copia de seguridad."
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "description": {
+    "message": "Descripción:"
+  },
+  "disabled": {
+    "message": "Deshabilitado"
+  },
+  "does_not_run_on": {
+    "message": "No funciona en:"
+  },
+  "done": {
+    "message": "Hecho"
+  },
+  "download_failed": {
+    "message": "Descarga del script de usuario fallida"
+  },
+  "download_error_unknown": {
+    "message": "Se encontró un error desconocido al descarga el script de usuario."
+  },
+  "duplicate_resource_NAME": {
+    "message": "Nombre de recurso duplicado: $1"
+  },
+  "edit": {
+    "message": "Editar"
+  },
+  "enabled": {
+    "message": "Habilitado"
+  },
+  "extDesc": {
+    "message": "Un gestor de scripts de usuario para Firefox."
+  },
+  "get_user_scripts": {
+    "message": "Obtener scripts de usuario"
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification: el \"texto\" debe ser una cadena"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab: No es posible entender la URL: $1"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey script $id$; versión $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
+    }
+  },
+  "greasemonkey_home_page": {
+    "message": "Página de inicio de Greasemonkey"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey está activado"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey está desactivado"
+  },
+  "greasemonkey_wiki": {
+    "message": "Wiki de Greasemonkey"
+  },
+  "homepage": {
+    "message": "Sitio web"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "Ignorando patrón @match $1 debido a: $2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Importar base de datos de Greasemonkey"
+  },
+  "install": {
+    "message": "Instalar"
+  },
+  "install_disabled": {
+    "message": "Instalar en estado desactivado"
+  },
+  "install_failed": {
+    "message": "Ha fallado la instalación del script de usuario"
+  },
+  "importing": {
+    "message": "Importando..."
+  },
+  "malicious_user_scripts": {
+    "message": "Los scripts de usuario malicioso pueden violar tu privacidad, robar tus datos y actuar por ti sin tu conocimiento."
+  },
+  "matches": {
+    "message": "Coincidencias:"
+  },
+  "new_user_script": {
+    "message": "Nuevo script de usuario..."
+  },
+  "open_editor_after": {
+    "message": "Abrir el editor después de terminar la instalación"
+  },
+  "other_user_scripts": {
+    "message": "Otros scripts de usuario"
+  },
+  "requires_special_apis": {
+    "message": "Necesita API especiales:"
+  },
+  "runs_on": {
+    "message": "Se ejecuta en:"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "No se guardó el script de usuario: El nombre del script $1 ya existe en espacio de nombres $2."
+  },
+  "save_failed_unknown": {
+    "message": "No se ha podido guardar la secuencia de usuario: Se ha producido un error desconocido."
+  },
+  "script_save_error": {
+    "message": "Error al guardar el script"
+  },
+  "sources_you_trust": {
+    "message": "Solo debes instalar scripts desde fuentes en las que confíes."
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "Éste es una script de usuario de Greasemonkey. Haz clic en instalar para utilizarlo."
+  },
+  "undo_uninstall": {
+    "message": "Deshacer desinstalación"
+  },
+  "uninstall": {
+    "message": "Desinstalar"
+  },
+  "unnamed_script_RAND": {
+    "message": "Script sin nombre $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "Scripts de usuario para esta pestaña"
+  },
+  "version": {
+    "message": "Versión:"
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest: No se puede entender el enlace: $1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest: El protocolo de la URL es erróneo: $1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest: No se recibió ningún detalle."
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest: No se recibió ninguna URL."
+  }
+}

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <!--
-  This /should/ be temporary until Mozilla fixes their stuff.
-  Bugzilla:
-  "Keep autoclose popups opened when opening a modal file picker dialog"
-  https://bugzilla.mozilla.org/show_bug.cgi?id=1366330
+This would be inside the monkey menu, except http://bugzil.la/1366330
+"Keep autoclose popups opened when opening a modal file picker dialog"
 -->
 <html>
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="import.css">
+<title>{'backup_import_title'|i18n}</title>
 </head>
 <body>
 
@@ -17,44 +16,45 @@
   {'backup_import_title'|i18n}
 </h2>
 
-<div class="body">
-  <div class="details">
-    <p>{'backup_import_detail'|i18n}</p>
-    <p>{'backup_import_warning'|i18n}</p>
-  </div>
+<div rv-if="modeDialog">
+  <h4>{'backup_import_options'|i18n}</h4>
+  <p>
+    <label>
+      <input type="checkbox" rv-checked="remove">
+      {'backup_import_remove_detail'|i18n}
+    </label>
+    <label>
+      <input type="checkbox" rv-checked="replace">
+      {'backup_import_replace_detail'|i18n}
+    </label>
+  </p>
 
-  <div class="import-option">
-    <h4>{'backup_import_option_merge'|i18n}</h4>
-    <div class="details">
-      {'backup_import_option_merge_detail'|i18n}
-    </div>
-    <input class="input-item" id="import-database-merge-file" type="file" />
-  </div>
+  <h4>{'backup_import_file'|i18n}</h4>
+  <p>
+    {'backup_import_select_file'|i18n}
+  </p>
+  <p>
+    <input class="input-item" type="file" accept="application/zip">
+  </p>
+</div>
 
-  <div class="import-option">
-    <h4>{'backup_import_option_replace'|i18n}</h4>
-    <div class="details">
-      {'backup_import_option_replace_detail'|i18n}
-    </div>
-    <input class="input-item" id="import-database-replace-file" type="file" />
-  </div>
+<div rv-if="modeImport">
+  <h4>{'importing'|i18n}</h4>
+  <progress rv-max="progressMax"></progress>
+</div>
 
-  <div class="import-option">
-    <h4>{'backup_import_option_overwrite'|i18n}</h4>
-    <div class="details">
-      {'backup_import_option_overwrite_detail'|i18n}
-    </div>
-    <input class="input-item" id="import-database-overwrite-file" type="file" />
-  </div>
+<div rv-if="modeDone">
+  <h4>{'done'|i18n}</h4>
 </div>
 
 <script src="/src/i18n.js"></script>
-<script src="/third-party/rivets/rivets.bundled.min.js"></script>
+<script src="/third-party/tinybind/tinybind.min.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/third-party/jszip/jszip.min.js"></script>
 <script src="/src/util/iconUrl.js"></script>
 <script src="/src/util/open-editor.js"></script>
+<script src="/src/util/log-unhandled-error.js"></script>
 <script src="/src/util/rivets-formatters.js"></script>
 <script src="/src/downloader.js"></script>
 <script src="/src/parse-meta-line.js"></script>

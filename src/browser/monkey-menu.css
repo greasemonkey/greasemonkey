@@ -10,6 +10,7 @@ html, body {
 body {
   cursor: default;
   font: caption;
+  min-height: 450px;
   width: 300px;
   overflow: hidden;
 }
@@ -17,7 +18,7 @@ body#rendering { display: none; }
 
 
 #script-list-scroll {
-  max-height: 350px;
+  max-height: 347px;
   overflow-y: auto;
 }
 
@@ -25,24 +26,84 @@ hr {
   margin: 6px 0;
 }
 
+textarea {
+  font-family: monospace;
+  font-size: 90%;
+  white-space: pre;
+}
+
 /******************************** SECTIONS ***********************************/
 
 section {
   margin-left: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
   transition-duration: 0.15s;
   transition-property: margin-left;
   width: 100vw;
 }
 
-section.user-script {
+/* Hide non-main sections by default. */
+section.options,
+section.user-script,
+section.user-script-options
+{
   position: absolute;
   top: 0;
   left: 100vw;
 }
 
-body#user-script section { margin-left: -100vw; }
+/* Slide the main menu away when it's non-active. */
+section.main-menu
+{ margin-left: -100vw; }
+body#main-menu section.main-menu
+{ margin-left: 0; }
+
+/* Slide the other menu in when it's active. */
+body#options section.options,
+body#user-script section.user-script,
+body#user-script-options section.user-script-options
+{ margin-left: -100vw; }
+
+/* Second level, when going to third, is even further left! */
+body#user-script-options section.user-script
+{ margin-left: -200vw; }
+
+
+section header {
+  color: -moz-fieldText;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+section p {
+  margin: 0;
+  padding: 4px 12px 4px 10px;
+}
+
+section h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 7px 12px 1px 10px;
+}
+
+
+section menuitem.go-back {
+  box-sizing: content-box;
+  color: inherit;
+  display: inline-block;
+  height: 16px;
+  margin: 4px 4px 0 4px;
+  padding: 8px;
+  vertical-align: -10px;  /* Relative to text, after padding. */
+  width: 16px;
+}
+section menuitem.go-back:hover {
+  background-color: var(--focus-color);
+}
+section menuitem.go-back::before {
+  content: url(/skin/back.svg);
+}
 
 /********************************** MENUS ************************************/
 
@@ -62,8 +123,24 @@ menuitem:focus {
   background-color: hsla(0, 0%, 80%, 0.3);
   outline: none;
 }
-menuitem.disabled * {
+menuitem[disabled] {
   opacity: 0.65;
+}
+menuitem .arrow {
+  background: url(/skin/next.svg) center center no-repeat;
+  display: inline-block;
+  height: 100%;
+  opacity: 1.0;
+  position: absolute;
+  right: 12px;
+  top: 0;
+  transform: rotate(180deg);
+  width: 12px;
+}
+
+p menuitem {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 menuitem .icon {
@@ -81,17 +158,6 @@ menuitem .icon img {
 menuitem.user-script {
   padding-right: 24px;
 }
-menuitem.user-script .arrow {
-  background: url(/skin/next.svg) center center no-repeat;
-  display: inline-block;
-  height: 100%;
-  opacity: 1.0;
-  position: absolute;
-  right: 12px;
-  top: 0;
-  transform: rotate(180deg);
-  width: 12px;
-}
 
 menu heading {
   color: #333;
@@ -101,33 +167,54 @@ menu heading {
 
 /***************************** SCRIPT DETAIL *********************************/
 
-menuitem#back {
-  box-sizing: content-box;
-  color: inherit;
-  display: inline-block;
-  height: 16px;
-  margin: 4px 4px 0 4px;
-  padding: 8px;
-  vertical-align: -10px;  /* Relative to text, after padding. */
-  width: 16px;
+/* Scroll the content of the script detail section. */
+section.user-script {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
 }
-menuitem#back:hover {
-  background-color: var(--focus-color);
-}
-menuitem#back::before {
-  content: url(/skin/back.svg);
+section.user-script menu {
+  overflow-y: auto;
 }
 
+/**************************** SCRIPT OPTIONS *********************************/
 
-section header {
-  color: -moz-fieldText;
-  overflow-x: hidden;
+/* Scroll the content of the script options section. */
+section.user-script-options {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+section.user-script-options menu {
+  overflow-y: auto;
+}
+
+section.user-script-options h2 a {
+  color: black;
+  float: right;
+}
+
+section.user-script-options textarea {
+  margin-bottom: 3px;
+}
+section.user-script-options input[type=checkbox] {
+  vertical-align: text-top;
+}
+
+/******************************** OPTIONS ************************************/
+
+section.options .explain a {
+  color: black;
+  float: right;
+}
+
+section.options #add-exclude-current {
+  cursor: pointer;
+  display: block;
+  margin-top: 4px;
+  padding: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-
-section.user-script p {
-  margin: 0;
-  padding: 4px 12px 4px 10px;
+  width: 90vw;
 }

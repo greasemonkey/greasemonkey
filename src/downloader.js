@@ -96,34 +96,57 @@ class Downloader {
     return details;
   }
 
-  async install(disabled=false, openEditor=false) {
+  async install(event, disabled=false, openEditor=false) {
     let scriptDetails = await this.scriptDetails;
     let downloaderDetails = await this.details();
     scriptDetails.enabled = !disabled;
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
 
     return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({
         'name': 'UserScriptInstall',
         'userScript': scriptDetails,
         'downloader': downloaderDetails,
-      }, (uuid) => {
+      }, savedDetails => {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
           reject(chrome.runtime.lastError);
         } else {
-          resolve(uuid);
+          resolve(savedDetails);
           if (openEditor) {
-            openUserScriptEditor(uuid);
+            openUserScriptEditor(savedDetails.uuid);
           }
         }
       });
     });
   }
 
-  async start() {
+  async installFromBackground(event) {
+    let scriptDetails = await this.scriptDetails;
+    let downloaderDetails = await this.details();
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
+
+    return UserScriptRegistry.installFromDownloader(
+        scriptDetails, downloaderDetails);
+  }
+
+  async start(detailsHandler) {
     if (this._scriptContent != null) {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
-      let scriptDetails = parseUserScript(this._scriptContent, this._scriptUrl);
+      let scriptDetails = parseUserScript(
+          this._scriptContent instanceof Promise
+              ? await this._scriptContent : this._scriptContent,
+          this._scriptUrl);
       if (scriptDetails) {
         if (this._knownUuid) {
           scriptDetails.uuid = this._knownUuid;
@@ -137,6 +160,10 @@ class Downloader {
     }
 
     let scriptDetails = await this.scriptDetails;
+    if (detailsHandler && !detailsHandler(scriptDetails)) {
+      // Abort, e.g. in case of update check with no newer version.
+      return;
+    }
 
     if (scriptDetails.iconUrl) {
       if (this._knownIconUrl == scriptDetails.iconUrl) {
@@ -205,11 +232,11 @@ class Downloader {
       } catch (e) {
         // If the download is still pending, errors might be resolved as we
         // finish.  If not, errors are fatal.
-        if (!download.pending) {
+        if (download.pending) {
+          console.warn('downloader parse fail:', e);
+        } else {
           this._scriptDetailsReject(e);
           return;
-        } else {
-          console.warn('downloader parse fail:', e);
         }
       }
     }
@@ -250,7 +277,9 @@ class Download {
   }
 
   _onError(reject, event) {
+    this.pending = false;
     this.progress = 1;
+    this._progressCb(this, event);
     reject();
   }
 
@@ -282,7 +311,11 @@ class Download {
 class ImmediateDownload {
   constructor(source) {
     this.progress = 1;
-    this.result = Promise.resolve(source);
+    if (source instanceof Promise) {
+      this.result = source;
+    } else {
+      this.result = Promise.resolve(source);
+    }
     this.status = 200;
     this.statusText = 'OK';
   }

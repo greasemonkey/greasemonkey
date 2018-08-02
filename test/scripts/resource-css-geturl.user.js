@@ -7,7 +7,7 @@
 // ==/UserScript==
 
 (async () => {
-  let cssUrl = await GM.getResourceUrl('CSS')
+  let cssUrl = await GM.getResourceUrl('CSS');
   let style = document.createElement('link');
   style.setAttribute('href', cssUrl);
   style.setAttribute('rel', 'stylesheet');
