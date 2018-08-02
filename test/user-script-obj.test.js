@@ -1,38 +1,65 @@
+'use strict';
 describe('user-script-obj', () => {
-  describe('EditableUserScript.calculateEvalContent()', () => {
-    let scriptContent = `
-// ==UserScript==
-// @name Origin
-// ==/UserScript==
-function gt_one(n) { return n > 1; }
-gt_one(2);
-`;
+  let userScript;
+  const matches = urlStr => assert.isOk(userScript.runsOn(new URL(urlStr)));
+  const notMatches =
+      urlStr => assert.isNotOk(userScript.runsOn(new URL(urlStr)));
 
-    it('does not fail on end of file line comment', () => {
-      let lineCommentContent = scriptContent + '// EOF Comment';
-      let userScript = new EditableUserScript({'content': lineCommentContent});
-      userScript.calculateEvalContent();
+  describe('EditableUserScript', () => {
+    describe('calculateEvalContent()', () => {
+      let scriptContent = metaBlockFromLines('// @name Origin')
+          + 'function gt_one(n) { return n > 1; }\n'
+          + 'gt_one(2);\n';
 
-      chai.expect(() => eval(userScript._evalContent))
-          .to.not.throw("expected expression, got ')'");
-    });
+      it('does not fail on end of file line comment', () => {
+        let lineCommentContent = scriptContent + '// EOF Comment';
+        let userScript = new EditableUserScript({'content': lineCommentContent});
+        userScript.calculateEvalContent();
 
-    it('does not fail on end of file block comment', () => {
-      let blockCommentContent = scriptContent + '/* Block'
+        chai.expect(() => eval(userScript._evalContent))
+            .to.not.throw("expected expression, got ')'");
+      });
+
+      it('does not fail on end of file block comment', () => {
+      let blockCommentContent = scriptContent + '/* Block';
       let userScript = new EditableUserScript({'content': blockCommentContent});
       userScript.calculateEvalContent();
 
       chai.expect(() => eval(userScript._evalContent))
           .to.not.throw("expected expression, got ')'");
+      });
+    });
+
+    describe('hasBeenEdited', () => {
+      it('handles missing values', () => {
+        let userScript = new EditableUserScript({});
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns false with earlier edit time', () => {
+        let userScript = new EditableUserScript({
+          'editTime': 1,
+          'installTime': 10,
+        });
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns false with no edit time', () => {
+        let userScript = new EditableUserScript({'installTime': 1});
+        assert.equal(userScript.hasBeenEdited, false);
+      });
+
+      it('returns true with later edit time', () => {
+        let userScript = new EditableUserScript({
+          'editTime': 100,
+          'installTime': 10,
+        });
+        assert.equal(userScript.hasBeenEdited, true);
+      });
     });
   });
 
-  describe('RemoteUserScript.runsAt()', () => {
-    let userScript;
-    const matches = urlStr => assert.isOk(userScript.runsAt(new URL(urlStr)));
-    const notMatches =
-        urlStr => assert.isNotOk(userScript.runsAt(new URL(urlStr)));
-
+  describe('RemoteUserScript.runsOn()', () => {
     beforeEach(() => {
       userScript = new RemoteUserScript({});
     });
@@ -163,6 +190,61 @@ gt_one(2);
           );
         });
       }
+    });
+
+    describe('user \'clude settings', () => {
+      const url = 'http://example.org/path?query';
+      beforeEach(() => {
+        userScript = new RunnableUserScript({});
+      });
+
+      it('still includes base', () => {
+        userScript._includes = ['*'];
+        userScript._userIncludes = ['http://example.net/*'];
+        matches(url);
+      });
+
+      it('does not include base, when user exclusive=true', () => {
+        userScript._includes = ['*'];
+        userScript._userIncludes = ['http://example.net/*'];
+        userScript._userIncludesExclusive = true;
+        notMatches(url);
+      });
+
+      it('still excludes base', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.org/*'];
+        userScript._userExclude = ['http://example.net/*'];
+        notMatches(url);
+      });
+
+      it('excludes user', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.net/*'];
+        userScript._userExclude = ['http://example.org/*'];
+        notMatches(url);
+      });
+
+      it('does not exclude base, when user eclusive=true', () => {
+        userScript._include = ['*'];
+        userScript._exclude = ['http://example.org/*'];
+        userScript._userExclude = ['http://example.net/*'];
+        userScript._userExcludeEclusive = true;
+        notMatches(url);
+      });
+
+      it('still matches base', () => {
+        userScript._matches = ['http://*/*'];
+        userScript._userMatches = ['http://example.net/*'];
+        matches(url);
+      });
+
+      it('does not match base, when user exclusive=true', () => {
+        userScript._matches = ['http://*/*'];
+        userScript._userMatches = ['http://example.net/*'];
+        userScript._userMatchesExclusive = true;
+        notMatches(url);
+      });
     });
   });
 });

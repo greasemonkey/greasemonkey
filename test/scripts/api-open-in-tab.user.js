@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name        GM.openInTab() Test
 // @description Exercises the `GM.openInTab()` API method.

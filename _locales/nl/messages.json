@@ -1,0 +1,217 @@
+{
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Greasemonkey-gebruikersscript"
+  },
+  "ERROR_at_URL": {
+    "message": "$1 op $2",
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 vereist @grant voor methode $2"
+  },
+  "backup_export": {
+    "message": "Een back-up exporteren..."
+  },
+  "backup_import": {
+    "message": "Een back-up importeren..."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey-back-up importeren"
+  },
+  "backup_import_file": {
+    "message": "Bestand importeren"
+  },
+  "backup_import_select_file": {
+    "message": "Selecteer een Greasemonkey-back-up-ZIP-bestand om dit met de opties hierboven te importeren."
+  },
+  "backup_import_options": {
+    "message": "Importopties"
+  },
+  "backup_import_remove_detail": {
+    "message": "Scripts die zich niet in het back-upbestand bevinden de-installeren"
+  },
+  "backup_import_replace_detail": {
+    "message": "Al geïnstalleerde scripts overschrijven met de versie in het back-upbestand"
+  },
+  "cancel": {
+    "message": "Annuleren"
+  },
+  "close": {
+    "message": "Sluiten"
+  },
+  "description": {
+    "message": "Beschrijving:"
+  },
+  "disabled": {
+    "message": "Uitgeschakeld"
+  },
+  "does_not_run_on": {
+    "message": "Werkt niet op:"
+  },
+  "done": {
+    "message": "Gereed"
+  },
+  "download_failed": {
+    "message": "Downloaden van gebruikersscript mislukt"
+  },
+  "download_error_unknown": {
+    "message": "Onbekende fout bij downloaden van gebruikersscript."
+  },
+  "duplicate_resource_NAME": {
+    "message": "Dubbele bronnaam: $1"
+  },
+  "edit": {
+    "message": "Bewerken"
+  },
+  "enabled": {
+    "message": "Ingeschakeld"
+  },
+  "Exclude": {
+    "message": "Uitsluiten:"
+  },
+  "extDesc": {
+    "message": "Een gebruikersscriptbeheerder voor Firefox."
+  },
+  "fix_and_save": {
+    "message": "De inhoud van de editor is niet opgeslagen. Corrigeer deze fout en probeer het opnieuw."
+  },
+  "get_user_scripts": {
+    "message": "Gebruikersscripts verkrijgen"
+  },
+  "global_excludes": {
+    "message": "Algemene uitsluitingen"
+  },
+  "global_excludes_explain": {
+    "message": "Eén @exclude-patroon per regel. Hier worden geen gebruikersscripts uitgevoerd."
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification: ‘text’ moet een string zijn"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab: de URL werd niet begrepen: $1"
+  },
+  "gm_script_id": {
+    "message": "[Greasemonkey-script $1]"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey-script $id$; versie $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
+    }
+  },
+  "greasemonkey_home_page": {
+    "message": "Greasemonkey-startpagina"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey is actief"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey is uitgeschakeld"
+  },
+  "greasemonkey_options": {
+    "message": "Greasemonkey-opties"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey-gebruikersscripteditor"
+  },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey-wiki"
+  },
+  "homepage": {
+    "message": "Startpagina"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "@match-patroon $1 wordt om de volgende reden genegeerd:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Greasemonkey-database importeren"
+  },
+  "install": {
+    "message": "Installeren"
+  },
+  "install_disabled": {
+    "message": "Installeren in uitgeschakelde status"
+  },
+  "install_failed": {
+    "message": "Installatie van gebruikersscript is mislukt"
+  },
+  "importing": {
+    "message": "Importeren..."
+  },
+  "malicious_user_scripts": {
+    "message": "Kwaadwillende gebruikersscripts kunnen uw privacy schenden, uw gegevens stelen, en namens u handelen zonder uw medeweten."
+  },
+  "matches": {
+    "message": "Overeenkomsten:"
+  },
+  "new_user_script": {
+    "message": "Nieuw gebruikersscript..."
+  },
+  "open_editor_after": {
+    "message": "Editor openen na voltooien van installatie"
+  },
+  "other_user_scripts": {
+    "message": "Andere gebruikersscripts"
+  },
+  "requires_special_apis": {
+    "message": "Vereist speciale API’s:"
+  },
+  "runs_on": {
+    "message": "Werkt op:"
+  },
+  "save": {
+    "message": "Opslaan"
+  },
+  "saving": {
+    "message": "Opslaan"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "Opslaan van gebruikersscript mislukt: script met naam $1 bestaat al in namespace $2."
+  },
+  "save_failed_unknown": {
+    "message": "Opslaan van gebruikersscript mislukt: onbekende fout."
+  },
+  "script_save_error": {
+    "message": "Fout bij opslaan van script"
+  },
+  "sources_you_trust": {
+    "message": "Installeer alleen scripts van bronnen die u vertrouwt."
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "Dit is een Greasemonkey-gebruikersscript. Klik op Installeren om het te gebruiken."
+  },
+  "undo_uninstall": {
+    "message": "De-installatie ongedaan maken"
+  },
+  "uninstall": {
+    "message": "De-installeren"
+  },
+  "unnamed_script_RAND": {
+    "message": "Naamloos script $1"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "Gebruikersscripts voor dit tabblad"
+  },
+  "version": {
+    "message": "Versie:"
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest: de URL werd niet begrepen: $1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest: doorgegeven URL heeft onjuist protocol: $1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest: geen details ontvangen."
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest: geen URL ontvangen."
+  }
+}

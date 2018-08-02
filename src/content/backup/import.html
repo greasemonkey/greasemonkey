@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+This would be inside the monkey menu, except http://bugzil.la/1366330
+"Keep autoclose popups opened when opening a modal file picker dialog"
+-->
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="import.css">
+<title>{'backup_import_title'|i18n}</title>
+</head>
+<body>
+
+<h2>
+  <img src="/skin/icon.svg" width="50" height="50">
+  {'backup_import_title'|i18n}
+</h2>
+
+<div rv-if="modeDialog">
+  <h4>{'backup_import_options'|i18n}</h4>
+  <p>
+    <label>
+      <input type="checkbox" rv-checked="remove">
+      {'backup_import_remove_detail'|i18n}
+    </label>
+    <label>
+      <input type="checkbox" rv-checked="replace">
+      {'backup_import_replace_detail'|i18n}
+    </label>
+  </p>
+
+  <h4>{'backup_import_file'|i18n}</h4>
+  <p>
+    {'backup_import_select_file'|i18n}
+  </p>
+  <p>
+    <input class="input-item" type="file" accept="application/zip">
+  </p>
+</div>
+
+<div rv-if="modeImport">
+  <h4>{'importing'|i18n}</h4>
+  <progress rv-max="progressMax"></progress>
+</div>
+
+<div rv-if="modeDone">
+  <h4>{'done'|i18n}</h4>
+</div>
+
+<script src="/src/i18n.js"></script>
+<script src="/third-party/tinybind/tinybind.min.js"></script>
+<script src="/third-party/convert2RegExp.js"></script>
+<script src="/third-party/MatchPattern.js"></script>
+<script src="/third-party/jszip/jszip.min.js"></script>
+<script src="/src/util/iconUrl.js"></script>
+<script src="/src/util/open-editor.js"></script>
+<script src="/src/util/log-unhandled-error.js"></script>
+<script src="/src/util/rivets-formatters.js"></script>
+<script src="/src/downloader.js"></script>
+<script src="/src/parse-meta-line.js"></script>
+<script src="/src/parse-user-script.js"></script>
+<script src="/src/supported-apis.js"></script>
+<script src="/src/user-script-obj.js"></script>
+
+<script src="import.js"></script>
+<script src="import.run.js"></script>
+
+</body>
+</html>

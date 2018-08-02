@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name     Icon Test
 // @description A script with an `@icon` at a relative URL.

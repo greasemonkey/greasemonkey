@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file is responsible for observing content navigation events and triggering
 content script executions.
@@ -16,7 +17,7 @@ function executeUserscriptOnNavigation(details) {
       'runAt': 'document_' + userScript.runAt,
     };
     if (details.frameId) options.frameId = details.frameId;
-    chrome.tabs.executeScript(details.tabId, options, result => {
+    chrome.tabs.executeScript(details.tabId, options, () => {
       let err = chrome.runtime.lastError;
       if (!err) return;
 

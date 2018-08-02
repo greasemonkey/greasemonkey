@@ -1,9 +1,8 @@
+'use strict';
 describe('bg/user-script-registry', () => {
   afterEach((done) => {
     let req = indexedDB.deleteDatabase('greasemonkey');
-    req.onsuccess = event => {
-      done();
-    };
+    req.onsuccess = () => done();
     req.onerror = event => {
       console.error('delete error;', event, event.result);
     };
@@ -23,7 +22,7 @@ describe('bg/user-script-registry', () => {
     assert.isOk(scriptNamed('footnote'));
     await UserScriptRegistry._loadUserScripts();
     assert.isOk(scriptNamed('footnote'));
-  });
+  }).timeout(5000);
 
   it('fails when saving two scripts of the same name', async () => {
     let userScript1 = new EditableUserScript(
@@ -40,20 +39,18 @@ describe('bg/user-script-registry', () => {
     userScript2Clone._name = 'conflict1';
 
     return UserScriptRegistry._saveUserScript(userScript2Clone)
-        .then(x => { throw new Error('Should not succeed here!') })
-        .catch(e => chai.expect(e.name).to.equal('ConstraintError'));
-  });
+        .then(() => { throw new Error('Should not succeed here!') })
+        .catch(e => chai.expect(e.orig.name).to.equal('ConstraintError'));
+  }).timeout(5000);
 
-  it('can uninstall a script', (done) => {
+  it('can uninstall a script', async () => {
     let userScript = new EditableUserScript(
         {'name': 'exponential', 'content': 'void(0)'});
     assert.isNotOk(scriptNamed('exponential'));
-    UserScriptRegistry._saveUserScript(userScript).then(() => {
-      assert.isOk(scriptNamed('exponential'));
-      onUserScriptUninstall({'uuid': userScript.uuid}, null, () => {
-        assert.isNotOk(scriptNamed('exponential'));
-        done();
-      });
-    });
-  });
+
+    await UserScriptRegistry._saveUserScript(userScript);
+    assert.isOk(scriptNamed('exponential'));
+    await onUserScriptUninstall({'uuid': userScript.uuid}, null, null);
+    assert.isNotOk(scriptNamed('exponential'));
+  }).timeout(5000);
 });

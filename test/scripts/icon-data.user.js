@@ -1,3 +1,4 @@
+'use strict';
 // ==UserScript==
 // @name Data URL Icon
 // @description The `data:` scheme works for `@icon`.

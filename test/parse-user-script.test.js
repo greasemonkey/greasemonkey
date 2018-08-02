@@ -1,6 +1,7 @@
-let urlStr = 'http://www.example.com/example.user.js';
-
+'use strict';
 describe('parse-user-script', () => {
+  let urlStr = 'http://www.example.com/example.user.js';
+
   describe('extractMeta()', () => {
     it('does not throw even when script content is null', () => {
       let result = extractMeta(null);
@@ -32,11 +33,15 @@ describe('parse-user-script', () => {
     });
 
     it('parses the @name', () => {
-      let src = `// ==UserScript==
-// @name Debts
-// ==/UserScript==`;
+      let src = metaBlockFromLines('// @name Debts');
       let result = parseUserScript(src, urlStr);
       assert.equal(result.name, 'Debts');
+    });
+
+    it('parses the @homepageURL', () => {
+      let src = metaBlockFromLines('// @homepageURL http://example.com/home');
+      let result = parseUserScript(src, urlStr);
+      assert.equal(result.homePageUrl, 'http://example.com/home');
     });
   });
 });

@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file sets up a message receiver, expecting to receive messages from
 content scripts.  It dispatches to global methods registered in other
@@ -23,7 +24,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         + `message from sender "${sender.url}".`);
   }
 
-  var cb = window['on' + message.name];
+  let cb = window['on' + message.name];
   if (!cb) {
     console.error(
         'Background has no callback for message:', message, 'sender:', sender);

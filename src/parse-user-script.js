@@ -1,3 +1,4 @@
+'use strict';
 const gAllMetaRegexp = new RegExp(
     '^(\u00EF\u00BB\u00BF)?// ==UserScript==([\\s\\S]*?)^// ==/UserScript==',
     'm');
@@ -5,7 +6,7 @@ const gAllMetaRegexp = new RegExp(
 
 /** Get just the stuff between ==UserScript== lines. */
 function extractMeta(content) {
-  var meta = content && content.match(gAllMetaRegexp);
+  const meta = content && content.match(gAllMetaRegexp);
   if (meta) return meta[2].replace(/^\s+/, '');
   return '';
 }
@@ -16,7 +17,7 @@ function extractMeta(content) {
 
 /** Pull the filename part from the URL, without `.user.js`. */
 function nameFromUrl(url) {
-  var name = url.substring(0, url.indexOf(".user.js"));
+  let name = url.substring(0, url.indexOf(".user.js"));
   name = name.substring(name.lastIndexOf("/") + 1);
   return name;
 }
@@ -35,17 +36,34 @@ function safeUrl(path, base) {
 }
 
 
+// Defaults that can only be applied after the meta block has been parsed.
+function prepDefaults(details) {
+  // We couldn't set this default above in case of real data, so if there's
+  // still no includes, set the default of include everything.
+  if (details.includes.length == 0 && details.matches.length == 0) {
+    details.includes.push('*');
+  }
+
+  if (details.grants.includes('none') && details.grants.length > 1) {
+    details.grants = ['none'];
+  }
+
+  return details;
+}
+
+
 /** Parse the source of a script; produce object of data. */
-window.parseUserScript = function(content, url) {
+window.parseUserScript = function(content, url, failWhenMissing=false) {
   if (!content) {
     throw new Error('parseUserScript() got no content!');
   }
 
   // Populate with defaults in case the script specifies no value.
-  var details = {
+  const details = {
     'downloadUrl': url,
     'excludes': [],
     'grants': [],
+    'homePageUrl': null,
     'includes': [],
     'matches': [],
     'name': url && nameFromUrl(url) || 'Unnamed Script',
@@ -56,16 +74,21 @@ window.parseUserScript = function(content, url) {
     'runAt': 'end'
   };
 
-  var meta = extractMeta(content).match(/.+/g);
+  let meta = extractMeta(content).match(/.+/g);
   if (!meta) {
-    return details;
+    if (failWhenMissing) {
+      throw new Error('Could not parse, no meta.');
+    } else {
+      return prepDefaults(details);
+    }
   }
 
   let locales = {};
 
   for (let i = 0, metaLine = ''; metaLine = meta[i]; i++) {
+    let data;
     try {
-      var data = parseMetaLine(metaLine.replace(/\s+$/, ''));
+      data = parseMetaLine(metaLine.replace(/\s+$/, ''));
     } catch (e) {
       // Ignore invalid/unsupported meta lines.
       continue;
@@ -74,6 +97,9 @@ window.parseUserScript = function(content, url) {
     switch (data.keyword) {
     case 'noframes':
       details.noFrames = true;
+      break;
+    case 'homepageURL':
+      details.homePageUrl = data.value;
       break;
     case 'namespace':
     case 'version':
@@ -133,17 +159,7 @@ window.parseUserScript = function(content, url) {
     }
   }
 
-  // We couldn't set this default above in case of real data, so if there's
-  // still no includes, set the default of include everything.
-  if (details.includes.length == 0 && details.matches.length == 0) {
-    details.includes.push('*');
-  }
-
-  if (details.grants.includes('none') && details.grants.length > 1) {
-    details.grants = ['none'];
-  }
-
-  return details;
+  return prepDefaults(details);
 }
 
 })();

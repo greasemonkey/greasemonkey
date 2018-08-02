@@ -4,8 +4,10 @@ module.exports = function(config) {
       './test/setup.js',
       './third-party/convert2RegExp.js',
       './third-party/MatchPattern.js',
+      './third-party/jszip/jszip.min.js',
       './src/**/*.js',
       './test/**/*.test.js',
+      {'pattern': './skin/**', 'included': false, 'served': true},
     ],
     exclude: [
       './src/i18n.js',  // Use test set up version instead.
@@ -38,4 +40,4 @@ module.exports = function(config) {
     singleRun: true,
     concurrency: Infinity
   })
-}
+};

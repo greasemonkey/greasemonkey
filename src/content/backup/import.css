@@ -1,0 +1,17 @@
+body {
+  border: 1px solid lightgray;
+  border-radius: 1ex;
+  font-family: sans-serif;
+  margin: 125px auto 0;
+  padding-left: 12px;
+  max-width: 40em;
+}
+
+label {
+  display: block;
+}
+
+progress {
+  margin-bottom: 12px;
+  width: calc(100% - 12px);
+}

@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "version": "4.3beta7",
+  "version": "4.6",
   "description": "__MSG_extDesc__",
   "homepage_url": "https://www.greasespot.net/",
   "icons": {
-    "48": "skin/icon.svg",
-    "96": "skin/icon.svg",
-    "512": "skin/icon.svg"
+    "48": "/skin/icon.svg",
+    "96": "/skin/icon.svg",
+    "512": "/skin/icon.svg"
   },
   "default_locale": "en",
 
@@ -20,45 +20,53 @@
 
   "browser_action": {
     "browser_style": false,
-    "default_icon": "skin/icon.svg",
-    "default_popup": "src/browser/monkey-menu.html",
+    "default_icon": "/skin/icon.svg",
+    "default_popup": "/src/browser/monkey-menu.html",
     "default_title": "__MSG_extName__"
   },
 
   "background": {
     "scripts": [
-      "src/i18n.js",
+      "/src/i18n.js",
 
-      "src/bg/api-provider-source.js",
-      "src/bg/execute.js",
-      "src/bg/is-enabled.js",
-      "src/bg/on-message.js",
-      "src/bg/on-user-script-notification.js",
-      "src/bg/on-user-script-open-in-tab.js",
-      "src/bg/on-user-script-xhr.js",
-      "src/bg/user-script-detect.js",
-      "src/bg/user-script-registry.js",
-      "src/bg/value-store.js",
-      "src/downloader.js",
-      "src/parse-meta-line.js",
-      "src/parse-user-script.js",
-      "src/supported-apis.js",
-      "src/user-script-obj.js",
-      "src/util/check-api-call-allowed.js",
+      "/src/bg/api-provider-source.js",
+      "/src/bg/execute.js",
+      "/src/bg/export-db.js",
+      "/src/bg/on-message.js",
+      "/src/bg/on-user-script-notification.js",
+      "/src/bg/on-user-script-open-in-tab.js",
+      "/src/bg/on-user-script-xhr.js",
+      "/src/bg/options.js",
+      "/src/bg/user-script-detect.js",
+      "/src/bg/user-script-registry.js",
+      "/src/bg/updater.js",
+      "/src/bg/updater.run.js",
+      "/src/bg/value-store.js",
+      "/src/downloader.js",
+      "/src/parse-meta-line.js",
+      "/src/parse-user-script.js",
+      "/src/supported-apis.js",
+      "/src/user-script-obj.js",
+      "/src/util/check-api-call-allowed.js",
+      "/src/util/log-unhandled-error.js",
       "/src/util/open-editor.js",
-      "third-party/convert2RegExp.js",
-      "third-party/MatchPattern.js",
+      "/third-party/convert2RegExp.js",
+      "/third-party/MatchPattern.js",
+      "/third-party/compare-versions/index.js",
+      "/third-party/jszip/jszip.min.js",
 
-      "src/bg/execute.run.js",
-      "src/bg/user-script-detect.run.js",
-      "src/bg/user-script-registry.run.js",
-      "src/bg/welcome.run.js"
+      "/src/bg/execute.run.js",
+      "/src/bg/user-script-detect.run.js",
+      "/src/bg/user-script-registry.run.js",
+      "/src/bg/welcome.run.js"
     ]
   },
 
   "permissions": [
     "<all_urls>",
     "clipboardWrite",
+    "cookies",
+    "downloads",
     "notifications",
     "storage",
     "tabs",

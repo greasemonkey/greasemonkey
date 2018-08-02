@@ -1,3 +1,4 @@
+'use strict';
 /*
 The registry of installed user scripts.
 
@@ -16,6 +17,34 @@ const dbVersion = 1;
 const scriptStoreName = 'user-scripts';
 
 
+function blobToBuffer(blob) {
+  if (!blob) return Promise.resolve(null);
+
+  let reader = new FileReader();
+  reader.readAsArrayBuffer(blob);
+  return new Promise(resolve => {
+    reader.onload = () => resolve({'buffer': reader.result, 'type': blob.type});
+  });
+}
+
+
+function bufferToBlob(buffer) {
+  if (!buffer) return buffer;
+  if (buffer instanceof Blob) return buffer;
+  return new Blob([buffer.buffer], {'type': buffer.type});
+}
+
+
+function detailsBuffersToBlobs(details) {
+  // See #2909; ArrayBuffers in IndexedDB; convert to Blobs in memory.
+  details.iconBlob = bufferToBlob(details.iconBlob);
+  Object.keys(details.resources || {}).forEach(k => {
+    let r = details.resources[k];
+    r.blob = bufferToBlob(r.blob);
+  });
+}
+
+
 async function openDb() {
   if (navigator.storage && navigator.storage.persist) {
     await navigator.storage.persist();
@@ -28,9 +57,7 @@ async function openDb() {
       console.error('Error opening user-scripts DB!', event);
       reject(event);
     };
-    dbOpen.onsuccess = event => {
-      resolve(event.target.result);
-    };
+    dbOpen.onsuccess = event => resolve(event.target.result);
     dbOpen.onupgradeneeded = event => {
       let db = event.target.result;
       db.onerror = event => {
@@ -47,72 +74,91 @@ async function openDb() {
 ///////////////////////////////////////////////////////////////////////////////
 
 async function installFromDownloader(userScriptDetails, downloaderDetails) {
+  let remoteScript = new RemoteUserScript(userScriptDetails);
+  let scriptValues = downloaderDetails.valueStore;
+  delete downloaderDetails.valueStore;
+
   let db = await openDb();
-  return new Promise(async (resolve, reject) => {
-    try {
-      let remoteScript = new RemoteUserScript(userScriptDetails);
-      let txn = db.transaction([scriptStoreName], "readonly");
-      let store = txn.objectStore(scriptStoreName);
-      let index = store.index('id');
-      let req = index.get(remoteScript.id);
-      txn.oncomplete = async event => {
-        let userScript = new EditableUserScript(req.result || {});
-        userScript.updateFromDownloaderDetails(
-            userScriptDetails, downloaderDetails);
-        await saveUserScript(userScript);
-        resolve(userScript.uuid);
-        db.close();
-      };
-      txn.onerror = event => {
-        console.error('Error looking up script!', event);
-        reject();
-        db.close();
-      };
-    } catch (e) {
-      console.error('at installFromDownloader(), db fail:', e);
-      reject();
-      db.close();
+  let txn = db.transaction([scriptStoreName], "readonly");
+  let store = txn.objectStore(scriptStoreName);
+  let index = store.index('id');
+  let req = index.get(remoteScript.id);
+  db.close();
+
+  return new Promise((resolve, reject) => {
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  }).then(foundDetails => {
+    foundDetails = foundDetails || {};
+    detailsBuffersToBlobs(foundDetails);
+    let userScript = new EditableUserScript(foundDetails);
+    userScript
+        .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
+    return userScript;
+  }).then(saveUserScript)
+  .then(async (details) => {
+    if (scriptValues) {
+      await ValueStore.deleteStore(details.uuid);
+      let setValues = Object.entries(scriptValues).map(([key, value]) => {
+        return ValueStore.setValue(details.uuid, key, value);
+      });
+      await Promise.all(setValues);
     }
+    return details;
+  }).catch(err => {
+    console.error('Error in installFromDownloader()', err);
+    // Rethrow so caller can also deal with it
+    throw err;
   });
 }
 
 
 async function loadUserScripts() {
   let db = await openDb();
+  let txn = db.transaction([scriptStoreName], "readonly");
+  let store = txn.objectStore(scriptStoreName);
+  let req = store.getAll();
+  db.close();
+
   return new Promise((resolve, reject) => {
-    let txn = db.transaction([scriptStoreName], "readonly");
-    let store = txn.objectStore(scriptStoreName);
-    let req = store.getAll();
-    req.onsuccess = async event => {
-      userScripts = {};
-      await Promise.all(event.target.result.map(async details => {
-        let userScript = new EditableUserScript(details);
-        userScripts[details.uuid] = userScript;
-        if (userScript.evalContentVersion != EVAL_CONTENT_VERSION) {
-          await saveUserScript(userScript);
-        }
-      }));
-      resolve();
-      db.close();
-    };
-    req.onerror = event => {
-      console.error('loadUserScripts() failure', event);
-      reject(event.target.error);
-      db.close();
-    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  }).then(loadDetails => {
+    let savePromises = loadDetails.map(details => {
+      detailsBuffersToBlobs(details);
+      if (details.evalContentVersion != EVAL_CONTENT_VERSION) {
+        return saveUserScript(new EditableUserScript(details));
+      } else {
+        return details;
+      }
+    });
+    return Promise.all(savePromises);
+  }).then(saveDetails => {
+    userScripts = {};
+    saveDetails.forEach(details => {
+      userScripts[details.uuid] = new EditableUserScript(details);
+    });
+  }).catch(err => {
+    console.error('Failed to load user scripts', err);
   });
 }
 
 
 function onListUserScripts(message, sender, sendResponse) {
   let result = [];
-  var userScriptIterator = UserScriptRegistry.scriptsToRunAt(
+  let userScriptIterator = UserScriptRegistry.scriptsToRunAt(
       null, message.includeDisabled);
   for (let userScript of userScriptIterator) {
-    result.push(userScript.details);
+    let details = userScript.details;
+    if (('undefined' == typeof message.stripContent) || message.stripContent) {
+      delete details.evalContent;
+      delete details.requiresContent;
+      delete details.resources;
+    }
+    result.push(details);
   }
   sendResponse(result);
-};
+}
 window.onListUserScripts = onListUserScripts;
 
 
@@ -125,13 +171,14 @@ function onUserScriptGet(message, sender, sendResponse) {
   } else {
     sendResponse(userScripts[message.uuid].details);
   }
-};
+}
 window.onUserScriptGet = onUserScriptGet;
 
 
-window.onUserScriptInstall = async function(message, sender, sendResponse) {
-  return await installFromDownloader(message.userScript, message.downloader);
+function onUserScriptInstall(message, sender, sendResponse) {
+  return installFromDownloader(message.userScript, message.downloader);
 }
+window.onUserScriptInstall = onUserScriptInstall;
 
 
 function onApiGetResourceBlob(message, sender, sendResponse) {
@@ -162,16 +209,52 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
       'resourceName': message.resourceName,
     });
   }
-};
+}
 window.onApiGetResourceBlob = onApiGetResourceBlob;
+
+
+window.onUserScriptOptionsSave = async function(message, sender, sendResponse) {
+  let details = message.details;
+  if (!details.uuid) {
+    console.warn(
+        'For UserScriptOptionsSave, details specified no UUID:', details);
+    return;
+  }
+  const userScript = userScripts[details.uuid];
+  if (!userScript) {
+    console.warn(
+        'For UserScriptOptionsSave, could not find script with UUID',
+        details.uuid);
+    return;
+  }
+
+  for (let k of ['userIncludes', 'userExcludes', 'userMatches']) {
+    userScript[k] = details[k].trim().split('\n')
+        .map(x => x.trim()).filter(x => x.length > 0);
+    userScript[k + 'Exclusive'] = details[k + 'Exclusive'];
+  }
+
+  return saveUserScript(userScript);
+};
+
+
+function onUserScriptToggleAutoUpdate(message, sender, sendResponse) {
+  const userScript = userScripts[message.uuid];
+  userScript.autoUpdate = !userScript.autoUpdate;
+  return saveUserScript(userScript).then(() => {
+    return {'autoUpdate': userScript.autoUpdate}
+  });
+}
+window.onUserScriptToggleAutoUpdate = onUserScriptToggleAutoUpdate;
 
 
 function onUserScriptToggleEnabled(message, sender, sendResponse) {
   const userScript = userScripts[message.uuid];
   userScript.enabled = !userScript.enabled;
-  saveUserScript(userScript);
-  sendResponse({'enabled': userScript.enabled});
-};
+  return saveUserScript(userScript).then(() => {
+    return {'enabled': userScript.enabled}
+  });
+}
 window.onUserScriptToggleEnabled = onUserScriptToggleEnabled;
 
 
@@ -180,17 +263,24 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
   let txn = db.transaction([scriptStoreName], 'readwrite');
   let store = txn.objectStore(scriptStoreName);
   let req = store.delete(message.uuid);
-  req.onsuccess = event => {
-    // TODO: Drop value store DB.
-    delete userScripts[message.uuid];
-    sendResponse(null);
-    db.close();
-  };
-  req.onerror = event => {
-    console.error('onUserScriptUninstall() failure', event);
-    db.close();
-  };
-};
+  db.close();
+
+  // TODO: Delete per-script values from local storage!
+
+  return new Promise((resolve, reject) => {
+    req.onsuccess = () => {
+      delete userScripts[message.uuid];
+      resolve();
+    };
+    req.onerror = event => {
+      console.error('onUserScriptUninstall() failure', event);
+      reject(req.error);
+    };
+  }).then(() => {
+    // TODO: The store may be orphaned if this fails
+    return ValueStore.deleteStore(message.uuid);
+  });
+}
 window.onUserScriptUninstall = onUserScriptUninstall;
 
 
@@ -214,44 +304,44 @@ async function saveUserScript(userScript) {
     } else {
       message = _('save_failed_unknown');
     }
-
-    // TODO: Pass this message to the editor tab, not general notifications.
-    let notificationOpts = {
-      'iconUrl': '/skin/icon.svg',
-      'message': message,
-      'title': _('script_save_error'),
-      'type': 'basic',
-    };
-    chrome.notifications.create(notificationOpts);
+    // Rethrow to allow caller to deal with error
+    let retError = new Error(message);
+    retError.orig = error;
+    throw retError;
   }
 
+  let details = userScript.details;
+  details.id = userScript.id;  // Secondary index on calculated value.
+
+  // See #2909; write ArrayBuffers to IndexedDB; not Blobs.
+  details.iconBlob = await blobToBuffer(details.iconBlob);
+  await Promise.all(Object.entries(details.resources).map(async ([k, v]) => {
+    // Don't modify the script's resources in place; _safeCopy() is shallow!
+    let result = Object.assign({}, v);
+    result.blob = await blobToBuffer(result.blob);
+    return [k, result];
+  })).then(entries => {
+    details.resources = entries.reduce((obj, [k, v]) => ({...obj, [k]: v}), {});
+  });
+
   let db = await openDb();
+  let txn = db.transaction([scriptStoreName], 'readwrite');
+  let store = txn.objectStore(scriptStoreName);
+  let req = store.put(details, userScript.uuid);
+  db.close();
+
   return new Promise((resolve, reject) => {
-    let txn = db.transaction([scriptStoreName], 'readwrite');
-    txn.oncomplete = event => {
+    req.onsuccess = () => {
       // In case this was for an install, now that the user script is saved
       // to the object store, also put it in the in-memory copy.
       userScripts[userScript.uuid] = userScript;
-      resolve();
-      db.close();
+      // Create a new details object since the original was modified for saving
+      let resDetails = userScript.details;
+      resDetails.id = userScript.id;
+      resolve(resDetails);
     };
-    txn.onerror = event => {
-      onSaveError(event.target.error);
-      reject(event.target.error);
-      db.close();
-    };
-
-    try {
-      let store = txn.objectStore(scriptStoreName);
-      let details = userScript.details;
-      details.id = userScript.id;  // Secondary index on calculated value.
-      store.put(details, userScript.uuid);
-    } catch (e) {
-      onSaveError(e.target.error);
-      reject(e);
-      db.close();
-    }
-  });
+    req.onerror = () => reject(req.error);
+  }).catch(onSaveError);
 }
 
 
@@ -268,11 +358,11 @@ function scriptByUuid(scriptUuid) {
 function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
   let url = urlStr && new URL(urlStr);
 
-  for (let uuid in userScripts) {
+  for (let uuid of Object.keys(userScripts)) {
     let userScript = userScripts[uuid];
     try {
       if (!includeDisabled && !userScript.enabled) continue;
-      if (url && !userScript.runsAt(url)) continue;
+      if (url && !userScript.runsOn(url)) continue;
       yield userScript;
     } catch (e) {
       console.error(
@@ -287,6 +377,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
   '_saveUserScript': saveUserScript,
+  'installFromDownloader': installFromDownloader,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
 };

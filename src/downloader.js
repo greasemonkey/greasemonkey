@@ -1,6 +1,16 @@
+'use strict';
+
+class DownloadError extends Error {
+  constructor(failedDownloads) {
+    super('Download(s) failed; see `.failedDownloads`.');
+    this.name = this.constructor.name;
+    this.failedDownloads = failedDownloads;
+  }
+}
+
+
 // Private implementation.
 (function() {
-
 
 class Downloader {
   constructor() {
@@ -30,6 +40,7 @@ class Downloader {
   }
 
   get progress() {
+    if (!this.scriptDownload) return 0;
     let p = this.scriptDownload.progress +
         (this.iconDownload ? this.iconDownload.progress : 0)
         + Object.values(this.requireDownloads)
@@ -52,6 +63,7 @@ class Downloader {
 
   setScriptUrl(val) { this._scriptUrl = val; return this; }
   setScriptContent(val) { this._scriptContent = val; return this; }
+  setScriptValues(keyPairs) { this._scriptValues = keyPairs; return this; }
 
   addProgressListener(cb) {
     this._progressListeners.push(cb);
@@ -80,36 +92,61 @@ class Downloader {
       };
     }
 
+    details.valueStore = this._scriptValues || null;
     return details;
   }
 
-  async install(disabled=false, openEditor=false) {
-    return new Promise(async (resolve, reject) => {
-      let scriptDetails = await this.scriptDetails;
-      scriptDetails.enabled = !disabled;
-      let downloaderDetails = await this.details();
+  async install(event, disabled=false, openEditor=false) {
+    let scriptDetails = await this.scriptDetails;
+    let downloaderDetails = await this.details();
+    scriptDetails.enabled = !disabled;
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
+
+    return new Promise((resolve, reject) => {
       chrome.runtime.sendMessage({
         'name': 'UserScriptInstall',
         'userScript': scriptDetails,
         'downloader': downloaderDetails,
-      }, (uuid) => {
+      }, savedDetails => {
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
           reject(chrome.runtime.lastError);
         } else {
-          resolve(uuid);
+          resolve(savedDetails);
           if (openEditor) {
-            openUserScriptEditor(uuid);
+            openUserScriptEditor(savedDetails.uuid);
           }
         }
       });
     });
   }
 
-  async start() {
+  async installFromBackground(event) {
+    let scriptDetails = await this.scriptDetails;
+    let downloaderDetails = await this.details();
+
+    if (event == 'install') {
+      scriptDetails.installTime = new Date().getTime();
+    } else if (event == 'edit') {
+      scriptDetails.editTime = new Date().getTime();
+    }
+
+    return UserScriptRegistry.installFromDownloader(
+        scriptDetails, downloaderDetails);
+  }
+
+  async start(detailsHandler) {
     if (this._scriptContent != null) {
       this.scriptDownload = new ImmediateDownload(this._scriptContent);
-      let scriptDetails = parseUserScript(this._scriptContent, this._scriptUrl);
+      let scriptDetails = parseUserScript(
+          this._scriptContent instanceof Promise
+              ? await this._scriptContent : this._scriptContent,
+          this._scriptUrl);
       if (scriptDetails) {
         if (this._knownUuid) {
           scriptDetails.uuid = this._knownUuid;
@@ -123,6 +160,10 @@ class Downloader {
     }
 
     let scriptDetails = await this.scriptDetails;
+    if (detailsHandler && !detailsHandler(scriptDetails)) {
+      // Abort, e.g. in case of update check with no newer version.
+      return;
+    }
 
     if (scriptDetails.iconUrl) {
       if (this._knownIconUrl == scriptDetails.iconUrl) {
@@ -158,7 +199,7 @@ class Downloader {
     let allDownloads = Object.values(this.requireDownloads)
         .concat(Object.values(this.resourceDownloads));
     if (this.iconDownload) {
-      allDownloads.unshift(iconDownload);
+      allDownloads.unshift(this.iconDownload);
     }
     allDownloads.unshift(this.scriptDownload);
 
@@ -170,11 +211,8 @@ class Downloader {
         failedDownloads.push(download);
       }
     }
-    console.info('near end of downloader.start(); failedDownloads =', failedDownloads);
     if (failedDownloads.length > 0) {
-      let e = new Error('Download(s) failed; see `.failedDownloads`.');
-      e.failedDownloads = failedDownloads;
-      throw e;
+      throw new DownloadError(failedDownloads);
     }
   }
 
@@ -184,7 +222,9 @@ class Downloader {
     ) {
       let responseSoFar = event.target.response;
       try {
-        let scriptDetail = parseUserScript(responseSoFar, this._scriptUrl);
+        let scriptDetail = parseUserScript(
+            responseSoFar, this._scriptUrl,
+            /*failWhenMissing=*/download.pending);
         if (scriptDetail) {
           this._scriptDetailsResolve(scriptDetail);
           this._scriptDetailsResolved = true;
@@ -192,7 +232,9 @@ class Downloader {
       } catch (e) {
         // If the download is still pending, errors might be resolved as we
         // finish.  If not, errors are fatal.
-        if (!download.pending) {
+        if (download.pending) {
+          console.warn('downloader parse fail:', e);
+        } else {
           this._scriptDetailsReject(e);
           return;
         }
@@ -210,6 +252,7 @@ class Download {
   constructor(progressCb, url, binary=false) {
     this.error = null;
     this.mimeType = null;
+    this.pending = true;
     this.progress = 0;
     this.status = null;
     this.statusText = null;
@@ -234,7 +277,9 @@ class Download {
   }
 
   _onError(reject, event) {
+    this.pending = false;
     this.progress = 1;
+    this._progressCb(this, event);
     reject();
   }
 
@@ -246,7 +291,9 @@ class Download {
     }
 
     this.mimeType = xhr.getResponseHeader('Content-Type');
+    this.pending = false;
     this.progress = 1;
+    this._progressCb(this, event);
     this.status = xhr.status;
     this.statusText = xhr.statusText;
     resolve(xhr.response);
@@ -264,7 +311,11 @@ class Download {
 class ImmediateDownload {
   constructor(source) {
     this.progress = 1;
-    this.result = Promise.resolve(source);
+    if (source instanceof Promise) {
+      this.result = source;
+    } else {
+      this.result = Promise.resolve(source);
+    }
     this.status = 200;
     this.statusText = 'OK';
   }
