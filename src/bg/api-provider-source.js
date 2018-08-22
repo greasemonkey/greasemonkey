@@ -14,7 +14,8 @@ function apiProviderSource(userScript) {
   if (!grants || grants.length == 0
       || (grants.length == 1 && grants[0] == 'none')
   ) {
-    return '/* No grants, no APIs. */';
+    /* No grants, no APIs. */
+    grants = [];
   }
 
   let source = '(function() {\n';
@@ -22,39 +23,24 @@ function apiProviderSource(userScript) {
   source += 'const _uuid = "' + userScript.uuid + '";\n\n';
   // A private copy of the localization function, used by some of the API functions.
   source += 'const _ = ' + _.toString() + ';\n\n';
+  // A private copy of the script name, used by the function declared hereafter.
+  // This needs to be escaped in case the name contains quotes or backslashes.
+  // A name cannot contain line terminators because that would end the name
+  // in the original script file.
+  source += 'const _name = "' + escape(userScript.name) + '";\n\n';
+  // A private copy of a function that is called when the script calls an API
+  // function it has not been granted access to.
+  source += 'const _notGranted = ' + throwMissingGrantError.toString() + ';\n\n';
 
-  if (grants.includes('GM.deleteValue')) {
-    source += 'GM.deleteValue = ' + GM_deleteValue.toString() + ';\n\n';
-  }
-  if (grants.includes('GM.getValue')) {
-    source += 'GM.getValue = ' + GM_getValue.toString() + ';\n\n';
-  }
-  if (grants.includes('GM.listValues')) {
-    source += 'GM.listValues = ' + GM_listValues.toString() + ';\n\n';
-  }
-  if (grants.includes('GM.setValue')) {
-    source += 'GM.setValue = ' + GM_setValue.toString() + ';\n\n';
-  }
-
-  if (grants.includes('GM.getResourceUrl')) {
-    source += 'GM.getResourceUrl = ' + GM_getResourceUrl.toString() + ';\n\n';
-  }
-
-  if (grants.includes('GM.notification')) {
-    source += 'GM.notification = ' + GM_notification.toString() + ';\n\n';
-  }
-
-  if (grants.includes('GM.openInTab')) {
-    source += 'GM.openInTab = ' + GM_openInTab.toString() + ';\n\n';
-  }
-
-  if (grants.includes('GM.setClipboard')) {
-    source += 'GM.setClipboard = ' + GM_setClipboard.toString() + ';\n\n';
-  }
-
-  if (grants.includes('GM.xmlHttpRequest')) {
-    source += 'GM.xmlHttpRequest = ' + GM_xmlHttpRequest.toString() + ';\n\n';
-  }
+  source += buildApiHook(grants, 'GM.deleteValue', GM_deleteValue);
+  source += buildApiHook(grants, 'GM.getValue', GM_getValue);
+  source += buildApiHook(grants, 'GM.listValues', GM_listValues);
+  source += buildApiHook(grants, 'GM.setValue', GM_setValue);
+  source += buildApiHook(grants, 'GM.getResourceUrl', GM_getResourceUrl);
+  source += buildApiHook(grants, 'GM.notification', GM_notification);
+  source += buildApiHook(grants, 'GM.openInTab', GM_openInTab);
+  source += buildApiHook(grants, 'GM.setClipboard', GM_setClipboard);
+  source += buildApiHook(grants, 'GM.xmlHttpRequest', GM_xmlHttpRequest);
 
   // TODO: GM_registerMenuCommand -- maybe.
   // TODO: GM_getResourceText -- maybe.
@@ -262,6 +248,33 @@ function GM_xmlHttpRequest(d) {
   });
 
   // TODO: Return an object which can be `.abort()`ed.
+}
+
+
+function buildApiHook(grants, method, callback) {
+  // This method builds the source code that'll assign the code-behind to
+  // the API function named by the 'method' parameter.
+  // The assignment will be the given callback's source-code if the access to the
+  // API was granted; otherwise it'll be an anonymous function that'll throw an
+  // error message stating that access to the API function has not been granted.
+  let apiHook = method + ' = ';
+  if (grants.includes(method)) {
+    apiHook += callback.toString();
+  } else {
+    apiHook += '() => { _notGranted("' + method + '"); }';
+  }
+  apiHook += ';\n\n';
+  return apiHook;
+}
+
+
+function throwMissingGrantError(method) {
+  throw new Error(_('SCRIPT_does_not_grant_METHOD', _name, method));
+}
+
+
+function escape(str) {
+  return str.replace(/["'\\]/g, c => { return '\\' + c; });
 }
 
 })();
