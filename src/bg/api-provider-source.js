@@ -27,7 +27,7 @@ function apiProviderSource(userScript) {
   // This needs to be escaped in case the name contains quotes or backslashes.
   // A name cannot contain line terminators because that would end the name
   // in the original script file.
-  source += 'const _name = "' + escape(userScript.name) + '";\n\n';
+  source += 'const _name = "' + escape(userScript.toString()) + '";\n\n';
   // A private copy of a function that is called when the script calls an API
   // function it has not been granted access to.
   source += 'const _notGranted = ' + throwMissingGrantError.toString() + ';\n\n';
