@@ -10,7 +10,7 @@ to the global scope (the `this` object).  It ...
 (function() {
 
 function apiProviderSource(userScript) {
-  const grants = userScript.grants;
+  let grants = userScript.grants;
   if (!grants || grants.length == 0
       || (grants.length == 1 && grants[0] == 'none')
   ) {
