@@ -1,13 +1,19 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "message": "$1 für $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey Benutzerskript"
   },
-  "ERROR_at_URL": {
-    "message": "$1 für $2",
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
-  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 benötigt @grant für Funktion $2"
+  },
+  "auto_update_disabled": {
+    "message": "Automatische Aktualisierung deaktiviert"
+  },
+  "auto_update_enabled": {
+    "message": "Automatische Aktualisierung aktiviert"
   },
   "backup_export": {
     "message": "Exportieren..."
@@ -18,9 +24,6 @@
   "backup_import_file": {
     "message": "Datei importieren"
   },
-  "backup_import_select_file": {
-    "message": "Eine Greasemonkey ZIP-Sicherungsdatei zum Import mit obigen Optionen auswählen."
-  },
   "backup_import_options": {
     "message": "Import-Optionen"
   },
@@ -30,11 +33,20 @@
   "backup_import_replace_detail": {
     "message": "Bereits vorhandene Benutzerskripte durch die gesicherte Version ersetzen."
   },
+  "backup_import_select_file": {
+    "message": "Eine Greasemonkey ZIP-Sicherungsdatei zum Import mit obigen Optionen auswählen."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey-Sicherung importieren"
+  },
   "cancel": {
     "message": "Abbrechen"
   },
   "close": {
     "message": "Schließen"
+  },
+  "confirm_update_edited": {
+    "message": "Das Skript wurde verändert, trotzdem aktualisieren?"
   },
   "description": {
     "message": "Beschreibung:"
@@ -48,11 +60,11 @@
   "done": {
     "message": "Beendet"
   },
-  "download_failed": {
-    "message": "Fehler beim Herunterladen des Benutzerskripts"
-  },
   "download_error_unknown": {
     "message": "Allgemeiner Fehler beim Herunterladen des Benutzerskripts."
+  },
+  "download_failed": {
+    "message": "Fehler beim Herunterladen des Benutzerskripts"
   },
   "duplicate_resource_NAME": {
     "message": "Mehrfach genutzter Ressourcen-Name: $1"
@@ -63,11 +75,14 @@
   "enabled": {
     "message": "Aktiviert"
   },
-  "Exclude": {
+  "exclude": {
     "message": "Ignoriere"
   },
   "extDesc": {
     "message": "Eine Benutzerskript-Verwaltung für Firefox."
+  },
+  "extName": {
+    "message": "Greasemonkey"
   },
   "fix_and_save": {
     "message": "Die veränderten Daten wurden bisher nicht gesichert.  Bitte vorher speichern und neu versuchen."
@@ -118,6 +133,9 @@
   "greasemonkey_user_script_editor": {
     "message": "Greasemonkey Benutzerskript-Editor"
   },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey Wiki"
+  },
   "homepage": {
     "message": "Homepage"
   },
@@ -126,6 +144,9 @@
   },
   "import_greasemonkey_database": {
     "message": "Greasemonkey-Datenbank importieren"
+  },
+  "importing": {
+    "message": "Importiere..."
   },
   "install": {
     "message": "Installieren"
@@ -136,8 +157,8 @@
   "install_failed": {
     "message": "Benutzerskript konnte nicht installiert werden"
   },
-  "importing": {
-    "message": "Importiere..."
+  "last_updated": {
+    "message": "Letzte Aktualisierung:"
   },
   "malicious_user_scripts": {
     "message": "Böswillige Benutzerskripte können private Informationen stehlen oder Ihren Computer übernehmen."
@@ -148,8 +169,14 @@
   "new_user_script": {
     "message": "Neues Benutzerskript..."
   },
+  "only_use_these": {
+    "message": "Nur diese benutzen"
+  },
   "open_editor_after": {
     "message": "Nach der Installation im Editor bearbeiten"
+  },
+  "options": {
+    "message": "Optionen:"
   },
   "other_user_scripts": {
     "message": "Sonstige Benutzerskripte"
@@ -163,14 +190,14 @@
   "save": {
     "message": "Speichern"
   },
-  "saving": {
-    "message": "Speichern"
-  },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "Fehler beim Speichern: Es gibt bereits ein Benutzerskript $1 im Namensbereich $2."
   },
   "save_failed_unknown": {
     "message": "Fehler beim Speichern: Allgemeiner Fehler."
+  },
+  "saving": {
+    "message": "Speichern"
   },
   "script_save_error": {
     "message": "Fehler beim Speichern des Benutzerskripts"
@@ -190,8 +217,35 @@
   "unnamed_script_RAND": {
     "message": "Unbenanntes Skript $1"
   },
+  "update_now": {
+    "message": "Jetzt aktualisieren"
+  },
+  "update_result_error": {
+    "message": "Fehler beim Suchen nach neuer Version."
+  },
+  "update_result_noupdate": {
+    "message": "Keine neue Version verfügbar."
+  },
+  "update_result_updated": {
+    "message": "Erfolgreich aktualisiert."
+  },
+  "user_includes": {
+    "message": "Benutzerdefinierte Includes"
+  },
+  "user_excludes": {
+    "message": "Benutzerdefinierte Excludes"
+  },
+  "user_matches": {
+    "message": "Benutzerdefinierte Matches"
+  },
+  "user_script_options": {
+    "message": "Benutzerskript-Optionen"
+  },
   "user_scripts_for_this_tab": {
     "message": "Benutzerskripte für diesen Reiter"
+  },
+  "version": {
+    "message": "Version:"
   },
   "xhr_bad_url": {
     "message": "GM.xmlHttpRequest: Ungültige URL: $1\n$2"

@@ -1,10 +1,10 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "message": "$1 於 $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey 使用者指令稿"
-  },
-  "ERROR_at_URL": {
-    "message": "$1 於 $2",
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
   },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 沒有 @grant 方法 $2"
@@ -21,11 +21,11 @@
   "does_not_run_on": {
     "message": "不會在執行於："
   },
-  "download_failed": {
-    "message": "使用者指令稿下載失敗"
-  },
   "download_error_unknown": {
     "message": "使用者指令稿下載時遇到未知的錯誤。"
+  },
+  "download_failed": {
+    "message": "使用者指令稿下載失敗"
   },
   "duplicate_resource_NAME": {
     "message": "重複的資源名稱：$1"
@@ -112,14 +112,14 @@
   "save": {
     "message": "儲存"
   },
-  "saving": {
-    "message": "正在儲存"
-  },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "使用者指令稿儲存失敗：名為 $1 的指令稿已存在於名字空間 $2。"
   },
   "save_failed_unknown": {
     "message": "使用者指令稿儲存失敗：未知的錯誤。"
+  },
+  "saving": {
+    "message": "正在儲存"
   },
   "script_save_error": {
     "message": "指令稿儲存錯誤"

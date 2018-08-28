@@ -1,13 +1,19 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "message": "$2 出现 $1 错误"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey 用户脚本"
   },
-  "ERROR_at_URL": {
-    "message": "$2 出现 $1 错误",
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
-  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 没有 @grant 方法 $2"
+  },
+  "auto_update_disabled": {
+    "message": "自动更新已禁用"
+  },
+  "auto_update_enabled": {
+    "message": "自动更新已启用"
   },
   "backup_export": {
     "message": "导出备份..."
@@ -15,14 +21,8 @@
   "backup_import": {
     "message": "导入备份..."
   },
-  "backup_import_title": {
-    "message": "Greasemonkey 备份导入"
-  },
   "backup_import_file": {
     "message": "导入文件"
-  },
-  "backup_import_select_file": {
-    "message": "选择一个 Greasemonkey 的 ZIP 备份文件，并按照以上设置导入。"
   },
   "backup_import_options": {
     "message": "导入选项"
@@ -33,8 +33,20 @@
   "backup_import_replace_detail": {
     "message": "使用备份文件中的版本覆盖已经安装的脚本。"
   },
+  "backup_import_select_file": {
+    "message": "选择一个 Greasemonkey 的 ZIP 备份文件，并按照以上设置导入。"
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey 备份导入"
+  },
   "cancel": {
     "message": "取消"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "confirm_update_edited": {
+    "message": "您编辑过这个脚本，真的要更新吗？"
   },
   "description": {
     "message": "描述："
@@ -48,11 +60,11 @@
   "done": {
     "message": "完成"
   },
-  "download_failed": {
-    "message": "用户脚本下载失败"
-  },
   "download_error_unknown": {
     "message": "下载用户脚本时出现未知错误。"
+  },
+  "download_failed": {
+    "message": "用户脚本下载失败"
   },
   "duplicate_resource_NAME": {
     "message": "资源名称重复：$1"
@@ -63,14 +75,26 @@
   "enabled": {
     "message": "已启用"
   },
+  "exclude": {
+    "message": "排除"
+  },
   "extDesc": {
     "message": "专为 Firefox 用户开发的脚本管理器"
   },
   "extName": {
     "message": "Greasemonkey 油猴子"
   },
+  "fix_and_save": {
+    "message": "编辑器内容尚未保存，请修复内容后再次尝试。"
+  },
   "get_user_scripts": {
     "message": "获取用户脚本"
+  },
+  "global_excludes": {
+    "message": "全局排除"
+  },
+  "global_excludes_explain": {
+    "message": "每行一个@exclude。这里不会运行任何用户脚本。"
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification：\"text\" 必须为一个字符串"
@@ -103,6 +127,12 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey 已禁用"
   },
+  "greasemonkey_options": {
+    "message": "Greasemonkey 选项"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Greasemonkey 用户脚本编辑器"
+  },
   "greasemonkey_wiki": {
     "message": "Greasemonkey 维基"
   },
@@ -115,6 +145,9 @@
   "import_greasemonkey_database": {
     "message": "导入 Greasemonkey 数据库"
   },
+  "importing": {
+    "message": "正在导入..."
+  },
   "install": {
     "message": "安装"
   },
@@ -124,8 +157,8 @@
   "install_failed": {
     "message": "无法安装用户脚本"
   },
-  "importing": {
-    "message": "正在导入..."
+  "last_updated": {
+    "message": "最后更新："
   },
   "malicious_user_scripts": {
     "message": "恶意脚本可能侵犯您的隐私、窃取您的数据，以及在您不知情的情况下代表您行事。"
@@ -136,8 +169,14 @@
   "new_user_script": {
     "message": "新建用户脚本..."
   },
+  "only_use_these": {
+    "message": "只使用这些"
+  },
   "open_editor_after": {
     "message": "安装完成后打开编辑器"
+  },
+  "options": {
+    "message": "选项："
   },
   "other_user_scripts": {
     "message": "其他用户脚本"
@@ -157,6 +196,9 @@
   "save_failed_unknown": {
     "message": "用户脚本保存失败：未知错误。"
   },
+  "saving": {
+    "message": "保存中"
+  },
   "script_save_error": {
     "message": "保存脚本出错"
   },
@@ -174,6 +216,30 @@
   },
   "unnamed_script_RAND": {
     "message": "未命名脚本 $1"
+  },
+  "update_now": {
+    "message": "立即更新"
+  },
+  "update_result_error": {
+    "message": "更新检查出错。"
+  },
+  "update_result_noupdate": {
+    "message": "没有可用的新版本。"
+  },
+  "update_result_updated": {
+    "message": "更新成功。"
+  },
+  "user_includes": {
+    "message": "用户包括"
+  },
+  "user_excludes": {
+    "message": "用户排除"
+  },
+  "user_matches": {
+    "message": "用户匹配"
+  },
+  "user_script_options": {
+    "message": "用户脚本选项"
   },
   "user_scripts_for_this_tab": {
     "message": "适用于此标签页的用户脚本"

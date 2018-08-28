@@ -1,13 +1,19 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "message": "$1 op $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey-gebruikersscript"
   },
-  "ERROR_at_URL": {
-    "message": "$1 op $2",
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
-  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 vereist @grant voor methode $2"
+  },
+  "auto_update_disabled": {
+    "message": "Automatisch bijwerken uitgeschakeld"
+  },
+  "auto_update_enabled": {
+    "message": "Automatisch bijwerken ingeschakeld"
   },
   "backup_export": {
     "message": "Een back-up exporteren..."
@@ -15,14 +21,8 @@
   "backup_import": {
     "message": "Een back-up importeren..."
   },
-  "backup_import_title": {
-    "message": "Greasemonkey-back-up importeren"
-  },
   "backup_import_file": {
     "message": "Bestand importeren"
-  },
-  "backup_import_select_file": {
-    "message": "Selecteer een Greasemonkey-back-up-ZIP-bestand om dit met de opties hierboven te importeren."
   },
   "backup_import_options": {
     "message": "Importopties"
@@ -33,11 +33,20 @@
   "backup_import_replace_detail": {
     "message": "Al geïnstalleerde scripts overschrijven met de versie in het back-upbestand"
   },
+  "backup_import_select_file": {
+    "message": "Selecteer een Greasemonkey-back-up-ZIP-bestand om dit met de opties hierboven te importeren."
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey-back-up importeren"
+  },
   "cancel": {
     "message": "Annuleren"
   },
   "close": {
     "message": "Sluiten"
+  },
+  "confirm_update_edited": {
+    "message": "U hebt dit script bewerkt. Echt bijwerken?"
   },
   "description": {
     "message": "Beschrijving:"
@@ -51,11 +60,11 @@
   "done": {
     "message": "Gereed"
   },
-  "download_failed": {
-    "message": "Downloaden van gebruikersscript mislukt"
-  },
   "download_error_unknown": {
     "message": "Onbekende fout bij downloaden van gebruikersscript."
+  },
+  "download_failed": {
+    "message": "Downloaden van gebruikersscript mislukt"
   },
   "duplicate_resource_NAME": {
     "message": "Dubbele bronnaam: $1"
@@ -66,11 +75,14 @@
   "enabled": {
     "message": "Ingeschakeld"
   },
-  "Exclude": {
+  "exclude": {
     "message": "Uitsluiten:"
   },
   "extDesc": {
     "message": "Een gebruikersscriptbeheerder voor Firefox."
+  },
+  "extName": {
+    "message": "Greasemonkey"
   },
   "fix_and_save": {
     "message": "De inhoud van de editor is niet opgeslagen. Corrigeer deze fout en probeer het opnieuw."
@@ -133,6 +145,9 @@
   "import_greasemonkey_database": {
     "message": "Greasemonkey-database importeren"
   },
+  "importing": {
+    "message": "Importeren..."
+  },
   "install": {
     "message": "Installeren"
   },
@@ -142,8 +157,8 @@
   "install_failed": {
     "message": "Installatie van gebruikersscript is mislukt"
   },
-  "importing": {
-    "message": "Importeren..."
+  "last_updated": {
+    "message": "Laatst bijgewerkt:"
   },
   "malicious_user_scripts": {
     "message": "Kwaadwillende gebruikersscripts kunnen uw privacy schenden, uw gegevens stelen, en namens u handelen zonder uw medeweten."
@@ -154,8 +169,14 @@
   "new_user_script": {
     "message": "Nieuw gebruikersscript..."
   },
+  "only_use_these": {
+    "message": "Alleen deze gebruiken"
+  },
   "open_editor_after": {
     "message": "Editor openen na voltooien van installatie"
+  },
+  "options": {
+    "message": "Opties:"
   },
   "other_user_scripts": {
     "message": "Andere gebruikersscripts"
@@ -169,14 +190,14 @@
   "save": {
     "message": "Opslaan"
   },
-  "saving": {
-    "message": "Opslaan"
-  },
   "save_failed_NAME_already_in_NAMESPACE": {
     "message": "Opslaan van gebruikersscript mislukt: script met naam $1 bestaat al in namespace $2."
   },
   "save_failed_unknown": {
     "message": "Opslaan van gebruikersscript mislukt: onbekende fout."
+  },
+  "saving": {
+    "message": "Opslaan"
   },
   "script_save_error": {
     "message": "Fout bij opslaan van script"
@@ -195,6 +216,30 @@
   },
   "unnamed_script_RAND": {
     "message": "Naamloos script $1"
+  },
+  "update_now": {
+    "message": "Nu bijwerken"
+  },
+  "update_result_error": {
+    "message": "Fout bij controleren op update."
+  },
+  "update_result_noupdate": {
+    "message": "Geen nieuwere versie beschikbaar."
+  },
+  "update_result_updated": {
+    "message": "Met succes bijgewerkt."
+  },
+  "user_includes": {
+    "message": "Opgenomen door gebruiker"
+  },
+  "user_excludes": {
+    "message": "Uitgesloten door gebruiker"
+  },
+  "user_matches": {
+    "message": "Overeenkomsten door gebruiker"
+  },
+  "user_script_options": {
+    "message": "Gebruikersscriptopties"
   },
   "user_scripts_for_this_tab": {
     "message": "Gebruikersscripts voor dit tabblad"

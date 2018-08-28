@@ -1,10 +1,10 @@
 {
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "message": "$1 em $2"
+  },
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Script do usuário Greasemonkey"
-  },
-  "ERROR_at_URL": {
-    "message": "$1 em $2",
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js"
   },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 não @grant o método $2"
@@ -15,14 +15,8 @@
   "backup_import": {
     "message": "Importar um backup..."
   },
-  "backup_import_title": {
-    "message": "Importação de Backup Greasemonkey"
-  },
   "backup_import_file": {
     "message": "Importar arquivo"
-  },
-  "backup_import_select_file": {
-    "message": "Selecione um arquivo ZIP de backup Greasemonkey para importá-lo com as opções acima."
   },
   "backup_import_options": {
     "message": "Opções de importação"
@@ -32,6 +26,12 @@
   },
   "backup_import_replace_detail": {
     "message": "Substituir scripts já instalados pela versão no arquivo de backup."
+  },
+  "backup_import_select_file": {
+    "message": "Selecione um arquivo ZIP de backup Greasemonkey para importá-lo com as opções acima."
+  },
+  "backup_import_title": {
+    "message": "Importação de Backup Greasemonkey"
   },
   "cancel": {
     "message": "Cancelar"
@@ -48,11 +48,11 @@
   "done": {
     "message": "Pronto"
   },
-  "download_failed": {
-    "message": "Download de script do usuário falhou"
-  },
   "download_error_unknown": {
     "message": "Download do script de usuário encontrou um erro desconhecido."
+  },
+  "download_failed": {
+    "message": "Download de script do usuário falhou"
   },
   "duplicate_resource_NAME": {
     "message": "Nome de recurso duplicado: $1"
@@ -112,6 +112,9 @@
   "import_greasemonkey_database": {
     "message": "Importar banco de dados Greasemonkey"
   },
+  "importing": {
+    "message": "Importando..."
+  },
   "install": {
     "message": "Instalar"
   },
@@ -120,9 +123,6 @@
   },
   "install_failed": {
     "message": "Falha ao instalar o script do usuário"
-  },
-  "importing": {
-    "message": "Importando..."
   },
   "malicious_user_scripts": {
     "message": "Os scripts de usuários mal-intencionados podem violar sua privacidade, roubar seus dados e agir em seu nome sem o seu conhecimento."
