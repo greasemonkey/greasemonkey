@@ -352,7 +352,8 @@ function newUserScript() {
       = new UserScriptDownloader().setScriptContent(scriptSource);
   downloader.start()
       .then(() => {
-        downloader.install('install', /*disabled=*/false, /*openEditor=*/true);
+        return downloader.install(
+            'install', /*disabled=*/false, /*openEditor=*/true);
       })
       .then(window.close);
 }
