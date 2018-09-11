@@ -6,6 +6,12 @@
   "NAME_greasemonkey_user_script": {
     "message": "$1 - Greasemonkey User Script"
   },
+  "DETECTED_ALL_stats_active": {
+    "message": "$1 / $2  active"
+  },
+  "DETECTED_ALL_stats_total": {
+    "message": "$1 / $2  total"
+  },
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 does not @grant method $2"
   },
