@@ -188,8 +188,15 @@ function onSave() {
   downloader
       .start()
       .then(() => {
+        return browser.runtime.sendMessage({
+          'name': 'UserScriptGet',
+          'uuid': userScriptUuid,
+        });
+      })
+      .then(userScript => {
+        let details = userScript || gUserScript;
         document.querySelector('#modal progress').removeAttribute('value');
-        return downloader.install('edit');
+        return downloader.install('edit', !details.enabled);
       }).then(onSaveComplete)
       .catch(modalFill);
 }
