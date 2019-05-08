@@ -70,7 +70,7 @@ function onClickInstall() {
       .then(finish)
       .catch(err => {
         gRvDetails.errorHeader = _('install_failed');
-        gRvDetails.errorList = [err.message];
+        gRvDetails.errorList = [err.message || err.name];
         document.body.className = 'error';
       });
 }
@@ -111,16 +111,16 @@ function maybeEnableInstall() {
 gDownloader.start().then(() => {
   gProgressBar.style.display = 'none';
   maybeEnableInstall();
-}).catch(e => {
+}).catch(err => {
   gRvDetails.errorHeader = _('download_failed');
-  if (e instanceof DownloadError) {
-    gRvDetails.errorList = e.failedDownloads.map(
+  if (err instanceof DownloadError) {
+    gRvDetails.errorList = err.failedDownloads.map(
         d => _('ERROR_at_URL', d.error, d.url));
-  } else if (e.message) {
-    gRvDetails.errorList = [e.message];
+  } else if (err.message) {
+    gRvDetails.errorList = [err.message];
   } else {
     // Log the unknown error.
-    console.error('Unknown save error in install dialog', e);
+    console.error('Unknown save error in install dialog', err);
     gRvDetails.errorList = [_('download_error_unknown')];
   }
   document.body.className = 'error';

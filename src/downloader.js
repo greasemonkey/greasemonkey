@@ -114,7 +114,7 @@ class Downloader {
         'downloader': downloaderDetails,
       }, savedDetails => {
         if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError);
+          console.error(chrome.runtime.lastError.message);
           reject(chrome.runtime.lastError);
         } else {
           resolve(savedDetails);

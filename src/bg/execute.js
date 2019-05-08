@@ -18,16 +18,16 @@ function executeUserscriptOnNavigation(detail) {
     };
     if (detail.frameId) options.frameId = detail.frameId;
     chrome.tabs.executeScript(detail.tabId, options, () => {
-      let err = chrome.runtime.lastError;
-      if (!err) return;
+      if (!chrome.runtime.lastError) return;
+      const errMsg = chrome.runtime.lastError.message;
 
       // TODO: i18n?
-      if (err.message.startsWith('Message manager disconnected')) return;
-      if (err.message.startsWith('No matching message handler')) return;
+      if (errMsg.startsWith('Message manager disconnected')) return;
+      if (errMsg.startsWith('No matching message handler')) return;
 
       // TODO: Better indication of the root cause.
       console.error(
-          'Could not execute user script', userScript.toString(), '\n', err);
+          'Could not execute', userScript.toString(), '\n', errMsg);
     });
   }
 }

@@ -329,7 +329,10 @@ window.EditableUserScript = class EditableUserScript
         ${SCRIPT_ENV_EXTRA}
         userScript();
         })();
-        } catch (e) { console.error("Script error: ", e); }
+        } catch (err) {
+          console.error('Script error in ${this.toString()}:'
+              + '\\n' + err.name + ':', err.message);
+        }
         //# sourceURL=user-script:${escape(this.id)}`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
   }
@@ -361,7 +364,7 @@ window.EditableUserScript = class EditableUserScript
       };
     });
     return 'const GM = {};\n'
-        + 'GM.info=' + JSON.stringify(gmInfo) + ';'
+        + 'GM.info = ' + JSON.stringify(gmInfo) + ';'
         + 'const GM_info = GM.info;';
   }
 
