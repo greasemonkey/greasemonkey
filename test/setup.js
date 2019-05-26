@@ -10,8 +10,8 @@ chrome.extension.getURL.callsFake(suffix => '/base/' + suffix);
 navigator.storage.persist = () => Promise.resolve(true);
 
 // In tests, never complain about missing translations.
-function _(str) {
-  return str;
+function _(str, ...args) {
+  return [str, args].flat().join(' ');
 }
 
 // Given array of meta lines, create a parsable meta block.
