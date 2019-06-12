@@ -11,6 +11,17 @@ describe('user-script-obj', () => {
           + 'function gt_one(n) { return n > 1; }\n'
           + 'gt_one(2);\n';
 
+      it('produces an evaluatable expression', () => {
+        let badString = "don't throw \"\\";
+        let scriptContent =  metaBlockFromLines('// @name ${badString}');
+        let userScript = new EditableUserScript({
+          'content': scriptContent,
+          'name': badString,
+        });
+        userScript.calculateEvalContent();
+        chai.expect(() => eval(userScript._evalContent)).to.not.throw();
+      });
+
       it('does not fail on end of file line comment', () => {
         let lineCommentContent = scriptContent + '// EOF Comment';
         let userScript = new EditableUserScript({'content': lineCommentContent});

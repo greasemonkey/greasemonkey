@@ -10,7 +10,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 13;
+const EVAL_CONTENT_VERSION = 14;
 
 
 // Private implementation.
@@ -330,8 +330,8 @@ window.EditableUserScript = class EditableUserScript
         userScript();
         })();
         } catch (err) {
-          console.error('Script error in ${this.toString()}:'
-              + '\\n' + err.name + ':', err.message);
+          console.error('Script error in %s:\\n%s: %s',
+              ${JSON.stringify(this.toString())}, err.name, err.message);
         }
         //# sourceURL=user-script:${escape(this.id)}`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
