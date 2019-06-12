@@ -9,6 +9,12 @@
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 は「@grant $2」を含みません。"
   },
+  "auto_update_disabled": {
+    "message": "自動更新は無効"
+  },
+  "auto_update_enabled": {
+    "message": "自動更新は有効"
+  },
   "backup_export": {
     "message": "バックアップのエクスポート..."
   },
@@ -38,6 +44,9 @@
   },
   "close": {
     "message": "閉じる"
+  },
+  "confirm_update_edited": {
+    "message": "スクリプトはローカルで変更されています。本当に更新しますか?"
   },
   "description": {
     "message": "説明："
@@ -75,11 +84,17 @@
   "extName": {
     "message": "Greasemonkey"
   },
+  "fix_and_save": {
+    "message": "変更内容は保存されていません。エラーを修正して再度保存してください。"
+  },
   "get_user_scripts": {
     "message": "ユーザースクリプトの入手"
   },
   "global_excludes": {
     "message": "グローバル除外"
+  },
+  "global_excludes_explain": {
+    "message": "@excludeのURLパターンを、1行ごとに記述してください。指定したURLでは、すべてのユーザースクリプトが実行されません。"
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification: 「text」は文字列でなければなりません。"
@@ -204,6 +219,12 @@
   },
   "update_now": {
     "message": "今すぐ更新"
+  },
+  "update_result_error": {
+    "message": "更新の確認中にエラーが発生しました。"
+  },
+  "update_result_noupdate": {
+    "message": "新しいバージョンはありません。"
   },
   "update_result_updated": {
     "message": "更新成功."

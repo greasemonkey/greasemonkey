@@ -9,17 +9,56 @@
   "SCRIPT_does_not_grant_METHOD": {
     "message": "$1 沒有 @grant 方法 $2"
   },
+  "auto_update_disabled": {
+    "message": "自動更新已停用"
+  },
+  "auto_update_enabled": {
+    "message": "自動更新已啟用"
+  },
+  "backup_export": {
+    "message": "匯出備份…"
+  },
+  "backup_import": {
+    "message": "匯入備份……"
+  },
+  "backup_import_file": {
+    "message": "匯入檔案"
+  },
+  "backup_import_options": {
+    "message": "匯入選項"
+  },
+  "backup_import_remove_detail": {
+    "message": "解除安裝不在備放檔案中的指令稿。"
+  },
+  "backup_import_replace_detail": {
+    "message": "以備份檔案裡的版本覆寫既有的已安裝指令稿。"
+  },
+  "backup_import_select_file": {
+    "message": "選取 Greasemonkey 備份 ZIP 檔案以使用上面的選項來匯入它。"
+  },
+  "backup_import_title": {
+    "message": "Greasemonkey 備份匯入"
+  },
   "cancel": {
     "message": "取消"
   },
   "close": {
     "message": "關閉"
   },
+  "confirm_update_edited": {
+    "message": "您已經編輯過此指令稿，真的要更新它？"
+  },
+  "description": {
+    "message": "描述："
+  },
   "disabled": {
     "message": "已停用"
   },
   "does_not_run_on": {
     "message": "不會在執行於："
+  },
+  "done": {
+    "message": "完成"
   },
   "download_error_unknown": {
     "message": "使用者指令稿下載時遇到未知的錯誤。"
@@ -36,11 +75,26 @@
   "enabled": {
     "message": "已啟用"
   },
+  "exclude": {
+    "message": "排除"
+  },
   "extDesc": {
     "message": "Firefox 的使用者指令稿管理器。"
   },
+  "extName": {
+    "message": "Greasemonkey"
+  },
+  "fix_and_save": {
+    "message": "編輯器內容尚未儲存。修復這個錯誤並再試一次。"
+  },
   "get_user_scripts": {
     "message": "取得使用者指令稿"
+  },
+  "global_excludes": {
+    "message": "全域排除"
+  },
+  "global_excludes_explain": {
+    "message": "每行一個 @exclude 模式。沒有使用者指令稿會在這裡執行。"
   },
   "gm_notif_text_must_be_string": {
     "message": "GM.notification： \"text\" 必須為字串"
@@ -73,11 +127,26 @@
   "greasemonkey_is_disabled": {
     "message": "Greasemonkey 已停用"
   },
+  "greasemonkey_options": {
+    "message": "Greasemonkey 選項"
+  },
   "greasemonkey_user_script_editor": {
     "message": "Greasemonkey 使用者指令稿編輯器"
   },
+  "greasemonkey_wiki": {
+    "message": "Greasemonkey Wiki"
+  },
+  "homepage": {
+    "message": "首頁"
+  },
   "ignoring_MATCH_because_REASON": {
     "message": "忽略 @match 模式 $1 因為：\\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "匯入 Greasemonkey 資料庫"
+  },
+  "importing": {
+    "message": "正在匯入…"
   },
   "install": {
     "message": "安裝"
@@ -88,6 +157,9 @@
   "install_failed": {
     "message": "使用者指令稿安裝失敗"
   },
+  "last_updated": {
+    "message": "最後更新："
+  },
   "malicious_user_scripts": {
     "message": "惡意的使用者指令稿可能會侵犯您的隱私、竊取您的資料，甚至在您不知情的狀況下以您的名義做出各種惡意行為。"
   },
@@ -97,8 +169,14 @@
   "new_user_script": {
     "message": "新使用者指令稿……"
   },
+  "only_use_these": {
+    "message": "僅使用這些"
+  },
   "open_editor_after": {
     "message": "在安裝完成後開啟編輯器"
+  },
+  "options": {
+    "message": "選項："
   },
   "other_user_scripts": {
     "message": "其他使用者指令稿"
@@ -139,8 +217,35 @@
   "unnamed_script_RAND": {
     "message": "未命名的指令稿 $1"
   },
+  "update_now": {
+    "message": "立刻更新"
+  },
+  "update_result_error": {
+    "message": "檢查更新發生錯誤。"
+  },
+  "update_result_noupdate": {
+    "message": "沒有可用的新版本。"
+  },
+  "update_result_updated": {
+    "message": "成功更新。"
+  },
+  "user_includes": {
+    "message": "使用者包含"
+  },
+  "user_excludes": {
+    "message": "使用者排除"
+  },
+  "user_matches": {
+    "message": "使用者符合"
+  },
+  "user_script_options": {
+    "message": "使用者指令稿選項"
+  },
   "user_scripts_for_this_tab": {
     "message": "供此分頁使用的使用者指令稿"
+  },
+  "version": {
+    "message": "版本："
   },
   "xhr_bad_url": {
     "message": "GM.xmlHttpRequest：無法理解 URL：$1\\n$2"
