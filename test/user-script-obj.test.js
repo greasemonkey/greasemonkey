@@ -12,16 +12,13 @@ describe('user-script-obj', () => {
           + 'gt_one(2);\n';
 
       it('produces an evaluatable expression', () => {
-        let badString = "don't throw \\";
-        let scriptContent = [
-          'description', 'exclude', 'grant', 'icon', 'include', 'match', 'name',
-          'namespace', 'noframes', 'require', 'resource', 'run-at', 'version' ];
-        scriptContent = scriptContent.map(key => `// @${key} ${badString}`);
-        scriptContent = metaBlockFromLines(...scriptContent);
-
-        let userScript = new EditableUserScript({'content': scriptContent});
+        let badString = "don't throw \"\\";
+        let scriptContent =  metaBlockFromLines('// @name ${badString}');
+        let userScript = new EditableUserScript({
+          'content': scriptContent,
+          'name': badString,
+        });
         userScript.calculateEvalContent();
-
         chai.expect(() => eval(userScript._evalContent)).to.not.throw();
       });
 
