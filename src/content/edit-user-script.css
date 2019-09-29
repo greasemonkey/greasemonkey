@@ -102,6 +102,6 @@ body, #editor {
 body {
   font-size: 14px;
 }
-.CodeMirror pre {
-  line-height: 1.0 !important;
+.CodeMirror-code > div {
+  line-height: 1.15 !important;
 }
