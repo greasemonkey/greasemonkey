@@ -1,12 +1,22 @@
 'use strict';
 let gUserScript = null;
 
+const macKeymap = CodeMirror.normalizeKeyMap({
+  'Cmd-/': 'toggleComment',
+});
+const pcKeymap = CodeMirror.normalizeKeyMap({
+  'Ctrl-/': 'toggleComment',
+});
+
+const isMacKeymap = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+
 const editor = CodeMirror(
     document.getElementById('editor'),
     // TODO: Make appropriate options user-configurable.
     {
       'tabSize': 2,
       'lineNumbers': true,
+      'extraKeys': isMacKeymap ? macKeymap : pcKeymap,
     });
 
 CodeMirror.commands.save = onSave;
