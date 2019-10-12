@@ -214,7 +214,10 @@ function activate(el) {
       return;
 
     case 'new-user-script':
-      newUserScript();
+      browser.tabs.query({'active': true, 'currentWindow': true})
+          .then(t => new URL(t[0].url))
+          .catch(() => new URL('about:blank'))
+          .then(newUserScript);
       return;
     case 'toggle-global-enabled':
       browser.runtime.sendMessage({'name': 'EnabledToggle'})
@@ -340,12 +343,14 @@ function navigateToScript(uuid) {
 }
 
 
-function newUserScript() {
+function newUserScript(url) {
   let r = Math.floor(Math.random() * 900000 + 100000);
   let name = _('unnamed_script_RAND', r);
+  let incl = url.origin == 'null' ? '*' : url.origin + '/*';
   let scriptSource = `// ==UserScript==
 // @name     ${name}
 // @version  1
+// @include  ${incl}
 // @grant    none
 // ==/UserScript==`;
   let downloader
