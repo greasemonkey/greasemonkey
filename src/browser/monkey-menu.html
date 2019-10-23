@@ -9,7 +9,7 @@
 </head>
 <body id="rendering">
 
-<section class="main-menu">
+<section class="main-menu" tabindex="-1" role="dialog">
   <menu>
     <menuitem id="toggle-global-enabled" tabindex="0">
       <i class="icon fa" rv-class-fa-check="enabled"></i>
@@ -87,7 +87,7 @@
 </section>
 
 
-<section class="options">
+<section class="options"  tabindex="-1" role="dialog">
   <header>
     <menuitem tabindex="0" class="go-back"></menuitem>
     {'greasemonkey_options'|i18n}
@@ -113,7 +113,7 @@
 </section>
 
 
-<section class="user-script">
+<section class="user-script"  tabindex="-1" role="dialog">
   <header>
     <menuitem tabindex="0" class="go-back"></menuitem>
     {activeScript.name}
@@ -166,7 +166,7 @@
 </section>
 
 
-<section class="user-script-options">
+<section class="user-script-options"  tabindex="-1" role="dialog">
   <header>
     <menuitem tabindex="0" class="go-back"></menuitem>
     {'options'|i18n} {activeScript.name}

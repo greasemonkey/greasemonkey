@@ -141,8 +141,14 @@ function onTransitionEnd() {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
   for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = (section.className == document.body.id
+    let isCurrent = section.className == document.body.id;
+    section.style.visibility = (isCurrent
         ? 'visible' : 'hidden');
+    if (isCurrent) {
+      // Make screen readers report the new section like a dialog. Otherwise,
+      // they would report nothing.
+      section.focus();
+    }
   }
 }
 
