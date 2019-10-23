@@ -258,5 +258,11 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest: Received no URL."
+  },
+  "back": {
+    "message": "Back"
+  },
+  "help": {
+    "message": "Help"
   }
 }
