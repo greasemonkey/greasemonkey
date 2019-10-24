@@ -258,5 +258,14 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest: Received no URL."
+  },
+  "editor": {
+    "message": "Editor"
+  },
+  "use_enhanced_editor": {
+    "message": "Use enhanced editor"
+  },
+  "use_enhanced_editor_explain": {
+    "message": "Screen reader users should disable this, as the enhanced code editor is not accessible."
   }
 }

@@ -5,6 +5,7 @@ let gTplData = {
   'pendingUninstall': 0,
   'options': {
     'globalExcludesStr': '',
+    'useCodeMirror': true,
   },
   'originGlob': null,
   'userScripts': {
@@ -112,6 +113,7 @@ function onLoad() {
       {'name': 'OptionsLoad'},
       options => {
         gTplData.options.globalExcludesStr = options.excludes;
+        gTplData.options.useCodeMirror = options.useCodeMirror;
         finish();
       });
 
@@ -214,7 +216,7 @@ function activate(el) {
       return;
 
     case 'new-user-script':
-      newUserScript();
+      newUserScript(!gTplData.options.useCodeMirror);
       return;
     case 'toggle-global-enabled':
       browser.runtime.sendMessage({'name': 'EnabledToggle'})
@@ -301,6 +303,7 @@ function navigateAway() {
       chrome.runtime.sendMessage({
         'name': 'OptionsSave',
         'excludes': gTplData.options.globalExcludesStr.trim(),
+        'useCodeMirror': gTplData.options.useCodeMirror,
       }, logUnhandledError);
       break;
     case 'user-script-options':

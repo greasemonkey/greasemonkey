@@ -22,6 +22,11 @@ chrome.storage.local.get('globalExcludes', v => {
   }
 });
 
+let gUseCodeMirror = true;
+chrome.storage.local.get('useCodeMirror', v => {
+  gUseCodeMirror = v['useCodeMirror'];
+  if ('undefined' == typeof gUseCodeMirror) gUseCodeMirror = true;
+});
 
 function getGlobalEnabled() {
   return !!gIsEnabled;
@@ -99,6 +104,7 @@ window.onEnabledToggle = onEnabledToggle;
 function onOptionsLoad(message, sender, sendResponse) {
   let options = {
     'excludes': gGlobalExcludes.join('\n'),
+    'useCodeMirror': gUseCodeMirror,
   };
   sendResponse(options);
 }
@@ -107,9 +113,13 @@ window.onOptionsLoad = onOptionsLoad;
 
 function onOptionsSave(message, sender, sendResponse) {
   chrome.storage.local.set(
-      {'globalExcludes': message.excludes},
+      {
+        'globalExcludes': message.excludes,
+        'useCodeMirror': message.useCodeMirror,
+        },
       logUnhandledError);
   gGlobalExcludes = message.excludes.split('\n');
+  gUseCodeMirror = message.useCodeMirror;
 }
 window.onOptionsSave = onOptionsSave;
 

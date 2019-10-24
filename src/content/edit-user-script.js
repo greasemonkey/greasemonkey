@@ -1,25 +1,93 @@
 'use strict';
 let gUserScript = null;
 
-const macKeymap = CodeMirror.normalizeKeyMap({
-  'Cmd-/': 'toggleComment',
-});
-const pcKeymap = CodeMirror.normalizeKeyMap({
-  'Ctrl-/': 'toggleComment',
-});
+/**
+ * A very simple editor based on a textarea.
+ * This is needed by screen reader users, as CodeMirror is unfortunately not
+ * accessible.
+ * This class simluates the parts of the CodeMirror API we need.
+ */
+class SimpleEditor {
+  constructor(element) {
+    this._doc = null;
+    this._onChangeExternal = null;
+    this._onSwapDoc = null;
+    this._textarea = document.createElement("textarea");
+    this._textarea.style["white-space"] = "pre-wrap";
+    this._textarea.addEventListener("input", this._onChange.bind(this));
+    this._textarea.addEventListener("keydown", this._onKeyDown.bind(this));
+    element.appendChild(this._textarea);
+  }
 
-const isMacKeymap = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+  getInputField() {
+    return this._textarea;
+  }
 
-const editor = CodeMirror(
-    document.getElementById('editor'),
-    // TODO: Make appropriate options user-configurable.
-    {
-      'tabSize': 2,
-      'lineNumbers': true,
-      'extraKeys': isMacKeymap ? macKeymap : pcKeymap,
-    });
+  focus() {
+    this._textarea.focus();
+  }
 
-CodeMirror.commands.save = onSave;
+  swapDoc(doc) {
+    this._doc = doc;
+    this._textarea.value = doc.getValue();
+    if (this._onSwapDoc) {
+      this._onSwapDoc(doc);
+    }
+  }
+
+  on(name, handler) {
+    if (name == "change") {
+      this._onChangeExternal = handler;
+    } else if (name == "swapDoc") {
+      this._onSwapDoc = handler;
+    }
+  }
+
+  execCommand(command) {
+    if (command == "save") {
+      onSave();
+    }
+  }
+
+  _onChange() {
+    if (this._doc) {
+      this._doc._currentValue = this._textarea.value;
+    }
+    if (this._onChangeExternal) {
+      this._onChangeExternal();
+    }
+  }
+
+  _onKeyDown(event) {
+    if (event.ctrlKey && event.key == "s") {
+      event.preventDefault();
+      this.execCommand("save");
+    }
+  }
+}
+
+class SimpleEditorDoc {
+  constructor(content, type) {
+    this._savedValue = content;
+    this._currentValue = content;
+  }
+
+  getValue() {
+    return this._currentValue;
+  }
+
+  isClean() {
+    return this._currentValue == this._savedValue;
+  }
+
+  markClean() {
+    this._savedValue = this._currentValue;
+  }
+
+  getMode() {
+    return {};
+  }
+}
 
 let modalTimer = null;
 
@@ -52,7 +120,7 @@ function addRequireTab(url, content) {
   requireTab.textContent = nameForUrl(url);
   tabs.appendChild(requireTab);
   editorTabs.push(requireTab);
-  editorDocs.push(CodeMirror.Doc(content, 'javascript'));
+  editorDocs.push(createDoc(content, 'javascript'));
   editorUrls.push(url);
 }
 
@@ -62,29 +130,77 @@ function nameForUrl(url) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-chrome.runtime.sendMessage({
-  'name': 'UserScriptGet',
-  'uuid': userScriptUuid,
-}, userScript => {
-  gUserScript = userScript;
+let editor;
+let createDoc;
+(async function() {
+  let options = await browser.runtime.sendMessage({'name': 'OptionsLoad'});
+  const editorElem = document.getElementById('editor');
+  if (options.useCodeMirror) {
+    const macKeymap = CodeMirror.normalizeKeyMap({
+      'Cmd-/': 'toggleComment',
+    });
+    const pcKeymap = CodeMirror.normalizeKeyMap({
+      'Ctrl-/': 'toggleComment',
+    });
 
+    const isMacKeymap = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+
+    editor = CodeMirror(
+        editorElem,
+        // TODO: Make appropriate options user-configurable.
+        {
+          'tabSize': 2,
+          'lineNumbers': true,
+          'extraKeys': isMacKeymap ? macKeymap : pcKeymap,
+        });
+
+    CodeMirror.commands.save = onSave;
+    createDoc = (...args) => CodeMirror.Doc(...args);
+  } else {
+    editor =new SimpleEditor(editorElem);
+    createDoc = (...args) => new SimpleEditorDoc(...args);
+  }
+
+  editor.on('change', () => {
+    let selectedTab = document.querySelector('#tabs .tab.active');
+    let idx = editorTabs.indexOf(selectedTab);
+    let selectedDoc = editorDocs[idx];
+    if (selectedDoc.isClean()) {
+      selectedTab.classList.remove('dirty');
+    } else {
+      selectedTab.classList.add('dirty');
+    }
+  });
+
+  editor.on('swapDoc', doc => {
+    if (doc.getMode().name == 'javascript') {
+      doc.setOption('gutters', ['CodeMirror-lint-markers']);
+      doc.setOption('lint', true);
+      doc.performLint();
+    }
+  });
+
+  gUserScript = await browser.runtime.sendMessage({
+    'name': 'UserScriptGet',
+    'uuid': userScriptUuid,
+  });
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
-  scriptTab.textContent = userScript.name;
+  scriptTab.textContent = gUserScript.name;
   tabs.appendChild(scriptTab);
   editorTabs.push(scriptTab);
-  editorDocs.push(CodeMirror.Doc(userScript.content, 'javascript'));
+  editorDocs.push(createDoc(gUserScript.content, 'javascript'));
   editorUrls.push(null);
 
-  Object.keys(userScript.requiresContent).forEach(u => {
-    addRequireTab(u, userScript.requiresContent[u]);
+  Object.keys(gUserScript.requiresContent).forEach(u => {
+    addRequireTab(u, gUserScript.requiresContent[u]);
   });
 
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  gTplData.name = userScript.name;
-});
+  gTplData.name = gUserScript.name;
+})();
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -102,27 +218,6 @@ tabs.addEventListener('click', event => {
     editor.focus();
   }
 }, true);
-
-
-editor.on('change', () => {
-  let selectedTab = document.querySelector('#tabs .tab.active');
-  let idx = editorTabs.indexOf(selectedTab);
-  let selectedDoc = editorDocs[idx];
-  if (selectedDoc.isClean()) {
-    selectedTab.classList.remove('dirty');
-  } else {
-    selectedTab.classList.add('dirty');
-  }
-});
-
-
-editor.on('swapDoc', doc => {
-  if (doc.getMode().name == 'javascript') {
-    doc.setOption('gutters', ['CodeMirror-lint-markers']);
-    doc.setOption('lint', true);
-    doc.performLint();
-  }
-});
 
 
 document.getElementById('save').addEventListener('click', () => {
