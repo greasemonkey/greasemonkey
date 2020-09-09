@@ -142,14 +142,13 @@ function onMouseOver(event) {
 }
 
 
-function onTransitionEnd() {
+function onTransitionEnd(e) {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
   for (let section of document.getElementsByTagName('section')) {
     let isCurrent = section.className == document.body.id;
-    section.style.visibility = (isCurrent
-        ? 'visible' : 'hidden');
-    if (isCurrent) {
+    section.style.visibility = isCurrent ? 'visible' : 'hidden';
+    if (isCurrent && e && e.target.tagName != 'TEXTAREA') {
       // Make screen readers report the new section like a dialog. Otherwise,
       // they would report nothing.
       section.focus();
