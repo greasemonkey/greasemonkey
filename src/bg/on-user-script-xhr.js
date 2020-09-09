@@ -61,6 +61,13 @@ function open(xhr, d, port, tabUrl) {
       // Ignore failure.  At least in responseType blob case, this access fails.
     }
 
+    responseState.status = xhr.status;
+    responseState.statusText = xhr.statusText;
+
+    try {
+      responseState.responseHeaders = xhr.getAllResponseHeaders();
+    } catch (e) {}
+
     switch (event.type) {
       case 'progress':
         responseState.lengthComputable = event.lengthComputable;
@@ -69,12 +76,6 @@ function open(xhr, d, port, tabUrl) {
         break;
       case 'error':
         console.log('error event?', event);
-        break;
-      default:
-        if (4 != xhr.readyState) break;
-        responseState.responseHeaders = xhr.getAllResponseHeaders();
-        responseState.status = xhr.status;
-        responseState.statusText = xhr.statusText;
         break;
     }
 

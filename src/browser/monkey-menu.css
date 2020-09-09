@@ -41,6 +41,14 @@ section {
   width: 100vw;
 }
 
+/* The active section gets focus so screen readers report the switch to a new
+ * section like a dialog. We don't want the whole section to get a focus
+ * outline visually.
+ */
+section:focus {
+  outline: none;
+}
+
 /* Hide non-main sections by default. */
 section.options,
 section.user-script,
@@ -70,7 +78,7 @@ body#user-script-options section.user-script
 
 section header {
   color: -moz-fieldText;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

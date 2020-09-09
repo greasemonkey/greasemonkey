@@ -86,6 +86,11 @@ function onLoad() {
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
+    // At this point, non-main sections aren't visible, but they don't have
+    // visibility: hidden. For accessibility, it's important that we set this
+    // so they don't appear to accessibility clients.
+    // onTransitionEnd takes care of this.
+    onTransitionEnd();
 
     setTimeout(window.focus, 0);
   }
@@ -139,12 +144,17 @@ function onMouseOver(event) {
 }
 
 
-function onTransitionEnd() {
+function onTransitionEnd(e) {
   // After a CSS transition has moved a section out of the visible area,
   // force it to be hidden, so that it cannot gain focus.
   for (let section of document.getElementsByTagName('section')) {
-    section.style.visibility = (section.className == document.body.id
-        ? 'visible' : 'hidden');
+    let isCurrent = section.className == document.body.id;
+    section.style.visibility = isCurrent ? 'visible' : 'hidden';
+    if (isCurrent && e && e.target.tagName != 'TEXTAREA') {
+      // Make screen readers report the new section like a dialog. Otherwise,
+      // they would report nothing.
+      section.focus();
+    }
   }
 }
 
