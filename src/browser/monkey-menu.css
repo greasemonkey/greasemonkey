@@ -95,6 +95,11 @@ section h2 {
   padding: 7px 12px 1px 10px;
 }
 
+section h2 a {
+  color: black;
+  float: right;
+}
+
 
 section menuitem.go-back {
   box-sizing: content-box;
@@ -195,11 +200,6 @@ section.user-script-options {
 }
 section.user-script-options menu {
   overflow-y: auto;
-}
-
-section.user-script-options h2 a {
-  color: black;
-  float: right;
 }
 
 section.user-script-options textarea {
