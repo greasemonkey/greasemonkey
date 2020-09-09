@@ -85,6 +85,11 @@ function onLoad() {
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
+    // At this point, non-main sections aren't visible, but they don't have
+    // visibility: hidden. For accessibility, it's important that we set this
+    // so they don't appear to accessibility clients.
+    // onTransitionEnd takes care of this.
+    onTransitionEnd();
 
     setTimeout(window.focus, 0);
   }

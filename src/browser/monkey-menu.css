@@ -78,7 +78,7 @@ body#user-script-options section.user-script
 
 section header {
   color: -moz-fieldText;
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

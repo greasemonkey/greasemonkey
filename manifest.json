@@ -57,8 +57,7 @@
 
       "/src/bg/execute.run.js",
       "/src/bg/user-script-detect.run.js",
-      "/src/bg/user-script-registry.run.js",
-      "/src/bg/welcome.run.js"
+      "/src/bg/user-script-registry.run.js"
     ]
   },
 

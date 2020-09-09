@@ -11,13 +11,13 @@
 
 <section class="main-menu" tabindex="-1" role="dialog">
   <menu>
-    <menuitem id="toggle-global-enabled" tabindex="0">
+    <menuitem id="toggle-global-enabled" tabindex="0" role="button">
       <i class="icon fa" rv-class-fa-check="enabled"></i>
       <span class="text i18n">
         {enabled|i18nBool 'greasemonkey_is_active' 'greasemonkey_is_disabled'}
       </span>
     </menuitem>
-    <menuitem id="open-options" tabindex="0">
+    <menuitem id="open-options" tabindex="0" role="button">
       <i class="icon fa fa-fw fa-cogs"></i>
       <span class="text">{'greasemonkey_options'|i18n}</span>
       <span class="arrow"></span>
@@ -27,12 +27,15 @@
 
     <div id="script-list-scroll" tabindex="-1">
       <div rv-if="userScripts.active | empty | not">
-        <heading>{'user_scripts_for_this_tab'|i18n}</heading>
+        <heading role="heading" aria-level="1">
+          {'user_scripts_for_this_tab'|i18n}
+        </heading>
         <menuitem rv-each-script="userScripts.active"
             class="user-script"
             rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
-            tabindex="0">
+            tabindex="0"
+            role="button">
           <i class="icon"><img rv-src="script.icon"></i>
           <span class="text">{script.name}</span>
           <span class="arrow"></span>
@@ -41,12 +44,15 @@
       <!-- TODO: Don't duplicate the above and below sections. -->
       <div rv-if="userScripts.inactive | empty | not">
         <hr rv-if="userScripts.active | empty | not">
-        <heading>{'other_user_scripts'|i18n}</heading>
+        <heading role="heading" aria-level="1">
+          {'other_user_scripts'|i18n}
+        </heading>
         <menuitem rv-each-script="userScripts.inactive"
             class="user-script"
             rv-disabled="script.enabled | not"
             rv-data-uuid="script.uuid"
-            tabindex="0">
+            tabindex="0"
+            role="button">
           <i class="icon"><img rv-src="script.icon"></i>
           <span class="text">{script.name}</span>
           <span class="arrow"></span>
@@ -56,30 +62,33 @@
 
     <hr>
 
-    <menuitem id="new-user-script" tabindex="0">
+    <menuitem id="new-user-script" tabindex="0" role="button">
       <i class="icon fa fa-file-text-o"></i>
       <span class="text">{'new_user_script'|i18n}</span>
     </menuitem>
-    <menuitem id="backup-export" tabindex="0">
+    <menuitem id="backup-export" tabindex="0" role="button">
       <i class="icon fa fa-upload"></i>
       <span class="text">{'backup_export'|i18n}</span>
     </menuitem>
-    <menuitem id="backup-import" tabindex="0">
+    <menuitem id="backup-import" tabindex="0" role="button">
       <i class="icon fa fa-download"></i>
       <span class="text">{'backup_import'|i18n}</span>
     </menuitem>
 
     <hr>
 
-    <menuitem tabindex="0" data-url="https://www.greasespot.net/">
+    <menuitem tabindex="0" data-url="https://www.greasespot.net/"
+        role="button">
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_home_page'|i18n}</span>
     </menuitem>
-    <menuitem tabindex="0" data-url="https://wiki.greasespot.net/">
+    <menuitem tabindex="0" data-url="https://wiki.greasespot.net/"
+        role="button">
       <i class="icon fa fa-link"></i>
       <span class="text">{'greasemonkey_wiki'|i18n}</span>
     </menuitem>
-    <menuitem tabindex="0" data-url="https://wiki.greasespot.net/User_Script_Hosting">
+    <menuitem data-url="https://wiki.greasespot.net/User_Script_Hosting"
+        tabindex="0" role="button">
       <i class="icon fa fa-link"></i>
       <span class="text">{'get_user_scripts'|i18n}</span>
     </menuitem>
@@ -89,8 +98,9 @@
 
 <section class="options"  tabindex="-1" role="dialog">
   <header>
-    <menuitem tabindex="0" class="go-back"></menuitem>
-    {'greasemonkey_options'|i18n}
+    <menuitem tabindex="0" class="go-back" role="button"
+        rv-aria-label="'back'|i18n"></menuitem>
+    <span role="heading" aria-level="1">{'greasemonkey_options'|i18n}</span>
   </header>
 
   <hr>
@@ -98,14 +108,16 @@
   <h2>{'global_excludes'|i18n}</h2>
   <p class="explain">
     <a href="https://wiki.greasespot.net/Include_and_exclude_rules">
-      <i class="icon fa fa-question-circle"></i>
+      <i class="icon fa fa-question-circle" rv-aria-label="'help' | i18n"></i>
     </a>
     {'global_excludes_explain'|i18n}
   </p>
   <p>
-    <textarea rows="5" rv-value="options.globalExcludesStr" title="{'global_excludes'|i18n}">
+    <textarea rows="5" rv-value="options.globalExcludesStr"
+        rv-title="'global_excludes'|i18n">
     </textarea>
-    <menuitem id="add-global-exclude-current" rv-if="options.globalExcludesStr | canAddOrigin">
+    <menuitem id="add-global-exclude-current" role="button"
+        rv-if="options.globalExcludesStr | canAddOrigin">
       <i class="icon fa fa-plus"></i>
       {'exclude'|i18n} {originGlob}
     </menuitem>
@@ -115,34 +127,35 @@
 
 <section class="user-script"  tabindex="-1" role="dialog">
   <header>
-    <menuitem tabindex="0" class="go-back"></menuitem>
-    {activeScript.name}
+    <menuitem tabindex="0" class="go-back" role="button"
+        rv-aria-label="'back'|i18n"></menuitem>
+    <span role="heading" aria-level="1">{activeScript.name}</span>
   </header>
 
   <hr>
 
   <menu>
-    <menuitem tabindex="0" id="user-script-toggle-enabled">
+    <menuitem tabindex="0" id="user-script-toggle-enabled" role="button">
       <i class="icon fa" rv-class-fa-check="activeScript.enabled"></i>
       <span class="text">{activeScript.enabled|i18nBool 'enabled' 'disabled'}</span>
     </menuitem>
-    <menuitem tabindex="0" id="user-script-edit">
+    <menuitem tabindex="0" id="user-script-edit" role="button">
       <i class="icon fa fa-pencil-square-o"></i>
       <span class="text">{'edit'|i18n}</span>
     </menuitem>
-    <menuitem tabindex="0" id="user-script-uninstall"
+    <menuitem tabindex="0" id="user-script-uninstall" role="button"
         rv-if="pendingUninstall | not"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'uninstall'|i18n}</span>
     </menuitem>
-    <menuitem tabindex="0" id="user-script-undo-uninstall"
+    <menuitem tabindex="0" id="user-script-undo-uninstall" role="button"
         rv-if="pendingUninstall"
     >
       <i class="icon fa fa-trash-o"></i>
       <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
     </menuitem>
-    <menuitem tabindex="0" id="open-user-script-options">
+    <menuitem tabindex="0" id="open-user-script-options" role="button">
       <i class="icon fa fa-fw fa-cogs"></i>
       <span class="text">{'user_script_options'|i18n}</span>
       <span class="arrow"></span>
@@ -168,14 +181,17 @@
 
 <section class="user-script-options"  tabindex="-1" role="dialog">
   <header>
-    <menuitem tabindex="0" class="go-back"></menuitem>
-    {'options'|i18n} {activeScript.name}
+    <menuitem tabindex="0" class="go-back" role="button"
+        rv-aria-label="'back'|i18n"></menuitem>
+    <span role="heading" aria-level="1">
+      {'options'|i18n} {activeScript.name}
+    </span>
   </header>
 
   <hr>
 
   <menu>
-    <menuitem tabindex="0" id="user-script-toggle-update"
+    <menuitem tabindex="0" id="user-script-toggle-update" role="button"
         rv-disabled="activeScript.downloadUrl | not"
     >
       <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
@@ -184,7 +200,7 @@
       </span>
     </menuitem>
 
-    <menuitem tabindex="0" id="user-script-update-now"
+    <menuitem tabindex="0" id="user-script-update-now" role="button"
         rv-disabled="activeScript.downloadUrl | not"
     >
       <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
@@ -197,14 +213,16 @@
 
     <h2>
       <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
-        <i class="icon fa fa-question-circle"></i>
+        <i class="icon fa fa-question-circle" rv-aria-label="'help' | i18n"></i>
       </a>
       {'user_includes'|i18n}
     </h2>
     <p>
-      <textarea rows="3" rv-value="activeScript.userIncludes" title="{'user_includes'|i18n}">
+      <textarea rows="3" rv-value="activeScript.userIncludes"
+          rv-title="'user_includes'|i18n">
       </textarea>
-      <menuitem id="add-user-include-current" rv-if="activeScript.userIncludes|canAddOrigin">
+      <menuitem id="add-user-include-current" role="button"
+          rv-if="activeScript.userIncludes|canAddOrigin">
         <i class="icon fa fa-plus"></i>
         {originGlob}
       </menuitem>
@@ -216,14 +234,16 @@
 
     <h2>
       <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
-        <i class="icon fa fa-question-circle"></i>
+        <i class="icon fa fa-question-circle" rv-aria-label="'help' | i18n"></i>
       </a>
       {'user_excludes'|i18n}
     </h2>
     <p>
-      <textarea rows="3" rv-value="activeScript.userExcludes" title="{'user_excludes'|i18n}">
+      <textarea rows="3" rv-value="activeScript.userExcludes"
+          rv-title="'user_excludes'|i18n">
       </textarea>
-      <menuitem id="add-user-exclude-current" rv-if="activeScript.userExcludes|canAddOrigin">
+      <menuitem id="add-user-exclude-current" role="button"
+          rv-if="activeScript.userExcludes|canAddOrigin">
         <i class="icon fa fa-plus"></i>
         {originGlob}
       </menuitem>
@@ -235,14 +255,16 @@
 
     <h2>
       <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
-        <i class="icon fa fa-question-circle"></i>
+        <i class="icon fa fa-question-circle" rv-aria-label="'help' | i18n"></i>
       </a>
       {'user_matches'|i18n}
     </h2>
     <p>
-      <textarea rows="3" rv-value="activeScript.userMatches" title="{'user_matches'|i18n}">
+      <textarea rows="3" rv-value="activeScript.userMatches"
+          rv-title="'user_matches'|i18n">
       </textarea>
-      <menuitem id="add-user-match-current" rv-if="activeScript.userMatches|canAddOrigin">
+      <menuitem id="add-user-match-current" role="button"
+          rv-if="activeScript.userMatches|canAddOrigin">
         <i class="icon fa fa-plus"></i>
         {originGlob}
       </menuitem>
