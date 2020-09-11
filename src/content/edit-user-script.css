@@ -84,7 +84,7 @@ body #modal-splash {
   background: #e5e5e5;
 }
 
-body, #editor {
+body, #editor, #editor textarea {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -96,6 +96,9 @@ body, #editor {
 }
 .CodeMirror {
   height: 100% !important;
+}
+#editor textarea {
+  font-family: monospace;
 }
 
 /* Replace shoelace.css settings with defaults. */
