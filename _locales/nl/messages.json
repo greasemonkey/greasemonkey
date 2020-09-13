@@ -1,6 +1,6 @@
 {
   "ERROR_at_URL": {
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "description": "E.g. 404 - Not Found at http://.../404.js",
     "message": "$1 op $2"
   },
   "NAME_greasemonkey_user_script": {
@@ -258,5 +258,20 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest: geen URL ontvangen."
+  },
+  "back": {
+    "message": "Terug"
+  },
+  "help": {
+    "message": "Help"
+  },
+  "editor": {
+    "message": "Editor"
+  },
+  "use_enhanced_editor": {
+    "message": "Verbeterde editor gebruiken"
+  },
+  "use_enhanced_editor_explain": {
+    "message": "Schermlezergebruikers moeten dit uitschakelen, omdat de verbeterde code-editor niet toegankelijk is."
   }
 }

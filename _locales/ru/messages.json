@@ -1,0 +1,262 @@
+{
+  "ERROR_at_URL": {
+    "description": "E.g. 404 - Not Found at http://.../404.js",
+    "message": "$1 на $2"
+  },
+  "NAME_greasemonkey_user_script": {
+    "message": "$1 - Пользовательский скрипт Greasemonkey"
+  },
+  "SCRIPT_does_not_grant_METHOD": {
+    "message": "$1 не метод @grant $2"
+  },
+  "auto_update_disabled": {
+    "message": "Автообновление отключено"
+  },
+  "auto_update_enabled": {
+    "message": "Автообновление включено"
+  },
+  "backup_export": {
+    "message": "Экспорт резервной копии..."
+  },
+  "backup_import": {
+    "message": "Импорт резервной копии..."
+  },
+  "backup_import_file": {
+    "message": "Импорт файла"
+  },
+  "backup_import_options": {
+    "message": "Параметры импорта"
+  },
+  "backup_import_remove_detail": {
+    "message": "Удалить скрипты, которые отсутствуют в файле резервной копии."
+  },
+  "backup_import_replace_detail": {
+    "message": "Перезаписать установленные скрипты с версией в файл резервной копии."
+  },
+  "backup_import_select_file": {
+    "message": "Выберите файл ZIP резервной копии для импорта с указанными выше параметрами."
+  },
+  "backup_import_title": {
+    "message": "Импорт резервной копии"
+  },
+  "cancel": {
+    "message": "Отмена"
+  },
+  "close": {
+    "message": "Закрыть"
+  },
+  "confirm_update_edited": {
+    "message": "Вы отредактировали этот скрипт, действительно обновить его?"
+  },
+  "description": {
+    "message": "Описание:"
+  },
+  "disabled": {
+    "message": "Отключён"
+  },
+  "does_not_run_on": {
+    "message": "Не запускается на:"
+  },
+  "done": {
+    "message": "Готово"
+  },
+  "download_error_unknown": {
+    "message": "Произошла неизвестная ошибка при загрузки пользовательского скрипта."
+  },
+  "download_failed": {
+    "message": "Ошибка загрузки пользовательского скрипта"
+  },
+  "duplicate_resource_NAME": {
+    "message": "Дубликат названия ресурса: $1"
+  },
+  "edit": {
+    "message": "Редактировать"
+  },
+  "enabled": {
+    "message": "Включён"
+  },
+  "exclude": {
+    "message": "Исключить"
+  },
+  "extDesc": {
+    "message": "Менеджер пользовательских скриптов для Firefox."
+  },
+  "extName": {
+    "message": "Greasemonkey"
+  },
+  "fix_and_save": {
+    "message": "Содержимое редактора не было сохранено. Исправьте эту ошибку и повторите попытку."
+  },
+  "get_user_scripts": {
+    "message": "Получить пользовательский скрипт"
+  },
+  "global_excludes": {
+    "message": "Глобальные исключения"
+  },
+  "global_excludes_explain": {
+    "message": "Один шаблон @exclude на строку. Пользовательские скрипты не будут запускаться здесь."
+  },
+  "gm_notif_text_must_be_string": {
+    "message": "GM.notification: \"text\" должен быть string"
+  },
+  "gm_opentab_bad_URL": {
+    "message": "GM.openInTab: Не удалось распознать URL-адрес: $1"
+  },
+  "gm_script_id": {
+    "message": "[Greasemonkey скрипт $1]"
+  },
+  "gm_script_id_ver": {
+    "message": "[Greasemonkey скрипт $id$; версия $version$]",
+    "placeholders": {
+      "id": {
+        "content": "$1",
+        "example": "User Script Name Here"
+      },
+      "version": {
+        "content": "$2",
+        "example": "1.0"
+      }
+    }
+  },
+  "greasemonkey_home_page": {
+    "message": "Домашняя страница"
+  },
+  "greasemonkey_is_active": {
+    "message": "Greasemonkey работает"
+  },
+  "greasemonkey_is_disabled": {
+    "message": "Greasemonkey отключен"
+  },
+  "greasemonkey_options": {
+    "message": "Параметры"
+  },
+  "greasemonkey_user_script_editor": {
+    "message": "Редактор пользовательского скрипта"
+  },
+  "greasemonkey_wiki": {
+    "message": "Wiki-страница"
+  },
+  "homepage": {
+    "message": "Домашняя страница"
+  },
+  "ignoring_MATCH_because_REASON": {
+    "message": "Игнорирование шаблона @match $1 так как:\n$2"
+  },
+  "import_greasemonkey_database": {
+    "message": "Импорт базы данных"
+  },
+  "importing": {
+    "message": "Импортирование..."
+  },
+  "install": {
+    "message": "Установить"
+  },
+  "install_disabled": {
+    "message": "Установить в отключенном состоянии"
+  },
+  "install_failed": {
+    "message": "Не удалось установить пользовательский скрипт"
+  },
+  "last_updated": {
+    "message": "Обновлён:"
+  },
+  "malicious_user_scripts": {
+    "message": "Вредоносные пользовательские скрипты могут нарушить вашу конфиденциальность, украсть ваши данные и действовать от вашего имени без вашего ведома."
+  },
+  "matches": {
+    "message": "Соответствия:"
+  },
+  "new_user_script": {
+    "message": "Создать пользовательский скрипт..."
+  },
+  "only_use_these": {
+    "message": "Использовать только эти"
+  },
+  "open_editor_after": {
+    "message": "Открыть редактор после завершения установки"
+  },
+  "options": {
+    "message": "Параметры:"
+  },
+  "other_user_scripts": {
+    "message": "Другие пользовательские скрипты"
+  },
+  "requires_special_apis": {
+    "message": "Требуются специальные API:"
+  },
+  "runs_on": {
+    "message": "Выполняется на:"
+  },
+  "save": {
+    "message": "Сохранить"
+  },
+  "save_failed_NAME_already_in_NAMESPACE": {
+    "message": "Ошибка сохранения пользовательского скрипта: скрипт с именем $1 уже существует в namespace $2."
+  },
+  "save_failed_unknown": {
+    "message": "Не удалось сохранить пользовательский скрипт: неизвестная ошибка."
+  },
+  "saving": {
+    "message": "Сохранение"
+  },
+  "script_save_error": {
+    "message": "Ошибка сохранения скрипта"
+  },
+  "sources_you_trust": {
+    "message": "Устанавливайте скрипты только из доверенных источников."
+  },
+  "this_is_a_greasemonkey_user_script": {
+    "message": "Это пользовательский скрипт Greasemonkey. Нажмите «Установить», чтобы использовать его."
+  },
+  "undo_uninstall": {
+    "message": "Отменить удаление"
+  },
+  "uninstall": {
+    "message": "Удалить"
+  },
+  "unnamed_script_RAND": {
+    "message": "Скрипт БезИмени $1"
+  },
+  "update_now": {
+    "message": "Обновить"
+  },
+  "update_result_error": {
+    "message": "Ошибка проверки обновления."
+  },
+  "update_result_noupdate": {
+    "message": "Нет доступных обновлений."
+  },
+  "update_result_updated": {
+    "message": "Успешно обновлён."
+  },
+  "user_includes": {
+    "message": "Пользовательские включения"
+  },
+  "user_excludes": {
+    "message": "Пользовательские исключения"
+  },
+  "user_matches": {
+    "message": "Пользовательские соответствия"
+  },
+  "user_script_options": {
+    "message": "Параметры скрипта"
+  },
+  "user_scripts_for_this_tab": {
+    "message": "Пользовательские скрипты для этой вкладки"
+  },
+  "version": {
+    "message": "Версия:"
+  },
+  "xhr_bad_url": {
+    "message": "GM.xmlHttpRequest: Не удалось распознать URL-адрес: $1\n$2"
+  },
+  "xhr_bad_url_scheme": {
+    "message": "GM.xmlHttpRequest: Переданный URL-адрес имеет неверный протокол: $1"
+  },
+  "xhr_no_details": {
+    "message": "GM.xmlHttpRequest: Получено без подробностей."
+  },
+  "xhr_no_url": {
+    "message": "GM.xmlHttpRequest: Получено без URL-адреса."
+  }
+}

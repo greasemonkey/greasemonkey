@@ -1,6 +1,6 @@
 {
   "ERROR_at_URL": {
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "description": "E.g. 404 - Not Found at http://.../404.js",
     "message": "$1 für $2"
   },
   "NAME_greasemonkey_user_script": {

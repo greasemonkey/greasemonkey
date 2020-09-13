@@ -1,6 +1,6 @@
 {
   "ERROR_at_URL": {
-    "description": "E.g. 404 - Not Found at http:\/\/...\/404.js",
+    "description": "E.g. 404 - Not Found at http://.../404.js",
     "message": "$1 於 $2"
   },
   "NAME_greasemonkey_user_script": {
@@ -258,5 +258,20 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest：收不到 URL。"
+  },
+  "back": {
+    "message": "返回"
+  },
+  "help": {
+    "message": "說明"
+  },
+  "editor": {
+    "message": "編輯器"
+  },
+  "use_enhanced_editor": {
+    "message": "使用進階編輯器"
+  },
+  "use_enhanced_editor_explain": {
+    "message": "螢幕閱讀器使用者應停用此功能，進階程式碼編輯器不是無障礙的。"
   }
 }
