@@ -288,7 +288,7 @@ function addOriginGlobTo(str) {
 
 
 function loadScripts(userScriptsDetail, url) {
-  userScriptsDetail.sort((a, b) => a.name.localeCompare(b.name));
+  userScriptsDetail.sort((a, b) => i18nUserScript('name', a).localeCompare(i18nUserScript('name', b)));
   for (let userScriptDetail of userScriptsDetail) {
     let userScript = new EditableUserScript(userScriptDetail);
     let tplItem = userScript.details;

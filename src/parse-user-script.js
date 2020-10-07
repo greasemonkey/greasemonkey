@@ -65,6 +65,7 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     'grants': [],
     'homePageUrl': null,
     'includes': [],
+    'locales': {},
     'matches': [],
     'name': url && nameFromUrl(url) || 'Unnamed Script',
     'namespace': url && new URL(url).host || null,
@@ -82,8 +83,6 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
       return prepDefaults(details);
     }
   }
-
-  let locales = {};
 
   for (let i = 0, metaLine = ''; metaLine = meta[i]; i++) {
     let data;
@@ -119,8 +118,8 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
     case 'name':
       let locale = data.locale;
       if (locale) {
-        if (!locales[locale]) locales[locale] = {};
-        locales[locale][data.keyword] = data.value;
+        if (!details.locales[locale]) details.locales[locale] = {};
+        details.locales[locale][data.keyword] = data.value;
       } else {
         details[data.keyword] = data.value;
       }

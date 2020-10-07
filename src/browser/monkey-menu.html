@@ -37,7 +37,7 @@
             tabindex="0"
             role="button">
           <i class="icon"><img rv-src="script.icon"></i>
-          <span class="text">{script.name}</span>
+          <span class="text">{'name'|i18nUserScript script}</span>
           <span class="arrow"></span>
         </menuitem>
       </div>
@@ -54,7 +54,7 @@
             tabindex="0"
             role="button">
           <i class="icon"><img rv-src="script.icon"></i>
-          <span class="text">{script.name}</span>
+          <span class="text">{'name'|i18nUserScript script}</span>
           <span class="arrow"></span>
         </menuitem>
       </div>
@@ -141,7 +141,7 @@
   <header>
     <menuitem tabindex="0" class="go-back" role="button"
         rv-aria-label="'back'|i18n"></menuitem>
-    <span role="heading" aria-level="1">{activeScript.name}</span>
+    <span role="heading" aria-level="1">{'name'|i18nUserScript activeScript}</span>
   </header>
 
   <hr>
@@ -176,7 +176,7 @@
     <hr>
 
     <p rv-if="activeScript.description">
-      <b>{'description'|i18n}</b> {activeScript.description}
+      <b>{'description'|i18n}</b> {'description'|i18nUserScript activeScript}
     </p>
     <p rv-if="activeScript.version">
       <b>{'version'|i18n}</b> {activeScript.version}
@@ -196,7 +196,7 @@
     <menuitem tabindex="0" class="go-back" role="button"
         rv-aria-label="'back'|i18n"></menuitem>
     <span role="heading" aria-level="1">
-      {'options'|i18n} {activeScript.name}
+      {'options'|i18n} {'name'|i18nUserScript activeScript}
     </span>
   </header>
 
@@ -293,6 +293,8 @@
 <script src="/third-party/tinybind/tinybind.min.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
+<script src="/src/util/get-best-locale-match.js"></script>
+<script src="/src/util/i18n-user-script.js"></script>
 <script src="/src/util/iconUrl.js"></script>
 <script src="/src/util/log-unhandled-error.js"></script>
 <script src="/src/util/open-editor.js"></script>
