@@ -36,6 +36,24 @@ describe('parse-user-script', () => {
       let src = metaBlockFromLines('// @name Debts');
       let result = parseUserScript(src, urlStr);
       assert.equal(result.name, 'Debts');
+      assert.deepEqual(result.locales, {});
+    });
+
+    it('parses @name or @description with locale', () => {
+      let src = metaBlockFromLines(
+          '// @name default',
+          '// @name:de de',
+          '// @name:zh-Hant zh-Hant',
+          '// @description:de de',
+          '// @description:sr-Cyrl sr-Cyrl');
+      let result = parseUserScript(src);
+      assert.equal(result.name, 'default');
+      assert.isUndefined(result.description);
+      assert.deepEqual(result.locales, {
+        de: { name: 'de', description: 'de' },
+        'zh-Hant': { name: 'zh-Hant' },
+        'sr-Cyrl': { description: 'sr-Cyrl' },
+      });
     });
 
     it('parses the @homepageURL', () => {

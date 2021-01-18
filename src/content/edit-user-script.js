@@ -186,7 +186,7 @@ let createDoc;
   });
   let scriptTab = document.createElement('li');
   scriptTab.className = 'tab active';
-  scriptTab.textContent = gUserScript.name;
+  scriptTab.textContent = i18nUserScript('name', gUserScript);
   tabs.appendChild(scriptTab);
   editorTabs.push(scriptTab);
   editorDocs.push(createDoc(gUserScript.content, 'javascript'));
@@ -199,7 +199,7 @@ let createDoc;
   editor.swapDoc(editorDocs[0]);
   editor.focus();
 
-  gTplData.name = gUserScript.name;
+  gTplData.name = i18nUserScript('name', gUserScript);
 })();
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,8 +310,8 @@ function onSave() {
 function onSaveComplete(savedDetails) {
   modalClose();
 
-  gTplData.name = savedDetails.name;
-  tabs.children[0].textContent = savedDetails.name;
+  gTplData.name = i18nUserScript('name', savedDetails);
+  tabs.children[0].textContent = i18nUserScript('name', savedDetails);
 
   for (let i = editorDocs.length; i--; ) {
     let url = editorUrls[i];

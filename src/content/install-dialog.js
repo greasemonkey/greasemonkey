@@ -35,7 +35,7 @@ gDownloader.addProgressListener(() => {
 gDownloader.scriptDetails.then(scriptDetails => {
   gDetails = scriptDetails;
 
-  document.title = _('NAME_greasemonkey_user_script', gDetails.name);
+  document.title = _('NAME_greasemonkey_user_script', i18nUserScript('name', gDetails));
   // Apply the onerror event for the img tag. CSP does not allow it to be done
   // directly in HTML.
   let iconEl = document.querySelector('#install #header img');
@@ -46,6 +46,8 @@ gDownloader.scriptDetails.then(scriptDetails => {
   // make a second copy of `gDetails`, for Rivets to own.
   let rvDetails = JSON.parse(JSON.stringify(gDetails));
   Object.assign(gRvDetails, rvDetails);
+  gRvDetails.name = i18nUserScript('name', rvDetails);
+  gRvDetails.description = i18nUserScript('description', rvDetails);
 
   document.body.className = 'install';
 });
