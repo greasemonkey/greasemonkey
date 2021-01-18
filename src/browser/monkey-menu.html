@@ -23,6 +23,14 @@
       <span class="arrow"></span>
     </menuitem>
 
+    <hr rv-if="menuCommands | empty | not">
+    <menuitem id="open-menu-commands" tabindex="0" role="button"
+        rv-if="menuCommands | empty | not">
+      <i class="icon fa fa-fw fa-list-alt"></i>
+      <span class="text">{'user_script_commands_button'|i18n}</span>
+      <span class="arrow"></span>
+    </menuitem>
+
     <hr rv-if="userScripts.active | bothArraysEmpty userScripts.inactive | not">
 
     <div id="script-list-scroll" tabindex="-1">
@@ -134,6 +142,28 @@
     <br>
     {'use_enhanced_editor_explain'|i18n}
   </p>
+</section>
+
+
+<section class="menu-commands"  tabindex="-1" role="dialog">
+  <header>
+    <menuitem tabindex="0" class="go-back" role="button"
+        rv-aria-label="'back'|i18n"></menuitem>
+    <span role="heading" aria-level="1">{'user_script_commands'|i18n}</span>
+  </header>
+
+  <hr>
+
+  <menuitem rv-each-command="menuCommands"
+      rv-command="command.id | mmUuidMenu"
+      rv-aria-keyshortcuts="command.accessKey"
+      tabindex="0"
+      role="button">
+    <i class="icon"><img rv-src="command.icon"></i>
+    <span class="text">
+      {command.caption}<span rv-if="command.accessKey">(<span class="access-key">{command.accessKey}</span>)</span>
+    </span>
+  </menuitem>
 </section>
 
 

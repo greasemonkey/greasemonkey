@@ -7,6 +7,7 @@ let gTplData = {
     'globalExcludesStr': '',
     'useCodeMirror': true,
   },
+  'menuCommands': [],
   'originGlob': null,
   'userScripts': {
     'active': [],
@@ -58,6 +59,22 @@ function onKeyDown(event) {
   } else  if (event.key == 'ArrowUp') {
     event.preventDefault();
     switchFocus(-1);
+  }
+
+  if (document.body.id === 'menu-commands'
+      && Array.from(event.key).length /* code point count */ === 1) {
+    const k = CSS.escape(event.key.toLowerCase());
+    const commands = document.querySelectorAll(
+        `.menu-commands [aria-keyshortcuts="${k}" i]`);
+
+    if (commands.length === 1) {
+      commands[0].click();
+    } else if (commands.length > 1) {
+      const nextIndex = Array.from(commands)
+          .findIndex(command => command.matches(':focus')) + 1;
+      const command = commands[nextIndex < commands.length ? nextIndex : 0];
+      command.focus();
+    }
   }
 }
 
@@ -112,6 +129,15 @@ function onLoad() {
         userScripts = userScripts_;
         finish();
       });
+  chrome.tabs.query({'active': true, 'currentWindow': true}, tabs => {
+    if (tabs.length) {
+      chrome.runtime.sendMessage(
+          {'name': 'ListMenuCommands', 'tabId': tabs[0].id},
+          function(menuCommands) {
+            gTplData.menuCommands = menuCommands;
+          });
+    }
+  });
 
   numPending++;
   chrome.runtime.sendMessage(
@@ -193,6 +219,10 @@ function activate(el) {
       gMainFocusedItem = document.activeElement;
       document.body.id = 'options';
       return;
+    case 'open-menu-commands':
+      gMainFocusedItem = document.activeElement;
+      document.body.id = 'menu-commands';
+      return;
     case 'open-user-script-options':
       gMainFocusedItem = document.activeElement;
       document.body.id = 'user-script-options';
@@ -262,6 +292,17 @@ function activate(el) {
       }
 
       return;
+  }
+
+  // Check if it's a menu command by examing the gTplData.menuCommands object
+  let command = el.getAttribute('command');
+  let menuCommand = gTplData.menuCommands.find(menuCommand => menuCommand.id === command);
+  if (menuCommand) {
+    // Found a menu command, execute it
+    chrome.runtime.sendMessage(
+        {'name': 'MenuCommandClick', 'id': menuCommand.id},
+        () => window.close());
+    return;
   }
 
   let url = el.getAttribute('data-url');

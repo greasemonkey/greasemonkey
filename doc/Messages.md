@@ -98,6 +98,28 @@ Received by: `bg/export-db.js`
 
 Send with no data to export the entire Userscript dataset.
 
+# ListMenuCommands
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/on-user-script-menu-command.js`
+
+Triggered when the popup menu is loaded.
+Lists menu commands registered by the `GM.registerMenuCommand()` method called 
+by user scripts on the specified tab.
+
+Data:
+
+* `tabId` A tab's ID (integer).
+
+Response data:
+
+* An array of command objects. Each object has
+  - `id` A command id that can be used as HTML/XML ID.
+  - `caption` A string given as the first parameter of the
+    `GM.registerMenuCommand()` method.
+  - `accessKey` A code point (string) or empty string given as the third
+    parameter of the `GM.registerMenuCommand()` method.
+  - `icon` A URL (string) of an icon which is returned by `iconUrl()` function.
+
 # ListUserScripts
 Received by: `bg/user-script-registry.js`.
 
@@ -111,11 +133,29 @@ Response data:
 
 * An array of `.details` objects from installed `EditableUserScript`s.
 
+# MenuCommandClick
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/on-user-script-menu-command.js`
+
+Triggered when a command button on the popup menu is clicked by the user.
+Posts message `{type: 'onclick'}` to the `UserScriptMenuCommand` channel
+to call a function given as the second parameter of the
+`GM.registerMenuCommand()` method.
+
+Data:
+
+* `id` The command id (string) as returned by `ListMenuCommands` message.
+
+Response data:
+
+* `undefined`
+
 # OptionsLoad
 Sent by: `browser/monkey-menu.js`
 Received by: `bg/options.js`
 
-Returns previously saved options data.  Result is the same format as `OptionsSave`'s request.
+Returns previously saved options data.  Result is the same format as
+`OptionsSave`'s request.
 
 * `excludes` A string, one `@exclude` pattern per line.
 
@@ -123,7 +163,8 @@ Returns previously saved options data.  Result is the same format as `OptionsSav
 Sent by: `browser/monkey-menu.js`
 Received by: `bg/options.js`
 
-Passes the user's option values from content to background for persistence.  Request data:
+Passes the user's option values from content to background for persistence.
+Request data:
 
 * `excludes` A string, one `@exclude` pattern per line.
 
@@ -151,6 +192,28 @@ user.  Data:
   references any remote resources.
 
 Callers should specify one or the other, not both.
+
+# UserScriptMenuCommand
+Sent by: `content/api-provider-source.js`
+Received by: `bg/on-user-script-menu-command.js`
+
+This is a channel (not a message).
+Triggered when the `GM.registerMenuCommand()` method is called by an user script.
+
+Data:
+
+* `details` The details object specifying the command. It has
+  - `caption` A string given as the first parameter of the
+    `GM.registerMenuCommand()` method.
+  - `accessKey` A code point (string) or empty string given as the third
+    parameter of the `GM.registerMenuCommand()` method.
+
+Response data:
+
+* `undefined`
+
+Messages exchanged via this channel are private to its implementation.
+See sender and receiver for further detail.
 
 # UserScriptOptionsSave
 Sent by: `browser/monkey-menu.js`
@@ -204,8 +267,9 @@ Response data:
 Sent by: `browser/monkey-menu.js`
 Received by: `bg/updater.js`
 
-Triggered when the "Update Now" button of the manage user scripts dialog is clicked
-by the user.  Data:
+Triggered when the "Update Now" button of the manage user scripts dialog is
+clicked by the user.
+Data:
 
 * `uuid` The UUID value of a script as returned by `ListUserScripts` message.
 
