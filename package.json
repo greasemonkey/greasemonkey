@@ -15,6 +15,7 @@
     "karma-sinon-chrome": "github:arantius/karma-sinon-chrome",
     "mocha": "^3.1.2",
     "sinon": "^4.1.5",
+    "sinon-chrome": "^2.2.1",
     "tinybind": "^0.11.0"
   }
 }

@@ -1,6 +1,7 @@
 module.exports = function(config) {
   config.set({
     files: [
+      './node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       './test/setup.js',
       './third-party/convert2RegExp.js',
       './third-party/MatchPattern.js',
