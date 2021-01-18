@@ -1,3 +1,4 @@
+'use strict';
 /*
 This file is responsible for providing the GM.registerMenuCommand API method.
 */

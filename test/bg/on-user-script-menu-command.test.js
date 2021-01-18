@@ -27,7 +27,8 @@ describe('bg/on-user-script-menu-command', () => {
   }
 
   before(() => {
-    sinon.stub(UserScriptRegistry, 'scriptByUuid').returns({grants: 'GM.registerMenuCommand'});
+    sinon.stub(UserScriptRegistry, 'scriptByUuid').returns(
+        {grants: 'GM.registerMenuCommand'});
   });
 
   after(() => {
@@ -64,7 +65,8 @@ describe('bg/on-user-script-menu-command', () => {
           details: details,
         }, fakePort);
 
-        const commands = await sendMessage({name: 'ListMenuCommands', tabId: 1});
+        const commands = await sendMessage(
+            {name: 'ListMenuCommands', tabId: 1});
 
         fakePort.onDisconnect.trigger();
 
@@ -92,7 +94,8 @@ describe('bg/on-user-script-menu-command', () => {
 
       fakePort.onDisconnect.trigger();
 
-      assert.isOk(postMessage.withArgs(sinon.match({type: 'onclick'})).calledOnce);
+      assert.isOk(postMessage.withArgs(
+          sinon.match({type: 'onclick'})).calledOnce);
     });
 
     it('a random generated command "id" is a valid HTML/XML ID', async () => {
@@ -180,14 +183,14 @@ describe('bg/on-user-script-menu-command', () => {
       assert.equal(commands1.length, detailsList1.length);
       for (const {command, details} of commands1
           .sort((a, b) => a.caption < b.caption ? -1 : 1)
-          .map((command, i) => ({command: command, details: detailsList1[i]}))) {
+          .map((c, i) => ({'command': c, details: detailsList1[i]}))) {
         assert.include(command, details);
       }
 
       assert.equal(commands2.length, detailsList2.length);
       for (const {command, details} of commands2
           .sort((a, b) => a.caption < b.caption ? -1 : 1)
-          .map((command, i) => ({command: command, details: detailsList2[i]}))) {
+          .map((c, i) => ({'command': c, details: detailsList2[i]}))) {
         assert.include(command, details);
       }
     });
@@ -214,7 +217,8 @@ describe('bg/on-user-script-menu-command', () => {
     it('throws TypeError when message is not an object', () => {
       const fakePort = createFakePortAndConnect({tabId: 1});
 
-      expect(() => fakePort.onMessage.trigger(null, fakePort)).to.throw(TypeError);
+      expect(() => fakePort.onMessage.trigger(null, fakePort))
+          .to.throw(TypeError);
     });
   });
 });

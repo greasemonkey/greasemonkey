@@ -61,14 +61,17 @@ function onKeyDown(event) {
     switchFocus(-1);
   }
 
-  if (document.body.id === 'menu-commands' && Array.from(event.key).length /* code point count */ === 1) {
+  if (document.body.id === 'menu-commands'
+      && Array.from(event.key).length /* code point count */ === 1) {
+    const k = CSS.escape(event.key.toLowerCase());
     const commands = document.querySelectorAll(
-        `.menu-commands [aria-keyshortcuts="${CSS.escape(event.key.toLowerCase())}" i]`);
+        `.menu-commands [aria-keyshortcuts="${k}" i]`);
 
     if (commands.length === 1) {
       commands[0].click();
     } else if (commands.length > 1) {
-      const nextIndex = Array.from(commands).findIndex(command => command.matches(':focus')) + 1;
+      const nextIndex = Array.from(commands)
+          .findIndex(command => command.matches(':focus')) + 1;
       const command = commands[nextIndex < commands.length ? nextIndex : 0];
       command.focus();
     }

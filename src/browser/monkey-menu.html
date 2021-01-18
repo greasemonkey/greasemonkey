@@ -23,8 +23,9 @@
       <span class="arrow"></span>
     </menuitem>
 
-    <hr rv-hide="menuCommands | empty">
-    <menuitem id="open-menu-commands" tabindex="0" role="button" rv-hide="menuCommands | empty">
+    <hr rv-if="menuCommands | empty | not">
+    <menuitem id="open-menu-commands" tabindex="0" role="button"
+        rv-if="menuCommands | empty | not">
       <i class="icon fa fa-fw fa-list-alt"></i>
       <span class="text">{'user_script_commands_button'|i18n}</span>
       <span class="arrow"></span>

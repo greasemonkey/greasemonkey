@@ -114,7 +114,8 @@ describe('bg/api-provider-source', () => {
               .to.throw(...testData[title]['expectedException']);
         } else {
           registerMenuCommand(...testData[title].argumentList);
-          assert.isOk(postMessage.withArgs(sinon.match(testData[title].expectedMessage)).calledOnce);
+          assert.isOk(postMessage.withArgs(sinon.match(
+              testData[title].expectedMessage)).calledOnce);
         }
       });
     }
