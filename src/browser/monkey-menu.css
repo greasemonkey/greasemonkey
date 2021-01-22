@@ -21,6 +21,7 @@ body#rendering { display: none; }
   max-height: 347px;
   overflow-y: auto;
 }
+#open-menu-commands ~ #script-list-scroll { max-height: 331px; }
 
 hr {
   margin: 6px 0;
