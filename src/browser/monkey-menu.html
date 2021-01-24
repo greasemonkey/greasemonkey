@@ -40,7 +40,7 @@
         </heading>
         <menuitem rv-each-script="userScripts.active"
             class="user-script"
-            rv-disabled="script.enabled | not"
+            rv-enabled="script.enabled"
             rv-data-uuid="script.uuid"
             tabindex="0"
             role="button">
@@ -57,7 +57,7 @@
         </heading>
         <menuitem rv-each-script="userScripts.inactive"
             class="user-script"
-            rv-disabled="script.enabled | not"
+            rv-enabled="script.enabled"
             rv-data-uuid="script.uuid"
             tabindex="0"
             role="button">
@@ -234,7 +234,7 @@
 
   <menu>
     <menuitem tabindex="0" id="user-script-toggle-update" role="button"
-        rv-disabled="activeScript.downloadUrl | not"
+        rv-enabled="activeScript.downloadUrl"
     >
       <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
       <span class="text">
@@ -243,7 +243,7 @@
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-update-now" role="button"
-        rv-disabled="activeScript.downloadUrl | not"
+        rv-enabled="activeScript.downloadUrl"
     >
       <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
       <span class="text">{'update_now'|i18n}</span>
