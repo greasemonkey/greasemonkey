@@ -1,5 +1,5 @@
 :root {
-  --focus-color: hsla(0, 0%, 80%, 0.3);
+  --focus-color: rgba(0, 0, 0, 0.15);
 }
 
 
@@ -136,7 +136,7 @@ menuitem {
   white-space: nowrap;
 }
 menuitem:focus {
-  background-color: hsla(0, 0%, 80%, 0.3);
+  background-color: var(--focus-color);
   outline: none;
 }
 menuitem[disabled] {
