@@ -139,7 +139,7 @@ menuitem:focus {
   background-color: var(--focus-color);
   outline: none;
 }
-menuitem[disabled] {
+menuitem.disabled {
   opacity: 0.65;
 }
 menuitem .arrow {
