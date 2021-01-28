@@ -102,6 +102,12 @@
   "gm_opentab_bad_URL": {
     "message": "GM.openInTab：無法理解 URL：$1"
   },
+  "gm_rmc_bad_access_key": {
+    "message": "GM.registerMenuCommand: \"accessKey\" 必須為單一個字元"
+  },
+  "gm_rmc_bad_command_func": {
+    "message": "GM.registerMenuCommand: \"commandFunc\" 必須為函式"
+  },
   "gm_script_id": {
     "message": "[Greasemonkey 指令稿 $1]"
   },
@@ -237,6 +243,12 @@
   },
   "user_matches": {
     "message": "使用者符合"
+  },
+  "user_script_commands": {
+    "message": "使用者指令稿指令"
+  },
+  "user_script_commands_button": {
+    "message": "使用者指令稿指令..."
   },
   "user_script_options": {
     "message": "使用者指令稿選項"

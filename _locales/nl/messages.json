@@ -102,6 +102,12 @@
   "gm_opentab_bad_URL": {
     "message": "GM.openInTab: de URL werd niet begrepen: $1"
   },
+  "gm_rmc_bad_access_key": {
+    "message": "GM.registerMenuCommand: ‘accessKey’ moet een enkel teken zijn"
+  },
+  "gm_rmc_bad_command_func": {
+    "message": "GM.registerMenuCommand: ‘commandFunc’ moet een functie zijn"
+  },
   "gm_script_id": {
     "message": "[Greasemonkey-script $1]"
   },
@@ -237,6 +243,12 @@
   },
   "user_matches": {
     "message": "Overeenkomsten door gebruiker"
+  },
+  "user_script_commands": {
+    "message": "Gebruikersscriptopdrachten"
+  },
+  "user_script_commands_button": {
+    "message": "Gebruikersscriptopdrachten..."
   },
   "user_script_options": {
     "message": "Gebruikersscriptopties"

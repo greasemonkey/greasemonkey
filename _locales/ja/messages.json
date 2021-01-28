@@ -102,6 +102,12 @@
   "gm_opentab_bad_URL": {
     "message": "GM.openInTab: 不正なURLです：$1"
   },
+  "gm_rmc_bad_access_key": {
+    "message": "GM.registerMenuCommand: 「accessKey」は1文字で指定する必要があります"
+  },
+  "gm_rmc_bad_command_func": {
+    "message": "GM.registerMenuCommand: 「commandFunc」には関数を指定してください"
+  },
   "gm_script_id": {
     "message": "「Greasemonkey スクリプト $1」"
   },
@@ -134,7 +140,7 @@
     "message": "Greasemonkey ユーザースクリプトエディタ"
   },
   "greasemonkey_wiki": {
-    "message": "Greasemonkey ウィキペディア"
+    "message": "Greasemonkey ウィキ"
   },
   "homepage": {
     "message": "ホームページ"
@@ -238,6 +244,12 @@
   "user_matches": {
     "message": "ユーザー @match"
   },
+  "user_script_commands": {
+    "message": "ユーザースクリプトコマンド"
+  },
+  "user_script_commands_button": {
+    "message": "ユーザースクリプトコマンド..."
+  },
   "user_script_options": {
     "message": "ユーザースクリプト設定"
   },
@@ -258,5 +270,11 @@
   },
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest:「URL」が指定されていません。"
+  },
+  "use_enhanced_editor": {
+    "message": "改良版のエディタを使用"
+  },
+  "use_enhanced_editor_explain": {
+    "message": "スクリーンリーダーを利用している場合、改良版エディターを読み取れないため、チェックを外してください。"
   }
 }
