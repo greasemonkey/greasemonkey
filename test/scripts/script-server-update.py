@@ -9,7 +9,7 @@ purposes, the script always has an update available.
 import collections
 import re
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 USER_JS = """// ==UserScript==
