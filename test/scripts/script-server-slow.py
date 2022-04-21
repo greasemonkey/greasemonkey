@@ -9,7 +9,7 @@ the script finishes.
 
 import time
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 USER_JS = """// ==UserScript==
