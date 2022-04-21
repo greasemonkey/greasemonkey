@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """Serve updatable user scripts.
 
 This server will start at version 1, then return a higher version number each
@@ -55,6 +55,6 @@ if __name__ == '__main__':
   if len(argv) == 2:
     port = int(argv[1])
 
-  print 'Starting httpd at http://localhost:%d/ ...' % port
+  print('Starting httpd at http://localhost:%d/ ...' % port)
   httpd = HTTPServer(('', port), S)
   httpd.serve_forever()
