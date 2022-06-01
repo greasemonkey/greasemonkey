@@ -61,6 +61,7 @@
       "/third-party/MatchPattern.js",
       "/third-party/compare-versions/index.js",
       "/third-party/jszip/jszip.min.js",
+      "/third-party/webdav/webdav.js",
 
       "/src/bg/execute.run.js",
       "/src/bg/user-script-detect.run.js",
