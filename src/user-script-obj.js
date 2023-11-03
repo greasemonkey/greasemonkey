@@ -46,7 +46,12 @@ function _testClude(glob, url) {
 
 function _testMatch(matchPattern, url) {
   if ('string' == typeof matchPattern) {
-    matchPattern = new MatchPattern(matchPattern);
+    try {
+      matchPattern = new MatchPattern(matchPattern);
+    } catch (e) {
+      // Invalid match patterns match nothing.  See #3171
+      return false;
+    }
   } else if (!(matchPattern instanceof MatchPattern)) {
     return false;
   }

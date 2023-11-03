@@ -141,6 +141,19 @@ describe('user-script-obj', () => {
         matches('file:///foo/bar');
       });
     });
+
+    describe('@match, invalid', () => {
+      // We usually shouldn't have a script saved with invalid matches, but
+      // it's possible for a _user_ @match to be invalid.  In this case, an
+      // uncaught exception could crash (at least) the monkey menu, while
+      // opening.  Assert that in this case the exception is NOT uncaught.
+      // See #3171 .
+      it('does not throw with invalid (user) @match', () => {
+        userScript._matches = ['xxx:yyy'];
+        chai.expect(() => notMatches('http://example.org'))
+            .to.not.throw();
+      });
+    });
   });
 
   describe('RunnableUserScript.uuid', () => {
