@@ -271,6 +271,15 @@
   "xhr_no_url": {
     "message": "GM.xmlHttpRequest:「URL」が指定されていません。"
   },
+  "back": {
+    "message": "戻る"
+  },
+  "help": {
+    "message": "ヘルプ"
+  },
+  "editor": {
+    "message": "エディター"
+  },
   "use_enhanced_editor": {
     "message": "改良版のエディタを使用"
   },
