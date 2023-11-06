@@ -23,8 +23,7 @@ function onHeadersReceivedDetectUserScript(requestDetails) {
 
   openInstallDialog(requestDetails.url);
 
-  // https://stackoverflow.com/a/18684302
-  return {'redirectUrl': 'javascript:'};
+  return {'cancel': true};
 }
 window.onHeadersReceivedDetectUserScript = onHeadersReceivedDetectUserScript;
 
