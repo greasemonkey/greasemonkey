@@ -125,18 +125,23 @@ function GM_setValue(key, value) {
 }
 
 
-function GM_getResourceUrl(name) {
+function GM_getResourceUrl(name, type) {
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({
       'name': 'ApiGetResourceBlob',
       'resourceName': name,
       'uuid': _uuid,
     }, result => {
-      if (result) {
-        resolve(URL.createObjectURL(result.blob))
-      } else {
+      if (!result) {
         reject(`No resource named "${name}"`);
       }
+
+      let blob = result.blob;
+      if (!type) type = result.mimetype;
+      if (type) {
+        blob = blob.slice(0, blob.size, type);
+      }
+      resolve(URL.createObjectURL(blob))
     });
   });
 }
