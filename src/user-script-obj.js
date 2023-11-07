@@ -217,7 +217,7 @@ window.RunnableUserScript = class RunnableUserScript
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._evalContentVersion = -1;
     this._iconBlob = null;
-    this._resources = {};  // Name to object with keys: name, mimetype, blob.
+    this._resources = {};  // Name to {blob, mimetype, name, url}.
     this._userExcludes = [];
     this._userExcludesExclusive = false;
     this._userIncludes = [];
@@ -366,8 +366,8 @@ window.EditableUserScript = class EditableUserScript
     Object.keys(this.resources).forEach(n => {
       let r = this.resources[n];
       gmInfo.script.resources[n] = {
-        'name': r.name,
         'mimetype': r.mimetype,
+        'name': r.name,
         'url': r.url || '',
       };
     });

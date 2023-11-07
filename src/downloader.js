@@ -86,9 +86,10 @@ class Downloader {
 
     for (let [n, d] of Object.entries(this.resourceDownloads)) {
       details.resources[n] = {
-        'name': n,
-        'mimetype': d.mimeType,
         'blob': await d.result,
+        'mimetype': d.mimeType,
+        'name': n,
+        'url': d.url,
       };
     }
 
