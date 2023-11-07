@@ -104,7 +104,8 @@ function _safeCopy(v) {
 
 const userScriptKeys = [
     'description', 'downloadUrl', 'excludes', 'grants', 'homePageUrl',
-    'includes', 'locales', 'matches', 'name', 'namespace', 'noFrames', 'runAt', 'version'];
+    'includes', 'locales', 'matches', 'name', 'namespace', 'noFrames', 'runAt',
+    'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
 window.RemoteUserScript = class RemoteUserScript {
   constructor(vals) {
