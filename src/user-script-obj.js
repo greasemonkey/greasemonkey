@@ -368,7 +368,7 @@ window.EditableUserScript = class EditableUserScript
       gmInfo.script.resources[n] = {
         'name': r.name,
         'mimetype': r.mimetype,
-        'url': r.url || "",
+        'url': r.url || '',
       };
     });
     return 'const GM = {};\n'
