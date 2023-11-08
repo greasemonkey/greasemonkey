@@ -11,10 +11,25 @@ body {
   cursor: default;
   font: caption;
   min-height: 450px;
+  overflow-x: hidden;
   width: 300px;
-  overflow: hidden;
 }
 body#rendering { display: none; }
+
+
+/*
+This wrapper prevents unintended horizontal scroll on devices with touch
+scrolling.  The body's `overflow-x: hidden` prevents scroll bars, but devices
+(especially (only?) mobile) that can scroll without scroll bars see the width of
+the invisible (non-active) sections and allow scrolling to them anyway.  The
+extra wrapper prevents this.
+*/
+#wrapper {
+  min-height: 450px;
+  overflow-x: hidden;
+  position: relative;
+  width: 100vw;
+}
 
 
 #script-list-scroll {
