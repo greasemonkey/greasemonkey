@@ -113,15 +113,26 @@ document.querySelector('#modal footer button')
 ///////////////////////////////////////////////////////////////////////////////
 
 function addRequireTab(url, content) {
-  if (!url) return console.error('addRequireTab missing URL!');
-  if (!content) return console.error('addRequireTab missing content!');
+  if (!url) return console.error('addRequireTab: missing URL!');
+  if (!content) return console.error('addRequireTab: missing content!');
   let requireTab = document.createElement('li');
-  requireTab.className = 'tab';
+  requireTab.className = 'tab require';
   requireTab.textContent = nameForUrl(url);
   tabs.appendChild(requireTab);
   editorTabs.push(requireTab);
   editorDocs.push(createDoc(content, 'javascript'));
   editorUrls.push(url);
+}
+
+async function addResourceTab(resource) {
+  if (!resource) return console.error('addResourceTab: missing resource!');
+  let resourceTab = document.createElement('li');
+  resourceTab.className = 'tab resource';
+  resourceTab.textContent = resource.name;
+  tabs.appendChild(resourceTab);
+  editorTabs.push(resourceTab);
+  editorDocs.push(createDoc(await resource.blob.text(), resource.mimetype));
+  editorUrls.push(resource.url);
 }
 
 function nameForUrl(url) {
@@ -195,6 +206,11 @@ let createDoc;
   Object.keys(gUserScript.requiresContent).forEach(u => {
     addRequireTab(u, gUserScript.requiresContent[u]);
   });
+
+  for (const [name, resource] of Object.entries(gUserScript.resources)) {
+    if (!resource.mimetype.match(/^text\//)) continue;
+    await addResourceTab(resource);
+  };
 
   editor.swapDoc(editorDocs[0]);
   editor.focus();
@@ -279,11 +295,38 @@ function onSave() {
   downloader.setScriptContent(editorDocs[0].getValue());
 
   let requires = {};
+  let resources = {};
   for (let i = 1; i < editorDocs.length; i++) {
-    requires[ editorUrls[i] ] = editorDocs[i].getValue();
+    let url = editorUrls[i];
+    if (editorTabs[i].classList.contains('require')) {
+      requires[url] = editorDocs[i].getValue();
+    } else if (editorTabs[i].classList.contains('resource')) {
+      let existingResource = null;
+      for (let r of Object.values(gUserScript.resources)) {
+        if (r.url != url) continue;
+        existingResource = r;
+        break;
+      }
+      if (!existingResource) {
+        console.warn('While saving, could not find resource with URL', url);
+        continue;
+      }
+      resources[url] = {
+        'blob': new Blob(
+            [editorDocs[i].getValue()],
+            {'type': existingResource.mimetype}),
+        'mimetype': existingResource.mimetype,
+        'name': existingResource.name,
+        'url': existingResource.url,
+      };
+    } else {
+      console.warn(
+          'When saving script, editor tab', i, 'had unsupported type',
+          editorTabs[i].classList);
+    }
   }
   downloader.setKnownRequires(requires);
-  downloader.setKnownResources(gUserScript.resources);
+  downloader.setKnownResources(resources);
   downloader.setKnownUuid(userScriptUuid);
   downloader.addProgressListener(() => {
     document.querySelector('#modal progress').value = downloader.progress;
@@ -314,8 +357,15 @@ function onSaveComplete(savedDetails) {
   tabs.children[0].textContent = i18nUserScript('name', savedDetails);
 
   for (let i = editorDocs.length; i--; ) {
-    let url = editorUrls[i];
-    if (i > 0 && !savedDetails.requiresContent[url]) {
+    let missing = false;
+    if (editorTabs[i].classList.contains('require')) {
+      let url = editorUrls[i];
+      missing |= !(url in savedDetails.requiresContent);
+    } else if (editorTabs[i].classList.contains('resource')) {
+      let resourceName = editorTabs[i].textContent;
+      missing |= !(resourceName in savedDetails.resources);
+    }
+    if (missing) {
       editorTabs[i].parentNode.removeChild(editorTabs[i]);
       editorDocs.splice(i, 1);
       editorTabs.splice(i, 1);
@@ -329,6 +379,11 @@ function onSaveComplete(savedDetails) {
   Object.keys(savedDetails.requiresContent).forEach(u => {
     if (editorUrls.indexOf(u) === -1) {
       addRequireTab(u, savedDetails.requiresContent[u]);
+    }
+  });
+  Object.values(savedDetails.resources).forEach(r => {
+    if (editorUrls.indexOf(r.url) === -1) {
+      addResourceTab(r);
     }
   });
 }
