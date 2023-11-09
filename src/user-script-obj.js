@@ -10,7 +10,7 @@ reference any other objects from this file.
 // Increment this number when updating `calculateEvalContent()`.  If it
 // is higher than it was when eval content was last calculated, it will
 // be re-calculated.
-const EVAL_CONTENT_VERSION = 14;
+const EVAL_CONTENT_VERSION = 15;
 
 
 // Private implementation.
@@ -104,7 +104,8 @@ function _safeCopy(v) {
 
 const userScriptKeys = [
     'description', 'downloadUrl', 'excludes', 'grants', 'homePageUrl',
-    'includes', 'locales', 'matches', 'name', 'namespace', 'noFrames', 'runAt', 'version'];
+    'includes', 'locales', 'matches', 'name', 'namespace', 'noFrames', 'runAt',
+    'version'];
 /// Base class, fields and methods common to all kinds of UserScript objects.
 window.RemoteUserScript = class RemoteUserScript {
   constructor(vals) {
@@ -216,7 +217,7 @@ window.RunnableUserScript = class RunnableUserScript
     this._evalContent = null;  // TODO: Calculated final eval string.  Blob?
     this._evalContentVersion = -1;
     this._iconBlob = null;
-    this._resources = {};  // Name to object with keys: name, mimetype, blob.
+    this._resources = {};  // Name to {blob, mimetype, name, url}.
     this._userExcludes = [];
     this._userExcludesExclusive = false;
     this._userIncludes = [];
@@ -365,9 +366,9 @@ window.EditableUserScript = class EditableUserScript
     Object.keys(this.resources).forEach(n => {
       let r = this.resources[n];
       gmInfo.script.resources[n] = {
-        'name': r.name,
         'mimetype': r.mimetype,
-        'url': r.url || "",
+        'name': r.name,
+        'url': r.url || '',
       };
     });
     return 'const GM = {};\n'

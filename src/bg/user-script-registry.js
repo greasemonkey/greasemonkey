@@ -200,15 +200,7 @@ function onApiGetResourceBlob(message, sender, sendResponse) {
 
   let userScript = userScripts[message.uuid];
   let resource = userScript.resources[message.resourceName];
-  if (!resource) {
-    sendResponse(false);
-  } else {
-    sendResponse({
-      'blob': resource.blob,
-      'mimetype': resource.mimetype,
-      'resourceName': message.resourceName,
-    });
-  }
+  sendResponse(resource || false);
 }
 window.onApiGetResourceBlob = onApiGetResourceBlob;
 

@@ -21,9 +21,12 @@ Data:
 
 Response:
 
+Object with keys:
+
 * `blob` The blob object.
 * `mimetype`  The MIME type of the resource (from download time).
-* `resourceName` As provided in the request.
+* `name` As provided in the request.
+* `url` Where this resource was originally downloaded from.
 
 # ApiDeleteValue
 Sent by: `content/api-provider-source.js`

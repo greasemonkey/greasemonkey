@@ -86,9 +86,10 @@ class Downloader {
 
     for (let [n, d] of Object.entries(this.resourceDownloads)) {
       details.resources[n] = {
-        'name': n,
-        'mimetype': d.mimeType,
         'blob': await d.result,
+        'mimetype': d.mimeType,
+        'name': n,
+        'url': d.url,
       };
     }
 
@@ -188,8 +189,10 @@ class Downloader {
     Object.keys(scriptDetails.resourceUrls).forEach(n => {
       let u = scriptDetails.resourceUrls[n];
       if (this._knownResources[u]) {
-        this.resourceDownloads[n]
-            = new ImmediateDownload(this._knownResources[u]);
+        let r = this._knownResources[u];
+        this.resourceDownloads[n] = new ImmediateDownload(r.blob);
+        this.resourceDownloads[n].mimeType = r.mimetype;
+        this.resourceDownloads[n].url = r.url;
       } else {
         this.resourceDownloads[n]
             = new Download(this._onProgress.bind(this), u, /*binary=*/true);

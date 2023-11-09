@@ -80,8 +80,18 @@ describe('bg/export-db', () => {
       'description': 'I have two `@resources`s with the same name!',
       'downloadUrl': 'http://example.com/script.user.js',
       'resources': {
-        'a': {'name': 'a', 'mimetype': 'text/plain', 'blob': new Blob(['stub'])},
-        'b': {'name': 'b', 'mimetype': 'text/plain', 'blob': new Blob(['stub'])},
+        'a': {
+          'blob': new Blob(['stub']),
+          'mimetype': 'text/plain',
+          'name': 'a',
+          'url': 'http://example.net/script-a.user.js',
+        },
+        'b': {
+          'blob': new Blob(['stub']),
+          'mimetype': 'text/plain',
+          'name': 'b',
+          'url': 'http://example.net/script-a.user.js',
+        },
       }
     });
 
