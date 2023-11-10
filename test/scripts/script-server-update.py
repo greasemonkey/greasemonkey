@@ -12,7 +12,7 @@ import re
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
-USER_JS = """// ==UserScript==
+USER_JS = b"""// ==UserScript==
 // @name        Update Test %d
 // @description A simple user script with a version, that can be (auto) updated.
 // @version     %d
@@ -44,7 +44,7 @@ class S(BaseHTTPRequestHandler):
       self.end_headers()
       for i in range(0, 10):
         self.wfile.write(
-            "Here's <a href='updatable-%d.user.js'>user script %d</a>.<br>"
+            b"Here's <a href='updatable-%d.user.js'>user script %d</a>.<br>"
             % (i, i))
 
 
