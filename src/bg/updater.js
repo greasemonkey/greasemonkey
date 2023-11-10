@@ -127,6 +127,7 @@ window.scheduleNextScriptAutoUpdate = async function() {
   }
 
   let delay = nextTime - new Date().getTime();
+  delay = Math.max(10000, delay);
   gTimer = setTimeout(async (nextUuid) => {
     await checkForUpdate(nextUuid);
     await scheduleNextScriptAutoUpdate();
