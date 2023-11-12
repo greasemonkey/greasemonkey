@@ -32,6 +32,7 @@ function onMenuCommandClick(message, sender, sendResponse) {
   if (commandMap.has(message.id)) {
     commandMap.get(message.id).port.postMessage({type: 'onclick'});
   }
+  sendResponse();  // Allow test to await this completion.
 }
 window.onMenuCommandClick = onMenuCommandClick;
 

@@ -6,11 +6,16 @@ The `UserScriptRegistry` object owns a set of UserScript objects, and
 exports methods for discovering them and their details.
 */
 
+// This is a Promise, which will resolve only after the user scripts have
+// been loaded from storage.  Await it if your behavior must happen only then.
+let userScriptsReady;
+
 // Private implementation.
 (function() {
 
-// TODO: Order?
 let userScripts = {};
+let userScriptsReadyResolve;
+userScriptsReady = new Promise((resolve) => userScriptsReadyResolve = resolve);
 
 const dbName = 'greasemonkey';
 const dbVersion = 1;
@@ -138,6 +143,7 @@ async function loadUserScripts() {
     saveDetails.forEach(details => {
       userScripts[details.uuid] = new EditableUserScript(details);
     });
+    userScriptsReadyResolve();
   }).catch(err => {
     console.error('Failed to load user scripts:', err.message || err.name);
   });
