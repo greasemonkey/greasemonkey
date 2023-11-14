@@ -58,6 +58,7 @@ function setGlobalEnabled(enabled) {
 window.setGlobalEnabled = setGlobalEnabled;
 function onEnabledSet(message, sender, sendResponse) {
   setGlobalEnabled(message.enabled);
+  sendResponse();
 }
 window.onEnabledSet = onEnabledSet;
 
@@ -120,6 +121,7 @@ function onOptionsSave(message, sender, sendResponse) {
       logUnhandledError);
   gGlobalExcludes = message.excludes.split('\n');
   gUseCodeMirror = message.useCodeMirror;
+  sendResponse();
 }
 window.onOptionsSave = onOptionsSave;
 

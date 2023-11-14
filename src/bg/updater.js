@@ -74,7 +74,6 @@ window.onUserScriptUpdateNow = function(message, sender, sendResponse) {
   checkForUpdate(message.uuid)
       .then(r => sendResponse(r))
       .catch(r => sendResponse(r));
-  return true; // I will `sendResponse()` later!
 };
 
 
