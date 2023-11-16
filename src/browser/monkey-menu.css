@@ -3,40 +3,37 @@
 }
 
 
-html, body {
+html, body, #mobile-wrapper {
   margin: 0;
+  overflow: hidden;  /* Only scroll <section>s individually. */
   padding: 0;
+  width: 25em;
 }
-body {
-  cursor: default;
-  font: caption;
-  min-height: 450px;
-  overflow-x: hidden;
-  width: 300px;
-}
-body#rendering { display: none; }
-
-
-/*
-This wrapper prevents unintended horizontal scroll on devices with touch
-scrolling.  The body's `overflow-x: hidden` prevents scroll bars, but devices
-(especially (only?) mobile) that can scroll without scroll bars see the width of
-the invisible (non-active) sections and allow scrolling to them anyway.  The
-extra wrapper prevents this.
-*/
-#wrapper {
-  min-height: 450px;
-  overflow-x: hidden;
+/* On mobile, viewport weirdness forces the "hidden" sections to become visible,
+ * by allowing the viewport/expanding the document to scroll to it (despite
+ * declaring the width, above).  This forces the document (since this contains
+ * everything but is not the <body>) to the size we want.
+ */
+#mobile-wrapper {
+  min-height: 40em;
+  overflow: hidden;
   position: relative;
+  width: 25em;
+}
+/* On desktop the above sets the popup size.  On mobile there is no popup, so
+ * allow growth to the whole screen size.  (Otherwise things, <hr> especially,
+ * just don't look right, filling only part of the screen.)
+ */
+html.mobile, html.mobile body, html.mobile #mobile-wrapper {
   width: 100vw;
 }
 
 
-#script-list-scroll {
-  max-height: 347px;
-  overflow-y: auto;
+body {
+  cursor: default;
+  font: caption;
 }
-#open-menu-commands ~ #script-list-scroll { max-height: 331px; }
+body.rendering { visibility: hidden; }
 
 hr {
   margin: 6px 0;
@@ -50,13 +47,6 @@ textarea {
 
 /******************************** SECTIONS ***********************************/
 
-section {
-  margin-left: 0;
-  transition-duration: 0.15s;
-  transition-property: margin-left;
-  width: 100vw;
-}
-
 /* The active section gets focus so screen readers report the switch to a new
  * section like a dialog. We don't want the whole section to get a focus
  * outline visually.
@@ -65,37 +55,45 @@ section:focus {
   outline: none;
 }
 
-/* Hide non-main sections by default. */
-section.options,
-section.menu-commands,
-section.user-script,
-section.user-script-options
-{
+/* "Hide" every section (off to the right) by default. */
+section {
   position: absolute;
-  top: 0;
   left: 100vw;
+  top: 0;
+  transition-duration: 0.15s;
+  transition-property: left;
+  width: 100vw;
 }
 
-/* Slide the main menu away when it's non-active. */
-section.main-menu
-{ margin-left: -100vw; }
-body#main-menu section.main-menu
-{ margin-left: 0; }
-
-/* Slide the other menu in when it's active. */
+/* Slide in (counteract the `left` offset) when active. */
+body#main-menu section.main-menu,
 body#options section.options,
 body#menu-commands section.menu-commands,
 body#user-script section.user-script,
 body#user-script-options section.user-script-options
-{ margin-left: -100vw; }
+{ left: 0; }
+/* Slide the main menu left when switching to any other section. */
+body:not(#main-menu) section.main-menu
+{ left: -100vw; }
 
-/* Second level, when going to third, is even further left! */
+/* When switching to a third-level, slide second-level further to the left. */
 body#user-script-options section.user-script
-{ margin-left: -200vw; }
+{ left: -100vw; }
 
+
+/* Cause each section's content (its <menu>) to scroll when necessary. */
+section {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+section menu {
+  overflow-y: auto;
+}
 
 section header {
   color: -moz-fieldText;
+  flex-shrink: 0;  /* Make sure a large <menu> doesn't shrink the header. */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -198,27 +196,8 @@ menu heading {
 
 /***************************** SCRIPT DETAIL *********************************/
 
-/* Scroll the content of the script detail section. */
-section.user-script {
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-}
-section.user-script menu {
-  overflow-y: auto;
-}
 
 /**************************** SCRIPT OPTIONS *********************************/
-
-/* Scroll the content of the script options section. */
-section.user-script-options {
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-}
-section.user-script-options menu {
-  overflow-y: auto;
-}
 
 section.user-script-options textarea {
   margin-bottom: 3px;

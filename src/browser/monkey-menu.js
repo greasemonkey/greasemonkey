@@ -80,6 +80,10 @@ function onKeyDown(event) {
 
 
 function onLoad() {
+  if (/Android/.test(navigator.userAgent)) {
+    document.documentElement.classList.add('mobile');
+  }
+
   gPendingTicker = setInterval(pendingUninstallTicker, 1000);
 
   let tabs = null;
@@ -103,13 +107,19 @@ function onLoad() {
     tinybind.bind(document.body, gTplData);
 
     document.body.id = 'main-menu';
-    // At this point, non-main sections aren't visible, but they don't have
+    // At this point, non-main sections aren't on screen, but they don't have
     // visibility: hidden. For accessibility, it's important that we set this
     // so they don't appear to accessibility clients.
     // onTransitionEnd takes care of this.
     onTransitionEnd();
 
-    setTimeout(window.focus, 0);
+    setTimeout(() => {
+      // Remove "rendering" class (which hides template and animation jank
+      // until this time).
+      document.body.className = '';
+
+      window.focus();
+    }, 0);
   }
 
   let numPending = 0;
