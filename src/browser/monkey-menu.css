@@ -194,8 +194,27 @@ menu heading {
   padding-left: 21px;
 }
 
-/***************************** SCRIPT DETAIL *********************************/
+/********************************* MAIN MENU *********************************/
 
+section.main-menu {
+  display: block;
+}
+
+section.main-menu menu {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+section.main-menu menu > * {
+  flex-shrink: 0;
+}
+
+section.main-menu menu #script-list-scroll {
+  flex-shrink: 1;
+  overflow-y: auto;
+}
 
 /**************************** SCRIPT OPTIONS *********************************/
 
