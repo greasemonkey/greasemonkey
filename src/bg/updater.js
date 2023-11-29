@@ -32,23 +32,23 @@ function checkForUpdate(uuid) {
         // @require, @icon, etc. downloads. So we should return "not abort".
         return !abort;
       }).then(async () => {
-        let window = windowVal[windowKey] || MAX_UPDATE_IN_MS;
+        let updateWindowMs = windowVal[windowKey] || MAX_UPDATE_IN_MS;
         if (abort) {
           // There was no update.  Wait longer before checking again.
-          window *= CHANGE_RATE;
+          updateWindowMs *= CHANGE_RATE;
         } else {
           // There was an update.  Check again, soon.  On the theory that
           // when a user script changes, it usually changes in bursts.
-          window = MIN_UPDATE_IN_MS;
+          updateWindowMs = MIN_UPDATE_IN_MS;
           await downloader.installFromBackground('install');
         }
-        window = Math.min(window, MAX_UPDATE_IN_MS);
-        window = Math.max(window, MIN_UPDATE_IN_MS);
-        window = fuzz(window);
+        updateWindowMs = Math.min(updateWindowMs, MAX_UPDATE_IN_MS);
+        updateWindowMs = Math.max(updateWindowMs, MIN_UPDATE_IN_MS);
+        updateWindowMs = fuzz(updateWindowMs);
 
         let d = {};
-        d[windowKey] = window;
-        d['updateNextAt.' + userScript.uuid] = new Date().getTime() + window;
+        d[windowKey] = updateWindowMs;
+        d['updateNextAt.' + uuid] = new Date().getTime() + updateWindowMs;
         chrome.storage.local.set(d, logUnhandledError);
 
         if (abort) {
@@ -74,7 +74,6 @@ window.onUserScriptUpdateNow = function(message, sender, sendResponse) {
   checkForUpdate(message.uuid)
       .then(r => sendResponse(r))
       .catch(r => sendResponse(r));
-  return true; // I will `sendResponse()` later!
 };
 
 
@@ -127,6 +126,7 @@ window.scheduleNextScriptAutoUpdate = async function() {
   }
 
   let delay = nextTime - new Date().getTime();
+  delay = Math.max(10000, delay);
   gTimer = setTimeout(async (nextUuid) => {
     await checkForUpdate(nextUuid);
     await scheduleNextScriptAutoUpdate();

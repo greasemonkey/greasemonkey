@@ -30,7 +30,7 @@
   },
 
   "background": {
-    "persistent": false,
+    "persistent": true,
     "scripts": [
       "/src/i18n.js",
 

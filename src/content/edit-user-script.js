@@ -207,8 +207,26 @@ let createDoc;
     addRequireTab(u, gUserScript.requiresContent[u]);
   });
 
+  let parsedMeta = null;
   for (const [name, resource] of Object.entries(gUserScript.resources)) {
     if (!resource.mimetype.match(/^text\//)) continue;
+
+    if (!resource.url) {
+      // Scripts installed with a version before #2733 will not know their URL.
+      // Back-fill this value by matching the name from freshly parsed metadata.
+      // This is required for it to save properly.
+      if (!parsedMeta) {
+        parsedMeta = parseUserScript(
+            gUserScript.content, gUserScript.downloadUrl);
+      }
+      for (const [n, u] of Object.entries(parsedMeta.resourceUrls)) {
+        if (n == name) {
+          resource.url = u;
+          break;
+        }
+      }
+    }
+
     await addResourceTab(resource);
   };
 

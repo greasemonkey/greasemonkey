@@ -31,7 +31,18 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     return;
   }
 
-  return cb(message, sender, sendResponse);
+  (async () => {
+    // Block until user scripts have been loaded.
+    await userScriptsReady;
+
+    let result = cb(message, sender, sendResponse);
+    if (result instanceof Promise) {
+      sendResponse(await result);
+    }
+  })();
+
+  // Indicate async. handling of message response.
+  return true;
 });
 
 })();

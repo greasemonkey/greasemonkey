@@ -26,7 +26,10 @@ describe('bg/on-user-script-menu-command', () => {
     });
   }
 
-  before(() => {
+  before(async () => {
+    // Resolve the promise which blocks message handling.
+    await UserScriptRegistry._loadUserScripts();
+
     sinon.stub(UserScriptRegistry, 'scriptByUuid').returns(
         {grants: 'GM.registerMenuCommand'});
   });
@@ -89,13 +92,12 @@ describe('bg/on-user-script-menu-command', () => {
       }, fakePort);
 
       const commands = await sendMessage({name: 'ListMenuCommands', tabId: 1});
-
-      sendMessage({name: 'MenuCommandClick', id: commands[0].id});
-
-      fakePort.onDisconnect.trigger();
+      await sendMessage({name: 'MenuCommandClick', id: commands[0].id});
 
       assert.isOk(postMessage.withArgs(
           sinon.match({type: 'onclick'})).calledOnce);
+
+      fakePort.onDisconnect.trigger();
     });
 
     it('a random generated command "id" is a valid HTML/XML ID', async () => {
