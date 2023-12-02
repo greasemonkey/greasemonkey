@@ -23,14 +23,15 @@ describe('bg/options', () => {
 
   describe('global excludes', () => {
     it('prevents script matching', () => {
-      window.onOptionsSave({'excludes': ''});
+      window.onOptionsSave({'excludes': ''}, null, () => null);
       let userScript
           = new EditableUserScript({'includes': ['http://example.net/*']});
 
       assert.isTrue(userScript.runsOn(new URL('http://example.net/ruined')));
       assert.isTrue(userScript.runsOn(new URL('http://example.net/weaved')));
 
-      window.onOptionsSave({'excludes': 'http://example.net/r*'});
+      window.onOptionsSave(
+          {'excludes': 'http://example.net/r*'}, null, () => null);
 
       assert.isFalse(userScript.runsOn(new URL('http://example.net/ruined')));
       assert.isTrue(userScript.runsOn(new URL('http://example.net/weaved')));
