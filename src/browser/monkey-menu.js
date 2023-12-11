@@ -39,11 +39,18 @@ function onContextMenu(event) {
 
 
 function onClick(event) {
-  if (event.which != 1) {
-    event.preventDefault();
-    event.stopPropagation();
-  } else {
-    activate(event.target);
+  switch (event.button) {
+    case 0:  // Left button mouse click.
+      activate(event.target);
+      return;
+    case 1:  // Middle button mouse click.
+    case 2:  // Right button mouse click.
+      process(event.target);
+      return;
+    default:
+      event.preventDefault();
+      event.stopPropagation();
+      return;
   }
 }
 
@@ -329,6 +336,28 @@ function activate(el) {
   }
 
   console.info('activate unhandled:', el);
+}
+
+
+// An element has been activated for edit by right mouse click.
+function process(el) {
+  while (el && el.tagName != 'MENUITEM') el = el.parentNode;
+  if (!el) return;
+
+  let uuidToEdit = gTplData.activeScript.uuid;
+  if (el.classList.contains('user-script')) {
+    uuidToEdit = el.getAttribute('data-uuid');
+  }
+
+  if (uuidToEdit) {
+    openUserScriptEditor(uuidToEdit);
+
+    window.close();
+    event.preventDefault();
+    return;
+  }
+
+  console.info('process unhandled:', el);
 }
 
 
