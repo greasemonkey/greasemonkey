@@ -96,7 +96,7 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
   await downloader.start();
   let userScript = new RemoteUserScript(await downloader.scriptDetails);
 
-  if (gImportOptions.replace || !installedIds.has(userScript.id)) {
+  if (gImportOptions.replace || !Object.hasOwn(installedIds, userScript.id)) {
     importedIds.add(userScript.id);
     await downloader.install('install', /*disabled=*/!exportDetails.enabled);
   }
