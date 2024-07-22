@@ -95,20 +95,21 @@ window._pickNextScriptAutoUpdate = async function() {
       return;
     }
 
-    let defaultCheckTime = new Date().getTime() + MIN_UPDATE_IN_MS;
     chrome.storage.local.get(updateNextAtKeys, vs => {
       for (let k of updateNextAtKeys) {
         let uuid = k.replace('updateNextAt.', '');
-        let v = vs[k];
+        // The key will be absent until the script is checked for updates.
+        let v = vs[k] || 0;
 
-        if (!nextTime || !nextUuid || v < nextTime) {
-          nextTime = v || defaultCheckTime;
+        if (!nextUuid || v < nextTime) {
+          nextTime = v;
           nextUuid = uuid;
         }
       }
 
       if (nextUuid) {
-        resolve([nextUuid, nextTime]);
+        let defaultCheckTime = new Date().getTime() + MIN_UPDATE_IN_MS;
+        resolve([nextUuid, nextTime || defaultCheckTime]);
       } else {
         reject('Could not find next script to update.');
       }
