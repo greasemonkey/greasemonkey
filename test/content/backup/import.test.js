@@ -46,7 +46,9 @@ describe('content/backup/import', () => {
     // TODO: Inject, don't monkey-patch.
     gImportOptions.replace = false;
 
-    await importAllScriptsFromZip(zip, new Set(['null/already-installed']));
+    await importAllScriptsFromZip(
+        zip,
+        {'null/already-installed': 'b7b49e7a-81bf-48d3-81a8-83c32cacd60a'});
 
     assert.equal(countOfMessagesNamed('UserScriptInstall'), 0);
   });
