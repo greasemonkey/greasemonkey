@@ -30,6 +30,29 @@ describe('bg/updater', () => {
       assert.equal(nextUuid, '7289270f-c30d-41e5-932c-560d81315565');
     });
 
+    it('will pick two scripts for their first update', async () => {
+      UserScriptRegistry.scriptsToRunAt.returns([{
+        'downloadUrl': 'http://example.com/anything4.user.js',
+        'uuid': '1833861b-0a70-442b-9663-5393e9a911ff',
+      },{
+        'downloadUrl': 'http://example.com/anything5.user.js',
+        'uuid': '91f450f1-156a-4887-86ee-2ab5fcc9c4d9',
+      }]);
+
+      chrome.storage.local.get.callsArgWith(1, {
+        // Never updated before, no stored values.
+      });
+      let [nextUuid1, _1] = await _pickNextScriptAutoUpdate();
+      assert.equal(nextUuid1, '1833861b-0a70-442b-9663-5393e9a911ff');
+
+      chrome.storage.local.get.callsArgWith(1, {
+        // Now we've updated the first script.
+        'updateNextAt.1833861b-0a70-442b-9663-5393e9a911ff': 1,
+      });
+      let [nextUuid2, _2] = await _pickNextScriptAutoUpdate();
+      assert.equal(nextUuid2, '91f450f1-156a-4887-86ee-2ab5fcc9c4d9');
+    });
+
     it('skips a local script', (done) => {
       UserScriptRegistry.scriptsToRunAt.returns([{
         // no downloadUrl here!
