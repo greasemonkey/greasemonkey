@@ -171,6 +171,29 @@ Request data:
 
 * `excludes` A string, one `@exclude` pattern per line.
 
+# SyncViaWebdavChangeOption
+Sent by: `browser/monkey-menu.js`
+Received by: `bg/sync-via-webdav.js`
+
+Triggered when "Sync via WebDAV" options on the popup menu is changed by the user.
+Enables, Disabled, or Reenables the sync.
+
+Data:
+
+Either of the following
+
+* `enabled` boolean, the new status (true = enabled, false = disabled).
+* `url` string, WebDAV directory URL.
+
+If neither is specified, just gets "Sync via WebDAV" options.
+
+Response data:
+
+Ppresented upon async completion.
+
+* `enabled` boolean, the new status (true = enabled, false = disabled).
+* `url` string, WebDAV directory URL.
+
 # UserScriptGet
 Sent by: `content/edit-user-script.js`
 

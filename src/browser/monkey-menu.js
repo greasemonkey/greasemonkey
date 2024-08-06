@@ -6,6 +6,10 @@ let gTplData = {
   'options': {
     'globalExcludesStr': '',
     'useCodeMirror': true,
+    'syncViaWebdav': {
+      'enabled': false,
+      'url': '',
+    },
   },
   'menuCommands': [],
   'originGlob': null,
@@ -13,6 +17,8 @@ let gTplData = {
     'active': [],
     'inactive': [],
   },
+  'syncViaWebdavUrlValidationMessage': '',
+  'pendingSyncViaWebdavChangeOption': true,
 };
 
 let gMainFocusedItem = null;  // TODO: this needs to be a stack.
@@ -49,7 +55,7 @@ function onClick(event) {
 
 
 function onKeyDown(event) {
-  if (event.target.tagName == 'TEXTAREA') return;
+  if (event.target.tagName == 'TEXTAREA' || event.target.type == 'url') return;
 
   if (event.code == 'Enter') {
     return activate(event.target);
@@ -157,6 +163,18 @@ function onLoad() {
         gTplData.options.useCodeMirror = options.useCodeMirror;
         finish();
       });
+  
+  // numPending++ and finish() are unnecessary
+  // because options.syncViaWebdav are managed separately
+  // using gTplData.pendingSyncViaWebdavChangeOption.
+  chrome.runtime.sendMessage(
+      {'name': 'SyncViaWebdavChangeOption'},
+      syncViaWebdav => {
+        if (!chrome.runtime.lastError) {
+          gTplData.options.syncViaWebdav = syncViaWebdav;
+          gTplData.pendingSyncViaWebdavChangeOption = false;
+        }
+      });
 
   numPending++;
   chrome.tabs.query(
@@ -186,7 +204,7 @@ function onTransitionEnd(e) {
   for (let section of document.getElementsByTagName('section')) {
     let isCurrent = section.className == document.body.id;
     section.style.visibility = isCurrent ? 'visible' : 'hidden';
-    if (isCurrent && e && e.target.tagName != 'TEXTAREA') {
+    if (isCurrent && e && e.target.tagName != 'TEXTAREA' && e.target.type != 'url') {
       // Make screen readers report the new section like a dialog. Otherwise,
       // they would report nothing.
       section.focus();
@@ -199,6 +217,21 @@ function onTransitionStart() {
   // While CSS transitioning, keep all sections visible.
   for (let section of document.getElementsByTagName('section')) {
     section.style.visibility = 'visible';
+  }
+}
+
+
+function onInput(event) {
+  let el = event.target;
+  switch (el.name) {
+    case 'sync-via-webdav-url':
+      if (!el.checkValidity()) {
+        gTplData.syncViaWebdavUrlValidationMessage = el.validationMessage;
+        break;
+      }
+      gTplData.syncViaWebdavUrlValidationMessage = '';
+      changeSyncViaWebdavOption(el.name);
+      break;
   }
 }
 
@@ -253,6 +286,10 @@ function activate(el) {
     case 'add-user-match-current':
       gTplData.activeScript.userMatches
           = addOriginGlobTo(gTplData.activeScript.userMatches);
+      return;
+    case 'toggle-sync-via-webdav':
+      if (gTplData.pendingSyncViaWebdavChangeOption) return;
+      changeSyncViaWebdavOption(el.id);
       return;
 
     case 'backup-export':
@@ -335,6 +372,30 @@ function activate(el) {
 function addOriginGlobTo(str) {
   if (!gTplData.originGlob) return str;
   return (str.trim() + '\n' + gTplData.originGlob).trim();
+}
+
+
+function changeSyncViaWebdavOption(name) {
+  gTplData.pendingSyncViaWebdavChangeOption = true;
+
+  const options = {'name': 'SyncViaWebdavChangeOption'};
+  switch (name) {
+    case 'toggle-sync-via-webdav':
+      options.enabled = !gTplData.options.syncViaWebdav.enabled;
+      break;
+    case 'sync-via-webdav-url':
+      options.url = gTplData.options.syncViaWebdav.url.trim();
+      break;
+  }
+
+  chrome.runtime.sendMessage(options, syncViaWebdav => {
+    if (chrome.runtime.lastError) {
+      window.close();
+    } else {
+      gTplData.options.syncViaWebdav = syncViaWebdav;
+      gTplData.pendingSyncViaWebdavChangeOption = false;
+    }
+  });
 }
 
 
