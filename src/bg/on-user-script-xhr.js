@@ -112,7 +112,7 @@ function open(xhr, d, port, tabUrl) {
     for (let prop in d.headers) {
       if (Object.prototype.hasOwnProperty.call(d.headers, prop)) {
         let propLower = prop.toLowerCase();
-        hasCookieHeader = (propLower === 'cookie');
+        hasCookieHeader ||= (propLower === 'cookie');
         if (gHeadersToReplace.includes(propLower)) {
           xhr.setRequestHeader(gDummyHeaderPrefix + propLower, d.headers[prop]);
         }
