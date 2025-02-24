@@ -15,7 +15,7 @@ html, body, #mobile-wrapper {
  * everything but is not the <body>) to the size we want.
  */
 #mobile-wrapper {
-  min-height: 40em;
+  min-height: 50em;
   overflow: hidden;
   position: relative;
   width: 25em;
@@ -39,7 +39,7 @@ hr {
   margin: 6px 0;
 }
 
-textarea {
+textarea, input[type=url] {
   font-family: monospace;
   font-size: 90%;
   white-space: pre;
@@ -241,6 +241,10 @@ section.options #add-exclude-current {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 90vw;
+}
+
+section.options menuitem.disabled {
+  cursor: not-allowed;
 }
 
 /***************************** MENU COMMANDS *********************************/

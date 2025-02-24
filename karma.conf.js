@@ -6,6 +6,7 @@ module.exports = function(config) {
       './third-party/convert2RegExp.js',
       './third-party/MatchPattern.js',
       './third-party/jszip/jszip.min.js',
+      './third-party/webdav/webdav.js',
       './src/**/*.js',
       './test/**/*.test.js',
       {'pattern': './skin/**', 'included': false, 'served': true},

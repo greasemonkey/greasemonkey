@@ -87,6 +87,9 @@
   "fix_and_save": {
     "message": "The editor contents have not been saved.  Fix this error and try again."
   },
+  "fix_and_save_sync_via_webdav": {
+    "message": "The modified user JS file have not been synced.  Fix this error and try again."
+  },
   "get_user_scripts": {
     "message": "Get user scripts"
   },
@@ -285,5 +288,26 @@
   },
   "use_enhanced_editor_explain": {
     "message": "Screen reader users should disable this, as the enhanced code editor is not accessible."
+  },
+  "sync_via_webdav": {
+    "message": "Sync Local Files via WebDAV"
+  },
+  "sync_via_webdav_is_enabled": {
+    "message": "Sync Enabled"
+  },
+  "sync_via_webdav_is_disabled": {
+    "message": "Sync Disabled"
+  },
+  "sync_via_webdav_url": {
+    "message": "WebDAV Directory URL"
+  },
+  "sync_via_webdav_url_pattern_description": {
+    "message": "Enter a URL that begins with \"http://localhost\", contains a non-empty path, and ends with \"/\"."
+  },
+  "sync_via_webdav_description": {
+    "message": "The WebDAV server must allow PROPFIND GET MKCOL PUT DELETE methods and depth: infinity."
+  },
+  "sync_via_webdav_error_notification_title": {
+    "message": "Greasemonkey Sync via WebDAV Error"
   }
 }

@@ -146,6 +146,31 @@
       <br>
       {'use_enhanced_editor_explain'|i18n}
     </p>
+
+    <h2>{'sync_via_webdav'|i18n}</h2>
+    <p>
+      <menuitem id="toggle-sync-via-webdav" tabindex="0" role="button"
+          rv-class-disabled="options.syncViaWebdav.url|trim|not|or pendingSyncViaWebdavChangeOption|or syncViaWebdavUrlValidationMessage">
+          <i class="icon fa" rv-class-fa-check="options.syncViaWebdav.enabled"
+              rv-hide="pendingSyncViaWebdavChangeOption"></i>
+          <i class="icon fa fa-spinner fa-pulse"
+              rv-show="pendingSyncViaWebdavChangeOption"></i>
+        <span class="text i18n">
+          {options.syncViaWebdav.enabled|i18nBool 'sync_via_webdav_is_enabled' 'sync_via_webdav_is_disabled'}
+        </span>
+      </menuitem>
+      <span class="text i18n">
+        {'sync_via_webdav_description'|i18n}
+      </span><br>
+      {'sync_via_webdav_url'|i18n}<br>
+      <input type="url" name="sync-via-webdav-url"
+          rv-value="options.syncViaWebdav.url"
+          rv-disabled="pendingSyncViaWebdavChangeOption|or options.syncViaWebdav.enabled"
+          pattern="\s*http://localhost(?::[0-9]+)?/([^?#]+/)?\s*"
+          rv-title="'sync_via_webdav_url_pattern_description'|i18n"
+          placeholder="http://locahost:PORT/PATH/">
+      <small class="input-invalid" rv-show="syncViaWebdavUrlValidationMessage">{syncViaWebdavUrlValidationMessage}</small>
+    </p>
   </menu>
 </section>
 
