@@ -14,6 +14,7 @@ class SimpleEditor {
     this._onSwapDoc = null;
     this._textarea = document.createElement("textarea");
     this._textarea.style["white-space"] = "pre-wrap";
+    this._textarea.spellcheck = false;
     this._textarea.addEventListener("input", this._onChange.bind(this));
     this._textarea.addEventListener("keydown", this._onKeyDown.bind(this));
     element.appendChild(this._textarea);
