@@ -76,7 +76,7 @@ async function importOneScriptFromZip(zip, file, installedIds, importedIds) {
   if (!file.name.includes('/')) {
     downloader.setScriptUrl('file:///' + file.name);
   } else {
-    let folderName = file.name.substr(0, file.name.lastIndexOf('/'));
+    let folderName = file.name.substr(0, file.name.indexOf('/'));
 
     exportDetails = await zip.file(`${folderName}/.gm.json`)
         .async('text')
