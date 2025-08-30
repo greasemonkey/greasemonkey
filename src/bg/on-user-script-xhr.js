@@ -125,7 +125,7 @@ function open(xhr, d, port, tabUrl) {
 
   // If this is a same-origin XHR or the user opted in with withCredentials,
   // add cookies unless already specified by the user.
-  chrome.cookies.getAll({url: d.url}, cookies => {
+  chrome.cookies.getAll({url: d.url, firstPartyDomain: tabUrl.hostname}, cookies => {
     if (cookies.length && !hasCookieHeader
         && (d.withCredentials || isSameOrigin(tabUrl, d.url))
     ) {
