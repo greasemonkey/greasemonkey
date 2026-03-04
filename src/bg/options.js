@@ -65,7 +65,7 @@ window.onEnabledSet = onEnabledSet;
 
 function setIcon() {
   // Firefox for Android does not have setIcon
-  // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/setIcon#Browser_compatibility
+  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/browserAction/setIcon#Browser_compatibility
   if (!chrome.browserAction.setIcon) {
     return;
   }
