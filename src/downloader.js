@@ -211,7 +211,13 @@ class Downloader {
       try {
         await download.result;
       } catch (e) {
-        failedDownloads.push(download);
+        if (download == this.iconDownload) {
+          // Ignore failure to download icons; the script will still work
+          // if this was the only failure.  See #3222 .
+          this.iconDownload = null;
+        } else {
+          failedDownloads.push(download);
+        }
       }
     }
     if (failedDownloads.length > 0) {
