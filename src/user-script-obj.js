@@ -340,8 +340,7 @@ window.EditableUserScript = class EditableUserScript
         } catch (err) {
           console.error('Script error in %s:\\n%s: %s',
               ${JSON.stringify(this.toString())}, err.name, err.message);
-        }
-        //# sourceURL=user-script:${escape(this.id)}`;
+        }`;
     this._evalContentVersion = EVAL_CONTENT_VERSION;
   }
 
