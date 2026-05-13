@@ -133,6 +133,7 @@ window.RemoteUserScript = class RemoteUserScript {
       d[k] = _safeCopy(this['_' + k]);
     });
     d.id = this.id;
+    d.updateDisabledReason = this.updateDisabledReason;
     return d;
   }
 
@@ -151,6 +152,17 @@ window.RemoteUserScript = class RemoteUserScript {
   get version() { return this._version; }
 
   get id() { return this.namespace + '/' + this.name; }
+
+  get updateDisabledReason() {
+    if (!this.downloadUrl) return _('update_disabled_url');
+    if (!this.version) return _('update_disabled_no_version');
+    try {
+      compareVersions('0', this.version);
+    } catch (e) {
+      return _('update_disabled_bad_version');
+    }
+    return null;  // Default case: no reason to disable update( check)s.
+  }
 
   runsOn(url) {
     if (!(url instanceof URL)) {

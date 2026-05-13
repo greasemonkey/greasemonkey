@@ -223,6 +223,15 @@
   "unnamed_script_RAND": {
     "message": "Unnamed Script $1"
   },
+  "update_disabled_url": {
+    "message": "Cannot update with no known download URL."
+  },
+  "update_disabled_no_version": {
+    "message": "Cannot update with no @version."
+  },
+  "update_disabled_bad_version": {
+    "message": "Cannot update with invalid @version format."
+  },
   "update_now": {
     "message": "Update now"
   },

@@ -245,8 +245,8 @@
 
   <menu>
     <menuitem tabindex="0" id="user-script-toggle-update" role="button"
-        rv-enabled="activeScript.downloadUrl"
-        rv-class-disabled="activeScript.downloadUrl | not"
+        rv-enabled="activeScript.updateDisabledReason | not"
+        rv-class-disabled="activeScript.updateDisabledReason"
     >
       <i class="icon fa" rv-class-fa-check="activeScript.autoUpdate"></i>
       <span class="text">
@@ -255,8 +255,8 @@
     </menuitem>
 
     <menuitem tabindex="0" id="user-script-update-now" role="button"
-        rv-enabled="activeScript.downloadUrl"
-        rv-class-disabled="activeScript.downloadUrl | not"
+        rv-enabled="activeScript.updateDisabledReason | not"
+        rv-class-disabled="activeScript.updateDisabledReason"
     >
       <i class="icon fa fa-refresh" rv-class-fa-spin="activeScript.updating"></i>
       <span class="text">{'update_now'|i18n}</span>
@@ -265,6 +265,10 @@
         {activeScript.updateMessage}
       </div>
     </menuitem>
+
+    <p hide="activeScript.updateDisabledReason | not" class="disabled">
+      {activeScript.updateDisabledReason}
+    </p>
 
     <h2>
       <a href="https://wiki.greasespot.net/Greasemonkey_Manual:Monkey_Menu#The_Script_Options">
@@ -335,6 +339,7 @@
 
 <script src="/src/i18n.js"></script>
 <script src="/third-party/tinybind/tinybind.min.js"></script>
+<script src="/third-party/compare-versions/index.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 <script src="/src/util/get-best-locale-match.js"></script>
