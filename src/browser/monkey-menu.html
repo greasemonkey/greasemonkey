@@ -192,25 +192,14 @@
       <i class="icon fa fa-pencil-square-o"></i>
       <span class="text">{'edit'|i18n}</span>
     </menuitem>
-    <menuitem tabindex="0" id="user-script-uninstall" role="button"
-        rv-if="pendingUninstall | not"
-    >
-      <i class="icon fa fa-trash-o"></i>
-      <span class="text">{'uninstall'|i18n}</span>
-    </menuitem>
-    <menuitem tabindex="0" id="user-script-undo-uninstall" role="button"
-        rv-if="pendingUninstall"
-    >
-      <i class="icon fa fa-trash-o"></i>
-      <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
-    </menuitem>
+
     <menuitem tabindex="0" id="open-user-script-options" role="button">
       <i class="icon fa fa-fw fa-cogs"></i>
       <span class="text">{'user_script_options'|i18n}</span>
       <span class="arrow"></span>
     </menuitem>
 
-    <hr>
+    <hr rv-if="activeScript.description || activeScript.version || activeScript.homePageUrl || activeScript.installTime">
 
     <p rv-if="activeScript.description">
       <b>{'description'|i18n}</b> {'description'|i18nUserScript activeScript}
@@ -224,6 +213,21 @@
     <p rv-if="activeScript.installTime">
       <b>{'last_updated'|i18n}</b> {activeScript.installTime|timeToLocaleString}
     </p>
+
+    <hr>
+
+    <menuitem tabindex="0" id="user-script-uninstall" role="button"
+        rv-if="pendingUninstall | not"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'uninstall'|i18n}</span>
+    </menuitem>
+    <menuitem tabindex="0" id="user-script-undo-uninstall" role="button"
+        rv-if="pendingUninstall"
+    >
+      <i class="icon fa fa-trash-o"></i>
+      <span class="text">{'undo_uninstall'|i18n} ({ pendingUninstall })</span>
+    </menuitem>
   </menu>
 </section>
 
