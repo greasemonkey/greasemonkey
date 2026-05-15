@@ -9,6 +9,7 @@ let gTplData = {
   },
   'menuCommands': [],
   'originGlob': null,
+  'showForceUpdate': false,
   'userScripts': {
     'active': [],
     'inactive': [],
@@ -236,6 +237,7 @@ function activate(el) {
     case 'open-user-script-options':
       gMainFocusedItem = document.activeElement;
       document.body.id = 'user-script-options';
+      gTplData.showForceUpdate = false;
       return;
 
     case 'add-global-exclude-current':
@@ -294,13 +296,15 @@ function activate(el) {
       if (el.disabled) return;
 
       if (gTplData.activeScript.hasBeenEdited) {
-        if (confirm(_('confirm_update_edited'))) {
-          userScriptUpdate(gTplData.activeScript.uuid);
-        }
+        gTplData.showForceUpdate = true;
       } else {
         userScriptUpdate(gTplData.activeScript.uuid);
       }
 
+      return;
+    case 'user-script-update-force':
+      gTplData.showForceUpdate = false;
+      userScriptUpdate(gTplData.activeScript.uuid);
       return;
   }
 

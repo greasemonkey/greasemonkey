@@ -225,6 +225,11 @@ section.user-script-options input[type=checkbox] {
   vertical-align: text-top;
 }
 
+menuitem#user-script-update-force {
+  /* Allow this one menu item to span lines, its content is important. */
+  white-space: normal;
+}
+
 /******************************** OPTIONS ************************************/
 
 section.options .explain a {

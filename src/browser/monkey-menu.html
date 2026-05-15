@@ -266,6 +266,13 @@
       </div>
     </menuitem>
 
+    <menuitem tabindex="0" id="user-script-update-force" role="button"
+        rv-if="showForceUpdate"
+    >
+      <i class="icon fa fa-exclamation-triangle"></i>
+      <span class="text">{'confirm_update_edited'|i18n}</span>
+    </menuitem>
+
     <p hide="activeScript.updateDisabledReason | not" class="disabled">
       {activeScript.updateDisabledReason}
     </p>
