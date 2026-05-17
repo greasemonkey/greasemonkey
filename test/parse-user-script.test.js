@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('parse-user-script', () => {
   let urlStr = 'http://www.example.com/example.user.js';
 
@@ -63,3 +64,5 @@ describe('parse-user-script', () => {
     });
   });
 });
+}, 3);
+

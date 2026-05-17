@@ -32,8 +32,8 @@
   "background": {
     "persistent": true,
     "scripts": [
+      "/third-party/initrc/initrc.js",
       "/src/i18n.js",
-
       "/src/bg/api-provider-source.js",
       "/src/bg/execute.js",
       "/src/bg/export-db.js",
@@ -61,10 +61,10 @@
       "/third-party/MatchPattern.js",
       "/third-party/compare-versions/index.js",
       "/third-party/jszip/jszip.min.js",
-
       "/src/bg/execute.run.js",
       "/src/bg/user-script-detect.run.js",
-      "/src/bg/user-script-registry.run.js"
+      "/src/bg/user-script-registry.run.js",
+      "/third-party/initrc/start.js"
     ]
   },
 

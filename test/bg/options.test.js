@@ -1,10 +1,15 @@
 'use strict';
-describe('bg/options', () => {
+window.initrc.startAdd(async function() {
+describe('bg/options', async () => {
   describe('global enable bit', () => {
     // Leave GM globally enabled after these tests run.
     after(() => {
       setGlobalEnabled(true);
     });
+  if (false === window.options_ready)
+    await (async function(){ return new Promise((resolve)=>{
+         setTimeout(function(){resolve()},10);
+    })})();
 
     it('passes data between setGlobalEnabled() and getGlobalEnabled()', () => {
       setGlobalEnabled(true);
@@ -23,6 +28,10 @@ describe('bg/options', () => {
 
   describe('global excludes', () => {
     it('prevents script matching', () => {
+       if (false === window.options_ready)
+         await (async function(){ return new Promise((resolve)=>{
+            setTimeout(function(){resolve()},10);
+         })})();
       window.onOptionsSave({'excludes': ''}, null, () => null);
       let userScript
           = new EditableUserScript({'includes': ['http://example.net/*']});
@@ -38,3 +47,4 @@ describe('bg/options', () => {
     });
   });
 });
+}, 3);

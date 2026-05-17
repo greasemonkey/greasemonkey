@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/export-db', () => {
   function assertZipHasFileNamed(zip, name) {
     assert.isNotNull(
@@ -138,3 +139,4 @@ describe('bg/export-db', () => {
     }
   });
 });
+}, 3);

@@ -6,7 +6,7 @@ content scripts.  It dispatches to global methods registered in other
 and passes all arguments on to that callback.
 */
 
-(function() {
+window.initrc.startAdd(async function() {
 const myPrefix = chrome.runtime.getURL('');
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -45,4 +45,4 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   return true;
 });
 
-})();
+}, 2);

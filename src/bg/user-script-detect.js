@@ -1,7 +1,7 @@
 'use strict';
 /* Detect user scripts, possibly open the installation dialog. */
 
-(function() {
+window.initrc.startAdd(async function() {
 
 const gContentTypeRe = (() => {
   const userScriptTypes = [
@@ -16,7 +16,12 @@ const gContentTypeRe = (() => {
 })();
 
 
-function onHeadersReceivedDetectUserScript(requestDetails) {
+function onHeadersReceivedDetectUserScript(requestDetails_) {
+  const requestDetails = requestDetails_;
+  if (false === window.options_ready)
+    return setTimeout(function(){
+       onHeadersReceivedDetectUserScript(requestDetails);
+    },10);
   if (!getGlobalEnabled()) return {};
   if (requestDetails.method != 'GET') return {};
   if (!responseHasUserScriptType(requestDetails.responseHeaders)) return {};
@@ -63,4 +68,4 @@ function openInstallDialog(url) {
   });
 }
 
-})();
+}, 2);

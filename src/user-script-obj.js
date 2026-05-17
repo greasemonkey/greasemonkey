@@ -14,7 +14,7 @@ const EVAL_CONTENT_VERSION = 15;
 
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
 
 const extensionVersion = chrome.runtime.getManifest().version;
 const aboutBlankRegexp = /^about:blank/;
@@ -407,4 +407,4 @@ window.EditableUserScript = class EditableUserScript
   }
 }
 
-})();
+}, 2);

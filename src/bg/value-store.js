@@ -7,7 +7,7 @@ result to the sender.
 */
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
 
 const valueStoreName = 'values';
 
@@ -216,4 +216,4 @@ function onApiSetValue(message, sender, sendResponse) {
 }
 window.onApiSetValue = onApiSetValue;
 
-})();
+}, 2);

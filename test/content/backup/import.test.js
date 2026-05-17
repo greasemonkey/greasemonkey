@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('content/backup/import', () => {
   function countOfMessagesNamed(messageName) {
     let count = 0;
@@ -96,3 +97,4 @@ describe('content/backup/import', () => {
     }
   });
 });
+}, 9);

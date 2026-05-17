@@ -4,7 +4,7 @@ This file is responsible for providing the GM.notification API method.
 */
 
 // Private implementation
-(function () {
+window.initrc.startAdd(async function() {
 
 let portMap = new Map();
 
@@ -55,4 +55,4 @@ chrome.notifications.onClosed.addListener(id => {
   port.disconnect();
 });
 
-})();
+}, 2);

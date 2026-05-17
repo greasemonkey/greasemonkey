@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/user-script-registry', () => {
   afterEach((done) => {
     let req = indexedDB.deleteDatabase('greasemonkey');
@@ -54,3 +55,4 @@ describe('bg/user-script-registry', () => {
     assert.isNotOk(scriptNamed('exponential'));
   }).timeout(5000);
 });
+}, 3);

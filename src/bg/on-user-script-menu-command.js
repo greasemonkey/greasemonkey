@@ -4,7 +4,7 @@ This file is responsible for providing the GM.registerMenuCommand API method.
 */
 
 // Private implementation
-(function () {
+window.initrc.startAdd(async function() {
 
 const commandMap = new Map();
 
@@ -73,4 +73,4 @@ function onUserScriptMenuCommand(port) {
 }
 chrome.runtime.onConnect.addListener(onUserScriptMenuCommand);
 
-})();
+}, 2);

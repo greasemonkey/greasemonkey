@@ -11,7 +11,9 @@ exports methods for discovering them and their details.
 let userScriptsReady;
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
+//if (false === window.options_ready)
+//  return setTimeout(userScriptRegistryInit,1);
 
 let userScripts = {};
 let userScriptsReadyResolve;
@@ -380,4 +382,4 @@ window.UserScriptRegistry = {
   'scriptsToRunAt': scriptsToRunAt,
 };
 
-})();
+}, 2);

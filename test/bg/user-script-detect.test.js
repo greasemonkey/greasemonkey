@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/user-script-detect', () => {
   it('opens install dialog (on linux)', () => {
     chrome.windows.create.reset();
@@ -32,3 +33,4 @@ describe('bg/user-script-detect', () => {
     assert(chrome.tabs.create.calledOnce);
   });
 });
+}, 3);

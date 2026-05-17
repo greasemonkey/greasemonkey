@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/third-party/font_awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="./edit-user-script.css">
 
+<script src="/third-party/initrc/initrc.js"></script>
 <script src="/src/i18n.js"></script>
 <script src="/third-party/tinybind/tinybind.min.js"></script>
 <script src="/src/util/get-best-locale-match.js"></script>
@@ -15,6 +16,7 @@
 
 <script src="/third-party/codemirror/codemirror.js"></script>
 <link rel="stylesheet" href="/third-party/codemirror/codemirror.css">
+<link rel="stylesheet" href="/third-party/codemirror/theme/material-darker.css">
 
 <script src="/third-party/codemirror/mode/javascript/javascript.js"></script>
 
@@ -39,6 +41,7 @@
 <script src="/src/parse-meta-line.js"></script>
 <script src="/src/parse-user-script.js"></script>
 <script src="/src/supported-apis.js"></script>
+<script src="/third-party/initrc/start.js"></script>
 <script src="/third-party/convert2RegExp.js"></script>
 <script src="/third-party/MatchPattern.js"></script>
 </head>
@@ -82,7 +85,7 @@
 </div>
 <div id="editor"></div>
 
-<script src="edit-user-script.js"></script>
+<script type="module" src="edit-user-script.js"></script>
 
 </body>
 </html>

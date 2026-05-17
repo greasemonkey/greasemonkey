@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/value-store', () => {
   let storeName = 'gmTests';
 
@@ -56,3 +57,4 @@ describe('bg/value-store', () => {
         });
   });
 });
+}, 3);

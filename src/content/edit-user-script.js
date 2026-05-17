@@ -8,30 +8,30 @@ let gUserScript = null;
  * This class simluates the parts of the CodeMirror API we need.
  */
 class SimpleEditor {
+  
+  #doc = null;
+  #onChangeExternal = null;
+  #onSwapDoc = null;
+  #textarea = document.createElement("textarea");
+  #element = null;
   constructor(element) {
-    this._doc = null;
-    this._onChangeExternal = null;
-    this._onSwapDoc = null;
-    this._textarea = document.createElement("textarea");
-    this._textarea.style["white-space"] = "pre-wrap";
-    this._textarea.addEventListener("input", this._onChange.bind(this));
-    this._textarea.addEventListener("keydown", this._onKeyDown.bind(this));
-    element.appendChild(this._textarea);
+    this.#element = element;
+    this.init();
   }
 
   getInputField() {
-    return this._textarea;
+    return this.#textarea;
   }
 
   focus() {
-    this._textarea.focus();
+    this.#textarea.focus();
   }
 
   swapDoc(doc) {
-    this._doc = doc;
-    this._textarea.value = doc.getValue();
-    if (this._onSwapDoc) {
-      this._onSwapDoc(doc);
+    this.#doc = doc;
+    this.#textarea.value = doc.getValue();
+    if (this.#onSwapDoc) {
+      this.#onSwapDoc(doc);
     }
   }
 
@@ -49,21 +49,31 @@ class SimpleEditor {
     }
   }
 
-  _onChange() {
-    if (this._doc) {
-      this._doc._currentValue = this._textarea.value;
+  async init(){
+    const options = await browser.runtime.sendMessage({'name': 'OptionsLoad'});
+    this.#textarea.style["white-space"] = "pre-wrap";
+    this.#textarea.spellcheck = options.simpleEditorSpellCheck;
+    this.#textarea.addEventListener("input", this.#onChange.bind(this));
+    this.#textarea.addEventListener("keydown", this.#onKeyDown.bind(this));
+    this.#element.appendChild(this.#textarea);
+  }
+
+  #onChange() {
+    if (this.#doc) {
+      this.#doc._currentValue = this.#textarea.value;
     }
-    if (this._onChangeExternal) {
-      this._onChangeExternal();
+    if (this.#onChangeExternal) {
+      this.#onChangeExternal();
     }
   }
 
-  _onKeyDown(event) {
+  #onKeyDown(event) {
     if (event.ctrlKey && event.key == "s") {
       event.preventDefault();
       this.execCommand("save");
     }
   }
+
 }
 
 class SimpleEditorDoc {
@@ -113,8 +123,10 @@ document.querySelector('#modal footer button')
 ///////////////////////////////////////////////////////////////////////////////
 
 function addRequireTab(url, content) {
-  if (!url) return console.error('addRequireTab: missing URL!');
-  if (!content) return console.error('addRequireTab: missing content!');
+  if (!url)
+     return console.error('addRequireTab: missing URL!');
+  if (!content)
+     return console.error('addRequireTab: missing content!');
   let requireTab = document.createElement('li');
   requireTab.className = 'tab require';
   requireTab.textContent = nameForUrl(url);
@@ -146,7 +158,7 @@ let createDoc;
 (async function() {
   let options = await browser.runtime.sendMessage({'name': 'OptionsLoad'});
   const editorElem = document.getElementById('editor');
-  if (options.useCodeMirror) {
+  if (codeEditor === 'cm5') {
     const macKeymap = CodeMirror.normalizeKeyMap({
       'Cmd-/': 'toggleComment',
     });
@@ -160,9 +172,17 @@ let createDoc;
         editorElem,
         // TODO: Make appropriate options user-configurable.
         {
-          'tabSize': 2,
-          'lineNumbers': true,
-          'extraKeys': isMacKeymap ? macKeymap : pcKeymap,
+          'tabSize'           : options.codeMirrorTabSize,
+          'lineNumbers'       : options.codeMirrorLineNumber,
+          'extraKeys'         : isMacKeymap ? macKeymap : pcKeymap,
+          'theme'             : options.codeMirrorTheme,
+          'keyMap'            : options.codeMirrorKeyMap,
+          'inputStyle'        : options.codeMirrorInputStyle,
+          'screenReaderLabel' : options.codeMirrorScreenReaderLabel,
+          'autocorrect'       : options.codeMirrorAutoCorrect,
+          'autocapitalize'    : options.codeMirrorAutoCapitalize,
+          'spellcheck'        : options.codeMirrorSpellCheck,
+          'lineWrapping'      : options.codeMirrorLineWrapping
         });
 
     CodeMirror.commands.save = onSave;

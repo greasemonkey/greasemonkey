@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/api-provider-source', () => {
   for (let apiName of SUPPORTED_APIS) {
     it('handles ' + apiName, () => {
@@ -134,3 +135,4 @@ describe('bg/api-provider-source', () => {
     });
   });
 });
+}, 3);

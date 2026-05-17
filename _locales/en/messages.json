@@ -136,6 +136,9 @@
   "greasemonkey_options": {
     "message": "Greasemonkey Options"
   },
+  "greasemonkey_settings": {
+    "message": "Greasemonkey Settings"
+  },
   "greasemonkey_user_script_editor": {
     "message": "Greasemonkey User Script Editor"
   },

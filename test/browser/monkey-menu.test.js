@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('browser/monkey-menu', () => {
   it('has no syntax errors in activate()', () => {
     activate(document.createElement('div'));
@@ -37,3 +38,4 @@ describe('browser/monkey-menu', () => {
     });
   });
 });
+}, 3);

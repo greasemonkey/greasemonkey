@@ -1,6 +1,8 @@
 module.exports = function(config) {
   config.set({
-    files: [
+   files: [
+      "./third-party/initrc/initrc.js",
+      './test/third-party/chai/chai.js',
       './node_modules/sinon-chrome/bundle/sinon-chrome-webextensions.min.js',
       './test/setup.js',
       './third-party/convert2RegExp.js',
@@ -8,6 +10,7 @@ module.exports = function(config) {
       './third-party/jszip/jszip.min.js',
       './src/**/*.js',
       './test/**/*.test.js',
+      "./third-party/initrc/start.js",
       {'pattern': './skin/**', 'included': false, 'served': true},
     ],
     exclude: [
@@ -17,7 +20,7 @@ module.exports = function(config) {
       './src/content/install-dialog.js',  // Not ready for testing yet.  TODO!
       './src/util/rivets-formatters.js',
     ],
-    frameworks: ['chai', 'mocha', 'sinon', 'sinon-chrome'],
+    frameworks: ['mocha', 'sinon', 'sinon-chrome'],
     preprocessors: config.coverage
         ? {'src/**/*.js': ['coverage']}
         : {},

@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('user-script-obj', () => {
   let userScript;
   const matches = urlStr => assert.isOk(userScript.runsOn(new URL(urlStr)));
@@ -272,3 +273,4 @@ describe('user-script-obj', () => {
     });
   });
 });
+}, 3);

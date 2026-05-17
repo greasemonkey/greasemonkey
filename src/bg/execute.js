@@ -6,7 +6,12 @@ content script executions.
 TODO: Make document_start execution time work as intended.
 */
 
-function executeUserscriptOnNavigation(detail) {
+function executeUserscriptOnNavigation(detail_) {
+  const detail = detail_;
+  if (false === window.options_ready)
+    return setTimeout(function(){
+      executeUserscriptOnNavigation(detail);
+    },10);
   if (false === getGlobalEnabled()) return;
 
   const userScriptIterator = UserScriptRegistry.scriptsToRunAt(detail.url);

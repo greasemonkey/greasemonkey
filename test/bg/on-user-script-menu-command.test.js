@@ -1,3 +1,6 @@
+
+'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/on-user-script-menu-command', () => {
   function createFakePortAndConnect({tabId, postMessage = () => {}}) {
     const ChromeEvent = chrome.runtime.onMessage.constructor;
@@ -224,3 +227,4 @@ describe('bg/on-user-script-menu-command', () => {
     });
   });
 });
+}, 3);

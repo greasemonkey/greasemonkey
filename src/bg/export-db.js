@@ -2,7 +2,7 @@
 /* Functions for exporting GM database. */
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
 
 async function onExportDatabase() {
   let userScriptIterator = UserScriptRegistry.scriptsToRunAt(null, true);
@@ -186,4 +186,4 @@ async function userScriptStore(uuid) {
   return entries;
 }
 
-})();
+}, 2);

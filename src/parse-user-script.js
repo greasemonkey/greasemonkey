@@ -13,7 +13,7 @@ function extractMeta(content) {
 
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
 
 /** Pull the filename part from the URL, without `.user.js`. */
 function nameFromUrl(url) {
@@ -161,4 +161,4 @@ window.parseUserScript = function(content, url, failWhenMissing=false) {
   return prepDefaults(details);
 }
 
-})();
+}, 2);

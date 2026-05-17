@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('content/cm-addons/lint-metadata', () => {
   function lintOneBadMetaLine(v) {
     let content = metaBlockFromLines('// @' + v);
@@ -44,3 +45,4 @@ describe('content/cm-addons/lint-metadata', () => {
     chai.expect(result.message).to.have.string('or "version" but');
   });
 });
+}, 9);

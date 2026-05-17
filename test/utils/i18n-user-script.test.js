@@ -2,6 +2,7 @@
 
 window.browser = { i18n: {} };
 
+window.initrc.startAdd(async function() {
 describe('i18n-user-script', () => {
   describe('i18nUserScript()', () => {
     it('If the localized text exists in only one of the @name or @descriptions', () => {
@@ -27,3 +28,4 @@ describe('i18n-user-script', () => {
     });
   });
 });
+}, 9);

@@ -5,7 +5,7 @@ listens for a connection on a Port, and
 */
 
 // Private implementation.
-(function() {
+window.initrc.startAdd(async function() {
 
 const gExtensionUrl = chrome.extension.getURL('');
 const gHeadersToReplace = ['cookie', 'origin', 'referer'];
@@ -196,4 +196,4 @@ chrome.webRequest.onBeforeSendHeaders.addListener(
     {'urls': ['<all_urls>'], 'types': ['xmlhttprequest']},
     ['blocking', 'requestHeaders']);
 
-})();
+}, 2);

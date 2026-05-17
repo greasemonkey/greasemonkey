@@ -6,8 +6,7 @@ user script.  This source is concatenated with the script itself for injection.
 This will be an anonymous and immediately called function which exports objects
 to the global scope (the `this` object).  It ...
 */
-
-(function() {
+window.initrc.startAdd(async function() {
 
 function apiProviderSource(userScript) {
   const grants = userScript.grants;
@@ -307,4 +306,4 @@ function GM_xmlHttpRequest(d) {
   // TODO: Return an object which can be `.abort()`ed.
 }
 
-})();
+}, 2);

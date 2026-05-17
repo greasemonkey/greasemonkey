@@ -1,4 +1,5 @@
 'use strict';
+window.initrc.startAdd(async function() {
 describe('bg/updater', () => {
   before(() => sinon.stub(UserScriptRegistry, 'scriptsToRunAt'));
   after(() => UserScriptRegistry.scriptsToRunAt.restore());
@@ -88,3 +89,4 @@ describe('bg/updater', () => {
     });
   });
 });
+}, 3);
