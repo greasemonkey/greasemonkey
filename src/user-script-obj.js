@@ -299,7 +299,7 @@ window.RunnableUserScript = class RunnableUserScript
 
 
 const editableUserScriptKeys = [
-    'content', 'editTime', 'installTime', 'requiresContent'];
+    'content', 'editTime', 'fileSystemEtag', 'fileSystemLastModified', 'installTime', 'requiresContent'];
 /// A _UserScript, plus user settings, plus all requires' contents.  Should
 /// never be called except by `UserScriptRegistry.`
 window.EditableUserScript = class EditableUserScript
@@ -309,6 +309,8 @@ window.EditableUserScript = class EditableUserScript
 
     this._content = null;
     this._editTime = null;
+    this._fileSystemEtag = null;
+    this._fileSystemLastModified = null;
     this._installTime = null;
     this._requiresContent = {};  // Map of download URL to content.
 
@@ -326,6 +328,8 @@ window.EditableUserScript = class EditableUserScript
 
   get content() { return this._content; }
   get editTime() { return this._editTime; }
+  get fileSystemEtag() { return this._fileSystemEtag; }
+  get fileSystemLastModified() { return this._fileSystemLastModified; }
   get installTime() { return this._installTime; }
   get requiresContent() { return _safeCopy(this._requiresContent); }
 
@@ -404,6 +408,14 @@ window.EditableUserScript = class EditableUserScript
 
     this._resources = {};
     Object.assign(this._resources, downloaderDetails.resources);
+  }
+
+  setFileSystemEtag(fileSystemEtag) {
+    this._fileSystemEtag = fileSystemEtag;
+  }
+
+  setFileSystemLastModified(fileSystemLastModified) {
+    this._fileSystemLastModified = fileSystemLastModified;
   }
 }
 

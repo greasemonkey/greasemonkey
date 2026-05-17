@@ -78,7 +78,7 @@ async function openDb() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-async function installFromDownloader(userScriptDetails, downloaderDetails) {
+async function installFromDownloader(userScriptDetails, downloaderDetails, {fromSyncViaWebdav = false} = {}) {
   let remoteScript = new RemoteUserScript(userScriptDetails);
   let scriptValues = downloaderDetails.valueStore;
   delete downloaderDetails.valueStore;
@@ -100,7 +100,7 @@ async function installFromDownloader(userScriptDetails, downloaderDetails) {
     userScript
         .updateFromDownloaderDetails(userScriptDetails, downloaderDetails);
     return userScript;
-  }).then(saveUserScript)
+  }).then(userScript => saveUserScript(userScript, {fromSyncViaWebdav}))
   .then(async (details) => {
     if (scriptValues) {
       await ValueStore.deleteStore(details.uuid);
@@ -267,8 +267,10 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
 
   return new Promise((resolve, reject) => {
     req.onsuccess = () => {
+      const userScript = userScripts[message.uuid];
       delete userScripts[message.uuid];
       resolve();
+      SyncViaWebdav.userScriptUninstalled(userScript);
     };
     req.onerror = event => {
       console.error('onUserScriptUninstall() failure', event);
@@ -282,7 +284,7 @@ async function onUserScriptUninstall(message, sender, sendResponse) {
 window.onUserScriptUninstall = onUserScriptUninstall;
 
 
-async function saveUserScript(userScript) {
+async function saveUserScript(userScript, {fromSyncViaWebdav = false} = {}) {
   if (!(userScript instanceof EditableUserScript)) {
     throw new Error(
         'Cannot save this type of UserScript object: '
@@ -337,6 +339,10 @@ async function saveUserScript(userScript) {
       let resDetails = userScript.details;
       resDetails.id = userScript.id;
       resolve(resDetails);
+
+      if (!fromSyncViaWebdav) {
+        SyncViaWebdav.userScriptEdited(userScript);
+      }
     };
     req.onerror = () => reject(req.error);
   }).catch(onSaveError);
@@ -374,7 +380,7 @@ function* scriptsToRunAt(urlStr=null, includeDisabled=false) {
 // Export public API.
 window.UserScriptRegistry = {
   '_loadUserScripts': loadUserScripts,
-  '_saveUserScript': saveUserScript,
+  'saveUserScript': saveUserScript,
   'installFromDownloader': installFromDownloader,
   'scriptByUuid': scriptByUuid,
   'scriptsToRunAt': scriptsToRunAt,
